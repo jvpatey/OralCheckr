@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { TestExample } from '../componenets/TestExample';
 
 export default function Landing() {
   const [count, setCount] = useState(0);
@@ -19,6 +20,7 @@ export default function Landing() {
         Add
       </button>
       <button onClick={handleSubtract}>Subtract</button>
+      <TestExample cardTitle="Landing Page" cardBody="Fox jumped over the fence" />
     </>
   );
 }
