@@ -1,8 +1,8 @@
-export function Landing() {
+export function Results() {
   return (
     <div>
       <h1>Welcome to Oralcheckr</h1>
-      <p>This is the landing page</p>
+      <p>This is the results page</p>
     </div>
   );
 }
