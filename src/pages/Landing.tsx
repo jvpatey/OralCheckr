@@ -20,7 +20,7 @@ export function Landing() {
 
   return (
     <div className="full-page-bg">
-      <Card>
+      <Card className="animated-card">
         <Card.Body className="card-style">
           <Card.Title style={{ marginTop: "20px" }} className="card-title">
             <img
