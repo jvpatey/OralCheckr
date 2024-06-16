@@ -15,35 +15,6 @@
   background-color: #328CC1;
   border-radius: 15px;
   border: transparent;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.card-title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.card-text {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.landing-btn {
-  margin-top: 20px;
-}
-
-.footer {
-  background-color: #EFEFEF;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  text-align: start;
 }
 
 .animated-card {
@@ -59,4 +30,12 @@
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: start;
 }
