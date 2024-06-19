@@ -1,9 +1,9 @@
-import { Card } from "react-bootstrap";
-import { LogoTitle } from "../componenets/LogoTitle";
-import { IntroText } from "../componenets/IntroText";
-import { StartButton } from "../componenets/StartButton";
-import { Footer } from "../componenets/Footer";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { Card } from 'react-bootstrap';
+import { LogoTitle } from '../componenets/LogoTitle';
+import { IntroText } from '../componenets/IntroText';
+import { StartButton } from '../componenets/StartButton';
+import { Footer } from '../componenets/Footer';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export function Landing() {
   return (
