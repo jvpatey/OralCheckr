@@ -18,7 +18,7 @@
 }
 
 .animated-card {
-  border-radius: 15px;
+  border-radius: 15px !important;
   animation: fadeInUp 1s ease-out;
 }
 
