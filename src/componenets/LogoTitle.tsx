@@ -9,7 +9,7 @@ export function LogoTitle() {
       }}
     >
       <img
-        src="src/assets/logo2.png"
+        src="public/images/logo2.png"
         alt="Logo"
         style={{ height: "90px", marginBottom: "5px" }}
       />
