@@ -20,7 +20,7 @@ export function Landing() {
             <img
               src="public/images/logo2.png"
               alt="Logo"
-              style={{ height: "90px", marginBottom: "5px" }}
+              style={{ height: "90px", marginBottom: "35px" }}
             />
             <span style={{ color: "#EFEFEF", fontSize: "50px" }}>
               OralCheckr
