@@ -1,22 +1,23 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
-import { Landing } from "./pages/Landing";
-import { StartQuestionnaire } from "./pages/StartQuestionnaire";
-import { Questionnaire } from "./pages/Questionnaire";
-import { Results } from "./pages/Results";
-import { Recommendations } from "./pages/Recommendations";
 import { GuardedRoute } from "./containers/GuardedRoute";
+import { Login } from "./pages/Login";
+import { Dashboard } from "./pages/Dashboard";
+import { Questionnaire } from "./pages/Questionnaire";
+import { StartQuestionnaire } from "./pages/StartQuestionnaire";
+import { Landing } from "./pages/Landing";
 
 export function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<Login />} />
+        <Route path="*" element={<Navigate to="/" />} />
         <Route
-          path="/startQuestionnaire"
+          path="/dashboard"
           element={
             <GuardedRoute>
-              <StartQuestionnaire />
+              <Dashboard />
             </GuardedRoute>
           }
         />
@@ -29,22 +30,21 @@ export function App() {
           }
         />
         <Route
-          path="/results"
+          path="/startQuestionnaire"
           element={
             <GuardedRoute>
-              <Results />
+              <StartQuestionnaire />
             </GuardedRoute>
           }
         />
         <Route
-          path="/recommendations"
+          path="/landing"
           element={
             <GuardedRoute>
-              <Recommendations />
+              <Landing />
             </GuardedRoute>
           }
         />
-        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   );
