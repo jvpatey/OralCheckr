@@ -1,4 +1,4 @@
-/* Bootstrap custom styles */
+/* -- Background styles --*/
 
 .full-page-bg {
   height: 100vh;
@@ -10,6 +10,8 @@
   align-items: center;
   padding: 20px;
 }
+
+/* -- Login Page styles --*/
 
 .logo-style {
   margin-top: 20px;
@@ -79,15 +81,6 @@
   }
 }
 
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  text-align: start;
-  color:#EFEFEF;
-}
-
 .landing-btn {
   background-color: #0375B4 !important;
   color:#262228 !important;
@@ -104,4 +97,78 @@
   border-color:#0375B4 !important;
   border-width: 2px;
 }
+
+/* -- Footer Styles -- */
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: start;
+  color:#EFEFEF;
+}
+
+/* -- Navbar Styles --*/
+
+.custom-navbar {
+  background-color: #262228;
+}
+
+.custom-navbar .navbar-brand {
+  color: #ffffff;
+}
+
+.custom-navbar .navbar-toggler {
+  border: none;
+  padding: 0;
+}
+
+.custom-navbar .navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.custom-navbar .nav-link {
+  color: #ffffff;
+}
+
+.brand-text {
+  margin-right: auto;
+}
+
+.custom-icon {
+  width: 24px;
+  height: 24px;
+  fill: #ffffff;
+}
+
+.custom-collapse {
+  background-color: #262228;
+}
+
+@media (max-width: 992px) {
+  .custom-collapse {
+    position: absolute;
+    top: 56px;
+    right: 0;
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .custom-collapse.show {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-right: 1rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .custom-collapse {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
 
