@@ -3,8 +3,8 @@
 .full-page-bg {
   height: 100vh;
   width: 100vw;
-  background-color: #262228;
-  display: flex;
+  background-color:#222831;
+  display: flex; 
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -34,7 +34,7 @@
 }
 
 .username-style {
-  background-color:#262228 !important;
+  background-color: #222831 !important;
   margin-top: 20px !important;
   border-style: solid !important;
   border-width: 2px !important;
@@ -42,7 +42,7 @@
 }
 
 .password-style {
-  background-color:#262228 !important;
+  background-color: #222831 !important;
   margin-top: 30px !important;
   border-style: solid !important;
   border-width: 2px !important;
@@ -57,7 +57,7 @@
 .card-style {
   max-width: 400px !important;
   min-height: 600px !important;
-  background-color:#262228 !important;
+  background-color:#222831 !important;
   border-style: solid !important;
   border-color:#efefef !important;
   border-radius: 15px;
@@ -83,7 +83,7 @@
 
 .landing-btn {
   background-color: #0375B4 !important;
-  color:#262228 !important;
+  color:#222831 !important;
   font-weight: bold !important;
   border-color:#0375B4 !important;
   width: 60%;
@@ -92,7 +92,7 @@
 }
 
 .landing-btn:hover {
-  background-color:#262228 !important;
+  background-color:#222831 !important;
   color:#0375B4 !important;
   border-color:#0375B4 !important;
   border-width: 2px;
@@ -112,7 +112,7 @@
 /* -- Navbar Styles --*/
 
 .custom-navbar {
-  background-color: #262228;
+  background-color: #222831;
 }
 
 .custom-navbar .navbar-brand {
@@ -144,7 +144,7 @@
 }
 
 .custom-collapse {
-  background-color: #262228;
+  background-color: #222831;
 }
 
 @media (max-width: 992px) {
