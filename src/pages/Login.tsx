@@ -51,7 +51,7 @@ export function Login() {
               />
             </Form.Group>
             <Button className="landing-btn" onClick={handleLogin}>
-              Get Started
+              Login
             </Button>
           </Form>
         </Card.Body>

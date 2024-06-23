@@ -3,7 +3,7 @@
 .full-page-bg {
   height: 100vh;
   width: 100vw;
-  background-color: #1D2731;
+  background-color: #262228;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -32,7 +32,7 @@
 }
 
 .username-style {
-  background-color: #1D2731 !important;
+  background-color:#262228 !important;
   margin-top: 20px !important;
   border-style: solid !important;
   border-width: 2px !important;
@@ -40,7 +40,7 @@
 }
 
 .password-style {
-  background-color: #1D2731 !important;
+  background-color:#262228 !important;
   margin-top: 30px !important;
   border-style: solid !important;
   border-width: 2px !important;
@@ -55,7 +55,7 @@
 .card-style {
   max-width: 400px !important;
   min-height: 600px !important;
-  background-color:#1D2731 !important;
+  background-color:#262228 !important;
   border-style: solid !important;
   border-color:#efefef !important;
   border-radius: 15px;
@@ -89,18 +89,19 @@
 }
 
 .landing-btn {
-  background-color: #D9B310 !important;
-  color:#1D2731 !important;
+  background-color: #0375B4 !important;
+  color:#262228 !important;
   font-weight: bold !important;
-  border-color:#D9B310 !important;
-  width: 50%;
-  margin-top: 50px !important;
+  border-color:#0375B4 !important;
+  width: 60%;
+  margin-top: 30px !important;
+  border-radius: 20px !important;
 }
 
 .landing-btn:hover {
-  background-color:#1D2731 !important;
-  color:#D9B310 !important;
-  border-color:#D9B310 !important;
+  background-color:#262228 !important;
+  color:#0375B4 !important;
+  border-color:#0375B4 !important;
   border-width: 2px;
 }
 
