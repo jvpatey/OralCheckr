@@ -9,8 +9,13 @@ export function NavBar({ links }: NavBarProps) {
   return (
     <Navbar expand="lg" fixed="top" className="custom-navbar">
       <Container fluid>
-        <Navbar.Brand href="#home" className="brand-text">
-          React-Bootstrap
+        <Navbar.Brand href="/dashboard" className="brand-text">
+          <img
+            src="public/images/logo2.png"
+            alt="Logo"
+            style={{ height: "40px", marginBottom: "10px" }}
+          />
+          OralCheckr
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav">
           <svg
