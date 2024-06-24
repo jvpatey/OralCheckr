@@ -1,34 +1,51 @@
-import { useState } from "react";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
+import { Landing } from "./pages/Landing";
+import { StartQuestionnaire } from "./pages/StartQuestionnaire";
+import { Questionnaire } from "./pages/Questionnaire";
+import { Results } from "./pages/Results";
+import { Recommendations } from "./pages/Recommendations";
+import { GuardedRoute } from "./containers/GuardedRoute";
 
-function App() {
-  const [count, setCount] = useState(0);
-
-  console.log("Re-rendering");
-
-  /* function handleCount(number1: number, number2: number) {
-    return number1 + number2;
-  }
-
-  handleCount(5, "hello"); */
-
-  function handleCount() {
-    setCount(count + 1);
-  }
-
-  function handleSubtract() {
-    setCount(count - 1);
-  }
-
+export function App() {
   return (
-    <>
-      <h2>{count}</h2>
-      <button onClick={handleCount} style={{ backgroundColor: "red" }}>
-        Add
-      </button>
-      <button onClick={handleSubtract}>Subtract</button>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route
+          path="/startQuestionnaire"
+          element={
+            <GuardedRoute>
+              <StartQuestionnaire />
+            </GuardedRoute>
+          }
+        />
+        <Route
+          path="/questionnaire"
+          element={
+            <GuardedRoute>
+              <Questionnaire />
+            </GuardedRoute>
+          }
+        />
+        <Route
+          path="/results"
+          element={
+            <GuardedRoute>
+              <Results />
+            </GuardedRoute>
+          }
+        />
+        <Route
+          path="/recommendations"
+          element={
+            <GuardedRoute>
+              <Recommendations />
+            </GuardedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;

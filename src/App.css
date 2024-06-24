@@ -1,42 +1,70 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* Bootstrap custom styles */
+
+.full-page-bg {
+  height: 100vh;
+  width: 100vw;
+  background-color: #efefef;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.logo-style {
+  margin-top: 20px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.text-style {
+  color: #EFEFEF;
+  text-align: center !important;
+  margin-top: 20px !important;
+  }
+
+.card-style {
+  max-width: 800px !important;
+  background-color: #328cc1;
+  border-radius: 15px;
+  padding: 20px !important;
+  text-align: center !important;
 }
 
-@keyframes logo-spin {
+.animated-card {
+  border-radius: 15px !important;
+  animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: start;
 }
 
-.card {
-  padding: 2em;
+.landing-btn {
+  background-color: #D9B310 !important;
+  color: #328CC1 !important;
+  font-weight: bold !important;
+  border-color: #D9B310 !important;
+  width: 50%;
+  margin-top: 50px !important;
 }
 
-.read-the-docs {
-  color: #888;
+.landing-btn:hover {
+  background-color: #0B3C5D !important;
+  color: #D9B310 !important;
+  border-color: #0B3C5D !important;
 }
