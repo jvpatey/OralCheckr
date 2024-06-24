@@ -172,4 +172,51 @@
   }
 }
 
+/* -- Sidebar styles -- */
+
+.sidebar-menu {
+  width: 200px;
+  margin: 10px;
+  background-color: #1f222b;
+  position: fixed;
+  top: 56px;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  padding-top: 1rem;
+  overflow-y: auto;
+  border-radius: 30px;
+}
+
+.sidebar-menu .sidebar-body {
+  padding-top: 1rem;
+}
+
+.sidebar-menu .sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-links {
+  color:#EFEFEF;
+  font-size: medium;
+  font-weight: 200;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.sidebar-links:hover {
+  color:#0375B4;
+  font-weight: bold;
+}
+
+.sidebar-menu .sidebar-nav-link:hover {
+  background-color: #37352f;
+}
+
+
+
 
