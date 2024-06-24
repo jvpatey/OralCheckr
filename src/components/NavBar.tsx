@@ -33,7 +33,7 @@ export function NavBar({ links }: NavBarProps) {
         <Navbar.Collapse id="basic-navbar-nav" className="custom-collapse">
           <Nav className="ms-auto">
             {links.map((link, index) => (
-              <Nav.Link key={index} href={link.href}>
+              <Nav.Link className="navlink-style" key={index} href={link.href}>
                 {link.text}
               </Nav.Link>
             ))}

@@ -23,7 +23,12 @@ export function Login() {
               alt="Logo"
               style={{ height: "60px", marginBottom: "20px" }}
             />
-            <span style={{ color: "#EFEFEF", fontSize: "35px" }}>
+            <span
+              style={{
+                color: "#222831",
+                fontSize: "35px",
+              }}
+            >
               OralCheckr
             </span>
           </div>
