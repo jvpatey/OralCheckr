@@ -12,13 +12,11 @@ export function Dashboard() {
 
   const sidebarLinks = [
     { text: "Oral Health Status", href: "/dashboard" },
-    { text: "Habit Tracker", href: "/habittracker" },
+    { text: "Habit Tracker", href: "/habit-tracker" },
     { text: "Recommendations", href: "/recommendations" },
   ];
 
-  const activeLink = sidebarLinks.find(
-    (link) => window.location.pathname === link.href
-  );
+  const activeLink = sidebarLinks.find((link) => window.location.pathname === link.href);
   const activeTitle = activeLink ? activeLink.text : "Dashboard";
 
   return (

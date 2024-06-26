@@ -8,6 +8,7 @@ import { StartQuestionnaire } from "./pages/StartQuestionnaire";
 import { Landing } from "./pages/Landing";
 import { HabitTacker } from "./pages/HabitTacker";
 import { Recommendations } from "./pages/Recommendations";
+import { RoutePaths } from "./common/Routes";
 
 export function App() {
   return (
@@ -16,7 +17,7 @@ export function App() {
         <Route path="/" element={<Login />} />
         <Route path="*" element={<Navigate to="/" />} />
         <Route
-          path="/dashboard"
+          path={RoutePaths.DASHBOARD}
           element={
             <GuardedRoute>
               <Dashboard />
