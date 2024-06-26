@@ -7,6 +7,7 @@ export function Recommendations() {
   const links = [
     { text: "Dashboard", href: "/dashboard" },
     { text: "Questionnaire", href: "/questionnaire" },
+    { text: "Log Out", href: "/login" },
   ];
 
   const sidebarLinks = [
