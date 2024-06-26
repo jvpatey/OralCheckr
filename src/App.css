@@ -3,7 +3,7 @@
 .full-page-bg {
   height: 100vh;
   width: 100vw;
-  background-color:#F5F5F5;
+  background-color: #F5F5F5;
   display: flex; 
   flex-direction: column;
   justify-content: center;
@@ -23,10 +23,10 @@
   font-weight: 500;
   text-align: center !important;
   margin-top: 20px !important;
-  }
+}
 
 .login-text {
-  color:#222831;
+  color: #222831;
   font-size: x-large !important;
   font-weight: 500;
   text-align: center !important;
@@ -42,7 +42,7 @@
 }
 
 .password-style {
-  background-color: #f5f5f5 !important;
+  background-color: #F5F5F5 !important;
   margin-top: 30px !important;
   border-style: solid !important;
   border-width: 2px !important;
@@ -51,7 +51,7 @@
 
 ::placeholder {
   color: #07889B !important;
-  opacity: 1 !;
+  opacity: 1 !important;
   font-weight: 400; 
 }
 
@@ -61,7 +61,7 @@
   background-color: #F5F5F5 !important;
   border-style: solid !important;
   border-width: 4px;
-  border-color:#07889B !important;
+  border-color: #07889B !important;
   border-radius: 15px;
   padding: 20px !important;
   text-align: center !important;
@@ -85,18 +85,18 @@
 
 .landing-btn {
   background-color: #07889B !important;
-  color:#F5F5F5 !important;
+  color: #F5F5F5 !important;
   font-weight: bold !important;
-  border-color:#0375B4 !important;
+  border-color: #0375B4 !important;
   width: 60%;
   margin-top: 30px !important;
   border-radius: 20px !important;
 }
 
 .landing-btn:hover {
-  background-color:#F5F5F5 !important;
-  color:#07889B !important;
-  border-color:#07889B !important;
+  background-color: #F5F5F5 !important;
+  color: #07889B !important;
+  border-color: #07889B !important;
   border-width: 2px;
 }
 
@@ -108,22 +108,44 @@
   bottom: 0;
   width: 100%;
   text-align: start;
-  color:#222831;
+  color: #222831;
 }
 
 /* -- Navbar Styles --*/
 
 .custom-navbar {
   background-color: #F5F5F5;
+  padding: 0.5rem 1rem;
 }
 
-.custom-navbar .navbar-brand {
-  color: #222831;
+.brand-text {
+  margin-right: auto;
+  font-size: x-large !important;
 }
 
 .navbar-brand:hover {
   color:#07889B !important;
   font-weight: bold !important;
+}
+
+.navlink-style {
+  color: #222831;
+  margin-left: 1rem;
+}
+
+.navlink-style:hover {
+  color: #07889B !important;
+  font-weight: bold !important;
+}
+
+.dropdown-icon {
+  color: #222831;
+  cursor: pointer;
+}
+
+.dropdown-icon:hover {
+  color: #0375B4;
+  transform: scale(1.25);
 }
 
 .custom-navbar .navbar-toggler {
@@ -139,24 +161,13 @@
   color: #222831;
 }
 
-.navlink-style:hover {
-  color:#07889B !important;
-  font-weight: bold !important;
-}
-
-.brand-text {
-  margin-right: auto;
-  font-size: x-large !important;
-}
-
-.custom-icon {
-  width: 24px;
-  height: 24px;
-  fill: #222831;
-}
-
 .custom-collapse {
   background-color: #F5F5F5;
+}
+
+.dropdown-link:hover {
+  color:#0375B4 !important;
+  font-weight: bold !important;
 }
 
 @media (max-width: 992px) {
@@ -273,6 +284,13 @@
   }
 }
 
+/* -- Icon Styles -- */
 
+.dropdown-icon {
+  color: #222831 !important;
+}
 
-
+.dropdown-icon:hover {
+  color: #0375B4 !important;
+  transform: scale(1.25) !important;
+}
