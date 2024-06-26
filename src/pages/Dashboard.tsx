@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { NavBar } from "../components/NavBar";
 import { SideBar } from "../components/SideBar";
+import { DashboardCard } from "../components/DashboardCard";
 
 export function Dashboard() {
   const links = [
@@ -17,7 +18,12 @@ export function Dashboard() {
   return (
     <div className="full-page-bg">
       <NavBar links={links} />
-      <SideBar links={sidebarLinks} />
+      <div className="dashboard-container">
+        <SideBar links={sidebarLinks} />
+        <div className="dashboard-card-container">
+          <DashboardCard />
+        </div>
+      </div>
     </div>
   );
 }
