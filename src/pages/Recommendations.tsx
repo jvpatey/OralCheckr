@@ -3,7 +3,7 @@ import { NavBar } from "../components/NavBar";
 import { SideBar } from "../components/SideBar";
 import { DashboardCard } from "../components/DashboardCard";
 
-export function Dashboard() {
+export function Recommendations() {
   const links = [
     { text: "Dashboard", href: "/dashboard" },
     { text: "Questionnaire", href: "/questionnaire" },

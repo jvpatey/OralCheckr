@@ -6,6 +6,8 @@ import { Dashboard } from "./pages/Dashboard";
 import { Questionnaire } from "./pages/Questionnaire";
 import { StartQuestionnaire } from "./pages/StartQuestionnaire";
 import { Landing } from "./pages/Landing";
+import { HabitTacker } from "./pages/HabitTacker";
+import { Recommendations } from "./pages/Recommendations";
 
 export function App() {
   return (
@@ -42,6 +44,22 @@ export function App() {
           element={
             <GuardedRoute>
               <Landing />
+            </GuardedRoute>
+          }
+        />
+        <Route
+          path="/habittracker"
+          element={
+            <GuardedRoute>
+              <HabitTacker />
+            </GuardedRoute>
+          }
+        />
+        <Route
+          path="/recommendations"
+          element={
+            <GuardedRoute>
+              <Recommendations />
             </GuardedRoute>
           }
         />
