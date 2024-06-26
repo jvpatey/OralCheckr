@@ -6,7 +6,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Questionnaire } from "./pages/Questionnaire";
 import { StartQuestionnaire } from "./pages/StartQuestionnaire";
 import { Landing } from "./pages/Landing";
-import { HabitTacker } from "./pages/HabitTacker";
+import { HabitTracker } from "./pages/HabitTracker";
 import { Recommendations } from "./pages/Recommendations";
 import { RoutePaths } from "./common/Routes";
 
@@ -25,7 +25,7 @@ export function App() {
           }
         />
         <Route
-          path="/questionnaire"
+          path={RoutePaths.QUESTIONNAIRE}
           element={
             <GuardedRoute>
               <Questionnaire />
@@ -33,7 +33,7 @@ export function App() {
           }
         />
         <Route
-          path="/startQuestionnaire"
+          path={RoutePaths.START_QUESTIONNAIRE}
           element={
             <GuardedRoute>
               <StartQuestionnaire />
@@ -41,7 +41,7 @@ export function App() {
           }
         />
         <Route
-          path="/landing"
+          path={RoutePaths.LANDING}
           element={
             <GuardedRoute>
               <Landing />
@@ -49,15 +49,15 @@ export function App() {
           }
         />
         <Route
-          path="/habittracker"
+          path={RoutePaths.HABIT_TRACKER}
           element={
             <GuardedRoute>
-              <HabitTacker />
+              <HabitTracker />
             </GuardedRoute>
           }
         />
         <Route
-          path="/recommendations"
+          path={RoutePaths.RECOMMENDATIONS}
           element={
             <GuardedRoute>
               <Recommendations />

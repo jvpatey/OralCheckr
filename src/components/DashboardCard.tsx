@@ -13,7 +13,6 @@ const StyledCard = styled(Card)`
   background-color: #e0e0e0;
   border: transparent;
   border-radius: 20px;
-  background-color: green;
 `;
 
 export function DashboardCard({ title }: DashboardCardProps) {

@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Nav, Navbar } from "react-bootstrap";
+import { RoutePaths } from "../common/Routes";
 
 interface NavBarProps {
   links: { text: string; href: string }[];
@@ -9,7 +10,7 @@ export function NavBar({ links }: NavBarProps) {
   return (
     <Navbar expand="lg" fixed="top" className="custom-navbar">
       <Container fluid>
-        <Navbar.Brand href="/dashboard" className="brand-text">
+        <Navbar.Brand href={RoutePaths.DASHBOARD} className="brand-text">
           <img
             src="public/images/logo2.png"
             alt="Logo"
