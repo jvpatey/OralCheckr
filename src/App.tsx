@@ -19,12 +19,10 @@ export const sidebarLinks = [
 
 export function App() {
   return (
-    <>
+    <BrowserRouter>
       <NavBar links={links} />
       <SideBar links={sidebarLinks} />
-      <BrowserRouter>
-        <Router />
-      </BrowserRouter>
-    </>
+      <Router />
+    </BrowserRouter>
   );
 }
