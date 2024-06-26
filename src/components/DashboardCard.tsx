@@ -6,13 +6,13 @@ interface DashboardCardProps {
 }
 
 const StyledCard = styled(Card)`
-  width: 80vw;
-  height: 100%;
-  min-width: 300px;
-  min-height: 400px;
-  background-color: #e0e0e0;
-  border: transparent;
-  border-radius: 20px;
+  // width: 80vw;
+  // height: 100%;
+  // min-width: 300px;
+  // min-height: 400px;
+  // background-color: #e0e0e0;
+  // border: transparent;
+  // border-radius: 20px;
 `;
 
 export function DashboardCard({ title }: DashboardCardProps) {
