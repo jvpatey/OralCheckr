@@ -12,6 +12,10 @@ export function NavBar({ links }: NavBarProps) {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
 
+  const handleLogout = () => {
+    localStorage.setItem("authenticated", "false");
+  };
+
   if (!isAuthenticated) {
     return null;
   }
@@ -48,7 +52,10 @@ export function NavBar({ links }: NavBarProps) {
                 }`}
                 key={link.href}
                 as={Link}
-                to={link.href}
+                to={link.href === RoutePaths.LOGIN ? "/" : link.href}
+                onClick={
+                  link.href === RoutePaths.LOGIN ? handleLogout : undefined
+                }
               >
                 {link.text}
               </Dropdown.Item>
@@ -65,6 +72,9 @@ export function NavBar({ links }: NavBarProps) {
                 key={link.href}
                 as={Link}
                 to={link.href}
+                onClick={
+                  link.href === RoutePaths.LOGIN ? handleLogout : undefined
+                }
               >
                 {link.text}
               </Nav.Link>
