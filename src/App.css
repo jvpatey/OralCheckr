@@ -250,8 +250,6 @@
 
 .dashboard-card-container {
   flex: 1 !important;
-  margin-left: 220px !important;
-  padding-right: 20px !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;

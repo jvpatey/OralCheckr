@@ -6,7 +6,7 @@ interface DashboardCardProps {
 }
 
 const StyledCard = styled(Card)`
-  width: 80vw;
+  width: 97vw;
   height: 87vh;
   min-width: 300px;
   min-height: 300px;
@@ -21,6 +21,7 @@ export function DashboardCard({ title }: DashboardCardProps) {
     <StyledCard>
       <Card.Body>
         <Card.Title>{title}</Card.Title>
+        {/* This page will contain the oral health status and recommendations */}
       </Card.Body>
     </StyledCard>
   );

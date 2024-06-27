@@ -7,7 +7,6 @@ import { HabitTracker } from "./pages/HabitTracker";
 import { Landing } from "./pages/Landing";
 import { Login } from "./pages/Login";
 import { Questionnaire } from "./pages/Questionnaire";
-import { Recommendations } from "./pages/Recommendations";
 import { StartQuestionnaire } from "./pages/StartQuestionnaire";
 
 export function Router() {
@@ -52,14 +51,6 @@ export function Router() {
         element={
           <GuardedRoute>
             <HabitTracker />
-          </GuardedRoute>
-        }
-      />
-      <Route
-        path={RoutePaths.RECOMMENDATIONS}
-        element={
-          <GuardedRoute>
-            <Recommendations />
           </GuardedRoute>
         }
       />
