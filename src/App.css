@@ -199,7 +199,8 @@
 .dropdown-menu .dropdown-item.active {
   color: #07889B !important;
   font-weight: bold !important;
-  transform: scale(1.10);
+  transform: scale(1.10) !important;
+  background-color: transparent !important;
 }
 
 /* -- Sidebar styles -- */
