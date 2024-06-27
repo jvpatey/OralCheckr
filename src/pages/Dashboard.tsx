@@ -3,13 +3,17 @@ import { sidebarLinks } from "../App";
 import { DashboardCard } from "../components/DashboardCard";
 
 export function Dashboard() {
-  const activeLink = sidebarLinks.find((link) => window.location.pathname === link.href);
+  const activeLink = sidebarLinks.find(
+    (link) => window.location.pathname === link.href
+  );
   const activeTitle = activeLink ? activeLink.text : "Dashboard";
 
   return (
     <div className="full-page-bg">
-      <div className="dashboard-card-container">
-        <DashboardCard title={activeTitle} />
+      <div className="dashboard-container">
+        <div className="dashboard-card-container">
+          <DashboardCard title={activeTitle} />
+        </div>
       </div>
     </div>
   );

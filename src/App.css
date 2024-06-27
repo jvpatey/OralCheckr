@@ -246,7 +246,6 @@
   display: flex !important;
   flex: 1 !important;
   overflow: hidden !important;
-  padding-top: 68px !important;
 }
 
 .dashboard-card-container {
@@ -256,16 +255,6 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-}
-
-.dashboard-card {
-  width: 80vw !important;
-  height: 100% !important;
-  min-width: 300px !important;
-  min-height: 400px !important;
-  background-color: #e0e0e0 !important;
-  border: transparent !important;
-  border-radius: 20px !important;
 }
 
 @media (max-width: 1100px) {
