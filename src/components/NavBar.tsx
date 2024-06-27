@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Nav, Navbar, Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { NavLink, useLocation } from "react-router-dom";
 import { RoutePaths } from "../common/Routes";
 
 interface NavBarProps {
@@ -9,6 +10,8 @@ interface NavBarProps {
 }
 
 export function NavBar({ links }: NavBarProps) {
+  const location = useLocation();
+
   return (
     <Navbar expand="lg" fixed="top" className="custom-navbar">
       <Container fluid>
@@ -32,9 +35,12 @@ export function NavBar({ links }: NavBarProps) {
           <Dropdown.Menu align="end">
             {links.map((link, index) => (
               <Dropdown.Item
-                className="dropdown-link"
+                className={`dropdown-link ${
+                  location.pathname === link.href ? "active" : ""
+                }`}
                 key={index}
-                href={link.href}
+                as={NavLink}
+                to={link.href}
               >
                 {link.text}
               </Dropdown.Item>
@@ -44,7 +50,14 @@ export function NavBar({ links }: NavBarProps) {
         <Navbar.Collapse id="basic-navbar-nav" className="custom-collapse">
           <Nav className="ms-auto d-none d-lg-flex">
             {links.map((link, index) => (
-              <Nav.Link className="navlink-style" key={index} href={link.href}>
+              <Nav.Link
+                className={`navlink-style ${
+                  location.pathname === link.href ? "active" : ""
+                }`}
+                key={index}
+                as={NavLink}
+                to={link.href}
+              >
                 {link.text}
               </Nav.Link>
             ))}
