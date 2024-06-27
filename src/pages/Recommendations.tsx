@@ -1,9 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { DashboardCard } from "../components/DashboardCard";
-import { sidebarLinks } from "../App";
+import { links } from "../App";
 
 export function Recommendations() {
-  const activeLink = sidebarLinks.find(
+  const activeLink = links.find(
     (link) => window.location.pathname === link.href
   );
   const activeTitle = activeLink ? activeLink.text : "Dashboard";
