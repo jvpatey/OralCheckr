@@ -12,6 +12,11 @@ interface NavBarProps {
 export function NavBar({ links }: NavBarProps) {
   const location = useLocation();
 
+  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <Navbar expand="lg" fixed="top" className="custom-navbar">
       <Container fluid>
