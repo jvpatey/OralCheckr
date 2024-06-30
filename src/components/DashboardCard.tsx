@@ -14,6 +14,18 @@ const StyledCard = styled(Card)`
   border: transparent;
   border-radius: 20px;
   margin-top: 68px;
+  animation: fadeInUp 1s ease-out;
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 40px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
 `;
 
 export function DashboardCard({ title }: DashboardCardProps) {
@@ -21,7 +33,6 @@ export function DashboardCard({ title }: DashboardCardProps) {
     <StyledCard>
       <Card.Body>
         <Card.Title>{title}</Card.Title>
-        {/* This page will contain the oral health status and recommendations */}
       </Card.Body>
     </StyledCard>
   );
