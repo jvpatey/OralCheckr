@@ -1,15 +1,17 @@
-/* Bootstrap custom styles */
+/* -- Background styles --*/
 
 .full-page-bg {
   height: 100vh;
   width: 100vw;
-  background-color: #efefef;
-  display: flex;
+  background-color: #F5F5F5;
+  display: flex; 
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 20px;
 }
+
+/* -- Login Page styles --*/
 
 .logo-style {
   margin-top: 20px;
@@ -17,14 +19,49 @@
 }
 
 .text-style {
-  color: #EFEFEF;
+  color: #222831;
+  font-weight: 500;
   text-align: center !important;
   margin-top: 20px !important;
-  }
+}
+
+.login-text {
+  color: #222831;
+  font-size: x-large !important;
+  font-weight: 500;
+  text-align: center !important;
+  margin-top: 50px !important;
+}
+
+.username-style {
+  background-color: #F5F5F5 !important;
+  margin-top: 20px !important;
+  border-style: solid !important;
+  border-width: 2px !important;
+  border-color: #222831 !important;
+}
+
+.password-style {
+  background-color: #F5F5F5 !important;
+  margin-top: 30px !important;
+  border-style: solid !important;
+  border-width: 2px !important;
+  border-color: #222831 !important;
+}
+
+::placeholder {
+  color: #07889B !important;
+  opacity: 1 !important;
+  font-weight: 400; 
+}
 
 .card-style {
-  max-width: 800px !important;
-  background-color: #328cc1;
+  max-width: 400px !important;
+  min-height: 600px !important;
+  background-color: #F5F5F5 !important;
+  border-style: solid !important;
+  border-width: 4px;
+  border-color: #07889B !important;
   border-radius: 15px;
   padding: 20px !important;
   text-align: center !important;
@@ -46,25 +83,209 @@
   }
 }
 
+.landing-btn {
+  background-color: #07889B !important;
+  color: #F5F5F5 !important;
+  font-weight: bold !important;
+  border-color: #0375B4 !important;
+  width: 60%;
+  margin-top: 30px !important;
+  border-radius: 20px !important;
+}
+
+.landing-btn:hover {
+  background-color: #F5F5F5 !important;
+  color: #07889B !important;
+  border-color: #07889B !important;
+  border-width: 2px;
+}
+
+/* -- Footer Styles -- */
+
 .footer {
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
   text-align: start;
+  color: #222831;
 }
 
-.landing-btn {
-  background-color: #D9B310 !important;
-  color: #328CC1 !important;
+/* -- Navbar Styles --*/
+
+.custom-navbar {
+  background-color: #F5F5F5;
+  padding: 0.5rem 1rem;
+}
+
+.brand-text {
+  margin-right: auto;
+  font-size: x-large !important;
+}
+
+.navbar-brand:hover {
+  color:#07889B !important;
   font-weight: bold !important;
-  border-color: #D9B310 !important;
-  width: 50%;
-  margin-top: 50px !important;
 }
 
-.landing-btn:hover {
-  background-color: #0B3C5D !important;
-  color: #D9B310 !important;
-  border-color: #0B3C5D !important;
+.navlink-style {
+  color: #222831;
+  margin-left: 1rem;
+}
+
+.navlink-style:hover {
+  color: #07889B !important;
+  font-weight: bold !important;
+}
+
+.dropdown-icon {
+  color: #222831;
+  cursor: pointer;
+}
+
+.dropdown-icon:hover {
+  color: #0375B4;
+  transform: scale(1.25);
+}
+
+.custom-navbar .navbar-toggler {
+  border: none;
+  padding: 0;
+}
+
+.custom-navbar .navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.custom-navbar .nav-link {
+  color: #222831;
+}
+
+.custom-collapse {
+  background-color: #F5F5F5;
+}
+
+.dropdown-link:hover {
+  color:#0375B4 !important;
+  font-weight: bold !important;
+}
+
+@media (max-width: 992px) {
+  .custom-collapse {
+    position: absolute;
+    top: 56px;
+    right: 0;
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .custom-collapse.show {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-right: 1rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .custom-collapse {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.navbar-nav .nav-link.active,
+.dropdown-menu .dropdown-item.active {
+  color: #07889B !important;
+  font-weight: bold !important;
+  transform: scale(1.10) !important;
+  background-color: transparent !important;
+}
+
+/* -- Sidebar styles -- */
+
+.sidebar-menu {
+  width: 200px;
+  margin: 10px;
+  background-color: #e0e0e0;
+  position: fixed;
+  top: 75px;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  padding-top: 1rem;
+  overflow-y: auto;
+  border-radius: 30px;
+}
+
+.sidebar-menu .sidebar-body {
+  padding-top: 1rem;
+}
+
+.sidebar-menu .sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-links {
+  color: #222831;
+  font-size: medium;
+  font-weight: 200;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.sidebar-links:hover {
+  color: #07889B;
+  font-weight: bold;
+}
+
+.sidebar-menu .sidebar-nav-link:hover {
+  background-color: #37352f;
+}
+
+/* -- Dashboard container styles -- */
+
+.dashboard-container {
+  display: flex !important;
+  flex: 1 !important;
+  overflow: hidden !important;
+}
+
+.dashboard-card-container {
+  flex: 1 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+@media (max-width: 1100px) {
+  .sidebar-menu {
+    display: none !important;
+  }
+
+  .dashboard-card-container {
+    margin-left: 0 !important;
+    padding: 10px !important;
+  }
+
+  .dashboard-card {
+    min-width: 100% !important;
+    min-height: 100% !important;
+  }
+}
+
+/* -- Icon Styles -- */
+
+.dropdown-icon {
+  color: #222831 !important;
+}
+
+.dropdown-icon:hover {
+  color: #0375B4 !important;
+  transform: scale(1.25) !important;
 }

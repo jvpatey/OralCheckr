@@ -1,0 +1,22 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "title": "How often do you brush your teeth?",
+      "type": "radio",
+      "options": [
+        { "optionId": 1, "optionLabel": "Once a day" },
+        { "optionId": 2, "optionLabel": "Twice a day" }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Your Question 2",
+      "type": "checkbox",
+      "options": [
+        { "optionId": 1, "optionLabel": " <description>" },
+        { "optionId": 2, "optionLabel": " <description>" }
+      ]
+    }
+  ]
+}
