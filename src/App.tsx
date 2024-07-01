@@ -6,7 +6,7 @@ import { RoutePaths } from "./common/Routes";
 
 export const links = [
   { text: "Dashboard", href: RoutePaths.DASHBOARD },
-  { text: "Questionnaire", href: RoutePaths.QUESTIONNAIRE },
+  { text: "Questionnaire", href: RoutePaths.START_QUESTIONNAIRE },
   { text: "Habit Tracker", href: RoutePaths.HABIT_TRACKER },
   { text: "Log Out", href: RoutePaths.LOGIN },
 ];
