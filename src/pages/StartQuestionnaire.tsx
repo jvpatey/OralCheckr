@@ -93,7 +93,7 @@ const Button = styled.button<{ $start?: boolean }>`
   background-color: ${(props) => (props.$start ? "#07889B" : "white")};
   color: ${(props) => (props.$start ? "#F5F5F5" : "#07889B")};
   font-weight: bold;
-  border: 2px solid ${(props) => (props.$start ? "#0375B4" : "#07889B")};
+  border: 2px solid ${(props) => (props.$start ? "#07889B" : "#07889B")};
   width: 20%;
   margin: 80px auto 20px;
   border-radius: 50px;
