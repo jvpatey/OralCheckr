@@ -4,6 +4,8 @@ import { QuesProps, Type } from "../common/Types";
 import questionData from "../common/questionnaire.json";
 import styled from "styled-components";
 import { Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { RoutePaths } from "../common/Routes";
 
 // styled-component styles for Questionnaire Page
 
@@ -146,6 +148,10 @@ export function Questionnaire() {
     }
   };
 
+  const handleSubmit = () => {
+    console.log("Submit questionnaire");
+  };
+
   return (
     <PageBackground>
       <DashboardContainer>
@@ -178,12 +184,22 @@ export function Questionnaire() {
                 >
                   Previous
                 </NavigationButton>
-                <NavigationButton
-                  onClick={handleNext}
-                  disabled={currentQuestion === questions.length - 1}
-                >
-                  Next
-                </NavigationButton>
+                {currentQuestion === questions.length - 1 ? (
+                  <NavigationButton
+                    as={Link}
+                    to={RoutePaths.DASHBOARD}
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </NavigationButton>
+                ) : (
+                  <NavigationButton
+                    onClick={handleNext}
+                    disabled={currentQuestion === questions.length - 1}
+                  >
+                    Next
+                  </NavigationButton>
+                )}
               </div>
             </QuesContainer>
           </StyledCard>
