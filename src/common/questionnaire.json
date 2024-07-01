@@ -6,16 +6,45 @@
       "type": "radio",
       "options": [
         { "optionId": 1, "optionLabel": "Once a day" },
-        { "optionId": 2, "optionLabel": "Twice a day" }
+        { "optionId": 2, "optionLabel": "Twice a day" },
+        { "optionId": 3, "optionLabel": "More than twice a day" },
+        { "optionId": 4, "optionLabel": "I don't brush my teeth daily" }
       ]
     },
     {
       "id": 2,
-      "title": "Your Question 2",
+      "title": "How often do you floss your teeth?",
+      "type": "radio",
+      "options": [
+        { "optionId": 1, "optionLabel": "Daily" },
+        { "optionId": 2, "optionLabel": "A few times a week" },
+        { "optionId": 3, "optionLabel": "Occasionally" },
+        { "optionId": 4, "optionLabel": "Never" }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "How often do you use a mouthrinse?",
+      "type": "radio",
+      "options": [
+        { "optionId": 1, "optionLabel": "Daily" },
+        { "optionId": 2, "optionLabel": "A few times a week" },
+        { "optionId": 3, "optionLabel": "Occasionally" },
+        { "optionId": 4, "optionLabel": "Never" }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Which additional oral health aids do you use? (Check all that apply)",
       "type": "checkbox",
       "options": [
-        { "optionId": 1, "optionLabel": " <description>" },
-        { "optionId": 2, "optionLabel": " <description>" }
+        { "optionId": 1, "optionLabel": "Manual toothbrush" },
+        { "optionId": 2, "optionLabel": "Power toothbrush" },
+        { "optionId": 3, "optionLabel": "String floss" },
+        { "optionId": 4, "optionLabel": "Floss picks" },
+        { "optionId": 5, "optionLabel": "Soft picks" },
+        { "optionId": 6, "optionLabel": "Waterflosser" },
+        { "optionId": 7, "optionLabel": "Tongue scraper" }
       ]
     }
   ]
