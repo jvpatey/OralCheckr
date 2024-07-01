@@ -75,11 +75,12 @@ const QuesContainer = styled.div`
   height: 100%;
   width: 100%;
   margin-top: 0;
+  padding: 20px;
+  overflow-y: auto;
 `;
 
 const ProgressBar = styled.div`
-  width: 90%;
-  margin-top: 20px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
@@ -97,6 +98,14 @@ const ProgressBar = styled.div`
   }
 `;
 
+const ProgressIndicator = styled.div`
+  font-size: 1.15rem;
+  color: #07889b;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
 const NavigationButton = styled.button`
   background-color: #07889b;
   color: white;
@@ -106,7 +115,6 @@ const NavigationButton = styled.button`
   cursor: pointer;
   font-size: 1rem;
   margin: 10px;
-  margin-bottom: 20px;
 
   &:hover {
     background-color: #066a83;
@@ -154,6 +162,9 @@ export function Questionnaire() {
                   ></div>
                 ))}
               </ProgressBar>
+              <ProgressIndicator>
+                Question {currentQuestion + 1} / {questions.length}
+              </ProgressIndicator>
               <Ques
                 id={questions[currentQuestion].id}
                 title={questions[currentQuestion].title}
