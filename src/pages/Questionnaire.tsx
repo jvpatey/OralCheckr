@@ -1,60 +1,55 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { links } from "../App";
-import { DashboardCard } from "../components/DashboardCard";
-import styled from "styled-components";
-
-// styled-component styles for Questionnaire Page
-
-const PageBackground = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background-color: #f5f5f5;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-`;
-
-const DashboardContainer = styled.div`
-  display: flex;
-  flex: 1;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-
-  @media (max-width: 1100px) {
-    max-width: 100vw;
-  }
-`;
-
-const DashboardCardContainer = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 20px;
-
-  @media (max-width: 1100px) {
-    margin-left: 0;
-    padding: 10px;
-  }
-`;
+import { useState } from "react";
+import { Ques } from "../components/Ques";
+import { QuesProps, Type } from "../common/Types";
+import questionData from "../common/questionnaire.json";
 
 export function Questionnaire() {
-  const activeLink = links.find(
-    (link) => window.location.pathname === link.href
-  );
-  const activeTitle = activeLink ? activeLink.text : "Dashboard";
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+
+  const questions: QuesProps[] = questionData.questions.map((question) => ({
+    ...question,
+    type: Type[question.type.toUpperCase() as keyof typeof Type],
+  }));
+
+  const handleNext = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  };
 
   return (
-    <PageBackground>
-      <DashboardContainer>
-        <DashboardCardContainer>
-          <DashboardCard title={activeTitle} />
-        </DashboardCardContainer>
-      </DashboardContainer>
-    </PageBackground>
+    <div>
+      <div className="progress-bar">
+        {questions.map((_, index) => (
+          <div
+            key={index}
+            className={`progress-segment ${
+              index <= currentQuestion ? "filled" : ""
+            }`}
+          ></div>
+        ))}
+      </div>
+      <Ques
+        id={questions[currentQuestion].id}
+        title={questions[currentQuestion].title}
+        type={questions[currentQuestion].type}
+        options={questions[currentQuestion].options}
+      />
+      <button onClick={handlePrevious} disabled={currentQuestion === 0}>
+        Previous
+      </button>
+      <button
+        onClick={handleNext}
+        disabled={currentQuestion === questions.length - 1}
+      >
+        Next
+      </button>
+    </div>
   );
 }
