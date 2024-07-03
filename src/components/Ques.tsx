@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { Type, QuesProps } from "../common/Types";
 import styled from "styled-components";
 
@@ -18,6 +19,7 @@ const FormContainer = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   margin: auto;
+  width: 100%;
 `;
 
 const FormGroup = styled.div`
@@ -50,37 +52,47 @@ const CheckboxInput = styled.input`
 `;
 
 export function Ques({ id, title, type, options }: QuesProps) {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+  }, [id]);
+
   return (
     <FormContainer>
       <QuesTitle>{title}</QuesTitle>
-      {type === Type.RADIO &&
-        options.map((option) => (
-          <FormGroup key={option.optionId}>
-            <RadioInput
-              type="radio"
-              id={`${id}-${option.optionId}`}
-              name={`question-${id}`}
-              value={option.optionLabel}
-            />
-            <label htmlFor={`${id}-${option.optionId}`}>
-              {option.optionLabel}
-            </label>
-          </FormGroup>
-        ))}
-      {type === Type.CHECKBOX &&
-        options.map((option) => (
-          <FormGroup key={option.optionId}>
-            <CheckboxInput
-              type="checkbox"
-              id={`${id}-${option.optionId}`}
-              name={`question-${id}`}
-              value={option.optionLabel}
-            />
-            <label htmlFor={`${id}-${option.optionId}`}>
-              {option.optionLabel}
-            </label>
-          </FormGroup>
-        ))}
+      <form ref={formRef} style={{ width: "100%" }}>
+        {type === Type.RADIO &&
+          options.map((option) => (
+            <FormGroup key={option.optionId}>
+              <RadioInput
+                type="radio"
+                id={`${id}-${option.optionId}`}
+                name={`question-${id}`}
+                value={option.optionLabel}
+              />
+              <label htmlFor={`${id}-${option.optionId}`}>
+                {option.optionLabel}
+              </label>
+            </FormGroup>
+          ))}
+        {type === Type.CHECKBOX &&
+          options.map((option) => (
+            <FormGroup key={option.optionId}>
+              <CheckboxInput
+                type="checkbox"
+                id={`${id}-${option.optionId}`}
+                name={`question-${id}`}
+                value={option.optionLabel}
+              />
+              <label htmlFor={`${id}-${option.optionId}`}>
+                {option.optionLabel}
+              </label>
+            </FormGroup>
+          ))}
+      </form>
     </FormContainer>
   );
 }
