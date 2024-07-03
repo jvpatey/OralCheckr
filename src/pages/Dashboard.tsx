@@ -6,7 +6,7 @@ import styled from "styled-components";
 // styled-component styles for Dashboard Page
 
 const PageBackground = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   background-color: #f5f5f5;
   display: flex;
@@ -40,6 +40,43 @@ const DashboardCardContainer = styled.div`
     margin-left: 0;
     padding: 10px;
   }
+
+  @media (max-height: 700px) {
+    padding: 10px;
+  }
+`;
+
+const StyledCard = styled(DashboardCard)`
+  width: 80vw;
+  max-width: 1400px;
+  height: 80vh;
+  min-height: 60vh;
+  background-color: #e0e0e0;
+  border: transparent;
+  border-radius: 20px;
+  margin-top: 68px;
+  animation: fadeInUp 1s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 40px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @media (max-height: 700px) {
+    height: auto;
+    margin-top: 20px;
+  }
 `;
 
 export function Dashboard() {
@@ -52,7 +89,7 @@ export function Dashboard() {
     <PageBackground>
       <DashboardContainer>
         <DashboardCardContainer>
-          <DashboardCard title={activeTitle} />
+          <StyledCard title={activeTitle} />
         </DashboardCardContainer>
       </DashboardContainer>
     </PageBackground>

@@ -10,7 +10,7 @@ import { RoutePaths } from "../common/Routes";
 // styled-component styles for Questionnaire Page
 
 const PageBackground = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   background-color: #f5f5f5;
   display: flex;
@@ -44,18 +44,27 @@ const DashboardCardContainer = styled.div`
     margin-left: 0;
     padding: 10px;
   }
+
+  @media (max-height: 700px) {
+    padding: 10px;
+  }
 `;
 
 const StyledCard = styled(Card)`
-  width: 97vw;
-  height: 87vh;
-  min-width: 300px;
-  min-height: 300px;
+  width: 80vw;
+  max-width: 1400px;
+  height: 80vh;
+  min-height: 60vh;
   background-color: #e0e0e0;
   border: transparent;
   border-radius: 20px;
   margin-top: 68px;
   animation: fadeInUp 1s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
 
   @keyframes fadeInUp {
     from {
@@ -67,16 +76,30 @@ const StyledCard = styled(Card)`
       transform: translate3d(0, 0, 0);
     }
   }
+
+  @media (max-height: 700px) {
+    height: auto;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 1100px) {
+    width: 90vw;
+    height: 70vh;
+  }
+
+  @media (max-height: 500px) {
+    height: auto;
+    min-height: 50vh;
+  }
 `;
 
 const QuesContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   height: 100%;
   width: 100%;
-  margin-top: 0;
   padding: 20px;
   overflow-y: auto;
 `;
@@ -117,6 +140,7 @@ const NavigationButton = styled.button`
   cursor: pointer;
   font-size: 1rem;
   margin: 10px;
+  width: 150px;
 
   &:hover {
     background-color: #066a83;
@@ -126,6 +150,18 @@ const NavigationButton = styled.button`
     background-color: #ccc;
     cursor: not-allowed;
   }
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    width: 100px;
+    font-size: 0.9rem;
+  }
+`;
+
+const SubmitButton = styled(NavigationButton).attrs({ as: Link })`
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
 `;
 
 export function Questionnaire() {
@@ -185,13 +221,12 @@ export function Questionnaire() {
                   Previous
                 </NavigationButton>
                 {currentQuestion === questions.length - 1 ? (
-                  <NavigationButton
-                    as={Link}
+                  <SubmitButton
                     to={RoutePaths.DASHBOARD}
                     onClick={handleSubmit}
                   >
                     Submit
-                  </NavigationButton>
+                  </SubmitButton>
                 ) : (
                   <NavigationButton
                     onClick={handleNext}
