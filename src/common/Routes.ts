@@ -1,9 +1,8 @@
 export enum RoutePaths {
-  DASHBOARD = "/dashboard",
-  HABIT_TRACKER = "/habit-tracker",
-  RECOMMENDATIONS = '/recommendations',
-  START_QUESTIONNAIRE = '/start-questionnaire',
-  QUESTIONNAIRE = '/questionnaire',
-  LOGIN = '/login',
-  LANDING = '/landing'
+  DASHBOARD = "/OralCheckr/dashboard",
+  HABIT_TRACKER = "/OralCheckr/habit-tracker",
+  RECOMMENDATIONS = '/OralCheckr/recommendations',
+  START_QUESTIONNAIRE = '/OralCheckr/start-questionnaire',
+  QUESTIONNAIRE = '/OralCheckr/questionnaire',
+  LOGIN = '/OralCheckr/login'
 }

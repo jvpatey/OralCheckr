@@ -5,7 +5,6 @@ import { GuardedRoute } from "./containers/GuardedRoute";
 import { RedirectIfAuthenticated } from "./containers/RedirectIfAuthenticated";
 import { Dashboard } from "./pages/Dashboard";
 import { HabitTracker } from "./pages/HabitTracker";
-import { Landing } from "./pages/Landing";
 import { Login } from "./pages/Login";
 import { Questionnaire } from "./pages/Questionnaire";
 import { StartQuestionnaire } from "./pages/StartQuestionnaire";
@@ -43,14 +42,6 @@ export function Router() {
         element={
           <GuardedRoute>
             <StartQuestionnaire />
-          </GuardedRoute>
-        }
-      />
-      <Route
-        path={RoutePaths.LANDING}
-        element={
-          <GuardedRoute>
-            <Landing />
           </GuardedRoute>
         }
       />

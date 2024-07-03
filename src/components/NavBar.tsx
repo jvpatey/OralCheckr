@@ -112,7 +112,7 @@ export function NavBar({ links }: NavBarProps) {
     <CustomNavbar expand="lg" fixed="top">
       <Container fluid>
         <BrandText as={Link} to={RoutePaths.DASHBOARD}>
-          <LogoImage src="/images/logo2.png" alt="Logo" />
+          <LogoImage src="/OralCheckr/images/logo2.png" alt="Logo" />
           OralCheckr
         </BrandText>
         <Dropdown className="ms-auto d-lg-none">
