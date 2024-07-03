@@ -136,10 +136,7 @@ export function Login() {
       <AnimatedCard>
         <CardBody>
           <LogoStyle>
-            <LogoImgStyle
-              src="/OralCheckr/public/images/logo2.png"
-              alt="Logo"
-            />
+            <LogoImgStyle src="./OralCheckr/images/logo2.png" alt="Logo" />
             <LogoTextStyle>OralCheckr</LogoTextStyle>
           </LogoStyle>
           <TextStyle>Improve your oral health today.</TextStyle>
