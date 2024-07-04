@@ -2,7 +2,7 @@ import { Container, Nav, Navbar, Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
-import { RoutePaths } from "../common/Routes";
+import { RoutePaths, getFullPath } from "../common/Routes";
 import styled from "styled-components";
 
 interface NavBarProps {
@@ -111,7 +111,7 @@ export function NavBar({ links }: NavBarProps) {
   return (
     <CustomNavbar expand="lg" fixed="top">
       <Container fluid>
-        <BrandText as={Link} to={RoutePaths.DASHBOARD}>
+        <BrandText as={Link} to={getFullPath(RoutePaths.DASHBOARD)}>
           <LogoImage src="/OralCheckr/images/logo2.png" alt="Logo" />
           OralCheckr
         </BrandText>
@@ -128,9 +128,13 @@ export function NavBar({ links }: NavBarProps) {
                 className={location.pathname === link.href ? "active" : ""}
                 key={link.href}
                 as={Link}
-                to={link.href === RoutePaths.LOGIN ? "/" : link.href}
+                to={
+                  link.href === getFullPath(RoutePaths.LOGIN) ? "/" : link.href
+                }
                 onClick={
-                  link.href === RoutePaths.LOGIN ? handleLogout : undefined
+                  link.href === getFullPath(RoutePaths.LOGIN)
+                    ? handleLogout
+                    : undefined
                 }
               >
                 {link.text}
@@ -147,7 +151,9 @@ export function NavBar({ links }: NavBarProps) {
                 as={Link}
                 to={link.href}
                 onClick={
-                  link.href === RoutePaths.LOGIN ? handleLogout : undefined
+                  link.href === getFullPath(RoutePaths.LOGIN)
+                    ? handleLogout
+                    : undefined
                 }
               >
                 {link.text}

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { RoutePaths } from "../common/Routes";
+import { getFullPath } from "../common/Routes";
 
 // styled-component styles for Questionnaire Page
 
@@ -242,7 +243,7 @@ export function Questionnaire() {
                 </NavigationButton>
                 {currentQuestion === questions.length - 1 ? (
                   <SubmitButton
-                    to={RoutePaths.DASHBOARD}
+                    to={getFullPath(RoutePaths.DASHBOARD)}
                     onClick={handleSubmit}
                   >
                     Submit

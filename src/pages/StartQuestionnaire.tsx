@@ -3,6 +3,7 @@ import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { RoutePaths } from "../common/Routes";
+import { getFullPath } from "../common/Routes";
 
 // styled-component styles for Start Questionnaire Page
 
@@ -153,7 +154,7 @@ export function StartQuestionnaire() {
               Utilize our recommendations and track your progress using our
               integrated habit tracker.
             </CardText>
-            <Button $start as={Link} to={RoutePaths.QUESTIONNAIRE}>
+            <Button $start as={Link} to={getFullPath(RoutePaths.QUESTIONNAIRE)}>
               Begin
             </Button>
           </StyledCard>

@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { RoutePaths } from "./common/Routes";
+import { RoutePaths, getFullPath } from "./common/Routes";
 import { GuardedRoute } from "./containers/GuardedRoute";
 import { RedirectIfAuthenticated } from "./containers/RedirectIfAuthenticated";
 import { Dashboard } from "./pages/Dashboard";
@@ -22,7 +22,7 @@ export function Router() {
       />
       <Route path="*" element={<Navigate to="/" replace={true} />} />
       <Route
-        path={RoutePaths.DASHBOARD}
+        path={getFullPath(RoutePaths.DASHBOARD)}
         element={
           <GuardedRoute>
             <Dashboard />
@@ -30,7 +30,7 @@ export function Router() {
         }
       />
       <Route
-        path={RoutePaths.QUESTIONNAIRE}
+        path={getFullPath(RoutePaths.QUESTIONNAIRE)}
         element={
           <GuardedRoute>
             <Questionnaire />
@@ -38,7 +38,7 @@ export function Router() {
         }
       />
       <Route
-        path={RoutePaths.START_QUESTIONNAIRE}
+        path={getFullPath(RoutePaths.START_QUESTIONNAIRE)}
         element={
           <GuardedRoute>
             <StartQuestionnaire />
@@ -46,7 +46,7 @@ export function Router() {
         }
       />
       <Route
-        path={RoutePaths.HABIT_TRACKER}
+        path={getFullPath(RoutePaths.HABIT_TRACKER)}
         element={
           <GuardedRoute>
             <HabitTracker />

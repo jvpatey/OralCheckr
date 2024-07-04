@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { RoutePaths } from "../common/Routes";
+import { getFullPath } from "../common/Routes";
 
 export function RedirectIfAuthenticated({
   children,
@@ -9,7 +10,7 @@ export function RedirectIfAuthenticated({
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
 
   if (isAuthenticated) {
-    return <Navigate to={RoutePaths.DASHBOARD} replace={true} />;
+    return <Navigate to={getFullPath(RoutePaths.DASHBOARD)} replace={true} />;
   }
 
   return children;

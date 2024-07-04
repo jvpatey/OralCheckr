@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
+import { RoutePaths } from "../common/Routes";
+import { getFullPath } from "../common/Routes";
 
 // styled-component styles for Login Page
 
@@ -128,7 +130,7 @@ export function Login() {
 
   const handleLogin = () => {
     localStorage.setItem("authenticated", "true");
-    navigate("/dashboard");
+    navigate(getFullPath(RoutePaths.DASHBOARD));
   };
 
   return (
