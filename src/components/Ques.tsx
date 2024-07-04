@@ -1,5 +1,4 @@
 import { useRef, useEffect } from "react";
-import { Type, QuesProps } from "../common/Types";
 import styled from "styled-components";
 
 const QuesTitle = styled.h2`
@@ -50,6 +49,27 @@ const RadioInput = styled.input`
 const CheckboxInput = styled.input`
   margin-right: 10px;
 `;
+
+// Types
+
+enum Type {
+  RADIO = "radio",
+  CHECKBOX = "checkbox",
+  RANGE = "range",
+  DROPDOWN = "dropdown",
+}
+
+interface Option {
+  optionId: number;
+  optionLabel: string;
+}
+
+interface QuesProps {
+  id: number;
+  title: string;
+  type: Type;
+  options: Option[];
+}
 
 export function Ques({ id, title, type, options }: QuesProps) {
   const formRef = useRef<HTMLFormElement>(null);

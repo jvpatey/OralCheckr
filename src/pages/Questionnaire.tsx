@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Ques } from "../components/Ques";
-import { QuesProps, Type } from "../common/Types";
 import questionData from "../common/questionnaire.json";
 import styled from "styled-components";
 import { Card } from "react-bootstrap";
@@ -163,6 +162,27 @@ const SubmitButton = styled(NavigationButton).attrs({ as: Link })`
   text-align: center;
   text-decoration: none;
 `;
+
+// types
+
+enum Type {
+  RADIO = "radio",
+  CHECKBOX = "checkbox",
+  RANGE = "range",
+  DROPDOWN = "dropdown",
+}
+
+interface Option {
+  optionId: number;
+  optionLabel: string;
+}
+
+interface QuesProps {
+  id: number;
+  title: string;
+  type: Type;
+  options: Option[];
+}
 
 export function Questionnaire() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
