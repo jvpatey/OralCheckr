@@ -159,7 +159,7 @@ export function Questionnaire() {
 
   const questions: QuesProps[] = questionData.questions.map((question) => ({
     ...question,
-    type: Type[question.type.toUpperCase() as keyof typeof Type],
+    type: question.type as Type,
   }));
 
   useEffect(() => {
@@ -242,12 +242,7 @@ export function Questionnaire() {
               <ProgressIndicator>
                 Question {currentQuestion + 1} / {questions.length}
               </ProgressIndicator>
-              <Ques
-                id={questions[currentQuestion].id}
-                title={questions[currentQuestion].title}
-                type={questions[currentQuestion].type}
-                options={questions[currentQuestion].options}
-              />
+              <Ques {...questions[currentQuestion]} />
               <div>
                 <NavigationButton
                   onClick={handlePrevious}

@@ -71,7 +71,8 @@ interface QuesProps {
   options: Option[];
 }
 
-export function Ques({ id, title, type, options }: QuesProps) {
+export function Ques(props: QuesProps) {
+  const { id, title, type, options } = props;
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
