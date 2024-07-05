@@ -6,19 +6,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 import { RoutePaths } from "../common/Routes";
 import { getFullPath } from "../common/Routes";
+import { PageBackground } from "../components/styled/PageBackground";
 
 // styled-component styles for Login Page
-
-const PageBackground = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background-color: #f5f5f5;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-`;
 
 const AnimatedCard = styled(Card)`
   border-radius: 15px;

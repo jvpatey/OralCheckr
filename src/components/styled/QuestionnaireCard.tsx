@@ -1,12 +1,8 @@
-import { Card } from "react-bootstrap";
 import styled from "styled-components";
+import { Card } from "react-bootstrap";
 
-interface DashboardCardProps {
-  title: string;
-}
-
-const StyledCard = styled(Card)`
-  width: 90vw;
+export const QuestionnaireCard = styled(Card)`
+  width: 80vw;
   max-width: 1400px;
   height: 80vh;
   min-height: 60vh;
@@ -37,13 +33,3 @@ const StyledCard = styled(Card)`
     margin-top: 20px;
   }
 `;
-
-export function DashboardCard({ title }: DashboardCardProps) {
-  return (
-    <StyledCard>
-      <Card.Body>
-        <Card.Title>{title}</Card.Title>
-      </Card.Body>
-    </StyledCard>
-  );
-}

@@ -2,96 +2,15 @@ import { useState } from "react";
 import { Ques } from "../components/Ques";
 import questionData from "../common/questionnaire.json";
 import styled from "styled-components";
-import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { RoutePaths } from "../common/Routes";
 import { getFullPath } from "../common/Routes";
+import { PageBackground } from "../components/styled/PageBackground";
+import { DashboardContainer } from "../components/styled/DashboardContainer";
+import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
+import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
 
 // styled-component styles for Questionnaire Page
-
-const PageBackground = styled.div`
-  min-height: 100vh;
-  width: 100vw;
-  background-color: #f5f5f5;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-`;
-
-const DashboardContainer = styled.div`
-  display: flex;
-  flex: 1;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-
-  @media (max-width: 1100px) {
-    max-width: 100vw;
-  }
-`;
-
-const DashboardCardContainer = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 20px;
-
-  @media (max-width: 1100px) {
-    margin-left: 0;
-    padding: 10px;
-  }
-
-  @media (max-height: 700px) {
-    padding: 10px;
-  }
-`;
-
-const StyledCard = styled(Card)`
-  width: 80vw;
-  max-width: 1400px;
-  height: 80vh;
-  min-height: 60vh;
-  background-color: #e0e0e0;
-  border: transparent;
-  border-radius: 20px;
-  margin-top: 68px;
-  animation: fadeInUp 1s ease-out;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 20px;
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translate3d(0, 40px, 0);
-    }
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
-  }
-
-  @media (max-height: 700px) {
-    height: auto;
-    margin-top: 20px;
-  }
-
-  @media (max-width: 1100px) {
-    width: 90vw;
-    height: 70vh;
-  }
-
-  @media (max-height: 500px) {
-    height: auto;
-    min-height: 50vh;
-  }
-`;
 
 const QuesContainer = styled.div`
   display: flex;
@@ -213,7 +132,7 @@ export function Questionnaire() {
     <PageBackground>
       <DashboardContainer>
         <DashboardCardContainer>
-          <StyledCard>
+          <QuestionnaireCard>
             <QuesContainer>
               <ProgressBar>
                 {questions.map((_, index) => (
@@ -258,7 +177,7 @@ export function Questionnaire() {
                 )}
               </div>
             </QuesContainer>
-          </StyledCard>
+          </QuestionnaireCard>
         </DashboardCardContainer>
       </DashboardContainer>
     </PageBackground>
