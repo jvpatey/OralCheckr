@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 
 const QuesTitle = styled.h2`
@@ -21,8 +21,9 @@ const FormContainer = styled.div`
   width: 100%;
 `;
 
-const FormGroup = styled.div`
+const FormGroup = styled.div<{ isRange: boolean }>`
   display: flex;
+  flex-direction: ${({ isRange }) => (isRange ? "column" : "row")};
   align-items: center;
   background-color: #e0e0e0;
   padding: 10px 20px;
@@ -50,7 +51,26 @@ const CheckboxInput = styled.input`
   margin-right: 10px;
 `;
 
-// Types
+const DropdownSelect = styled.select`
+  color: #222831;
+  background-color: #e0e0e0;
+  border-color: f5f5f5;
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+`;
+
+const RangeInput = styled.input`
+  width: 100%;
+  margin: 10px 0;
+`;
+
+const RangeLabels = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
 
 enum Type {
   RADIO = "radio",
@@ -74,6 +94,7 @@ interface QuesProps {
 export function Ques(props: QuesProps) {
   const { id, title, type, options } = props;
   const formRef = useRef<HTMLFormElement>(null);
+  const [rangeValue, setRangeValue] = useState(0);
 
   useEffect(() => {
     if (formRef.current) {
@@ -81,13 +102,17 @@ export function Ques(props: QuesProps) {
     }
   }, [id]);
 
+  const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRangeValue(Number(event.target.value));
+  };
+
   return (
     <FormContainer>
       <QuesTitle>{title}</QuesTitle>
       <form ref={formRef} style={{ width: "100%" }}>
         {type === Type.RADIO &&
           options.map((option) => (
-            <FormGroup key={option.optionId}>
+            <FormGroup key={option.optionId} isRange={false}>
               <RadioInput
                 type="radio"
                 id={`${id}-${option.optionId}`}
@@ -101,7 +126,7 @@ export function Ques(props: QuesProps) {
           ))}
         {type === Type.CHECKBOX &&
           options.map((option) => (
-            <FormGroup key={option.optionId}>
+            <FormGroup key={option.optionId} isRange={false}>
               <CheckboxInput
                 type="checkbox"
                 id={`${id}-${option.optionId}`}
@@ -113,6 +138,35 @@ export function Ques(props: QuesProps) {
               </label>
             </FormGroup>
           ))}
+        {type === Type.DROPDOWN && (
+          <FormGroup isRange={false}>
+            <DropdownSelect id={`question-${id}`} name={`question-${id}`}>
+              {options.map((option) => (
+                <option key={option.optionId} value={option.optionLabel}>
+                  {option.optionLabel}
+                </option>
+              ))}
+            </DropdownSelect>
+          </FormGroup>
+        )}
+        {type === Type.RANGE && (
+          <FormGroup isRange={true}>
+            <RangeInput
+              type="range"
+              id={`question-${id}`}
+              name={`question-${id}`}
+              min="0"
+              max={options.length - 1}
+              value={rangeValue}
+              onChange={handleRangeChange}
+            />
+            <RangeLabels>
+              {options.map((option) => (
+                <span key={option.optionId}>{option.optionLabel}</span>
+              ))}
+            </RangeLabels>
+          </FormGroup>
+        )}
       </form>
     </FormContainer>
   );
