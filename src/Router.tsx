@@ -7,7 +7,6 @@ import { Dashboard } from "./pages/Dashboard";
 import { HabitTracker } from "./pages/HabitTracker";
 import { Login } from "./pages/Login";
 import { Questionnaire } from "./pages/Questionnaire";
-import { StartQuestionnaire } from "./pages/StartQuestionnaire";
 
 export function Router() {
   return (
@@ -30,26 +29,18 @@ export function Router() {
         }
       />
       <Route
-        path={getFullPath(RoutePaths.QUESTIONNAIRE)}
-        element={
-          <GuardedRoute>
-            <Questionnaire />
-          </GuardedRoute>
-        }
-      />
-      <Route
-        path={getFullPath(RoutePaths.START_QUESTIONNAIRE)}
-        element={
-          <GuardedRoute>
-            <StartQuestionnaire />
-          </GuardedRoute>
-        }
-      />
-      <Route
         path={getFullPath(RoutePaths.HABIT_TRACKER)}
         element={
           <GuardedRoute>
             <HabitTracker />
+          </GuardedRoute>
+        }
+      />
+      <Route
+        path={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/:questionId?`}
+        element={
+          <GuardedRoute>
+            <Questionnaire />
           </GuardedRoute>
         }
       />
