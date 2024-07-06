@@ -154,7 +154,7 @@ export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState<number>(
-    questionId ? parseInt(questionId) - 1 : -1
+    questionId ? parseInt(questionId) : -1
   );
 
   const questions: QuesProps[] = questionData.questions.map((question) => ({
@@ -164,7 +164,7 @@ export function Questionnaire() {
 
   useEffect(() => {
     if (questionId) {
-      setCurrentQuestion(parseInt(questionId) - 1);
+      setCurrentQuestion(parseInt(questionId));
     } else {
       setCurrentQuestion(-1);
     }
@@ -173,14 +173,16 @@ export function Questionnaire() {
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       navigate(
-        `${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion + 2}`
+        `${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion + 1}`
       );
     }
   };
 
   const handlePrevious = () => {
     if (currentQuestion > 0) {
-      navigate(`${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion}`);
+      navigate(
+        `${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion - 1}`
+      );
     }
   };
 
@@ -211,7 +213,7 @@ export function Questionnaire() {
               </CardText>
               <StartButton
                 as={Link}
-                to={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/1`}
+                to={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/0`}
               >
                 Begin
               </StartButton>
