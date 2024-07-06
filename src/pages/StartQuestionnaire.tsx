@@ -7,6 +7,7 @@ import { PageBackground } from "../components/styled/PageBackground";
 import { DashboardContainer } from "../components/styled/DashboardContainer";
 import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
 import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
+import { NavigationButton } from "../components/styled/NavigationButton";
 
 // styled-component styles for Start Questionnaire Page
 
@@ -39,27 +40,20 @@ const CardText = styled.h5`
   }
 `;
 
-const Button = styled.button<{ $start?: boolean }>`
-  background-color: ${(props) => (props.$start ? "#07889B" : "white")};
-  color: ${(props) => (props.$start ? "#F5F5F5" : "#07889B")};
-  font-weight: bold;
-  border: 2px solid ${(props) => (props.$start ? "#07889B" : "#07889B")};
-  width: 25%; /* Increased button width */
-  margin: 20px auto;
-  border-radius: 50px;
-  padding: 0.5em 1em;
-  cursor: pointer;
+const StartButton = styled(NavigationButton)`
+  width: 25%;
   text-align: center;
-
-  &:hover {
-    background-color: ${(props) => (props.$start ? "#F5F5F5" : "#07889B")};
-    color: ${(props) => (props.$start ? "#07889B" : "#F5F5F5")};
-    border-color: #07889b;
-    border-width: 2px;
-  }
 
   @media (max-width: 768px) {
     width: 40%;
+  }
+
+  &:hover {
+    background-color: #f5f5f5;
+    color: #07889b;
+    font-weight: bold;
+    border: solid;
+    border-color: #07889b;
   }
 `;
 
@@ -83,9 +77,12 @@ export function StartQuestionnaire() {
               Utilize our recommendations and track your progress using our
               integrated habit tracker.
             </CardText>
-            <Button $start as={Link} to={getFullPath(RoutePaths.QUESTIONNAIRE)}>
+            <StartButton
+              as={Link}
+              to={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/0`}
+            >
               Begin
-            </Button>
+            </StartButton>
           </QuestionnaireCard>
         </DashboardCardContainer>
       </DashboardContainer>

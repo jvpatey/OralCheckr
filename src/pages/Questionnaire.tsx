@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import questionData from "../common/questionnaire.json";
 import styled from "styled-components";
 import { getFullPath } from "../common/Routes";
@@ -9,6 +9,8 @@ import { DashboardCardContainer } from "../components/styled/DashboardCardContai
 import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
 import { Ques } from "../components/Ques";
 import { RoutePaths } from "../common/Routes";
+import { StartQuestionnaire } from "./StartQuestionnaire";
+import { NavigationButton } from "../components/styled/NavigationButton";
 
 // styled-component styles for Questionnaire Page
 
@@ -50,83 +52,10 @@ const ProgressIndicator = styled.div`
   text-align: center;
 `;
 
-const NavigationButton = styled.button`
-  background-color: #07889b;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 1rem;
-  margin: 10px;
-  width: 150px;
-
-  &:hover {
-    background-color: #066a83;
-  }
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-
-  @media (max-width: 768px) {
-    padding: 8px 16px;
-    width: 100px;
-    font-size: 0.9rem;
-  }
-`;
-
 const SubmitButton = styled(NavigationButton).attrs({ as: "a" })`
   display: inline-block;
   text-align: center;
   text-decoration: none;
-`;
-
-const TitleText = styled.h1`
-  color: #07889b;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-size: 2.5rem;
-
-  @media (max-width: 768px) {
-    font-size: 2rem;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-`;
-
-const CardText = styled.h5`
-  color: #222831;
-  margin-bottom: 20px;
-  margin-right: 40px;
-  margin-left: 40px;
-  text-align: center;
-  font-size: 1.5rem;
-
-  @media (max-width: 768px) {
-    font-size: 1.25rem;
-    margin-right: 20px;
-    margin-left: 20px;
-  }
-`;
-
-const StartButton = styled(NavigationButton)`
-  width: 25%;
-  text-align: center;
-
-  @media (max-width: 768px) {
-    width: 40%;
-  }
-
-  &:hover {
-    background-color: #f5f5f5;
-    color: #07889b;
-    font-weight: bold;
-    border: solid;
-    border-color: #07889b;
-  }
 `;
 
 // types
@@ -190,38 +119,9 @@ export function Questionnaire() {
     console.log("Submit questionnaire");
   };
 
+  // Render the start-questionnaire page
   if (currentQuestion === -1) {
-    // Render the start-questionnaire page
-    return (
-      <PageBackground>
-        <DashboardContainer>
-          <DashboardCardContainer>
-            <QuestionnaireCard>
-              <TitleText>Oral Health Questionnaire</TitleText>
-              <CardText>
-                Take our oral health questionnaire to evaluate your dental
-                well-being.
-              </CardText>
-              <CardText>
-                Receive a personalized score and tailored recommendations based
-                on your answers to gain valuable insights and improve your oral
-                health.
-              </CardText>
-              <CardText>
-                Utilize our recommendations and track your progress using our
-                integrated habit tracker.
-              </CardText>
-              <StartButton
-                as={Link}
-                to={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/0`}
-              >
-                Begin
-              </StartButton>
-            </QuestionnaireCard>
-          </DashboardCardContainer>
-        </DashboardContainer>
-      </PageBackground>
-    );
+    return <StartQuestionnaire />;
   }
 
   // Render the questionnaire pages
