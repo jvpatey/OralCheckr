@@ -54,7 +54,7 @@ const CheckboxInput = styled.input`
 const DropdownSelect = styled.select`
   color: #222831;
   background-color: #e0e0e0;
-  border-color: f5f5f5;
+  border-color: #f5f5f5;
   width: 100%;
   padding: 10px;
   border-radius: 20px;
@@ -110,63 +110,69 @@ export function Ques(props: QuesProps) {
     <FormContainer>
       <QuesTitle>{title}</QuesTitle>
       <form ref={formRef} style={{ width: "100%" }}>
-        {type === Type.RADIO &&
-          options.map((option) => (
-            <FormGroup key={option.optionId} isRange={false}>
-              <RadioInput
-                type="radio"
-                id={`${id}-${option.optionId}`}
-                name={`question-${id}`}
-                value={option.optionLabel}
-              />
-              <label htmlFor={`${id}-${option.optionId}`}>
-                {option.optionLabel}
-              </label>
-            </FormGroup>
-          ))}
-        {type === Type.CHECKBOX &&
-          options.map((option) => (
-            <FormGroup key={option.optionId} isRange={false}>
-              <CheckboxInput
-                type="checkbox"
-                id={`${id}-${option.optionId}`}
-                name={`question-${id}`}
-                value={option.optionLabel}
-              />
-              <label htmlFor={`${id}-${option.optionId}`}>
-                {option.optionLabel}
-              </label>
-            </FormGroup>
-          ))}
-        {type === Type.DROPDOWN && (
-          <FormGroup isRange={false}>
-            <DropdownSelect id={`question-${id}`} name={`question-${id}`}>
-              {options.map((option) => (
-                <option key={option.optionId} value={option.optionLabel}>
-                  {option.optionLabel}
-                </option>
-              ))}
-            </DropdownSelect>
-          </FormGroup>
-        )}
-        {type === Type.RANGE && (
-          <FormGroup isRange={true}>
-            <RangeInput
-              type="range"
-              id={`question-${id}`}
-              name={`question-${id}`}
-              min="0"
-              max={options.length - 1}
-              value={rangeValue}
-              onChange={handleRangeChange}
-            />
-            <RangeLabels>
-              {options.map((option) => (
-                <span key={option.optionId}>{option.optionLabel}</span>
-              ))}
-            </RangeLabels>
-          </FormGroup>
-        )}
+        {(() => {
+          switch (type) {
+            case Type.RADIO:
+              return options.map((option) => (
+                <FormGroup key={option.optionId} isRange={false}>
+                  <RadioInput
+                    type="radio"
+                    id={`${id}-${option.optionId}`}
+                    name={`question-${id}`}
+                    value={option.optionLabel}
+                  />
+                  <label htmlFor={`${id}-${option.optionId}`}>
+                    {option.optionLabel}
+                  </label>
+                </FormGroup>
+              ));
+            case Type.CHECKBOX:
+              return options.map((option) => (
+                <FormGroup key={option.optionId} isRange={false}>
+                  <CheckboxInput
+                    type="checkbox"
+                    id={`${id}-${option.optionId}`}
+                    name={`question-${id}`}
+                    value={option.optionLabel}
+                  />
+                  <label htmlFor={`${id}-${option.optionId}`}>
+                    {option.optionLabel}
+                  </label>
+                </FormGroup>
+              ));
+            case Type.DROPDOWN:
+              return (
+                <FormGroup isRange={false}>
+                  <DropdownSelect id={`question-${id}`} name={`question-${id}`}>
+                    {options.map((option) => (
+                      <option key={option.optionId} value={option.optionLabel}>
+                        {option.optionLabel}
+                      </option>
+                    ))}
+                  </DropdownSelect>
+                </FormGroup>
+              );
+            case Type.RANGE:
+              return (
+                <FormGroup isRange={true}>
+                  <RangeInput
+                    type="range"
+                    id={`question-${id}`}
+                    name={`question-${id}`}
+                    min="0"
+                    max={options.length - 1}
+                    value={rangeValue}
+                    onChange={handleRangeChange}
+                  />
+                  <RangeLabels>
+                    {options.map((option) => (
+                      <span key={option.optionId}>{option.optionLabel}</span>
+                    ))}
+                  </RangeLabels>
+                </FormGroup>
+              );
+          }
+        })()}
       </form>
     </FormContainer>
   );
