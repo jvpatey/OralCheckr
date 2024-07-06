@@ -63,9 +63,6 @@ const CustomCollapse = styled(Navbar.Collapse)`
     right: 0;
     width: 100%;
     max-width: 250px;
-  }
-
-  @media (max-width: 992px) {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
