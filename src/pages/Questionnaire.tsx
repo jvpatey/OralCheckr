@@ -81,11 +81,12 @@ interface QuesProps {
 export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
-  const [currentQuestion, setCurrentQuestion] = useState<number>(
-    questionId ? parseInt(questionId) : -1
-  );
+  const [currentQuestion, setCurrentQuestion] = useState<number>(-1);
   const [responses, setResponses] = useState<Record<number, number | number[]>>(
-    {}
+    () => {
+      const storedResponses = localStorage.getItem("questionnaire");
+      return storedResponses ? JSON.parse(storedResponses) : {};
+    }
   );
 
   const questions: QuesProps[] = questionData.questions.map((question) => ({
@@ -94,16 +95,22 @@ export function Questionnaire() {
   }));
 
   useEffect(() => {
+    const savedCurrentQuestion = localStorage.getItem("currentQuestion");
     if (questionId) {
       setCurrentQuestion(parseInt(questionId));
+    } else if (savedCurrentQuestion) {
+      setCurrentQuestion(parseInt(savedCurrentQuestion));
     } else {
       setCurrentQuestion(-1);
     }
   }, [questionId]);
 
+  // Save the current question index to local storage whenever it changes
   useEffect(() => {
-    localStorage.removeItem("questionnaire");
-  }, []);
+    if (currentQuestion >= 0) {
+      localStorage.setItem("currentQuestion", currentQuestion.toString());
+    }
+  }, [currentQuestion]);
 
   const handleResponseChange = (
     questionId: number,
@@ -134,6 +141,7 @@ export function Questionnaire() {
 
   const handleSubmit = () => {
     localStorage.setItem("questionnaire", JSON.stringify(responses));
+    localStorage.removeItem("currentQuestion");
     console.log("Submit questionnaire", responses);
   };
 
