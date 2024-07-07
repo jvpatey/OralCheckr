@@ -51,16 +51,6 @@ const CheckboxInput = styled.input`
   margin-right: 10px;
 `;
 
-const DropdownSelect = styled.select`
-  color: #222831;
-  background-color: #e0e0e0;
-  border-color: #f5f5f5;
-  width: 100%;
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-`;
-
 const RangeInput = styled.input`
   width: 100%;
   margin: 10px 0;
@@ -76,7 +66,6 @@ enum Type {
   RADIO = "radio",
   CHECKBOX = "checkbox",
   RANGE = "range",
-  DROPDOWN = "dropdown",
 }
 
 interface Option {
@@ -124,13 +113,6 @@ export function Ques(props: QuesProps) {
     onResponseChange(id, newSelectedOptions);
   };
 
-  const handleDropdownChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const value = Number(event.target.value);
-    onResponseChange(id, value);
-  };
-
   return (
     <FormContainer>
       <QuesTitle>{title}</QuesTitle>
@@ -167,23 +149,6 @@ export function Ques(props: QuesProps) {
                   </label>
                 </FormGroup>
               ));
-            case Type.DROPDOWN:
-              return (
-                <FormGroup isRange={false}>
-                  <DropdownSelect
-                    id={`question-${id}`}
-                    name={`question-${id}`}
-                    onChange={handleDropdownChange}
-                  >
-                    <option value="">Select an option</option>
-                    {options.map((option) => (
-                      <option key={option.optionId} value={option.optionId}>
-                        {option.optionLabel}
-                      </option>
-                    ))}
-                  </DropdownSelect>
-                </FormGroup>
-              );
             case Type.RANGE:
               return (
                 <FormGroup isRange={true}>

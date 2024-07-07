@@ -60,7 +60,7 @@
     {
       "id": 5,
       "title": "How often do your gums bleed when flossing?",
-      "type": "dropdown",
+      "type": "radio",
       "options": [
         { "optionId": 1, "optionLabel": "Never" },
         { "optionId": 2, "optionLabel": "Occasionally" },
@@ -126,7 +126,7 @@
     {
       "id": 11,
       "title": "When was your last visit to a dental professional?",
-      "type": "dropdown",
+      "type": "radio",
       "options": [
         { "optionId": 1, "optionLabel": "Less than 6 months" },
         { "optionId": 2, "optionLabel": "6 months to 1 year" },

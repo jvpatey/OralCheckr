@@ -64,7 +64,6 @@ enum Type {
   RADIO = "radio",
   CHECKBOX = "checkbox",
   RANGE = "range",
-  DROPDOWN = "dropdown",
 }
 
 interface Option {
