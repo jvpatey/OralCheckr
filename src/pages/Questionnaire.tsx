@@ -85,6 +85,9 @@ export function Questionnaire() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(
     questionId ? parseInt(questionId) : -1
   );
+  const [responses, setResponses] = useState<Record<number, number | number[]>>(
+    {}
+  );
 
   const questions: QuesProps[] = questionData.questions.map((question) => ({
     ...question,
@@ -98,6 +101,16 @@ export function Questionnaire() {
       setCurrentQuestion(-1);
     }
   }, [questionId]);
+
+  const handleResponseChange = (
+    questionId: number,
+    response: number | number[]
+  ) => {
+    setResponses((prevResponses) => ({
+      ...prevResponses,
+      [questionId]: response,
+    }));
+  };
 
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
@@ -116,8 +129,11 @@ export function Questionnaire() {
   };
 
   const handleSubmit = () => {
-    console.log("Submit questionnaire");
+    localStorage.setItem("questionnaire", JSON.stringify(responses));
+    console.log("Submit questionnaire", responses);
   };
+
+  const isNextDisabled = !responses[currentQuestion];
 
   // Render the start-questionnaire page
   if (currentQuestion === -1) {
@@ -144,7 +160,10 @@ export function Questionnaire() {
               <ProgressIndicator>
                 Question {currentQuestion + 1} / {questions.length}
               </ProgressIndicator>
-              <Ques {...questions[currentQuestion]} />
+              <Ques
+                {...questions[currentQuestion]}
+                onResponseChange={handleResponseChange}
+              />
               <div>
                 <NavigationButton
                   onClick={handlePrevious}
@@ -162,7 +181,7 @@ export function Questionnaire() {
                 ) : (
                   <NavigationButton
                     onClick={handleNext}
-                    disabled={currentQuestion === questions.length - 1}
+                    disabled={isNextDisabled}
                   >
                     Next
                   </NavigationButton>

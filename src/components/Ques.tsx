@@ -89,12 +89,14 @@ interface QuesProps {
   title: string;
   type: Type;
   options: Option[];
+  onResponseChange: (questionId: number, response: number | number[]) => void;
 }
 
 export function Ques(props: QuesProps) {
-  const { id, title, type, options } = props;
+  const { id, title, type, options, onResponseChange } = props;
   const formRef = useRef<HTMLFormElement>(null);
   const [rangeValue, setRangeValue] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
 
   useEffect(() => {
     if (formRef.current) {
@@ -103,7 +105,30 @@ export function Ques(props: QuesProps) {
   }, [id]);
 
   const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRangeValue(Number(event.target.value));
+    const value = Number(event.target.value);
+    setRangeValue(value);
+    onResponseChange(id, value);
+  };
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
+    onResponseChange(id, value);
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
+    const newSelectedOptions = event.target.checked
+      ? [...selectedOptions, value]
+      : selectedOptions.filter((option) => option !== value);
+    setSelectedOptions(newSelectedOptions);
+    onResponseChange(id, newSelectedOptions);
+  };
+
+  const handleDropdownChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const value = Number(event.target.value);
+    onResponseChange(id, value);
   };
 
   return (
@@ -119,7 +144,8 @@ export function Ques(props: QuesProps) {
                     type="radio"
                     id={`${id}-${option.optionId}`}
                     name={`question-${id}`}
-                    value={option.optionLabel}
+                    value={option.optionId}
+                    onChange={handleRadioChange}
                   />
                   <label htmlFor={`${id}-${option.optionId}`}>
                     {option.optionLabel}
@@ -133,7 +159,8 @@ export function Ques(props: QuesProps) {
                     type="checkbox"
                     id={`${id}-${option.optionId}`}
                     name={`question-${id}`}
-                    value={option.optionLabel}
+                    value={option.optionId}
+                    onChange={handleCheckboxChange}
                   />
                   <label htmlFor={`${id}-${option.optionId}`}>
                     {option.optionLabel}
@@ -143,9 +170,14 @@ export function Ques(props: QuesProps) {
             case Type.DROPDOWN:
               return (
                 <FormGroup isRange={false}>
-                  <DropdownSelect id={`question-${id}`} name={`question-${id}`}>
+                  <DropdownSelect
+                    id={`question-${id}`}
+                    name={`question-${id}`}
+                    onChange={handleDropdownChange}
+                  >
+                    <option value="">Select an option</option>
                     {options.map((option) => (
-                      <option key={option.optionId} value={option.optionLabel}>
+                      <option key={option.optionId} value={option.optionId}>
                         {option.optionLabel}
                       </option>
                     ))}
