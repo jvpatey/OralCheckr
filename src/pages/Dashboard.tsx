@@ -1,5 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { links } from "../App";
+import { PageBackground } from "../components/styled/PageBackground";
+import { DashboardContainer } from "../components/styled/DashboardContainer";
+import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
 import { DashboardCard } from "../components/DashboardCard";
 
 export function Dashboard() {
@@ -9,13 +12,12 @@ export function Dashboard() {
   const activeTitle = activeLink ? activeLink.text : "Dashboard";
 
   return (
-    <div className="full-page-bg">
-      <div className="dashboard-container">
-        <div className="dashboard-card-container">
+    <PageBackground>
+      <DashboardContainer>
+        <DashboardCardContainer>
           <DashboardCard title={activeTitle} />
-          {/* This page will contain the oral health status and recommendations */}
-        </div>
-      </div>
-    </div>
+        </DashboardCardContainer>
+      </DashboardContainer>
+    </PageBackground>
   );
 }

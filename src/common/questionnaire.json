@@ -1,21 +1,138 @@
 {
   "questions": [
     {
-      "id": 1,
+      "id": 0,
       "title": "How often do you brush your teeth?",
       "type": "radio",
       "options": [
         { "optionId": 1, "optionLabel": "Once a day" },
-        { "optionId": 2, "optionLabel": "Twice a day" }
+        { "optionId": 2, "optionLabel": "Twice a day" },
+        { "optionId": 3, "optionLabel": "More than twice a day" },
+        { "optionId": 4, "optionLabel": "I don't brush my teeth daily" }
+      ]
+    },
+    {
+      "id": 1,
+      "title": "How often do you floss your teeth?",
+      "type": "radio",
+      "options": [
+        { "optionId": 1, "optionLabel": "Daily" },
+        { "optionId": 2, "optionLabel": "A few times a week" },
+        { "optionId": 3, "optionLabel": "Occasionally" },
+        { "optionId": 4, "optionLabel": "Never" }
       ]
     },
     {
       "id": 2,
-      "title": "Your Question 2",
+      "title": "How often do you use a mouthrinse?",
+      "type": "radio",
+      "options": [
+        { "optionId": 1, "optionLabel": "Daily" },
+        { "optionId": 2, "optionLabel": "A few times a week" },
+        { "optionId": 3, "optionLabel": "Occasionally" },
+        { "optionId": 4, "optionLabel": "Never" }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Which additional oral health aids do you use? (Check all that apply)",
       "type": "checkbox",
       "options": [
-        { "optionId": 1, "optionLabel": " <description>" },
-        { "optionId": 2, "optionLabel": " <description>" }
+        { "optionId": 1, "optionLabel": "Manual toothbrush" },
+        { "optionId": 2, "optionLabel": "Power toothbrush" },
+        { "optionId": 3, "optionLabel": "String floss" },
+        { "optionId": 4, "optionLabel": "Floss picks" },
+        { "optionId": 5, "optionLabel": "Soft picks" },
+        { "optionId": 6, "optionLabel": "Waterflosser" },
+        { "optionId": 7, "optionLabel": "Tongue scraper" }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Do you grind or clench your teeth?",
+      "type": "radio",
+      "options": [
+        { "optionId": 1, "optionLabel": "Yes" },
+        { "optionId": 2, "optionLabel": "No" },
+        { "optionId": 3, "optionLabel": "Not sure" }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "How often do your gums bleed when flossing?",
+      "type": "dropdown",
+      "options": [
+        { "optionId": 1, "optionLabel": "Never" },
+        { "optionId": 2, "optionLabel": "Occasionally" },
+        { "optionId": 3, "optionLabel": "Frequently" },
+        { "optionId": 4, "optionLabel": "Always" }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "How many acidic foods or beverages do you consume in a day? (e.g., citrus fruits, carbonated beverages, wine, etc.)",
+      "type": "range",
+      "options": [
+        { "optionId": 1, "optionLabel": "None" },
+        { "optionId": 2, "optionLabel": "1-2" },
+        { "optionId": 3, "optionLabel": "3-5" },
+        { "optionId": 4, "optionLabel": "5 or more" }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Do you experience tooth sensitivity to hot or cold?",
+      "type": "radio",
+      "options": [
+        { "optionId": 1, "optionLabel": "Yes" },
+        { "optionId": 2, "optionLabel": "Occasionally" },
+        { "optionId": 3, "optionLabel": "Never" }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "If you experience TMJ (temporomandibular joint) pain or discomfort, how would you rate your pain?",
+      "type": "range",
+      "options": [
+        { "optionId": 1, "optionLabel": "0" },
+        { "optionId": 2, "optionLabel": "1-2" },
+        { "optionId": 3, "optionLabel": "3-4" },
+        { "optionId": 4, "optionLabel": "5-6" },
+        { "optionId": 5, "optionLabel": "7-8" },
+        { "optionId": 6, "optionLabel": "9-10" }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Do you smoke or use any vaping products?",
+      "type": "radio",
+      "options": [
+        { "optionId": 1, "optionLabel": "Yes" },
+        { "optionId": 2, "optionLabel": "Occasionally" },
+        { "optionId": 3, "optionLabel": "No" }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "If you are experiencing tooth pain, how would you rate the pain on a scale from 1-10? (0 if no pain)",
+      "type": "range",
+      "options": [
+        { "optionId": 1, "optionLabel": "0" },
+        { "optionId": 2, "optionLabel": "1-3" },
+        { "optionId": 3, "optionLabel": "4-6" },
+        { "optionId": 4, "optionLabel": "7-10" }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "When was your last visit to a dental professional?",
+      "type": "dropdown",
+      "options": [
+        { "optionId": 1, "optionLabel": "Less than 6 months" },
+        { "optionId": 2, "optionLabel": "6 months to 1 year" },
+        { "optionId": 3, "optionLabel": "1 to 2 years" },
+        { "optionId": 4, "optionLabel": "More than 2 years" },
+        { "optionId": 5, "optionLabel": "I'm not sure" }
       ]
     }
   ]

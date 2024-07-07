@@ -1,5 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { links } from "../App";
+import { PageBackground } from "../components/styled/PageBackground";
+import { DashboardContainer } from "../components/styled/DashboardContainer";
+import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
 import { DashboardCard } from "../components/DashboardCard";
 
 export function HabitTracker() {
@@ -9,10 +12,12 @@ export function HabitTracker() {
   const activeTitle = activeLink ? activeLink.text : "Dashboard";
 
   return (
-    <div className="full-page-bg">
-      <div className="dashboard-card-container">
-        <DashboardCard title={activeTitle} />
-      </div>
-    </div>
+    <PageBackground>
+      <DashboardContainer>
+        <DashboardCardContainer>
+          <DashboardCard title={activeTitle} />
+        </DashboardCardContainer>
+      </DashboardContainer>
+    </PageBackground>
   );
 }
