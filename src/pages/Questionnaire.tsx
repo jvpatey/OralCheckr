@@ -101,14 +101,19 @@ export function Questionnaire() {
     }
   }, [questionId]);
 
+  useEffect(() => {
+    localStorage.removeItem("questionnaire");
+  }, []);
+
   const handleResponseChange = (
     questionId: number,
     response: number | number[]
   ) => {
-    setResponses((prevResponses) => ({
-      ...prevResponses,
-      [questionId]: response,
-    }));
+    setResponses((prevResponses) => {
+      const updatedResponses = { ...prevResponses, [questionId]: response };
+      localStorage.setItem("questionnaire", JSON.stringify(updatedResponses));
+      return updatedResponses;
+    });
   };
 
   const handleNext = () => {
@@ -162,6 +167,7 @@ export function Questionnaire() {
               <Ques
                 {...questions[currentQuestion]}
                 onResponseChange={handleResponseChange}
+                initialResponse={responses[currentQuestion]}
               />
               <div>
                 <NavigationButton

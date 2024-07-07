@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const QuesTitle = styled.h2`
@@ -79,19 +79,34 @@ interface QuesProps {
   type: Type;
   options: Option[];
   onResponseChange: (questionId: number, response: number | number[]) => void;
+  initialResponse?: number | number[];
 }
 
 export function Ques(props: QuesProps) {
-  const { id, title, type, options, onResponseChange } = props;
-  const formRef = useRef<HTMLFormElement>(null);
-  const [rangeValue, setRangeValue] = useState(0);
+  const { id, title, type, options, onResponseChange, initialResponse } = props;
+  const [rangeValue, setRangeValue] = useState<number | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
 
   useEffect(() => {
-    if (formRef.current) {
-      formRef.current.reset();
+    if (initialResponse) {
+      switch (type) {
+        case Type.RADIO:
+          setRangeValue(initialResponse as number);
+          break;
+        case Type.CHECKBOX:
+          setSelectedOptions(initialResponse as number[]);
+          break;
+        case Type.RANGE:
+          setRangeValue(initialResponse as number);
+          break;
+        default:
+          break;
+      }
+    } else {
+      setRangeValue(null);
+      setSelectedOptions([]);
     }
-  }, [id]);
+  }, [id, initialResponse, type]);
 
   const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
@@ -101,6 +116,7 @@ export function Ques(props: QuesProps) {
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
+    setRangeValue(value);
     onResponseChange(id, value);
   };
 
@@ -116,7 +132,7 @@ export function Ques(props: QuesProps) {
   return (
     <FormContainer>
       <QuesTitle>{title}</QuesTitle>
-      <form ref={formRef} style={{ width: "100%" }}>
+      <form style={{ width: "100%" }}>
         {(() => {
           switch (type) {
             case Type.RADIO:
@@ -128,6 +144,7 @@ export function Ques(props: QuesProps) {
                     name={`question-${id}`}
                     value={option.optionId}
                     onChange={handleRadioChange}
+                    checked={rangeValue === option.optionId}
                   />
                   <label htmlFor={`${id}-${option.optionId}`}>
                     {option.optionLabel}
@@ -143,6 +160,7 @@ export function Ques(props: QuesProps) {
                     name={`question-${id}`}
                     value={option.optionId}
                     onChange={handleCheckboxChange}
+                    checked={selectedOptions.includes(option.optionId)}
                   />
                   <label htmlFor={`${id}-${option.optionId}`}>
                     {option.optionLabel}
@@ -158,7 +176,7 @@ export function Ques(props: QuesProps) {
                     name={`question-${id}`}
                     min="0"
                     max={options.length - 1}
-                    value={rangeValue}
+                    value={rangeValue !== null ? rangeValue : 0}
                     onChange={handleRangeChange}
                   />
                   <RangeLabels>
@@ -168,6 +186,8 @@ export function Ques(props: QuesProps) {
                   </RangeLabels>
                 </FormGroup>
               );
+            default:
+              return null;
           }
         })()}
       </form>
