@@ -137,7 +137,11 @@ export function Questionnaire() {
     console.log("Submit questionnaire", responses);
   };
 
-  const isNextDisabled = !responses[currentQuestion];
+  const currentQuestionType = questions[currentQuestion]?.type;
+  const isNextDisabled =
+    currentQuestionType !== Type.RANGE &&
+    (responses[currentQuestion] === undefined ||
+      responses[currentQuestion] === null);
 
   // Render the start-questionnaire page
   if (currentQuestion === -1) {
