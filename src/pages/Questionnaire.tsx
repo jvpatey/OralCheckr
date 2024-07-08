@@ -69,6 +69,7 @@ enum Type {
 interface Option {
   optionId: number;
   optionLabel: string;
+  points: number;
 }
 
 interface QuesProps {
@@ -105,7 +106,6 @@ export function Questionnaire() {
     }
   }, [questionId]);
 
-  // Save the current question index to local storage whenever it changes
   useEffect(() => {
     if (currentQuestion >= 0) {
       localStorage.setItem("currentQuestion", currentQuestion.toString());
@@ -140,9 +140,12 @@ export function Questionnaire() {
   };
 
   const handleSubmit = () => {
+    const totalScore = calculateTotalScore();
     localStorage.setItem("questionnaire", JSON.stringify(responses));
+    localStorage.setItem("totalScore", JSON.stringify(totalScore));
     localStorage.removeItem("currentQuestion");
     console.log("Submit questionnaire", responses);
+    console.log("Total Score", totalScore);
   };
 
   const currentQuestionType = questions[currentQuestion]?.type;
@@ -150,6 +153,37 @@ export function Questionnaire() {
     currentQuestionType !== Type.RANGE &&
     (responses[currentQuestion] === undefined ||
       responses[currentQuestion] === null);
+
+  const calculateTotalScore = () => {
+    const numberOfQuestions = questions.length;
+    const maxPointsPerQuestion = 100 / numberOfQuestions;
+    let totalScore = 0;
+
+    questions.forEach((question) => {
+      const response = responses[question.id];
+      if (response !== undefined) {
+        if (Array.isArray(response)) {
+          response.forEach((optionId) => {
+            const option = question.options.find(
+              (opt) => opt.optionId === optionId
+            );
+            if (option) {
+              totalScore += (option.points / 4) * maxPointsPerQuestion;
+            }
+          });
+        } else {
+          const option = question.options.find(
+            (opt) => opt.optionId === response
+          );
+          if (option) {
+            totalScore += (option.points / 4) * maxPointsPerQuestion;
+          }
+        }
+      }
+    });
+
+    return Math.min(totalScore, 100);
+  };
 
   // Render the start-questionnaire page
   if (currentQuestion === -1) {

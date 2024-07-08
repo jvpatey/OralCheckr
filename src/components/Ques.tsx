@@ -71,6 +71,7 @@ enum Type {
 interface Option {
   optionId: number;
   optionLabel: string;
+  points: number;
 }
 
 interface QuesProps {
