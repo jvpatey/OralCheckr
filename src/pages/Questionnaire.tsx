@@ -79,16 +79,42 @@ interface QuesProps {
   options: Option[];
 }
 
+type Responses = Record<number, number | number[]>;
+
+const calculateTotalScore = (questions: QuesProps[], responses: Responses) => {
+  const numberOfQuestions = questions.length;
+  const maxPointsPerQuestion = 100 / numberOfQuestions;
+  let totalScore = 0;
+
+  questions.forEach((question) => {
+    const response = responses[question.id];
+    if (response !== undefined) {
+      if (Array.isArray(response)) {
+        response.forEach((optionId) => {
+          const option = question.options.find((opt) => opt.optionId === optionId);
+          if (option) {
+            totalScore += (option.points / 4) * maxPointsPerQuestion;
+          }
+        });
+      } else {
+        const option = question.options.find((opt) => opt.optionId === response);
+        if (option) {
+          totalScore += (option.points / 4) * maxPointsPerQuestion;
+        }
+      }
+    }
+  });
+
+  return Math.min(totalScore, 100);
+};
+
 export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
+  const storedResponses = localStorage.getItem("questionnaire");
+
   const [currentQuestion, setCurrentQuestion] = useState<number>(-1);
-  const [responses, setResponses] = useState<Record<number, number | number[]>>(
-    () => {
-      const storedResponses = localStorage.getItem("questionnaire");
-      return storedResponses ? JSON.parse(storedResponses) : {};
-    }
-  );
+  const [responses, setResponses] = useState<Responses>(storedResponses ? JSON.parse(storedResponses) : {});
 
   const questions: QuesProps[] = questionData.questions.map((question) => ({
     ...question,
@@ -112,10 +138,7 @@ export function Questionnaire() {
     }
   }, [currentQuestion]);
 
-  const handleResponseChange = (
-    questionId: number,
-    response: number | number[]
-  ) => {
+  const handleResponseChange = (questionId: number, response: number | number[]) => {
     setResponses((prevResponses) => {
       const updatedResponses = { ...prevResponses, [questionId]: response };
       localStorage.setItem("questionnaire", JSON.stringify(updatedResponses));
@@ -125,22 +148,18 @@ export function Questionnaire() {
 
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
-      navigate(
-        `${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion + 1}`
-      );
+      navigate(`${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion + 1}`);
     }
   };
 
   const handlePrevious = () => {
     if (currentQuestion > 0) {
-      navigate(
-        `${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion - 1}`
-      );
+      navigate(`${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion - 1}`);
     }
   };
 
   const handleSubmit = () => {
-    const totalScore = calculateTotalScore();
+    const totalScore = calculateTotalScore(questions, responses);
     localStorage.setItem("questionnaire", JSON.stringify(responses));
     localStorage.setItem("totalScore", JSON.stringify(totalScore));
     localStorage.removeItem("currentQuestion");
@@ -151,39 +170,7 @@ export function Questionnaire() {
   const currentQuestionType = questions[currentQuestion]?.type;
   const isNextDisabled =
     currentQuestionType !== Type.RANGE &&
-    (responses[currentQuestion] === undefined ||
-      responses[currentQuestion] === null);
-
-  const calculateTotalScore = () => {
-    const numberOfQuestions = questions.length;
-    const maxPointsPerQuestion = 100 / numberOfQuestions;
-    let totalScore = 0;
-
-    questions.forEach((question) => {
-      const response = responses[question.id];
-      if (response !== undefined) {
-        if (Array.isArray(response)) {
-          response.forEach((optionId) => {
-            const option = question.options.find(
-              (opt) => opt.optionId === optionId
-            );
-            if (option) {
-              totalScore += (option.points / 4) * maxPointsPerQuestion;
-            }
-          });
-        } else {
-          const option = question.options.find(
-            (opt) => opt.optionId === response
-          );
-          if (option) {
-            totalScore += (option.points / 4) * maxPointsPerQuestion;
-          }
-        }
-      }
-    });
-
-    return Math.min(totalScore, 100);
-  };
+    (responses[currentQuestion] === undefined || responses[currentQuestion] === null);
 
   // Render the start-questionnaire page
   if (currentQuestion === -1) {
@@ -199,12 +186,7 @@ export function Questionnaire() {
             <QuesContainer>
               <ProgressBar>
                 {questions.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`progress-segment ${
-                      index <= currentQuestion ? "filled" : ""
-                    }`}
-                  ></div>
+                  <div key={index} className={`progress-segment ${index <= currentQuestion ? "filled" : ""}`}></div>
                 ))}
               </ProgressBar>
               <ProgressIndicator>
@@ -216,24 +198,15 @@ export function Questionnaire() {
                 initialResponse={responses[currentQuestion]}
               />
               <div>
-                <NavigationButton
-                  onClick={handlePrevious}
-                  disabled={currentQuestion === 0}
-                >
+                <NavigationButton onClick={handlePrevious} disabled={currentQuestion === 0}>
                   Previous
                 </NavigationButton>
                 {currentQuestion === questions.length - 1 ? (
-                  <SubmitButton
-                    href={getFullPath(RoutePaths.DASHBOARD)}
-                    onClick={handleSubmit}
-                  >
+                  <SubmitButton href={getFullPath(RoutePaths.DASHBOARD)} onClick={handleSubmit}>
                     Submit
                   </SubmitButton>
                 ) : (
-                  <NavigationButton
-                    onClick={handleNext}
-                    disabled={isNextDisabled}
-                  >
+                  <NavigationButton onClick={handleNext} disabled={isNextDisabled}>
                     Next
                   </NavigationButton>
                 )}
