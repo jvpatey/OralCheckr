@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Question, Type } from "../pages/Questionnaire";
 
 const QuesTitle = styled.h2`
   color: #07889b;
@@ -62,23 +63,7 @@ const RangeLabels = styled.div`
   width: 100%;
 `;
 
-enum Type {
-  RADIO = "radio",
-  CHECKBOX = "checkbox",
-  RANGE = "range",
-}
-
-interface Option {
-  optionId: number;
-  optionLabel: string;
-  points: number;
-}
-
-interface QuesProps {
-  id: number;
-  title: string;
-  type: Type;
-  options: Option[];
+interface QuesProps extends Question {
   onResponseChange: (questionId: number, response: number | number[]) => void;
   initialResponse?: number | number[];
 }
@@ -147,9 +132,7 @@ export function Ques(props: QuesProps) {
                     onChange={handleRadioChange}
                     checked={rangeValue === option.optionId}
                   />
-                  <label htmlFor={`${id}-${option.optionId}`}>
-                    {option.optionLabel}
-                  </label>
+                  <label htmlFor={`${id}-${option.optionId}`}>{option.optionLabel}</label>
                 </FormGroup>
               ));
             case Type.CHECKBOX:
@@ -163,9 +146,7 @@ export function Ques(props: QuesProps) {
                     onChange={handleCheckboxChange}
                     checked={selectedOptions.includes(option.optionId)}
                   />
-                  <label htmlFor={`${id}-${option.optionId}`}>
-                    {option.optionLabel}
-                  </label>
+                  <label htmlFor={`${id}-${option.optionId}`}>{option.optionLabel}</label>
                 </FormGroup>
               ));
             case Type.RANGE:

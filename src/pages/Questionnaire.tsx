@@ -60,7 +60,7 @@ const SubmitButton = styled(NavigationButton).attrs({ as: "a" })`
 
 // types
 
-enum Type {
+export enum Type {
   RADIO = "radio",
   CHECKBOX = "checkbox",
   RANGE = "range",
@@ -72,7 +72,7 @@ interface Option {
   points: number;
 }
 
-interface QuesProps {
+export interface Question {
   id: number;
   title: string;
   type: Type;
@@ -81,7 +81,7 @@ interface QuesProps {
 
 type Responses = Record<number, number | number[]>;
 
-const calculateTotalScore = (questions: QuesProps[], responses: Responses) => {
+const calculateTotalScore = (questions: Question[], responses: Responses) => {
   const numberOfQuestions = questions.length;
   const maxPointsPerQuestion = 100 / numberOfQuestions;
   let totalScore = 0;
@@ -116,7 +116,7 @@ export function Questionnaire() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(-1);
   const [responses, setResponses] = useState<Responses>(storedResponses ? JSON.parse(storedResponses) : {});
 
-  const questions: QuesProps[] = questionData.questions.map((question) => ({
+  const questions: Question[] = questionData.questions.map((question) => ({
     ...question,
     type: question.type as Type,
   }));
