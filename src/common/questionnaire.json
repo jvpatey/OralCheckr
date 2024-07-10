@@ -38,13 +38,13 @@
       "title": "Which additional oral health aids do you use? (Check all that apply)",
       "type": "checkbox",
       "options": [
-        { "optionId": 1, "optionLabel": "Manual toothbrush", "points": 2 },
-        { "optionId": 2, "optionLabel": "Power toothbrush", "points": 3 },
-        { "optionId": 3, "optionLabel": "String floss", "points": 3 },
-        { "optionId": 4, "optionLabel": "Floss picks", "points": 2 },
-        { "optionId": 5, "optionLabel": "Soft picks", "points": 2 },
-        { "optionId": 6, "optionLabel": "Waterflosser", "points": 3 },
-        { "optionId": 7, "optionLabel": "Tongue scraper", "points": 2 }
+        { "optionId": 1, "optionLabel": "Manual toothbrush", "points": 5 },
+        { "optionId": 2, "optionLabel": "Power toothbrush", "points": 7 },
+        { "optionId": 3, "optionLabel": "String floss", "points": 7 },
+        { "optionId": 4, "optionLabel": "Floss picks", "points": 5 },
+        { "optionId": 5, "optionLabel": "Soft picks", "points": 5 },
+        { "optionId": 6, "optionLabel": "Waterflosser", "points": 7 },
+        { "optionId": 7, "optionLabel": "Tongue scraper", "points": 5 }
       ]
     },
     {
@@ -52,8 +52,8 @@
       "title": "Do you grind or clench your teeth?",
       "type": "radio",
       "options": [
-        { "optionId": 1, "optionLabel": "Yes", "points": 1 },
-        { "optionId": 2, "optionLabel": "No", "points": 4 },
+        { "optionId": 1, "optionLabel": "Yes", "points": 0 },
+        { "optionId": 2, "optionLabel": "No", "points": 3 },
         { "optionId": 3, "optionLabel": "Not sure", "points": 0 }
       ]
     },
@@ -86,7 +86,7 @@
       "options": [
         { "optionId": 1, "optionLabel": "Yes", "points": 0 },
         { "optionId": 2, "optionLabel": "Occasionally", "points": 2 },
-        { "optionId": 3, "optionLabel": "Never", "points": 4 }
+        { "optionId": 3, "optionLabel": "Never", "points": 3 }
       ]
     },
     {
@@ -94,11 +94,11 @@
       "title": "If you experience TMJ (temporomandibular joint) pain or discomfort, how would you rate your pain?",
       "type": "range",
       "options": [
-        { "optionId": 1, "optionLabel": "0", "points": 4 },
-        { "optionId": 2, "optionLabel": "1-2", "points": 4 },
-        { "optionId": 3, "optionLabel": "3-4", "points": 3 },
-        { "optionId": 4, "optionLabel": "5-6", "points": 2 },
-        { "optionId": 5, "optionLabel": "7-8", "points": 1 },
+        { "optionId": 1, "optionLabel": "0", "points": 6 },
+        { "optionId": 2, "optionLabel": "1-2", "points": 5 },
+        { "optionId": 3, "optionLabel": "3-4", "points": 4 },
+        { "optionId": 4, "optionLabel": "5-6", "points": 3 },
+        { "optionId": 5, "optionLabel": "7-8", "points": 2 },
         { "optionId": 6, "optionLabel": "9-10", "points": 0 }
       ]
     },
@@ -108,8 +108,8 @@
       "type": "radio",
       "options": [
         { "optionId": 1, "optionLabel": "Yes", "points": 0 },
-        { "optionId": 2, "optionLabel": "Occasionally", "points": 2 },
-        { "optionId": 3, "optionLabel": "No", "points": 4 }
+        { "optionId": 2, "optionLabel": "Occasionally", "points": 1 },
+        { "optionId": 3, "optionLabel": "No", "points": 3 }
       ]
     },
     {
@@ -128,11 +128,11 @@
       "title": "When was your last visit to a dental professional?",
       "type": "radio",
       "options": [
-        { "optionId": 1, "optionLabel": "Less than 6 months", "points": 4 },
-        { "optionId": 2, "optionLabel": "6 months to 1 year", "points": 3 },
-        { "optionId": 3, "optionLabel": "1 to 2 years", "points": 2 },
-        { "optionId": 4, "optionLabel": "More than 2 years", "points": 1 },
-        { "optionId": 5, "optionLabel": "I'm not sure", "points": 0 }
+        { "optionId": 1, "optionLabel": "Less than 6 months", "points": 5 },
+        { "optionId": 2, "optionLabel": "6 months to 1 year", "points": 4 },
+        { "optionId": 3, "optionLabel": "1 to 2 years", "points": 3 },
+        { "optionId": 4, "optionLabel": "More than 2 years", "points": 2 },
+        { "optionId": 5, "optionLabel": "I'm not sure", "points": 1 }
       ]
     }
   ]
