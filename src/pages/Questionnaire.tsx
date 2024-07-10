@@ -151,11 +151,9 @@ export function Questionnaire() {
     questionId: number,
     response: number | number[]
   ) => {
-    setResponses((prevResponses) => {
-      const updatedResponses = { ...prevResponses, [questionId]: response };
-      localStorage.setItem("questionnaire", JSON.stringify(updatedResponses));
-      return updatedResponses;
-    });
+    const updatedResponses = { ...responses, [questionId]: response };
+    localStorage.setItem("questionnaire", JSON.stringify(updatedResponses));
+    setResponses(updatedResponses);
   };
 
   const handleNext = () => {
