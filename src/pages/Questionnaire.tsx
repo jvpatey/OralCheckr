@@ -81,6 +81,9 @@ export interface Question {
 
 type Responses = Record<number, number | number[]>;
 
+// if somehow the points for a question exceed the maxPointsPerQuestion, give it maxPointsPerQuestion
+// create a function for the common logic in the calculateTotalScore and call that function.
+
 const calculateTotalScore = (questions: Question[], responses: Responses) => {
   const numberOfQuestions = questions.length;
   const maxPointsPerQuestion = 100 / numberOfQuestions;
@@ -90,16 +93,16 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
     const response = responses[question.id];
     if (response !== undefined) {
       if (Array.isArray(response)) {
-        response.forEach((optionId) => {
-          const option = question.options.find((opt) => opt.optionId === optionId);
+        response.forEach((ele) => {
+          const option = question.options.find((opt) => opt.optionId === ele);
           if (option) {
-            totalScore += (option.points / 4) * maxPointsPerQuestion;
+            totalScore += (option.points / question.options.length) * maxPointsPerQuestion;
           }
         });
       } else {
         const option = question.options.find((opt) => opt.optionId === response);
         if (option) {
-          totalScore += (option.points / 4) * maxPointsPerQuestion;
+          totalScore += (option.points / question.options.length) * maxPointsPerQuestion;
         }
       }
     }
