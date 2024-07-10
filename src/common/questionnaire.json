@@ -1,7 +1,7 @@
 {
   "questions": [
     {
-      "id": 0,
+      "id": 1,
       "title": "How often do you brush your teeth?",
       "type": "radio",
       "options": [
@@ -12,7 +12,7 @@
       ]
     },
     {
-      "id": 1,
+      "id": 2,
       "title": "How often do you floss your teeth?",
       "type": "radio",
       "options": [
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": 3,
       "title": "How often do you use a mouthrinse?",
       "type": "radio",
       "options": [
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": 4,
       "title": "Which additional oral health aids do you use? (Check all that apply)",
       "type": "checkbox",
       "options": [
@@ -48,7 +48,7 @@
       ]
     },
     {
-      "id": 4,
+      "id": 5,
       "title": "Do you grind or clench your teeth?",
       "type": "radio",
       "options": [
@@ -58,7 +58,7 @@
       ]
     },
     {
-      "id": 5,
+      "id": 6,
       "title": "How often do your gums bleed when flossing?",
       "type": "radio",
       "options": [
@@ -69,7 +69,7 @@
       ]
     },
     {
-      "id": 6,
+      "id": 7,
       "title": "How many acidic foods or beverages do you consume in a day? (e.g., citrus fruits, carbonated beverages, wine, etc.)",
       "type": "range",
       "options": [
@@ -80,7 +80,7 @@
       ]
     },
     {
-      "id": 7,
+      "id": 8,
       "title": "Do you experience tooth sensitivity to hot or cold?",
       "type": "radio",
       "options": [
@@ -90,7 +90,7 @@
       ]
     },
     {
-      "id": 8,
+      "id": 9,
       "title": "If you experience TMJ (temporomandibular joint) pain or discomfort, how would you rate your pain?",
       "type": "range",
       "options": [
@@ -103,7 +103,7 @@
       ]
     },
     {
-      "id": 9,
+      "id": 10,
       "title": "Do you smoke or use any vaping products?",
       "type": "radio",
       "options": [
@@ -113,7 +113,7 @@
       ]
     },
     {
-      "id": 10,
+      "id": 11,
       "title": "If you are experiencing tooth pain, how would you rate the pain on a scale from 1-10? (0 if no pain)",
       "type": "range",
       "options": [
@@ -124,7 +124,7 @@
       ]
     },
     {
-      "id": 11,
+      "id": 12,
       "title": "When was your last visit to a dental professional?",
       "type": "radio",
       "options": [

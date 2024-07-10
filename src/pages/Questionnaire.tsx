@@ -96,13 +96,17 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
         response.forEach((ele) => {
           const option = question.options.find((opt) => opt.optionId === ele);
           if (option) {
-            totalScore += (option.points / question.options.length) * maxPointsPerQuestion;
+            totalScore +=
+              (option.points / question.options.length) * maxPointsPerQuestion;
           }
         });
       } else {
-        const option = question.options.find((opt) => opt.optionId === response);
+        const option = question.options.find(
+          (opt) => opt.optionId === response
+        );
         if (option) {
-          totalScore += (option.points / question.options.length) * maxPointsPerQuestion;
+          totalScore +=
+            (option.points / question.options.length) * maxPointsPerQuestion;
         }
       }
     }
@@ -116,8 +120,10 @@ export function Questionnaire() {
   const navigate = useNavigate();
   const storedResponses = localStorage.getItem("questionnaire");
 
-  const [currentQuestion, setCurrentQuestion] = useState<number>(-1);
-  const [responses, setResponses] = useState<Responses>(storedResponses ? JSON.parse(storedResponses) : {});
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  const [responses, setResponses] = useState<Responses>(
+    storedResponses ? JSON.parse(storedResponses) : {}
+  );
 
   const questions: Question[] = questionData.questions.map((question) => ({
     ...question,
@@ -131,17 +137,20 @@ export function Questionnaire() {
     } else if (savedCurrentQuestion) {
       setCurrentQuestion(parseInt(savedCurrentQuestion));
     } else {
-      setCurrentQuestion(-1);
+      setCurrentQuestion(0);
     }
   }, [questionId]);
 
   useEffect(() => {
-    if (currentQuestion >= 0) {
+    if (currentQuestion > 0) {
       localStorage.setItem("currentQuestion", currentQuestion.toString());
     }
   }, [currentQuestion]);
 
-  const handleResponseChange = (questionId: number, response: number | number[]) => {
+  const handleResponseChange = (
+    questionId: number,
+    response: number | number[]
+  ) => {
     setResponses((prevResponses) => {
       const updatedResponses = { ...prevResponses, [questionId]: response };
       localStorage.setItem("questionnaire", JSON.stringify(updatedResponses));
@@ -150,14 +159,18 @@ export function Questionnaire() {
   };
 
   const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      navigate(`${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion + 1}`);
+    if (currentQuestion < questions.length) {
+      navigate(
+        `${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion + 1}`
+      );
     }
   };
 
   const handlePrevious = () => {
-    if (currentQuestion > 0) {
-      navigate(`${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion - 1}`);
+    if (currentQuestion > 1) {
+      navigate(
+        `${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion - 1}`
+      );
     }
   };
 
@@ -170,13 +183,14 @@ export function Questionnaire() {
     console.log("Total Score", totalScore);
   };
 
-  const currentQuestionType = questions[currentQuestion]?.type;
+  const currentQuestionType = questions[currentQuestion - 1]?.type;
   const isNextDisabled =
     currentQuestionType !== Type.RANGE &&
-    (responses[currentQuestion] === undefined || responses[currentQuestion] === null);
+    (responses[currentQuestion] === undefined ||
+      responses[currentQuestion] === null);
 
   // Render the start-questionnaire page
-  if (currentQuestion === -1) {
+  if (currentQuestion === 0) {
     return <StartQuestionnaire />;
   }
 
@@ -189,27 +203,41 @@ export function Questionnaire() {
             <QuesContainer>
               <ProgressBar>
                 {questions.map((_, index) => (
-                  <div key={index} className={`progress-segment ${index <= currentQuestion ? "filled" : ""}`}></div>
+                  <div
+                    key={index}
+                    className={`progress-segment ${
+                      index < currentQuestion ? "filled" : ""
+                    }`}
+                  ></div>
                 ))}
               </ProgressBar>
               <ProgressIndicator>
-                Question {currentQuestion + 1} / {questions.length}
+                Question {currentQuestion} / {questions.length}
               </ProgressIndicator>
               <Ques
-                {...questions[currentQuestion]}
+                {...questions[currentQuestion - 1]}
                 onResponseChange={handleResponseChange}
                 initialResponse={responses[currentQuestion]}
               />
               <div>
-                <NavigationButton onClick={handlePrevious} disabled={currentQuestion === 0}>
+                <NavigationButton
+                  onClick={handlePrevious}
+                  disabled={currentQuestion === 1}
+                >
                   Previous
                 </NavigationButton>
-                {currentQuestion === questions.length - 1 ? (
-                  <SubmitButton href={getFullPath(RoutePaths.DASHBOARD)} onClick={handleSubmit}>
+                {currentQuestion === questions.length ? (
+                  <SubmitButton
+                    href={getFullPath(RoutePaths.DASHBOARD)}
+                    onClick={handleSubmit}
+                  >
                     Submit
                   </SubmitButton>
                 ) : (
-                  <NavigationButton onClick={handleNext} disabled={isNextDisabled}>
+                  <NavigationButton
+                    onClick={handleNext}
+                    disabled={isNextDisabled}
+                  >
                     Next
                   </NavigationButton>
                 )}

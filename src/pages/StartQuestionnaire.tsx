@@ -79,7 +79,7 @@ export function StartQuestionnaire() {
             </CardText>
             <StartButton
               as={Link}
-              to={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/0`}
+              to={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/1`}
             >
               Begin
             </StartButton>
