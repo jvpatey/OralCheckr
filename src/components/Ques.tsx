@@ -24,7 +24,9 @@ const FormContainer = styled.div`
   width: 100%;
 `;
 
-const FormGroup = styled.div<{ isRange: boolean }>`
+const FormGroup = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "isRange",
+})<{ isRange: boolean }>`
   display: flex;
   flex-direction: ${({ isRange }) => (isRange ? "column" : "row")};
   align-items: center;
