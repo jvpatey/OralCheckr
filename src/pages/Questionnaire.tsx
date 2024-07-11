@@ -81,37 +81,59 @@ export interface Question {
 
 type Responses = Record<number, number | number[]>;
 
-// if somehow the points for a question exceed the maxPointsPerQuestion, give it maxPointsPerQuestion
-// create a function for the common logic in the calculateTotalScore and call that function.
+// function to calculate score for each question - used inside calculateTotalScore function
+const calculateOptionScore = (
+  points: number,
+  numberOfOptions: number,
+  maxPointsPerQuestion: number
+) => {
+  return (points / numberOfOptions) * maxPointsPerQuestion;
+};
 
+// function to calculate total score when the user submits the questionnaire
 const calculateTotalScore = (questions: Question[], responses: Responses) => {
   const numberOfQuestions = questions.length;
+  // calculation to determine the max points alloted per question.
   const maxPointsPerQuestion = 100 / numberOfQuestions;
   let totalScore = 0;
 
   questions.forEach((question) => {
     const response = responses[question.id];
+    let questionScore = 0;
+
     if (response !== undefined) {
+      // checks if the response is an array (checkbox input) before calculating score
       if (Array.isArray(response)) {
         response.forEach((ele) => {
           const option = question.options.find((opt) => opt.optionId === ele);
           if (option) {
-            totalScore +=
-              (option.points / question.options.length) * maxPointsPerQuestion;
+            questionScore += calculateOptionScore(
+              option.points,
+              question.options.length,
+              maxPointsPerQuestion
+            );
           }
         });
+        // score calculation for range and radio inputs
       } else {
         const option = question.options.find(
           (opt) => opt.optionId === response
         );
         if (option) {
-          totalScore +=
-            (option.points / question.options.length) * maxPointsPerQuestion;
+          questionScore += calculateOptionScore(
+            option.points,
+            question.options.length,
+            maxPointsPerQuestion
+          );
         }
       }
     }
+
+    // Ensure the score for this question does not exceed the max points per question
+    totalScore += Math.min(questionScore, maxPointsPerQuestion);
   });
 
+  // Ensure the total score does not exceed 100
   return Math.min(totalScore, 100);
 };
 
