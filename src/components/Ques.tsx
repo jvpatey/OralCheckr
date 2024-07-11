@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Question, Type } from "../pages/Questionnaire";
 
+// Styled-components for the Questionnaire component
+
 const QuesTitle = styled.h2`
   color: #07889b;
   margin-bottom: 20px;
@@ -63,16 +65,19 @@ const RangeLabels = styled.div`
   width: 100%;
 `;
 
+// Interface for the Ques component props, extending Question interface
 interface QuesProps extends Question {
   onResponseChange: (questionId: number, response: number | number[]) => void;
   initialResponse?: number | number[];
 }
 
+// Ques functional component definition
 export function Ques(props: QuesProps) {
   const { id, title, type, options, onResponseChange, initialResponse } = props;
   const [rangeValue, setRangeValue] = useState<number | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
 
+  // useEffect to set initial values for all question types
   useEffect(() => {
     if (initialResponse) {
       switch (type) {
@@ -94,18 +99,21 @@ export function Ques(props: QuesProps) {
     }
   }, [id, initialResponse, type]);
 
+  // Handler for range input changes
   const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
     setRangeValue(value);
     onResponseChange(id, value);
   };
 
+  // Handler for radio input changes
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
     setRangeValue(value);
     onResponseChange(id, value);
   };
 
+  // Handler for checkbox input changes
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
     const newSelectedOptions = event.target.checked
@@ -120,6 +128,7 @@ export function Ques(props: QuesProps) {
       <QuesTitle>{title}</QuesTitle>
       <form style={{ width: "100%" }}>
         {(() => {
+          // Render inputs based on question type
           switch (type) {
             case Type.RADIO:
               return options.map((option) => (
@@ -132,7 +141,9 @@ export function Ques(props: QuesProps) {
                     onChange={handleRadioChange}
                     checked={rangeValue === option.optionId}
                   />
-                  <label htmlFor={`${id}-${option.optionId}`}>{option.optionLabel}</label>
+                  <label htmlFor={`${id}-${option.optionId}`}>
+                    {option.optionLabel}
+                  </label>
                 </FormGroup>
               ));
             case Type.CHECKBOX:
@@ -146,7 +157,9 @@ export function Ques(props: QuesProps) {
                     onChange={handleCheckboxChange}
                     checked={selectedOptions.includes(option.optionId)}
                   />
-                  <label htmlFor={`${id}-${option.optionId}`}>{option.optionLabel}</label>
+                  <label htmlFor={`${id}-${option.optionId}`}>
+                    {option.optionLabel}
+                  </label>
                 </FormGroup>
               ));
             case Type.RANGE:

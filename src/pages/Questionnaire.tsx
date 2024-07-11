@@ -81,7 +81,7 @@ export interface Question {
 
 type Responses = Record<number, number | number[]>;
 
-// function to calculate score for each question - used inside calculateTotalScore function
+// Function to calculate the score for each option - used inside calculateTotalScore function
 const calculateOptionScore = (
   points: number,
   numberOfOptions: number,
@@ -90,10 +90,10 @@ const calculateOptionScore = (
   return (points / numberOfOptions) * maxPointsPerQuestion;
 };
 
-// function to calculate total score when the user submits the questionnaire
+// Function to calculate the total score when the user submits the questionnaire
 const calculateTotalScore = (questions: Question[], responses: Responses) => {
   const numberOfQuestions = questions.length;
-  // calculation to determine the max points alloted per question.
+  // Calculation to determine the max points allotted per question.
   const maxPointsPerQuestion = 100 / numberOfQuestions;
   let totalScore = 0;
 
@@ -102,7 +102,7 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
     let questionScore = 0;
 
     if (response !== undefined) {
-      // checks if the response is an array (checkbox input) before calculating score
+      // Check if the response is an array (checkbox input) before calculating the score
       if (Array.isArray(response)) {
         response.forEach((ele) => {
           const option = question.options.find((opt) => opt.optionId === ele);
@@ -114,7 +114,7 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
             );
           }
         });
-        // score calculation for range and radio inputs
+        // Score calculation for range and radio inputs
       } else {
         const option = question.options.find(
           (opt) => opt.optionId === response
@@ -142,16 +142,20 @@ export function Questionnaire() {
   const navigate = useNavigate();
   const storedResponses = localStorage.getItem("questionnaire");
 
+  // State to keep track of the current question number
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  // State to store the user's responses
   const [responses, setResponses] = useState<Responses>(
     storedResponses ? JSON.parse(storedResponses) : {}
   );
 
+  // Map the questions from the JSON data to the Question type
   const questions: Question[] = questionData.questions.map((question) => ({
     ...question,
     type: question.type as Type,
   }));
 
+  // Updates local storage for current question
   useEffect(() => {
     const savedCurrentQuestion = localStorage.getItem("currentQuestion");
     if (questionId) {
@@ -163,12 +167,14 @@ export function Questionnaire() {
     }
   }, [questionId]);
 
+  // Effect to save the current question number to local storage whenever it changes
   useEffect(() => {
     if (currentQuestion > 0) {
       localStorage.setItem("currentQuestion", currentQuestion.toString());
     }
   }, [currentQuestion]);
 
+  // Handle the change in response for a question
   const handleResponseChange = (
     questionId: number,
     response: number | number[]
@@ -178,6 +184,7 @@ export function Questionnaire() {
     setResponses(updatedResponses);
   };
 
+  // Navigate to the next question
   const handleNext = () => {
     if (currentQuestion < questions.length) {
       navigate(
@@ -186,6 +193,7 @@ export function Questionnaire() {
     }
   };
 
+  // Navigate to the previous question
   const handlePrevious = () => {
     if (currentQuestion > 1) {
       navigate(
@@ -194,6 +202,7 @@ export function Questionnaire() {
     }
   };
 
+  // Handle the submission of the questionnaire
   const handleSubmit = () => {
     const totalScore = calculateTotalScore(questions, responses);
     localStorage.setItem("questionnaire", JSON.stringify(responses));
@@ -203,13 +212,14 @@ export function Questionnaire() {
     console.log("Total Score", totalScore);
   };
 
+  // Determine if the "Next" button should be disabled
   const currentQuestionType = questions[currentQuestion - 1]?.type;
   const isNextDisabled =
     currentQuestionType !== Type.RANGE &&
     (responses[currentQuestion] === undefined ||
       responses[currentQuestion] === null);
 
-  // Render the start-questionnaire page
+  // Render the start-questionnaire page if the current question is 0
   if (currentQuestion === 0) {
     return <StartQuestionnaire />;
   }

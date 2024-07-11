@@ -11,6 +11,7 @@ import { Questionnaire } from "./pages/Questionnaire";
 export function Router() {
   return (
     <Routes>
+      {/* Redirect to login page if user is not authenticated */}
       <Route
         path="/"
         element={
@@ -19,6 +20,7 @@ export function Router() {
           </RedirectIfAuthenticated>
         }
       />
+      {/* Catch-all route that redirects to the login page */}
       <Route path="*" element={<Navigate to="/" replace={true} />} />
       <Route
         path={getFullPath(RoutePaths.DASHBOARD)}
@@ -36,6 +38,7 @@ export function Router() {
           </GuardedRoute>
         }
       />
+      {/* Questionnaire route guarded by authentication, with optional questionId parameter */}
       <Route
         path={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/:questionId?`}
         element={
