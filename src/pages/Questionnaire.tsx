@@ -60,67 +60,170 @@ const SubmitButton = styled(NavigationButton).attrs({ as: "a" })`
 
 // types
 
-enum Type {
+export enum Type {
   RADIO = "radio",
   CHECKBOX = "checkbox",
   RANGE = "range",
-  DROPDOWN = "dropdown",
 }
 
 interface Option {
   optionId: number;
   optionLabel: string;
+  points: number;
 }
 
-interface QuesProps {
+export interface Question {
   id: number;
   title: string;
   type: Type;
   options: Option[];
 }
 
+type Responses = Record<number, number | number[]>;
+
+// Helper function to calculate the score for each option
+const calculateOptionScore = (
+  points: number,
+  numberOfOptions: number,
+  maxPointsPerQuestion: number
+) => {
+  return (points / numberOfOptions) * maxPointsPerQuestion;
+};
+
+// Helper function to find the option and calculate its score
+const findOptionScore = (
+  optionId: number,
+  question: Question,
+  maxPointsPerQuestion: number
+) => {
+  const option = question.options.find((opt) => opt.optionId === optionId);
+  if (option) {
+    return calculateOptionScore(
+      option.points,
+      question.options.length,
+      maxPointsPerQuestion
+    );
+  }
+  return 0;
+};
+
+// Function to calculate the total score when the user submits the questionnaire
+const calculateTotalScore = (questions: Question[], responses: Responses) => {
+  const numberOfQuestions = questions.length;
+  const maxPointsPerQuestion = 100 / numberOfQuestions;
+  let totalScore = 0;
+
+  questions.forEach((question) => {
+    const response = responses[question.id];
+    let questionScore = 0;
+
+    if (response !== undefined) {
+      // Check if the response is an array (checkbox input) before calculating the score
+      if (Array.isArray(response)) {
+        response.forEach((ele) => {
+          questionScore += findOptionScore(ele, question, maxPointsPerQuestion);
+        });
+      } else {
+        questionScore += findOptionScore(
+          response,
+          question,
+          maxPointsPerQuestion
+        );
+      }
+    }
+
+    // Ensure the score for this question does not exceed the max points per question
+    totalScore += Math.min(questionScore, maxPointsPerQuestion);
+  });
+
+  // Ensure the total score does not exceed 100
+  return Math.min(totalScore, 100);
+};
+
 export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
-  const [currentQuestion, setCurrentQuestion] = useState<number>(
-    questionId ? parseInt(questionId) : -1
+  const storedResponses = localStorage.getItem("questionnaire");
+
+  // State to keep track of the current question number
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  // State to store the user's responses
+  const [responses, setResponses] = useState<Responses>(
+    storedResponses ? JSON.parse(storedResponses) : {}
   );
 
-  const questions: QuesProps[] = questionData.questions.map((question) => ({
+  // Map the questions from the JSON data to the Question type
+  const questions: Question[] = questionData.questions.map((question) => ({
     ...question,
     type: question.type as Type,
   }));
 
+  // Updates local storage for current question
   useEffect(() => {
+    const savedCurrentQuestion = localStorage.getItem("currentQuestion");
     if (questionId) {
       setCurrentQuestion(parseInt(questionId));
+    } else if (savedCurrentQuestion) {
+      setCurrentQuestion(parseInt(savedCurrentQuestion));
     } else {
-      setCurrentQuestion(-1);
+      setCurrentQuestion(0);
     }
   }, [questionId]);
 
+  // Effect to save the current question number to local storage whenever it changes
+  useEffect(() => {
+    if (currentQuestion > 0) {
+      localStorage.setItem("currentQuestion", currentQuestion.toString());
+    }
+  }, [currentQuestion]);
+
+  // Handle the change in response for a question
+  const handleResponseChange = (
+    questionId: number,
+    response: number | number[]
+  ) => {
+    const updatedResponses = { ...responses, [questionId]: response };
+    localStorage.setItem("questionnaire", JSON.stringify(updatedResponses));
+    setResponses(updatedResponses);
+  };
+
+  // Navigate to the next question
   const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
+    if (currentQuestion < questions.length) {
       navigate(
         `${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion + 1}`
       );
     }
   };
 
+  // Navigate to the previous question
   const handlePrevious = () => {
-    if (currentQuestion > 0) {
+    if (currentQuestion > 1) {
       navigate(
         `${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion - 1}`
       );
     }
   };
 
+  // Handle the submission of the questionnaire
   const handleSubmit = () => {
-    console.log("Submit questionnaire");
+    const totalScore = calculateTotalScore(questions, responses);
+    localStorage.setItem("questionnaire", JSON.stringify(responses));
+    localStorage.setItem("totalScore", JSON.stringify(totalScore));
+    localStorage.removeItem("currentQuestion");
+    console.log("Submit questionnaire", responses);
+    console.log("Total Score", totalScore);
   };
 
-  // Render the start-questionnaire page
-  if (currentQuestion === -1) {
+  // Determine if the "Next" button should be disabled
+  const currentQuestionType = questions[currentQuestion - 1]?.type;
+  const isNextDisabled =
+    currentQuestionType !== Type.RANGE &&
+    (responses[currentQuestion] === undefined ||
+      responses[currentQuestion] === null);
+
+  // Render the start-questionnaire page if the current question is 0
+  if (currentQuestion === 0) {
     return <StartQuestionnaire />;
   }
 
@@ -136,23 +239,27 @@ export function Questionnaire() {
                   <div
                     key={index}
                     className={`progress-segment ${
-                      index <= currentQuestion ? "filled" : ""
+                      index < currentQuestion ? "filled" : ""
                     }`}
                   ></div>
                 ))}
               </ProgressBar>
               <ProgressIndicator>
-                Question {currentQuestion + 1} / {questions.length}
+                Question {currentQuestion} / {questions.length}
               </ProgressIndicator>
-              <Ques {...questions[currentQuestion]} />
+              <Ques
+                {...questions[currentQuestion - 1]}
+                onResponseChange={handleResponseChange}
+                initialResponse={responses[currentQuestion]}
+              />
               <div>
                 <NavigationButton
                   onClick={handlePrevious}
-                  disabled={currentQuestion === 0}
+                  disabled={currentQuestion === 1}
                 >
                   Previous
                 </NavigationButton>
-                {currentQuestion === questions.length - 1 ? (
+                {currentQuestion === questions.length ? (
                   <SubmitButton
                     href={getFullPath(RoutePaths.DASHBOARD)}
                     onClick={handleSubmit}
@@ -162,7 +269,7 @@ export function Questionnaire() {
                 ) : (
                   <NavigationButton
                     onClick={handleNext}
-                    disabled={currentQuestion === questions.length - 1}
+                    disabled={isNextDisabled}
                   >
                     Next
                   </NavigationButton>

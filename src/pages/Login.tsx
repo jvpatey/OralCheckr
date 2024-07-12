@@ -118,9 +118,10 @@ const Button = styled.button<{ $login?: boolean }>`
 export function Login() {
   const navigate = useNavigate();
 
+  // Handle login button click
   const handleLogin = () => {
-    localStorage.setItem("authenticated", "true");
-    navigate(getFullPath(RoutePaths.DASHBOARD));
+    localStorage.setItem("authenticated", "true"); // Set authentication status in local storage
+    navigate(getFullPath(RoutePaths.DASHBOARD)); // Navigate to the dashboard page
   };
 
   return (

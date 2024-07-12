@@ -1,5 +1,8 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Question, Type } from "../pages/Questionnaire";
+
+// Styled-components for the Questionnaire component
 
 const QuesTitle = styled.h2`
   color: #07889b;
@@ -21,7 +24,9 @@ const FormContainer = styled.div`
   width: 100%;
 `;
 
-const FormGroup = styled.div<{ isRange: boolean }>`
+const FormGroup = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "isRange",
+})<{ isRange: boolean }>`
   display: flex;
   flex-direction: ${({ isRange }) => (isRange ? "column" : "row")};
   align-items: center;
@@ -51,16 +56,6 @@ const CheckboxInput = styled.input`
   margin-right: 10px;
 `;
 
-const DropdownSelect = styled.select`
-  color: #222831;
-  background-color: #e0e0e0;
-  border-color: #f5f5f5;
-  width: 100%;
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-`;
-
 const RangeInput = styled.input`
   width: 100%;
   margin: 10px 0;
@@ -72,45 +67,70 @@ const RangeLabels = styled.div`
   width: 100%;
 `;
 
-enum Type {
-  RADIO = "radio",
-  CHECKBOX = "checkbox",
-  RANGE = "range",
-  DROPDOWN = "dropdown",
+// Interface for the Ques component props, extending Question interface
+interface QuesProps extends Question {
+  onResponseChange: (questionId: number, response: number | number[]) => void;
+  initialResponse?: number | number[];
 }
 
-interface Option {
-  optionId: number;
-  optionLabel: string;
-}
-
-interface QuesProps {
-  id: number;
-  title: string;
-  type: Type;
-  options: Option[];
-}
-
+// Ques functional component definition
 export function Ques(props: QuesProps) {
-  const { id, title, type, options } = props;
-  const formRef = useRef<HTMLFormElement>(null);
-  const [rangeValue, setRangeValue] = useState(0);
+  const { id, title, type, options, onResponseChange, initialResponse } = props;
+  const [rangeValue, setRangeValue] = useState<number | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
 
+  // useEffect to set initial values for all question types
   useEffect(() => {
-    if (formRef.current) {
-      formRef.current.reset();
+    if (initialResponse) {
+      switch (type) {
+        case Type.RADIO:
+          setRangeValue(initialResponse as number);
+          break;
+        case Type.CHECKBOX:
+          setSelectedOptions(initialResponse as number[]);
+          break;
+        case Type.RANGE:
+          setRangeValue(initialResponse as number);
+          break;
+        default:
+          break;
+      }
+    } else {
+      setRangeValue(null);
+      setSelectedOptions([]);
     }
-  }, [id]);
+  }, [id, initialResponse, type]);
 
+  // Handler for range input changes
   const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRangeValue(Number(event.target.value));
+    const value = Number(event.target.value);
+    setRangeValue(value);
+    onResponseChange(id, value);
+  };
+
+  // Handler for radio input changes
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
+    setRangeValue(value);
+    onResponseChange(id, value);
+  };
+
+  // Handler for checkbox input changes
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
+    const newSelectedOptions = event.target.checked
+      ? [...selectedOptions, value]
+      : selectedOptions.filter((option) => option !== value);
+    setSelectedOptions(newSelectedOptions);
+    onResponseChange(id, newSelectedOptions);
   };
 
   return (
     <FormContainer>
       <QuesTitle>{title}</QuesTitle>
-      <form ref={formRef} style={{ width: "100%" }}>
+      <form style={{ width: "100%" }}>
         {(() => {
+          // Render inputs based on question type
           switch (type) {
             case Type.RADIO:
               return options.map((option) => (
@@ -119,7 +139,9 @@ export function Ques(props: QuesProps) {
                     type="radio"
                     id={`${id}-${option.optionId}`}
                     name={`question-${id}`}
-                    value={option.optionLabel}
+                    value={option.optionId}
+                    onChange={handleRadioChange}
+                    checked={rangeValue === option.optionId}
                   />
                   <label htmlFor={`${id}-${option.optionId}`}>
                     {option.optionLabel}
@@ -133,25 +155,15 @@ export function Ques(props: QuesProps) {
                     type="checkbox"
                     id={`${id}-${option.optionId}`}
                     name={`question-${id}`}
-                    value={option.optionLabel}
+                    value={option.optionId}
+                    onChange={handleCheckboxChange}
+                    checked={selectedOptions.includes(option.optionId)}
                   />
                   <label htmlFor={`${id}-${option.optionId}`}>
                     {option.optionLabel}
                   </label>
                 </FormGroup>
               ));
-            case Type.DROPDOWN:
-              return (
-                <FormGroup isRange={false}>
-                  <DropdownSelect id={`question-${id}`} name={`question-${id}`}>
-                    {options.map((option) => (
-                      <option key={option.optionId} value={option.optionLabel}>
-                        {option.optionLabel}
-                      </option>
-                    ))}
-                  </DropdownSelect>
-                </FormGroup>
-              );
             case Type.RANGE:
               return (
                 <FormGroup isRange={true}>
@@ -161,7 +173,7 @@ export function Ques(props: QuesProps) {
                     name={`question-${id}`}
                     min="0"
                     max={options.length - 1}
-                    value={rangeValue}
+                    value={rangeValue !== null ? rangeValue : 0}
                     onChange={handleRangeChange}
                   />
                   <RangeLabels>
@@ -171,6 +183,8 @@ export function Ques(props: QuesProps) {
                   </RangeLabels>
                 </FormGroup>
               );
+            default:
+              return null;
           }
         })()}
       </form>

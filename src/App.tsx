@@ -5,6 +5,7 @@ import { NavBar } from "./components/NavBar";
 import { RoutePaths } from "./common/Routes";
 import { getFullPath } from "./common/Routes";
 
+// Define navigation links for the NavBar
 export const links = [
   { text: "Dashboard", href: getFullPath(RoutePaths.DASHBOARD) },
   { text: "Questionnaire", href: getFullPath(RoutePaths.QUESTIONNAIRE) },
