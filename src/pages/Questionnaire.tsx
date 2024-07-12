@@ -81,7 +81,7 @@ export interface Question {
 
 type Responses = Record<number, number | number[]>;
 
-// Function to calculate the score for each option - used inside calculateTotalScore function
+// Helper function to calculate the score for each option
 const calculateOptionScore = (
   points: number,
   numberOfOptions: number,
@@ -90,10 +90,26 @@ const calculateOptionScore = (
   return (points / numberOfOptions) * maxPointsPerQuestion;
 };
 
+// Helper function to find the option and calculate its score
+const findOptionScore = (
+  optionId: number,
+  question: Question,
+  maxPointsPerQuestion: number
+) => {
+  const option = question.options.find((opt) => opt.optionId === optionId);
+  if (option) {
+    return calculateOptionScore(
+      option.points,
+      question.options.length,
+      maxPointsPerQuestion
+    );
+  }
+  return 0;
+};
+
 // Function to calculate the total score when the user submits the questionnaire
 const calculateTotalScore = (questions: Question[], responses: Responses) => {
   const numberOfQuestions = questions.length;
-  // Calculation to determine the max points allotted per question.
   const maxPointsPerQuestion = 100 / numberOfQuestions;
   let totalScore = 0;
 
@@ -105,27 +121,14 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
       // Check if the response is an array (checkbox input) before calculating the score
       if (Array.isArray(response)) {
         response.forEach((ele) => {
-          const option = question.options.find((opt) => opt.optionId === ele);
-          if (option) {
-            questionScore += calculateOptionScore(
-              option.points,
-              question.options.length,
-              maxPointsPerQuestion
-            );
-          }
+          questionScore += findOptionScore(ele, question, maxPointsPerQuestion);
         });
-        // Score calculation for range and radio inputs
       } else {
-        const option = question.options.find(
-          (opt) => opt.optionId === response
+        questionScore += findOptionScore(
+          response,
+          question,
+          maxPointsPerQuestion
         );
-        if (option) {
-          questionScore += calculateOptionScore(
-            option.points,
-            question.options.length,
-            maxPointsPerQuestion
-          );
-        }
       }
     }
 
