@@ -5,12 +5,12 @@ const StyledCard = styled(Card)`
   background-color: #f5f5f5;
   border: transparent;
   border-radius: 20px;
-  width: 90%;
-  height: 90%;
+  width: 95%;
+  height: 95%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 10px;
+  margin-right: 20px;
 `;
 
 const StyledHeader = styled(Card.Header)`
