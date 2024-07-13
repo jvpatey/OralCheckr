@@ -2,30 +2,13 @@ import { useEffect, useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Carousel from "react-bootstrap/Carousel";
 import { Card } from "react-bootstrap";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import questionData from "../common/questionnaire.json";
 
 // styled-component styles for Recommendations Component
 
-const BackgroundWrapper = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== "bgImage",
-})<{ bgImage: string }>`
-  ${({ bgImage }) =>
-    css`
-      background-image: url(${bgImage});
-    `}
-  background-size: cover;
-  background-position: center;
-  width: 95%;
-  height: 95%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 20px;
-`;
-
 const StyledCard = styled(Card)`
-  background-color: transparent;
+  background-color: #f5f5f5;
   border: transparent;
   border-radius: 20px;
   width: 95%;
@@ -63,13 +46,14 @@ const CategoryText = styled.div`
   font-weight: bold;
   font-size: 18px;
   margin-bottom: 10px;
+  color: #222831;
 `;
 
 const StyledHeader = styled(Card.Header)`
   text-align: center;
   font-weight: bold;
   font-size: 20px;
-  color: #e0e0e0;
+  color: #07889b;
   border: transparent;
   background-color: transparent;
   border-radius: 20px 20px 0 0;
@@ -91,6 +75,13 @@ const CustomCarousel = styled(Carousel)`
     width: auto;
     color: #e0e0e0;
   }
+
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon,
+  .carousel-indicators .active,
+  .carousel-indicators {
+    filter: invert(1);
+  }
 `;
 
 // Helper function to process a single option and add it to recommendations
@@ -108,14 +99,13 @@ const processOption = (
   }
 };
 
+// Recommendations functional component
 export function Recommendations() {
   const [recommendations, setRecommendations] = useState<
     { category: string; feedback: string }[]
   >([]);
-
   const [index, setIndex] = useState(0);
   const hasFetchedRef = useRef(false);
-  const backgroundImage = "public/images/background.png";
 
   // useEffect hook to fetch recommendations
   useEffect(() => {
@@ -151,28 +141,28 @@ export function Recommendations() {
   };
 
   return (
-    <BackgroundWrapper bgImage={backgroundImage}>
-      <StyledCard>
-        <StyledHeader>Recommendations</StyledHeader>
-        <Card.Body style={{ padding: 0 }}>
-          {recommendations.length > 0 ? (
-            <CarouselContainer>
-              <CustomCarousel activeIndex={index} onSelect={handleSelect}>
-                {recommendations.map((rec, idx) => (
-                  <Carousel.Item key={idx} style={{ marginBottom: "30px" }}>
-                    <CarouselContent>
-                      <CategoryText>{rec.category}</CategoryText>
-                      {rec.feedback}
-                    </CarouselContent>
-                  </Carousel.Item>
-                ))}
-              </CustomCarousel>
-            </CarouselContainer>
-          ) : (
-            <NoRecommendations>No recommendations available</NoRecommendations>
-          )}
-        </Card.Body>
-      </StyledCard>
-    </BackgroundWrapper>
+    <StyledCard>
+      <StyledHeader>Feedback and Recommendations</StyledHeader>
+      <Card.Body style={{ padding: 0 }}>
+        {recommendations.length > 0 ? (
+          <CarouselContainer>
+            <CustomCarousel activeIndex={index} onSelect={handleSelect}>
+              {recommendations.map((rec, idx) => (
+                <Carousel.Item key={idx} style={{ marginBottom: "30px" }}>
+                  <CarouselContent style={{ color: "#222831" }}>
+                    <CategoryText style={{ color: "#07889b" }}>
+                      {rec.category}
+                    </CategoryText>
+                    {rec.feedback}
+                  </CarouselContent>
+                </Carousel.Item>
+              ))}
+            </CustomCarousel>
+          </CarouselContainer>
+        ) : (
+          <NoRecommendations>No recommendations available</NoRecommendations>
+        )}
+      </Card.Body>
+    </StyledCard>
   );
 }
