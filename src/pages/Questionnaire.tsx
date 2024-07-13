@@ -10,6 +10,7 @@ import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
 import { Ques } from "../components/Ques";
 import { RoutePaths } from "../common/Routes";
 import { StartQuestionnaire } from "./StartQuestionnaire";
+import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { NavigationButton } from "../components/styled/NavigationButton";
 
 // styled-component styles for Questionnaire Page
@@ -224,6 +225,9 @@ export function Questionnaire() {
 
   // Render the start-questionnaire page if the current question is 0
   if (currentQuestion === 0) {
+    if (storedResponses) {
+      return <RetakeQuestionnaire />;
+    }
     return <StartQuestionnaire />;
   }
 
