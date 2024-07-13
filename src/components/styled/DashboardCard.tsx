@@ -1,9 +1,6 @@
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
-
-interface DashboardCardProps {
-  title: string;
-}
+import { ReactNode } from "react";
 
 const StyledCard = styled(Card)`
   width: 90vw;
@@ -38,12 +35,14 @@ const StyledCard = styled(Card)`
   }
 `;
 
-export function DashboardCard({ title }: DashboardCardProps) {
+interface DashboardCardProps {
+  children: ReactNode;
+}
+
+export function DashboardCard({ children }: DashboardCardProps) {
   return (
     <StyledCard>
-      <Card.Body>
-        <Card.Title>{title}</Card.Title>
-      </Card.Body>
+      <Card.Body>{children}</Card.Body>
     </StyledCard>
   );
 }
