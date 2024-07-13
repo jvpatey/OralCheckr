@@ -4,6 +4,23 @@ import { DashboardContainer } from "../components/styled/DashboardContainer";
 import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
 import { DashboardCard } from "../components/styled/DashboardCard";
 import { Container, Row, Col } from "react-bootstrap";
+import { OralHealthStatus } from "../components/OralHealthStatus";
+import styled from "styled-components";
+
+const StyledContainer = styled(Container)`
+  height: 100%;
+`;
+
+const StyledRow = styled(Row)`
+  height: 50%;
+  margin: 0;
+`;
+
+const StyledCol = styled(Col)`
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+`;
 
 export function Dashboard() {
   return (
@@ -11,19 +28,17 @@ export function Dashboard() {
       <DashboardContainer>
         <DashboardCardContainer>
           <DashboardCard>
-            <Container fluid>
-              <Row className="h-50">
-                <Col md={6} className="d-flex">
-                  Oral health status
-                </Col>
-                <Col md={6} className="d-flex">
-                  Recommendations
-                </Col>
-              </Row>
-              <Row className="h-50">
-                <Col className="d-flex">Habit Tracker</Col>
-              </Row>
-            </Container>
+            <StyledContainer fluid>
+              <StyledRow>
+                <StyledCol md={6}>
+                  <OralHealthStatus />
+                </StyledCol>
+                <StyledCol md={6}>Recommendations</StyledCol>
+              </StyledRow>
+              <StyledRow>
+                <StyledCol>Habit Tracker</StyledCol>
+              </StyledRow>
+            </StyledContainer>
           </DashboardCard>
         </DashboardCardContainer>
       </DashboardContainer>

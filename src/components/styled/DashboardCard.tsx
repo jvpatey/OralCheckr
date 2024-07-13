@@ -14,8 +14,6 @@ const StyledCard = styled(Card)`
   animation: fadeInUp 1s ease-out;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   padding: 20px;
 
   @keyframes fadeInUp {
@@ -35,6 +33,13 @@ const StyledCard = styled(Card)`
   }
 `;
 
+const StyledCardBody = styled(Card.Body)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
 interface DashboardCardProps {
   children: ReactNode;
 }
@@ -42,7 +47,7 @@ interface DashboardCardProps {
 export function DashboardCard({ children }: DashboardCardProps) {
   return (
     <StyledCard>
-      <Card.Body>{children}</Card.Body>
+      <StyledCardBody>{children}</StyledCardBody>
     </StyledCard>
   );
 }
