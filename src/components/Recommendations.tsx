@@ -11,10 +11,11 @@ const StyledCard = styled(Card)`
   background-color: #f5f5f5;
   border: transparent;
   border-radius: 20px;
-  width: 95%;
-  height: 95%;
+  width: 98%;
+  height: 98%;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 `;
 
 const NoRecommendations = styled.div`
@@ -52,12 +53,13 @@ const CategoryText = styled.div`
 const StyledHeader = styled(Card.Header)`
   text-align: center;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 22px;
   color: #07889b;
   border: transparent;
   background-color: transparent;
   border-radius: 20px 20px 0 0;
   padding: 10px;
+  margin-top: 20px;
 `;
 
 // Custom styles for carousel controls and indicators
@@ -99,7 +101,6 @@ const processOption = (
   }
 };
 
-// Recommendations functional component
 export function Recommendations() {
   const [recommendations, setRecommendations] = useState<
     { category: string; feedback: string }[]

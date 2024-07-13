@@ -14,7 +14,6 @@ const StyledCard = styled(Card)`
   animation: fadeInUp 1s ease-out;
   display: flex;
   flex-direction: column;
-  padding: 20px;
 
   @keyframes fadeInUp {
     from {
@@ -38,6 +37,7 @@ const StyledCardBody = styled(Card.Body)`
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 `;
 
 interface DashboardCardProps {
