@@ -138,7 +138,14 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
   });
 
   // Ensure the total score does not exceed 100
-  return Math.min(totalScore, 100);
+  totalScore = Math.min(totalScore, 100);
+
+  // If totalScore is greater than 99, set it to 100
+  if (totalScore > 99) {
+    totalScore = 100;
+  }
+
+  return totalScore;
 };
 
 export function Questionnaire() {
