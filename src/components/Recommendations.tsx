@@ -20,9 +20,10 @@ const StyledCard = styled(Card)`
 
 const NoRecommendations = styled.div`
   display: flex;
+  font-size: 18px;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: 50%;
 `;
 
 const CarouselContainer = styled.div`

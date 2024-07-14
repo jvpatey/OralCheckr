@@ -2,7 +2,6 @@ import { Card, ProgressBar } from "react-bootstrap";
 import styled from "styled-components";
 
 // styled-component styles for Oral Health Status Component
-
 const StyledCard = styled(Card)`
   background-color: #f5f5f5;
   border: transparent;
@@ -45,6 +44,13 @@ const CustomProgressBar = styled(ProgressBar)`
   }
 `;
 
+const MessageText = styled.p`
+  font-size: 18px;
+  text-align: left;
+  text-align: center;
+  margin-top: 30px;
+`;
+
 export function OralHealthStatus() {
   const storedScore = localStorage.getItem("totalScore");
   const score = storedScore ? parseInt(storedScore, 10) : 0;
@@ -53,10 +59,19 @@ export function OralHealthStatus() {
     <StyledCard>
       <StyledHeader>Oral Health Status</StyledHeader>
       <Card.Body>
-        <StyledText>
-          Your current oral health score is <ScoreSpan>{score}</ScoreSpan>.
-        </StyledText>
-        <CustomProgressBar now={score} label={`${score}%`} />
+        {score === 0 ? (
+          <MessageText>
+            Please complete the oral health questionnaire to get your oral
+            health score.
+          </MessageText>
+        ) : (
+          <>
+            <StyledText>
+              Your current oral health score is <ScoreSpan>{score}</ScoreSpan>.
+            </StyledText>
+            <CustomProgressBar now={score} label={`${score}%`} />
+          </>
+        )}
       </Card.Body>
     </StyledCard>
   );
