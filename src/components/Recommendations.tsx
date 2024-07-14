@@ -82,18 +82,28 @@ interface Recommendation {
   feedback: string;
 }
 
-// Helper function to process a single option and add it to recommendations
+// Helper function to process a single option and return a recommendation
 const processOption = (
   optionId: number,
-  question: (typeof questionData.questions)[0],
-  recs: Recommendation[]
-) => {
+  question: (typeof questionData.questions)[0]
+): Recommendation | null => {
   const option = question.options.find((opt) => opt.optionId === optionId);
   if (option && option.feedback) {
-    recs.push({
+    return {
       category: question.Category,
       feedback: option.feedback,
-    });
+    };
+  }
+  return null;
+};
+
+// Helper function to add recommendation to recs array
+const addRecommendation = (
+  recs: Recommendation[],
+  recommendation: Recommendation | null
+) => {
+  if (recommendation) {
+    recs.push(recommendation);
   }
 };
 
@@ -117,11 +127,13 @@ export function Recommendations() {
       if (Array.isArray(response)) {
         // Handle checkbox responses
         response.forEach((res) => {
-          processOption(res, question, recs);
+          const recommendation = processOption(res, question);
+          addRecommendation(recs, recommendation);
         });
       } else {
         // Handle other responses
-        processOption(response, question, recs);
+        const recommendation = processOption(response, question);
+        addRecommendation(recs, recommendation);
       }
     });
 
