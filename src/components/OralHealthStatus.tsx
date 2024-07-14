@@ -1,18 +1,8 @@
 import { Card, ProgressBar } from "react-bootstrap";
+import { DashboardTile } from "./styled/DashboardTile";
 import styled from "styled-components";
 
 // styled-component styles for Oral Health Status Component
-const StyledCard = styled(Card)`
-  background-color: #f5f5f5;
-  border: transparent;
-  border-radius: 20px;
-  width: 98%;
-  height: 98%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  box-sizing: border-box;
-`;
 
 const StyledHeader = styled(Card.Header)`
   background-color: #f5f5f5;
@@ -56,7 +46,7 @@ export function OralHealthStatus() {
   const score = storedScore ? parseInt(storedScore, 10) : 0;
 
   return (
-    <StyledCard>
+    <DashboardTile>
       <StyledHeader>Oral Health Status</StyledHeader>
       <Card.Body>
         {score === 0 ? (
@@ -73,6 +63,6 @@ export function OralHealthStatus() {
           </>
         )}
       </Card.Body>
-    </StyledCard>
+    </DashboardTile>
   );
 }

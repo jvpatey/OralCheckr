@@ -1,22 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Carousel from "react-bootstrap/Carousel";
+import { DashboardTile } from "./styled/DashboardTile";
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import questionData from "../common/questionnaire.json";
 
 // styled-component styles for Recommendations Component
-
-const StyledCard = styled(Card)`
-  background-color: #f5f5f5;
-  border: transparent;
-  border-radius: 20px;
-  width: 98%;
-  height: 98%;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-`;
 
 const NoRecommendations = styled.div`
   display: flex;
@@ -143,7 +133,7 @@ export function Recommendations() {
   };
 
   return (
-    <StyledCard>
+    <DashboardTile>
       <StyledHeader>Feedback and Recommendations</StyledHeader>
       <Card.Body style={{ padding: 0 }}>
         {recommendations.length > 0 ? (
@@ -165,6 +155,6 @@ export function Recommendations() {
           <NoRecommendations>No recommendations available</NoRecommendations>
         )}
       </Card.Body>
-    </StyledCard>
+    </DashboardTile>
   );
 }
