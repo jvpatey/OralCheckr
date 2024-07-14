@@ -77,11 +77,16 @@ const CustomCarousel = styled(Carousel)`
   }
 `;
 
+interface Recommendation {
+  category: string;
+  feedback: string;
+}
+
 // Helper function to process a single option and add it to recommendations
 const processOption = (
   optionId: number,
   question: (typeof questionData.questions)[0],
-  recs: { category: string; feedback: string }[]
+  recs: Recommendation[]
 ) => {
   const option = question.options.find((opt) => opt.optionId === optionId);
   if (option && option.feedback) {
@@ -93,9 +98,7 @@ const processOption = (
 };
 
 export function Recommendations() {
-  const [recommendations, setRecommendations] = useState<
-    { category: string; feedback: string }[]
-  >([]);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [index, setIndex] = useState(0);
   const hasFetchedRef = useRef(false);
 
@@ -106,7 +109,7 @@ export function Recommendations() {
     const storedResponses = JSON.parse(
       localStorage.getItem("questionnaire") || "{}"
     );
-    const recs: { category: string; feedback: string }[] = [];
+    const recs: Recommendation[] = [];
 
     questionData.questions.forEach((question) => {
       const response = storedResponses[question.id];
