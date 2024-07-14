@@ -103,12 +103,16 @@ export function Ques(props: QuesProps) {
 
   // Initialize range value when the component mounts if it's a range question
   useEffect(() => {
-    if (type === Type.RANGE && rangeValue === null) {
-      const initialValue = 1;
-      setRangeValue(initialValue);
-      onResponseChange(id, initialValue);
+    if (type === Type.RANGE) {
+      if (initialResponse === undefined) {
+        const initialValue = 1;
+        setRangeValue(initialValue);
+        onResponseChange(id, initialValue);
+      } else {
+        setRangeValue(initialResponse as number);
+      }
     }
-  }, [type, rangeValue, id, onResponseChange]);
+  }, [id, type]);
 
   // Handler for range input changes
   const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
