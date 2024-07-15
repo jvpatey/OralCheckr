@@ -1,9 +1,6 @@
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
-
-interface DashboardCardProps {
-  title: string;
-}
+import { ReactNode } from "react";
 
 const StyledCard = styled(Card)`
   width: 90vw;
@@ -17,9 +14,6 @@ const StyledCard = styled(Card)`
   animation: fadeInUp 1s ease-out;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
 
   @keyframes fadeInUp {
     from {
@@ -38,12 +32,22 @@ const StyledCard = styled(Card)`
   }
 `;
 
-export function DashboardCard({ title }: DashboardCardProps) {
+const StyledCardBody = styled(Card.Body)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+`;
+
+interface DashboardCardProps {
+  children: ReactNode;
+}
+
+export function DashboardCard({ children }: DashboardCardProps) {
   return (
     <StyledCard>
-      <Card.Body>
-        <Card.Title>{title}</Card.Title>
-      </Card.Body>
+      <StyledCardBody>{children}</StyledCardBody>
     </StyledCard>
   );
 }

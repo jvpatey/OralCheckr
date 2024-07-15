@@ -10,6 +10,7 @@ import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
 import { Ques } from "../components/Ques";
 import { RoutePaths } from "../common/Routes";
 import { StartQuestionnaire } from "./StartQuestionnaire";
+import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { NavigationButton } from "../components/styled/NavigationButton";
 
 // styled-component styles for Questionnaire Page
@@ -137,7 +138,14 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
   });
 
   // Ensure the total score does not exceed 100
-  return Math.min(totalScore, 100);
+  totalScore = Math.min(totalScore, 100);
+
+  // If totalScore is greater than 99, set it to 100
+  if (totalScore > 99) {
+    totalScore = 100;
+  }
+
+  return totalScore;
 };
 
 export function Questionnaire() {
@@ -222,8 +230,17 @@ export function Questionnaire() {
     (responses[currentQuestion] === undefined ||
       responses[currentQuestion] === null);
 
+  // Reset responses when retaking the questionnaire
+  const resetResponses = () => {
+    setResponses({});
+    setCurrentQuestion(1);
+  };
+
   // Render the start-questionnaire page if the current question is 0
   if (currentQuestion === 0) {
+    if (storedResponses) {
+      return <RetakeQuestionnaire resetResponses={resetResponses} />;
+    }
     return <StartQuestionnaire />;
   }
 

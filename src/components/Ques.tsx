@@ -81,7 +81,7 @@ export function Ques(props: QuesProps) {
 
   // useEffect to set initial values for all question types
   useEffect(() => {
-    if (initialResponse) {
+    if (initialResponse !== undefined) {
       switch (type) {
         case Type.RADIO:
           setRangeValue(initialResponse as number);
@@ -101,9 +101,22 @@ export function Ques(props: QuesProps) {
     }
   }, [id, initialResponse, type]);
 
+  // Initialize range value when the component mounts if it's a range question
+  useEffect(() => {
+    if (type === Type.RANGE) {
+      if (initialResponse === undefined) {
+        const initialValue = 1;
+        setRangeValue(initialValue);
+        onResponseChange(id, initialValue);
+      } else {
+        setRangeValue(initialResponse as number);
+      }
+    }
+  }, [id, type]);
+
   // Handler for range input changes
   const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
+    const value = Number(event.target.value) + 1;
     setRangeValue(value);
     onResponseChange(id, value);
   };
@@ -173,7 +186,7 @@ export function Ques(props: QuesProps) {
                     name={`question-${id}`}
                     min="0"
                     max={options.length - 1}
-                    value={rangeValue !== null ? rangeValue : 0}
+                    value={rangeValue !== null ? rangeValue - 1 : 0}
                     onChange={handleRangeChange}
                   />
                   <RangeLabels>
