@@ -230,10 +230,16 @@ export function Questionnaire() {
     (responses[currentQuestion] === undefined ||
       responses[currentQuestion] === null);
 
+  // Reset responses when retaking the questionnaire
+  const resetResponses = () => {
+    setResponses({});
+    setCurrentQuestion(1);
+  };
+
   // Render the start-questionnaire page if the current question is 0
   if (currentQuestion === 0) {
     if (storedResponses) {
-      return <RetakeQuestionnaire />;
+      return <RetakeQuestionnaire resetResponses={resetResponses} />;
     }
     return <StartQuestionnaire />;
   }

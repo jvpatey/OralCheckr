@@ -120,8 +120,14 @@ const StyledModal = styled(Modal)`
   }
 `;
 
-// page rendered when user tries to take the questionnaire but previous responses are stilled stored in Local Storage
-export function RetakeQuestionnaire() {
+interface RetakeQuestionnaireProps {
+  resetResponses: () => void;
+}
+
+// page rendered when user tries to take the questionnaire but previous responses are still stored in Local Storage
+export function RetakeQuestionnaire({
+  resetResponses,
+}: RetakeQuestionnaireProps) {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
@@ -134,12 +140,14 @@ export function RetakeQuestionnaire() {
     localStorage.removeItem("currentQuestion");
     localStorage.removeItem("totalScore");
     setShowModal(false);
+    resetResponses();
     navigate(`${getFullPath(RoutePaths.QUESTIONNAIRE)}/1`);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
   };
+
   return (
     <PageBackground>
       <DashboardContainer>
@@ -171,7 +179,7 @@ export function RetakeQuestionnaire() {
           <Modal.Title>Confirm</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <strong>Are you sure you want to retake the questionnaire?</strong>
+          <strong>Are you sure you want to retake the questionnaire?</strong>{" "}
           This will clear your previous responses and oral health score.
         </Modal.Body>
         <Modal.Footer>
