@@ -17,13 +17,20 @@ const NoRecommendations = styled.div`
 `;
 
 const CarouselContainer = styled.div`
-  height: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
+  height: 100%;
+
+  @media (max-width: 768px) {
+    height: 300px;
+  }
 `;
 
 const CarouselContent = styled.div`
   flex: 1;
+  font-size: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,6 +39,12 @@ const CarouselContent = styled.div`
   color: #e0e0e0;
   padding: 20px;
   margin: 0 50px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    margin: 0 20px;
+    padding: 10px;
+  }
 `;
 
 const CategoryText = styled.div`
@@ -39,6 +52,10 @@ const CategoryText = styled.div`
   font-size: 18px;
   margin-bottom: 10px;
   color: #222831;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 const StyledHeader = styled(Card.Header)`
@@ -51,10 +68,26 @@ const StyledHeader = styled(Card.Header)`
   border-radius: 20px 20px 0 0;
   padding: 10px;
   margin-top: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 // Custom styles for carousel controls and indicators
 const CustomCarousel = styled(Carousel)`
+  flex: 1;
+  .carousel-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
   .carousel-indicators li {
     background-color: #e0e0e0;
   }
@@ -65,8 +98,19 @@ const CustomCarousel = styled(Carousel)`
 
   .carousel-control-prev,
   .carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     width: auto;
     color: #e0e0e0;
+  }
+
+  .carousel-control-prev {
+    left: 10px;
+  }
+
+  .carousel-control-next {
+    right: 10px;
   }
 
   .carousel-control-prev-icon,
@@ -74,6 +118,19 @@ const CustomCarousel = styled(Carousel)`
   .carousel-indicators .active,
   .carousel-indicators {
     filter: invert(1);
+  }
+
+  @media (max-width: 768px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+      top: 45%;
+    }
+  }
+`;
+
+const FixedHeightDashboardTile = styled(DashboardTile)`
+  @media (max-width: 768px) {
+    height: 250px;
   }
 `;
 
@@ -148,9 +205,11 @@ export function Recommendations() {
   };
 
   return (
-    <DashboardTile>
+    <FixedHeightDashboardTile>
       <StyledHeader>Feedback and Recommendations</StyledHeader>
-      <Card.Body style={{ padding: 0 }}>
+      <Card.Body
+        style={{ padding: 0, display: "flex", flexDirection: "column" }}
+      >
         {recommendations.length > 0 ? (
           <CarouselContainer>
             <CustomCarousel activeIndex={index} onSelect={handleSelect}>
@@ -170,6 +229,6 @@ export function Recommendations() {
           <NoRecommendations>No recommendations available</NoRecommendations>
         )}
       </Card.Body>
-    </DashboardTile>
+    </FixedHeightDashboardTile>
   );
 }
