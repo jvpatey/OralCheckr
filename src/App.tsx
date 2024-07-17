@@ -9,7 +9,7 @@ import { getFullPath } from "./common/Routes";
 export const links = [
   { text: "Dashboard", href: getFullPath(RoutePaths.DASHBOARD) },
   { text: "Questionnaire", href: getFullPath(RoutePaths.QUESTIONNAIRE) },
-  { text: "Habit Tracker", href: getFullPath(RoutePaths.HABIT_TRACKER) },
+  { text: "Habit Tracker", href: getFullPath(RoutePaths.CALENDAR) },
   { text: "Log Out", href: getFullPath(RoutePaths.LOGIN) },
 ];
 
