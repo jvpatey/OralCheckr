@@ -1,18 +1,32 @@
-import styled from "styled-components";
 import { Link } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
+import { getFullPath } from "../common/Routes";
+
+const slideInFromLeft = keyframes`
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+`;
 
 const SidebarContainer = styled.div`
-  height: 100vh;
+  height: calc(100vh - 56px);
   width: 200px;
   position: fixed;
-  top: 0;
+  top: 56px;
   left: 0;
+  transform: translateX(-100%);
   background-color: #e0e0e0;
   color: #222831;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 20px;
+  z-index: 1000;
+  animation: ${slideInFromLeft} 1.5s forwards;
+  transition: transform 0.3s ease;
 
   @media (max-width: 768px) {
     width: 80px;
@@ -35,13 +49,6 @@ const SidebarLink = styled(Link)`
   }
 `;
 
-const SidebarHeader = styled.h3`
-  margin-bottom: 30px;
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-  }
-`;
-
 interface SidebarProps {
   links: { name: string; path: string }[];
 }
@@ -49,9 +56,8 @@ interface SidebarProps {
 export function Sidebar({ links }: SidebarProps) {
   return (
     <SidebarContainer>
-      <SidebarHeader>OralCheckr</SidebarHeader>
       {links.map((link, index) => (
-        <SidebarLink to={link.path} key={index}>
+        <SidebarLink to={getFullPath(link.path)} key={index}>
           {link.name}
         </SidebarLink>
       ))}
