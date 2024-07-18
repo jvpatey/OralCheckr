@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { getFullPath } from "../common/Routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,22 +8,12 @@ import {
   faList,
 } from "@fortawesome/free-solid-svg-icons";
 
-const slideInFromLeft = keyframes`
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-`;
-
 const SidebarContainer = styled.div`
   height: calc(100vh - 56px);
-  width: 150px;
+  width: 190px;
   position: fixed;
   top: 56px;
   left: 0;
-  transform: translateX(-100%);
   background-color: #e0e0e0;
   color: #222831;
   display: flex;
@@ -31,11 +21,9 @@ const SidebarContainer = styled.div`
   align-items: center;
   padding-top: 20px;
   z-index: 1000;
-  animation: ${slideInFromLeft} 1.5s forwards;
-  transition: transform 0.3s ease;
 
   @media (max-width: 768px) {
-    width: 60px;
+    width: 70px;
   }
 `;
 
