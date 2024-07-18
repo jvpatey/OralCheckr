@@ -3,15 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import questionData from "../common/questionnaire.json";
 import styled from "styled-components";
 import { getFullPath } from "../common/Routes";
-import { PageBackground } from "../components/styled/PageBackground";
-import { DashboardContainer } from "../components/styled/DashboardContainer";
-import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
-import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
+import { PageBackground } from "../components/Styled/PageBackground";
+import { DashboardContainer } from "../components/Styled/DashboardContainer";
+import { DashboardCardContainer } from "../components/Styled/DashboardCardContainer";
+import { QuestionnaireCard } from "../components/Styled/QuestionnaireCard";
 import { Ques } from "../components/Ques";
 import { RoutePaths } from "../common/Routes";
 import { StartQuestionnaire } from "./StartQuestionnaire";
 import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
-import { NavigationButton } from "../components/styled/NavigationButton";
+import { NavigationButton } from "../components/Styled/NavigationButton";
 
 // styled-component styles for Questionnaire Page
 

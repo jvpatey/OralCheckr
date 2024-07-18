@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Carousel from "react-bootstrap/Carousel";
-import { DashboardTile } from "./styled/DashboardTile";
+import { DashboardTile } from "./Styled/DashboardTile";
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import questionData from "../common/questionnaire.json";

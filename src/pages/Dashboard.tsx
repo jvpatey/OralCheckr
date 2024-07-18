@@ -1,8 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { PageBackground } from "../components/styled/PageBackground";
-import { DashboardContainer } from "../components/styled/DashboardContainer";
-import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
-import { DashboardCard } from "../components/styled/DashboardCard";
+import { PageBackground } from "../components/Styled/PageBackground";
+import { DashboardContainer } from "../components/Styled/DashboardContainer";
+import { DashboardCardContainer } from "../components/Styled/DashboardCardContainer";
+import { DashboardCard } from "../components/Styled/DashboardCard";
 import { Container, Row, Col } from "react-bootstrap";
 import { OralHealthStatus } from "../components/OralHealthStatus";
 import { Recommendations } from "../components/Recommendations";

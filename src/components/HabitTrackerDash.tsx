@@ -1,4 +1,4 @@
-import { DashboardTile } from "./styled/DashboardTile";
+import { DashboardTile } from "./Styled/DashboardTile";
 import { Card } from "react-bootstrap";
 
 // styled-component styles for Habit Tracker Dash Component

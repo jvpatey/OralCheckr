@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 import { RoutePaths } from "../common/Routes";
 import { getFullPath } from "../common/Routes";
-import { PageBackground } from "../components/styled/PageBackground";
+import { PageBackground } from "../components/Styled/PageBackground";
 
 // styled-component styles for Login Page
 
