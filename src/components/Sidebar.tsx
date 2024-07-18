@@ -12,7 +12,7 @@ const SidebarContainer = styled.div`
   height: calc(100vh - 56px);
   width: 190px;
   position: fixed;
-  top: 56px;
+  top: 60px;
   left: 0;
   background-color: #e0e0e0;
   color: #222831;
@@ -20,7 +20,7 @@ const SidebarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding-top: 20px;
-  z-index: 1000;
+  border-top-right-radius: 20px;
 
   @media (max-width: 768px) {
     width: 70px;

@@ -1,7 +1,13 @@
 import styled, { keyframes } from "styled-components";
 import { Navbar, Container, Dropdown, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTachometerAlt,
+  faBars,
+  faClipboardList,
+  faTasksAlt,
+  faArrowRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons"; // Import icons as needed
 import { Link, useLocation } from "react-router-dom";
 import { RoutePaths, getFullPath } from "../common/Routes";
 
@@ -71,7 +77,7 @@ const CustomCollapse = styled(Navbar.Collapse)`
 
 const CustomNavLink = styled(Nav.Link)`
   color: #222831;
-  margin-right: 25px;
+  margin-right: 35px;
 
   &:hover {
     color: #07889b;
@@ -84,6 +90,10 @@ const CustomNavLink = styled(Nav.Link)`
     transform: scale(1.1);
     background-color: transparent !important;
   }
+`;
+
+const Icon = styled.span`
+  margin-right: 5px;
 `;
 
 export function NavBar({ links }: NavBarProps) {
@@ -108,6 +118,21 @@ export function NavBar({ links }: NavBarProps) {
       (href.includes(RoutePaths.HABITS) ||
         href.includes(RoutePaths.CALENDAR) ||
         href.includes(RoutePaths.ANALYTICS)));
+
+  const renderIcon = (text: string) => {
+    switch (text.toLowerCase()) {
+      case "dashboard":
+        return <FontAwesomeIcon icon={faTachometerAlt} />;
+      case "questionnaire":
+        return <FontAwesomeIcon icon={faClipboardList} />;
+      case "habit tracker":
+        return <FontAwesomeIcon icon={faTasksAlt} />;
+      case "log out":
+        return <FontAwesomeIcon icon={faArrowRightFromBracket} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <CustomNavbar expand="lg" fixed="top">
@@ -138,6 +163,7 @@ export function NavBar({ links }: NavBarProps) {
                     : undefined
                 }
               >
+                <Icon>{renderIcon(link.text)}</Icon>
                 {link.text}
               </Dropdown.Item>
             ))}
@@ -157,6 +183,7 @@ export function NavBar({ links }: NavBarProps) {
                     : undefined
                 }
               >
+                <Icon>{renderIcon(link.text)}</Icon>
                 {link.text}
               </CustomNavLink>
             ))}
