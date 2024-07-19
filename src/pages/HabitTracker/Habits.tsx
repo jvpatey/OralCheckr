@@ -33,6 +33,7 @@ export function Habits() {
   const [showModal, setShowModal] = useState(false);
   const [newHabitName, setNewHabitName] = useState("");
   const [newHabitCount, setNewHabitCount] = useState("");
+  const [editIndex, setEditIndex] = useState<number | null>(null);
 
   // Load habits from local storage when the component mounts
   useEffect(() => {
@@ -45,22 +46,32 @@ export function Habits() {
   // Handler for showing the add habit modal
   const handleAddHabitClick = () => {
     setShowModal(true);
+    setEditIndex(null);
+    setNewHabitName("");
+    setNewHabitCount("");
   };
 
   // Handler for saving a new habit
   const handleSaveHabit = () => {
     if (newHabitName && newHabitCount) {
-      const newHabit: Habit = {
-        name: newHabitName,
-        count: parseInt(newHabitCount, 10),
-        index: habits.length + 1, // Start index at 1 instead of 0
-      };
-
-      const updatedHabits = [...habits, newHabit];
+      const updatedHabits = [...habits];
+      if (editIndex !== null) {
+        // Update the habit if editing
+        updatedHabits[editIndex] = {
+          name: newHabitName,
+          count: parseInt(newHabitCount, 10),
+          index: editIndex + 1,
+        };
+      } else {
+        // Add the new habit
+        updatedHabits.push({
+          name: newHabitName,
+          count: parseInt(newHabitCount, 10),
+          index: habits.length + 1,
+        });
+      }
       setHabits(updatedHabits);
       localStorage.setItem("habits", JSON.stringify(updatedHabits));
-
-      // Close the modal and reset input fields
       setShowModal(false);
       setNewHabitName("");
       setNewHabitCount("");
@@ -76,11 +87,39 @@ export function Habits() {
 
   // Handler for deleting a habit
   const handleDeleteHabit = (index: number) => {
+    // Filter out the deleted habit and reindex the remaining habits
     const updatedHabits = habits
       .filter((habit) => habit.index !== index)
       .map((habit, idx) => ({ ...habit, index: idx + 1 }));
     setHabits(updatedHabits);
     localStorage.setItem("habits", JSON.stringify(updatedHabits));
+  };
+
+  // Handler for editing a habit
+  const handleEditHabit = (index: number) => {
+    const habitToEdit = habits.find((habit) => habit.index === index);
+    if (habitToEdit) {
+      setNewHabitName(habitToEdit.name);
+      setNewHabitCount(habitToEdit.count.toString());
+      setEditIndex(index - 1);
+      setShowModal(true);
+    }
+  };
+
+  // Handler for habit name input change with validation
+  const handleHabitNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (/^[a-zA-Z\s]*$/.test(value)) {
+      setNewHabitName(value);
+    }
+  };
+
+  // Handler for habit count input change with validation
+  const handleHabitCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (/^\d*$/.test(value)) {
+      setNewHabitCount(value);
+    }
   };
 
   return (
@@ -95,13 +134,16 @@ export function Habits() {
             habitIndex={habit.index}
             habitCount={habit.count}
             onDeleteClick={handleDeleteHabit}
+            onEditClick={() => handleEditHabit(habit.index)}
           />
         ))}
       </HabitGrid>
 
       <StyledModal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Add a New Habit</Modal.Title>
+          <Modal.Title>
+            {editIndex !== null ? "Edit a Habit" : "Add a New Habit"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -111,7 +153,7 @@ export function Habits() {
                 type="text"
                 placeholder="Enter habit name"
                 value={newHabitName}
-                onChange={(e) => setNewHabitName(e.target.value)}
+                onChange={handleHabitNameChange}
               />
             </Form.Group>
             <Form.Group controlId="habitCount">
@@ -122,7 +164,7 @@ export function Habits() {
                 type="number"
                 placeholder="Enter habit count"
                 value={newHabitCount}
-                onChange={(e) => setNewHabitCount(e.target.value)}
+                onChange={handleHabitCountChange}
               />
             </Form.Group>
           </Form>
@@ -135,6 +177,7 @@ export function Habits() {
             variant="primary"
             style={{ backgroundColor: "#07889b", borderColor: "#07889b" }}
             onClick={handleSaveHabit}
+            disabled={!newHabitName || !newHabitCount} // Disable button if fields are empty
           >
             Save Habit
           </Button>
