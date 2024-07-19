@@ -83,6 +83,7 @@ export function Habits() {
           <HabitTile
             key={habit.index}
             habitName={habit.name}
+            habitCount={habit.count}
             habitIndex={habit.index}
           />
         ))}
