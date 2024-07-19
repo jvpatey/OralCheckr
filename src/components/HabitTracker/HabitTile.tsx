@@ -98,9 +98,36 @@ const IndexDisplay = styled.div`
   justify-content: center;
 `;
 
+// Styled component for the text on the back side
+const BackText = styled.div`
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  text-align: center;
+  word-wrap: break-word;
+  width: 100%;
+
+  .label {
+    color: #222831;
+    font-weight: bold;
+  }
+
+  .value {
+    color: #07889b;
+  }
+
+  .spaced {
+    margin-top: 10px;
+  }
+`;
+
 interface HabitTileProps {
   habitName: string;
   habitIndex: number;
+  habitCount: number;
   onEditClick?: () => void;
   onDeleteClick?: () => void;
 }
@@ -108,6 +135,7 @@ interface HabitTileProps {
 export function HabitTile({
   habitName,
   habitIndex,
+  habitCount,
   onEditClick,
   onDeleteClick,
 }: HabitTileProps) {
@@ -143,7 +171,15 @@ export function HabitTile({
           </IconsContainer>
         </FlipCardFront>
         <FlipCardBack>
-          <HabitName>{habitName}</HabitName>
+          <IndexDisplay>{habitIndex}</IndexDisplay>
+          <BackText>
+            <div className="label">
+              Habit: <span className="value">{habitName}</span>
+            </div>
+            <div className="label spaced">
+              Count (times/day): <span className="value">{habitCount}</span>
+            </div>
+          </BackText>
         </FlipCardBack>
       </FlipCard>
     </TileContainer>
