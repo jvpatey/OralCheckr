@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
+// styled component styles for the add habit tile component
+
 const AddTileContainer = styled.div`
   background-color: #e0e0e0;
   width: 150px;
@@ -37,6 +39,7 @@ const EditIcon = styled.div`
   margin-top: 10px;
 `;
 
+// Types
 interface AddHabitTileProps {
   onAddClick: () => void;
 }

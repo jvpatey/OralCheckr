@@ -1,21 +1,24 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+
+// Styled-components for various parts of the HabitTile component
 
 const TileContainer = styled.div`
   perspective: 1000px;
+  width: 150px;
+  height: 150px;
 
   &:hover {
-    font-weight: bold;
     transform: scale(1.05);
-    color: #07889b;
   }
 `;
 
+// FlipCard styled component with conditional flipping based on the flipped prop
 const FlipCard = styled.div<{ flipped: boolean }>`
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  height: 100%;
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.6s;
@@ -24,66 +27,120 @@ const FlipCard = styled.div<{ flipped: boolean }>`
     flipped ? "rotateY(180deg)" : "rotateY(0deg)"};
 `;
 
+// Front side of the flip card
 const FlipCardFront = styled.div`
   background-color: #e0e0e0;
   border-radius: 15px;
-  position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 10px;
+  position: absolute;
 `;
 
+// Back side of the flip card
 const FlipCardBack = styled(FlipCardFront)`
   background-color: #bdbdbd;
   color: #f5f5f5;
   transform: rotateY(180deg);
-  justify-content: space-between;
 `;
 
+// Styled component for displaying the habit name
 const HabitName = styled.div`
-  font-size: 18px;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  text-align: center;
+  word-wrap: break-word;
+  width: 100%;
+`;
+
+// Styled component for the edit and delete icons container
+const IconsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+`;
+
+// Styled component for the edit and delete icons
+const IconWrapper = styled.div`
+  cursor: pointer;
+  color: #222831;
+  margin: 0 10px;
+
+  &:hover {
+    transform: scale(1.1);
+    color: #07889b;
+  }
+`;
+
+// Styled component for displaying the index
+const IndexDisplay = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #222831;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-const EditIcon = styled.div`
-  cursor: pointer;
-  color: #007bff;
-  margin-top: 5px;
-`;
-
 interface HabitTileProps {
   habitName: string;
+  habitIndex: number;
   onEditClick?: () => void;
+  onDeleteClick?: () => void;
 }
 
-export function HabitTile({ habitName, onEditClick }: HabitTileProps) {
+export function HabitTile({
+  habitName,
+  habitIndex,
+  onEditClick,
+  onDeleteClick,
+}: HabitTileProps) {
+  // State for managing the flipped state of the card
   const [flipped, setFlipped] = useState(false);
 
+  // Handler for flipping the card
   const handleFlip = () => setFlipped(!flipped);
 
   return (
     <TileContainer onClick={handleFlip}>
       <FlipCard flipped={flipped}>
         <FlipCardFront>
+          <IndexDisplay>{habitIndex}</IndexDisplay>
           <HabitName>{habitName}</HabitName>
-          {onEditClick && (
-            <EditIcon
+          <IconsContainer>
+            <IconWrapper
               onClick={(e) => {
                 e.stopPropagation();
                 onEditClick && onEditClick();
               }}
             >
-              <FontAwesomeIcon icon={faEdit} />
-            </EditIcon>
-          )}
+              <FontAwesomeIcon icon={faPencil} />
+            </IconWrapper>
+            <IconWrapper
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteClick && onDeleteClick();
+              }}
+            >
+              <FontAwesomeIcon icon={faTrashCan} />
+            </IconWrapper>
+          </IconsContainer>
         </FlipCardFront>
         <FlipCardBack>
           <HabitName>{habitName}</HabitName>
