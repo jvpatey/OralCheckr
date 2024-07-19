@@ -129,7 +129,7 @@ interface HabitTileProps {
   habitIndex: number;
   habitCount: number;
   onEditClick?: () => void;
-  onDeleteClick?: () => void;
+  onDeleteClick?: (index: number) => void;
 }
 
 export function HabitTile({
@@ -144,6 +144,14 @@ export function HabitTile({
 
   // Handler for flipping the card
   const handleFlip = () => setFlipped(!flipped);
+
+  // Handler for delete icon click
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (window.confirm("Are you sure you want to delete this habit?")) {
+      onDeleteClick && onDeleteClick(habitIndex);
+    }
+  };
 
   return (
     <TileContainer onClick={handleFlip}>
@@ -160,12 +168,7 @@ export function HabitTile({
             >
               <FontAwesomeIcon icon={faPencil} />
             </IconWrapper>
-            <IconWrapper
-              onClick={(e) => {
-                e.stopPropagation();
-                onDeleteClick && onDeleteClick();
-              }}
-            >
+            <IconWrapper onClick={handleDeleteClick}>
               <FontAwesomeIcon icon={faTrashCan} />
             </IconWrapper>
           </IconsContainer>

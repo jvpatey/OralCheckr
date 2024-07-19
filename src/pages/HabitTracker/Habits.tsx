@@ -74,6 +74,15 @@ export function Habits() {
     setNewHabitCount("");
   };
 
+  // Handler for deleting a habit
+  const handleDeleteHabit = (index: number) => {
+    const updatedHabits = habits
+      .filter((habit) => habit.index !== index)
+      .map((habit, idx) => ({ ...habit, index: idx + 1 }));
+    setHabits(updatedHabits);
+    localStorage.setItem("habits", JSON.stringify(updatedHabits));
+  };
+
   return (
     <PageBackground>
       <Sidebar links={links} />
@@ -83,8 +92,9 @@ export function Habits() {
           <HabitTile
             key={habit.index}
             habitName={habit.name}
-            habitCount={habit.count}
             habitIndex={habit.index}
+            habitCount={habit.count}
+            onDeleteClick={handleDeleteHabit}
           />
         ))}
       </HabitGrid>
