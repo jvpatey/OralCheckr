@@ -80,7 +80,11 @@ export function Habits() {
       <HabitGrid>
         <AddHabitTile onAddClick={handleAddHabitClick} />
         {habits.map((habit) => (
-          <HabitTile key={habit.index} habitName={habit.name} />
+          <HabitTile
+            key={habit.index}
+            habitName={habit.name}
+            habitIndex={habit.index}
+          />
         ))}
       </HabitGrid>
 
