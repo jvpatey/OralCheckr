@@ -11,6 +11,7 @@ import { DashboardContainer } from "../components/Styled/DashboardContainer";
 import { DashboardCardContainer } from "../components/Styled/DashboardCardContainer";
 import { QuestionnaireCard } from "../components/Styled/QuestionnaireCard";
 import { NavigationButton } from "../components/Styled/NavigationButton";
+import { StyledModal } from "../components/Styled/Modal";
 
 const TitleText = styled.h1`
   color: #07889b;
@@ -93,30 +94,6 @@ const ModalButton = styled(Button)<ButtonProps>`
       color: #07889b;
       font-weight: bold;
     }
-  }
-`;
-
-const StyledModal = styled(Modal)`
-  padding: 10px;
-
-  .modal-content {
-    background-color: #f5f5f5;
-    border: 1px solid #f5f5f5;
-  }
-
-  .modal-header,
-  .modal-footer {
-    border: none;
-  }
-
-  .modal-title {
-    color: #07889b;
-    font-size: 1.5rem;
-  }
-
-  .modal-body {
-    color: #222831;
-    font-size: 1.2rem;
   }
 `;
 
