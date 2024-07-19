@@ -34,6 +34,8 @@ export function Habits() {
   const [newHabitName, setNewHabitName] = useState("");
   const [newHabitCount, setNewHabitCount] = useState("");
   const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [originalHabitName, setOriginalHabitName] = useState("");
+  const [originalHabitCount, setOriginalHabitCount] = useState("");
 
   // Load habits from local storage when the component mounts
   useEffect(() => {
@@ -49,6 +51,8 @@ export function Habits() {
     setEditIndex(null);
     setNewHabitName("");
     setNewHabitCount("");
+    setOriginalHabitName("");
+    setOriginalHabitCount("");
   };
 
   // Handler for saving a new habit
@@ -101,6 +105,8 @@ export function Habits() {
     if (habitToEdit) {
       setNewHabitName(habitToEdit.name);
       setNewHabitCount(habitToEdit.count.toString());
+      setOriginalHabitName(habitToEdit.name);
+      setOriginalHabitCount(habitToEdit.count.toString());
       setEditIndex(index - 1);
       setShowModal(true);
     }
@@ -120,6 +126,20 @@ export function Habits() {
     if (/^\d*$/.test(value)) {
       setNewHabitCount(value);
     }
+  };
+
+  // Check if the Save button should be enabled
+  const isSaveDisabled = () => {
+    if (!newHabitName || !newHabitCount) {
+      return true;
+    }
+    if (editIndex !== null) {
+      return (
+        newHabitName === originalHabitName &&
+        newHabitCount === originalHabitCount
+      );
+    }
+    return false;
   };
 
   return (
@@ -177,7 +197,7 @@ export function Habits() {
             variant="primary"
             style={{ backgroundColor: "#07889b", borderColor: "#07889b" }}
             onClick={handleSaveHabit}
-            disabled={!newHabitName || !newHabitCount} // Disable button if fields are empty
+            disabled={isSaveDisabled()} // Disable button if fields are empty or unchanged when editing
           >
             Save Habit
           </Button>
