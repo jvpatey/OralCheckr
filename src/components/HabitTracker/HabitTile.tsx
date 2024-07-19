@@ -16,15 +16,15 @@ const TileContainer = styled.div`
 `;
 
 // FlipCard styled component with conditional flipping based on the flipped prop
-const FlipCard = styled.div<{ flipped: boolean }>`
+const FlipCard = styled.div<{ $flipped: boolean }>`
   width: 100%;
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.6s;
 
-  transform: ${({ flipped }) =>
-    flipped ? "rotateY(180deg)" : "rotateY(0deg)"};
+  transform: ${({ $flipped }) =>
+    $flipped ? "rotateY(180deg)" : "rotateY(0deg)"};
 `;
 
 // Front side of the flip card
@@ -147,7 +147,7 @@ export function HabitTile({
 
   return (
     <TileContainer onClick={handleFlip}>
-      <FlipCard flipped={flipped}>
+      <FlipCard $flipped={flipped}>
         <FlipCardFront>
           <IndexDisplay>{habitIndex}</IndexDisplay>
           <HabitName>{habitName}</HabitName>
