@@ -14,6 +14,7 @@ const HabitListContainer = styled.div`
   width: calc(100% - 190px);
   height: calc(100vh - 76px);
   overflow-y: auto;
+  overflow-x: hidden;
   position: absolute;
   top: 56px;
   left: 190px;
@@ -32,6 +33,8 @@ const HabitList = styled.div`
   padding: 20px;
   margin-left: 10px;
   width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 `;
 
 // Types
