@@ -31,10 +31,10 @@ const TileContainer = styled.div`
   margin-bottom: 10px;
   margin-left: auto;
   margin-right: auto;
-  transition: transform 0.3s;
+  transition: box-shadow 0.3s;
 
   &:hover {
-    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
   @media (max-width: 768px) {

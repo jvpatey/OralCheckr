@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-// styled component styles for the add habit tile component
+// Styled component styles for the add habit tile component
 const AddTileContainer = styled.div`
   background-color: #e0e0e0;
   width: 65%;
@@ -19,11 +19,11 @@ const AddTileContainer = styled.div`
   cursor: pointer;
   margin-left: auto;
   margin-right: auto;
-  transition: transform 0.3s;
+  transition: box-shadow 0.3s, color 0.3s, font-weight 0.3s;
 
   &:hover {
     font-weight: bold;
-    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     color: #07889b;
   }
 
