@@ -38,6 +38,7 @@ const SidebarLink = styled(Link)`
   align-items: center;
   justify-content: flex-start;
   color: #222831;
+  position: relative;
 
   &:hover {
     color: #07889b;
@@ -52,6 +53,29 @@ const SidebarLink = styled(Link)`
   @media (max-width: 768px) {
     justify-content: center;
     padding: 10px;
+  }
+
+  @media (max-width: 768px) {
+    &::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #222831;
+      color: #f5f5f5;
+      padding: 2px 5px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      font-size: 10px;
+    }
+
+    &:hover::after {
+      opacity: 1;
+    }
   }
 `;
 
@@ -88,6 +112,7 @@ export function Sidebar({ links }: SidebarProps) {
           className={
             location.pathname === getFullPath(link.path) ? "active" : ""
           }
+          data-tooltip={link.name}
         >
           <Icon>{renderIcon(link.name)}</Icon>
           <span className="d-lg-inline d-none">{link.name}</span>
