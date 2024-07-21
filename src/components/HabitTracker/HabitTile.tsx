@@ -16,6 +16,10 @@ const TileContainer = styled.div`
   &:hover {
     transform: scale(1.05);
   }
+
+  @media (max-width: 768px) {
+    width: 85%;
+  }
 `;
 
 // FlipCard styled component with conditional flipping based on the flipped prop
@@ -55,6 +59,10 @@ const FlipCardBack = styled(FlipCardFront)`
 // Styled component for displaying the habit name
 const HabitName = styled.div`
   font-size: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0 15px;
 `;
 
 // Styled component for the edit and delete icons container
@@ -96,20 +104,29 @@ const BackText = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  word-wrap: break-word;
   width: 100%;
+  padding: 10px;
 
   .label {
     color: #222831;
     font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    margin-bottom: 2px;
   }
 
   .value {
     color: #07889b;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
   }
 
   .spaced {
-    margin-top: 10px;
+    margin-top: 5px;
   }
 `;
 
@@ -164,10 +181,10 @@ export function HabitTile({
         <FlipCardBack>
           <IndexDisplay>{habitIndex}</IndexDisplay>
           <BackText>
-            <div className="label">
+            <div className="label spaced">
               Habit: <span className="value">{habitName}</span>
             </div>
-            <div className="label spaced">
+            <div className="label">
               Count (times/day): <span className="value">{habitCount}</span>
             </div>
           </BackText>

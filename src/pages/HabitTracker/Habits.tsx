@@ -17,6 +17,11 @@ const HabitListContainer = styled.div`
   position: absolute;
   top: 56px;
   left: 190px;
+
+  @media (max-width: 768px) {
+    width: calc(100% - 70px);
+    left: 70px;
+  }
 `;
 
 const HabitList = styled.div`
@@ -26,6 +31,7 @@ const HabitList = styled.div`
   gap: 10px;
   padding: 20px;
   margin-left: 10px;
+  width: 100%;
 `;
 
 // Types

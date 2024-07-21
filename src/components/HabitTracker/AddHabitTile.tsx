@@ -26,6 +26,10 @@ const AddTileContainer = styled.div`
     transform: scale(1.05);
     color: #07889b;
   }
+
+  @media (max-width: 768px) {
+    width: 85%;
+  }
 `;
 
 const HabitName = styled.div`
