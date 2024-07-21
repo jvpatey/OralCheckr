@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPencil,
@@ -7,6 +7,23 @@ import {
   faSync,
 } from "@fortawesome/free-solid-svg-icons";
 
+// Common styles for both sides of the flip card
+const flipCardCommonStyles = css`
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  position: absolute;
+`;
+
+// Styled component for the tile container
 const TileContainer = styled.div`
   perspective: 1000px;
   width: 65%;
@@ -29,7 +46,7 @@ const TileContainer = styled.div`
   }
 `;
 
-// FlipCard styled component with conditional flipping based on the flipped prop
+// Styled component for the flip card with conditional flipping
 const FlipCard = styled.div<{ $flipped: boolean }>`
   width: 100%;
   height: 100%;
@@ -42,22 +59,12 @@ const FlipCard = styled.div<{ $flipped: boolean }>`
 
 // Front side of the flip card
 const FlipCardFront = styled.div`
-  background-color: #e0e0e0;
-  border-radius: 10px;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  position: absolute;
+  ${flipCardCommonStyles}
 `;
 
 // Back side of the flip card
-const FlipCardBack = styled(FlipCardFront)`
+const FlipCardBack = styled.div`
+  ${flipCardCommonStyles}
   background-color: #bdbdbd;
   color: #f5f5f5;
   transform: rotateX(180deg);
@@ -103,7 +110,6 @@ const ArrowIconWrapper = styled.div`
   color: #07889b;
   opacity: 0;
   transition: opacity 0.3s;
-  }
 `;
 
 // Styled component for displaying the index
