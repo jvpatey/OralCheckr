@@ -1,7 +1,13 @@
-import { DashboardTile } from "./Styled/DashboardTile";
+import { DashboardTile as HabitDashboardTile } from "./Styled/DashboardTile";
+import styled from "styled-components";
 import { Card } from "react-bootstrap";
 
-// styled-component styles for Habit Tracker Dash Component
+// Extend the existing DashboardTile component and add a fixed height
+const DashboardTile = styled(HabitDashboardTile)`
+  @media (max-width: 1100px) {
+    height: 200px;
+  }
+`;
 
 export function HabitTrackerDash() {
   return (
