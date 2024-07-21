@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import round from "lodash/round";
 import questionData from "../common/questionnaire.json";
 import styled from "styled-components";
 import { getFullPath } from "../common/Routes";
@@ -144,6 +145,9 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
   if (totalScore > 99) {
     totalScore = 100;
   }
+
+  // Round the total score to the nearest integer and cast it to a number
+  totalScore = round(totalScore, 0) as number;
 
   return totalScore;
 };
