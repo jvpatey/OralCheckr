@@ -10,6 +10,15 @@ import { AddHabitTile } from "../../components/HabitTracker/AddHabitTile";
 import { StyledModal } from "../../components/Styled/Modal";
 
 // Styled component for the habit list container
+const HabitListContainer = styled.div`
+  width: calc(100% - 190px);
+  height: calc(100vh - 76px);
+  overflow-y: auto;
+  position: absolute;
+  top: 56px;
+  left: 190px;
+`;
+
 const HabitList = styled.div`
   display: flex;
   flex-direction: column;
@@ -17,10 +26,6 @@ const HabitList = styled.div`
   gap: 10px;
   padding: 20px;
   margin-left: 10px;
-  width: calc(100% - 190px);
-  position: absolute;
-  top: 56px;
-  left: 190px;
 `;
 
 // Types
@@ -30,6 +35,7 @@ interface Habit {
   index: number;
 }
 
+// Functional component for Habits
 export function Habits() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -147,19 +153,21 @@ export function Habits() {
   return (
     <PageBackground>
       <Sidebar links={links} />
-      <HabitList>
-        <AddHabitTile onAddClick={handleAddHabitClick} />
-        {habits.map((habit) => (
-          <HabitTile
-            key={habit.index}
-            habitName={habit.name}
-            habitIndex={habit.index}
-            habitCount={habit.count}
-            onDeleteClick={handleDeleteHabit}
-            onEditClick={() => handleEditHabit(habit.index)}
-          />
-        ))}
-      </HabitList>
+      <HabitListContainer>
+        <HabitList>
+          <AddHabitTile onAddClick={handleAddHabitClick} />
+          {habits.map((habit) => (
+            <HabitTile
+              key={habit.index}
+              habitName={habit.name}
+              habitIndex={habit.index}
+              habitCount={habit.count}
+              onDeleteClick={handleDeleteHabit}
+              onEditClick={() => handleEditHabit(habit.index)}
+            />
+          ))}
+        </HabitList>
+      </HabitListContainer>
 
       <StyledModal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
