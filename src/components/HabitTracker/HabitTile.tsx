@@ -71,14 +71,14 @@ const HabitName = styled.div`
   text-overflow: ellipsis;
   flex: 1;
   text-align: center;
-  margin-left: 30px;
+  margin-left: 15px;
 `;
 
 // Styled component for the edit and delete icons container
 const IconsContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 30px;
+  margin-right: 15px;
 `;
 
 // Styled component for the edit and delete icons
@@ -100,12 +100,9 @@ const ArrowIconWrapper = styled.div`
   right: 5px;
   font-size: 12px;
   cursor: pointer;
-  color: #222831;
+  color: #07889b;
   opacity: 0;
   transition: opacity 0.3s;
-
-  &:hover {
-    color: #07889b;
   }
 `;
 
