@@ -1,9 +1,12 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPencil,
+  faTrashCan,
+  faSync,
+} from "@fortawesome/free-solid-svg-icons";
 
-// Styled-components for various parts of the HabitTile component
 const TileContainer = styled.div`
   perspective: 1000px;
   width: 65%;
@@ -19,6 +22,10 @@ const TileContainer = styled.div`
 
   @media (max-width: 768px) {
     width: 85%;
+  }
+
+  &:hover .arrow-icon {
+    opacity: 1;
   }
 `;
 
@@ -62,22 +69,42 @@ const HabitName = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding: 0 15px;
+  flex: 1;
+  text-align: center;
+  margin-left: 30px;
 `;
 
 // Styled component for the edit and delete icons container
 const IconsContainer = styled.div`
   display: flex;
+  align-items: center;
+  margin-right: 30px;
 `;
 
 // Styled component for the edit and delete icons
 const IconWrapper = styled.div`
   cursor: pointer;
   color: #222831;
-  margin: 0 10px;
+  margin: 0 5px;
 
   &:hover {
     transform: scale(1.1);
+    color: #07889b;
+  }
+`;
+
+// Styled component for the arrow icon
+const ArrowIconWrapper = styled.div`
+  position: absolute;
+  bottom: 0px;
+  right: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #222831;
+  opacity: 0;
+  transition: opacity 0.3s;
+
+  &:hover {
     color: #07889b;
   }
 `;
@@ -177,6 +204,9 @@ export function HabitTile({
               <FontAwesomeIcon icon={faTrashCan} />
             </IconWrapper>
           </IconsContainer>
+          <ArrowIconWrapper className="arrow-icon">
+            <FontAwesomeIcon icon={faSync} />
+          </ArrowIconWrapper>
         </FlipCardFront>
         <FlipCardBack>
           <IndexDisplay>{habitIndex}</IndexDisplay>
@@ -188,6 +218,9 @@ export function HabitTile({
               Count (times/day): <span className="value">{habitCount}</span>
             </div>
           </BackText>
+          <ArrowIconWrapper className="arrow-icon">
+            <FontAwesomeIcon icon={faSync} />
+          </ArrowIconWrapper>
         </FlipCardBack>
       </FlipCard>
     </TileContainer>
