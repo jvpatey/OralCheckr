@@ -9,10 +9,12 @@ import { HabitTile } from "../../components/HabitTracker/HabitTile";
 import { AddHabitTile } from "../../components/HabitTracker/AddHabitTile";
 import { StyledModal } from "../../components/Styled/Modal";
 
-const HabitGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 20px;
+// Styled component for the habit list container
+const HabitList = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   padding: 20px;
   margin-left: 10px;
   width: calc(100% - 190px);
@@ -145,7 +147,7 @@ export function Habits() {
   return (
     <PageBackground>
       <Sidebar links={links} />
-      <HabitGrid>
+      <HabitList>
         <AddHabitTile onAddClick={handleAddHabitClick} />
         {habits.map((habit) => (
           <HabitTile
@@ -157,7 +159,7 @@ export function Habits() {
             onEditClick={() => handleEditHabit(habit.index)}
           />
         ))}
-      </HabitGrid>
+      </HabitList>
 
       <StyledModal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
