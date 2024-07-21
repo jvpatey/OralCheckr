@@ -65,19 +65,24 @@ export function Habits() {
   // Handler for showing the add habit modal
   const handleAddHabitClick = () => {
     setShowModal(true);
-    setEditIndex(null);
+    resetForm();
+  };
+
+  // Reset the form fields and edit state
+  const resetForm = () => {
     setNewHabitName("");
     setNewHabitCount("");
+    setEditIndex(null);
     setOriginalHabitName("");
     setOriginalHabitCount("");
   };
 
-  // Handler for saving a new habit
+  // Handler for saving a new or edited habit
   const handleSaveHabit = () => {
     if (newHabitName && newHabitCount) {
       const updatedHabits = [...habits];
+      // Update the habit if editing
       if (editIndex !== null) {
-        // Update the habit if editing
         updatedHabits[editIndex] = {
           name: newHabitName,
           count: parseInt(newHabitCount, 10),
@@ -94,16 +99,14 @@ export function Habits() {
       setHabits(updatedHabits);
       localStorage.setItem("habits", JSON.stringify(updatedHabits));
       setShowModal(false);
-      setNewHabitName("");
-      setNewHabitCount("");
+      resetForm();
     }
   };
 
   // Handler for closing the modal without saving
   const handleCloseModal = () => {
     setShowModal(false);
-    setNewHabitName("");
-    setNewHabitCount("");
+    resetForm();
   };
 
   // Handler for deleting a habit
@@ -146,18 +149,12 @@ export function Habits() {
   };
 
   // Check if the Save button should be enabled
-  const isSaveDisabled = () => {
-    if (!newHabitName || !newHabitCount) {
-      return true;
-    }
-    if (editIndex !== null) {
-      return (
-        newHabitName === originalHabitName &&
-        newHabitCount === originalHabitCount
-      );
-    }
-    return false;
-  };
+  const isSaveDisabled = () =>
+    !newHabitName ||
+    !newHabitCount ||
+    (editIndex !== null &&
+      newHabitName === originalHabitName &&
+      newHabitCount === originalHabitCount);
 
   return (
     <PageBackground>
