@@ -26,6 +26,7 @@ const flipCardCommonStyles = css`
 // Styled component for the tile container
 const TileContainer = styled.div`
   perspective: 1000px;
+  border-radius: 10px;
   width: 65%;
   height: 50px;
   margin-bottom: 10px;
