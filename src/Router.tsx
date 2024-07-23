@@ -6,9 +6,9 @@ import { RedirectIfAuthenticated } from "./containers/RedirectIfAuthenticated";
 import { Dashboard } from "./pages/Dashboard";
 import { Login } from "./pages/Login";
 import { Questionnaire } from "./pages/Questionnaire";
-import { Habits } from "./pages/HabitTracker/Habits";
-import { Calendar } from "./pages/HabitTracker/Calendar";
-import { Analytics } from "./pages/HabitTracker/Analytics";
+import { Habits } from "./pages/habittracker/Habits";
+import { Calendar } from "./pages/habittracker/Calendar";
+import { Analytics } from "./pages/habittracker/Analytics";
 
 export function Router() {
   return (
