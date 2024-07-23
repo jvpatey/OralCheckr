@@ -1,4 +1,4 @@
-import { DashboardTile as HabitDashboardTile } from "./Styled/DashboardTile";
+import { DashboardTile as HabitDashboardTile } from "./styled/DashboardTile";
 import styled from "styled-components";
 import { Card } from "react-bootstrap";
 

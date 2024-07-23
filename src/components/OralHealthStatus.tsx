@@ -1,5 +1,5 @@
 import { Card, ProgressBar } from "react-bootstrap";
-import { DashboardTile } from "./Styled/DashboardTile";
+import { DashboardTile } from "./styled/DashboardTile";
 import styled from "styled-components";
 
 // styled-component styles for Oral Health Status Component

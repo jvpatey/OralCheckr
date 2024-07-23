@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { RoutePaths } from "../common/Routes";
 import { getFullPath } from "../common/Routes";
 import styled from "styled-components";
-import { PageBackground } from "../components/Styled/PageBackground";
-import { DashboardContainer } from "../components/Styled/DashboardContainer";
-import { DashboardCardContainer } from "../components/Styled/DashboardCardContainer";
-import { QuestionnaireCard } from "../components/Styled/QuestionnaireCard";
-import { NavigationButton } from "../components/Styled/NavigationButton";
+import { PageBackground } from "../components/styled/PageBackground";
+import { DashboardContainer } from "../components/styled/DashboardContainer";
+import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
+import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
+import { NavigationButton } from "../components/styled/NavigationButton";
 
 // styled-component styles for Start Questionnaire Page
 

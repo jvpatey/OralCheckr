@@ -2,12 +2,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import styled from "styled-components";
-import { PageBackground } from "../../components/Styled/PageBackground";
+import { PageBackground } from "../../components/styled/PageBackground";
 import { Sidebar } from "../../components/Sidebar";
 import { links } from "../../common/SidebarLinks";
-import { HabitTile } from "../../components/HabitTracker/HabitTile";
-import { AddHabitTile } from "../../components/HabitTracker/AddHabitTile";
-import { StyledModal } from "../../components/Styled/Modal";
+import { HabitTile } from "../../components/habittracker/HabitTile";
+import { AddHabitTile } from "../../components/habittracker/AddHabitTile";
+import { StyledModal } from "../../components/styled/Modal";
 
 // Styled component for the habit list container
 const HabitListContainer = styled.div`
