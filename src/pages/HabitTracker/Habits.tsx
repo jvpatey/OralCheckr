@@ -44,15 +44,33 @@ interface Habit {
   index: number;
 }
 
+type EditHabit = {
+  name: string;
+  count: string;
+  index: number | null;
+};
+
 // Functional component for Habits
 export function Habits() {
+  // State to store the list of habits
   const [habits, setHabits] = useState<Habit[]>([]);
+
+  // State to control the visibility of the modal
   const [showModal, setShowModal] = useState(false);
-  const [newHabitName, setNewHabitName] = useState("");
-  const [newHabitCount, setNewHabitCount] = useState("");
-  const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [originalHabitName, setOriginalHabitName] = useState("");
-  const [originalHabitCount, setOriginalHabitCount] = useState("");
+
+  // State to store the new habit being added or edited
+  const [newHabit, setNewHabit] = useState<EditHabit>({
+    name: "",
+    count: "",
+    index: null,
+  });
+
+  // State to store the original habit values when editing
+  const [originalHabit, setOriginalHabit] = useState<EditHabit>({
+    name: "",
+    count: "",
+    index: null,
+  });
 
   // Load habits from local storage when the component mounts
   useEffect(() => {
@@ -70,29 +88,26 @@ export function Habits() {
 
   // Reset the form fields and edit state
   const resetForm = () => {
-    setNewHabitName("");
-    setNewHabitCount("");
-    setEditIndex(null);
-    setOriginalHabitName("");
-    setOriginalHabitCount("");
+    setNewHabit({ name: "", count: "", index: null });
+    setOriginalHabit({ name: "", count: "", index: null });
   };
 
   // Handler for saving a new or edited habit
   const handleSaveHabit = () => {
-    if (newHabitName && newHabitCount) {
+    if (newHabit.name && newHabit.count) {
       const updatedHabits = [...habits];
       // Update the habit if editing
-      if (editIndex !== null) {
-        updatedHabits[editIndex] = {
-          name: newHabitName,
-          count: parseInt(newHabitCount, 10),
-          index: editIndex + 1,
+      if (newHabit.index !== null) {
+        updatedHabits[newHabit.index - 1] = {
+          name: newHabit.name,
+          count: parseInt(newHabit.count, 10),
+          index: newHabit.index,
         };
       } else {
         // Add the new habit
         updatedHabits.push({
-          name: newHabitName,
-          count: parseInt(newHabitCount, 10),
+          name: newHabit.name,
+          count: parseInt(newHabit.count, 10),
           index: habits.length + 1,
         });
       }
@@ -123,11 +138,16 @@ export function Habits() {
   const handleEditHabit = (index: number) => {
     const habitToEdit = habits.find((habit) => habit.index === index);
     if (habitToEdit) {
-      setNewHabitName(habitToEdit.name);
-      setNewHabitCount(habitToEdit.count.toString());
-      setOriginalHabitName(habitToEdit.name);
-      setOriginalHabitCount(habitToEdit.count.toString());
-      setEditIndex(index - 1);
+      setNewHabit({
+        name: habitToEdit.name,
+        count: habitToEdit.count.toString(),
+        index: habitToEdit.index,
+      });
+      setOriginalHabit({
+        name: habitToEdit.name,
+        count: habitToEdit.count.toString(),
+        index: habitToEdit.index,
+      });
       setShowModal(true);
     }
   };
@@ -136,7 +156,7 @@ export function Habits() {
   const handleHabitNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (/^[a-zA-Z\s]*$/.test(value)) {
-      setNewHabitName(value);
+      setNewHabit((prev) => ({ ...prev, name: value }));
     }
   };
 
@@ -144,17 +164,17 @@ export function Habits() {
   const handleHabitCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (/^\d*$/.test(value)) {
-      setNewHabitCount(value);
+      setNewHabit((prev) => ({ ...prev, count: value }));
     }
   };
 
   // Check if the Save button should be enabled
   const isSaveDisabled = () =>
-    !newHabitName ||
-    !newHabitCount ||
-    (editIndex !== null &&
-      newHabitName === originalHabitName &&
-      newHabitCount === originalHabitCount);
+    !newHabit.name ||
+    !newHabit.count ||
+    (newHabit.index !== null &&
+      newHabit.name === originalHabit.name &&
+      newHabit.count === originalHabit.count);
 
   return (
     <PageBackground>
@@ -176,7 +196,7 @@ export function Habits() {
       <StyledModal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {editIndex !== null ? "Edit a Habit" : "Add a New Habit"}
+            {newHabit.index !== null ? "Edit a Habit" : "Add a New Habit"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -186,7 +206,7 @@ export function Habits() {
               <Form.Control
                 type="text"
                 placeholder="Enter habit name"
-                value={newHabitName}
+                value={newHabit.name}
                 onChange={handleHabitNameChange}
               />
             </Form.Group>
@@ -197,7 +217,7 @@ export function Habits() {
               <Form.Control
                 type="number"
                 placeholder="Enter habit count"
-                value={newHabitCount}
+                value={newHabit.count}
                 onChange={handleHabitCountChange}
               />
             </Form.Group>
