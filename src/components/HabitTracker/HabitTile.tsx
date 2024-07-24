@@ -162,17 +162,17 @@ const BackText = styled.div`
 `;
 
 interface HabitTileProps {
-  habitName: string;
-  habitIndex: number;
-  habitCount: number;
+  habit: {
+    name: string;
+    count: number;
+    index: number;
+  };
   onEditClick?: () => void;
   onDeleteClick?: (index: number) => void;
 }
 
 export function HabitTile({
-  habitName,
-  habitIndex,
-  habitCount,
+  habit,
   onEditClick,
   onDeleteClick,
 }: HabitTileProps) {
@@ -185,7 +185,7 @@ export function HabitTile({
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this habit?")) {
-      onDeleteClick && onDeleteClick(habitIndex);
+      onDeleteClick && onDeleteClick(habit.index);
     }
   };
 
@@ -193,8 +193,8 @@ export function HabitTile({
     <TileContainer onClick={handleFlip}>
       <FlipCard $flipped={flipped}>
         <FlipCardFront>
-          <IndexDisplay>{habitIndex}</IndexDisplay>
-          <HabitName>{habitName}</HabitName>
+          <IndexDisplay>{habit.index}</IndexDisplay>
+          <HabitName>{habit.name}</HabitName>
           <IconsContainer>
             <IconWrapper
               onClick={(e) => {
@@ -213,13 +213,13 @@ export function HabitTile({
           </ArrowIconWrapper>
         </FlipCardFront>
         <FlipCardBack>
-          <IndexDisplay>{habitIndex}</IndexDisplay>
+          <IndexDisplay>{habit.index}</IndexDisplay>
           <BackText>
             <div className="label spaced">
-              Habit: <span className="value">{habitName}</span>
+              Habit: <span className="value">{habit.name}</span>
             </div>
             <div className="label">
-              Count (times/day): <span className="value">{habitCount}</span>
+              Count (times/day): <span className="value">{habit.count}</span>
             </div>
           </BackText>
           <ArrowIconWrapper className="arrow-icon">

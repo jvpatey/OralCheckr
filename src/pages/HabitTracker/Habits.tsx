@@ -165,9 +165,7 @@ export function Habits() {
           {habits.map((habit) => (
             <HabitTile
               key={habit.index}
-              habitName={habit.name}
-              habitIndex={habit.index}
-              habitCount={habit.count}
+              habit={habit}
               onDeleteClick={handleDeleteHabit}
               onEditClick={() => handleEditHabit(habit.index)}
             />
