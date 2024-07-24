@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import styled from "styled-components";
+import _ from "lodash";
 import { PageBackground } from "../../components/styled/PageBackground";
 import { Sidebar } from "../../components/Sidebar";
 import { links } from "../../common/SidebarLinks";
@@ -163,7 +164,7 @@ export function Habits() {
   // Handler for habit count input change with validation
   const handleHabitCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    if (/^\d*$/.test(value)) {
+    if (_.isNumber(Number(value))) {
       setNewHabit((prev) => ({ ...prev, count: value }));
     }
   };
