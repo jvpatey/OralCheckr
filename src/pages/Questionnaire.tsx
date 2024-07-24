@@ -141,13 +141,8 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
   // Ensure the total score does not exceed 100
   totalScore = Math.min(totalScore, 100);
 
-  // If totalScore is greater than 99, set it to 100
-  if (totalScore > 99) {
-    totalScore = 100;
-  }
-
-  // Round the total score to the nearest integer and cast it to a number
-  totalScore = round(totalScore, 0) as number;
+  // Round the total score to the nearest integer
+  totalScore = round(totalScore, 0);
 
   return totalScore;
 };
