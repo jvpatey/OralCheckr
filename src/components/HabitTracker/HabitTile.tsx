@@ -113,8 +113,8 @@ const ArrowIconWrapper = styled.div`
   transition: opacity 0.3s;
 `;
 
-// Styled component for displaying the index
-const IndexDisplay = styled.div`
+// Styled component for displaying the id
+const IdDisplay = styled.div`
   font-size: 14px;
   font-weight: bold;
   color: #222831;
@@ -165,10 +165,10 @@ interface HabitTileProps {
   habit: {
     name: string;
     count: number;
-    index: number;
+    id: number;
   };
   onEditClick?: () => void;
-  onDeleteClick?: (index: number) => void;
+  onDeleteClick?: (id: number) => void;
 }
 
 export function HabitTile({
@@ -185,7 +185,7 @@ export function HabitTile({
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this habit?")) {
-      onDeleteClick && onDeleteClick(habit.index);
+      onDeleteClick && onDeleteClick(habit.id);
     }
   };
 
@@ -193,7 +193,7 @@ export function HabitTile({
     <TileContainer onClick={handleFlip}>
       <FlipCard $flipped={flipped}>
         <FlipCardFront>
-          <IndexDisplay>{habit.index}</IndexDisplay>
+          <IdDisplay>{habit.id}</IdDisplay>
           <HabitName>{habit.name}</HabitName>
           <IconsContainer>
             <IconWrapper
@@ -213,7 +213,7 @@ export function HabitTile({
           </ArrowIconWrapper>
         </FlipCardFront>
         <FlipCardBack>
-          <IndexDisplay>{habit.index}</IndexDisplay>
+          <IdDisplay>{habit.id}</IdDisplay>
           <BackText>
             <div className="label spaced">
               Habit: <span className="value">{habit.name}</span>
