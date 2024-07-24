@@ -2,11 +2,6 @@ import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { getFullPath } from "../common/Routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCalendarDays,
-  faChartSimple,
-  faList,
-} from "@fortawesome/free-solid-svg-icons";
 
 const SidebarContainer = styled.div`
   height: calc(100vh - 56px);
@@ -84,24 +79,11 @@ const Icon = styled.span`
 `;
 
 interface SidebarProps {
-  links: { name: string; path: string }[];
+  links: { name: string; path: string; icon: any }[];
 }
 
 export function Sidebar({ links }: SidebarProps) {
   const location = useLocation();
-
-  const renderIcon = (name: string) => {
-    switch (name.toLowerCase()) {
-      case "calendar":
-        return <FontAwesomeIcon icon={faCalendarDays} />;
-      case "habits":
-        return <FontAwesomeIcon icon={faList} />;
-      case "analytics":
-        return <FontAwesomeIcon icon={faChartSimple} />;
-      default:
-        return null;
-    }
-  };
 
   return (
     <SidebarContainer>
@@ -114,7 +96,9 @@ export function Sidebar({ links }: SidebarProps) {
           }
           data-tooltip={link.name}
         >
-          <Icon>{renderIcon(link.name)}</Icon>
+          <Icon>
+            <FontAwesomeIcon icon={link.icon} />
+          </Icon>
           <span className="d-lg-inline d-none">{link.name}</span>
         </SidebarLink>
       ))}
