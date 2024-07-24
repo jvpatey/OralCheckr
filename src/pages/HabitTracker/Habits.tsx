@@ -153,12 +153,10 @@ export function Habits() {
     }
   };
 
-  // Handler for habit name input change with validation
+  // Handler for habit name input change without validation
   const handleHabitNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    if (/^[a-zA-Z\s]*$/.test(value)) {
-      setNewHabit((prev) => ({ ...prev, name: value }));
-    }
+    setNewHabit((prev) => ({ ...prev, name: value }));
   };
 
   // Handler for habit count input change with validation
