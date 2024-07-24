@@ -1,18 +1,12 @@
 import styled, { keyframes } from "styled-components";
 import { Navbar, Container, Dropdown, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTachometerAlt,
-  faBars,
-  faClipboardList,
-  faTasksAlt,
-  faArrowRightFromBracket,
-} from "@fortawesome/free-solid-svg-icons"; // Import icons as needed
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { RoutePaths, getFullPath } from "../common/Routes";
 
 interface NavBarProps {
-  links: { text: string; href: string }[];
+  links: { text: string; href: string; icon: any }[];
 }
 
 const fadeInDown = keyframes`
@@ -119,21 +113,6 @@ export function NavBar({ links }: NavBarProps) {
         href.includes(RoutePaths.CALENDAR) ||
         href.includes(RoutePaths.ANALYTICS)));
 
-  const renderIcon = (text: string) => {
-    switch (text.toLowerCase()) {
-      case "dashboard":
-        return <FontAwesomeIcon icon={faTachometerAlt} />;
-      case "questionnaire":
-        return <FontAwesomeIcon icon={faClipboardList} />;
-      case "habit tracker":
-        return <FontAwesomeIcon icon={faTasksAlt} />;
-      case "log out":
-        return <FontAwesomeIcon icon={faArrowRightFromBracket} />;
-      default:
-        return null;
-    }
-  };
-
   return (
     <CustomNavbar expand="lg" fixed="top">
       <Container fluid>
@@ -163,7 +142,9 @@ export function NavBar({ links }: NavBarProps) {
                     : undefined
                 }
               >
-                <Icon>{renderIcon(link.text)}</Icon>
+                <Icon>
+                  <FontAwesomeIcon icon={link.icon} />
+                </Icon>
                 {link.text}
               </Dropdown.Item>
             ))}
@@ -183,7 +164,9 @@ export function NavBar({ links }: NavBarProps) {
                     : undefined
                 }
               >
-                <Icon>{renderIcon(link.text)}</Icon>
+                <Icon>
+                  <FontAwesomeIcon icon={link.icon} />
+                </Icon>
                 {link.text}
               </CustomNavLink>
             ))}
