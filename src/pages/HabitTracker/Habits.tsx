@@ -224,12 +224,15 @@ export function Habits() {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button variant="outline-secondary" onClick={handleCloseModal}>
             Cancel
           </Button>
           <Button
             variant="primary"
-            style={{ backgroundColor: "#07889b", borderColor: "#07889b" }}
+            style={{
+              backgroundColor: isSaveDisabled() ? "#ccc" : "#07889b",
+              borderColor: isSaveDisabled() ? "#ccc" : "#07889b",
+            }}
             onClick={handleSaveHabit}
             disabled={isSaveDisabled()} // Disable button if fields are empty or unchanged when editing
           >
