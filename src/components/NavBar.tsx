@@ -95,7 +95,6 @@ export function NavBar({ links }: NavBarProps) {
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
   const isHabitTrackerActive =
     location.pathname.includes(RoutePaths.HABITS) ||
-    location.pathname.includes(RoutePaths.CALENDAR) ||
     location.pathname.includes(RoutePaths.ANALYTICS);
 
   const handleLogout = () => {
@@ -110,7 +109,6 @@ export function NavBar({ links }: NavBarProps) {
     location.pathname === href ||
     (isHabitTrackerActive &&
       (href.includes(RoutePaths.HABITS) ||
-        href.includes(RoutePaths.CALENDAR) ||
         href.includes(RoutePaths.ANALYTICS)));
 
   return (

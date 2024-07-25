@@ -7,7 +7,6 @@ import { Dashboard } from "./pages/Dashboard";
 import { Login } from "./pages/Login";
 import { Questionnaire } from "./pages/Questionnaire";
 import { Habits } from "./pages/habittracker/Habits";
-import { Calendar } from "./pages/habittracker/Calendar";
 import { Analytics } from "./pages/habittracker/Analytics";
 
 export function Router() {
@@ -29,14 +28,6 @@ export function Router() {
         element={
           <GuardedRoute>
             <Dashboard />
-          </GuardedRoute>
-        }
-      />
-      <Route
-        path={getFullPath(RoutePaths.CALENDAR)}
-        element={
-          <GuardedRoute>
-            <Calendar />
           </GuardedRoute>
         }
       />

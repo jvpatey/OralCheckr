@@ -10,6 +10,5 @@ export enum RoutePaths {
   RECOMMENDATIONS = '/recommendations',
   QUESTIONNAIRE = '/questionnaire',
   HABITS = '/habit-tracker/habits',
-  CALENDAR = '/habit-tracker/calendar',
   ANALYTICS = '/habit-tracker/analytics'
 }

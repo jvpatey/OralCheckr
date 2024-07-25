@@ -24,7 +24,7 @@ export const links = [
   },
   {
     text: "Habit Tracker",
-    href: getFullPath(RoutePaths.CALENDAR),
+    href: getFullPath(RoutePaths.HABITS),
     icon: faTasksAlt,
   },
   {
