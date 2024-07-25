@@ -9,7 +9,10 @@ import {
 
 // Common styles for both sides of the flip card
 const flipCardCommonStyles = css`
-  background-color: #e0e0e0;
+  background-color: #e9f6fb;
+  color: #00a9dd;
+  font-weight: 600;
+  border: 2px solid #00a9dd;
   border-radius: 10px;
   width: 100%;
   height: 100%;
@@ -66,8 +69,6 @@ const FlipCardFront = styled.div`
 // Back side of the flip card
 const FlipCardBack = styled.div`
   ${flipCardCommonStyles}
-  background-color: #bdbdbd;
-  color: #f5f5f5;
   transform: rotateX(180deg);
 `;
 
@@ -89,15 +90,26 @@ const IconsContainer = styled.div`
   margin-right: 15px;
 `;
 
-// Styled component for the edit and delete icons
-const IconWrapper = styled.div`
+// Separate styles for edit and delete icons
+const EditIcon = styled.div`
   cursor: pointer;
-  color: #222831;
+  color: #93c47d;
   margin: 0 5px;
 
   &:hover {
     transform: scale(1.1);
-    color: #07889b;
+    color: #93c47d;
+  }
+`;
+
+const DeleteIcon = styled.div`
+  cursor: pointer;
+  color: #e07366;
+  margin: 0 5px;
+
+  &:hover {
+    transform: scale(1.1);
+    color: #e07366;
   }
 `;
 
@@ -139,7 +151,7 @@ const BackText = styled.div`
   padding: 10px;
 
   .label {
-    color: #222831;
+    color: #646660;
     font-weight: bold;
     overflow: hidden;
     white-space: nowrap;
@@ -149,7 +161,7 @@ const BackText = styled.div`
   }
 
   .value {
-    color: #07889b;
+    color: #00a9dd;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -196,17 +208,17 @@ export function HabitTile({
           <IdDisplay>{habit.id}</IdDisplay>
           <HabitName>{habit.name}</HabitName>
           <IconsContainer>
-            <IconWrapper
+            <EditIcon
               onClick={(e) => {
                 e.stopPropagation();
                 onEditClick && onEditClick();
               }}
             >
               <FontAwesomeIcon icon={faPencil} />
-            </IconWrapper>
-            <IconWrapper onClick={handleDeleteClick}>
+            </EditIcon>
+            <DeleteIcon onClick={handleDeleteClick}>
               <FontAwesomeIcon icon={faTrashCan} />
-            </IconWrapper>
+            </DeleteIcon>
           </IconsContainer>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />

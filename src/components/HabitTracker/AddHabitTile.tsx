@@ -4,7 +4,9 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 // Styled component styles for the add habit tile component
 const AddTileContainer = styled.div`
-  background-color: #e0e0e0;
+  background-color: #d9ead3;
+  color: #659053;
+  font-weight: bold;
   width: 65%;
   height: 50px;
   display: flex;
@@ -15,7 +17,7 @@ const AddTileContainer = styled.div`
   padding: 10px;
   margin-bottom: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 2px solid #07889b;
+  border: 2px solid #659053;
   cursor: pointer;
   margin-left: auto;
   margin-right: auto;
@@ -23,8 +25,9 @@ const AddTileContainer = styled.div`
 
   &:hover {
     font-weight: bold;
+    border-color: #38761d;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: #07889b;
+    color: #38761d;
   }
 
   @media (max-width: 768px) {
@@ -38,21 +41,15 @@ const HabitName = styled.div`
   align-items: center;
   justify-content: center;
   flex-grow: 1;
+  margin-right: 40px;
 `;
 
-const EditIcon = styled.div`
-  cursor: pointer;
-  color: #07889b;
-`;
-
-const IconWrapper = styled.div`
+const AddIcon = styled.div`
+  font-size: 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-left: 10px;
 `;
 
-// Types
 interface AddHabitTileProps {
   onAddClick: () => void;
 }
@@ -60,12 +57,10 @@ interface AddHabitTileProps {
 export function AddHabitTile({ onAddClick }: AddHabitTileProps) {
   return (
     <AddTileContainer onClick={onAddClick}>
+      <AddIcon>
+        <FontAwesomeIcon icon={faPlus} />
+      </AddIcon>
       <HabitName>Add Habit</HabitName>
-      <IconWrapper>
-        <EditIcon>
-          <FontAwesomeIcon icon={faPlus} />
-        </EditIcon>
-      </IconWrapper>
     </AddTileContainer>
   );
 }
