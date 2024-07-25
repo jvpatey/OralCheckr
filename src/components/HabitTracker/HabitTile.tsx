@@ -80,7 +80,7 @@ const HabitName = styled.div`
   text-overflow: ellipsis;
   flex: 1;
   text-align: center;
-  margin-left: 15px;
+  margin-left: 45px;
 `;
 
 // Styled component for the edit and delete icons container
@@ -125,20 +125,6 @@ const ArrowIconWrapper = styled.div`
   transition: opacity 0.3s;
 `;
 
-// Styled component for displaying the id
-const IdDisplay = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-  color: #222831;
-  background-color: #f5f5f5;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 // Styled component for the text on the back side
 const BackText = styled.div`
   font-size: 12px;
@@ -177,10 +163,9 @@ interface HabitTileProps {
   habit: {
     name: string;
     count: number;
-    id: number;
   };
   onEditClick?: () => void;
-  onDeleteClick?: (id: number) => void;
+  onDeleteClick?: () => void;
 }
 
 export function HabitTile({
@@ -197,7 +182,7 @@ export function HabitTile({
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this habit?")) {
-      onDeleteClick && onDeleteClick(habit.id);
+      onDeleteClick && onDeleteClick();
     }
   };
 
@@ -205,7 +190,6 @@ export function HabitTile({
     <TileContainer onClick={handleFlip}>
       <FlipCard $flipped={flipped}>
         <FlipCardFront>
-          <IdDisplay>{habit.id}</IdDisplay>
           <HabitName>{habit.name}</HabitName>
           <IconsContainer>
             <EditIcon
@@ -225,7 +209,6 @@ export function HabitTile({
           </ArrowIconWrapper>
         </FlipCardFront>
         <FlipCardBack>
-          <IdDisplay>{habit.id}</IdDisplay>
           <BackText>
             <div className="label spaced">
               Habit: <span className="value">{habit.name}</span>

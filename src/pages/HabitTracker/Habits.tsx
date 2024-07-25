@@ -42,13 +42,11 @@ const HabitList = styled.div`
 interface Habit {
   name: string;
   count: number;
-  id: number;
 }
 
 type EditHabit = {
   name: string;
   count: string;
-  id: number | null;
 };
 
 // Functional component for Habits
@@ -63,14 +61,12 @@ export function Habits() {
   const [newHabit, setNewHabit] = useState<EditHabit>({
     name: "",
     count: "",
-    id: null,
   });
 
   // State to store the original habit values when editing
   const [originalHabit, setOriginalHabit] = useState<EditHabit>({
     name: "",
     count: "",
-    id: null,
   });
 
   // Load habits from local storage when the component mounts
@@ -89,27 +85,28 @@ export function Habits() {
 
   // Reset the form fields and edit state
   const resetForm = () => {
-    setNewHabit({ name: "", count: "", id: null });
-    setOriginalHabit({ name: "", count: "", id: null });
+    setNewHabit({ name: "", count: "" });
+    setOriginalHabit({ name: "", count: "" });
   };
 
   // Handler for saving a new or edited habit
   const handleSaveHabit = () => {
     if (newHabit.name && newHabit.count) {
       const updatedHabits = [...habits];
-      // Update the habit if editing
-      if (newHabit.id !== null) {
-        updatedHabits[newHabit.id - 1] = {
+      const habitIndex = habits.findIndex(
+        (habit) =>
+          habit.name === originalHabit.name &&
+          habit.count === parseInt(originalHabit.count, 10)
+      );
+      if (habitIndex > -1) {
+        updatedHabits[habitIndex] = {
           name: newHabit.name,
           count: parseInt(newHabit.count, 10),
-          id: newHabit.id,
         };
       } else {
-        // Add the new habit
         updatedHabits.push({
           name: newHabit.name,
           count: parseInt(newHabit.count, 10),
-          id: habits.length + 1,
         });
       }
       setHabits(updatedHabits);
@@ -126,29 +123,25 @@ export function Habits() {
   };
 
   // Handler for deleting a habit
-  const handleDeleteHabit = (id: number) => {
-    // Filter out the deleted habit and reindex the remaining habits
-    const updatedHabits = habits
-      .filter((habit) => habit.id !== id)
-      .map((habit, idx) => ({ ...habit, id: idx + 1 }));
+  const handleDeleteHabit = (index: number) => {
+    // Filter out the deleted habit
+    const updatedHabits = habits.filter((_, idx) => idx !== index);
     setHabits(updatedHabits);
     localStorage.setItem("habits", JSON.stringify(updatedHabits));
   };
 
   // Handler for editing a habit
-  const handleEditHabit = (id: number) => {
-    const habitToEdit = habits.find((habit) => habit.id === id);
+  const handleEditHabit = (index: number) => {
+    const habitToEdit = habits[index];
     if (habitToEdit) {
       // Set the newHabit and originalHabit with the habit details being edited
       setNewHabit({
         name: habitToEdit.name,
         count: habitToEdit.count.toString(),
-        id: habitToEdit.id,
       });
       setOriginalHabit({
         name: habitToEdit.name,
         count: habitToEdit.count.toString(),
-        id: habitToEdit.id,
       });
       setShowModal(true);
     }
@@ -172,8 +165,7 @@ export function Habits() {
   const isSaveDisabled = () =>
     !newHabit.name ||
     !newHabit.count ||
-    (newHabit.id !== null &&
-      newHabit.name === originalHabit.name &&
+    (newHabit.name === originalHabit.name &&
       newHabit.count === originalHabit.count);
 
   return (
@@ -181,14 +173,15 @@ export function Habits() {
       <Sidebar links={links} />
       <HabitListContainer>
         <HabitList>
-          {habits.map((habit) => (
+          {habits.map((habit, index) => (
             <HabitTile
-              key={habit.id}
+              key={index}
               habit={habit}
-              onDeleteClick={handleDeleteHabit}
-              onEditClick={() => handleEditHabit(habit.id)}
+              onDeleteClick={() => handleDeleteHabit(index)}
+              onEditClick={() => handleEditHabit(index)}
             />
           ))}
+          {/* Add Habit Tile at the bottom */}
           <AddHabitTile onAddClick={handleAddHabitClick} />
         </HabitList>
       </HabitListContainer>
@@ -196,7 +189,7 @@ export function Habits() {
       <StyledModal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {newHabit.id !== null ? "Edit a Habit" : "Add a New Habit"}
+            {originalHabit.name ? "Edit a Habit" : "Add a New Habit"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
