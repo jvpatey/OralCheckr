@@ -181,7 +181,6 @@ export function Habits() {
       <Sidebar links={links} />
       <HabitListContainer>
         <HabitList>
-          <AddHabitTile onAddClick={handleAddHabitClick} />
           {habits.map((habit) => (
             <HabitTile
               key={habit.id}
@@ -190,6 +189,7 @@ export function Habits() {
               onEditClick={() => handleEditHabit(habit.id)}
             />
           ))}
+          <AddHabitTile onAddClick={handleAddHabitClick} />
         </HabitList>
       </HabitListContainer>
 
@@ -234,7 +234,7 @@ export function Habits() {
               borderColor: isSaveDisabled() ? "#ccc" : "#07889b",
             }}
             onClick={handleSaveHabit}
-            disabled={isSaveDisabled()} // Disable button if fields are empty or unchanged when editing
+            disabled={isSaveDisabled()}
           >
             Save Habit
           </Button>
