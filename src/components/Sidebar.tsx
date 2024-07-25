@@ -76,6 +76,16 @@ const SidebarLink = styled(Link)`
 
 const Icon = styled.span`
   margin-right: 10px;
+
+  @media (max-width: 768px) {
+    margin-right: 0;
+  }
+`;
+
+const Text = styled.span`
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 interface SidebarProps {
@@ -99,7 +109,7 @@ export function Sidebar({ links }: SidebarProps) {
           <Icon>
             <FontAwesomeIcon icon={link.icon} />
           </Icon>
-          <span className="d-lg-inline d-none">{link.name}</span>
+          <Text>{link.name}</Text>
         </SidebarLink>
       ))}
     </SidebarContainer>
