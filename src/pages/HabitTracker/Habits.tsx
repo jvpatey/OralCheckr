@@ -44,11 +44,6 @@ interface Habit {
   count: number;
 }
 
-type EditHabit = {
-  name: string;
-  count: string;
-};
-
 // Functional component for Habits
 export function Habits() {
   // State to store the list of habits
@@ -58,15 +53,15 @@ export function Habits() {
   const [showModal, setShowModal] = useState(false);
 
   // State to store the new habit being added or edited
-  const [newHabit, setNewHabit] = useState<EditHabit>({
+  const [newHabit, setNewHabit] = useState<Habit>({
     name: "",
-    count: "",
+    count: 0,
   });
 
   // State to store the original habit values when editing
-  const [originalHabit, setOriginalHabit] = useState<EditHabit>({
+  const [originalHabit, setOriginalHabit] = useState<Habit>({
     name: "",
-    count: "",
+    count: 0,
   });
 
   // Load habits from local storage when the component mounts
@@ -85,29 +80,23 @@ export function Habits() {
 
   // Reset the form fields and edit state
   const resetForm = () => {
-    setNewHabit({ name: "", count: "" });
-    setOriginalHabit({ name: "", count: "" });
+    setNewHabit({ name: "", count: 0 });
+    setOriginalHabit({ name: "", count: 0 });
   };
 
   // Handler for saving a new or edited habit
   const handleSaveHabit = () => {
-    if (newHabit.name && newHabit.count) {
+    if (newHabit.name && newHabit.count > 0) {
       const updatedHabits = [...habits];
       const habitIndex = habits.findIndex(
         (habit) =>
           habit.name === originalHabit.name &&
-          habit.count === parseInt(originalHabit.count, 10)
+          habit.count === originalHabit.count
       );
       if (habitIndex > -1) {
-        updatedHabits[habitIndex] = {
-          name: newHabit.name,
-          count: parseInt(newHabit.count, 10),
-        };
+        updatedHabits[habitIndex] = newHabit;
       } else {
-        updatedHabits.push({
-          name: newHabit.name,
-          count: parseInt(newHabit.count, 10),
-        });
+        updatedHabits.push(newHabit);
       }
       setHabits(updatedHabits);
       localStorage.setItem("habits", JSON.stringify(updatedHabits));
@@ -135,14 +124,8 @@ export function Habits() {
     const habitToEdit = habits[index];
     if (habitToEdit) {
       // Set the newHabit and originalHabit with the habit details being edited
-      setNewHabit({
-        name: habitToEdit.name,
-        count: habitToEdit.count.toString(),
-      });
-      setOriginalHabit({
-        name: habitToEdit.name,
-        count: habitToEdit.count.toString(),
-      });
+      setNewHabit(habitToEdit);
+      setOriginalHabit(habitToEdit);
       setShowModal(true);
     }
   };
@@ -157,14 +140,14 @@ export function Habits() {
   const handleHabitCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (_.isNumber(Number(value))) {
-      setNewHabit((prev) => ({ ...prev, count: value }));
+      setNewHabit((prev) => ({ ...prev, count: Number(value) }));
     }
   };
 
   // Check if the Save button should be enabled
   const isSaveDisabled = () =>
     !newHabit.name ||
-    !newHabit.count ||
+    newHabit.count <= 0 ||
     (newHabit.name === originalHabit.name &&
       newHabit.count === originalHabit.count);
 
@@ -210,7 +193,7 @@ export function Habits() {
               <Form.Control
                 type="number"
                 placeholder="Enter habit count"
-                value={newHabit.count}
+                value={newHabit.count.toString()}
                 onChange={handleHabitCountChange}
               />
             </Form.Group>
