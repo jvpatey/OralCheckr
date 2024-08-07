@@ -9,12 +9,13 @@ const SidebarContainer = styled.div`
   position: fixed;
   top: 60px;
   left: 0;
-  background-color: #e0e0e0;
+  background-color: #3f93b2;
   color: #222831;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 20px;
+  margin-top: 10px;
   border-top-right-radius: 20px;
 
   @media (max-width: 768px) {
@@ -28,26 +29,34 @@ const SidebarLink = styled(Link)`
   padding: 15px 20px;
   text-align: left;
   text-decoration: none;
-  color: #222831;
+  color: #f5f5f5;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  color: #222831;
   position: relative;
+  margin-left: 10px;
 
   &:hover {
-    color: #07889b;
+    color: #f5f5f5;
     transform: scale(1.05);
   }
 
   &.active {
-    font-weight: bold;
-    color: #07889b;
+    font-weight: 800;
+    color: #dfdfdf;
+    font-size: 17px;
   }
 
   @media (max-width: 768px) {
     justify-content: center;
     padding: 10px;
+    margin-right: 15px;
+
+    &.active {
+      font-weight: 800;
+      color: #f5f5f5;
+      font-size: 20px;
+    }
   }
 
   @media (max-width: 768px) {
