@@ -9,10 +9,10 @@ import {
 
 // Common styles for both sides of the flip card
 const flipCardCommonStyles = css`
-  background-color: #e9f6fb;
-  color: #00a9dd;
+  background-color: #f5f5f5;
+  color: #3f93b2;
   font-weight: 600;
-  border: 2px solid #00a9dd;
+  border: 2px solid #3f93b2;
   border-radius: 10px;
   width: 100%;
   height: 100%;
@@ -147,7 +147,7 @@ const BackText = styled.div`
   }
 
   .value {
-    color: #00a9dd;
+    color: #41bc7a;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

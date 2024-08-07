@@ -9,6 +9,7 @@ import { links } from "../../common/SidebarLinks";
 import { HabitTile } from "../../components/habittracker/HabitTile";
 import { AddHabitTile } from "../../components/habittracker/AddHabitTile";
 import { StyledModal } from "../../components/styled/Modal";
+import { LogButton } from "../../components/habittracker/LogButton";
 
 // Styled component for the habit list container
 const HabitListContainer = styled.div`
@@ -62,6 +63,13 @@ const HabitList = styled.div`
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+`;
+
+const HabitRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 // Types
@@ -188,12 +196,14 @@ export function Habits() {
           </Header>
           <HabitList>
             {habits.map((habit, index) => (
-              <HabitTile
-                key={index}
-                habit={habit}
-                onDeleteClick={() => handleDeleteHabit(index)}
-                onEditClick={() => handleEditHabit(index)}
-              />
+              <HabitRow key={index}>
+                <HabitTile
+                  habit={habit}
+                  onDeleteClick={() => handleDeleteHabit(index)}
+                  onEditClick={() => handleEditHabit(index)}
+                />
+                <LogButton />
+              </HabitRow>
             ))}
           </HabitList>
         </HabitWrapper>
