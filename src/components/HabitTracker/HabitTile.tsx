@@ -30,7 +30,7 @@ const flipCardCommonStyles = css`
 const TileContainer = styled.div`
   perspective: 1000px;
   border-radius: 10px;
-  width: 65%;
+  width: 100%;
   height: 50px;
   margin-bottom: 10px;
   margin-left: auto;

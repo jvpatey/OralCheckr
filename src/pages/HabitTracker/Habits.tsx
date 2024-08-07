@@ -26,13 +26,39 @@ const HabitListContainer = styled.div`
   }
 `;
 
+// Wrapper for header and habit list
+const HabitWrapper = styled.div`
+  width: 40%;
+  margin: 0 auto;
+  padding: 20px 0;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    width: 80%;
+  }
+`;
+
+// Styled component for the header containing the "Add Habit" button
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+`;
+
+const HeaderText = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+  color: #848889;
+`;
+
 const HabitList = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 20px;
-  margin-left: 10px;
+  padding: 20px 0;
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -155,18 +181,22 @@ export function Habits() {
     <PageBackground>
       <Sidebar links={links} />
       <HabitListContainer>
-        <HabitList>
-          {habits.map((habit, index) => (
-            <HabitTile
-              key={index}
-              habit={habit}
-              onDeleteClick={() => handleDeleteHabit(index)}
-              onEditClick={() => handleEditHabit(index)}
-            />
-          ))}
-          {/* Add Habit Tile at the bottom */}
-          <AddHabitTile onAddClick={handleAddHabitClick} />
-        </HabitList>
+        <HabitWrapper>
+          <Header>
+            <HeaderText>My Habits:</HeaderText>
+            <AddHabitTile onAddClick={handleAddHabitClick} />
+          </Header>
+          <HabitList>
+            {habits.map((habit, index) => (
+              <HabitTile
+                key={index}
+                habit={habit}
+                onDeleteClick={() => handleDeleteHabit(index)}
+                onEditClick={() => handleEditHabit(index)}
+              />
+            ))}
+          </HabitList>
+        </HabitWrapper>
       </HabitListContainer>
 
       <StyledModal show={showModal} onHide={handleCloseModal}>

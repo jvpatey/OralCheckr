@@ -4,50 +4,44 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 // Styled component styles for the add habit tile component
 const AddTileContainer = styled.div`
-  background-color: #d9ead3;
-  color: #659053;
-  font-weight: bold;
-  width: 65%;
-  height: 50px;
+  background-color: #41bc7a;
+  color: #ffffff;
+  width: auto;
+  height: 35px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 2px solid #659053;
+  border-radius: 25px;
+  padding: 0 20px;
   cursor: pointer;
-  margin-left: auto;
-  margin-right: auto;
-  transition: box-shadow 0.3s, color 0.3s, font-weight 0.3s;
+  transition: box-shadow 0.3s, background-color 0.3s;
 
   &:hover {
-    font-weight: bold;
-    border-color: #38761d;
+    background-color: #f5f5f5;
+    border: 2px solid #41bc7a;
+    color: #41bc7a;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: #38761d;
   }
 
   @media (max-width: 768px) {
-    width: 85%;
+    width: auto;
   }
 `;
 
 const HabitName = styled.div`
-  font-size: 18px;
+  font-size: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-grow: 1;
-  margin-right: 40px;
+  margin-left: 10px;
 `;
 
 const AddIcon = styled.div`
-  font-size: 24px;
+  font-size: 15px;
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 interface AddHabitTileProps {
