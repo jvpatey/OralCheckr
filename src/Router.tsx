@@ -4,9 +4,10 @@ import { RoutePaths, getFullPath } from "./common/Routes";
 import { GuardedRoute } from "./containers/GuardedRoute";
 import { RedirectIfAuthenticated } from "./containers/RedirectIfAuthenticated";
 import { Dashboard } from "./pages/Dashboard";
-import { HabitTracker } from "./pages/HabitTracker";
 import { Login } from "./pages/Login";
 import { Questionnaire } from "./pages/Questionnaire";
+import { Habits } from "./pages/habittracker/Habits";
+import { Analytics } from "./pages/habittracker/Analytics";
 
 export function Router() {
   return (
@@ -31,10 +32,18 @@ export function Router() {
         }
       />
       <Route
-        path={getFullPath(RoutePaths.HABIT_TRACKER)}
+        path={getFullPath(RoutePaths.HABITS)}
         element={
           <GuardedRoute>
-            <HabitTracker />
+            <Habits />
+          </GuardedRoute>
+        }
+      />
+      <Route
+        path={getFullPath(RoutePaths.ANALYTICS)}
+        element={
+          <GuardedRoute>
+            <Analytics />
           </GuardedRoute>
         }
       />

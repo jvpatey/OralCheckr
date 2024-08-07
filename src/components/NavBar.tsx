@@ -1,47 +1,40 @@
-import { Container, Nav, Navbar, Dropdown } from "react-bootstrap";
+import styled, { keyframes } from "styled-components";
+import { Navbar, Container, Dropdown, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { RoutePaths, getFullPath } from "../common/Routes";
-import styled from "styled-components";
 
 interface NavBarProps {
-  links: { text: string; href: string }[];
+  links: { text: string; href: string; icon: any }[];
 }
 
-// styled-components styling for Navbar
-
-const CustomNavbar = styled(Navbar)`
-  background-color: #f5f5f5;
-  padding: 0.5rem 1rem;
-  animation: fadeInDown 1s ease-out;
-
-  @keyframes fadeInDown {
-    from {
-      opacity: 0;
-      transform: translate3d(0, -40px, 0);
-    }
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
+const fadeInDown = keyframes`
+  from {
+    opacity: 0;
+    transform: translate3d(0, -40px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 `;
 
+const CustomNavbar = styled(Navbar)`
+  background-color: #f5f5f5;
+  width: 100%;
+  animation: ${fadeInDown} 1s ease-out;
+`;
+
 const BrandText = styled(Navbar.Brand)`
-  margin-right: auto;
+  display: flex;
+  align-items: center;
   font-size: x-large;
   color: #222831;
-
-  &:hover {
-    color: #07889b;
-    font-weight: bold;
-  }
 `;
 
 const LogoImage = styled.img`
   height: 45px;
-  margin-bottom: 5px;
 `;
 
 const DropdownIcon = styled.div`
@@ -78,7 +71,7 @@ const CustomCollapse = styled(Navbar.Collapse)`
 
 const CustomNavLink = styled(Nav.Link)`
   color: #222831;
-  margin-right: 25px;
+  margin-right: 35px;
 
   &:hover {
     color: #07889b;
@@ -89,13 +82,20 @@ const CustomNavLink = styled(Nav.Link)`
     color: #07889b;
     font-weight: bold;
     transform: scale(1.1);
-    background-color: transparent;
+    background-color: transparent !important;
   }
+`;
+
+const Icon = styled.span`
+  margin-right: 5px;
 `;
 
 export function NavBar({ links }: NavBarProps) {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
+  const isHabitTrackerActive =
+    location.pathname.includes(RoutePaths.HABITS) ||
+    location.pathname.includes(RoutePaths.ANALYTICS);
 
   const handleLogout = () => {
     localStorage.setItem("authenticated", "false");
@@ -104,6 +104,12 @@ export function NavBar({ links }: NavBarProps) {
   if (!isAuthenticated) {
     return null;
   }
+
+  const isActive = (href: string) =>
+    location.pathname === href ||
+    (isHabitTrackerActive &&
+      (href.includes(RoutePaths.HABITS) ||
+        href.includes(RoutePaths.ANALYTICS)));
 
   return (
     <CustomNavbar expand="lg" fixed="top">
@@ -122,8 +128,8 @@ export function NavBar({ links }: NavBarProps) {
           <Dropdown.Menu align="end">
             {links.map((link) => (
               <Dropdown.Item
-                className={location.pathname === link.href ? "active" : ""}
                 key={link.href}
+                className={isActive(link.href) ? "active" : ""}
                 as={Link}
                 to={
                   link.href === getFullPath(RoutePaths.LOGIN) ? "/" : link.href
@@ -134,6 +140,9 @@ export function NavBar({ links }: NavBarProps) {
                     : undefined
                 }
               >
+                <Icon>
+                  <FontAwesomeIcon icon={link.icon} />
+                </Icon>
                 {link.text}
               </Dropdown.Item>
             ))}
@@ -143,8 +152,8 @@ export function NavBar({ links }: NavBarProps) {
           <Nav className="ms-auto d-none d-lg-flex">
             {links.map((link) => (
               <CustomNavLink
-                className={location.pathname === link.href ? "active" : ""}
                 key={link.href}
+                className={isActive(link.href) ? "active" : ""}
                 as={Link}
                 to={link.href}
                 onClick={
@@ -153,6 +162,9 @@ export function NavBar({ links }: NavBarProps) {
                     : undefined
                 }
               >
+                <Icon>
+                  <FontAwesomeIcon icon={link.icon} />
+                </Icon>
                 {link.text}
               </CustomNavLink>
             ))}
