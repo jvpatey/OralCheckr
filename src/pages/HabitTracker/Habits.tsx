@@ -10,12 +10,12 @@ import { HabitTile } from "../../components/habittracker/HabitTile";
 import { AddHabitTile } from "../../components/habittracker/AddHabitTile";
 import { StyledModal } from "../../components/styled/Modal";
 import { EditModeButton } from "../../components/habittracker/EditModeButton";
+import { DatePickerWithBubbles } from "../../components/habittracker/DatePickerWithBubbles";
 import {
   EditButton,
   DeleteButton,
   LogButton,
 } from "../../components/habittracker/LogButton";
-import { DatePickerWithBubbles } from "../../components/habittracker/DatePickerWithBubbles";
 
 // Styled component for the habit list container
 const HabitListContainer = styled.div`

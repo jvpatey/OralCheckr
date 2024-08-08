@@ -3,8 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 // Styled component styles for the edit button
-const EditTileContainer = styled.div<{ isEditMode: boolean }>`
-  background-color: ${({ isEditMode }) => (isEditMode ? "#e74c3c" : "#f1c232")};
+const EditTileContainer = styled.div<{ $isEditMode: boolean }>`
+  background-color: ${({ $isEditMode }) =>
+    $isEditMode ? "#e74c3c" : "#f1c232"};
   color: #ffffff;
   width: auto;
   height: 35px;
@@ -20,8 +21,8 @@ const EditTileContainer = styled.div<{ isEditMode: boolean }>`
   &:hover {
     background-color: #f5f5f5;
     border: 2px solid
-      ${({ isEditMode }) => (isEditMode ? "#e07366" : "#f1c232")};
-    color: ${({ isEditMode }) => (isEditMode ? "#e07366" : "#f1c232")};
+      ${({ $isEditMode }) => ($isEditMode ? "#e07366" : "#f1c232")};
+    color: ${({ $isEditMode }) => ($isEditMode ? "#e07366" : "#f1c232")};
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
@@ -63,7 +64,7 @@ interface EditModeButtonProps {
 
 export function EditModeButton({ onClick, isEditMode }: EditModeButtonProps) {
   return (
-    <EditTileContainer onClick={onClick} isEditMode={isEditMode}>
+    <EditTileContainer onClick={onClick} $isEditMode={isEditMode}>
       <EditIcon>
         <FontAwesomeIcon icon={isEditMode ? faTimes : faPencilAlt} />
       </EditIcon>

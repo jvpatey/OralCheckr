@@ -1,3 +1,4 @@
+// DatePickerWithBubbles.tsx
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -24,7 +25,6 @@ const DayBubbleContainer = styled.div`
   justify-content: center;
   margin-bottom: 20px;
   margin-top: 30px;
-  flex-wrap: wrap;
 
   @media (max-width: 768px) {
     flex-wrap: nowrap;
@@ -32,39 +32,34 @@ const DayBubbleContainer = styled.div`
 `;
 
 // Styled component for the date picker
-const CustomDatePickerInput = styled.input<{ disabled: boolean }>`
-  background-color: ${({ disabled }) => (disabled ? "#e0e0e0" : "#f5f5f5")};
+const CustomDatePickerInput = styled.input<{ $disabled: boolean }>`
+  background-color: ${({ $disabled }) => ($disabled ? "#e0e0e0" : "#f5f5f5")};
   border: none;
-  color: ${({ disabled }) => (disabled ? "#9e9e9e" : "#3f93b2")};
+  color: ${({ $disabled }) => ($disabled ? "#9e9e9e" : "#3f93b2")};
   border: 2px solid #3f93b2;
   padding: 8px 12px;
   border-radius: 10px;
   text-align: center;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
 
   &:hover {
-    background-color: ${({ disabled }) => (disabled ? "#e0e0e0" : "#3f93b2")};
-    color: ${({ disabled }) => (disabled ? "#9e9e9e" : "#f5f5f5")};
+    background-color: ${({ $disabled }) => ($disabled ? "#e0e0e0" : "#3f93b2")};
+    color: ${({ $disabled }) => ($disabled ? "#9e9e9e" : "#f5f5f5")};
   }
 
   &:focus {
     outline: none;
     box-shadow: 0 0 3px 2px rgba(53, 122, 150, 0.5);
   }
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-    padding: 4px 6px;
-  }
 `;
 
 // Styled component for the arrow buttons
-const ArrowButton = styled.button<{ disabled: boolean }>`
+const ArrowButton = styled.button<{ $disabled: boolean }>`
   background: none;
   border: none;
-  color: ${({ disabled }) => (disabled ? "#9e9e9e" : "#3f93b2")};
+  color: ${({ $disabled }) => ($disabled ? "#9e9e9e" : "#3f93b2")};
   font-size: 20px;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
   border-radius: 50%;
   width: 30px;
   height: 45px;
@@ -73,7 +68,7 @@ const ArrowButton = styled.button<{ disabled: boolean }>`
   justify-content: center;
 
   &:hover {
-    background-color: ${({ disabled }) => (disabled ? "none" : "#dfdfdf")};
+    background-color: ${({ $disabled }) => ($disabled ? "none" : "#dfdfdf")};
   }
 
   &:focus {
@@ -81,9 +76,15 @@ const ArrowButton = styled.button<{ disabled: boolean }>`
   }
 
   @media (max-width: 768px) {
-    width: 10px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     font-size: 16px;
+  }
+
+  @media (max-width: 480px) {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
   }
 `;
 
@@ -156,12 +157,12 @@ export function DatePickerWithBubbles({
         }}
         dateFormat="MMMM d, yyyy"
         showWeekNumbers
-        customInput={<CustomDatePickerInput disabled={isEditMode} />}
+        customInput={<CustomDatePickerInput $disabled={isEditMode} />}
         placeholderText={weekRange}
         disabled={isEditMode}
       />
       <DayBubbleContainer>
-        <ArrowButton onClick={handlePrevWeek} disabled={isEditMode}>
+        <ArrowButton onClick={handlePrevWeek} $disabled={isEditMode}>
           <FontAwesomeIcon icon={faChevronLeft} />
         </ArrowButton>
         {daysInWeek.map((day, index) => (
@@ -170,10 +171,10 @@ export function DatePickerWithBubbles({
             selected={index === selectedDay}
             onClick={() => setSelectedDay(index)}
             date={day}
-            isEditMode={isEditMode}
+            isEditMode={isEditMode} // Pass isEditMode to DayBubble
           />
         ))}
-        <ArrowButton onClick={handleNextWeek} disabled={isEditMode}>
+        <ArrowButton onClick={handleNextWeek} $disabled={isEditMode}>
           <FontAwesomeIcon icon={faChevronRight} />
         </ArrowButton>
       </DayBubbleContainer>

@@ -25,8 +25,11 @@ const AddTileContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding: 0 12px;
-    height: 35px;
+    padding: 0 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 10px;
   }
 `;
 
@@ -44,7 +47,7 @@ const HabitName = styled.div`
 
   @media (max-width: 480px) {
     font-size: 10px;
-    margin-left: 3px;
+    margin-left: 5px;
   }
 `;
 
