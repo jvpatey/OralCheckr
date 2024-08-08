@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 // Styled component for the date bubbles
-const Bubble = styled.div<{ selected: boolean }>`
+const DayBubbleStyled = styled.div<{ selected: boolean; isEditMode: boolean }>`
   background-color: ${({ selected }) => (selected ? "#3f93b2" : "#ccc")};
-  color: white;
+  color: ${({ isEditMode }) => (isEditMode ? "#aaa" : "white")};
   width: 50px;
   height: 50px;
   display: flex;
@@ -12,17 +12,11 @@ const Bubble = styled.div<{ selected: boolean }>`
   justify-content: center;
   border-radius: 50%;
   margin: 0 5px;
-  cursor: pointer;
+  cursor: ${({ isEditMode }) => (isEditMode ? "not-allowed" : "pointer")};
 
   &:hover {
-    background-color: #3f93b2;
-    transform: scale(1.05);
-  }
-
-  @media (max-width: 768px) {
-    width: 40px;
-    height: 40px;
-    font-size: 12px;
+    background-color: ${({ isEditMode }) => (isEditMode ? "#ccc" : "#3f93b2")};
+    transform: ${({ isEditMode }) => (isEditMode ? "none" : "scale(1.05)")};
   }
 `;
 
@@ -30,13 +24,23 @@ interface DayBubbleProps {
   selected: boolean;
   onClick: () => void;
   date: Date;
+  isEditMode: boolean;
 }
 
-export function DayBubble({ selected, onClick, date }: DayBubbleProps) {
+export function DayBubble({
+  selected,
+  onClick,
+  date,
+  isEditMode,
+}: DayBubbleProps) {
   return (
-    <Bubble selected={selected} onClick={onClick}>
+    <DayBubbleStyled
+      selected={selected}
+      onClick={onClick}
+      isEditMode={isEditMode}
+    >
       <div>{date.getDate()}</div>
       <div>{date.toLocaleDateString("en", { weekday: "short" })[0]}</div>
-    </Bubble>
+    </DayBubbleStyled>
   );
 }

@@ -9,8 +9,12 @@ import { links } from "../../common/SidebarLinks";
 import { HabitTile } from "../../components/habittracker/HabitTile";
 import { AddHabitTile } from "../../components/habittracker/AddHabitTile";
 import { StyledModal } from "../../components/styled/Modal";
-import { LogButton } from "../../components/habittracker/LogButton";
-import { EditButton } from "../../components/habittracker/EditButton";
+import { EditModeButton } from "../../components/habittracker/EditModeButton";
+import {
+  EditButton,
+  DeleteButton,
+  LogButton,
+} from "../../components/habittracker/LogButton";
 import { DatePickerWithBubbles } from "../../components/habittracker/DatePickerWithBubbles";
 
 // Styled component for the habit list container
@@ -106,6 +110,9 @@ export function Habits() {
     count: 0,
   });
 
+  // State to control the edit mode
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+
   // Load habits from local storage when the component mounts
   useEffect(() => {
     const storedHabits = localStorage.getItem("habits");
@@ -155,10 +162,12 @@ export function Habits() {
 
   // Handler for deleting a habit
   const handleDeleteHabit = (index: number) => {
-    // Filter out the deleted habit
-    const updatedHabits = habits.filter((_, idx) => idx !== index);
-    setHabits(updatedHabits);
-    localStorage.setItem("habits", JSON.stringify(updatedHabits));
+    if (window.confirm("Are you sure you want to delete this habit?")) {
+      // Filter out the deleted habit
+      const updatedHabits = habits.filter((_, idx) => idx !== index);
+      setHabits(updatedHabits);
+      localStorage.setItem("habits", JSON.stringify(updatedHabits));
+    }
   };
 
   // Handler for editing a habit
@@ -198,23 +207,28 @@ export function Habits() {
       <Sidebar links={links} />
       <HabitListContainer>
         <HabitWrapper>
-          <DatePickerWithBubbles />
+          <DatePickerWithBubbles isEditMode={isEditMode} />
           <Header>
             <HeaderText>My Habits:</HeaderText>
             <HeaderButtons>
-              <EditButton />
-              <AddHabitTile onAddClick={handleAddHabitClick} />
+              {!isEditMode && <AddHabitTile onAddClick={handleAddHabitClick} />}
+              <EditModeButton
+                onClick={() => setIsEditMode(!isEditMode)}
+                isEditMode={isEditMode}
+              />
             </HeaderButtons>
           </Header>
           <HabitList>
             {habits.map((habit, index) => (
               <HabitRow key={index}>
-                <HabitTile
-                  habit={habit}
-                  onDeleteClick={() => handleDeleteHabit(index)}
-                  onEditClick={() => handleEditHabit(index)}
-                />
-                <LogButton />
+                <HabitTile habit={habit} />
+                {isEditMode && (
+                  <>
+                    <EditButton onClick={() => handleEditHabit(index)} />
+                    <DeleteButton onClick={() => handleDeleteHabit(index)} />
+                  </>
+                )}
+                {!isEditMode && <LogButton />}
               </HabitRow>
             ))}
           </HabitList>

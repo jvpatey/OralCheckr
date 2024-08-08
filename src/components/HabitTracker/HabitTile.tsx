@@ -1,11 +1,7 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPencil,
-  faTrashCan,
-  faSync,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSync } from "@fortawesome/free-solid-svg-icons";
 
 // Common styles for both sides of the flip card
 const flipCardCommonStyles = css`
@@ -80,37 +76,6 @@ const HabitName = styled.div`
   text-overflow: ellipsis;
   flex: 1;
   text-align: center;
-  margin-left: 45px;
-`;
-
-// Styled component for the edit and delete icons container
-const IconsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 15px;
-`;
-
-// Separate styles for edit and delete icons
-const EditIcon = styled.div`
-  cursor: pointer;
-  color: #93c47d;
-  margin: 0 5px;
-
-  &:hover {
-    transform: scale(1.1);
-    color: #93c47d;
-  }
-`;
-
-const DeleteIcon = styled.div`
-  cursor: pointer;
-  color: #e07366;
-  margin: 0 5px;
-
-  &:hover {
-    transform: scale(1.1);
-    color: #e07366;
-  }
 `;
 
 // Styled component for the arrow icon
@@ -164,46 +129,19 @@ interface HabitTileProps {
     name: string;
     count: number;
   };
-  onEditClick?: () => void;
-  onDeleteClick?: () => void;
 }
 
-export function HabitTile({
-  habit,
-  onEditClick,
-  onDeleteClick,
-}: HabitTileProps) {
+export function HabitTile({ habit }: HabitTileProps) {
   const [flipped, setFlipped] = useState(false);
 
   // Handler for flipping the card
   const handleFlip = () => setFlipped(!flipped);
-
-  // Handler for delete icon click
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (window.confirm("Are you sure you want to delete this habit?")) {
-      onDeleteClick && onDeleteClick();
-    }
-  };
 
   return (
     <TileContainer onClick={handleFlip}>
       <FlipCard $flipped={flipped}>
         <FlipCardFront>
           <HabitName>{habit.name}</HabitName>
-          <IconsContainer>
-            <EditIcon
-              onClick={(e) => {
-                e.stopPropagation();
-                onEditClick && onEditClick();
-              }}
-            >
-              <FontAwesomeIcon icon={faPencil} />
-            </EditIcon>
-            <DeleteIcon onClick={handleDeleteClick}>
-              <FontAwesomeIcon icon={faTrashCan} />
-            </DeleteIcon>
-          </IconsContainer>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>

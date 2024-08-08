@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClipboardCheck,
+  faPencilAlt,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Styled component styles for the log button
 const ButtonContainer = styled.div`
@@ -31,7 +35,29 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const AddIcon = styled.div`
+const EditButtonContainer = styled(ButtonContainer)`
+  border: 2px solid #f1c232;
+  color: #f1c232;
+
+  &:hover {
+    background-color: #f1c232;
+    border: 2px solid #f1c232;
+    color: #f5f5f5;
+  }
+`;
+
+const DeleteButtonContainer = styled(ButtonContainer)`
+  border: 2px solid #e74c3c;
+  color: #e74c3c;
+
+  &:hover {
+    background-color: #e74c3c;
+    border: 2px solid #e74c3c;
+    color: #f5f5f5;
+  }
+`;
+
+const ButtonIcon = styled.div`
   font-size: 20px;
   display: flex;
   align-items: center;
@@ -41,9 +67,29 @@ const AddIcon = styled.div`
 export function LogButton() {
   return (
     <ButtonContainer>
-      <AddIcon>
+      <ButtonIcon>
         <FontAwesomeIcon icon={faClipboardCheck} />
-      </AddIcon>
+      </ButtonIcon>
     </ButtonContainer>
+  );
+}
+
+export function EditButton({ onClick }: { onClick: () => void }) {
+  return (
+    <EditButtonContainer onClick={onClick}>
+      <ButtonIcon>
+        <FontAwesomeIcon icon={faPencilAlt} />
+      </ButtonIcon>
+    </EditButtonContainer>
+  );
+}
+
+export function DeleteButton({ onClick }: { onClick: () => void }) {
+  return (
+    <DeleteButtonContainer onClick={onClick}>
+      <ButtonIcon>
+        <FontAwesomeIcon icon={faTrashAlt} />
+      </ButtonIcon>
+    </DeleteButtonContainer>
   );
 }

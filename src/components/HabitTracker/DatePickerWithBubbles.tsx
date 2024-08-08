@@ -27,19 +27,19 @@ const DayBubbleContainer = styled.div`
 `;
 
 // Styled component for the date picker
-const CustomDatePickerInput = styled.input`
-  background-color: #f5f5f5;
+const CustomDatePickerInput = styled.input<{ disabled: boolean }>`
+  background-color: ${({ disabled }) => (disabled ? "#e0e0e0" : "#f5f5f5")};
   border: none;
-  color: #3f93b2;
+  color: ${({ disabled }) => (disabled ? "#9e9e9e" : "#3f93b2")};
   border: 2px solid #3f93b2;
   padding: 8px 12px;
   border-radius: 10px;
   text-align: center;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
 
   &:hover {
-    background-color: #3f93b2;
-    color: #f5f5f5;
+    background-color: ${({ disabled }) => (disabled ? "#e0e0e0" : "#3f93b2")};
+    color: ${({ disabled }) => (disabled ? "#9e9e9e" : "#f5f5f5")};
   }
 
   &:focus {
@@ -49,12 +49,12 @@ const CustomDatePickerInput = styled.input`
 `;
 
 // Styled component for the arrow buttons
-const ArrowButton = styled.button`
+const ArrowButton = styled.button<{ disabled: boolean }>`
   background: none;
   border: none;
-  color: #3f93b2;
+  color: ${({ disabled }) => (disabled ? "#9e9e9e" : "#3f93b2")};
   font-size: 20px;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   border-radius: 50%;
   width: 30px;
   height: 45px;
@@ -63,7 +63,7 @@ const ArrowButton = styled.button`
   justify-content: center;
 
   &:hover {
-    background-color: #dfdfdf;
+    background-color: ${({ disabled }) => (disabled ? "none" : "#dfdfdf")};
   }
 
   &:focus {
@@ -95,7 +95,13 @@ const getDaysInWeek = (startOfWeek: Date) => {
   return days;
 };
 
-export function DatePickerWithBubbles() {
+interface DatePickerWithBubblesProps {
+  isEditMode: boolean;
+}
+
+export function DatePickerWithBubbles({
+  isEditMode,
+}: DatePickerWithBubblesProps) {
   // State to store the currently selected date in the DatePicker
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   // State to store the currently selected day of the week
@@ -140,11 +146,12 @@ export function DatePickerWithBubbles() {
         }}
         dateFormat="MMMM d, yyyy"
         showWeekNumbers
-        customInput={<CustomDatePickerInput />}
+        customInput={<CustomDatePickerInput disabled={isEditMode} />}
         placeholderText={weekRange}
+        disabled={isEditMode}
       />
       <DayBubbleContainer>
-        <ArrowButton onClick={handlePrevWeek}>
+        <ArrowButton onClick={handlePrevWeek} disabled={isEditMode}>
           <FontAwesomeIcon icon={faChevronLeft} />
         </ArrowButton>
         {daysInWeek.map((day, index) => (
@@ -153,9 +160,10 @@ export function DatePickerWithBubbles() {
             selected={index === selectedDay}
             onClick={() => setSelectedDay(index)}
             date={day}
+            isEditMode={isEditMode} // Pass isEditMode to DayBubble
           />
         ))}
-        <ArrowButton onClick={handleNextWeek}>
+        <ArrowButton onClick={handleNextWeek} disabled={isEditMode}>
           <FontAwesomeIcon icon={faChevronRight} />
         </ArrowButton>
       </DayBubbleContainer>
