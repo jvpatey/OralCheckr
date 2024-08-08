@@ -18,6 +18,13 @@ const DayBubbleStyled = styled.div<{ selected: boolean; isEditMode: boolean }>`
     background-color: ${({ isEditMode }) => (isEditMode ? "#ccc" : "#3f93b2")};
     transform: ${({ isEditMode }) => (isEditMode ? "none" : "scale(1.05)")};
   }
+
+  @media (max-width: 768px) {
+    width: 35px;
+    height: 35px;
+    font-size: 12px;
+    margin: 2px;
+  }
 `;
 
 interface DayBubbleProps {

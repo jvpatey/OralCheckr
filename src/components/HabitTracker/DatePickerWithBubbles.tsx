@@ -46,6 +46,11 @@ const CustomDatePickerInput = styled.input<{ disabled: boolean }>`
     outline: none;
     box-shadow: 0 0 3px 2px rgba(53, 122, 150, 0.5);
   }
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 4px 6px;
+  }
 `;
 
 // Styled component for the arrow buttons
@@ -160,7 +165,7 @@ export function DatePickerWithBubbles({
             selected={index === selectedDay}
             onClick={() => setSelectedDay(index)}
             date={day}
-            isEditMode={isEditMode} // Pass isEditMode to DayBubble
+            isEditMode={isEditMode}
           />
         ))}
         <ArrowButton onClick={handleNextWeek} disabled={isEditMode}>

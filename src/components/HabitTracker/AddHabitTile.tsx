@@ -25,7 +25,8 @@ const AddTileContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: auto;
+    padding: 0 12px;
+    height: 35px;
   }
 `;
 
@@ -35,6 +36,16 @@ const HabitName = styled.div`
   align-items: center;
   justify-content: center;
   margin-left: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    margin-left: 5px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+    margin-left: 3px;
+  }
 `;
 
 const AddIcon = styled.div`
@@ -42,6 +53,14 @@ const AddIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 interface AddHabitTileProps {

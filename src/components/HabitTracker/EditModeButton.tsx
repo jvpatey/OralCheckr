@@ -26,7 +26,8 @@ const EditTileContainer = styled.div<{ isEditMode: boolean }>`
   }
 
   @media (max-width: 768px) {
-    width: auto;
+    padding: 0 12px;
+    height: 35px;
   }
 `;
 
@@ -36,6 +37,11 @@ const ButtonLabel = styled.div`
   align-items: center;
   justify-content: center;
   margin-left: 10px;
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+    margin-left: 10px;
+  }
 `;
 
 const EditIcon = styled.div`
@@ -43,6 +49,11 @@ const EditIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+    margin-left: 3px;
+  }
 `;
 
 interface EditModeButtonProps {
