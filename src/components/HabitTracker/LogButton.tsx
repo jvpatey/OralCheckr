@@ -27,7 +27,7 @@ const ButtonContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: auto;
+    width: 45px;
   }
 `;
 

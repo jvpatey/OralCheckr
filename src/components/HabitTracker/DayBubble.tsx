@@ -18,6 +18,12 @@ const Bubble = styled.div<{ selected: boolean }>`
     background-color: #3f93b2;
     transform: scale(1.05);
   }
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    font-size: 12px;
+  }
 `;
 
 interface DayBubbleProps {

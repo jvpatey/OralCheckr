@@ -69,6 +69,12 @@ const ArrowButton = styled.button`
   &:focus {
     outline: none;
   }
+
+  @media (max-width: 768px) {
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+  }
 `;
 
 // Helper function to get the start of the week for a given date
