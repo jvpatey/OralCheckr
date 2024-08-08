@@ -87,6 +87,13 @@ const HabitRow = styled.div`
   width: 100%;
 `;
 
+// Placeholder text when there are no habits
+const PlaceholderText = styled.div`
+  font-size: 18px;
+  color: #848889;
+  margin-top: 20px;
+`;
+
 // Types
 interface Habit {
   name: string;
@@ -215,22 +222,29 @@ export function Habits() {
               <EditModeButton
                 onClick={() => setIsEditMode(!isEditMode)}
                 isEditMode={isEditMode}
+                disabled={!isEditMode && habits.length === 0}
               />
             </HeaderButtons>
           </Header>
           <HabitList>
-            {habits.map((habit, index) => (
-              <HabitRow key={index}>
-                <HabitTile habit={habit} />
-                {isEditMode && (
-                  <>
-                    <EditButton onClick={() => handleEditHabit(index)} />
-                    <DeleteButton onClick={() => handleDeleteHabit(index)} />
-                  </>
-                )}
-                {!isEditMode && <LogButton />}
-              </HabitRow>
-            ))}
+            {habits.length === 0 ? (
+              <PlaceholderText>
+                Add a habit to start tracking your progress!
+              </PlaceholderText>
+            ) : (
+              habits.map((habit, index) => (
+                <HabitRow key={index}>
+                  <HabitTile habit={habit} />
+                  {isEditMode && (
+                    <>
+                      <EditButton onClick={() => handleEditHabit(index)} />
+                      <DeleteButton onClick={() => handleDeleteHabit(index)} />
+                    </>
+                  )}
+                  {!isEditMode && <LogButton />}
+                </HabitRow>
+              ))
+            )}
           </HabitList>
         </HabitWrapper>
       </HabitListContainer>

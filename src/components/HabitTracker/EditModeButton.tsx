@@ -3,9 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 // Styled component styles for the edit button
-const EditTileContainer = styled.div<{ $isEditMode: boolean }>`
-  background-color: ${({ $isEditMode }) =>
-    $isEditMode ? "#e74c3c" : "#f1c232"};
+const EditTileContainer = styled.div<{
+  $isEditMode: boolean;
+  $disabled: boolean;
+}>`
+  background-color: ${({ $isEditMode, $disabled }) =>
+    $disabled ? "#ccc" : $isEditMode ? "#e74c3c" : "#f1c232"};
   color: #ffffff;
   width: auto;
   height: 35px;
@@ -15,15 +18,18 @@ const EditTileContainer = styled.div<{ $isEditMode: boolean }>`
   justify-content: center;
   border-radius: 25px;
   padding: 0 20px;
-  cursor: pointer;
+  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
   transition: box-shadow 0.3s, background-color 0.3s;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: ${({ $disabled }) => ($disabled ? "#ccc" : "#f5f5f5")};
     border: 2px solid
-      ${({ $isEditMode }) => ($isEditMode ? "#e07366" : "#f1c232")};
-    color: ${({ $isEditMode }) => ($isEditMode ? "#e07366" : "#f1c232")};
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      ${({ $isEditMode, $disabled }) =>
+        $disabled ? "#ccc" : $isEditMode ? "#e07366" : "#f1c232"};
+    color: ${({ $isEditMode, $disabled }) =>
+      $disabled ? "#999" : $isEditMode ? "#e07366" : "#f1c232"};
+    box-shadow: ${({ $disabled }) =>
+      $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
   }
 
   @media (max-width: 768px) {
@@ -60,11 +66,20 @@ const EditIcon = styled.div`
 interface EditModeButtonProps {
   onClick: () => void;
   isEditMode: boolean;
+  disabled?: boolean;
 }
 
-export function EditModeButton({ onClick, isEditMode }: EditModeButtonProps) {
+export function EditModeButton({
+  onClick,
+  isEditMode,
+  disabled = false,
+}: EditModeButtonProps) {
   return (
-    <EditTileContainer onClick={onClick} $isEditMode={isEditMode}>
+    <EditTileContainer
+      onClick={disabled ? undefined : onClick}
+      $isEditMode={isEditMode}
+      $disabled={disabled}
+    >
       <EditIcon>
         <FontAwesomeIcon icon={isEditMode ? faTimes : faPencilAlt} />
       </EditIcon>
