@@ -15,12 +15,12 @@ export const StyledModal = styled(Modal)`
   }
 
   .modal-title {
-    color: #07889b;
+    color: #3f93b2;
     font-size: 1.5rem;
   }
 
   .modal-body {
-    color: #222831;
+    color: #3f93b2;
     font-size: 1.2rem;
   }
 `;

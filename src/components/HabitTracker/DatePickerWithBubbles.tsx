@@ -24,6 +24,11 @@ const DayBubbleContainer = styled.div`
   justify-content: center;
   margin-bottom: 20px;
   margin-top: 30px;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-wrap: nowrap;
+  }
 `;
 
 // Styled component for the date picker
@@ -76,8 +81,8 @@ const ArrowButton = styled.button<{ disabled: boolean }>`
   }
 
   @media (max-width: 768px) {
-    width: 25px;
-    height: 25px;
+    width: 10px;
+    height: 30px;
     font-size: 16px;
   }
 `;
