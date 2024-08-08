@@ -12,6 +12,7 @@ import { HabitTile } from "../../components/habittracker/HabitTile";
 import { AddHabitTile } from "../../components/habittracker/AddHabitTile";
 import { StyledModal } from "../../components/styled/Modal";
 import { LogButton } from "../../components/habittracker/LogButton";
+import { EditButton } from "../../components/habittracker/EditButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
@@ -59,6 +60,13 @@ const HeaderText = styled.div`
   font-size: 18px;
   font-weight: bold;
   color: #848889;
+`;
+
+// Container for the buttons in the header
+const HeaderButtons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 
 // Styled component for the date controls
@@ -327,7 +335,6 @@ export function Habits() {
     });
   };
 
-  // Inside the return statement
   return (
     <PageBackground>
       <Sidebar links={links} />
@@ -367,7 +374,10 @@ export function Habits() {
           </DateControlsContainer>
           <Header>
             <HeaderText>My Habits:</HeaderText>
-            <AddHabitTile onAddClick={handleAddHabitClick} />
+            <HeaderButtons>
+              <EditButton />
+              <AddHabitTile onAddClick={handleAddHabitClick} />
+            </HeaderButtons>
           </Header>
           <HabitList>
             {habits.map((habit, index) => (
