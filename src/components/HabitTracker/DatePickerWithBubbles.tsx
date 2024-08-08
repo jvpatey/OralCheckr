@@ -1,5 +1,4 @@
-// DatePickerWithBubbles.tsx
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
@@ -31,12 +30,13 @@ const DayBubbleContainer = styled.div`
   }
 `;
 
-// Styled component for the date picker
-const CustomDatePickerInput = styled.input<{ $disabled: boolean }>`
+// Styled component for the date picker input button
+const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
   background-color: ${({ $disabled }) => ($disabled ? "#e0e0e0" : "#f5f5f5")};
   border: none;
-  color: ${({ $disabled }) => ($disabled ? "#9e9e9e" : "#3f93b2")};
-  border: 2px solid #3f93b2;
+  color: ${({ $disabled }) => ($disabled ? "#3f93b2" : "#3f93b2")};
+  border: ${({ $disabled }) =>
+    $disabled ? "2px solid #f5f5f5" : "2px solid #3f93b2"};
   padding: 8px 12px;
   border-radius: 10px;
   text-align: center;
@@ -44,7 +44,9 @@ const CustomDatePickerInput = styled.input<{ $disabled: boolean }>`
 
   &:hover {
     background-color: ${({ $disabled }) => ($disabled ? "#e0e0e0" : "#3f93b2")};
-    color: ${({ $disabled }) => ($disabled ? "#9e9e9e" : "#f5f5f5")};
+    color: ${({ $disabled }) => ($disabled ? "#3f93b2" : "#f5f5f5")};
+    border: ${({ $disabled }) =>
+      $disabled ? "2px solid #f5f5f5" : "2px solid #f5f5f5"};
   }
 
   &:focus {
@@ -148,6 +150,13 @@ export function DatePickerWithBubbles({
     });
   };
 
+  // Custom input component for the DatePicker
+  const CustomInput = forwardRef(({ onClick }: any, ref: any) => (
+    <CustomDatePickerInput $disabled={isEditMode} onClick={onClick} ref={ref}>
+      {weekRange}
+    </CustomDatePickerInput>
+  ));
+
   return (
     <DateControlsContainer>
       <DatePicker
@@ -157,8 +166,7 @@ export function DatePickerWithBubbles({
         }}
         dateFormat="MMMM d, yyyy"
         showWeekNumbers
-        customInput={<CustomDatePickerInput $disabled={isEditMode} />}
-        placeholderText={weekRange}
+        customInput={<CustomInput />}
         disabled={isEditMode}
       />
       <DayBubbleContainer>
@@ -171,7 +179,7 @@ export function DatePickerWithBubbles({
             selected={index === selectedDay}
             onClick={() => setSelectedDay(index)}
             date={day}
-            isEditMode={isEditMode} // Pass isEditMode to DayBubble
+            isEditMode={isEditMode}
           />
         ))}
         <ArrowButton onClick={handleNextWeek} $disabled={isEditMode}>

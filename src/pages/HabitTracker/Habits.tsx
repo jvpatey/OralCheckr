@@ -55,7 +55,7 @@ const Header = styled.div`
 `;
 
 const HeaderText = styled.div`
-  font-size: 18px;
+  font-size: 25px;
   font-weight: bold;
   color: #848889;
 `;
