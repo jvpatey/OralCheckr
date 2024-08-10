@@ -7,7 +7,7 @@ import { PageBackground } from "../../components/styled/PageBackground";
 import { Sidebar } from "../../components/Sidebar";
 import { links } from "../../common/SidebarLinks";
 import { HabitTile } from "../../components/habittracker/HabitTile";
-import { AddHabitTile } from "../../components/habittracker/AddHabitTile";
+import { AddHabitButton } from "../../components/habittracker/AddHabitButton";
 import { StyledModal } from "../../components/styled/Modal";
 import { EditModeButton } from "../../components/habittracker/EditModeButton";
 import { DatePickerWithBubbles } from "../../components/habittracker/DatePickerWithBubbles";
@@ -248,7 +248,9 @@ export function Habits() {
           <Header>
             <HeaderText>My Habits:</HeaderText>
             <HeaderButtons>
-              {!isEditMode && <AddHabitTile onAddClick={handleAddHabitClick} />}
+              {!isEditMode && (
+                <AddHabitButton onAddClick={handleAddHabitClick} />
+              )}
               <EditModeButton
                 onClick={() => setIsEditMode(!isEditMode)}
                 isEditMode={isEditMode}

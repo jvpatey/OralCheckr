@@ -82,7 +82,7 @@ const HabitName = styled.div`
 const ArrowIconWrapper = styled.div`
   position: absolute;
   bottom: 0px;
-  right: 5px;
+  left: 5px;
   font-size: 12px;
   cursor: pointer;
   color: #07889b;

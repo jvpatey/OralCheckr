@@ -16,7 +16,7 @@ const AddTileContainer = styled.div`
   padding: 0 20px;
   cursor: pointer;
   transition: box-shadow 0.3s, background-color 0.3s;
-  white-space: nowrap; /* Prevents text wrapping */
+  white-space: nowrap;
 
   &:hover {
     background-color: #f5f5f5;
@@ -42,7 +42,7 @@ const HabitName = styled.div`
   align-items: center;
   justify-content: center;
   margin-left: 10px;
-  white-space: nowrap; /* Prevents text wrapping */
+  white-space: nowrap;
 
   @media (max-width: 768px) {
     font-size: 14px;
@@ -74,7 +74,7 @@ interface AddHabitTileProps {
   onAddClick: () => void;
 }
 
-export function AddHabitTile({ onAddClick }: AddHabitTileProps) {
+export function AddHabitButton({ onAddClick }: AddHabitTileProps) {
   return (
     <AddTileContainer onClick={onAddClick}>
       <AddIcon>
