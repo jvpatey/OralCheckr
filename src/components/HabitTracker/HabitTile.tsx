@@ -4,11 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
 
 // Common styles for both sides of the flip card
-const flipCardCommonStyles = css`
+const flipCardCommonStyles = css<{ isComplete: boolean }>`
   background-color: #f5f5f5;
-  color: #3f93b2;
+  color: ${({ isComplete }) => (isComplete ? "#41bc7a" : "#3f93b2")};
   font-weight: 600;
-  border: 2px solid #3f93b2;
+  border: 2px solid ${({ isComplete }) => (isComplete ? "#41bc7a" : "#3f93b2")};
   border-radius: 10px;
   width: 100%;
   height: 100%;
@@ -48,13 +48,14 @@ const TileContainer = styled.div`
 `;
 
 // Styled component for the progress bar
-const ProgressBar = styled.div<{ progress: number }>`
+const ProgressBar = styled.div<{ progress: number; isComplete: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: ${({ progress }) => progress}%;
-  background-color: rgba(63, 147, 178, 0.2);
+  background-color: ${({ isComplete }) =>
+    isComplete ? "rgba(65, 188, 122, 0.2)" : "rgba(63, 147, 178, 0.2)"};
   z-index: 1;
   transition: width 0.3s ease;
 `;
@@ -71,13 +72,13 @@ const FlipCard = styled.div<{ $flipped: boolean }>`
 `;
 
 // Front side of the flip card
-const FlipCardFront = styled.div`
+const FlipCardFront = styled.div<{ isComplete: boolean }>`
   ${flipCardCommonStyles}
   z-index: 2;
 `;
 
 // Back side of the flip card
-const FlipCardBack = styled.div`
+const FlipCardBack = styled.div<{ isComplete: boolean }>`
   ${flipCardCommonStyles}
   transform: rotateX(180deg);
   z-index: 2;
@@ -172,21 +173,24 @@ export function HabitTile({ habit, logCount }: HabitTileProps) {
   // Calculate the progress as a percentage
   const progress = Math.min((logCount / habit.count) * 100, 100);
 
+  // Determine if the habit is complete
+  const isComplete = logCount >= habit.count;
+
   // Handler for flipping the card
   const handleFlip = () => setFlipped(!flipped);
 
   return (
     <TileContainer onClick={handleFlip}>
       <FlipCard $flipped={flipped}>
-        <FlipCardFront>
-          <ProgressBar progress={progress} />
+        <FlipCardFront isComplete={isComplete}>
+          <ProgressBar progress={progress} isComplete={isComplete} />
           <HabitName>{habit.name}</HabitName>
           <LogCountBubble>{logCount}</LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>
         </FlipCardFront>
-        <FlipCardBack>
+        <FlipCardBack isComplete={isComplete}>
           <BackText>
             <div className="label spaced">
               Habit: <span className="value">{habit.name}</span>
