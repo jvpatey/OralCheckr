@@ -16,6 +16,7 @@ const AddTileContainer = styled.div`
   padding: 0 20px;
   cursor: pointer;
   transition: box-shadow 0.3s, background-color 0.3s;
+  white-space: nowrap; /* Prevents text wrapping */
 
   &:hover {
     background-color: #f5f5f5;
@@ -26,10 +27,12 @@ const AddTileContainer = styled.div`
 
   @media (max-width: 768px) {
     padding: 0 15px;
+    font-size: 14px;
   }
 
   @media (max-width: 480px) {
     padding: 0 10px;
+    font-size: 12px;
   }
 `;
 
@@ -39,14 +42,15 @@ const HabitName = styled.div`
   align-items: center;
   justify-content: center;
   margin-left: 10px;
+  white-space: nowrap; /* Prevents text wrapping */
 
   @media (max-width: 768px) {
-    font-size: 12px;
+    font-size: 14px;
     margin-left: 5px;
   }
 
   @media (max-width: 480px) {
-    font-size: 10px;
+    font-size: 12px;
     margin-left: 5px;
   }
 `;
@@ -58,11 +62,11 @@ const AddIcon = styled.div`
   justify-content: center;
 
   @media (max-width: 768px) {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   @media (max-width: 480px) {
-    font-size: 10px;
+    font-size: 12px;
   }
 `;
 

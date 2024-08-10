@@ -20,8 +20,8 @@ import {
 // Styled component for the habit list container
 const HabitListContainer = styled.div`
   width: calc(100% - 190px);
-  height: calc(100vh - 76px);
-  overflow-y: auto;
+  height: calc(100vh - 56px);
+  overflow-y: hidden;
   overflow-x: hidden;
   position: absolute;
   top: 56px;
@@ -33,15 +33,28 @@ const HabitListContainer = styled.div`
   }
 `;
 
+// Container for the scrolling habit list
+const ScrollableHabitList = styled.div`
+  height: calc(100vh - 300px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 0;
+`;
+
 // Wrapper for header and habit list
 const HabitWrapper = styled.div`
-  width: 40%;
+  width: 100%;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 20px 0;
   box-sizing: border-box;
+  padding: 0 20px;
 
   @media (max-width: 768px) {
-    width: 80%;
+    padding: 0 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 10px;
   }
 `;
 
@@ -52,12 +65,19 @@ const Header = styled.div`
   align-items: center;
   padding: 10px 0;
   border-bottom: 1px solid #ccc;
+  width: 100%;
+  white-space: nowrap;
 `;
 
 const HeaderText = styled.div`
   font-size: 25px;
   font-weight: bold;
   color: #848889;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 // Container for the buttons in the header
@@ -65,6 +85,11 @@ const HeaderButtons = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    gap: 8px;
+  }
 `;
 
 // Styled component for the list of entered habits
@@ -73,7 +98,6 @@ const HabitList = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 20px 0;
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -91,6 +115,10 @@ const HabitRow = styled.div`
 const PlaceholderText = styled.div`
   font-size: 18px;
   color: #848889;
+  margin-top: 20px;
+`;
+
+const DatePickerWrapper = styled.div`
   margin-top: 20px;
 `;
 
@@ -214,7 +242,9 @@ export function Habits() {
       <Sidebar links={links} />
       <HabitListContainer>
         <HabitWrapper>
-          <DatePickerWithBubbles isEditMode={isEditMode} />
+          <DatePickerWrapper>
+            <DatePickerWithBubbles isEditMode={isEditMode} />
+          </DatePickerWrapper>
           <Header>
             <HeaderText>My Habits:</HeaderText>
             <HeaderButtons>
@@ -226,26 +256,30 @@ export function Habits() {
               />
             </HeaderButtons>
           </Header>
-          <HabitList>
-            {habits.length === 0 ? (
-              <PlaceholderText>
-                Add a habit to start tracking your progress!
-              </PlaceholderText>
-            ) : (
-              habits.map((habit, index) => (
-                <HabitRow key={index}>
-                  <HabitTile habit={habit} />
-                  {isEditMode && (
-                    <>
-                      <EditButton onClick={() => handleEditHabit(index)} />
-                      <DeleteButton onClick={() => handleDeleteHabit(index)} />
-                    </>
-                  )}
-                  {!isEditMode && <LogButton />}
-                </HabitRow>
-              ))
-            )}
-          </HabitList>
+          <ScrollableHabitList>
+            <HabitList>
+              {habits.length === 0 ? (
+                <PlaceholderText>
+                  Add a habit to start tracking your progress!
+                </PlaceholderText>
+              ) : (
+                habits.map((habit, index) => (
+                  <HabitRow key={index}>
+                    <HabitTile habit={habit} />
+                    {isEditMode && (
+                      <>
+                        <EditButton onClick={() => handleEditHabit(index)} />
+                        <DeleteButton
+                          onClick={() => handleDeleteHabit(index)}
+                        />
+                      </>
+                    )}
+                    {!isEditMode && <LogButton />}
+                  </HabitRow>
+                ))
+              )}
+            </HabitList>
+          </ScrollableHabitList>
         </HabitWrapper>
       </HabitListContainer>
 
