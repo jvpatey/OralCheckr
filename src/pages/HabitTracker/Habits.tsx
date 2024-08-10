@@ -9,7 +9,7 @@ import { HabitTile } from "../../components/habittracker/HabitTile";
 import { AddHabitButton } from "../../components/habittracker/AddHabitButton";
 import { StyledModal } from "../../components/styled/Modal";
 import { EditModeButton } from "../../components/habittracker/EditModeButton";
-import { DatePickerWithBubbles } from "../../components/habittracker/DatePickerWithBubbles";
+import { DateRangePicker } from "../../components/habittracker/DateRangePicker";
 import { LogButton } from "../../components/habittracker/LogButton";
 import { EditButton } from "../../components/habittracker/EditButton";
 import { DeleteButton } from "../../components/habittracker/DeleteButton";
@@ -328,7 +328,7 @@ export function Habits() {
       <HabitListContainer>
         <HabitWrapper>
           <DatePickerWrapper>
-            <DatePickerWithBubbles
+            <DateRangePicker
               isEditMode={isEditMode}
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}

@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
+  faCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
 import { DayBubble } from "./DayBubble";
 
@@ -14,10 +15,16 @@ const DateControlsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
 `;
 
-// Styled component for the container of the date bubbles
+// Styled component for the container of the date picker and today button
+const DatePickerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+// Styled component for the date bubbles container
 const DayBubbleContainer = styled.div`
   display: flex;
   align-items: center;
@@ -90,6 +97,31 @@ const ArrowButton = styled.button<{ $disabled: boolean }>`
   }
 `;
 
+// Styled component for the "Today" button
+const TodayButton = styled.button<{ $disabled: boolean }>`
+  background-color: ${({ $disabled }) => ($disabled ? "#e0e0e0" : "#f5f5f5")};
+  border: 2px solid ${({ $disabled }) => ($disabled ? "#ccc" : "#41bc7a")};
+  color: ${({ $disabled }) => ($disabled ? "#ccc" : "#41bc7a")};
+  font-size: 14px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
+  margin-left: 10px;
+
+  &:hover {
+    background-color: ${({ $disabled }) => ($disabled ? "#e0e0e0" : "#41bc7a")};
+    border: 2px solid ${({ $disabled }) => ($disabled ? "#ccc" : "#41bc7a")};
+    color: ${({ $disabled }) => ($disabled ? "#ccc" : "#f5f5f5")};
+    box-shadow: ${({ $disabled }) =>
+      $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 3px 2px rgba(53, 122, 150, 0.5);
+  }
+`;
+
 // Helper function to calculate the start of the week for a given date
 const getStartOfWeek = (date: Date) => {
   const startOfWeek = new Date(date);
@@ -114,7 +146,7 @@ interface DatePickerWithBubblesProps {
   setSelectedDate: (date: Date) => void;
 }
 
-export function DatePickerWithBubbles({
+export function DateRangePicker({
   isEditMode,
   selectedDate,
   setSelectedDate,
@@ -159,6 +191,13 @@ export function DatePickerWithBubbles({
     setSelectedDay(dayIndex);
   };
 
+  // Handler for resetting to the current date
+  const handleTodayClick = () => {
+    const today = new Date();
+    setSelectedDate(today);
+    setSelectedDay(today.getDay());
+  };
+
   // Custom input component for the DatePicker
   const CustomInput = forwardRef(({ onClick }: any, ref: any) => (
     <CustomDatePickerInput $disabled={isEditMode} onClick={onClick} ref={ref}>
@@ -168,16 +207,32 @@ export function DatePickerWithBubbles({
 
   return (
     <DateControlsContainer>
-      <DatePicker
-        selected={selectedDate}
-        onChange={(date: Date | null) => {
-          if (date) setSelectedDate(date);
-        }}
-        dateFormat="MMMM d, yyyy"
-        showWeekNumbers
-        customInput={<CustomInput />}
-        disabled={isEditMode}
-      />
+      {/* Wrapper to position the DatePicker and Today button inline */}
+      <DatePickerWrapper>
+        <DatePicker
+          selected={selectedDate}
+          onChange={(date: Date | null) => {
+            if (date) setSelectedDate(date);
+          }}
+          dateFormat="MMMM d, yyyy"
+          showWeekNumbers
+          customInput={<CustomInput />}
+          disabled={isEditMode}
+        />
+        {/* Today button to reset to the current date */}
+        <TodayButton
+          onClick={handleTodayClick}
+          $disabled={isEditMode}
+          disabled={isEditMode}
+        >
+          <FontAwesomeIcon
+            icon={faCalendarDay}
+            style={{ marginRight: "5px" }}
+          />
+          Today
+        </TodayButton>
+      </DatePickerWrapper>
+      {/* Container for day bubbles and navigation arrows */}
       <DayBubbleContainer>
         <ArrowButton onClick={handlePrevWeek} $disabled={isEditMode}>
           <FontAwesomeIcon icon={faChevronLeft} />
