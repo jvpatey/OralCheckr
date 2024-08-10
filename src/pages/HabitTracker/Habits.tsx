@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Modal, Button, Form } from "react-bootstrap";
 import _ from "lodash";
 import { PageBackground } from "../../components/styled/PageBackground";
@@ -15,6 +15,18 @@ import { EditButton } from "../../components/habittracker/EditButton";
 import { DeleteButton } from "../../components/habittracker/DeleteButton";
 import { RemoveLogButton } from "../../components/habittracker/RemoveLogButton";
 
+// Define the keyframes for the fade-up animation
+const fadeUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 // Styled component for the habit list container
 const HabitListContainer = styled.div`
   width: calc(100% - 190px);
@@ -24,6 +36,7 @@ const HabitListContainer = styled.div`
   position: absolute;
   top: 56px;
   left: 190px;
+  animation: ${fadeUp} 1s ease-out;
 
   @media (max-width: 768px) {
     width: calc(100% - 70px);
