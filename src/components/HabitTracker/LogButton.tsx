@@ -64,9 +64,19 @@ const ButtonIcon = styled.div`
   justify-content: center;
 `;
 
-export function LogButton() {
+interface LogButtonProps {
+  habitName: string;
+  selectedDate: Date;
+  onLog: (habitName: string, selectedDate: Date) => void;
+}
+
+export function LogButton({ habitName, selectedDate, onLog }: LogButtonProps) {
+  const handleLogClick = () => {
+    onLog(habitName, selectedDate);
+  };
+
   return (
-    <ButtonContainer>
+    <ButtonContainer onClick={handleLogClick}>
       <ButtonIcon>
         <FontAwesomeIcon icon={faClipboardCheck} />
       </ButtonIcon>

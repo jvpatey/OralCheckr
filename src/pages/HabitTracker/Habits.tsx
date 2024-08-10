@@ -1,4 +1,3 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Modal, Button, Form } from "react-bootstrap";
@@ -12,9 +11,9 @@ import { StyledModal } from "../../components/styled/Modal";
 import { EditModeButton } from "../../components/habittracker/EditModeButton";
 import { DatePickerWithBubbles } from "../../components/habittracker/DatePickerWithBubbles";
 import {
+  LogButton,
   EditButton,
   DeleteButton,
-  LogButton,
 } from "../../components/habittracker/LogButton";
 
 // Styled component for the habit list container
@@ -148,11 +147,23 @@ export function Habits() {
   // State to control the edit mode
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
-  // Load habits from local storage when the component mounts
+  // State to store the currently selected date in the DatePicker
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+  // State to store the logged data
+  const [logging, setLogging] = useState<any>({});
+
+  // Load habits and logging from local storage when the component mounts
   useEffect(() => {
     const storedHabits = localStorage.getItem("habits");
+    const storedLogging = localStorage.getItem("logging");
+
     if (storedHabits) {
       setHabits(JSON.parse(storedHabits));
+    }
+
+    if (storedLogging) {
+      setLogging(JSON.parse(storedLogging));
     }
   }, []);
 
@@ -237,13 +248,49 @@ export function Habits() {
     (newHabit.name === originalHabit.name &&
       newHabit.count === originalHabit.count);
 
+  // Handler for logging habit activity
+  const handleLog = (habitName: string, selectedDate: Date) => {
+    const year = selectedDate.getFullYear();
+    const month = selectedDate
+      .toLocaleString("default", { month: "long" })
+      .toLowerCase();
+    const day = selectedDate.getDate();
+
+    const updatedLogging = { ...logging };
+
+    if (!updatedLogging[habitName]) {
+      updatedLogging[habitName] = {};
+    }
+
+    if (!updatedLogging[habitName][year]) {
+      updatedLogging[habitName][year] = {};
+    }
+
+    if (!updatedLogging[habitName][year][month]) {
+      updatedLogging[habitName][year][month] = {};
+    }
+
+    if (!updatedLogging[habitName][year][month][day]) {
+      updatedLogging[habitName][year][month][day] = 0;
+    }
+
+    updatedLogging[habitName][year][month][day] += 1;
+
+    setLogging(updatedLogging);
+    localStorage.setItem("logging", JSON.stringify(updatedLogging));
+  };
+
   return (
     <PageBackground>
       <Sidebar links={links} />
       <HabitListContainer>
         <HabitWrapper>
           <DatePickerWrapper>
-            <DatePickerWithBubbles isEditMode={isEditMode} />
+            <DatePickerWithBubbles
+              isEditMode={isEditMode}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+            />
           </DatePickerWrapper>
           <Header>
             <HeaderText>My Habits:</HeaderText>
@@ -268,15 +315,20 @@ export function Habits() {
                 habits.map((habit, index) => (
                   <HabitRow key={index}>
                     <HabitTile habit={habit} />
-                    {isEditMode && (
+                    {isEditMode ? (
                       <>
                         <EditButton onClick={() => handleEditHabit(index)} />
                         <DeleteButton
                           onClick={() => handleDeleteHabit(index)}
                         />
                       </>
+                    ) : (
+                      <LogButton
+                        habitName={habit.name}
+                        selectedDate={selectedDate}
+                        onLog={handleLog}
+                      />
                     )}
-                    {!isEditMode && <LogButton />}
                   </HabitRow>
                 ))
               )}

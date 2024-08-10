@@ -1,4 +1,4 @@
-import { useState, forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
@@ -110,13 +110,15 @@ const getDaysInWeek = (startOfWeek: Date) => {
 
 interface DatePickerWithBubblesProps {
   isEditMode: boolean;
+  selectedDate: Date;
+  setSelectedDate: (date: Date) => void;
 }
 
 export function DatePickerWithBubbles({
   isEditMode,
+  selectedDate,
+  setSelectedDate,
 }: DatePickerWithBubblesProps) {
-  // State to store the currently selected date in the DatePicker
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   // State to store the currently selected day of the week
   const [selectedDay, setSelectedDay] = useState<number>(new Date().getDay());
 
@@ -135,19 +137,15 @@ export function DatePickerWithBubbles({
 
   // Handler functions for changing the selected date
   const handlePrevWeek = () => {
-    setSelectedDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setDate(prevDate.getDate() - 7);
-      return newDate;
-    });
+    const newDate = new Date(selectedDate);
+    newDate.setDate(selectedDate.getDate() - 7);
+    setSelectedDate(newDate);
   };
 
   const handleNextWeek = () => {
-    setSelectedDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setDate(prevDate.getDate() + 7);
-      return newDate;
-    });
+    const newDate = new Date(selectedDate);
+    newDate.setDate(selectedDate.getDate() + 7);
+    setSelectedDate(newDate);
   };
 
   // Custom input component for the DatePicker
