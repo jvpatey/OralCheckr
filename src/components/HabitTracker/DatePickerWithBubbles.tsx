@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { useState, forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { DayBubble } from "./DayBubble";
 
-// Styled component for the date controls
+// Styled component for the container of the date controls
 const DateControlsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@ const DateControlsContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-// Styled component for the date bubbles container
+// Styled component for the container of the date bubbles
 const DayBubbleContainer = styled.div`
   display: flex;
   align-items: center;
@@ -55,7 +55,7 @@ const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
   }
 `;
 
-// Styled component for the arrow buttons
+// Styled component for the arrow buttons to navigate weeks
 const ArrowButton = styled.button<{ $disabled: boolean }>`
   background: none;
   border: none;
@@ -90,14 +90,14 @@ const ArrowButton = styled.button<{ $disabled: boolean }>`
   }
 `;
 
-// Helper function to get the start of the week for a given date
+// Helper function to calculate the start of the week for a given date
 const getStartOfWeek = (date: Date) => {
   const startOfWeek = new Date(date);
   startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
   return startOfWeek;
 };
 
-// Helper function to get an array of the days in the week
+// Helper function to get an array of days in the current week
 const getDaysInWeek = (startOfWeek: Date) => {
   const days = [];
   for (let i = 0; i < 7; i++) {
@@ -119,14 +119,14 @@ export function DatePickerWithBubbles({
   selectedDate,
   setSelectedDate,
 }: DatePickerWithBubblesProps) {
-  // State to store the currently selected day of the week
-  const [selectedDay, setSelectedDay] = useState<number>(new Date().getDay());
+  // State to track the selected day within the week
+  const [selectedDay, setSelectedDay] = useState<number>(selectedDate.getDay());
 
-  // Get the start of the week and the days in the week
+  // Calculate the start of the week and the days in the week based on the selected date
   const startOfWeek = getStartOfWeek(selectedDate);
   const daysInWeek = getDaysInWeek(startOfWeek);
 
-  // Format the week range
+  // Format the week range for display
   const weekRange = `${startOfWeek.toLocaleDateString("en", {
     month: "short",
     day: "numeric",
@@ -135,17 +135,28 @@ export function DatePickerWithBubbles({
     day: "numeric",
   })}`;
 
-  // Handler functions for changing the selected date
+  // Handler for moving to the previous week
   const handlePrevWeek = () => {
     const newDate = new Date(selectedDate);
     newDate.setDate(selectedDate.getDate() - 7);
     setSelectedDate(newDate);
+    setSelectedDay(newDate.getDay());
   };
 
+  // Handler for moving to the next week
   const handleNextWeek = () => {
     const newDate = new Date(selectedDate);
     newDate.setDate(selectedDate.getDate() + 7);
     setSelectedDate(newDate);
+    setSelectedDay(newDate.getDay());
+  };
+
+  // Handler for clicking on a specific day bubble
+  const handleDayClick = (dayIndex: number) => {
+    const newDate = new Date(startOfWeek);
+    newDate.setDate(startOfWeek.getDate() + dayIndex);
+    setSelectedDate(newDate);
+    setSelectedDay(dayIndex);
   };
 
   // Custom input component for the DatePicker
@@ -175,7 +186,7 @@ export function DatePickerWithBubbles({
           <DayBubble
             key={index}
             selected={index === selectedDay}
-            onClick={() => setSelectedDay(index)}
+            onClick={() => handleDayClick(index)}
             date={day}
             isEditMode={isEditMode}
           />
