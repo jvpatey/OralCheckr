@@ -1,8 +1,21 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { getFullPath } from "../common/Routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+// Fade-in from left animation
+const fadeInLeft = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+// Apply the animation to the sidebar container
 const SidebarContainer = styled.div`
   height: calc(100vh - 56px);
   width: 190px;
@@ -17,6 +30,7 @@ const SidebarContainer = styled.div`
   padding-top: 20px;
   margin-top: 10px;
   border-top-right-radius: 20px;
+  animation: ${fadeInLeft} 1s ease-in-out;
 
   @media (max-width: 768px) {
     width: 70px;
