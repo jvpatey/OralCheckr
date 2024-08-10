@@ -124,14 +124,32 @@ const BackText = styled.div`
   }
 `;
 
+// Styled component for displaying the log count in a bubble
+const LogCountBubble = styled.div`
+  background-color: #f5f5f5;
+  color: #41bc7a;
+  border: 2px solid #41bc7a;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-left: 10px;
+`;
+
 interface HabitTileProps {
   habit: {
     name: string;
     count: number;
   };
+  logCount: number;
 }
 
-export function HabitTile({ habit }: HabitTileProps) {
+export function HabitTile({ habit, logCount }: HabitTileProps) {
   const [flipped, setFlipped] = useState(false);
 
   // Handler for flipping the card
@@ -142,6 +160,7 @@ export function HabitTile({ habit }: HabitTileProps) {
       <FlipCard $flipped={flipped}>
         <FlipCardFront>
           <HabitName>{habit.name}</HabitName>
+          <LogCountBubble>{logCount}</LogCountBubble>{" "}
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>
