@@ -12,7 +12,6 @@ const flipCardCommonStyles = css`
   border-radius: 10px;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -20,6 +19,7 @@ const flipCardCommonStyles = css`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 10px;
   position: absolute;
+  backface-visibility: hidden;
 `;
 
 // Styled component for the tile container
@@ -32,6 +32,7 @@ const TileContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
   transition: box-shadow 0.3s;
+  position: relative;
 
   &:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -44,6 +45,18 @@ const TileContainer = styled.div`
   &:hover .arrow-icon {
     opacity: 1;
   }
+`;
+
+// Styled component for the progress bar
+const ProgressBar = styled.div<{ progress: number }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: ${({ progress }) => progress}%;
+  background-color: rgba(63, 147, 178, 0.2);
+  z-index: 1;
+  transition: width 0.3s ease;
 `;
 
 // Styled component for the flip card with conditional flipping
@@ -60,12 +73,14 @@ const FlipCard = styled.div<{ $flipped: boolean }>`
 // Front side of the flip card
 const FlipCardFront = styled.div`
   ${flipCardCommonStyles}
+  z-index: 2;
 `;
 
 // Back side of the flip card
 const FlipCardBack = styled.div`
   ${flipCardCommonStyles}
   transform: rotateX(180deg);
+  z-index: 2;
 `;
 
 // Styled component for displaying the habit name
@@ -76,6 +91,7 @@ const HabitName = styled.div`
   text-overflow: ellipsis;
   flex: 1;
   text-align: center;
+  z-index: 2;
 `;
 
 // Styled component for the arrow icon
@@ -139,6 +155,7 @@ const LogCountBubble = styled.div`
   justify-content: center;
   text-align: center;
   margin-left: 10px;
+  z-index: 2;
 `;
 
 interface HabitTileProps {
@@ -152,6 +169,9 @@ interface HabitTileProps {
 export function HabitTile({ habit, logCount }: HabitTileProps) {
   const [flipped, setFlipped] = useState(false);
 
+  // Calculate the progress as a percentage
+  const progress = Math.min((logCount / habit.count) * 100, 100);
+
   // Handler for flipping the card
   const handleFlip = () => setFlipped(!flipped);
 
@@ -159,8 +179,9 @@ export function HabitTile({ habit, logCount }: HabitTileProps) {
     <TileContainer onClick={handleFlip}>
       <FlipCard $flipped={flipped}>
         <FlipCardFront>
+          <ProgressBar progress={progress} />
           <HabitName>{habit.name}</HabitName>
-          <LogCountBubble>{logCount}</LogCountBubble>{" "}
+          <LogCountBubble>{logCount}</LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>
