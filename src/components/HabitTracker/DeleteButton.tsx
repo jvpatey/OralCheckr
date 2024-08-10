@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
-const ButtonContainer = styled.div`
+const DeleteButtonContainer = styled.div`
   background-color: #f5f5f5;
-  border: 2px solid #41bc7a;
-  color: #41bc7a;
+  border: 2px solid #e74c3c;
+  color: #e74c3c;
   width: 50px;
   height: 45px;
   display: flex;
@@ -19,8 +19,8 @@ const ButtonContainer = styled.div`
   transition: box-shadow 0.3s, background-color 0.3s;
 
   &:hover {
-    background-color: #41bc7a;
-    border: 2px solid #41bc7a;
+    background-color: #e74c3c;
+    border: 2px solid #e74c3c;
     color: #f5f5f5;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
@@ -37,22 +37,12 @@ const ButtonIcon = styled.div`
   justify-content: center;
 `;
 
-interface LogButtonProps {
-  habitName: string;
-  selectedDate: Date;
-  onLog: (habitName: string, selectedDate: Date) => void;
-}
-
-export function LogButton({ habitName, selectedDate, onLog }: LogButtonProps) {
-  const handleLogClick = () => {
-    onLog(habitName, selectedDate);
-  };
-
+export function DeleteButton({ onClick }: { onClick: () => void }) {
   return (
-    <ButtonContainer onClick={handleLogClick}>
+    <DeleteButtonContainer onClick={onClick}>
       <ButtonIcon>
-        <FontAwesomeIcon icon={faPlusCircle} />
+        <FontAwesomeIcon icon={faTrashAlt} />
       </ButtonIcon>
-    </ButtonContainer>
+    </DeleteButtonContainer>
   );
 }

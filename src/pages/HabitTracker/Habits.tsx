@@ -10,11 +10,10 @@ import { AddHabitButton } from "../../components/habittracker/AddHabitButton";
 import { StyledModal } from "../../components/styled/Modal";
 import { EditModeButton } from "../../components/habittracker/EditModeButton";
 import { DatePickerWithBubbles } from "../../components/habittracker/DatePickerWithBubbles";
-import {
-  LogButton,
-  EditButton,
-  DeleteButton,
-} from "../../components/habittracker/LogButton";
+import { LogButton } from "../../components/habittracker/LogButton";
+import { EditButton } from "../../components/habittracker/EditButton";
+import { DeleteButton } from "../../components/habittracker/DeleteButton";
+import { RemoveLogButton } from "../../components/habittracker/RemoveLogButton";
 
 // Styled component for the habit list container
 const HabitListContainer = styled.div`
@@ -280,6 +279,49 @@ export function Habits() {
     localStorage.setItem("logging", JSON.stringify(updatedLogging));
   };
 
+  // Handler for removing a log
+  const handleRemoveLog = (habitName: string, selectedDate: Date) => {
+    const year = selectedDate.getFullYear();
+    const month = selectedDate
+      .toLocaleString("default", { month: "long" })
+      .toLowerCase();
+    const day = selectedDate.getDate();
+
+    const updatedLogging = { ...logging };
+
+    if (
+      updatedLogging[habitName] &&
+      updatedLogging[habitName][year] &&
+      updatedLogging[habitName][year][month] &&
+      updatedLogging[habitName][year][month][day] > 0
+    ) {
+      updatedLogging[habitName][year][month][day] -= 1;
+
+      if (updatedLogging[habitName][year][month][day] === 0) {
+        delete updatedLogging[habitName][year][month][day];
+      }
+
+      setLogging(updatedLogging);
+      localStorage.setItem("logging", JSON.stringify(updatedLogging));
+    }
+  };
+
+  // Determine if the Remove Log button should be disabled
+  const isRemoveLogDisabled = (habitName: string, selectedDate: Date) => {
+    const year = selectedDate.getFullYear();
+    const month = selectedDate
+      .toLocaleString("default", { month: "long" })
+      .toLowerCase();
+    const day = selectedDate.getDate();
+
+    return !(
+      logging[habitName] &&
+      logging[habitName][year] &&
+      logging[habitName][year][month] &&
+      logging[habitName][year][month][day] > 0
+    );
+  };
+
   return (
     <PageBackground>
       <Sidebar links={links} />
@@ -323,11 +365,22 @@ export function Habits() {
                         />
                       </>
                     ) : (
-                      <LogButton
-                        habitName={habit.name}
-                        selectedDate={selectedDate}
-                        onLog={handleLog}
-                      />
+                      <>
+                        <LogButton
+                          habitName={habit.name}
+                          selectedDate={selectedDate}
+                          onLog={handleLog}
+                        />
+                        <RemoveLogButton
+                          habitName={habit.name}
+                          selectedDate={selectedDate}
+                          onRemoveLog={handleRemoveLog}
+                          disabled={isRemoveLogDisabled(
+                            habit.name,
+                            selectedDate
+                          )}
+                        />
+                      </>
                     )}
                   </HabitRow>
                 ))
