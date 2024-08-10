@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSync } from "@fortawesome/free-solid-svg-icons";
+import { faSync, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 // Common styles for both sides of the flip card
 const flipCardCommonStyles = css<{ isComplete: boolean }>`
@@ -148,7 +148,7 @@ const LogCountBubble = styled.div`
   border: 2px solid #41bc7a;
   font-weight: bold;
   font-size: 14px;
-  border-radius: 50%;
+  border-radius: 10px;
   width: 30px;
   height: 30px;
   display: flex;
@@ -185,7 +185,9 @@ export function HabitTile({ habit, logCount }: HabitTileProps) {
         <FlipCardFront isComplete={isComplete}>
           <ProgressBar progress={progress} isComplete={isComplete} />
           <HabitName>{habit.name}</HabitName>
-          <LogCountBubble>{logCount}</LogCountBubble>
+          <LogCountBubble>
+            {isComplete ? <FontAwesomeIcon icon={faCheck} /> : logCount}
+          </LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>
@@ -199,6 +201,9 @@ export function HabitTile({ habit, logCount }: HabitTileProps) {
               Count (times/day): <span className="value">{habit.count}</span>
             </div>
           </BackText>
+          <LogCountBubble>
+            {isComplete ? <FontAwesomeIcon icon={faCheck} /> : logCount}
+          </LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>
