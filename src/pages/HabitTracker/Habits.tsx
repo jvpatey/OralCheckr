@@ -335,6 +335,51 @@ export function Habits() {
     );
   };
 
+  // Function to render the habit list
+  const renderHabits = () => {
+    return habits.map((habit, index) => {
+      const year = selectedDate.getFullYear();
+      const month = selectedDate
+        .toLocaleString("default", { month: "long" })
+        .toLowerCase();
+      const day = selectedDate.getDate();
+
+      const logCount =
+        logging[habit.name] &&
+        logging[habit.name][year] &&
+        logging[habit.name][year][month] &&
+        logging[habit.name][year][month][day]
+          ? logging[habit.name][year][month][day]
+          : 0;
+
+      return (
+        <HabitRow key={index}>
+          <HabitTile habit={habit} logCount={logCount} />
+          {isEditMode ? (
+            <>
+              <EditButton onClick={() => handleEditHabit(index)} />
+              <DeleteButton onClick={() => handleDeleteHabit(index)} />
+            </>
+          ) : (
+            <>
+              <LogButton
+                habitName={habit.name}
+                selectedDate={selectedDate}
+                onLog={handleLog}
+              />
+              <RemoveLogButton
+                habitName={habit.name}
+                selectedDate={selectedDate}
+                onRemoveLog={handleRemoveLog}
+                disabled={isRemoveLogDisabled(habit.name, selectedDate)}
+              />
+            </>
+          )}
+        </HabitRow>
+      );
+    });
+  };
+
   return (
     <PageBackground>
       <Sidebar links={links} />
@@ -367,52 +412,7 @@ export function Habits() {
                   Add a habit to start tracking your progress!
                 </PlaceholderText>
               ) : (
-                habits.map((habit, index) => {
-                  const year = selectedDate.getFullYear();
-                  const month = selectedDate
-                    .toLocaleString("default", { month: "long" })
-                    .toLowerCase();
-                  const day = selectedDate.getDate();
-
-                  const logCount =
-                    logging[habit.name] &&
-                    logging[habit.name][year] &&
-                    logging[habit.name][year][month] &&
-                    logging[habit.name][year][month][day]
-                      ? logging[habit.name][year][month][day]
-                      : 0;
-
-                  return (
-                    <HabitRow key={index}>
-                      <HabitTile habit={habit} logCount={logCount} />
-                      {isEditMode ? (
-                        <>
-                          <EditButton onClick={() => handleEditHabit(index)} />
-                          <DeleteButton
-                            onClick={() => handleDeleteHabit(index)}
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <LogButton
-                            habitName={habit.name}
-                            selectedDate={selectedDate}
-                            onLog={handleLog}
-                          />
-                          <RemoveLogButton
-                            habitName={habit.name}
-                            selectedDate={selectedDate}
-                            onRemoveLog={handleRemoveLog}
-                            disabled={isRemoveLogDisabled(
-                              habit.name,
-                              selectedDate
-                            )}
-                          />
-                        </>
-                      )}
-                    </HabitRow>
-                  );
-                })
+                renderHabits()
               )}
             </HabitList>
           </ScrollableHabitList>
