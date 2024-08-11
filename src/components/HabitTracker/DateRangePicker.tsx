@@ -140,7 +140,7 @@ const getDaysInWeek = (startOfWeek: Date) => {
   return days;
 };
 
-interface DatePickerWithBubblesProps {
+interface DateRangePickerProps {
   isEditMode: boolean;
   selectedDate: Date;
   setSelectedDate: (date: Date) => void;
@@ -150,7 +150,7 @@ export function DateRangePicker({
   isEditMode,
   selectedDate,
   setSelectedDate,
-}: DatePickerWithBubblesProps) {
+}: DateRangePickerProps) {
   // State to track the selected day within the week
   const [selectedDay, setSelectedDay] = useState<number>(selectedDate.getDay());
 
@@ -207,7 +207,6 @@ export function DateRangePicker({
 
   return (
     <DateControlsContainer>
-      {/* Wrapper to position the DatePicker and Today button inline */}
       <DatePickerWrapper>
         <DatePicker
           selected={selectedDate}
