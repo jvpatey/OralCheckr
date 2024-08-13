@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
 import { Modal, Button, Form } from "react-bootstrap";
 import _ from "lodash";
 import { PageBackground } from "../../components/styled/PageBackground";
@@ -15,6 +14,18 @@ import { EditButton } from "../../components/habittracker/EditButton";
 import { DeleteButton } from "../../components/habittracker/DeleteButton";
 import { RemoveLogButton } from "../../components/habittracker/RemoveLogButton";
 import { LocalStorage } from "../../common/local-storage";
+import {
+  HabitListContainer,
+  ScrollableHabitList,
+  HabitWrapper,
+  Header,
+  HeaderText,
+  HeaderButtons,
+  HabitList,
+  HabitRow,
+  PlaceholderText,
+  DatePickerWrapper,
+} from "../../components/habittracker/habit-components";
 
 // Utility function to update habit data in state and localStorage
 const updateHabits = (
@@ -90,124 +101,6 @@ const manageLogging = (
 
   updateLogging(updatedLogging, setLogging);
 };
-
-// Define the keyframes for the fade-up animation
-const fadeUp = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-// Styled component for the habit list container
-const HabitListContainer = styled.div`
-  width: calc(100% - 190px);
-  height: calc(100vh - 56px);
-  overflow-y: hidden;
-  overflow-x: hidden;
-  position: absolute;
-  top: 56px;
-  left: 190px;
-  animation: ${fadeUp} 1s ease-out;
-
-  @media (max-width: 768px) {
-    width: calc(100% - 70px);
-    left: 70px;
-  }
-`;
-
-// Container for the scrolling habit list
-const ScrollableHabitList = styled.div`
-  height: calc(100vh - 300px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 20px 0;
-`;
-
-// Wrapper for header and habit list
-const HabitWrapper = styled.div`
-  width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
-  box-sizing: border-box;
-  padding: 0 20px;
-
-  @media (max-width: 768px) {
-    padding: 0 15px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0 10px;
-  }
-`;
-
-// Styled component for the header containing the "Add Habit" button
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #ccc;
-  width: 100%;
-  white-space: nowrap;
-`;
-
-const HeaderText = styled.div`
-  font-size: 25px;
-  font-weight: bold;
-  color: #848889;
-  white-space: nowrap;
-
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
-`;
-
-// Container for the buttons in the header
-const HeaderButtons = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  white-space: nowrap;
-
-  @media (max-width: 768px) {
-    gap: 8px;
-  }
-`;
-
-// Styled component for the list of entered habits
-const HabitList = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
-`;
-
-// Styled component for row containing the habit tile and log button
-const HabitRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-// Placeholder text when there are no habits
-const PlaceholderText = styled.div`
-  font-size: 18px;
-  color: #848889;
-  margin-top: 20px;
-`;
-
-const DatePickerWrapper = styled.div`
-  margin-top: 20px;
-`;
 
 // Types
 interface Habit {
