@@ -69,26 +69,13 @@ const manageLogging = (
 
   const updatedLogging = { ...logging };
 
-  // Initialize logging structure if it doesn't exist
-  if (!updatedLogging[habitName]) {
-    updatedLogging[habitName] = {};
-  }
-  if (!updatedLogging[habitName][year]) {
-    updatedLogging[habitName][year] = {};
-  }
-  if (!updatedLogging[habitName][year][month]) {
-    updatedLogging[habitName][year][month] = {};
-  }
-  if (!updatedLogging[habitName][year][month][day]) {
-    updatedLogging[habitName][year][month][day] = 0;
-  }
-
   // Add or remove log based on action
   if (action === "add") {
-    updatedLogging[habitName][year][month][day] += 1;
+    updatedLogging[habitName][year][month][day] =
+      (updatedLogging[habitName]?.[year]?.[month]?.[day] || 0) + 1;
   } else if (
     action === "remove" &&
-    updatedLogging[habitName][year][month][day] > 0
+    updatedLogging[habitName]?.[year]?.[month]?.[day] > 0
   ) {
     updatedLogging[habitName][year][month][day] -= 1;
 
