@@ -225,22 +225,18 @@ interface Logging {
 }
 
 export function Habits() {
-  // State to store the list of habits
   const [habits, setHabits] = useState<Habit[]>([]);
-  // State to control the visibility of the add habit modal
   const [showAddHabitModal, setShowAddHabitModal] = useState<boolean>(false);
-  // State to store the new habit being added or edited
   const [newHabit, setNewHabit] = useState<Habit>({ name: "", count: 0 });
   // State to store the original habit values when editing
   const [originalHabit, setOriginalHabit] = useState<Habit>({
     name: "",
     count: 0,
   });
-  // State to control the edit mode
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   // State to store the currently selected date in the DatePicker
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  // State to store the logged data
+  // State to store data when a habit is logged
   const [logging, setLogging] = useState<Logging>({});
 
   // Load habits and logging from local storage when the component mounts
