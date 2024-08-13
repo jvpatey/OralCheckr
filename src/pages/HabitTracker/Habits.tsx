@@ -217,8 +217,8 @@ interface Habit {
 export function Habits() {
   // State to store the list of habits
   const [habits, setHabits] = useState<Habit[]>([]);
-  // State to control the visibility of the modal
-  const [showModal, setShowModal] = useState<boolean>(false);
+  // State to control the visibility of the add habit modal
+  const [showAddHabitModal, setShowAddHabitModal] = useState<boolean>(false);
   // State to store the new habit being added or edited
   const [newHabit, setNewHabit] = useState<Habit>({ name: "", count: 0 });
   // State to store the original habit values when editing
@@ -249,7 +249,7 @@ export function Habits() {
 
   // Handler for showing the add habit modal
   const handleAddHabitClick = () => {
-    setShowModal(true);
+    setShowAddHabitModal(true);
     resetHabitForm(setNewHabit, setOriginalHabit);
   };
 
@@ -268,14 +268,14 @@ export function Habits() {
         updatedHabits.push(newHabit);
       }
       updateHabits(updatedHabits, setHabits);
-      setShowModal(false);
+      setShowAddHabitModal(false);
       resetHabitForm(setNewHabit, setOriginalHabit);
     }
   };
 
   // Handler for closing the modal without saving
   const handleCloseModal = () => {
-    setShowModal(false);
+    setShowAddHabitModal(false);
     resetHabitForm(setNewHabit, setOriginalHabit);
   };
 
@@ -293,7 +293,7 @@ export function Habits() {
     if (habitToEdit) {
       setNewHabit(habitToEdit);
       setOriginalHabit(habitToEdit);
-      setShowModal(true);
+      setShowAddHabitModal(true);
     }
   };
 
@@ -428,7 +428,7 @@ export function Habits() {
         </HabitWrapper>
       </HabitListContainer>
 
-      <StyledModal show={showModal} onHide={handleCloseModal}>
+      <StyledModal show={showAddHabitModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>
             {originalHabit.name ? "Edit a Habit" : "Add a New Habit"}
