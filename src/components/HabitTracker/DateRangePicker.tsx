@@ -214,7 +214,8 @@ export function DateRangePicker({
             if (date) setSelectedDate(date);
           }}
           dateFormat="MMMM d, yyyy"
-          showWeekNumbers
+          showWeekNumbers={false}
+          highlightDates={daysInWeek}
           customInput={<CustomInput />}
           disabled={isEditMode}
         />
