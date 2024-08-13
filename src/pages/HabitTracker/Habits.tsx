@@ -238,7 +238,7 @@ export function Habits() {
   // State to store the currently selected date in the DatePicker
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   // State to store data when a habit is logged
-  const [logging, setLogging] = useState<Logging>({});
+  const [habitsLog, setHabitsLog] = useState<Logging>({});
 
   // Load habits and logging from local storage when the component mounts
   useEffect(() => {
@@ -250,7 +250,7 @@ export function Habits() {
     }
 
     if (storedLogging) {
-      setLogging(JSON.parse(storedLogging));
+      setHabitsLog(JSON.parse(storedLogging));
     }
   }, []);
 
@@ -320,12 +320,12 @@ export function Habits() {
 
   // Handler for logging habit activity
   const handleLog = (habitName: string, selectedDate: Date) => {
-    manageLogging(habitName, selectedDate, logging, setLogging, "add");
+    manageLogging(habitName, selectedDate, habitsLog, setHabitsLog, "add");
   };
 
   // Handler for removing a log
   const handleRemoveLog = (habitName: string, selectedDate: Date) => {
-    manageLogging(habitName, selectedDate, logging, setLogging, "remove");
+    manageLogging(habitName, selectedDate, habitsLog, setHabitsLog, "remove");
   };
 
   // Determine if the Remove Log button should be disabled
@@ -337,10 +337,10 @@ export function Habits() {
     const day = selectedDate.getDate();
 
     return !(
-      logging[habitName] &&
-      logging[habitName][year] &&
-      logging[habitName][year][month] &&
-      logging[habitName][year][month][day] > 0
+      habitsLog[habitName] &&
+      habitsLog[habitName][year] &&
+      habitsLog[habitName][year][month] &&
+      habitsLog[habitName][year][month][day] > 0
     );
   };
 
@@ -361,11 +361,11 @@ export function Habits() {
       const day = selectedDate.getDate();
 
       const logCount =
-        logging[habit.name] &&
-        logging[habit.name][year] &&
-        logging[habit.name][year][month] &&
-        logging[habit.name][year][month][day]
-          ? logging[habit.name][year][month][day]
+        habitsLog[habit.name] &&
+        habitsLog[habit.name][year] &&
+        habitsLog[habit.name][year][month] &&
+        habitsLog[habit.name][year][month][day]
+          ? habitsLog[habit.name][year][month][day]
           : 0;
 
       return (
