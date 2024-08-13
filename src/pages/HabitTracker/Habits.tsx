@@ -14,6 +14,7 @@ import { LogButton } from "../../components/habittracker/LogButton";
 import { EditButton } from "../../components/habittracker/EditButton";
 import { DeleteButton } from "../../components/habittracker/DeleteButton";
 import { RemoveLogButton } from "../../components/habittracker/RemoveLogButton";
+import { LocalStorage } from "../../common/local-storage";
 
 // Utility function to update habit data in state and localStorage
 const updateHabits = (
@@ -21,16 +22,16 @@ const updateHabits = (
   setHabits: (habits: Habit[]) => void
 ) => {
   setHabits(updatedHabits);
-  localStorage.setItem("habits", JSON.stringify(updatedHabits));
+  localStorage.setItem(LocalStorage.HABITS, JSON.stringify(updatedHabits));
 };
 
 // Utility function to update logging data in state and localStorage
 const updateLogging = (
-  updatedLogging: any,
-  setLogging: (logging: any) => void
+  updatedLogging: Logging,
+  setLogging: (logging: Logging) => void
 ) => {
   setLogging(updatedLogging);
-  localStorage.setItem("logging", JSON.stringify(updatedLogging));
+  localStorage.setItem(LocalStorage.HABITS_LOG, JSON.stringify(updatedLogging));
 };
 
 // Utility function to reset habit form
@@ -241,8 +242,8 @@ export function Habits() {
 
   // Load habits and logging from local storage when the component mounts
   useEffect(() => {
-    const storedHabits = localStorage.getItem("habits");
-    const storedLogging = localStorage.getItem("logging");
+    const storedHabits = localStorage.getItem(LocalStorage.HABITS);
+    const storedLogging = localStorage.getItem(LocalStorage.HABITS_LOG);
 
     if (storedHabits) {
       setHabits(JSON.parse(storedHabits));
