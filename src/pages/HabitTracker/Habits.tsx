@@ -12,6 +12,7 @@ import { EditButton } from "../../components/habittracker/EditButton";
 import { DeleteButton } from "../../components/habittracker/DeleteButton";
 import { RemoveLogButton } from "../../components/habittracker/RemoveLogButton";
 import { LocalStorage } from "../../common/local-storage";
+import { LogAction } from "../../common/local-storage";
 import { AddEditHabitModal } from "../../components/habittracker/AddEditHabitModal";
 import {
   HabitListContainer,
@@ -59,7 +60,7 @@ const manageLogging = (
   selectedDate: Date,
   logging: Logging,
   setLogging: (logging: Logging) => void,
-  action: "add" | "remove"
+  action: LogAction
 ) => {
   const year = selectedDate.getFullYear();
   const month = selectedDate
@@ -70,11 +71,11 @@ const manageLogging = (
   const updatedLogging = { ...logging };
 
   // Add or remove log based on action
-  if (action === "add") {
+  if (action === LogAction.ADD) {
     updatedLogging[habitName][year][month][day] =
       (updatedLogging[habitName]?.[year]?.[month]?.[day] || 0) + 1;
   } else if (
-    action === "remove" &&
+    action === LogAction.REMOVE &&
     updatedLogging[habitName]?.[year]?.[month]?.[day] > 0
   ) {
     updatedLogging[habitName][year][month][day] -= 1;
@@ -183,12 +184,24 @@ export function Habits() {
 
   // Handler for logging habit activity
   const handleLog = (habitName: string, selectedDate: Date) => {
-    manageLogging(habitName, selectedDate, habitsLog, setHabitsLog, "add");
+    manageLogging(
+      habitName,
+      selectedDate,
+      habitsLog,
+      setHabitsLog,
+      LogAction.ADD
+    );
   };
 
   // Handler for removing a log
   const handleRemoveLog = (habitName: string, selectedDate: Date) => {
-    manageLogging(habitName, selectedDate, habitsLog, setHabitsLog, "remove");
+    manageLogging(
+      habitName,
+      selectedDate,
+      habitsLog,
+      setHabitsLog,
+      LogAction.REMOVE
+    );
   };
 
   // Determine if the Remove Log button should be disabled
