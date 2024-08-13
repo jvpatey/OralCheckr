@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
 import _ from "lodash";
 import { PageBackground } from "../../components/styled/PageBackground";
 import { Sidebar } from "../../components/Sidebar";
 import { links } from "../../common/SidebarLinks";
 import { HabitTile } from "../../components/habittracker/HabitTile";
 import { AddHabitButton } from "../../components/habittracker/AddHabitButton";
-import { StyledModal } from "../../components/styled/Modal";
 import { EditModeButton } from "../../components/habittracker/EditModeButton";
 import { DateRangePicker } from "../../components/habittracker/DateRangePicker";
 import { LogButton } from "../../components/habittracker/LogButton";
@@ -14,6 +12,7 @@ import { EditButton } from "../../components/habittracker/EditButton";
 import { DeleteButton } from "../../components/habittracker/DeleteButton";
 import { RemoveLogButton } from "../../components/habittracker/RemoveLogButton";
 import { LocalStorage } from "../../common/local-storage";
+import { AddEditHabitModal } from "../../components/habittracker/AddEditHabitModal";
 import {
   HabitListContainer,
   ScrollableHabitList,
@@ -103,7 +102,7 @@ const manageLogging = (
 };
 
 // Types
-interface Habit {
+export interface Habit {
   name: string;
   count: number;
 }
@@ -122,13 +121,11 @@ export function Habits() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [showAddHabitModal, setShowAddHabitModal] = useState<boolean>(false);
   const [newHabit, setNewHabit] = useState<Habit>({ name: "", count: 0 });
-  // State to store the original habit values when editing
   const [originalHabit, setOriginalHabit] = useState<Habit>({
     name: "",
     count: 0,
   });
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
-  // State to store the currently selected date in the DatePicker
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   // State to store data when a habit is logged
   const [habitsLog, setHabitsLog] = useState<Logging>({});
@@ -197,20 +194,6 @@ export function Habits() {
     }
   };
 
-  // Handler for habit name input change
-  const handleHabitNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setNewHabit((prev) => ({ ...prev, name: value }));
-  };
-
-  // Handler for habit count input change with validation
-  const handleHabitCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    if (_.isNumber(Number(value))) {
-      setNewHabit((prev) => ({ ...prev, count: Number(value) }));
-    }
-  };
-
   // Handler for logging habit activity
   const handleLog = (habitName: string, selectedDate: Date) => {
     manageLogging(habitName, selectedDate, habitsLog, setHabitsLog, "add");
@@ -236,13 +219,6 @@ export function Habits() {
       habitsLog[habitName][year][month][day] > 0
     );
   };
-
-  // Check if the Save button should be enabled
-  const isSaveDisabled = () =>
-    !newHabit.name ||
-    newHabit.count <= 0 ||
-    (newHabit.name === originalHabit.name &&
-      newHabit.count === originalHabit.count);
 
   // Function to render the habit list
   const renderHabits = () => {
@@ -328,53 +304,14 @@ export function Habits() {
         </HabitWrapper>
       </HabitListContainer>
 
-      <StyledModal show={showAddHabitModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {originalHabit.name ? "Edit a Habit" : "Add a New Habit"}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="habitName">
-              <Form.Label>Habit Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter habit name"
-                value={newHabit.name}
-                onChange={handleHabitNameChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="habitCount">
-              <Form.Label style={{ marginTop: "10px" }}>
-                Habit Count (times per day)
-              </Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter habit count"
-                value={newHabit.count.toString()}
-                onChange={handleHabitCountChange}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-secondary" onClick={handleCloseModal}>
-            Cancel
-          </Button>
-          <Button
-            variant="primary"
-            style={{
-              backgroundColor: isSaveDisabled() ? "#ccc" : "#07889b",
-              borderColor: isSaveDisabled() ? "#ccc" : "#07889b",
-            }}
-            onClick={handleSaveHabit}
-            disabled={isSaveDisabled()}
-          >
-            Save Habit
-          </Button>
-        </Modal.Footer>
-      </StyledModal>
+      <AddEditHabitModal
+        show={showAddHabitModal}
+        handleClose={handleCloseModal}
+        handleSaveHabit={handleSaveHabit}
+        originalHabit={originalHabit}
+        newHabit={newHabit}
+        setNewHabit={setNewHabit}
+      />
     </PageBackground>
   );
 }
