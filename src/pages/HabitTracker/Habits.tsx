@@ -57,8 +57,8 @@ const resetHabitForm = (
 const manageLogging = (
   habitName: string,
   selectedDate: Date,
-  logging: any,
-  setLogging: (logging: any) => void,
+  logging: Logging,
+  setLogging: (logging: Logging) => void,
   action: "add" | "remove"
 ) => {
   const year = selectedDate.getFullYear();
@@ -212,12 +212,7 @@ export function Habits() {
       .toLowerCase();
     const day = selectedDate.getDate();
 
-    return !(
-      habitsLog[habitName] &&
-      habitsLog[habitName][year] &&
-      habitsLog[habitName][year][month] &&
-      habitsLog[habitName][year][month][day] > 0
-    );
+    return !(habitsLog[habitName]?.[year]?.[month]?.[day] > 0);
   };
 
   // Function to render the habit list
@@ -229,13 +224,7 @@ export function Habits() {
         .toLowerCase();
       const day = selectedDate.getDate();
 
-      const logCount =
-        habitsLog[habit.name] &&
-        habitsLog[habit.name][year] &&
-        habitsLog[habit.name][year][month] &&
-        habitsLog[habit.name][year][month][day]
-          ? habitsLog[habit.name][year][month][day]
-          : 0;
+      const logCount = habitsLog[habit.name]?.[year]?.[month]?.[day] || 0;
 
       return (
         <HabitRow key={index}>
