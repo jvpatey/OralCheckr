@@ -214,6 +214,16 @@ interface Habit {
   count: number;
 }
 
+interface Logging {
+  [habitName: string]: {
+    [year: number]: {
+      [month: string]: {
+        [day: number]: number;
+      };
+    };
+  };
+}
+
 export function Habits() {
   // State to store the list of habits
   const [habits, setHabits] = useState<Habit[]>([]);
@@ -231,7 +241,7 @@ export function Habits() {
   // State to store the currently selected date in the DatePicker
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   // State to store the logged data
-  const [logging, setLogging] = useState<any>({});
+  const [logging, setLogging] = useState<Logging>({});
 
   // Load habits and logging from local storage when the component mounts
   useEffect(() => {
