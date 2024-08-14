@@ -1,9 +1,12 @@
 import styled from "styled-components";
+import { colors } from "../../common/color-utils";
 
 // Styled component for the date bubbles
 const DayBubbleStyled = styled.div<{ selected: boolean; $isEditMode: boolean }>`
-  background-color: ${({ selected }) => (selected ? "#3f93b2" : "#ccc")};
-  color: ${({ $isEditMode }) => ($isEditMode ? "#aaa" : "white")};
+  background-color: ${({ selected }) =>
+    selected ? colors.blue : colors.bgGrey};
+  color: ${({ $isEditMode }) =>
+    $isEditMode ? colors.textGrey : colors.bgWhite};
   width: 50px;
   height: 50px;
   display: flex;
@@ -16,7 +19,7 @@ const DayBubbleStyled = styled.div<{ selected: boolean; $isEditMode: boolean }>`
 
   &:hover {
     background-color: ${({ $isEditMode }) =>
-      $isEditMode ? "#ccc" : "#3f93b2"};
+      $isEditMode ? colors.bgGrey : colors.blue};
     transform: ${({ $isEditMode }) => ($isEditMode ? "none" : "scale(1.05)")};
   }
 

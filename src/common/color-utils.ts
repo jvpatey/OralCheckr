@@ -1,5 +1,10 @@
 export const colors = {
-  disabledGrey: "some grey color here",
-  // all other colors go here
-  // reference these colors in the rest of the app
+  disabledBgGrey: "#e0e0e0",
+  bgGrey: "#CCC",
+  textGrey: "#848889",
+  bgWhite: "#f5f5f5",
+  blue: "#3f93b2",
+  green: "#41bc7a",
+  yellow: "#f1c232",
+  red: "#ff6961",
 };

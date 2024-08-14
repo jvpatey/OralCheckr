@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../common/color-utils";
 
 interface LogButtonProps {
   habitName: string;
@@ -11,9 +12,11 @@ interface LogButtonProps {
 
 // Updated ButtonContainer styled component to match RemoveLogButton styles
 const ButtonContainer = styled.div<{ disabled?: boolean }>`
-  background-color: ${({ disabled }) => (disabled ? "#e0e0e0" : "#f5f5f5")};
-  border: 2px solid ${({ disabled }) => (disabled ? "#ccc" : "#41bc7a")};
-  color: ${({ disabled }) => (disabled ? "#ccc" : "#41bc7a")};
+  background-color: ${({ disabled }) =>
+    disabled ? colors.disabledBgGrey : colors.bgWhite};
+  border: 2px solid
+    ${({ disabled }) => (disabled ? colors.bgGrey : colors.green)};
+  color: ${({ disabled }) => (disabled ? colors.bgGrey : colors.green)};
   width: 50px;
   height: 45px;
   display: flex;
@@ -27,9 +30,11 @@ const ButtonContainer = styled.div<{ disabled?: boolean }>`
   transition: box-shadow 0.3s, background-color 0.3s;
 
   &:hover {
-    background-color: ${({ disabled }) => (disabled ? "#e0e0e0" : "#41bc7a")};
-    border: 2px solid ${({ disabled }) => (disabled ? "#ccc" : "#41bc7a")};
-    color: ${({ disabled }) => (disabled ? "#ccc" : "#f5f5f5")};
+    background-color: ${({ disabled }) =>
+      disabled ? colors.disabledBgGrey : colors.green};
+    border: 2px solid
+      ${({ disabled }) => (disabled ? colors.bgGrey : colors.green)};
+    color: ${({ disabled }) => (disabled ? colors.bgGrey : colors.bgWhite)};
     box-shadow: ${({ disabled }) =>
       disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
   }

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../common/color-utils";
 
 // Styled component styles for the edit button
 const EditTileContainer = styled.div<{
@@ -8,8 +9,12 @@ const EditTileContainer = styled.div<{
   $disabled: boolean;
 }>`
   background-color: ${({ $isEditMode, $disabled }) =>
-    $disabled ? "#ccc" : $isEditMode ? "#e74c3c" : "#f1c232"};
-  color: #ffffff;
+    $disabled
+      ? colors.disabledBgGrey
+      : $isEditMode
+      ? colors.red
+      : colors.yellow};
+  color: ${colors.bgWhite};
   width: auto;
   height: 35px;
   display: flex;
@@ -22,12 +27,17 @@ const EditTileContainer = styled.div<{
   transition: box-shadow 0.3s, background-color 0.3s;
 
   &:hover {
-    background-color: ${({ $disabled }) => ($disabled ? "#ccc" : "#f5f5f5")};
+    background-color: ${({ $disabled }) =>
+      $disabled ? colors.disabledBgGrey : colors.bgWhite};
     border: 2px solid
       ${({ $isEditMode, $disabled }) =>
-        $disabled ? "#ccc" : $isEditMode ? "#e07366" : "#f1c232"};
+        $disabled
+          ? colors.disabledBgGrey
+          : $isEditMode
+          ? colors.red
+          : colors.yellow};
     color: ${({ $isEditMode, $disabled }) =>
-      $disabled ? "#999" : $isEditMode ? "#e07366" : "#f1c232"};
+      $disabled ? colors.textGrey : $isEditMode ? colors.red : colors.yellow};
     box-shadow: ${({ $disabled }) =>
       $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
   }

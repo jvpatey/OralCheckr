@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { colors } from "../../common/color-utils";
 
 export const fadeUp = keyframes`
   from {
@@ -55,7 +56,7 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid ${colors.bgGrey};
   width: 100%;
   white-space: nowrap;
 `;
@@ -63,7 +64,7 @@ export const Header = styled.div`
 export const HeaderText = styled.div`
   font-size: 25px;
   font-weight: bold;
-  color: #848889;
+  color: ${colors.textGrey};
   white-space: nowrap;
 
   @media (max-width: 768px) {
@@ -101,7 +102,7 @@ export const HabitRow = styled.div`
 
 export const PlaceholderText = styled.div`
   font-size: 18px;
-  color: #848889;
+  color: ${colors.textGrey};
   margin-top: 20px;
 `;
 

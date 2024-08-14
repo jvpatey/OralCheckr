@@ -2,14 +2,15 @@ import { useState } from "react";
 import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../common/color-utils";
 
 // Common styles for both sides of the flip card
 const flipCardCommonStyles = css<{ $isComplete: boolean }>`
-  background-color: #f5f5f5;
-  color: ${({ $isComplete }) => ($isComplete ? "#41bc7a" : "#3f93b2")};
+  background-color: ${colors.bgWhite};
+  color: ${({ $isComplete }) => ($isComplete ? colors.green : colors.blue)};
   font-weight: 600;
   border: 2px solid
-    ${({ $isComplete }) => ($isComplete ? "#41bc7a" : "#3f93b2")};
+    ${({ $isComplete }) => ($isComplete ? colors.green : colors.blue)};
   border-radius: 10px;
   width: 100%;
   height: 100%;
@@ -103,7 +104,7 @@ const ArrowIconWrapper = styled.div`
   left: 5px;
   font-size: 12px;
   cursor: pointer;
-  color: #07889b;
+  color: ${colors.blue};
   opacity: 0;
   transition: opacity 0.3s;
 `;
@@ -120,7 +121,7 @@ const BackText = styled.div`
   padding: 10px;
 
   .label {
-    color: #646660;
+    color: ${colors.textGrey};
     font-weight: bold;
     overflow: hidden;
     white-space: nowrap;
@@ -130,7 +131,7 @@ const BackText = styled.div`
   }
 
   .value {
-    color: #41bc7a;
+    color: ${colors.green};
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -144,9 +145,9 @@ const BackText = styled.div`
 
 // Styled component for displaying the log count in a bubble
 const LogCountBubble = styled.div`
-  background-color: #f5f5f5;
-  color: #41bc7a;
-  border: 2px solid #41bc7a;
+  background-color: ${colors.bgWhite};
+  color: ${colors.green};
+  border: 2px solid ${colors.green};
   font-weight: bold;
   font-size: 14px;
   border-radius: 10px;

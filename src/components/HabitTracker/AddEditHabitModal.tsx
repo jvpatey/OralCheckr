@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Button, Modal, Form } from "react-bootstrap";
 import { StyledModal } from "../styled/Modal";
 import { Habit } from "../../pages/habittracker/Habits";
+import { colors } from "../../common/color-utils";
+import styled from "styled-components";
 
 interface AddEditHabitModalProps {
   show: boolean;
@@ -11,6 +13,28 @@ interface AddEditHabitModalProps {
   newHabit: Habit;
   setNewHabit: (habit: Habit) => void;
 }
+
+// Styled component for the Save Button
+const SaveButton = styled.button<{ disabled: boolean }>`
+  background-color: ${({ disabled }) =>
+    disabled ? colors.disabledBgGrey : colors.blue};
+  border-color: ${({ disabled }) =>
+    disabled ? colors.disabledBgGrey : colors.blue};
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+
+  &:hover {
+    background-color: ${({ disabled }) =>
+      disabled ? colors.disabledBgGrey : colors.bgWhite};
+    border-color: ${({ disabled }) =>
+      disabled ? colors.disabledBgGrey : colors.blue};
+    color: ${({ disabled }) =>
+      disabled ? colors.disabledBgGrey : colors.blue};
+  }
+`;
 
 export function AddEditHabitModal({
   show,
@@ -82,17 +106,12 @@ export function AddEditHabitModal({
         <Button variant="outline-secondary" onClick={handleClose}>
           Cancel
         </Button>
-        <Button
-          variant="primary"
-          style={{
-            backgroundColor: isSaveDisabled() ? "#ccc" : "#07889b",
-            borderColor: isSaveDisabled() ? "#ccc" : "#07889b",
-          }}
-          onClick={() => handleSaveHabit(newHabit)}
+        <SaveButton
           disabled={isSaveDisabled()}
+          onClick={() => handleSaveHabit(newHabit)}
         >
           Save Habit
-        </Button>
+        </SaveButton>
       </Modal.Footer>
     </StyledModal>
   );

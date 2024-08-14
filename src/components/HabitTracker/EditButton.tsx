@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../common/color-utils";
 
 const EditButtonContainer = styled.div`
-  background-color: #f5f5f5;
-  border: 2px solid #f1c232;
-  color: #f1c232;
+  background-color: ${colors.bgWhite};
+  border: 2px solid ${colors.yellow};
+  color: ${colors.yellow};
   width: 50px;
   height: 45px;
   display: flex;
@@ -19,9 +20,9 @@ const EditButtonContainer = styled.div`
   transition: box-shadow 0.3s, background-color 0.3s;
 
   &:hover {
-    background-color: #f1c232;
-    border: 2px solid #f1c232;
-    color: #f5f5f5;
+    background-color: ${colors.yellow};
+    border: 2px solid ${colors.yellow};
+    color: ${colors.bgWhite};
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 

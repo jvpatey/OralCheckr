@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../common/color-utils";
 
 const DeleteButtonContainer = styled.div`
-  background-color: #f5f5f5;
-  border: 2px solid #e74c3c;
-  color: #e74c3c;
+  background-color: ${colors.bgWhite};
+  border: 2px solid ${colors.red};
+  color: ${colors.red};
   width: 50px;
   height: 45px;
   display: flex;
@@ -19,9 +20,9 @@ const DeleteButtonContainer = styled.div`
   transition: box-shadow 0.3s, background-color 0.3s;
 
   &:hover {
-    background-color: #e74c3c;
-    border: 2px solid #e74c3c;
-    color: #f5f5f5;
+    background-color: ${colors.red};
+    border: 2px solid ${colors.red};
+    color: ${colors.bgWhite};
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 

@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../common/color-utils";
 
 // Styled component styles for the add habit tile component
-const AddTileContainer = styled.div`
-  background-color: #41bc7a;
-  color: #ffffff;
+const AddHabitButtonContainer = styled.div`
+  background-color: ${colors.green};
+  color: ${colors.bgWhite};
   width: auto;
   height: 35px;
   display: flex;
@@ -19,9 +20,9 @@ const AddTileContainer = styled.div`
   white-space: nowrap;
 
   &:hover {
-    background-color: #f5f5f5;
-    border: 2px solid #41bc7a;
-    color: #41bc7a;
+    background-color: ${colors.bgWhite};
+    border: 2px solid ${colors.green};
+    color: ${colors.green};
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
@@ -76,11 +77,11 @@ interface AddHabitTileProps {
 
 export function AddHabitButton({ onAddClick }: AddHabitTileProps) {
   return (
-    <AddTileContainer onClick={onAddClick}>
+    <AddHabitButtonContainer onClick={onAddClick}>
       <AddIcon>
         <FontAwesomeIcon icon={faPlus} />
       </AddIcon>
       <HabitName>Add Habit</HabitName>
-    </AddTileContainer>
+    </AddHabitButtonContainer>
   );
 }

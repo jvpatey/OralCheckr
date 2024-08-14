@@ -9,6 +9,7 @@ import {
   faCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
 import { DayBubble } from "./DayBubble";
+import { colors } from "../../common/color-utils";
 
 // Styled component for the container of the date controls
 const DateControlsContainer = styled.div`
@@ -39,21 +40,27 @@ const DayBubbleContainer = styled.div`
 
 // Styled component for the date picker input button
 const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
-  background-color: ${({ $disabled }) => ($disabled ? "#e0e0e0" : "#f5f5f5")};
-  border: none;
-  color: ${({ $disabled }) => ($disabled ? "#3f93b2" : "#3f93b2")};
+  background-color: ${({ $disabled }) =>
+    $disabled ? colors.disabledBgGrey : colors.bgWhite};
+  color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.blue)};
   border: ${({ $disabled }) =>
-    $disabled ? "2px solid #f5f5f5" : "2px solid #3f93b2"};
+    $disabled
+      ? `2px solid ${colors.disabledBgGrey}`
+      : `2px solid ${colors.blue}`};
   padding: 8px 12px;
   border-radius: 10px;
   text-align: center;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
 
   &:hover {
-    background-color: ${({ $disabled }) => ($disabled ? "#e0e0e0" : "#3f93b2")};
-    color: ${({ $disabled }) => ($disabled ? "#3f93b2" : "#f5f5f5")};
+    cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
+    background-color: ${({ $disabled }) =>
+      $disabled ? colors.disabledBgGrey : colors.blue};
+    color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.bgWhite)};
     border: ${({ $disabled }) =>
-      $disabled ? "2px solid #f5f5f5" : "2px solid #f5f5f5"};
+      $disabled
+        ? `2px solid ${colors.disabledBgGrey}`
+        : `2px solid ${colors.blue}`};
   }
 
   &:focus {
@@ -66,7 +73,7 @@ const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
 const ArrowButton = styled.button<{ $disabled: boolean }>`
   background: none;
   border: none;
-  color: ${({ $disabled }) => ($disabled ? "#9e9e9e" : "#3f93b2")};
+  color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.blue)};
   font-size: 20px;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
   border-radius: 50%;
@@ -77,7 +84,9 @@ const ArrowButton = styled.button<{ $disabled: boolean }>`
   justify-content: center;
 
   &:hover {
-    background-color: ${({ $disabled }) => ($disabled ? "none" : "#dfdfdf")};
+    background-color: ${({ $disabled }) =>
+      $disabled ? "none" : colors.disabledBgGrey};
+    cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
   }
 
   &:focus {
@@ -99,9 +108,13 @@ const ArrowButton = styled.button<{ $disabled: boolean }>`
 
 // Styled component for the "Today" button
 const TodayButton = styled.button<{ $disabled: boolean }>`
-  background-color: ${({ $disabled }) => ($disabled ? "#e0e0e0" : "#f5f5f5")};
-  border: 2px solid ${({ $disabled }) => ($disabled ? "#ccc" : "#41bc7a")};
-  color: ${({ $disabled }) => ($disabled ? "#ccc" : "#41bc7a")};
+  background-color: ${({ $disabled }) =>
+    $disabled ? colors.disabledBgGrey : colors.bgWhite};
+  border: ${({ $disabled }) =>
+    $disabled
+      ? `2px solid ${colors.disabledBgGrey}`
+      : `2px solid ${colors.green}`};
+  color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.green)};
   font-size: 14px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -109,9 +122,11 @@ const TodayButton = styled.button<{ $disabled: boolean }>`
   margin-left: 10px;
 
   &:hover {
-    background-color: ${({ $disabled }) => ($disabled ? "#e0e0e0" : "#41bc7a")};
-    border: 2px solid ${({ $disabled }) => ($disabled ? "#ccc" : "#41bc7a")};
-    color: ${({ $disabled }) => ($disabled ? "#ccc" : "#f5f5f5")};
+    background-color: ${({ $disabled }) =>
+      $disabled ? colors.disabledBgGrey : colors.green};
+    border: 2px solid
+      ${({ $disabled }) => ($disabled ? colors.disabledBgGrey : colors.green)};
+    color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.bgWhite)};
     box-shadow: ${({ $disabled }) =>
       $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
   }
