@@ -54,6 +54,24 @@ const resetHabitForm = (
   setOriginalHabit({ name: "", count: 0 });
 };
 
+// Utility function to initialize logging structure
+const initializeLogging = (
+  logging: Logging,
+  habitName: string,
+  year: number,
+  month: string
+): void => {
+  if (!logging[habitName]) {
+    logging[habitName] = {};
+  }
+  if (!logging[habitName][year]) {
+    logging[habitName][year] = {};
+  }
+  if (!logging[habitName][year][month]) {
+    logging[habitName][year][month] = {};
+  }
+};
+
 // Utility function to manage logging data
 const manageLogging = (
   habitName: string,
@@ -70,15 +88,15 @@ const manageLogging = (
 
   const updatedLogging = { ...logging };
 
-  // Add or remove log based on action
+  // Initialize logging structure
+  initializeLogging(updatedLogging, habitName, year, month);
+
+  const currentCount = updatedLogging[habitName]?.[year]?.[month]?.[day] || 0;
+
   if (action === LogAction.ADD) {
-    updatedLogging[habitName][year][month][day] =
-      (updatedLogging[habitName]?.[year]?.[month]?.[day] || 0) + 1;
-  } else if (
-    action === LogAction.REMOVE &&
-    updatedLogging[habitName]?.[year]?.[month]?.[day] > 0
-  ) {
-    updatedLogging[habitName][year][month][day] -= 1;
+    updatedLogging[habitName][year][month][day] = currentCount + 1;
+  } else if (action === LogAction.REMOVE && currentCount > 0) {
+    updatedLogging[habitName][year][month][day] = currentCount - 1;
 
     // Remove the day entry if the log count drops to zero
     if (updatedLogging[habitName][year][month][day] === 0) {
@@ -226,6 +244,9 @@ export function Habits() {
 
       const logCount = habitsLog[habit.name]?.[year]?.[month]?.[day] || 0;
 
+      // Determine if the Add Log button should be disabled
+      const isAddLogDisabled = logCount >= habit.count;
+
       return (
         <HabitRow key={index}>
           <HabitTile habit={habit} logCount={logCount} />
@@ -240,6 +261,7 @@ export function Habits() {
                 habitName={habit.name}
                 selectedDate={selectedDate}
                 onLog={handleLog}
+                disabled={isAddLogDisabled}
               />
               <RemoveLogButton
                 habitName={habit.name}
