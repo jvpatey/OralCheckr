@@ -202,6 +202,8 @@ export function DateRangePicker({
 
   // Handler for clicking on a specific day bubble
   const handleDayClick = (dayIndex: number) => {
+    if (isEditMode) return;
+
     const newDate = new Date(startOfWeek);
     newDate.setDate(startOfWeek.getDate() + dayIndex);
     setSelectedFullDate(newDate);
