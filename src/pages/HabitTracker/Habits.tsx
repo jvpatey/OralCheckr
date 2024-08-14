@@ -284,8 +284,8 @@ export function Habits() {
           <DatePickerWrapper>
             <DateRangePicker
               isEditMode={isEditMode}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
+              selectedFullDate={selectedDate}
+              setSelectedFullDate={setSelectedDate}
             />
           </DatePickerWrapper>
           <Header>
