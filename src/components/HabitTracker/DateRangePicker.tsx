@@ -50,6 +50,11 @@ const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
   padding: 8px 12px;
   border-radius: 10px;
   text-align: center;
+  min-width: 150px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
 
   &:hover {
