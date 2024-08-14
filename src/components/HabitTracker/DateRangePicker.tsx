@@ -142,22 +142,20 @@ const getDaysInWeek = (startOfWeek: Date) => {
 
 interface DateRangePickerProps {
   isEditMode: boolean;
-  selectedFullDate: Date;
-  setSelectedFullDate: (date: Date) => void;
+  selectedDate: Date;
+  setSelectedDate: (date: Date) => void;
 }
 
 export function DateRangePicker({
   isEditMode,
-  selectedFullDate,
-  setSelectedFullDate,
+  selectedDate,
+  setSelectedDate,
 }: DateRangePickerProps) {
   // State to track the selected day within the week
-  const [selectedDayIndex, setSelectedDayIndex] = useState<number>(
-    selectedFullDate.getDay()
-  );
+  const [selectedDay, setSelectedDay] = useState<number>(selectedDate.getDay());
 
   // Calculate the start of the week and the days in the week based on the selected date
-  const startOfWeek = getStartOfWeek(selectedFullDate);
+  const startOfWeek = getStartOfWeek(selectedDate);
   const daysInWeek = getDaysInWeek(startOfWeek);
 
   // Format the week range for display
@@ -171,33 +169,33 @@ export function DateRangePicker({
 
   // Handler for moving to the previous week
   const handlePrevWeek = () => {
-    const newDate = new Date(selectedFullDate);
-    newDate.setDate(selectedFullDate.getDate() - 7);
-    setSelectedFullDate(newDate);
-    setSelectedDayIndex(newDate.getDay());
+    const newDate = new Date(selectedDate);
+    newDate.setDate(selectedDate.getDate() - 7);
+    setSelectedDate(newDate);
+    setSelectedDay(newDate.getDay());
   };
 
   // Handler for moving to the next week
   const handleNextWeek = () => {
-    const newDate = new Date(selectedFullDate);
-    newDate.setDate(selectedFullDate.getDate() + 7);
-    setSelectedFullDate(newDate);
-    setSelectedDayIndex(newDate.getDay());
+    const newDate = new Date(selectedDate);
+    newDate.setDate(selectedDate.getDate() + 7);
+    setSelectedDate(newDate);
+    setSelectedDay(newDate.getDay());
   };
 
   // Handler for clicking on a specific day bubble
   const handleDayClick = (dayIndex: number) => {
     const newDate = new Date(startOfWeek);
     newDate.setDate(startOfWeek.getDate() + dayIndex);
-    setSelectedFullDate(newDate);
-    setSelectedDayIndex(dayIndex);
+    setSelectedDate(newDate);
+    setSelectedDay(dayIndex);
   };
 
   // Handler for resetting to the current date
   const handleTodayClick = () => {
     const today = new Date();
-    setSelectedFullDate(today);
-    setSelectedDayIndex(today.getDay());
+    setSelectedDate(today);
+    setSelectedDay(today.getDay());
   };
 
   // Custom input component for the DatePicker
@@ -211,12 +209,9 @@ export function DateRangePicker({
     <DateControlsContainer>
       <DatePickerWrapper>
         <DatePicker
-          selected={selectedFullDate}
+          selected={selectedDate}
           onChange={(date: Date | null) => {
-            if (date) {
-              setSelectedFullDate(date);
-              setSelectedDayIndex(date.getDay());
-            }
+            if (date) setSelectedDate(date);
           }}
           dateFormat="MMMM d, yyyy"
           showWeekNumbers={false}
@@ -245,7 +240,7 @@ export function DateRangePicker({
         {daysInWeek.map((day, index) => (
           <DayBubble
             key={index}
-            selected={index === selectedDayIndex}
+            selected={index === selectedDay}
             onClick={() => handleDayClick(index)}
             date={day}
             isEditMode={isEditMode}
