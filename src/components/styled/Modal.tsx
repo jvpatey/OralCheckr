@@ -21,7 +21,7 @@ export const StyledModal = styled(Modal)`
   }
 
   .modal-body {
-    color: ${colors.blue};
+    color: ${colors.textGrey};
     font-size: 1.2rem;
   }
 `;

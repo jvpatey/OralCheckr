@@ -12,9 +12,10 @@ import { DashboardCardContainer } from "../components/styled/DashboardCardContai
 import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
 import { NavigationButton } from "../components/styled/NavigationButton";
 import { StyledModal } from "../components/styled/Modal";
+import { colors } from "../common/color-utils";
 
 const TitleText = styled.h1`
-  color: #07889b;
+  color: ${colors.blue};
   margin-top: 20px;
   margin-bottom: 60px;
   text-align: center;
@@ -28,7 +29,7 @@ const TitleText = styled.h1`
 `;
 
 const CardText = styled.h5`
-  color: #222831;
+  color: ${colors.textGrey};
   margin-bottom: 20px;
   margin-right: 40px;
   margin-left: 40px;
@@ -55,44 +56,43 @@ const NavButton = styled(NavigationButton)`
   justify-content: center;
   width: 70%;
   text-align: center;
+  border: solid;
+  border-color: ${colors.blue};
 
   @media (max-width: 768px) {
     width: 50%;
   }
 
   &:hover {
-    background-color: #f5f5f5;
-    color: #07889b;
-    font-weight: bold;
+    background-color: ${colors.bgWhite};
+    color: ${colors.blue};
     border: solid;
-    border-color: #07889b;
+    border-color: ${colors.blue};
   }
 `;
 
 const ModalButton = styled(Button)<ButtonProps>`
   &.btn-secondary {
-    background-color: #f5f5f5;
-    color: #07889b;
-    border: 1px solid #07889b;
+    background-color: ${colors.bgWhite};
+    color: ${colors.textGrey};
+    border: 1px solid ${colors.textGrey};
 
     &:hover {
-      background-color: #07889b;
-      color: #f5f5f5;
-      border-color: #f5f5f5;
-      font-weight: bold;
+      background-color: ${colors.textGrey};
+      color: ${colors.bgWhite};
+      border-color: ${colors.bgWhite};
     }
   }
 
   &.btn-primary {
-    background-color: #07889b;
-    border-color: #07889b;
-    color: #f5f5f5;
+    background-color: ${colors.bgWhite};
+    border-color: ${colors.blue};
+    color: ${colors.blue};
 
     &:hover {
-      background-color: #f5f5f5;
-      border-color: #07889b;
-      color: #07889b;
-      font-weight: bold;
+      background-color: ${colors.blue};
+      border-color: ${colors.blue};
+      color: ${colors.bgWhite};
     }
   }
 `;

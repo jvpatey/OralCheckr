@@ -13,6 +13,7 @@ import { RoutePaths } from "../common/Routes";
 import { StartQuestionnaire } from "./StartQuestionnaire";
 import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { NavigationButton } from "../components/styled/NavigationButton";
+import { colors } from "../common/color-utils";
 
 // styled-component styles for Questionnaire Page
 
@@ -36,19 +37,19 @@ const ProgressBar = styled.div`
   .progress-segment {
     width: 100%;
     height: 8px;
-    background-color: #ccc;
+    background-color: ${colors.bgGrey};
     border-radius: 4px;
     margin-right: 4px;
 
     &.filled {
-      background-color: #07889b;
+      background-color: ${colors.blue};
     }
   }
 `;
 
 const ProgressIndicator = styled.div`
   font-size: 1.15rem;
-  color: #07889b;
+  color: ${colors.blue};
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;

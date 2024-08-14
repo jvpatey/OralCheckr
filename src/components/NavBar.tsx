@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { RoutePaths, getFullPath } from "../common/Routes";
+import { colors } from "../common/color-utils";
 
 interface NavBarProps {
   links: { text: string; href: string; icon: any }[];
@@ -21,7 +22,7 @@ const fadeInDown = keyframes`
 `;
 
 const CustomNavbar = styled(Navbar)`
-  background-color: #f5f5f5;
+  background-color: ${colors.bgWhite};
   width: 100%;
   animation: ${fadeInDown} 1s ease-out;
 `;
@@ -30,10 +31,10 @@ const BrandText = styled(Navbar.Brand)`
   display: flex;
   align-items: center;
   font-size: x-large;
-  color: #848889;
+  color: ${colors.textGrey};
 
   &:hover {
-    color: #3f93b2;
+    color: ${colors.blue};
     font-weight: 600;
   }
 `;
@@ -44,57 +45,57 @@ const LogoImage = styled.img`
 `;
 
 const CustomDropdownToggle = styled(Dropdown.Toggle)`
-  color: #848889;
+  color: ${colors.textGrey};
   background: none;
   border: none;
 
   &:hover {
-    color: #3f93b2;
+    color: ${colors.blue};
     transform: scale(1.1);
     background-color: transparent;
   }
 
   &:focus,
   &:active {
-    color: #848889;
+    color: ${colors.textGrey};
     background-color: transparent;
     box-shadow: none;
   }
 
   &.show {
-    color: #3f93b2;
+    color: ${colors.textGrey};
     background-color: transparent;
     transform: scale(1.1);
   }
 `;
 
 const CustomDropdownMenu = styled(Dropdown.Menu)`
-  background-color: #f5f5f5;
+  background-color: ${colors.bgWhite};
   border: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 200px;
 `;
 
 const CustomDropdownItem = styled(Dropdown.Item)`
-  color: #848889;
+  color: ${colors.textGrey};
   padding: 10px 20px;
   display: block;
   width: 100%;
   text-align: left;
 
   &:hover {
-    color: #3f93b2;
+    color: ${colors.blue};
     background-color: transparent;
   }
 
   &.active {
-    color: #3f93b2;
+    color: ${colors.blue};
     font-weight: bold;
   }
 `;
 
 const CustomCollapse = styled(Navbar.Collapse)`
-  background-color: #f5f5f5;
+  background-color: ${colors.bgWhite};
 
   @media (max-width: 992px) {
     position: absolute;
@@ -116,16 +117,16 @@ const CustomCollapse = styled(Navbar.Collapse)`
 `;
 
 const CustomNavLink = styled(Nav.Link)`
-  color: #848889;
+  color: ${colors.textGrey};
   margin-right: 35px;
 
   &:hover {
-    color: #3f93b2;
+    color: ${colors.blue};
     transform: scale(1.05);
   }
 
   &.active {
-    color: #3f93b2;
+    color: ${colors.blue};
     font-weight: bold;
     transform: scale(1.1);
     background-color: transparent;

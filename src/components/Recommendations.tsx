@@ -5,6 +5,7 @@ import { DashboardTile } from "./styled/DashboardTile";
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import questionData from "../common/questionnaire.json";
+import { colors } from "../common/color-utils";
 
 // styled-component styles for Recommendations Component
 
@@ -36,7 +37,7 @@ const CarouselContent = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #e0e0e0;
+  color: ${colors.textGrey};
   padding: 20px;
   margin: 0 50px;
 
@@ -51,7 +52,7 @@ const CategoryText = styled.div`
   font-weight: bold;
   font-size: 18px;
   margin-bottom: 10px;
-  color: #222831;
+  color: ${colors.blue};
 
   @media (max-width: 768px) {
     font-size: 16px;
@@ -62,7 +63,7 @@ const StyledHeader = styled(Card.Header)`
   text-align: center;
   font-weight: bold;
   font-size: 22px;
-  color: #07889b;
+  color: ${colors.blue};
   border: transparent;
   background-color: transparent;
   border-radius: 20px 20px 0 0;
@@ -89,11 +90,11 @@ const CustomCarousel = styled(Carousel)`
   }
 
   .carousel-indicators li {
-    background-color: #e0e0e0;
+    background-color: ${colors.disabledBgGrey};
   }
 
   .carousel-indicators .active {
-    background-color: #07889b;
+    background-color: ${colors.blue};
   }
 
   .carousel-control-prev,
@@ -102,7 +103,7 @@ const CustomCarousel = styled(Carousel)`
     top: 50%;
     transform: translateY(-50%);
     width: auto;
-    color: #e0e0e0;
+    color: ${colors.disabledBgGrey};
   }
 
   .carousel-control-prev {
@@ -215,10 +216,8 @@ export function Recommendations() {
             <CustomCarousel activeIndex={index} onSelect={handleSelect}>
               {recommendations.map((rec, idx) => (
                 <Carousel.Item key={idx} style={{ marginBottom: "30px" }}>
-                  <CarouselContent style={{ color: "#222831" }}>
-                    <CategoryText style={{ color: "#07889b" }}>
-                      {rec.category}
-                    </CategoryText>
+                  <CarouselContent>
+                    <CategoryText>{rec.category}</CategoryText>
                     {rec.feedback}
                   </CarouselContent>
                 </Carousel.Item>

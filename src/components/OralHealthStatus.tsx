@@ -1,12 +1,13 @@
 import { Card, ProgressBar } from "react-bootstrap";
 import { DashboardTile } from "./styled/DashboardTile";
 import styled from "styled-components";
+import { colors } from "../common/color-utils";
 
 // styled-component styles for Oral Health Status Component
 
 const StyledHeader = styled(Card.Header)`
-  background-color: #f5f5f5;
-  color: #07889b;
+  background-color: ${colors.bgWhite};
+  color: ${colors.blue};
   font-size: 22px;
   font-weight: bold;
   border: transparent;
@@ -15,26 +16,28 @@ const StyledHeader = styled(Card.Header)`
 `;
 
 const StyledText = styled.p`
+  color: ${colors.textGrey};
   margin-bottom: 40px;
   margin-top: 10px;
   font-size: 18px;
 `;
 
 const ScoreSpan = styled.span`
-  color: #07889b;
+  color: ${colors.blue};
   font-weight: bold;
 `;
 
 const CustomProgressBar = styled(ProgressBar)`
-  height: 25px;
+  height: 30px;
   .progress-bar {
-    background-color: #07889b;
+    background-color: ${colors.blue};
     font-size: 16px;
     border-radius: 20px;
   }
 `;
 
 const MessageText = styled.p`
+  color: ${colors.textGrey};
   display: flex;
   font-size: 18px;
   align-items: center;

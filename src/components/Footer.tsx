@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "../common/color-utils";
 
 const StyledFooter = styled.footer`
   position: fixed;
@@ -6,7 +7,7 @@ const StyledFooter = styled.footer`
   bottom: 0;
   width: 100%;
   text-align: start;
-  color: #222831;
+  color: ${colors.textGrey};
   margin-left: 10px;
 `;
 

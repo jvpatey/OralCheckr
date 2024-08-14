@@ -13,7 +13,7 @@ export const NavigationButton = styled.button`
   width: 150px;
 
   &:hover {
-    background-color: ${colors.bgWhite};
+    background-color: ${colors.disabledBgGrey};
     color: ${colors.blue};
     border: solid 2px ${colors.blue};
   }
