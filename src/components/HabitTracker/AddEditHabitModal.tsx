@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { StyledModal } from "../styled/Modal";
 import { Habit } from "../../pages/habittracker/Habits";
@@ -20,6 +20,16 @@ export function AddEditHabitModal({
   newHabit,
   setNewHabit,
 }: AddEditHabitModalProps) {
+  // Ref for the habit name input
+  const habitNameRef = useRef<HTMLInputElement>(null);
+
+  // Focus the habit name input when the modal is shown
+  useEffect(() => {
+    if (show && habitNameRef.current) {
+      habitNameRef.current.focus();
+    }
+  }, [show]);
+
   const isSaveDisabled = () =>
     !newHabit.name ||
     newHabit.count <= 0 ||
@@ -52,6 +62,7 @@ export function AddEditHabitModal({
               placeholder="Enter habit name"
               value={newHabit.name}
               onChange={handleHabitNameChange}
+              ref={habitNameRef}
             />
           </Form.Group>
           <Form.Group controlId="habitCount">
