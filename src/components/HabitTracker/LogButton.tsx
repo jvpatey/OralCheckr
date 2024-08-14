@@ -2,10 +2,18 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
-const ButtonContainer = styled.div`
-  background-color: #f5f5f5;
-  border: 2px solid #41bc7a;
-  color: #41bc7a;
+interface LogButtonProps {
+  habitName: string;
+  selectedDate: Date;
+  onLog: (habitName: string, selectedDate: Date) => void;
+  disabled?: boolean;
+}
+
+// Updated ButtonContainer styled component to match RemoveLogButton styles
+const ButtonContainer = styled.div<{ disabled?: boolean }>`
+  background-color: ${({ disabled }) => (disabled ? "#e0e0e0" : "#f5f5f5")};
+  border: 2px solid ${({ disabled }) => (disabled ? "#ccc" : "#41bc7a")};
+  color: ${({ disabled }) => (disabled ? "#ccc" : "#41bc7a")};
   width: 50px;
   height: 45px;
   display: flex;
@@ -15,14 +23,15 @@ const ButtonContainer = styled.div`
   border-radius: 5px;
   margin-left: 10px;
   margin-bottom: 10px;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   transition: box-shadow 0.3s, background-color 0.3s;
 
   &:hover {
-    background-color: #41bc7a;
-    border: 2px solid #41bc7a;
-    color: #f5f5f5;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: ${({ disabled }) => (disabled ? "#e0e0e0" : "#41bc7a")};
+    border: 2px solid ${({ disabled }) => (disabled ? "#ccc" : "#41bc7a")};
+    color: ${({ disabled }) => (disabled ? "#ccc" : "#f5f5f5")};
+    box-shadow: ${({ disabled }) =>
+      disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
   }
 
   @media (max-width: 768px) {
@@ -37,19 +46,20 @@ const ButtonIcon = styled.div`
   justify-content: center;
 `;
 
-interface LogButtonProps {
-  habitName: string;
-  selectedDate: Date;
-  onLog: (habitName: string, selectedDate: Date) => void;
-}
-
-export function LogButton({ habitName, selectedDate, onLog }: LogButtonProps) {
+export function LogButton({
+  habitName,
+  selectedDate,
+  onLog,
+  disabled,
+}: LogButtonProps) {
   const handleLogClick = () => {
-    onLog(habitName, selectedDate);
+    if (!disabled) {
+      onLog(habitName, selectedDate);
+    }
   };
 
   return (
-    <ButtonContainer onClick={handleLogClick}>
+    <ButtonContainer onClick={handleLogClick} disabled={disabled}>
       <ButtonIcon>
         <FontAwesomeIcon icon={faPlusCircle} />
       </ButtonIcon>
