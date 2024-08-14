@@ -55,22 +55,22 @@ const resetHabitForm = (
 };
 
 // Utility function to initialize logging structure
-const initializeLogging = (
-  logging: Logging,
-  habitName: string,
-  year: number,
-  month: string
-): void => {
-  if (!logging[habitName]) {
-    logging[habitName] = {};
-  }
-  if (!logging[habitName][year]) {
-    logging[habitName][year] = {};
-  }
-  if (!logging[habitName][year][month]) {
-    logging[habitName][year][month] = {};
-  }
-};
+// const initializeLogging = (
+//   logging: Logging,
+//   habitName: string,
+//   year: number,
+//   month: string
+// ): void => {
+//   if (!logging[habitName]) {
+//     logging[habitName] = {};
+//   }
+//   if (!logging[habitName][year]) {
+//     logging[habitName][year] = {};
+//   }
+//   if (!logging[habitName][year][month]) {
+//     logging[habitName][year][month] = {};
+//   }
+// };
 
 // Utility function to manage logging data
 const manageLogging = (
@@ -89,7 +89,7 @@ const manageLogging = (
   const updatedLogging = { ...logging };
 
   // Initialize logging structure
-  initializeLogging(updatedLogging, habitName, year, month);
+  // initializeLogging(updatedLogging, habitName, year, month);
 
   const currentCount = updatedLogging[habitName]?.[year]?.[month]?.[day] || 0;
 
@@ -142,11 +142,11 @@ export function Habits() {
     const storedLogging = localStorage.getItem(LocalStorage.HABITS_LOG);
 
     if (storedHabits) {
-      setHabits(JSON.parse(storedHabits));
+      setHabits(JSON.parse(storedHabits) as Habit[]);
     }
 
     if (storedLogging) {
-      setHabitsLog(JSON.parse(storedLogging));
+      setHabitsLog(JSON.parse(storedLogging) as Logging);
     }
   }, []);
 

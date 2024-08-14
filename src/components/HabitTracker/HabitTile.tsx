@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSync, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faSync } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../common/color-utils";
 
 // Common styles for both sides of the flip card
@@ -187,9 +187,7 @@ export function HabitTile({ habit, logCount }: HabitTileProps) {
         <FlipCardFront $isComplete={isComplete}>
           <ProgressBar $progress={progress} $isComplete={isComplete} />
           <HabitName>{habit.name}</HabitName>
-          <LogCountBubble>
-            {isComplete ? <FontAwesomeIcon icon={faCheck} /> : logCount}
-          </LogCountBubble>
+          <LogCountBubble>{logCount}</LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>
@@ -203,9 +201,7 @@ export function HabitTile({ habit, logCount }: HabitTileProps) {
               Count (times/day): <span className="value">{habit.count}</span>
             </div>
           </BackText>
-          <LogCountBubble>
-            {isComplete ? <FontAwesomeIcon icon={faCheck} /> : logCount}
-          </LogCountBubble>
+          <LogCountBubble>{logCount}</LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>
