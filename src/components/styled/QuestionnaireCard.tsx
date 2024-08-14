@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { Card } from "react-bootstrap";
+import { colors } from "../../common/color-utils";
 
 export const QuestionnaireCard = styled(Card)`
   width: 80vw;
   max-width: 1400px;
   height: 80vh;
   min-height: 60vh;
-  background-color: #e0e0e0;
+  background-color: ${colors.disabledBgGrey};
   border: transparent;
   border-radius: 20px;
   margin-top: 68px;

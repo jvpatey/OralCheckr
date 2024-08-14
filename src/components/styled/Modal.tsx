@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
+import { colors } from "../../common/color-utils";
 
 export const StyledModal = styled(Modal)`
   padding: 10px;
 
   .modal-content {
-    background-color: #f5f5f5;
-    border: 1px solid #f5f5f5;
+    background-color: ${colors.bgWhite};
+    border: 1px solid ${colors.bgWhite};
   }
 
   .modal-header,
@@ -15,12 +16,12 @@ export const StyledModal = styled(Modal)`
   }
 
   .modal-title {
-    color: #3f93b2;
+    color: ${colors.blue};
     font-size: 1.5rem;
   }
 
   .modal-body {
-    color: #3f93b2;
+    color: ${colors.blue};
     font-size: 1.2rem;
   }
 `;
