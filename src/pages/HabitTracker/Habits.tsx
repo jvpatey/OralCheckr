@@ -3,16 +3,9 @@ import _ from "lodash";
 import { PageBackground } from "../../components/styled/PageBackground";
 import { Sidebar } from "../../components/Sidebar";
 import { links } from "../../common/SidebarLinks";
-import { HabitTile } from "../../components/habittracker/HabitTile";
 import { AddHabitButton } from "../../components/habittracker/AddHabitButton";
 import { EditModeButton } from "../../components/habittracker/EditModeButton";
 import { DateRangePicker } from "../../components/habittracker/DateRangePicker";
-import { LogButton } from "../../components/habittracker/LogButton";
-import { EditButton } from "../../components/habittracker/EditButton";
-import { DeleteButton } from "../../components/habittracker/DeleteButton";
-import { RemoveLogButton } from "../../components/habittracker/RemoveLogButton";
-import { LocalStorage } from "../../common/local-storage";
-import { LogAction } from "../../common/local-storage";
 import { AddEditHabitModal } from "../../components/habittracker/AddEditHabitModal";
 import { cloneDeep } from "lodash";
 import {
@@ -22,11 +15,12 @@ import {
   Header,
   HeaderText,
   HeaderButtons,
-  HabitList,
-  HabitRow,
-  PlaceholderText,
+  StyledHabitList,
   DatePickerWrapper,
 } from "../../components/habittracker/habit-components";
+import { HabitList } from "../../components/habittracker/HabitList";
+import { LocalStorage } from "../../common/local-storage";
+import { LogAction } from "../../common/local-storage";
 
 // Utility function to update habit data in state and localStorage
 const updateHabits = (
@@ -108,7 +102,7 @@ export interface Habit {
   count: number;
 }
 
-interface Logging {
+export interface Logging {
   [habitName: string]: {
     [year: number]: {
       [month: string]: {
@@ -217,60 +211,6 @@ export function Habits() {
     );
   };
 
-  // Determine if the Remove Log button should be disabled
-  const isRemoveLogDisabled = (habitName: string, selectedDate: Date) => {
-    const year = selectedDate.getFullYear();
-    const month = selectedDate
-      .toLocaleString("default", { month: "long" })
-      .toLowerCase();
-    const day = selectedDate.getDate();
-
-    return !(habitsLog[habitName]?.[year]?.[month]?.[day] > 0);
-  };
-
-  // Function to render the habit list
-  const renderHabits = () => {
-    return habits.map((habit, index) => {
-      const year = selectedDate.getFullYear();
-      const month = selectedDate
-        .toLocaleString("default", { month: "long" })
-        .toLowerCase();
-      const day = selectedDate.getDate();
-
-      const logCount = habitsLog[habit.name]?.[year]?.[month]?.[day] || 0;
-
-      // Determine if the Add Log button should be disabled
-      const isAddLogDisabled = logCount >= habit.count;
-
-      return (
-        <HabitRow key={index}>
-          <HabitTile habit={habit} logCount={logCount} />
-          {isEditMode ? (
-            <>
-              <EditButton onClick={() => handleEditHabit(index)} />
-              <DeleteButton onClick={() => handleDeleteHabit(index)} />
-            </>
-          ) : (
-            <>
-              <LogButton
-                habitName={habit.name}
-                selectedDate={selectedDate}
-                onLog={handleLog}
-                disabled={isAddLogDisabled}
-              />
-              <RemoveLogButton
-                habitName={habit.name}
-                selectedDate={selectedDate}
-                onRemoveLog={handleRemoveLog}
-                disabled={isRemoveLogDisabled(habit.name, selectedDate)}
-              />
-            </>
-          )}
-        </HabitRow>
-      );
-    });
-  };
-
   return (
     <PageBackground>
       <Sidebar links={links} />
@@ -297,15 +237,18 @@ export function Habits() {
             </HeaderButtons>
           </Header>
           <ScrollableHabitList>
-            <HabitList>
-              {habits.length === 0 ? (
-                <PlaceholderText>
-                  Add a habit to start tracking your progress!
-                </PlaceholderText>
-              ) : (
-                renderHabits()
-              )}
-            </HabitList>
+            <StyledHabitList>
+              <HabitList
+                habits={habits}
+                selectedDate={selectedDate}
+                isEditMode={isEditMode}
+                handleEditHabit={handleEditHabit}
+                handleDeleteHabit={handleDeleteHabit}
+                handleLog={handleLog}
+                handleRemoveLog={handleRemoveLog}
+                habitsLog={habitsLog}
+              />
+            </StyledHabitList>
           </ScrollableHabitList>
         </HabitWrapper>
       </HabitListContainer>

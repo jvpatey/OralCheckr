@@ -83,7 +83,7 @@ export const HeaderButtons = styled.div`
   }
 `;
 
-export const HabitList = styled.div`
+export const StyledHabitList = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
