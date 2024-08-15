@@ -4,10 +4,14 @@ import {
   PlaceholderText,
 } from "../../components/habittracker/habit-components";
 import { HabitTile } from "../../components/habittracker/HabitTile";
-import { LogButton } from "../../components/habittracker/LogButton";
-import { RemoveLogButton } from "../../components/habittracker/RemoveLogButton";
-import { EditButton } from "../../components/habittracker/EditButton";
-import { DeleteButton } from "../../components/habittracker/DeleteButton";
+import { IconButton } from "../../components/habittracker/IconButton";
+import {
+  faTrashAlt,
+  faPencilAlt,
+  faPlusCircle,
+  faMinusCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../common/color-utils";
 
 interface HabitListProps {
   habits: Habit[];
@@ -48,21 +52,45 @@ export function HabitList({
           <HabitTile habit={habit} logCount={logCount} />
           {isEditMode ? (
             <>
-              <EditButton onClick={() => handleEditHabit(index)} />
-              <DeleteButton onClick={() => handleDeleteHabit(index)} />
+              <IconButton
+                icon={faPencilAlt}
+                onClick={() => handleEditHabit(index)}
+                borderColor={colors.yellow}
+                backgroundColor={colors.bgWhite}
+                color={colors.yellow}
+                hoverBackgroundColor={colors.yellow}
+                hoverColor={colors.bgWhite}
+              />
+              <IconButton
+                icon={faTrashAlt}
+                onClick={() => handleDeleteHabit(index)}
+                borderColor={colors.red}
+                backgroundColor={colors.bgWhite}
+                color={colors.red}
+                hoverBackgroundColor={colors.red}
+                hoverColor={colors.bgWhite}
+              />
             </>
           ) : (
             <>
-              <LogButton
-                habitName={habit.name}
-                selectedDate={selectedDate}
-                onLog={handleLog}
+              <IconButton
+                icon={faPlusCircle}
+                onClick={() => handleLog(habit.name, selectedDate)}
+                borderColor={colors.green}
+                backgroundColor={colors.bgWhite}
+                color={colors.green}
+                hoverBackgroundColor={colors.green}
+                hoverColor={colors.bgWhite}
                 disabled={isAddLogDisabled}
               />
-              <RemoveLogButton
-                habitName={habit.name}
-                selectedDate={selectedDate}
-                onRemoveLog={handleRemoveLog}
+              <IconButton
+                icon={faMinusCircle}
+                onClick={() => handleRemoveLog(habit.name, selectedDate)}
+                borderColor={colors.red}
+                backgroundColor={colors.bgWhite}
+                color={colors.red}
+                hoverBackgroundColor={colors.red}
+                hoverColor={colors.bgWhite}
                 disabled={!(habitsLog[habit.name]?.[year]?.[month]?.[day] > 0)}
               />
             </>
