@@ -67,7 +67,8 @@ const manageLogging = (
   selectedDate: Date,
   logging: Logging,
   setLogging: (logging: Logging) => void,
-  action: LogAction
+  action: LogAction,
+  habits: Habit[]
 ) => {
   const year = selectedDate.getFullYear();
   const month = selectedDate
@@ -83,7 +84,13 @@ const manageLogging = (
   const currentCount = updatedLogging[habitName]?.[year]?.[month]?.[day] || 0;
 
   if (action === LogAction.ADD) {
-    updatedLogging[habitName][year][month][day] = currentCount + 1;
+    // Find the habit to check its count
+    const habit = habits.find((h) => h.name === habitName);
+
+    // Ensure the habit exists and the log count doesn't exceed the habit count
+    if (habit && currentCount < habit.count) {
+      updatedLogging[habitName][year][month][day] = currentCount + 1;
+    }
   } else if (action === LogAction.REMOVE && currentCount > 0) {
     updatedLogging[habitName][year][month][day] = currentCount - 1;
 
@@ -196,7 +203,8 @@ export function Habits() {
       selectedDate,
       habitsLog,
       setHabitsLog,
-      LogAction.ADD
+      LogAction.ADD,
+      habits
     );
   };
 
@@ -207,7 +215,8 @@ export function Habits() {
       selectedDate,
       habitsLog,
       setHabitsLog,
-      LogAction.REMOVE
+      LogAction.REMOVE,
+      habits
     );
   };
 
