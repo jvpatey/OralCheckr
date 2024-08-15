@@ -14,6 +14,7 @@ import { RemoveLogButton } from "../../components/habittracker/RemoveLogButton";
 import { LocalStorage } from "../../common/local-storage";
 import { LogAction } from "../../common/local-storage";
 import { AddEditHabitModal } from "../../components/habittracker/AddEditHabitModal";
+import { cloneDeep } from "lodash";
 import {
   HabitListContainer,
   ScrollableHabitList,
@@ -55,22 +56,16 @@ const resetHabitForm = (
 };
 
 // Utility function to initialize logging structure
-// const initializeLogging = (
-//   logging: Logging,
-//   habitName: string,
-//   year: number,
-//   month: string
-// ): void => {
-//   if (!logging[habitName]) {
-//     logging[habitName] = {};
-//   }
-//   if (!logging[habitName][year]) {
-//     logging[habitName][year] = {};
-//   }
-//   if (!logging[habitName][year][month]) {
-//     logging[habitName][year][month] = {};
-//   }
-// };
+const initializeLogging = (
+  logging: Logging,
+  habitName: string,
+  year: number,
+  month: string
+): void => {
+  logging[habitName] = logging[habitName] ?? {};
+  logging[habitName][year] = logging[habitName][year] ?? {};
+  logging[habitName][year][month] = logging[habitName][year][month] ?? {};
+};
 
 // Utility function to manage logging data
 const manageLogging = (
@@ -86,10 +81,10 @@ const manageLogging = (
     .toLowerCase();
   const day = selectedDate.getDate();
 
-  const updatedLogging = { ...logging };
+  const updatedLogging = cloneDeep(logging);
 
   // Initialize logging structure
-  // initializeLogging(updatedLogging, habitName, year, month);
+  initializeLogging(updatedLogging, habitName, year, month);
 
   const currentCount = updatedLogging[habitName]?.[year]?.[month]?.[day] || 0;
 
