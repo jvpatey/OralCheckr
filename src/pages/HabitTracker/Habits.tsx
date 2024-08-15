@@ -3,8 +3,7 @@ import _ from "lodash";
 import { PageBackground } from "../../components/styled/PageBackground";
 import { Sidebar } from "../../components/Sidebar";
 import { links } from "../../common/SidebarLinks";
-import { AddHabitButton } from "../../components/habittracker/AddHabitButton";
-import { EditModeButton } from "../../components/habittracker/EditModeButton";
+import { IconTextButton } from "../../components/habittracker/IconTextButton";
 import { DateRangePicker } from "../../components/habittracker/DateRangePicker";
 import { AddEditHabitModal } from "../../components/habittracker/AddEditHabitModal";
 import { cloneDeep } from "lodash";
@@ -21,6 +20,12 @@ import {
 import { HabitList } from "../../components/habittracker/HabitList";
 import { LocalStorage } from "../../common/local-storage";
 import { LogAction } from "../../common/local-storage";
+import {
+  faPlus,
+  faPencilAlt,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../common/color-utils";
 
 // Utility function to update habit data in state and localStorage
 const updateHabits = (
@@ -236,11 +241,24 @@ export function Habits() {
             <HeaderText>My Habits:</HeaderText>
             <HeaderButtons>
               {!isEditMode && (
-                <AddHabitButton onAddClick={handleAddHabitClick} />
+                <IconTextButton
+                  icon={faPlus}
+                  label="Add Habit"
+                  onClick={handleAddHabitClick}
+                  backgroundColor={colors.green}
+                  color={colors.bgWhite}
+                  hoverBackgroundColor={colors.bgWhite}
+                  hoverColor={colors.green}
+                />
               )}
-              <EditModeButton
+              <IconTextButton
+                icon={isEditMode ? faTimes : faPencilAlt}
+                label={isEditMode ? "Exit" : "Edit"}
                 onClick={() => setIsEditMode(!isEditMode)}
-                isEditMode={isEditMode}
+                backgroundColor={isEditMode ? colors.red : colors.yellow}
+                color={colors.bgWhite}
+                hoverBackgroundColor={colors.bgWhite}
+                hoverColor={isEditMode ? colors.red : colors.yellow}
                 disabled={!isEditMode && habits.length === 0}
               />
             </HeaderButtons>
