@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import _ from "lodash";
 import { PageBackground } from "../../components/styled/PageBackground";
-import { Sidebar } from "../../components/Sidebar";
-import { links } from "../../common/SidebarLinks";
 import { IconTextButton } from "../../components/habittracker/IconTextButton";
 import { DateRangePicker } from "../../components/habittracker/DateRangePicker";
 import { AddEditHabitModal } from "../../components/habittracker/AddEditHabitModal";
@@ -227,7 +225,6 @@ export function Habits() {
 
   return (
     <PageBackground>
-      <Sidebar links={links} />
       <HabitListContainer>
         <HabitWrapper>
           <DatePickerWrapper>

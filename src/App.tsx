@@ -1,44 +1,28 @@
-// App.tsx
 import { BrowserRouter } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Router } from "./Router";
 import { NavBar } from "./components/NavBar";
-import { RoutePaths, getFullPath } from "./common/Routes";
-import {
-  faTachometerAlt,
-  faClipboardList,
-  faTasksAlt,
-  faArrowRightFromBracket,
-} from "@fortawesome/free-solid-svg-icons";
+import { Sidebar } from "./components/Sidebar";
+import { links as sidebarLinks } from "./common/SidebarLinks";
+import { links as navbarLinks } from "./common/NavbarLinks";
 
-// Define navigation links for the NavBar
-export const links = [
-  {
-    text: "Dashboard",
-    href: getFullPath(RoutePaths.DASHBOARD),
-    icon: faTachometerAlt,
-  },
-  {
-    text: "Questionnaire",
-    href: getFullPath(RoutePaths.QUESTIONNAIRE),
-    icon: faClipboardList,
-  },
-  {
-    text: "Habit Tracker",
-    href: getFullPath(RoutePaths.HABITS),
-    icon: faTasksAlt,
-  },
-  {
-    text: "Log Out",
-    href: getFullPath(RoutePaths.LOGIN),
-    icon: faArrowRightFromBracket,
-  },
-];
+function RenderNavs() {
+  const location = useLocation();
+  const isHabitTrackerRoute = location.pathname.includes("/habit-tracker");
+
+  return (
+    <>
+      <NavBar links={navbarLinks} />
+      {isHabitTrackerRoute && <Sidebar links={sidebarLinks} />}
+      <Router />
+    </>
+  );
+}
 
 export function App() {
   return (
     <BrowserRouter>
-      <NavBar links={links} />
-      <Router />
+      <RenderNavs />
     </BrowserRouter>
   );
 }
