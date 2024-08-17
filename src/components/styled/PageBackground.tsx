@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../common/color-utils";
 
+// Styled component for the page background
 export const PageBackground = styled.div`
   height: 100vh;
   width: 100vw;

@@ -137,6 +137,7 @@ const Icon = styled.span`
   margin-right: 5px;
 `;
 
+// Functional component for to render the Navbar - used on all pages
 export function NavBar({ links }: NavBarProps) {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("authenticated") === "true";

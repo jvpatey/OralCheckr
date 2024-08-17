@@ -36,6 +36,7 @@ const SaveButton = styled.button<{ disabled: boolean }>`
   }
 `;
 
+// Functional component for the add/edit habit modal, used in the Habits component
 export function AddEditHabitModal({
   show,
   handleClose,

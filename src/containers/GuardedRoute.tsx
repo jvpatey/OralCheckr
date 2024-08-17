@@ -1,7 +1,7 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
 export function GuardedRoute({ children }: { children: JSX.Element }) {
-  const isAuthenticated = localStorage.getItem('authenticated') === 'true';
+  const isAuthenticated = localStorage.getItem("authenticated") === "true";
 
   if (isAuthenticated) {
     return children;

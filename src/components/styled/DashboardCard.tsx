@@ -45,6 +45,7 @@ interface DashboardCardProps {
   children: ReactNode;
 }
 
+// Styled component for the dashboard card
 export function DashboardCard({ children }: DashboardCardProps) {
   return (
     <StyledCard>

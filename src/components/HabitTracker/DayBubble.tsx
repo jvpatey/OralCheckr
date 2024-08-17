@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../common/color-utils";
 
-// Styled component for the date bubbles
+// Styled component for the date bubbles that show the range of dates for the selected week - used in the Habits component
 const DayBubbleStyled = styled.div<{ selected: boolean; $isEditMode: boolean }>`
   background-color: ${({ selected }) =>
     selected ? colors.blue : colors.bgGrey};

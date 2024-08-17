@@ -125,6 +125,7 @@ interface SidebarProps {
   links: { name: string; path: string; icon: any }[];
 }
 
+// Functional component to render the sidebar - used on the habit tracker pages
 export function Sidebar({ links }: SidebarProps) {
   const location = useLocation();
 

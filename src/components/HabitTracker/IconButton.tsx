@@ -64,6 +64,7 @@ const ButtonIcon = styled.div`
   justify-content: center;
 `;
 
+// Functional component for the common icon button (log, remove log, edit, and delete buttons) - used in the Habits component
 export function IconButton({
   icon,
   onClick,

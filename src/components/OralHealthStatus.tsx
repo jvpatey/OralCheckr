@@ -46,6 +46,7 @@ const MessageText = styled.p`
   padding: 15px;
 `;
 
+// Functional component for the Oral Health Status Card on the Dashboard
 export function OralHealthStatus() {
   const storedScore = localStorage.getItem("totalScore");
   const score = storedScore ? parseInt(storedScore, 10) : 0;

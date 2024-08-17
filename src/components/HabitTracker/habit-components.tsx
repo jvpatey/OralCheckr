@@ -1,6 +1,8 @@
 import styled, { keyframes } from "styled-components";
 import { colors } from "../../common/color-utils";
 
+// Styled components for the Habits component
+
 export const fadeUp = keyframes`
   from {
     opacity: 0;

@@ -166,6 +166,7 @@ interface DateRangePickerProps {
   setSelectedFullDate: (date: Date) => void;
 }
 
+// Functional component for the date picker - used in the Habits component
 export function DateRangePicker({
   isEditMode,
   selectedFullDate,

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Card } from "react-bootstrap";
 import { colors } from "../../common/color-utils";
 
+// Styled component for the Card that contains the Questionnaire
 export const QuestionnaireCard = styled(Card)`
   width: 80vw;
   max-width: 1400px;

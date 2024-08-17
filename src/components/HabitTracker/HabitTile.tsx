@@ -169,6 +169,7 @@ interface HabitTileProps {
   logCount: number;
 }
 
+// Functional component to render the tile that stores the habit name, count, and logs - used in the Habits component
 export function HabitTile({ habit, logCount }: HabitTileProps) {
   const [flipped, setFlipped] = useState(false);
 

@@ -24,6 +24,7 @@ interface HabitListProps {
   habitsLog: Logging;
 }
 
+// Functional component to render the list of entered habits - used in the Habits component
 export function HabitList({
   habits,
   selectedDate,

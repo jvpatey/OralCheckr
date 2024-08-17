@@ -75,7 +75,7 @@ interface QuesProps extends Question {
   initialResponse?: number | number[];
 }
 
-// Ques functional component definition
+// Ques functional component for rendering the questions inside the Questionnaire
 export function Ques(props: QuesProps) {
   const { id, title, type, options, onResponseChange, initialResponse } = props;
   const [rangeValue, setRangeValue] = useState<number | null>(null);

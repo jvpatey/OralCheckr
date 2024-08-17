@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../common/color-utils";
 
+// Styled component for the Navigation buttons inside the Questionnaire
 export const NavigationButton = styled.button`
   background-color: ${colors.blue};
   color: white;

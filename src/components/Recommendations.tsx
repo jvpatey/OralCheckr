@@ -165,6 +165,7 @@ const addRecommendation = (
   }
 };
 
+// Functional component for the Recommendations card on the Dashboard
 export function Recommendations() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [index, setIndex] = useState(0);

@@ -95,6 +95,7 @@ const Label = styled.div`
   }
 `;
 
+// Functional component for the common icon button with text (edit mode, add habit, cancel buttons) - used in the Habits component
 export function IconTextButton({
   icon,
   label,

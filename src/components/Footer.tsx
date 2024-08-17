@@ -11,6 +11,7 @@ const StyledFooter = styled.footer`
   margin-left: 10px;
 `;
 
+// Functional component to style the footer
 export function Footer() {
   return (
     <StyledFooter>

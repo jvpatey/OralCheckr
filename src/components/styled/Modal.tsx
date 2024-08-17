@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Modal } from "react-bootstrap";
 import { colors } from "../../common/color-utils";
 
+// Styled component to style the Questionnaire modal
 export const StyledModal = styled(Modal)`
   padding: 10px;
 
