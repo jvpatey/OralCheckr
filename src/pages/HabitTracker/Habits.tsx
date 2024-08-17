@@ -100,6 +100,16 @@ const manageLogging = (
     // Remove the day entry if the log count drops to zero
     if (updatedLogging[habitName][year][month][day] === 0) {
       delete updatedLogging[habitName][year][month][day];
+
+      // If the month no longer has any days logged, remove the month entry
+      if (Object.keys(updatedLogging[habitName][year][month]).length === 0) {
+        delete updatedLogging[habitName][year][month];
+
+        // If the year no longer has any months logged, remove the year entry
+        if (Object.keys(updatedLogging[habitName][year]).length === 0) {
+          delete updatedLogging[habitName][year];
+        }
+      }
     }
   }
 
