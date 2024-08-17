@@ -8,11 +8,12 @@ import { DashboardContainer } from "../components/styled/DashboardContainer";
 import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
 import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
 import { NavigationButton } from "../components/styled/NavigationButton";
+import { colors } from "../common/color-utils";
 
 // styled-component styles for Start Questionnaire Page
 
 const TitleText = styled.h1`
-  color: #07889b;
+  color: ${colors.blue};
   margin-top: 20px;
   margin-bottom: 20px;
   text-align: center;
@@ -26,7 +27,7 @@ const TitleText = styled.h1`
 `;
 
 const CardText = styled.h5`
-  color: #222831;
+  color: ${colors.textGrey};
   margin-bottom: 20px;
   margin-right: 40px;
   margin-left: 40px;
@@ -43,17 +44,19 @@ const CardText = styled.h5`
 const StartButton = styled(NavigationButton)`
   width: 25%;
   text-align: center;
+  border: solid;
+  border-color: ${colors.blue};
+  color: ${colors.bgWhite};
 
   @media (max-width: 768px) {
     width: 40%;
   }
 
   &:hover {
-    background-color: #f5f5f5;
-    color: #07889b;
-    font-weight: bold;
+    background-color: ${colors.bgWhite};
+    color: ${colors.blue};
     border: solid;
-    border-color: #07889b;
+    border-color: ${colors.blue};
   }
 `;
 

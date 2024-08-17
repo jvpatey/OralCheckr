@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+// Styled component to position the dashboard
 export const DashboardContainer = styled.div`
   display: flex;
   flex: 1;

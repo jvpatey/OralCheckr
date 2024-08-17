@@ -9,6 +9,7 @@ const DashboardTile = styled(HabitDashboardTile)`
   }
 `;
 
+// Styled component for the Habit Tracker Card on the dashboard
 export function HabitTrackerDash() {
   return (
     <DashboardTile style={{ width: "99%" }}>

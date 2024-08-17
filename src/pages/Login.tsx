@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { RoutePaths } from "../common/Routes";
 import { getFullPath } from "../common/Routes";
 import { PageBackground } from "../components/styled/PageBackground";
+import { colors } from "../common/color-utils";
 
 // styled-component styles for Login Page
 
@@ -29,10 +30,10 @@ const AnimatedCard = styled(Card)`
 const CardBody = styled(Card.Body)`
   max-width: 400px;
   min-height: 600px;
-  background-color: #f5f5f5;
+  background-color: ${colors.bgWhite};
   border-style: solid;
   border-width: 4px;
-  border-color: #07889b;
+  border-color: ${colors.blue};
   border-radius: 15px;
   padding: 20px;
   text-align: center;
@@ -45,23 +46,23 @@ const LogoStyle = styled.div`
 
 const LogoImgStyle = styled.img`
   height: 60px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 `;
 
 const LogoTextStyle = styled.span`
-  color: #222831;
+  color: ${colors.blue};
   font-size: 35px;
 `;
 
 const TextStyle = styled(Card.Text)`
-  color: #222831;
+  color: ${colors.darkGrey};
   font-weight: 500;
   text-align: center;
   margin-top: 20px;
 `;
 
 const LoginText = styled(Card.Text)`
-  color: #222831;
+  color: ${colors.blue};
   font-size: x-large;
   font-weight: 600;
   text-align: center;
@@ -69,14 +70,13 @@ const LoginText = styled(Card.Text)`
 `;
 
 const UsernameStyle = styled(Form.Control)`
-  background-color: #f5f5f5;
+  background-color: ${colors.bgWhite};
   margin-top: 20px;
   border-style: solid;
   border-width: 2px;
-  border-color: #222831;
+  border-color: ${colors.blue};
 
   ::placeholder {
-    color: #07889b !important;
     opacity: 1 !important;
     font-weight: 400;
   }
@@ -87,7 +87,7 @@ const PasswordStyle = styled(Form.Control)`
   margin-top: 30px;
   border-style: solid;
   border-width: 2px;
-  border-color: #222831;
+  border-color: ${colors.blue};
 
   ::placeholder {
     color: #07889b !important;
@@ -97,10 +97,11 @@ const PasswordStyle = styled(Form.Control)`
 `;
 
 const Button = styled.button<{ $login?: boolean }>`
-  background-color: ${(props) => (props.$login ? "#07889B" : "white")};
-  color: ${(props) => (props.$login ? "#F5F5F5" : "#07889B")};
+  background-color: ${(props) =>
+    props.$login ? colors.bgWhite : colors.bgWhite};
+  color: ${(props) => (props.$login ? colors.blue : colors.blue)};
   font-weight: bold;
-  border: 2px solid ${(props) => (props.$login ? "#0375B4" : "#07889B")};
+  border: 2px solid ${(props) => (props.$login ? colors.blue : colors.blue)};
   width: 60%;
   margin-top: 30px;
   border-radius: 20px;
@@ -108,9 +109,9 @@ const Button = styled.button<{ $login?: boolean }>`
   cursor: pointer;
 
   &:hover {
-    background-color: ${(props) => (props.$login ? "#F5F5F5" : "#07889B")};
-    color: ${(props) => (props.$login ? "#07889B" : "#F5F5F5")};
-    border-color: #07889b;
+    background-color: ${(props) => (props.$login ? colors.blue : colors.blue)};
+    color: ${(props) => (props.$login ? colors.bgWhite : colors.bgWhite)};
+    border-color: ${colors.blue};
     border-width: 2px;
   }
 `;
@@ -129,7 +130,7 @@ export function Login() {
       <AnimatedCard>
         <CardBody>
           <LogoStyle>
-            <LogoImgStyle src="./OralCheckr/images/logo2.png" alt="Logo" />
+            <LogoImgStyle src="./OralCheckr/images/logo-blue.png" alt="Logo" />
             <LogoTextStyle>OralCheckr</LogoTextStyle>
           </LogoStyle>
           <TextStyle>Improve your oral health today.</TextStyle>

@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
+import { colors } from "../../common/color-utils";
 
+// Styled component to style the Questionnaire modal
 export const StyledModal = styled(Modal)`
   padding: 10px;
 
   .modal-content {
-    background-color: #f5f5f5;
-    border: 1px solid #f5f5f5;
+    background-color: ${colors.bgWhite};
+    border: 1px solid ${colors.bgWhite};
   }
 
   .modal-header,
@@ -15,12 +17,12 @@ export const StyledModal = styled(Modal)`
   }
 
   .modal-title {
-    color: #07889b;
+    color: ${colors.blue};
     font-size: 1.5rem;
   }
 
   .modal-body {
-    color: #222831;
+    color: ${colors.textGrey};
     font-size: 1.2rem;
   }
 `;

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+// Styled component to contain the dashboard card
 export const DashboardCardContainer = styled.div`
   flex: 1;
   display: flex;

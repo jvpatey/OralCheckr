@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { RoutePaths, getFullPath } from "../common/Routes";
+import { colors } from "../common/color-utils";
 
 interface NavBarProps {
   links: { text: string; href: string; icon: any }[];
@@ -21,7 +22,7 @@ const fadeInDown = keyframes`
 `;
 
 const CustomNavbar = styled(Navbar)`
-  background-color: #f5f5f5;
+  background-color: ${colors.bgWhite};
   width: 100%;
   animation: ${fadeInDown} 1s ease-out;
 `;
@@ -30,25 +31,71 @@ const BrandText = styled(Navbar.Brand)`
   display: flex;
   align-items: center;
   font-size: x-large;
-  color: #222831;
+  color: ${colors.textGrey};
+
+  &:hover {
+    color: ${colors.blue};
+    font-weight: 600;
+  }
 `;
 
 const LogoImage = styled.img`
   height: 45px;
+  margin-bottom: 5px;
 `;
 
-const DropdownIcon = styled.div`
-  color: #222831;
-  cursor: pointer;
+const CustomDropdownToggle = styled(Dropdown.Toggle)`
+  color: ${colors.textGrey};
+  background: none;
+  border: none;
 
   &:hover {
-    color: #0375b4;
-    transform: scale(1.25);
+    color: ${colors.blue};
+    transform: scale(1.1);
+    background-color: transparent;
+  }
+
+  &:focus,
+  &:active {
+    color: ${colors.textGrey};
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  &.show {
+    color: ${colors.textGrey};
+    background-color: transparent;
+    transform: scale(1.1);
+  }
+`;
+
+const CustomDropdownMenu = styled(Dropdown.Menu)`
+  background-color: ${colors.bgWhite};
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 200px;
+`;
+
+const CustomDropdownItem = styled(Dropdown.Item)`
+  color: ${colors.textGrey};
+  padding: 10px 20px;
+  display: block;
+  width: 100%;
+  text-align: left;
+
+  &:hover {
+    color: ${colors.blue};
+    background-color: transparent;
+  }
+
+  &.active {
+    color: ${colors.blue};
+    font-weight: bold;
   }
 `;
 
 const CustomCollapse = styled(Navbar.Collapse)`
-  background-color: #f5f5f5;
+  background-color: ${colors.bgWhite};
 
   @media (max-width: 992px) {
     position: absolute;
@@ -70,19 +117,19 @@ const CustomCollapse = styled(Navbar.Collapse)`
 `;
 
 const CustomNavLink = styled(Nav.Link)`
-  color: #222831;
+  color: ${colors.textGrey};
   margin-right: 35px;
 
   &:hover {
-    color: #07889b;
+    color: ${colors.blue};
     transform: scale(1.05);
   }
 
   &.active {
-    color: #07889b;
+    color: ${colors.blue};
     font-weight: bold;
     transform: scale(1.1);
-    background-color: transparent !important;
+    background-color: transparent;
   }
 `;
 
@@ -90,6 +137,7 @@ const Icon = styled.span`
   margin-right: 5px;
 `;
 
+// Functional component for to render the Navbar - used on all pages
 export function NavBar({ links }: NavBarProps) {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
@@ -115,19 +163,17 @@ export function NavBar({ links }: NavBarProps) {
     <CustomNavbar expand="lg" fixed="top">
       <Container fluid>
         <BrandText as={Link} to={getFullPath(RoutePaths.DASHBOARD)}>
-          <LogoImage src="/OralCheckr/images/logo2.png" alt="Logo" />
+          <LogoImage src="/OralCheckr/images/logo-blue.png" alt="Logo" />
           OralCheckr
         </BrandText>
         <Dropdown className="ms-auto d-lg-none">
-          <DropdownIcon>
-            <Dropdown.Toggle as="span" id="dropdown-basic">
-              <FontAwesomeIcon icon={faBars} />
-            </Dropdown.Toggle>
-          </DropdownIcon>
+          <CustomDropdownToggle id="dropdown-basic">
+            <FontAwesomeIcon icon={faBars} />
+          </CustomDropdownToggle>
 
-          <Dropdown.Menu align="end">
+          <CustomDropdownMenu align="end">
             {links.map((link) => (
-              <Dropdown.Item
+              <CustomDropdownItem
                 key={link.href}
                 className={isActive(link.href) ? "active" : ""}
                 as={Link}
@@ -144,9 +190,9 @@ export function NavBar({ links }: NavBarProps) {
                   <FontAwesomeIcon icon={link.icon} />
                 </Icon>
                 {link.text}
-              </Dropdown.Item>
+              </CustomDropdownItem>
             ))}
-          </Dropdown.Menu>
+          </CustomDropdownMenu>
         </Dropdown>
         <CustomCollapse id="basic-navbar-nav">
           <Nav className="ms-auto d-none d-lg-flex">

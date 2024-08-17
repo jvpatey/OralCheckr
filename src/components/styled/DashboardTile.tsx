@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { Card } from "react-bootstrap";
+import { colors } from "../../common/color-utils";
 
+// Styled component to style the tiles within the Dashboard Card
 export const DashboardTile = styled(Card)`
-  background-color: #f5f5f5;
+  background-color: ${colors.bgWhite};
   border: transparent;
   border-radius: 20px;
   display: flex;

@@ -1,13 +1,14 @@
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import { ReactNode } from "react";
+import { colors } from "../../common/color-utils";
 
 const StyledCard = styled(Card)`
   width: 90vw;
   max-width: 1400px;
   height: 80vh;
   min-height: 60vh;
-  background-color: #e0e0e0;
+  background-color: ${colors.disabledBgGrey};
   border: transparent;
   border-radius: 20px;
   margin-top: 68px;
@@ -44,6 +45,7 @@ interface DashboardCardProps {
   children: ReactNode;
 }
 
+// Styled component for the dashboard card
 export function DashboardCard({ children }: DashboardCardProps) {
   return (
     <StyledCard>

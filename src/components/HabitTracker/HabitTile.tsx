@@ -1,22 +1,19 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPencil,
-  faTrashCan,
-  faSync,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSync } from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../common/color-utils";
 
 // Common styles for both sides of the flip card
-const flipCardCommonStyles = css`
-  background-color: #e9f6fb;
-  color: #00a9dd;
+const flipCardCommonStyles = css<{ $isComplete: boolean }>`
+  background-color: ${colors.bgWhite};
+  color: ${({ $isComplete }) => ($isComplete ? colors.green : colors.blue)};
   font-weight: 600;
-  border: 2px solid #00a9dd;
+  border: 2px solid
+    ${({ $isComplete }) => ($isComplete ? colors.green : colors.blue)};
   border-radius: 10px;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -24,18 +21,20 @@ const flipCardCommonStyles = css`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 10px;
   position: absolute;
+  backface-visibility: hidden;
 `;
 
 // Styled component for the tile container
 const TileContainer = styled.div`
   perspective: 1000px;
   border-radius: 10px;
-  width: 65%;
+  width: 100%;
   height: 50px;
   margin-bottom: 10px;
   margin-left: auto;
   margin-right: auto;
   transition: box-shadow 0.3s;
+  position: relative;
 
   &:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -50,6 +49,19 @@ const TileContainer = styled.div`
   }
 `;
 
+// Styled component for the progress bar
+const ProgressBar = styled.div<{ $progress: number; $isComplete: boolean }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: ${({ $progress }) => $progress}%;
+  background-color: ${({ $isComplete }) =>
+    $isComplete ? "rgba(65, 188, 122, 0.2)" : "rgba(63, 147, 178, 0.2)"};
+  z-index: 1;
+  transition: width 0.3s ease;
+`;
+
 // Styled component for the flip card with conditional flipping
 const FlipCard = styled.div<{ $flipped: boolean }>`
   width: 100%;
@@ -62,14 +74,16 @@ const FlipCard = styled.div<{ $flipped: boolean }>`
 `;
 
 // Front side of the flip card
-const FlipCardFront = styled.div`
+const FlipCardFront = styled.div<{ $isComplete: boolean }>`
   ${flipCardCommonStyles}
+  z-index: 2;
 `;
 
 // Back side of the flip card
-const FlipCardBack = styled.div`
+const FlipCardBack = styled.div<{ $isComplete: boolean }>`
   ${flipCardCommonStyles}
   transform: rotateX(180deg);
+  z-index: 2;
 `;
 
 // Styled component for displaying the habit name
@@ -80,47 +94,17 @@ const HabitName = styled.div`
   text-overflow: ellipsis;
   flex: 1;
   text-align: center;
-  margin-left: 45px;
-`;
-
-// Styled component for the edit and delete icons container
-const IconsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 15px;
-`;
-
-// Separate styles for edit and delete icons
-const EditIcon = styled.div`
-  cursor: pointer;
-  color: #93c47d;
-  margin: 0 5px;
-
-  &:hover {
-    transform: scale(1.1);
-    color: #93c47d;
-  }
-`;
-
-const DeleteIcon = styled.div`
-  cursor: pointer;
-  color: #e07366;
-  margin: 0 5px;
-
-  &:hover {
-    transform: scale(1.1);
-    color: #e07366;
-  }
+  z-index: 2;
 `;
 
 // Styled component for the arrow icon
 const ArrowIconWrapper = styled.div`
   position: absolute;
   bottom: 0px;
-  right: 5px;
+  left: 5px;
   font-size: 12px;
   cursor: pointer;
-  color: #07889b;
+  color: ${colors.blue};
   opacity: 0;
   transition: opacity 0.3s;
 `;
@@ -137,7 +121,7 @@ const BackText = styled.div`
   padding: 10px;
 
   .label {
-    color: #646660;
+    color: ${colors.textGrey};
     font-weight: bold;
     overflow: hidden;
     white-space: nowrap;
@@ -147,7 +131,7 @@ const BackText = styled.div`
   }
 
   .value {
-    color: #00a9dd;
+    color: ${colors.green};
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -159,56 +143,57 @@ const BackText = styled.div`
   }
 `;
 
+// Styled component for displaying the log count in a bubble
+const LogCountBubble = styled.div`
+  background-color: ${colors.bgWhite};
+  color: ${colors.green};
+  border: 2px solid ${colors.green};
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-left: 10px;
+  z-index: 2;
+`;
+
 interface HabitTileProps {
   habit: {
     name: string;
     count: number;
   };
-  onEditClick?: () => void;
-  onDeleteClick?: () => void;
+  logCount: number;
 }
 
-export function HabitTile({
-  habit,
-  onEditClick,
-  onDeleteClick,
-}: HabitTileProps) {
+// Functional component to render the tile that stores the habit name, count, and logs - used in the Habits component
+export function HabitTile({ habit, logCount }: HabitTileProps) {
   const [flipped, setFlipped] = useState(false);
+
+  // Calculate the progress as a percentage
+  const progress = Math.min((logCount / habit.count) * 100, 100);
+
+  // Determine if the habit is complete
+  const isComplete = logCount >= habit.count;
 
   // Handler for flipping the card
   const handleFlip = () => setFlipped(!flipped);
 
-  // Handler for delete icon click
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (window.confirm("Are you sure you want to delete this habit?")) {
-      onDeleteClick && onDeleteClick();
-    }
-  };
-
   return (
     <TileContainer onClick={handleFlip}>
       <FlipCard $flipped={flipped}>
-        <FlipCardFront>
+        <FlipCardFront $isComplete={isComplete}>
+          <ProgressBar $progress={progress} $isComplete={isComplete} />
           <HabitName>{habit.name}</HabitName>
-          <IconsContainer>
-            <EditIcon
-              onClick={(e) => {
-                e.stopPropagation();
-                onEditClick && onEditClick();
-              }}
-            >
-              <FontAwesomeIcon icon={faPencil} />
-            </EditIcon>
-            <DeleteIcon onClick={handleDeleteClick}>
-              <FontAwesomeIcon icon={faTrashCan} />
-            </DeleteIcon>
-          </IconsContainer>
+          <LogCountBubble>{logCount}</LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>
         </FlipCardFront>
-        <FlipCardBack>
+        <FlipCardBack $isComplete={isComplete}>
           <BackText>
             <div className="label spaced">
               Habit: <span className="value">{habit.name}</span>
@@ -217,6 +202,7 @@ export function HabitTile({
               Count (times/day): <span className="value">{habit.count}</span>
             </div>
           </BackText>
+          <LogCountBubble>{logCount}</LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>

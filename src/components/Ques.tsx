@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Question, Type } from "../pages/Questionnaire";
+import { colors } from "../common/color-utils";
 
 // Styled-components for the Questionnaire component
 
 const QuesTitle = styled.h2`
-  color: #07889b;
+  color: ${colors.blue};
   margin-bottom: 20px;
   text-align: center;
   font-size: 1.5rem;
@@ -16,7 +17,7 @@ const FormContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 50px;
-  background-color: #f5f5f5;
+  background-color: ${colors.bgWhite};
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 600px;
@@ -30,14 +31,15 @@ const FormGroup = styled.div.withConfig({
   display: flex;
   flex-direction: ${({ isRange }) => (isRange ? "column" : "row")};
   align-items: center;
-  background-color: #e0e0e0;
+  background-color: ${colors.disabledBgGrey};
   padding: 10px 20px;
   border-radius: 20px;
   margin-bottom: 15px;
   width: 100%;
+  color: ${colors.darkGrey};
 
   &:hover {
-    background-color: #f0f0f0;
+    background-color: ${colors.bgGrey};
   }
 
   label {
@@ -73,7 +75,7 @@ interface QuesProps extends Question {
   initialResponse?: number | number[];
 }
 
-// Ques functional component definition
+// Ques functional component for rendering the questions inside the Questionnaire
 export function Ques(props: QuesProps) {
   const { id, title, type, options, onResponseChange, initialResponse } = props;
   const [rangeValue, setRangeValue] = useState<number | null>(null);

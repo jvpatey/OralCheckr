@@ -1,53 +1,86 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { getFullPath } from "../common/Routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { colors } from "../common/color-utils";
+
+// Fade-in from left animation
+const fadeInLeft = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
 
 const SidebarContainer = styled.div`
   height: calc(100vh - 56px);
-  width: 190px;
+  width: 160px;
   position: fixed;
   top: 60px;
   left: 0;
-  background-color: #e0e0e0;
-  color: #222831;
+  background-color: ${colors.blue};
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   padding-top: 20px;
-  border-top-right-radius: 20px;
+  padding-left: 10px;
+  margin-top: 10px;
+  border-top-right-radius: 12px;
+  animation: ${fadeInLeft} 1s ease-in-out;
 
   @media (max-width: 768px) {
     width: 70px;
+    align-items: center;
+    padding-left: 0;
   }
 `;
 
 const SidebarLink = styled(Link)`
   width: 100%;
+  max-width: 135px;
   font-size: 15px;
-  padding: 15px 20px;
+  padding: 10px 20px;
   text-align: left;
   text-decoration: none;
-  color: #222831;
+  color: ${colors.bgWhite};
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  color: #222831;
-  position: relative;
+  margin-bottom: 17px;
 
   &:hover {
-    color: #07889b;
+    color: ${colors.bgWhite};
     transform: scale(1.05);
   }
 
   &.active {
-    font-weight: bold;
-    color: #07889b;
+    font-weight: 800;
+    font-size: 15px;
+    background-color: ${colors.green};
+    color: ${colors.bgWhite};
+    border-radius: 10px;
+    padding: 10px 20px;
   }
 
   @media (max-width: 768px) {
     justify-content: center;
     padding: 10px;
+    margin-right: 0;
+    margin-left: 0;
+
+    &.active {
+      font-weight: 800;
+      color: ${colors.bgWhite};
+      font-size: 18px;
+      background-color: ${colors.green};
+      padding: 8px;
+      border-radius: 10px;
+      width: auto;
+    }
   }
 
   @media (max-width: 768px) {
@@ -57,8 +90,8 @@ const SidebarLink = styled(Link)`
       left: 60px;
       top: 50%;
       transform: translateY(-50%);
-      background: #222831;
-      color: #f5f5f5;
+      background: ${colors.darkGrey};
+      color: ${colors.bgWhite};
       padding: 2px 5px;
       border-radius: 4px;
       white-space: nowrap;
@@ -92,6 +125,7 @@ interface SidebarProps {
   links: { name: string; path: string; icon: any }[];
 }
 
+// Functional component to render the sidebar - used on the habit tracker pages
 export function Sidebar({ links }: SidebarProps) {
   const location = useLocation();
 
