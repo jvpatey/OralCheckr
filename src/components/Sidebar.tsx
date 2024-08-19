@@ -18,7 +18,7 @@ const fadeInLeft = keyframes`
 
 const SidebarContainer = styled.div`
   height: calc(100vh - 56px);
-  width: 160px;
+  width: 200px;
   position: fixed;
   top: 60px;
   left: 0;
@@ -40,9 +40,8 @@ const SidebarContainer = styled.div`
 `;
 
 const SidebarLink = styled(Link)`
-  width: 100%;
-  max-width: 135px;
-  font-size: 15px;
+  width: calc(100% - 20px);
+  font-size: 17px;
   padding: 10px 20px;
   text-align: left;
   text-decoration: none;
@@ -51,19 +50,23 @@ const SidebarLink = styled(Link)`
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 17px;
+  border-radius: 10px;
+  overflow: hidden;
 
   &:hover {
     color: ${colors.bgWhite};
     transform: scale(1.05);
+    background-color: ${colors.green};
   }
 
   &.active {
     font-weight: 800;
-    font-size: 15px;
+    font-size: 17px;
     background-color: ${colors.green};
     color: ${colors.bgWhite};
     border-radius: 10px;
     padding: 10px 20px;
+    overflow: hidden;
   }
 
   @media (max-width: 768px) {
@@ -71,6 +74,7 @@ const SidebarLink = styled(Link)`
     padding: 10px;
     margin-right: 0;
     margin-left: 0;
+    width: auto;
 
     &.active {
       font-weight: 800;
@@ -79,7 +83,6 @@ const SidebarLink = styled(Link)`
       background-color: ${colors.green};
       padding: 8px;
       border-radius: 10px;
-      width: auto;
     }
   }
 

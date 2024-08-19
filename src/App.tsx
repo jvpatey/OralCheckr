@@ -1,19 +1,31 @@
 import { BrowserRouter } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { Router } from "./Router";
 import { NavBar } from "./components/NavBar";
 import { Sidebar } from "./components/Sidebar";
-import { links as sidebarLinks } from "./common/SidebarLinks";
-import { links as navbarLinks } from "./common/NavbarLinks";
+import {
+  habitTrackerLinks,
+  questionnaireLinks,
+  SidebarLink,
+} from "./common/SidebarLinks";
+import { navbarLinks } from "./common/NavbarLinks";
+import { Router } from "./Router";
 
 function RenderNavs() {
   const location = useLocation();
   const isHabitTrackerRoute = location.pathname.includes("/habit-tracker");
+  const isQuestionnaireRoute = location.pathname.includes("/questionnaire");
+
+  let sidebarLinks: SidebarLink[] = [];
+  if (isHabitTrackerRoute) {
+    sidebarLinks = habitTrackerLinks;
+  } else if (isQuestionnaireRoute) {
+    sidebarLinks = questionnaireLinks;
+  }
 
   return (
     <>
       <NavBar links={navbarLinks} />
-      {isHabitTrackerRoute && <Sidebar links={sidebarLinks} />}
+      {sidebarLinks.length > 0 && <Sidebar links={sidebarLinks} />}
       <Router />
     </>
   );

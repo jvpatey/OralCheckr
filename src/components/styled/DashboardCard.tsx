@@ -33,7 +33,7 @@ const StyledCard = styled(Card)`
   @media (max-width: 768px) {
     width: 90%;
     margin: 10px auto;
-    min-height: auto;
+    min-height: 250px;
   }
 
   &:hover {

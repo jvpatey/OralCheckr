@@ -1,7 +1,7 @@
 import { faClipboardList, faTasksAlt, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { RoutePaths, getFullPath } from "./Routes";
 
-export const links = [
+export const navbarLinks = [
   {
     text: "Questionnaire",
     href: getFullPath(RoutePaths.QUESTIONNAIRE),
