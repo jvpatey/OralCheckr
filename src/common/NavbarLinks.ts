@@ -1,12 +1,7 @@
-import { faTachometerAlt, faClipboardList, faTasksAlt, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faClipboardList, faTasksAlt, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { RoutePaths, getFullPath } from "./Routes";
 
 export const links = [
-  {
-    text: "Dashboard",
-    href: getFullPath(RoutePaths.DASHBOARD),
-    icon: faTachometerAlt,
-  },
   {
     text: "Questionnaire",
     href: getFullPath(RoutePaths.QUESTIONNAIRE),

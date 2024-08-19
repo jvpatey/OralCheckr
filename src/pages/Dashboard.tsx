@@ -4,8 +4,9 @@ import { DashboardContainer } from "../components/styled/DashboardContainer";
 import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
 import { DashboardCard } from "../components/styled/DashboardCard";
 import { faClipboardList, faTasksAlt } from "@fortawesome/free-solid-svg-icons";
+import { RoutePaths, getFullPath } from "../common/Routes";
 
-// functional component for the dashboard page
+// Functional component for the dashboard
 export function Dashboard() {
   return (
     <PageBackground>
@@ -14,13 +15,13 @@ export function Dashboard() {
           <DashboardCard
             title="Questionnaire"
             description="Click here to complete/retake the oral health questionnaire. Get feedback to improve your oral health."
-            buttonLink="/OralCheckr/questionnaire"
+            buttonLink={getFullPath(RoutePaths.QUESTIONNAIRE)}
             icon={faClipboardList}
           />
           <DashboardCard
             title="Habit Tracker"
             description="Click here to track your oral health habits and see analytics and progress."
-            buttonLink="/OralCheckr/habit-tracker"
+            buttonLink={getFullPath(RoutePaths.HABITS)}
             icon={faTasksAlt}
           />
         </DashboardCardContainer>

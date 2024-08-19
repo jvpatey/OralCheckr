@@ -119,6 +119,7 @@ const CustomCollapse = styled(Navbar.Collapse)`
 const CustomNavLink = styled(Nav.Link)`
   color: ${colors.textGrey};
   margin-right: 35px;
+  font-size: large;
 
   &:hover {
     color: ${colors.blue};
