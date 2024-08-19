@@ -21,6 +21,6 @@ export const habitTrackerLinks: SidebarLink[] = [
 
 // Links array with icons for the questionnaire
 export const questionnaireLinks: SidebarLink[] = [
-  { name: "Questionnaire", path: "/questionnaire", icon: faClipboardList },
-  { name: "Results", path: "/questionnaire/results", icon: faSquarePollVertical },
+  { name: "Questionnaire", path: "/ques/questionnaire", icon: faClipboardList },
+  { name: "Results", path: "/ques/results", icon: faSquarePollVertical },
 ];

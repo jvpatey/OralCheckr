@@ -13,7 +13,7 @@ import { Router } from "./Router";
 function RenderNavs() {
   const location = useLocation();
   const isHabitTrackerRoute = location.pathname.includes("/habit-tracker");
-  const isQuestionnaireRoute = location.pathname.includes("/questionnaire");
+  const isQuestionnaireRoute = location.pathname.includes("/ques");
 
   let sidebarLinks: SidebarLink[] = [];
   if (isHabitTrackerRoute) {

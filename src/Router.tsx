@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import "./App.css";
 import { RoutePaths, getFullPath } from "./common/Routes";
 import { GuardedRoute } from "./containers/GuardedRoute";
 import { RedirectIfAuthenticated } from "./containers/RedirectIfAuthenticated";
@@ -8,11 +7,11 @@ import { Login } from "./pages/Login";
 import { Questionnaire } from "./pages/Questionnaire";
 import { Habits } from "./pages/habittracker/Habits";
 import { Analytics } from "./pages/habittracker/Analytics";
+import { Results } from "./pages/Results";
 
 export function Router() {
   return (
     <Routes>
-      {/* Redirect to login page if user is not authenticated */}
       <Route
         path="/"
         element={
@@ -21,7 +20,6 @@ export function Router() {
           </RedirectIfAuthenticated>
         }
       />
-      {/* Catch-all route that redirects to the login page */}
       <Route path="*" element={<Navigate to="/" replace={true} />} />
       <Route
         path={getFullPath(RoutePaths.DASHBOARD)}
@@ -47,9 +45,27 @@ export function Router() {
           </GuardedRoute>
         }
       />
-      {/* Questionnaire route guarded by authentication, with optional questionId parameter */}
+      {/* Use exact matching for results */}
       <Route
-        path={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/:questionId?`}
+        path={getFullPath(RoutePaths.RESULTS)}
+        element={
+          <GuardedRoute>
+            <Results />
+          </GuardedRoute>
+        }
+      />
+      {/* Use a more specific match for the questionnaire with optional ID */}
+      <Route
+        path={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/:questionId`}
+        element={
+          <GuardedRoute>
+            <Questionnaire />
+          </GuardedRoute>
+        }
+      />
+      {/* Explicitly define the questionnaire base path */}
+      <Route
+        path={getFullPath(RoutePaths.QUESTIONNAIRE)}
         element={
           <GuardedRoute>
             <Questionnaire />

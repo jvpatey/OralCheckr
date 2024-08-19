@@ -92,10 +92,6 @@ export function StartQuestionnaire() {
               your answers to gain valuable insights and improve your oral
               health.
             </CardText>
-            <CardText>
-              Utilize our recommendations and track your progress using our
-              integrated habit tracker.
-            </CardText>
             <ButtonContainer>
               <StartButton
                 as={Link}
