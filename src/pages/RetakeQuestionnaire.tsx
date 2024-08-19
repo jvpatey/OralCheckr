@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { ButtonProps } from "react-bootstrap/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RoutePaths } from "../common/Routes";
 import { getFullPath } from "../common/Routes";
 import styled from "styled-components";
@@ -54,20 +54,26 @@ const NavButton = styled(NavigationButton)`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 70%;
+  width: 80%;
+  padding: 15px 20px;
+  font-size: 1.25rem;
   text-align: center;
-  border: solid;
-  border-color: ${colors.blue};
+  border: solid 2px;
+  border-color: ${colors.green};
+  background-color: ${colors.green};
+  color: ${colors.bgWhite};
 
   @media (max-width: 768px) {
-    width: 50%;
+    width: 70%;
+    padding: 10px 15px;
+    font-size: 1.1rem;
   }
 
   &:hover {
     background-color: ${colors.bgWhite};
-    color: ${colors.blue};
-    border: solid;
-    border-color: ${colors.blue};
+    color: ${colors.green};
+    border: solid 2px;
+    border-color: ${colors.green};
   }
 `;
 
@@ -101,7 +107,6 @@ interface RetakeQuestionnaireProps {
   resetResponses: () => void;
 }
 
-// page rendered when user tries to take the questionnaire but previous responses are still stored in Local Storage
 export function RetakeQuestionnaire({
   resetResponses,
 }: RetakeQuestionnaireProps) {
@@ -142,9 +147,6 @@ export function RetakeQuestionnaire({
             <ButtonContainer>
               <NavButton onClick={handleRetakeClick}>
                 Retake Questionnaire
-              </NavButton>
-              <NavButton as={Link} to={getFullPath(RoutePaths.DASHBOARD)}>
-                Back to Dashboard
               </NavButton>
             </ButtonContainer>
           </QuestionnaireCard>

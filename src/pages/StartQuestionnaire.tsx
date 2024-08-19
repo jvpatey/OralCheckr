@@ -10,12 +10,12 @@ import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
 import { NavigationButton } from "../components/styled/NavigationButton";
 import { colors } from "../common/color-utils";
 
-// styled-component styles for Start Questionnaire Page
+// Styled-components for Start Questionnaire Page
 
 const TitleText = styled.h1`
   color: ${colors.blue};
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 60px;
   text-align: center;
   font-size: 2.5rem;
 
@@ -41,26 +41,41 @@ const CardText = styled.h5`
   }
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+`;
+
 const StartButton = styled(NavigationButton)`
-  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%; // Wider button
+  padding: 20px 30px;
+  font-size: 1.5rem;
   text-align: center;
-  border: solid;
-  border-color: ${colors.blue};
+  border: solid 2px;
+  border-color: ${colors.green};
+  background-color: ${colors.green};
   color: ${colors.bgWhite};
 
   @media (max-width: 768px) {
-    width: 40%;
+    width: 80%;
+    padding: 15px 20px;
+    font-size: 1.25rem;
   }
 
   &:hover {
     background-color: ${colors.bgWhite};
-    color: ${colors.blue};
-    border: solid;
-    border-color: ${colors.blue};
+    color: ${colors.green};
+    border: solid 2px;
+    border-color: ${colors.green};
   }
 `;
 
-// functional component for the page to start the questionnaire if not completed previously
+// Functional component for the page to start the questionnaire if not completed previously
 export function StartQuestionnaire() {
   return (
     <PageBackground>
@@ -81,12 +96,14 @@ export function StartQuestionnaire() {
               Utilize our recommendations and track your progress using our
               integrated habit tracker.
             </CardText>
-            <StartButton
-              as={Link}
-              to={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/1`}
-            >
-              Begin
-            </StartButton>
+            <ButtonContainer>
+              <StartButton
+                as={Link}
+                to={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/1`}
+              >
+                Begin
+              </StartButton>
+            </ButtonContainer>
           </QuestionnaireCard>
         </QuestionnaireCardContainer>
       </DashboardContainer>
