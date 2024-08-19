@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { getFullPath } from "../common/Routes";
 import { PageBackground } from "../components/styled/PageBackground";
 import { DashboardContainer } from "../components/styled/DashboardContainer";
-import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
+import { QuestionnaireCardContainer } from "../components/styled/QuestionnaireCardContainer";
 import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
 import { Ques } from "../components/Ques";
 import { RoutePaths } from "../common/Routes";
@@ -248,7 +248,7 @@ export function Questionnaire() {
   return (
     <PageBackground>
       <DashboardContainer>
-        <DashboardCardContainer>
+        <QuestionnaireCardContainer>
           <QuestionnaireCard>
             <QuesContainer>
               <ProgressBar>
@@ -294,7 +294,7 @@ export function Questionnaire() {
               </div>
             </QuesContainer>
           </QuestionnaireCard>
-        </DashboardCardContainer>
+        </QuestionnaireCardContainer>
       </DashboardContainer>
     </PageBackground>
   );

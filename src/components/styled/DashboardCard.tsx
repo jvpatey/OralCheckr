@@ -1,20 +1,23 @@
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
-import { ReactNode } from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { colors } from "../../common/color-utils";
 
 const StyledCard = styled(Card)`
-  width: 90vw;
-  max-width: 1400px;
-  height: 80vh;
-  min-height: 60vh;
-  background-color: ${colors.disabledBgGrey};
-  border: transparent;
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  height: auto;
+  min-height: 40vh;
+  background-color: ${colors.blue};
+  border: 4px solid ${colors.blue};
   border-radius: 20px;
-  margin-top: 68px;
   animation: fadeInUp 1s ease-out;
   display: flex;
   flex-direction: column;
+  text-decoration: none;
+  cursor: pointer;
 
   @keyframes fadeInUp {
     from {
@@ -27,9 +30,16 @@ const StyledCard = styled(Card)`
     }
   }
 
-  @media (max-height: 700px) {
-    height: auto;
-    margin-top: 20px;
+  @media (max-width: 768px) {
+    width: 90%;
+    margin: 10px auto;
+    min-height: auto;
+  }
+
+  &:hover {
+    background-color: ${colors.green};
+    border: 4px solid ${colors.green};
+    transform: scale(1.05);
   }
 `;
 
@@ -38,18 +48,55 @@ const StyledCardBody = styled(Card.Body)`
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   overflow-y: auto;
 `;
 
-interface DashboardCardProps {
-  children: ReactNode;
-}
+const CardTitle = styled.h2`
+  margin-bottom: 10px;
+  font-size: 30px;
+  color: ${colors.bgWhite};
+  transition: color 0.3s ease;
+`;
 
-// Styled component for the dashboard card
-export function DashboardCard({ children }: DashboardCardProps) {
+const CardIcon = styled(FontAwesomeIcon)`
+  font-size: 36px;
+  color: ${colors.bgWhite};
+  margin-bottom: 15px;
+  transition: color 0.3s ease;
+`;
+
+const CardText = styled.p`
+  font-size: 16px;
+  color: ${colors.bgWhite};
+  margin: 10px;
+`;
+
+type DashboardCardProps = {
+  title: string;
+  description: string;
+  buttonLink: string;
+  icon: any;
+};
+
+// functionalcomponent for dashboard card buttons
+export function DashboardCard({
+  title,
+  description,
+  buttonLink,
+  icon,
+}: DashboardCardProps) {
   return (
-    <StyledCard>
-      <StyledCardBody>{children}</StyledCardBody>
-    </StyledCard>
+    <Link to={buttonLink} style={{ textDecoration: "none" }}>
+      <StyledCard>
+        <StyledCardBody>
+          <CardTitle>{title}</CardTitle>
+          <CardIcon icon={icon} />
+          <CardText>{description}</CardText>
+        </StyledCardBody>
+      </StyledCard>
+    </Link>
   );
 }

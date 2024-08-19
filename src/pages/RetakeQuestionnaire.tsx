@@ -8,7 +8,7 @@ import { getFullPath } from "../common/Routes";
 import styled from "styled-components";
 import { PageBackground } from "../components/styled/PageBackground";
 import { DashboardContainer } from "../components/styled/DashboardContainer";
-import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
+import { QuestionnaireCardContainer } from "../components/styled/QuestionnaireCardContainer";
 import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
 import { NavigationButton } from "../components/styled/NavigationButton";
 import { StyledModal } from "../components/styled/Modal";
@@ -128,7 +128,7 @@ export function RetakeQuestionnaire({
   return (
     <PageBackground>
       <DashboardContainer>
-        <DashboardCardContainer>
+        <QuestionnaireCardContainer>
           <QuestionnaireCard>
             <TitleText>Oral Health Questionnaire</TitleText>
             <CardText>
@@ -148,7 +148,7 @@ export function RetakeQuestionnaire({
               </NavButton>
             </ButtonContainer>
           </QuestionnaireCard>
-        </DashboardCardContainer>
+        </QuestionnaireCardContainer>
       </DashboardContainer>
 
       <StyledModal show={showModal} onHide={handleCloseModal}>

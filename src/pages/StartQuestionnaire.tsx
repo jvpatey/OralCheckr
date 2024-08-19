@@ -5,7 +5,7 @@ import { getFullPath } from "../common/Routes";
 import styled from "styled-components";
 import { PageBackground } from "../components/styled/PageBackground";
 import { DashboardContainer } from "../components/styled/DashboardContainer";
-import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
+import { QuestionnaireCardContainer } from "../components/styled/QuestionnaireCardContainer";
 import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
 import { NavigationButton } from "../components/styled/NavigationButton";
 import { colors } from "../common/color-utils";
@@ -60,11 +60,12 @@ const StartButton = styled(NavigationButton)`
   }
 `;
 
+// functional component for the page to start the questionnaire if not completed previously
 export function StartQuestionnaire() {
   return (
     <PageBackground>
       <DashboardContainer>
-        <DashboardCardContainer>
+        <QuestionnaireCardContainer>
           <QuestionnaireCard>
             <TitleText>Oral Health Questionnaire</TitleText>
             <CardText>
@@ -87,7 +88,7 @@ export function StartQuestionnaire() {
               Begin
             </StartButton>
           </QuestionnaireCard>
-        </DashboardCardContainer>
+        </QuestionnaireCardContainer>
       </DashboardContainer>
     </PageBackground>
   );
