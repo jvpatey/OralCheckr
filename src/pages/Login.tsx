@@ -13,6 +13,7 @@ import { colors } from "../common/color-utils";
 
 const AnimatedCard = styled(Card)`
   border-radius: 15px;
+  margin-top: 40px;
   animation: fadeInUp 1s ease-out;
 
   @keyframes fadeInUp {
@@ -30,7 +31,7 @@ const AnimatedCard = styled(Card)`
 const CardBody = styled(Card.Body)`
   max-width: 400px;
   min-height: 600px;
-  background-color: ${colors.bgWhite};
+  background-color: ${colors.blue};
   border-style: solid;
   border-width: 4px;
   border-color: ${colors.blue};
@@ -50,19 +51,19 @@ const LogoImgStyle = styled.img`
 `;
 
 const LogoTextStyle = styled.span`
-  color: ${colors.blue};
+  color: ${colors.bgWhite};
   font-size: 35px;
 `;
 
 const TextStyle = styled(Card.Text)`
-  color: ${colors.darkGrey};
+  color: ${colors.bgWhite};
   font-weight: 500;
   text-align: center;
   margin-top: 20px;
 `;
 
 const LoginText = styled(Card.Text)`
-  color: ${colors.blue};
+  color: ${colors.bgWhite};
   font-size: x-large;
   font-weight: 600;
   text-align: center;
@@ -97,9 +98,8 @@ const PasswordStyle = styled(Form.Control)`
 `;
 
 const Button = styled.button<{ $login?: boolean }>`
-  background-color: ${(props) =>
-    props.$login ? colors.bgWhite : colors.bgWhite};
-  color: ${(props) => (props.$login ? colors.blue : colors.blue)};
+  background-color: ${(props) => (props.$login ? colors.green : colors.green)};
+  color: ${(props) => (props.$login ? colors.bgWhite : colors.bgWhite)};
   font-weight: bold;
   border: 2px solid ${(props) => (props.$login ? colors.blue : colors.blue)};
   width: 60%;
@@ -109,9 +109,10 @@ const Button = styled.button<{ $login?: boolean }>`
   cursor: pointer;
 
   &:hover {
-    background-color: ${(props) => (props.$login ? colors.blue : colors.blue)};
-    color: ${(props) => (props.$login ? colors.bgWhite : colors.bgWhite)};
-    border-color: ${colors.blue};
+    background-color: ${(props) =>
+      props.$login ? colors.bgWhite : colors.bgWhite};
+    color: ${(props) => (props.$login ? colors.green : colors.green)};
+    border-color: ${colors.bgWhite};
     border-width: 2px;
   }
 `;
@@ -130,10 +131,12 @@ export function Login() {
       <AnimatedCard>
         <CardBody>
           <LogoStyle>
-            <LogoImgStyle src="./OralCheckr/images/logo-blue.png" alt="Logo" />
+            <LogoImgStyle src="./OralCheckr/images/logo-white.png" alt="Logo" />
             <LogoTextStyle>OralCheckr</LogoTextStyle>
           </LogoStyle>
-          <TextStyle>Improve your oral health today.</TextStyle>
+          <TextStyle style={{ fontSize: "25px" }}>
+            Welcome to OralCheckr
+          </TextStyle>
           <TextStyle>
             Take our questionnaire to get insight on your oral health status,
             get personalized recommendations, and track your habits.
