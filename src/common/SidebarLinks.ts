@@ -1,3 +1,5 @@
+import { getFullPath } from "./Routes";
+import { RoutePaths } from "./Routes";
 import {
   faChartSimple,
   faList,
@@ -15,12 +17,12 @@ export interface SidebarLink {
 
 // Links array with icons for the habit tracker
 export const habitTrackerLinks: SidebarLink[] = [
-  { name: "Habits", path: "/habit-tracker/habits", icon: faList },
-  { name: "Analytics", path: "/habit-tracker/analytics", icon: faChartSimple },
+  { name: "Habits", path: getFullPath(RoutePaths.HABITS), icon: faList },
+  { name: "Analytics", path: getFullPath(RoutePaths.ANALYTICS), icon: faChartSimple },
 ];
 
 // Links array with icons for the questionnaire
 export const questionnaireLinks: SidebarLink[] = [
-  { name: "Questionnaire", path: "/ques/questionnaire", icon: faClipboardList },
-  { name: "Results", path: "/ques/results", icon: faSquarePollVertical },
+  { name: "Questionnaire", path: getFullPath(RoutePaths.QUESTIONNAIRE), icon: faClipboardList },
+  { name: "Results", path: getFullPath(RoutePaths.RESULTS), icon: faSquarePollVertical },
 ];

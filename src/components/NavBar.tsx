@@ -138,13 +138,30 @@ const Icon = styled.span`
   margin-right: 5px;
 `;
 
-// Functional component for to render the Navbar - used on all pages
+// Functional component to render the Navbar - used on all pages
 export function NavBar({ links }: NavBarProps) {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
-  const isHabitTrackerActive =
-    location.pathname.includes(RoutePaths.HABITS) ||
-    location.pathname.includes(RoutePaths.ANALYTICS);
+
+  const isActive = (href: string) => {
+    const isQuestionnaireActive =
+      location.pathname.startsWith(getFullPath(RoutePaths.QUESTIONNAIRE)) ||
+      location.pathname.startsWith(getFullPath(RoutePaths.RESULTS));
+
+    const isHabitTrackerActive =
+      location.pathname.startsWith(getFullPath(RoutePaths.HABITS)) ||
+      location.pathname.startsWith(getFullPath(RoutePaths.ANALYTICS));
+
+    return (
+      location.pathname === href ||
+      (isHabitTrackerActive &&
+        (href.includes(RoutePaths.HABITS) ||
+          href.includes(RoutePaths.ANALYTICS))) ||
+      (isQuestionnaireActive &&
+        (href.includes(RoutePaths.QUESTIONNAIRE) ||
+          href.includes(RoutePaths.RESULTS)))
+    );
+  };
 
   const handleLogout = () => {
     localStorage.setItem("authenticated", "false");
@@ -153,12 +170,6 @@ export function NavBar({ links }: NavBarProps) {
   if (!isAuthenticated) {
     return null;
   }
-
-  const isActive = (href: string) =>
-    location.pathname === href ||
-    (isHabitTrackerActive &&
-      (href.includes(RoutePaths.HABITS) ||
-        href.includes(RoutePaths.ANALYTICS)));
 
   return (
     <CustomNavbar expand="lg" fixed="top">

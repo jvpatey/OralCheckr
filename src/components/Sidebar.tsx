@@ -1,6 +1,5 @@
 import styled, { keyframes } from "styled-components";
 import { Link, useLocation } from "react-router-dom";
-import { getFullPath } from "../common/Routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { colors } from "../common/color-utils";
 
@@ -136,11 +135,9 @@ export function Sidebar({ links }: SidebarProps) {
     <SidebarContainer>
       {links.map((link, index) => (
         <SidebarLink
-          to={getFullPath(link.path)}
+          to={link.path}
           key={index}
-          className={
-            location.pathname === getFullPath(link.path) ? "active" : ""
-          }
+          className={location.pathname === link.path ? "active" : ""}
           data-tooltip={link.name}
         >
           <Icon>
