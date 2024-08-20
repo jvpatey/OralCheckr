@@ -1,83 +1,75 @@
 import { useEffect, useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Carousel from "react-bootstrap/Carousel";
-import { DashboardTile } from "./styled/DashboardTile";
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import questionData from "../common/questionnaire.json";
 import { colors } from "../common/color-utils";
 
-// styled-component styles for Recommendations Component
-
+// Styled-components for Recommendations Component
 const NoRecommendations = styled.div`
   display: flex;
   font-size: 18px;
   align-items: center;
   justify-content: center;
-  height: 50%;
+  height: 100%;
 `;
 
 const CarouselContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  position: relative;
   height: 100%;
-
-  @media (max-width: 768px) {
-    height: 300px;
-  }
 `;
 
 const CarouselContent = styled.div`
   flex: 1;
-  font-size: 14px;
+  font-size: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: ${colors.textGrey};
-  padding: 20px;
-  margin: 0 50px;
+  padding: 10px 40px;
+  overflow-y: auto;
 
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     font-size: 12px;
-    margin: 0 20px;
-    padding: 10px;
+    padding: 10px 25px;
   }
 `;
 
 const CategoryText = styled.div`
   font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: ${colors.blue};
+  font-size: 20px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  color: ${colors.green};
 
-  @media (max-width: 768px) {
-    font-size: 16px;
+  @media (max-width: 950px) {
+    font-size: 14px;
   }
 `;
 
 const StyledHeader = styled(Card.Header)`
-  text-align: center;
-  font-weight: bold;
-  font-size: 22px;
+  background-color: ${colors.bgWhite};
   color: ${colors.blue};
-  border: transparent;
-  background-color: transparent;
-  border-radius: 20px 20px 0 0;
-  padding: 10px;
-  margin-top: 20px;
+  font-size: 25px;
+  font-weight: bold;
+  border: none;
+  text-align: center;
+  margin-top: 50px;
 
-  @media (max-width: 768px) {
-    font-size: 20px;
+  @media (max-width: 950px) {
+    font-size: 18px;
   }
 `;
 
 // Custom styles for carousel controls and indicators
 const CustomCarousel = styled(Carousel)`
   flex: 1;
+
   .carousel-indicators {
     position: absolute;
     bottom: 10px;
@@ -90,11 +82,12 @@ const CustomCarousel = styled(Carousel)`
   }
 
   .carousel-indicators li {
+    margin-bottom: 20px;
     background-color: ${colors.disabledBgGrey};
   }
 
   .carousel-indicators .active {
-    background-color: ${colors.blue};
+    background-color: ${colors.green};
   }
 
   .carousel-control-prev,
@@ -103,35 +96,52 @@ const CustomCarousel = styled(Carousel)`
     top: 50%;
     transform: translateY(-50%);
     width: auto;
-    color: ${colors.disabledBgGrey};
+    color: ${colors.green};
   }
 
   .carousel-control-prev {
-    left: 10px;
+    left: 15px;
   }
 
   .carousel-control-next {
-    right: 10px;
+    right: 15px;
   }
 
   .carousel-control-prev-icon,
-  .carousel-control-next-icon,
+  .carousel-control-next-icon {
+    width: 30px;
+    height: 30px;
+  }
+
   .carousel-indicators .active,
   .carousel-indicators {
     filter: invert(1);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     .carousel-control-prev,
     .carousel-control-next {
-      top: 45%;
+      top: 50%;
+      width: 20px;
+      height: 20px;
     }
-  }
-`;
 
-const FixedHeightDashboardTile = styled(DashboardTile)`
-  @media (max-width: 768px) {
-    height: 250px;
+    .carousel-control-prev {
+      left: 10px;
+    }
+
+    .carousel-control-next {
+      right: 10px;
+    }
+
+    .carousel-indicators {
+      bottom: -10px;
+    }
+
+    .carousel-indicators li {
+      width: 8px;
+      height: 8px;
+    }
   }
 `;
 
@@ -165,13 +175,12 @@ const addRecommendation = (
   }
 };
 
-// Functional component for the Recommendations card on the Dashboard
+// Functional component for the Recommendations card
 export function Recommendations() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [index, setIndex] = useState(0);
   const hasFetchedRef = useRef(false);
 
-  // useEffect hook to fetch recommendations
   useEffect(() => {
     if (hasFetchedRef.current) return;
 
@@ -184,31 +193,27 @@ export function Recommendations() {
       const response = storedResponses[question.id];
 
       if (Array.isArray(response)) {
-        // Handle checkbox responses
         response.forEach((res) => {
           const recommendation = processOption(res, question);
           addRecommendation(recs, recommendation);
         });
-      } else {
-        // Handle other responses
+      } else if (response !== undefined) {
         const recommendation = processOption(response, question);
         addRecommendation(recs, recommendation);
       }
     });
 
-    // Update state with fetched recommendations
     setRecommendations(recs);
     hasFetchedRef.current = true;
   }, []);
 
-  // Handler for selecting a carousel slide
   const handleSelect = (selectedIndex: number) => {
     setIndex(selectedIndex);
   };
 
   return (
-    <FixedHeightDashboardTile>
-      <StyledHeader>Feedback and Recommendations</StyledHeader>
+    <>
+      <StyledHeader>Recommendations</StyledHeader>
       <Card.Body
         style={{ padding: 0, display: "flex", flexDirection: "column" }}
       >
@@ -216,7 +221,7 @@ export function Recommendations() {
           <CarouselContainer>
             <CustomCarousel activeIndex={index} onSelect={handleSelect}>
               {recommendations.map((rec, idx) => (
-                <Carousel.Item key={idx} style={{ marginBottom: "30px" }}>
+                <Carousel.Item key={idx} style={{ marginBottom: "10px" }}>
                   <CarouselContent>
                     <CategoryText>{rec.category}</CategoryText>
                     {rec.feedback}
@@ -229,6 +234,6 @@ export function Recommendations() {
           <NoRecommendations>No recommendations available</NoRecommendations>
         )}
       </Card.Body>
-    </FixedHeightDashboardTile>
+    </>
   );
 }

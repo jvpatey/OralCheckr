@@ -1,38 +1,54 @@
 import { Card, ProgressBar } from "react-bootstrap";
-import { DashboardTile } from "./styled/DashboardTile";
 import styled from "styled-components";
 import { colors } from "../common/color-utils";
 
-// styled-component styles for Oral Health Status Component
-
+// Styled-component styles for Oral Health Status Component
 const StyledHeader = styled(Card.Header)`
   background-color: ${colors.bgWhite};
   color: ${colors.blue};
-  font-size: 22px;
+  font-size: 25px;
   font-weight: bold;
-  border: transparent;
-  margin-top: 20px;
+  border: none;
   text-align: center;
+  margin-top: 50px;
+
+  @media (max-width: 950px) {
+    font-size: 18px;
+  }
 `;
 
 const StyledText = styled.p`
   color: ${colors.textGrey};
-  margin-bottom: 40px;
-  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-top: 30px;
   font-size: 18px;
+
+  @media (max-width: 950px) {
+    font-size: 16px;
+  }
 `;
 
 const ScoreSpan = styled.span`
-  color: ${colors.blue};
+  color: ${colors.green};
   font-weight: bold;
+  font-size: 20px;
+
+  @media (max-width: 950px) {
+    font-size: 18px;
+  }
 `;
 
 const CustomProgressBar = styled(ProgressBar)`
   height: 30px;
+  margin-top: 60px;
   .progress-bar {
-    background-color: ${colors.blue};
+    background-color: ${colors.green};
     font-size: 16px;
     border-radius: 20px;
+  }
+
+  @media (max-width: 950px) {
+    margin-bottom: 20px;
   }
 `;
 
@@ -42,17 +58,21 @@ const MessageText = styled.p`
   font-size: 18px;
   align-items: center;
   justify-content: center;
-  height: 50%;
+  height: 100%;
   padding: 15px;
+
+  @media (max-width: 950px) {
+    font-size: 16px;
+  }
 `;
 
-// Functional component for the Oral Health Status Card on the Dashboard
+// Functional component for the Oral Health Status Card
 export function OralHealthStatus() {
   const storedScore = localStorage.getItem("totalScore");
   const score = storedScore ? parseInt(storedScore, 10) : 0;
 
   return (
-    <DashboardTile>
+    <>
       <StyledHeader>Oral Health Status</StyledHeader>
       <Card.Body>
         {score === 0 ? (
@@ -69,6 +89,6 @@ export function OralHealthStatus() {
           </>
         )}
       </Card.Body>
-    </DashboardTile>
+    </>
   );
 }
