@@ -9,7 +9,7 @@ import {
 } from "../../common/SidebarLinks";
 import { navbarLinks } from "../../common/NavbarLinks";
 import { Router } from "../../Router";
-import { getFullPath, RoutePaths } from "../../common/Routes";
+import { getFullPath } from "../../common/Routes";
 
 // Function to render the navigation components of the app
 export function RenderNavs() {
@@ -27,14 +27,6 @@ export function RenderNavs() {
 
     // Determine if the current path is related to the questionnaire section
     const isQuestionnaireRoute = currentPath.startsWith(getFullPath("/ques"));
-
-    console.log("Current Path:", currentPath);
-    console.log(
-      "Full Path for Questionnaire:",
-      getFullPath(RoutePaths.QUESTIONNAIRE)
-    );
-    console.log("Is Habit Tracker Route:", isHabitTrackerRoute);
-    console.log("Is Questionnaire Route:", isQuestionnaireRoute);
 
     // Update the sidebar links based on the current route
     if (isHabitTrackerRoute) {
