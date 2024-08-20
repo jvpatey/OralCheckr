@@ -1,4 +1,4 @@
-import { Habit, Logging } from "../../pages/habittracker/Habits";
+import { Habit, Logging } from "../../containers/habittracker/Habits";
 import {
   HabitRow,
   PlaceholderText,

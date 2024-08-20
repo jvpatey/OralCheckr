@@ -1,14 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
-import { RoutePaths } from "../common/Routes";
-import { getFullPath } from "../common/Routes";
+import { RoutePaths } from "../../common/Routes";
+import { getFullPath } from "../../common/Routes";
 import styled from "styled-components";
-import { PageBackground } from "../components/styled/PageBackground";
-import { DashboardContainer } from "../components/styled/DashboardContainer";
-import { QuestionnaireCardContainer } from "../components/styled/QuestionnaireCardContainer";
-import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
-import { NavigationButton } from "../components/styled/NavigationButton";
-import { colors } from "../common/color-utils";
+import { PageBackground } from "../shared/PageBackground";
+import { DashboardContainer } from "../dashboard/DashboardContainer";
+import { QuestionnaireCardContainer } from "./QuestionnaireCardContainer";
+import { QuestionnaireCard } from "./QuestionnaireCard";
+import { NavigationButton } from "./NavigationButton";
+import { colors } from "../../common/color-utils";
 
 // Styled-components for Start Questionnaire Page
 

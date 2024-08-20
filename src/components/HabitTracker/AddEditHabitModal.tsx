@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import { StyledModal } from "../styled/Modal";
-import { Habit } from "../../pages/habittracker/Habits";
+import { StyledModal } from "../questionnaire/Modal";
+import { Habit } from "../../containers/habittracker/Habits";
 import { colors } from "../../common/color-utils";
 import styled from "styled-components";
 

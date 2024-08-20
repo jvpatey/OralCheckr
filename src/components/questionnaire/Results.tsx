@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { QuestionnaireCardContainer } from "../components/styled/QuestionnaireCardContainer";
-import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
-import { OralHealthStatus } from "../components/OralHealthStatus";
-import { Recommendations } from "../components/Recommendations";
-import { colors } from "../common/color-utils";
-import { PageBackground } from "../components/styled/PageBackground";
+import { QuestionnaireCardContainer } from "./QuestionnaireCardContainer";
+import { QuestionnaireCard } from "./QuestionnaireCard";
+import { OralHealthStatus } from "./OralHealthStatus";
+import { Recommendations } from "../../containers/questionnaire/Recommendations";
+import { colors } from "../../common/color-utils";
+import { PageBackground } from "../shared/PageBackground";
 
 // Container to hold the tiles inside the Questionnaire Card
 const TilesContainer = styled.div`

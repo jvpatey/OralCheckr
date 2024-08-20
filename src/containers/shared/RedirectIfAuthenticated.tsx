@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { RoutePaths } from "../common/Routes";
-import { getFullPath } from "../common/Routes";
+import { RoutePaths } from "../../common/Routes";
+import { getFullPath } from "../../common/Routes";
 
 export function RedirectIfAuthenticated({
   children,

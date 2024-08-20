@@ -1,13 +1,13 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { RoutePaths, getFullPath } from "./common/Routes";
-import { GuardedRoute } from "./containers/GuardedRoute";
-import { RedirectIfAuthenticated } from "./containers/RedirectIfAuthenticated";
-import { Dashboard } from "./pages/Dashboard";
-import { Login } from "./pages/Login";
-import { Questionnaire } from "./pages/Questionnaire";
-import { Habits } from "./pages/habittracker/Habits";
-import { Analytics } from "./pages/habittracker/Analytics";
-import { Results } from "./pages/Results";
+import { GuardedRoute } from "./containers/shared/GuardedRoute";
+import { RedirectIfAuthenticated } from "./containers/shared/RedirectIfAuthenticated";
+import { Dashboard } from "./components/dashboard/Dashboard";
+import { Login } from "./containers/Login";
+import { Questionnaire } from "./containers/questionnaire/Questionnaire";
+import { Habits } from "./containers/habittracker/Habits";
+import { Analytics } from "./containers/habittracker/Analytics";
+import { Results } from "./components/questionnaire/Results";
 
 export function Router() {
   return (

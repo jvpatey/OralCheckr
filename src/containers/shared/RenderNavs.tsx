@@ -1,15 +1,15 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { NavBar } from "../components/NavBar";
-import { Sidebar } from "../components/Sidebar";
+import { NavBar } from "./NavBar";
+import { Sidebar } from "../../components/shared/Sidebar";
 import {
   habitTrackerLinks,
   questionnaireLinks,
   SidebarLink,
-} from "../common/SidebarLinks";
-import { navbarLinks } from "../common/NavbarLinks";
-import { Router } from "../Router";
-import { getFullPath, RoutePaths } from "../common/Routes";
+} from "../../common/SidebarLinks";
+import { navbarLinks } from "../../common/NavbarLinks";
+import { Router } from "../../Router";
+import { getFullPath, RoutePaths } from "../../common/Routes";
 
 // Function to render the navigation components of the app
 export function RenderNavs() {

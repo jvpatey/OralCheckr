@@ -1,10 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { PageBackground } from "../components/styled/PageBackground";
-import { DashboardContainer } from "../components/styled/DashboardContainer";
-import { DashboardCardContainer } from "../components/styled/DashboardCardContainer";
-import { DashboardCard } from "../components/styled/DashboardCard";
+import { PageBackground } from "../shared/PageBackground";
+import { DashboardContainer } from "./DashboardContainer";
+import { DashboardCardContainer } from "./DashboardCardContainer";
+import { DashboardCard } from "./DashboardCard";
 import { faClipboardList, faTasksAlt } from "@fortawesome/free-solid-svg-icons";
-import { RoutePaths, getFullPath } from "../common/Routes";
+import { RoutePaths, getFullPath } from "../../common/Routes";
 
 // Functional component for the dashboard
 export function Dashboard() {

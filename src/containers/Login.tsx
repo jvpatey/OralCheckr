@@ -1,12 +1,12 @@
 import { Card } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { Footer } from "../components/Footer";
+import { Footer } from "../components/shared/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 import { RoutePaths } from "../common/Routes";
 import { getFullPath } from "../common/Routes";
-import { PageBackground } from "../components/styled/PageBackground";
+import { PageBackground } from "../components/shared/PageBackground";
 import { colors } from "../common/color-utils";
 
 // styled-component styles for Login Page

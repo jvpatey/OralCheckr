@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import _ from "lodash";
-import { PageBackground } from "../../components/styled/PageBackground";
+import { PageBackground } from "../../components/shared/PageBackground";
 import { IconTextButton } from "../../components/habittracker/IconTextButton";
 import { DateRangePicker } from "../../components/habittracker/DateRangePicker";
 import { AddEditHabitModal } from "../../components/habittracker/AddEditHabitModal";

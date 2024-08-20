@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Question, Type } from "../pages/Questionnaire";
-import { colors } from "../common/color-utils";
+import { Question, Type } from "./Questionnaire";
+import { colors } from "../../common/color-utils";
 
 // Styled-components for the Questionnaire component
 

@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import round from "lodash/round";
-import questionData from "../common/questionnaire.json";
+import questionData from "../../common/questionnaire.json";
 import styled from "styled-components";
-import { getFullPath } from "../common/Routes";
-import { PageBackground } from "../components/styled/PageBackground";
-import { DashboardContainer } from "../components/styled/DashboardContainer";
-import { QuestionnaireCardContainer } from "../components/styled/QuestionnaireCardContainer";
-import { QuestionnaireCard } from "../components/styled/QuestionnaireCard";
-import { Ques } from "../components/Ques";
-import { RoutePaths } from "../common/Routes";
-import { StartQuestionnaire } from "./StartQuestionnaire";
+import { getFullPath } from "../../common/Routes";
+import { PageBackground } from "../../components/shared/PageBackground";
+import { DashboardContainer } from "../../components/dashboard/DashboardContainer";
+import { QuestionnaireCardContainer } from "../../components/questionnaire/QuestionnaireCardContainer";
+import { QuestionnaireCard } from "../../components/questionnaire/QuestionnaireCard";
+import { Ques } from "./Ques";
+import { RoutePaths } from "../../common/Routes";
+import { StartQuestionnaire } from "../../components/questionnaire/StartQuestionnaire";
 import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
-import { NavigationButton } from "../components/styled/NavigationButton";
-import { colors } from "../common/color-utils";
+import { NavigationButton } from "../../components/questionnaire/NavigationButton";
+import { colors } from "../../common/color-utils";
 
 // styled-component styles for Questionnaire Page
 
