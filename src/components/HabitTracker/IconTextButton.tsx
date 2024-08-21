@@ -35,15 +35,17 @@ const ButtonContainer = styled.div<{
   border-radius: 25px;
   padding: 0 20px;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-  transition: box-shadow 0.3s, background-color 0.3s;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
   white-space: nowrap;
+  border: 2px solid
+    ${({ $backgroundColor, $disabled }) =>
+      $disabled ? colors.disabledBgGrey : $backgroundColor};
 
   &:hover {
     background-color: ${({ $hoverBackgroundColor, $disabled }) =>
       $disabled ? colors.disabledBgGrey : $hoverBackgroundColor};
-    border: 2px solid
-      ${({ $hoverBackgroundColor, $disabled }) =>
-        $disabled ? colors.disabledBgGrey : $hoverBackgroundColor};
+    border-color: ${({ $hoverBackgroundColor, $disabled }) =>
+      $disabled ? colors.disabledBgGrey : $hoverBackgroundColor};
     color: ${({ $hoverColor, $disabled }) =>
       $disabled ? colors.textGrey : $hoverColor};
     box-shadow: ${({ $disabled }) =>
