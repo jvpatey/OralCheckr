@@ -26,6 +26,14 @@ const QuesContainer = styled.div`
   width: 100%;
   padding: 20px;
   overflow-y: auto;
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+
+  @media (max-width: 375px) {
+    padding: 10px;
+  }
 `;
 
 const ProgressBar = styled.div`
@@ -45,6 +53,10 @@ const ProgressBar = styled.div`
       background-color: ${colors.green};
     }
   }
+
+  @media (max-width: 768px) {
+    margin-bottom: 15px;
+  }
 `;
 
 const ProgressIndicator = styled.div`
@@ -53,6 +65,15 @@ const ProgressIndicator = styled.div`
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+
+  @media (max-width: 375px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const SubmitButton = styled(NavigationButton).attrs({ as: "a" })`
@@ -61,6 +82,19 @@ const SubmitButton = styled(NavigationButton).attrs({ as: "a" })`
   text-decoration: none;
   pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+  font-size: 1rem;
+  padding: 10px 20px;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    width: 80px;
+    font-size: 0.7rem;
+  }
 `;
 
 // types

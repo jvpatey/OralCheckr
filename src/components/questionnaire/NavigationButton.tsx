@@ -28,7 +28,7 @@ export const NavigationButton = styled.button`
 
   @media (max-width: 768px) {
     padding: 8px 16px;
-    width: 100px;
-    font-size: 0.9rem;
+    width: 90px;
+    font-size: 0.8rem;
   }
 `;

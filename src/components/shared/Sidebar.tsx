@@ -32,7 +32,7 @@ const SidebarContainer = styled.div`
   animation: ${fadeInLeft} 1s ease-in-out;
 
   @media (max-width: 768px) {
-    width: 70px;
+    width: 50px;
     align-items: center;
     padding-left: 0;
   }
