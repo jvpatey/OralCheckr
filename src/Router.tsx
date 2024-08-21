@@ -2,12 +2,12 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { RoutePaths, getFullPath } from "./common/Routes";
 import { GuardedRoute } from "./containers/shared/GuardedRoute";
 import { RedirectIfAuthenticated } from "./containers/shared/RedirectIfAuthenticated";
-import { Dashboard } from "./components/dashboard/Dashboard";
 import { Login } from "./containers/Login";
 import { Questionnaire } from "./containers/questionnaire/Questionnaire";
 import { Habits } from "./containers/habittracker/Habits";
 import { Analytics } from "./containers/habittracker/Analytics";
 import { Results } from "./components/questionnaire/Results";
+import { Dashboard } from "./components/dashboard/Dashboard";
 
 export function Router() {
   return (
@@ -20,9 +20,8 @@ export function Router() {
           </RedirectIfAuthenticated>
         }
       />
-      <Route path="*" element={<Navigate to="/" replace={true} />} />
       <Route
-        path={getFullPath(RoutePaths.DASHBOARD)}
+        path={getFullPath(RoutePaths.LANDING)}
         element={
           <GuardedRoute>
             <Dashboard />
@@ -45,7 +44,6 @@ export function Router() {
           </GuardedRoute>
         }
       />
-      {/* Use exact matching for results */}
       <Route
         path={getFullPath(RoutePaths.RESULTS)}
         element={
@@ -54,7 +52,7 @@ export function Router() {
           </GuardedRoute>
         }
       />
-      {/* Use a more specific match for the questionnaire with optional ID */}
+      {/* Questionnaire path with optional ID for questionnaire questions */}
       <Route
         path={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/:questionId`}
         element={
@@ -63,13 +61,19 @@ export function Router() {
           </GuardedRoute>
         }
       />
-      {/* Explicitly define the questionnaire base path */}
       <Route
         path={getFullPath(RoutePaths.QUESTIONNAIRE)}
         element={
           <GuardedRoute>
             <Questionnaire />
           </GuardedRoute>
+        }
+      />
+      {/* Wildcard route to catch all other routes */}
+      <Route
+        path="*"
+        element={
+          <Navigate to={getFullPath(RoutePaths.LANDING)} replace={true} />
         }
       />
     </Routes>
