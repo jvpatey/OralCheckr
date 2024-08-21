@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-// Styled component to position the dashboard
-export const DashboardContainer = styled.div`
+// Styled component to position the Landing
+export const LandingContainer = styled.div`
   display: flex;
   flex: 1;
   width: 100%;

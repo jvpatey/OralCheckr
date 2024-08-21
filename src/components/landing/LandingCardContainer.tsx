@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-// Styled component to contain the dashboard card
-export const DashboardCardContainer = styled.div`
+// Styled component to contain the Landing card
+export const LandingCardContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;

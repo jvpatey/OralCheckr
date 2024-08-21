@@ -7,7 +7,7 @@ import { RoutePaths } from "../../common/constants/routes";
 import { getFullPath } from "../../common/constants/routes";
 import styled from "styled-components";
 import { PageBackground } from "../../components/PageBackground";
-import { DashboardContainer } from "../../components/dashboard/DashboardContainer";
+import { LandingContainer } from "../../components/landing/LandingContainer";
 import { QuestionnaireCardContainer } from "../../components/questionnaire/QuestionnaireCardContainer";
 import { QuestionnaireCard } from "../../components/questionnaire/QuestionnaireCard";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
@@ -132,7 +132,7 @@ export function RetakeQuestionnaire({
 
   return (
     <PageBackground>
-      <DashboardContainer>
+      <LandingContainer>
         <QuestionnaireCardContainer>
           <QuestionnaireCard>
             <TitleText>Oral Health Questionnaire</TitleText>
@@ -151,7 +151,7 @@ export function RetakeQuestionnaire({
             </ButtonContainer>
           </QuestionnaireCard>
         </QuestionnaireCardContainer>
-      </DashboardContainer>
+      </LandingContainer>
 
       <StyledModal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>

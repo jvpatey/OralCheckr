@@ -4,7 +4,7 @@ import { RoutePaths } from "../../common/constants/routes";
 import { getFullPath } from "../../common/constants/routes";
 import styled from "styled-components";
 import { PageBackground } from "../PageBackground";
-import { DashboardContainer } from "../dashboard/DashboardContainer";
+import { LandingContainer } from "../landing/LandingContainer";
 import { QuestionnaireCardContainer } from "./QuestionnaireCardContainer";
 import { QuestionnaireCard } from "./QuestionnaireCard";
 import { NavigationButton } from "./NavigationButton";
@@ -79,7 +79,7 @@ const StartButton = styled(NavigationButton)`
 export function StartQuestionnaire() {
   return (
     <PageBackground>
-      <DashboardContainer>
+      <LandingContainer>
         <QuestionnaireCardContainer>
           <QuestionnaireCard>
             <TitleText>Oral Health Questionnaire</TitleText>
@@ -102,7 +102,7 @@ export function StartQuestionnaire() {
             </ButtonContainer>
           </QuestionnaireCard>
         </QuestionnaireCardContainer>
-      </DashboardContainer>
+      </LandingContainer>
     </PageBackground>
   );
 }

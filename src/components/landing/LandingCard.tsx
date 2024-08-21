@@ -81,8 +81,8 @@ type DashboardCardProps = {
   icon: any;
 };
 
-// functionalcomponent for dashboard card buttons
-export function DashboardCard({
+// functionalcomponent for Landing card buttons
+export function LandingCard({
   title,
   description,
   buttonLink,

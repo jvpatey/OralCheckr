@@ -5,7 +5,7 @@ import questionData from "../../common/questionnaire.json";
 import styled from "styled-components";
 import { getFullPath } from "../../common/constants/routes";
 import { PageBackground } from "../../components/PageBackground";
-import { DashboardContainer } from "../../components/dashboard/DashboardContainer";
+import { LandingContainer } from "../../components/landing/LandingContainer";
 import { QuestionnaireCardContainer } from "../../components/questionnaire/QuestionnaireCardContainer";
 import { QuestionnaireCard } from "../../components/questionnaire/QuestionnaireCard";
 import { RenderQuestions } from "./RenderQuestions";
@@ -289,7 +289,7 @@ export function Questionnaire() {
   // Render the questionnaire pages
   return (
     <PageBackground>
-      <DashboardContainer>
+      <LandingContainer>
         <QuestionnaireCardContainer>
           <QuestionnaireCard>
             <QuesContainer>
@@ -338,7 +338,7 @@ export function Questionnaire() {
             </QuesContainer>
           </QuestionnaireCard>
         </QuestionnaireCardContainer>
-      </DashboardContainer>
+      </LandingContainer>
     </PageBackground>
   );
 }

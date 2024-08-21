@@ -7,7 +7,7 @@ import { Questionnaire } from "./containers/questionnaire/Questionnaire";
 import { Habits } from "./containers/habit-tracker/Habits";
 import { Analytics } from "./containers/habit-tracker/Analytics";
 import { Results } from "./components/questionnaire/Results";
-import { Dashboard } from "./components/dashboard/Dashboard";
+import { Landing } from "./components/landing/Landing";
 
 export function Router() {
   return (
@@ -24,7 +24,7 @@ export function Router() {
         path={getFullPath(RoutePaths.LANDING)}
         element={
           <GuardedRoute>
-            <Dashboard />
+            <Landing />
           </GuardedRoute>
         }
       />
