@@ -38,6 +38,7 @@ const CardBody = styled(Card.Body)`
   border-radius: 15px;
   padding: 20px;
   text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
 const LogoStyle = styled.div`

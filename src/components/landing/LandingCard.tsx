@@ -18,6 +18,7 @@ const StyledCard = styled(Card)`
   flex-direction: column;
   text-decoration: none;
   cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
   @keyframes fadeInUp {
     from {
