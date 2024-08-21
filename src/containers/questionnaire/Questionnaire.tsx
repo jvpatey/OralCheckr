@@ -37,12 +37,12 @@ const ProgressBar = styled.div`
   .progress-segment {
     width: 100%;
     height: 8px;
-    background-color: ${colors.bgGrey};
+    background-color: ${colors.textGrey};
     border-radius: 4px;
     margin-right: 4px;
 
     &.filled {
-      background-color: ${colors.blue};
+      background-color: ${colors.green};
     }
   }
 `;
@@ -59,6 +59,8 @@ const SubmitButton = styled(NavigationButton).attrs({ as: "a" })`
   display: inline-block;
   text-align: center;
   text-decoration: none;
+  pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 `;
 
 // types
@@ -230,6 +232,12 @@ export function Questionnaire() {
     (responses[currentQuestion] === undefined ||
       responses[currentQuestion] === null);
 
+  // Determine if the "Submit" button should be disabled
+  const isSubmitDisabled =
+    currentQuestion === questions.length &&
+    (responses[questions.length] === undefined ||
+      responses[questions.length] === null);
+
   // Reset responses when retaking the questionnaire
   const resetResponses = () => {
     setResponses({});
@@ -278,8 +286,9 @@ export function Questionnaire() {
                 </NavigationButton>
                 {currentQuestion === questions.length ? (
                   <SubmitButton
-                    href={getFullPath(RoutePaths.DASHBOARD)}
+                    href={getFullPath(RoutePaths.RESULTS)}
                     onClick={handleSubmit}
+                    disabled={isSubmitDisabled}
                   >
                     Submit
                   </SubmitButton>
