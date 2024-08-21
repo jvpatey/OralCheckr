@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 // Styled component to style the Questionnaire modal
 export const StyledModal = styled(Modal)`

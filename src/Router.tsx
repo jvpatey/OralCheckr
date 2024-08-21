@@ -1,11 +1,11 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { RoutePaths, getFullPath } from "./common/Routes";
-import { GuardedRoute } from "./containers/shared/GuardedRoute";
-import { RedirectIfAuthenticated } from "./containers/shared/RedirectIfAuthenticated";
+import { RoutePaths, getFullPath } from "./common/constants/routes";
+import { GuardedRoute } from "./containers/authentication/GuardedRoute";
+import { RedirectIfAuthenticated } from "./containers/authentication/RedirectIfAuthenticated";
 import { Login } from "./containers/Login";
 import { Questionnaire } from "./containers/questionnaire/Questionnaire";
-import { Habits } from "./containers/habittracker/Habits";
-import { Analytics } from "./containers/habittracker/Analytics";
+import { Habits } from "./containers/habit-tracker/Habits";
+import { Analytics } from "./containers/habit-tracker/Analytics";
 import { Results } from "./components/questionnaire/Results";
 import { Dashboard } from "./components/dashboard/Dashboard";
 

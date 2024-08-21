@@ -4,7 +4,7 @@ import Carousel from "react-bootstrap/Carousel";
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import questionData from "../../common/questionnaire.json";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 // Styled-components for Recommendations Component
 const NoRecommendations = styled.div`

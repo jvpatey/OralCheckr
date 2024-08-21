@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 // Styled component for the Navigation buttons inside the Questionnaire
 export const NavigationButton = styled.button`

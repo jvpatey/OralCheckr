@@ -2,7 +2,7 @@ import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 const StyledCard = styled(Card)`
   width: 100%;

@@ -1,11 +1,11 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { NavBar } from "./NavBar";
-import { Sidebar } from "../../components/shared/Sidebar";
-import { links, NavLink } from "../../common/links";
-import { Router } from "../../Router";
-import { getFullPath } from "../../common/constants/routes";
-import { RoutePaths } from "../../common/constants/routes";
+import { Sidebar } from "../components/Sidebar";
+import { links, NavLink } from "../common/links";
+import { Router } from "../Router";
+import { getFullPath } from "../common/constants/routes";
+import { RoutePaths } from "../common/constants/routes";
 
 // Function to render the navigation components of the app
 export function RenderNavs() {

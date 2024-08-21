@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Question, Type } from "./Questionnaire";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 // Styled-components for the Questionnaire component
 
@@ -69,14 +69,14 @@ const RangeLabels = styled.div`
   width: 100%;
 `;
 
-// Interface for the Ques component props, extending Question interface
-interface QuesProps extends Question {
+// Interface for the RenderQuestions component props, extending Question interface
+interface RenderQuestionsProps extends Question {
   onResponseChange: (questionId: number, response: number | number[]) => void;
   initialResponse?: number | number[];
 }
 
-// Ques functional component for rendering the questions inside the Questionnaire
-export function Ques(props: QuesProps) {
+// RenderQuestions functional component for rendering the questions inside the Questionnaire
+export function RenderQuestions(props: RenderQuestionsProps) {
   const { id, title, type, options, onResponseChange, initialResponse } = props;
   const [rangeValue, setRangeValue] = useState<number | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);

@@ -3,16 +3,16 @@ import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { ButtonProps } from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
-import { RoutePaths } from "../../common/Routes";
-import { getFullPath } from "../../common/Routes";
+import { RoutePaths } from "../../common/constants/routes";
+import { getFullPath } from "../../common/constants/routes";
 import styled from "styled-components";
-import { PageBackground } from "../../components/shared/PageBackground";
+import { PageBackground } from "../../components/PageBackground";
 import { DashboardContainer } from "../../components/dashboard/DashboardContainer";
 import { QuestionnaireCardContainer } from "../../components/questionnaire/QuestionnaireCardContainer";
 import { QuestionnaireCard } from "../../components/questionnaire/QuestionnaireCard";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
 import { StyledModal } from "../../components/questionnaire/Modal";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 const TitleText = styled.h1`
   color: ${colors.blue};

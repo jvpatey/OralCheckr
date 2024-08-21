@@ -1,17 +1,14 @@
-import { Habit, Logging } from "../../containers/habittracker/Habits";
-import {
-  HabitRow,
-  PlaceholderText,
-} from "../../components/habittracker/habit-components";
-import { HabitTile } from "../../components/habittracker/HabitTile";
-import { IconButton } from "../../components/habittracker/IconButton";
+import { Habit, Logging } from "../../containers/habit-tracker/Habits";
+import { HabitRow, PlaceholderText } from "./HabitComponents";
+import { HabitTile } from "./HabitTile";
+import { IconButton } from "./IconButton";
 import {
   faTrashAlt,
   faPencilAlt,
   faPlusCircle,
   faMinusCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 interface HabitListProps {
   habits: Habit[];

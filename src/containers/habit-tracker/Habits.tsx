@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import _ from "lodash";
-import { PageBackground } from "../../components/shared/PageBackground";
-import { IconTextButton } from "../../components/habittracker/IconTextButton";
-import { DateRangePicker } from "../../components/habittracker/DateRangePicker";
-import { AddEditHabitModal } from "../../components/habittracker/AddEditHabitModal";
+import { PageBackground } from "../../components/PageBackground";
+import { IconTextButton } from "../../components/habit-tracker/IconTextButton";
+import { DateRangePicker } from "../../components/habit-tracker/DateRangePicker";
+import { AddEditHabitModal } from "./AddEditHabitModal";
 import { cloneDeep } from "lodash";
 import {
   HabitListContainer,
@@ -14,16 +14,16 @@ import {
   HeaderButtons,
   StyledHabitList,
   DatePickerWrapper,
-} from "../../components/habittracker/habit-components";
-import { HabitList } from "../../components/habittracker/HabitList";
-import { LocalStorage } from "../../common/local-storage";
-import { LogAction } from "../../common/local-storage";
+} from "../../components/habit-tracker/HabitComponents";
+import { HabitList } from "../../components/habit-tracker/HabitList";
+import { LocalStorage } from "../../common/constants/local-storage";
+import { LogAction } from "../../common/constants/local-storage";
 import {
   faPlus,
   faPencilAlt,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 // Utility function to update habit data in state and localStorage
 const updateHabits = (

@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { colors } from "../../common/color-utils";
+import { colors } from "../common/utilities/color-utils";
 
 // Fade-in from left animation
 const fadeInLeft = keyframes`

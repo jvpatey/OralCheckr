@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../../common/color-utils";
+import { colors } from "../common/utilities/color-utils";
 
 const StyledFooter = styled.footer`
   position: fixed;

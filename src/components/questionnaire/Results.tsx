@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { Card } from "react-bootstrap";
 import { OralHealthStatus } from "./OralHealthStatus";
 import { Recommendations } from "../../containers/questionnaire/Recommendations";
-import { colors } from "../../common/color-utils";
-import { PageBackground } from "../shared/PageBackground";
+import { colors } from "../../common/utilities/color-utils";
+import { PageBackground } from "../PageBackground";
 
 const ResultsCard = styled(Card)`
   width: 100%;

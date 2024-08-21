@@ -1,6 +1,6 @@
 import { Card, ProgressBar } from "react-bootstrap";
 import styled from "styled-components";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 // Styled-component styles for Oral Health Status Component
 const StyledHeader = styled(Card.Header)`

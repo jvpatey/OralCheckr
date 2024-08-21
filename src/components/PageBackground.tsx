@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../../common/color-utils";
+import { colors } from "../common/utilities/color-utils";
 
 // Styled component for the page background
 export const PageBackground = styled.div`

@@ -3,8 +3,8 @@ import { Navbar, Container, Dropdown, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
-import { RoutePaths, getFullPath } from "../../common/Routes";
-import { colors } from "../../common/color-utils";
+import { RoutePaths, getFullPath } from "../common/constants/routes";
+import { colors } from "../common/utilities/color-utils";
 
 interface NavBarProps {
   links: { text: string; href: string; icon: any }[];

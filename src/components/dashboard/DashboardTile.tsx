@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Card } from "react-bootstrap";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 // Styled component to style the tiles within the Dashboard Card
 export const DashboardTile = styled(Card)`

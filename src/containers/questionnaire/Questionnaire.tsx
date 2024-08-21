@@ -3,17 +3,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import round from "lodash/round";
 import questionData from "../../common/questionnaire.json";
 import styled from "styled-components";
-import { getFullPath } from "../../common/Routes";
-import { PageBackground } from "../../components/shared/PageBackground";
+import { getFullPath } from "../../common/constants/routes";
+import { PageBackground } from "../../components/PageBackground";
 import { DashboardContainer } from "../../components/dashboard/DashboardContainer";
 import { QuestionnaireCardContainer } from "../../components/questionnaire/QuestionnaireCardContainer";
 import { QuestionnaireCard } from "../../components/questionnaire/QuestionnaireCard";
-import { Ques } from "./Ques";
-import { RoutePaths } from "../../common/Routes";
+import { RenderQuestions } from "./RenderQuestions";
+import { RoutePaths } from "../../common/constants/routes";
 import { StartQuestionnaire } from "../../components/questionnaire/StartQuestionnaire";
 import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 // styled-component styles for Questionnaire Page
 
@@ -306,7 +306,7 @@ export function Questionnaire() {
               <ProgressIndicator>
                 Question {currentQuestion} / {questions.length}
               </ProgressIndicator>
-              <Ques
+              <RenderQuestions
                 {...questions[currentQuestion - 1]}
                 onResponseChange={handleResponseChange}
                 initialResponse={responses[currentQuestion]}

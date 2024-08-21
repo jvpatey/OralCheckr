@@ -9,7 +9,7 @@ import {
   faCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
 import { DayBubble } from "./DayBubble";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 // Styled component for the container of the date controls
 const DateControlsContainer = styled.div`

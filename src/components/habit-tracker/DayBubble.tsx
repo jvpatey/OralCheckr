@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../../common/color-utils";
+import { colors } from "../../common/utilities/color-utils";
 
 // Styled component for the date bubbles that show the range of dates for the selected week - used in the Habits component
 const DayBubbleStyled = styled.div<{ selected: boolean; $isEditMode: boolean }>`
