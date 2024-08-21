@@ -2,6 +2,8 @@ import styled, { keyframes } from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { colors } from "../common/utilities/color-utils";
+import { getFullPath } from "../common/constants/routes";
+import { RoutePaths } from "../common/constants/routes";
 
 // Fade-in from left animation
 const fadeInLeft = keyframes`
@@ -138,7 +140,16 @@ export function Sidebar({ links }: SidebarProps) {
         <SidebarLink
           to={link.path}
           key={index}
-          className={location.pathname === link.path ? "active" : ""}
+          className={
+            location.pathname === link.path ||
+            (link.path === getFullPath(RoutePaths.QUESTIONNAIRE) &&
+              location.pathname.startsWith(
+                getFullPath(RoutePaths.QUESTIONNAIRE)
+              ) &&
+              location.pathname !== getFullPath(RoutePaths.RESULTS))
+              ? "active"
+              : ""
+          }
           data-tooltip={link.name}
         >
           <Icon>
