@@ -25,6 +25,15 @@ const CustomNavbar = styled(Navbar)`
   background-color: ${colors.bgWhite};
   width: 100%;
   animation: ${fadeInDown} 1s ease-out;
+
+  @media (max-width: 768px) {
+    .d-lg-none {
+      display: block;
+    }
+    .d-lg-flex {
+      display: none;
+    }
+  }
 `;
 
 const BrandText = styled(Navbar.Brand)`
@@ -97,7 +106,7 @@ const CustomDropdownItem = styled(Dropdown.Item)`
 const CustomCollapse = styled(Navbar.Collapse)`
   background-color: ${colors.bgWhite};
 
-  @media (max-width: 992px) {
+  @media (max-width: 768px) {
     position: absolute;
     top: 56px;
     right: 0;
@@ -109,7 +118,7 @@ const CustomCollapse = styled(Navbar.Collapse)`
     padding-right: 1rem;
   }
 
-  @media (min-width: 992px) {
+  @media (min-width: 768px) {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -174,7 +183,7 @@ export function NavBar({ links }: NavBarProps) {
   return (
     <CustomNavbar expand="lg" fixed="top">
       <Container fluid>
-        <BrandText as={Link} to={getFullPath(RoutePaths.DASHBOARD)}>
+        <BrandText as={Link} to={getFullPath(RoutePaths.LANDING)}>
           <LogoImage src="/OralCheckr/images/logo-blue.png" alt="Logo" />
           OralCheckr
         </BrandText>

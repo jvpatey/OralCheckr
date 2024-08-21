@@ -39,6 +39,12 @@ const SidebarContainer = styled.div`
     align-items: center;
     padding-left: 0;
   }
+
+  @media (max-width: 768px) {
+    padding-left: 0;
+    padding-top: 10px;
+    margin-top: 20px;
+  }
 `;
 
 const SidebarLink = styled(Link)`
