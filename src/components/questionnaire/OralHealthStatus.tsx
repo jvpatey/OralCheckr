@@ -6,13 +6,19 @@ import { colors } from "../../common/utilities/color-utils";
 const StyledHeader = styled(Card.Header)`
   background-color: ${colors.bgWhite};
   color: ${colors.blue};
-  font-size: 22px;
+  font-size: 25px;
   font-weight: bold;
   border: none;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 50px;
 
-  @media (max-width: 950px) {
+  @media (max-width: 375px) {
+    margin-top: 20px;
+    font-size: 22px;
+  }
+
+  @media (max-width: 430px) {
+    margin-top: 10px;
     font-size: 18px;
   }
 `;

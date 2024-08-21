@@ -118,18 +118,9 @@ const CustomCarousel = styled(Carousel)`
     margin: 0 -15px;
   }
 
-  .carousel-control-prev {
-    left: 10;
-  }
-
-  .carousel-control-next {
-    right: 0;
-  }
-
   .carousel-control-prev-icon,
   .carousel-control-next-icon {
-    width: 20px;
-    height: 20px;
+    filter: invert(50%) sepia(100%) saturate(5000%) hue-rotate(90deg);
   }
 `;
 
