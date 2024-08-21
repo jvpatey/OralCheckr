@@ -22,6 +22,7 @@ interface HabitListProps {
   handleLog: (habitName: string, selectedDate: Date) => void;
   handleRemoveLog: (habitName: string, selectedDate: Date) => void;
   habitsLog: Logging;
+  isFutureDate: boolean;
 }
 
 // RenderHabits Component
@@ -34,6 +35,7 @@ export function RenderHabits({
   handleLog,
   handleRemoveLog,
   habitsLog,
+  isFutureDate,
 }: HabitListProps) {
   return (
     <>
@@ -46,10 +48,9 @@ export function RenderHabits({
 
         const logCount = habitsLog[habit.name]?.[year]?.[month]?.[day] || 0;
 
-        const isAddLogDisabled = logCount >= habit.count;
-        const isRemoveLogDisabled = !(
-          habitsLog[habit.name]?.[year]?.[month]?.[day] > 0
-        );
+        const isAddLogDisabled = isFutureDate || logCount >= habit.count;
+        const isRemoveLogDisabled =
+          isFutureDate || !(habitsLog[habit.name]?.[year]?.[month]?.[day] > 0);
 
         return (
           <HabitRow key={index}>
@@ -116,6 +117,7 @@ export function HabitList({
   handleLog,
   handleRemoveLog,
   habitsLog,
+  isFutureDate,
 }: HabitListProps) {
   return habits.length === 0 ? (
     <PlaceholderText>
@@ -131,6 +133,7 @@ export function HabitList({
       handleLog={handleLog}
       handleRemoveLog={handleRemoveLog}
       habitsLog={habitsLog}
+      isFutureDate={isFutureDate}
     />
   );
 }

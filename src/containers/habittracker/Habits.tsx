@@ -233,6 +233,9 @@ export function Habits() {
     );
   };
 
+  // Check if the selected date is in the future
+  const isFutureDate = selectedDate > new Date();
+
   return (
     <PageBackground>
       <HabitListContainer>
@@ -281,6 +284,7 @@ export function Habits() {
                 handleLog={handleLog}
                 handleRemoveLog={handleRemoveLog}
                 habitsLog={habitsLog}
+                isFutureDate={isFutureDate}
               />
             </StyledHabitList>
           </ScrollableHabitList>
