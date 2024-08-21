@@ -52,7 +52,7 @@ export function Router() {
           </GuardedRoute>
         }
       />
-      {/* Questionnaire path with optional ID for questionnaire questions */}
+      {/* Questionnaire path with dynamic question ID */}
       <Route
         path={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/:questionId`}
         element={

@@ -7,8 +7,8 @@ export const getFullPath = (routePath: string) => `${BASE_PATH}${routePath}`;
 export enum RoutePaths {
   LOGIN = '/login',
   LANDING = "/", 
-  QUESTIONNAIRE = '/ques/questionnaire',
+  QUESTIONNAIRE = '/questionnaire',
   HABITS = '/habit-tracker/habits',
   ANALYTICS = '/habit-tracker/analytics',
-  RESULTS = '/ques/results'
+  RESULTS = '/questionnaire/results'
 }
