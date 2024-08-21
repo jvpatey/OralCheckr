@@ -13,6 +13,7 @@ const NoRecommendations = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
+  color: ${colors.textGrey};
 `;
 
 const CarouselContainer = styled.div`
