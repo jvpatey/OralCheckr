@@ -23,6 +23,11 @@ const DatePickerWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
+
+  @media (max-width: 400px) {
+    margin-left: 30px;
+
 `;
 
 // Styled component for the date bubbles container

@@ -29,6 +29,7 @@ const SidebarContainer = styled.div`
   padding-left: 10px;
   margin-top: 10px;
   border-top-right-radius: 12px;
+  z-index: 5;
   animation: ${fadeInLeft} 1s ease-in-out;
 
   @media (max-width: 768px) {
