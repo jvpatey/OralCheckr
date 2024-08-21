@@ -21,23 +21,28 @@ const CarouselContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  justify-content: space-between;
 `;
 
 const CarouselContent = styled.div`
-  flex: 1;
-  font-size: 15px;
+  flex-grow: 1;
+  font-size: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: ${colors.textGrey};
-  padding: 10px 40px;
+  padding: 20px 40px;
   overflow-y: auto;
 
   @media (max-width: 950px) {
     font-size: 12px;
-    padding: 10px 25px;
+    padding: 15px 30px;
+  }
+
+  @media (max-width: 375px) {
+    padding: 10px 20px;
   }
 `;
 
@@ -63,13 +68,15 @@ const StyledHeader = styled(Card.Header)`
   margin-top: 50px;
 
   @media (max-width: 950px) {
+    margin-top: 10px;
     font-size: 18px;
   }
 `;
 
-// Custom styles for carousel controls and indicators
 const CustomCarousel = styled(Carousel)`
-  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
 
   .carousel-indicators {
     position: absolute;
@@ -77,13 +84,12 @@ const CustomCarousel = styled(Carousel)`
     left: 0;
     right: 0;
     margin: 0 auto;
-    width: 100%;
     display: flex;
     justify-content: center;
+    padding: 5px;
   }
 
   .carousel-indicators li {
-    margin-bottom: 20px;
     background-color: ${colors.disabledBgGrey};
   }
 
@@ -98,51 +104,21 @@ const CustomCarousel = styled(Carousel)`
     transform: translateY(-50%);
     width: auto;
     color: ${colors.green};
+    margin: 0 -15px;
   }
 
   .carousel-control-prev {
-    left: 15px;
+    left: 10;
   }
 
   .carousel-control-next {
-    right: 15px;
+    right: 0;
   }
 
   .carousel-control-prev-icon,
   .carousel-control-next-icon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .carousel-indicators .active,
-  .carousel-indicators {
-    filter: invert(1);
-  }
-
-  @media (max-width: 950px) {
-    .carousel-control-prev,
-    .carousel-control-next {
-      top: 50%;
-      width: 20px;
-      height: 20px;
-    }
-
-    .carousel-control-prev {
-      left: 10px;
-    }
-
-    .carousel-control-next {
-      right: 10px;
-    }
-
-    .carousel-indicators {
-      bottom: -10px;
-    }
-
-    .carousel-indicators li {
-      width: 8px;
-      height: 8px;
-    }
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -216,13 +192,21 @@ export function Recommendations() {
     <>
       <StyledHeader>Recommendations</StyledHeader>
       <Card.Body
-        style={{ padding: 0, display: "flex", flexDirection: "column" }}
+        style={{
+          padding: 0,
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+        }}
       >
         {recommendations.length > 0 ? (
           <CarouselContainer>
             <CustomCarousel activeIndex={index} onSelect={handleSelect}>
               {recommendations.map((rec, idx) => (
-                <Carousel.Item key={idx} style={{ marginBottom: "10px" }}>
+                <Carousel.Item
+                  key={idx}
+                  style={{ marginBottom: "10px", height: "100%" }}
+                >
                   <CarouselContent>
                     <CategoryText>{rec.category}</CategoryText>
                     {rec.feedback}

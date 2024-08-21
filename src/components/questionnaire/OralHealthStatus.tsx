@@ -6,11 +6,11 @@ import { colors } from "../../common/color-utils";
 const StyledHeader = styled(Card.Header)`
   background-color: ${colors.bgWhite};
   color: ${colors.blue};
-  font-size: 25px;
+  font-size: 22px;
   font-weight: bold;
   border: none;
   text-align: center;
-  margin-top: 50px;
+  margin-top: 20px;
 
   @media (max-width: 950px) {
     font-size: 18px;
@@ -19,8 +19,8 @@ const StyledHeader = styled(Card.Header)`
 
 const StyledText = styled.p`
   color: ${colors.textGrey};
-  margin-bottom: 20px;
-  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-top: 20px;
   font-size: 18px;
 
   @media (max-width: 950px) {
@@ -39,30 +39,30 @@ const ScoreSpan = styled.span`
 `;
 
 const CustomProgressBar = styled(ProgressBar)`
-  height: 30px;
-  margin-top: 60px;
+  height: 20px;
+  margin-top: 20px;
   .progress-bar {
     background-color: ${colors.green};
-    font-size: 16px;
+    font-size: 14px;
     border-radius: 20px;
   }
 
   @media (max-width: 950px) {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 `;
 
 const MessageText = styled.p`
   color: ${colors.textGrey};
   display: flex;
-  font-size: 18px;
+  font-size: 16px;
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 15px;
+  padding: 10px;
 
   @media (max-width: 950px) {
-    font-size: 16px;
+    font-size: 14px;
   }
 `;
 
