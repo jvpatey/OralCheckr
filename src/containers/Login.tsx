@@ -47,12 +47,22 @@ const LogoStyle = styled.div`
 
 const LogoImgStyle = styled.img`
   height: 60px;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 `;
 
-const LogoTextStyle = styled.span`
-  color: ${colors.bgWhite};
-  font-size: 35px;
+// GradientText component for applying gradient effect to text
+const GradientText = styled.span`
+  font-size: 40px;
+  font-weight: bold;
+  background: linear-gradient(
+    90deg,
+    ${colors.bgWhite} 0%,
+    ${colors.green} 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 `;
 
 const TextStyle = styled(Card.Text)`
@@ -132,11 +142,8 @@ export function Login() {
         <CardBody>
           <LogoStyle>
             <LogoImgStyle src="./OralCheckr/images/logo-white.png" alt="Logo" />
-            <LogoTextStyle>OralCheckr</LogoTextStyle>
+            <GradientText>OralCheckr</GradientText>
           </LogoStyle>
-          <TextStyle style={{ fontSize: "25px" }}>
-            Welcome to OralCheckr
-          </TextStyle>
           <TextStyle>
             Take our questionnaire to get insight on your oral health status,
             get personalized recommendations, and track your habits.

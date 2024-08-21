@@ -43,7 +43,7 @@ const SidebarContainer = styled.div`
   @media (max-width: 768px) {
     padding-left: 0;
     padding-top: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
   }
 `;
 

@@ -39,12 +39,24 @@ const CustomNavbar = styled(Navbar)`
 const BrandText = styled(Navbar.Brand)`
   display: flex;
   align-items: center;
-  font-size: x-large;
+  font-size: 28px;
   color: ${colors.textGrey};
 
   &:hover {
     color: ${colors.blue};
     font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0;
+  }
+
+  @media (max-width: 768px) {
+    &::after {
+      content: "";
+      display: block;
+      height: 45px;
+    }
   }
 `;
 
