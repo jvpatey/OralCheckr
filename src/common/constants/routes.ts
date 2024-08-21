@@ -8,7 +8,7 @@ export enum RoutePaths {
   LOGIN = '/login',
   LANDING = "/", 
   QUESTIONNAIRE = '/questionnaire',
-  HABITS = '/habit-tracker/habits',
+  HABITS = '/habit-tracker',
   ANALYTICS = '/habit-tracker/analytics',
   RESULTS = '/questionnaire/results'
 }
