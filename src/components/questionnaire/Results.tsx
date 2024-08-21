@@ -5,10 +5,9 @@ import { Recommendations } from "../../containers/questionnaire/Recommendations"
 import { colors } from "../../common/color-utils";
 import { PageBackground } from "../shared/PageBackground";
 
-// Container to hold the tiles inside the Questionnaire Card
 const ResultsCard = styled(Card)`
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   height: auto;
   max-height: calc(100vh - 120px);
   background-color: ${colors.disabledBgGrey};
@@ -62,22 +61,23 @@ export const ResultsCardContainer = styled.div`
 
 const TilesContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   height: 100%;
   padding: 20px;
   gap: 20px;
 
   @media (max-width: 1024px) {
+    flex-direction: column;
     padding: 10px;
     gap: 15px;
   }
 `;
 
 const TileWrapper = styled.div`
-  width: 100%;
+  width: 48%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -89,6 +89,7 @@ const TileWrapper = styled.div`
   height: 400px;
 
   @media (max-width: 1024px) {
+    width: 100%;
     height: 380px;
   }
 

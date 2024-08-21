@@ -41,8 +41,10 @@ const CarouselContent = styled.div`
     padding: 15px 30px;
   }
 
-  @media (max-width: 375px) {
+  @media (max-width: 430px) {
+    font-size: 10px;
     padding: 10px 20px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -54,6 +56,10 @@ const CategoryText = styled.div`
   color: ${colors.green};
 
   @media (max-width: 950px) {
+    font-size: 16px;
+  }
+
+  @media (max-width: 430px) {
     font-size: 14px;
   }
 `;
@@ -67,7 +73,12 @@ const StyledHeader = styled(Card.Header)`
   text-align: center;
   margin-top: 50px;
 
-  @media (max-width: 950px) {
+  @media (max-width: 375px) {
+    margin-top: 20px;
+    font-size: 22px;
+  }
+
+  @media (max-width: 430px) {
     margin-top: 10px;
     font-size: 18px;
   }
