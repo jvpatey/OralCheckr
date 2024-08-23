@@ -8,6 +8,9 @@ import { Habit } from "../../../containers/habit-tracker/habits/Habits";
 import { LocalStorage } from "../../../common/constants/local-storage";
 
 const AnalyticsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: calc(100% - 190px);
   height: calc(100vh - 56px);
   overflow-y: auto;

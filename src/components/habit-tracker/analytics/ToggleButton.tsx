@@ -11,7 +11,10 @@ const ToggleButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 5px; /* Reduce the space between ToggleButton and content below */
+  margin-left: 5px;
+  width: 320px;
+  box-sizing: border-box;
 `;
 
 const Button = styled.button<{ $active: boolean }>`
@@ -22,7 +25,8 @@ const Button = styled.button<{ $active: boolean }>`
   padding: 10px 20px;
   cursor: pointer;
   font-size: 16px;
-  margin: 0;
+  width: 50%;
+  box-sizing: border-box;
 
   &:first-child {
     border-radius: 10px 0 0 10px;
