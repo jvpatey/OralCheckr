@@ -11,9 +11,9 @@ const ToggleButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 5px; /* Reduce the space between ToggleButton and content below */
+  margin-bottom: 5px;
   margin-left: 5px;
-  width: 320px;
+  width: 370px;
   box-sizing: border-box;
 `;
 

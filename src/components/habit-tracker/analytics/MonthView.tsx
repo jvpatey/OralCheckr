@@ -8,6 +8,7 @@ import { IconButton } from "../../../components/habit-tracker/habits/IconButton"
 import {
   faChevronLeft,
   faChevronRight,
+  faCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Styled components for the layout
@@ -29,6 +30,7 @@ const MonthPickerContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 380px;
 `;
 
 interface ViewProps {
@@ -61,6 +63,10 @@ export function MonthView({ habits, onSelectHabit }: ViewProps) {
     setSelectedMonth(nextMonth);
   };
 
+  const handleTodayClick = () => {
+    setSelectedMonth(new Date());
+  };
+
   return (
     <ViewContainer>
       <MonthPickerContainer>
@@ -84,6 +90,15 @@ export function MonthView({ habits, onSelectHabit }: ViewProps) {
           backgroundColor={colors.bgWhite}
           color={colors.blue}
           hoverBackgroundColor={colors.blue}
+          hoverColor={colors.bgWhite}
+        />
+        <IconButton
+          icon={faCalendarDay}
+          onClick={handleTodayClick}
+          borderColor={colors.green}
+          backgroundColor={colors.bgWhite}
+          color={colors.green}
+          hoverBackgroundColor={colors.green}
           hoverColor={colors.bgWhite}
         />
       </MonthPickerContainer>
