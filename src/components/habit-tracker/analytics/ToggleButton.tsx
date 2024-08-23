@@ -14,9 +14,10 @@ const ToggleButtonContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-const Button = styled.button<{ active: boolean }>`
-  background-color: ${({ active }) => (active ? colors.blue : colors.bgWhite)};
-  color: ${({ active }) => (active ? colors.bgWhite : colors.textGrey)};
+const Button = styled.button<{ $active: boolean }>`
+  background-color: ${({ $active }) =>
+    $active ? colors.blue : colors.bgWhite};
+  color: ${({ $active }) => ($active ? colors.bgWhite : colors.textGrey)};
   border: 2px solid ${colors.blue};
   padding: 10px 20px;
   cursor: pointer;
@@ -32,7 +33,8 @@ const Button = styled.button<{ active: boolean }>`
   }
 
   &:hover {
-    background-color: ${({ active }) => (active ? colors.blue : colors.bgGrey)};
+    background-color: ${({ $active }) =>
+      $active ? colors.blue : colors.bgGrey};
   }
 `;
 
@@ -46,7 +48,7 @@ export function ToggleButton({
       {options.map((option) => (
         <Button
           key={option.value}
-          active={activeValue === option.value}
+          $active={activeValue === option.value}
           onClick={() => onChange(option.value)}
         >
           {option.label}

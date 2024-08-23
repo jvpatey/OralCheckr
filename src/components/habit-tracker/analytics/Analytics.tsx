@@ -1,20 +1,11 @@
-import { useState } from "react";
-import styled, { keyframes } from "styled-components";
+import { useState, useEffect } from "react";
+import styled from "styled-components";
 import { PageBackground } from "../../PageBackground";
+import { ToggleButton } from "./ToggleButton";
 import { MonthView } from "./MonthView";
 import { YearView } from "./YearView";
-import { ToggleButton } from "./ToggleButton";
-
-export const fadeUp = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
+import { Habit } from "../../../containers/habit-tracker/habits/Habits";
+import { LocalStorage } from "../../../common/constants/local-storage";
 
 const AnalyticsContainer = styled.div`
   width: calc(100% - 190px);
@@ -25,12 +16,6 @@ const AnalyticsContainer = styled.div`
   left: 190px;
   padding: 20px;
   box-sizing: border-box;
-  animation: ${fadeUp} 1s ease-out;
-
-  @media (max-width: 768px) {
-    width: calc(100% - 70px);
-    left: 70px;
-  }
 
   @media (max-width: 768px) {
     width: calc(100% - 70px);
@@ -39,12 +24,25 @@ const AnalyticsContainer = styled.div`
 `;
 
 export function Analytics() {
-  const [view, setView] = useState("month");
+  const [view, setView] = useState<string>("month");
+  const [habits, setHabits] = useState<Habit[]>([]);
+
+  useEffect(() => {
+    // Fetch habits from local storage when the component mounts
+    const storedHabits = localStorage.getItem(LocalStorage.HABITS);
+    if (storedHabits) {
+      setHabits(JSON.parse(storedHabits) as Habit[]);
+    }
+  }, []);
 
   const toggleOptions = [
     { label: "Month View", value: "month" },
     { label: "Year View", value: "year" },
   ];
+
+  const handleSelectHabit = (habitName: string) => {
+    console.log(`Selected habit in ${view}: ${habitName}`);
+  };
 
   return (
     <PageBackground>
@@ -54,8 +52,11 @@ export function Analytics() {
           activeValue={view}
           onChange={setView}
         />
-
-        {view === "month" ? <MonthView /> : <YearView />}
+        {view === "month" ? (
+          <MonthView habits={habits} onSelectHabit={handleSelectHabit} />
+        ) : (
+          <YearView habits={habits} onSelectHabit={handleSelectHabit} />
+        )}
       </AnalyticsContainer>
     </PageBackground>
   );
