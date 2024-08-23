@@ -29,7 +29,9 @@ export function RenderNavs() {
     );
 
     // Determine if the current path is related to the questionnaire section
-    const isQuestionnaireRoute = currentPath.startsWith(getFullPath("/ques"));
+    const isQuestionnaireRoute = currentPath.startsWith(
+      getFullPath("/questionnaire")
+    );
 
     // Update the sidebar links based on the current route
     if (isHabitTrackerRoute) {
