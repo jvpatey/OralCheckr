@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import { colors } from "../../common/utilities/color-utils";
+import { colors } from "../../../common/utilities/color-utils";
 
 // Styled components for the Habits component
 

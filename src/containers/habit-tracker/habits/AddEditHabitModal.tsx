@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import { StyledModal } from "../../components/questionnaire/Modal";
+import { StyledModal } from "../../../components/questionnaire/Modal";
 import { Habit } from "./Habits";
-import { colors } from "../../common/utilities/color-utils";
+import { colors } from "../../../common/utilities/color-utils";
 import styled from "styled-components";
 
 interface AddEditHabitModalProps {
