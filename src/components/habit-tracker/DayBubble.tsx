@@ -1,12 +1,18 @@
 import styled from "styled-components";
 import { colors } from "../../common/utilities/color-utils";
 
-// Styled component for the date bubbles that show the range of dates for the selected week - used in the Habits component
+// Styled component for the individual day bubbles in the date picker
 const DayBubbleStyled = styled.div<{ selected: boolean; $isEditMode: boolean }>`
-  background-color: ${({ selected }) =>
-    selected ? colors.blue : colors.bgGrey};
-  color: ${({ $isEditMode }) =>
-    $isEditMode ? colors.textGrey : colors.bgWhite};
+  // Background color changes based on selection and edit mode
+  background-color: ${({ selected, $isEditMode }) =>
+    selected
+      ? colors.blue
+      : $isEditMode
+      ? colors.disabledBgGrey
+      : colors.bgGrey};
+  color: ${({ selected, $isEditMode }) =>
+    selected || $isEditMode ? colors.bgWhite : colors.darkGrey};
+
   width: 50px;
   height: 50px;
   display: flex;
@@ -18,8 +24,12 @@ const DayBubbleStyled = styled.div<{ selected: boolean; $isEditMode: boolean }>`
   cursor: ${({ $isEditMode }) => ($isEditMode ? "not-allowed" : "pointer")};
 
   &:hover {
-    background-color: ${({ $isEditMode }) =>
-      $isEditMode ? colors.bgGrey : colors.blue};
+    background-color: ${({ selected, $isEditMode }) =>
+      $isEditMode
+        ? colors.disabledBgGrey
+        : selected
+        ? colors.blue
+        : colors.bgGrey};
     transform: ${({ $isEditMode }) => ($isEditMode ? "none" : "scale(1.05)")};
   }
 
@@ -45,6 +55,7 @@ interface DayBubbleProps {
   isEditMode: boolean;
 }
 
+// Functional component to render each day bubble in the date picker
 export function DayBubble({
   selected,
   onClick,

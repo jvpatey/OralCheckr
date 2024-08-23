@@ -27,7 +27,7 @@ const DatePickerWrapper = styled.div`
 
   @media (max-width: 400px) {
     margin-left: 30px;
-
+  }
 `;
 
 // Styled component for the date bubbles container
@@ -182,7 +182,7 @@ export function DateRangePicker({
     selectedFullDate.getDay()
   );
 
-  // Calculate the start of the week and the days in the week based on the selected date
+  const today = new Date();
   const startOfWeek = getStartOfWeek(selectedFullDate);
   const daysInWeek = getDaysInWeek(startOfWeek);
 
@@ -213,17 +213,15 @@ export function DateRangePicker({
 
   // Handler for clicking on a specific day bubble
   const handleDayClick = (dayIndex: number) => {
-    if (isEditMode) return;
-
-    const newDate = new Date(startOfWeek);
-    newDate.setDate(startOfWeek.getDate() + dayIndex);
-    setSelectedFullDate(newDate);
-    setSelectedDayIndex(dayIndex);
+    const day = daysInWeek[dayIndex];
+    if (!isEditMode && day <= today) {
+      setSelectedFullDate(day);
+      setSelectedDayIndex(dayIndex);
+    }
   };
 
   // Handler for resetting to the current date
   const handleTodayClick = () => {
-    const today = new Date();
     setSelectedFullDate(today);
     setSelectedDayIndex(today.getDay());
   };
@@ -251,6 +249,7 @@ export function DateRangePicker({
           highlightDates={daysInWeek}
           customInput={<CustomInput />}
           disabled={isEditMode}
+          maxDate={today}
         />
         {/* Today button to reset to the current date */}
         <TodayButton
@@ -276,7 +275,7 @@ export function DateRangePicker({
             selected={index === selectedDayIndex}
             onClick={() => handleDayClick(index)}
             date={day}
-            isEditMode={isEditMode}
+            isEditMode={isEditMode || day > today}
           />
         ))}
         <ArrowButton onClick={handleNextWeek} $disabled={isEditMode}>
