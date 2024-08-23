@@ -5,9 +5,10 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { RoutePaths, getFullPath } from "../common/constants/routes";
 import { colors } from "../common/utilities/color-utils";
+import { NavLink } from "../common/links";
 
 interface NavBarProps {
-  links: { text: string; href: string; icon: any }[];
+  links: NavLink[];
 }
 
 const fadeInDown = keyframes`
@@ -207,14 +208,14 @@ export function NavBar({ links }: NavBarProps) {
           <CustomDropdownMenu align="end">
             {links.map((link) => (
               <CustomDropdownItem
-                key={link.href}
-                className={isActive(link.href) ? "active" : ""}
+                key={link.path}
+                className={isActive(link.path) ? "active" : ""}
                 as={Link}
                 to={
-                  link.href === getFullPath(RoutePaths.LOGIN) ? "/" : link.href
+                  link.path === getFullPath(RoutePaths.LOGIN) ? "/" : link.path
                 }
                 onClick={
-                  link.href === getFullPath(RoutePaths.LOGIN)
+                  link.path === getFullPath(RoutePaths.LOGIN)
                     ? handleLogout
                     : undefined
                 }
@@ -222,7 +223,7 @@ export function NavBar({ links }: NavBarProps) {
                 <Icon>
                   <FontAwesomeIcon icon={link.icon} />
                 </Icon>
-                {link.text}
+                {link.name}
               </CustomDropdownItem>
             ))}
           </CustomDropdownMenu>
@@ -231,12 +232,12 @@ export function NavBar({ links }: NavBarProps) {
           <Nav className="ms-auto d-none d-lg-flex">
             {links.map((link) => (
               <CustomNavLink
-                key={link.href}
-                className={isActive(link.href) ? "active" : ""}
+                key={link.path}
+                className={isActive(link.path) ? "active" : ""}
                 as={Link}
-                to={link.href}
+                to={link.path}
                 onClick={
-                  link.href === getFullPath(RoutePaths.LOGIN)
+                  link.path === getFullPath(RoutePaths.LOGIN)
                     ? handleLogout
                     : undefined
                 }
@@ -244,7 +245,7 @@ export function NavBar({ links }: NavBarProps) {
                 <Icon>
                   <FontAwesomeIcon icon={link.icon} />
                 </Icon>
-                {link.text}
+                {link.name}
               </CustomNavLink>
             ))}
           </Nav>

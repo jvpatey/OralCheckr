@@ -7,16 +7,16 @@ export interface NavLink {
   name: string;
   path: string;
   icon: IconDefinition;
-  displayIn: "navbar" | "sidebar" | "both";
+  displayIn: "navbar" | "sidebar";
 }
 
-// Combined links array
-export const links: NavLink[] = [
+// Navbar links
+export const navbarLinks: NavLink[] = [
   {
     name: "Questionnaire",
     path: getFullPath(RoutePaths.QUESTIONNAIRE),
     icon: faClipboardList,
-    displayIn: "both",
+    displayIn: "navbar",
   },
   {
     name: "Habit Tracker",
@@ -29,6 +29,16 @@ export const links: NavLink[] = [
     path: getFullPath(RoutePaths.LOGIN),
     icon: faArrowRightFromBracket,
     displayIn: "navbar",
+  },
+];
+
+// Sidebar links
+export const sidebarLinks: NavLink[] = [
+  {
+    name: "Questionnaire",
+    path: getFullPath(RoutePaths.QUESTIONNAIRE),
+    icon: faClipboardList,
+    displayIn: "sidebar",
   },
   {
     name: "Habits",
@@ -49,3 +59,5 @@ export const links: NavLink[] = [
     displayIn: "sidebar",
   },
 ];
+
+

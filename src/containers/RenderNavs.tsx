@@ -2,7 +2,11 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { NavBar } from "./NavBar";
 import { Sidebar } from "../components/Sidebar";
-import { links, NavLink } from "../common/links";
+import {
+  navbarLinks,
+  sidebarLinks as sidebarNavLinks,
+  NavLink,
+} from "../common/links";
 import { Router } from "../Router";
 import { getFullPath } from "../common/constants/routes";
 import { RoutePaths } from "../common/constants/routes";
@@ -11,13 +15,6 @@ import { RoutePaths } from "../common/constants/routes";
 export function RenderNavs() {
   const location = useLocation();
   const [sidebarLinks, setSidebarLinks] = useState<NavLink[]>([]);
-  const navbarLinks = links
-    .filter((link) => link.displayIn === "navbar" || link.displayIn === "both")
-    .map((link) => ({
-      text: link.name,
-      href: link.path,
-      icon: link.icon,
-    }));
 
   // Hook to update the sidebar links whenever the URL path changes.
   useEffect(() => {
@@ -36,20 +33,18 @@ export function RenderNavs() {
     // Update the sidebar links based on the current route
     if (isHabitTrackerRoute) {
       setSidebarLinks(
-        links.filter(
+        sidebarNavLinks.filter(
           (link) =>
-            link.displayIn !== "navbar" &&
-            (link.path.startsWith(getFullPath(RoutePaths.HABITS)) ||
-              link.path.startsWith(getFullPath(RoutePaths.ANALYTICS)))
+            link.path.startsWith(getFullPath(RoutePaths.HABITS)) ||
+            link.path.startsWith(getFullPath(RoutePaths.ANALYTICS))
         )
       );
     } else if (isQuestionnaireRoute) {
       setSidebarLinks(
-        links.filter(
+        sidebarNavLinks.filter(
           (link) =>
-            link.displayIn !== "navbar" &&
-            (link.path.startsWith(getFullPath(RoutePaths.QUESTIONNAIRE)) ||
-              link.path.startsWith(getFullPath(RoutePaths.RESULTS)))
+            link.path.startsWith(getFullPath(RoutePaths.QUESTIONNAIRE)) ||
+            link.path.startsWith(getFullPath(RoutePaths.RESULTS))
         )
       );
     } else {
