@@ -1,8 +1,9 @@
 import styled, { keyframes } from "styled-components";
 import { Link, useLocation } from "react-router-dom";
-import { getFullPath } from "../common/Routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { colors } from "../common/color-utils";
+import { colors } from "../common/utilities/color-utils";
+import { getFullPath } from "../common/constants/routes";
+import { RoutePaths } from "../common/constants/routes";
 
 // Fade-in from left animation
 const fadeInLeft = keyframes`
@@ -18,7 +19,7 @@ const fadeInLeft = keyframes`
 
 const SidebarContainer = styled.div`
   height: calc(100vh - 56px);
-  width: 160px;
+  width: 200px;
   position: fixed;
   top: 60px;
   left: 0;
@@ -30,19 +31,25 @@ const SidebarContainer = styled.div`
   padding-left: 10px;
   margin-top: 10px;
   border-top-right-radius: 12px;
+  z-index: 5;
   animation: ${fadeInLeft} 1s ease-in-out;
 
   @media (max-width: 768px) {
-    width: 70px;
+    width: 50px;
     align-items: center;
     padding-left: 0;
+  }
+
+  @media (max-width: 768px) {
+    padding-left: 0;
+    padding-top: 10px;
+    margin-top: 10px;
   }
 `;
 
 const SidebarLink = styled(Link)`
-  width: 100%;
-  max-width: 135px;
-  font-size: 15px;
+  width: calc(100% - 20px);
+  font-size: 17px;
   padding: 10px 20px;
   text-align: left;
   text-decoration: none;
@@ -51,19 +58,23 @@ const SidebarLink = styled(Link)`
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 17px;
+  border-radius: 10px;
+  overflow: hidden;
 
   &:hover {
     color: ${colors.bgWhite};
     transform: scale(1.05);
+    background-color: ${colors.green};
   }
 
   &.active {
     font-weight: 800;
-    font-size: 15px;
+    font-size: 17px;
     background-color: ${colors.green};
     color: ${colors.bgWhite};
     border-radius: 10px;
     padding: 10px 20px;
+    overflow: hidden;
   }
 
   @media (max-width: 768px) {
@@ -71,6 +82,7 @@ const SidebarLink = styled(Link)`
     padding: 10px;
     margin-right: 0;
     margin-left: 0;
+    width: auto;
 
     &.active {
       font-weight: 800;
@@ -79,7 +91,6 @@ const SidebarLink = styled(Link)`
       background-color: ${colors.green};
       padding: 8px;
       border-radius: 10px;
-      width: auto;
     }
   }
 
@@ -133,10 +144,17 @@ export function Sidebar({ links }: SidebarProps) {
     <SidebarContainer>
       {links.map((link, index) => (
         <SidebarLink
-          to={getFullPath(link.path)}
+          to={link.path}
           key={index}
           className={
-            location.pathname === getFullPath(link.path) ? "active" : ""
+            location.pathname === link.path ||
+            (link.path === getFullPath(RoutePaths.QUESTIONNAIRE) &&
+              location.pathname.startsWith(
+                getFullPath(RoutePaths.QUESTIONNAIRE)
+              ) &&
+              location.pathname !== getFullPath(RoutePaths.RESULTS))
+              ? "active"
+              : ""
           }
           data-tooltip={link.name}
         >

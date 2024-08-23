@@ -1,18 +1,17 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import "./App.css";
-import { RoutePaths, getFullPath } from "./common/Routes";
-import { GuardedRoute } from "./containers/GuardedRoute";
-import { RedirectIfAuthenticated } from "./containers/RedirectIfAuthenticated";
-import { Dashboard } from "./pages/Dashboard";
-import { Login } from "./pages/Login";
-import { Questionnaire } from "./pages/Questionnaire";
-import { Habits } from "./pages/habittracker/Habits";
-import { Analytics } from "./pages/habittracker/Analytics";
+import { RoutePaths, getFullPath } from "./common/constants/routes";
+import { GuardedRoute } from "./containers/authentication/GuardedRoute";
+import { RedirectIfAuthenticated } from "./containers/authentication/RedirectIfAuthenticated";
+import { Login } from "./containers/Login";
+import { Questionnaire } from "./containers/questionnaire/Questionnaire";
+import { Habits } from "./containers/habit-tracker/Habits";
+import { Analytics } from "./containers/habit-tracker/Analytics";
+import { Results } from "./components/questionnaire/Results";
+import { Landing } from "./components/landing/Landing";
 
 export function Router() {
   return (
     <Routes>
-      {/* Redirect to login page if user is not authenticated */}
       <Route
         path="/"
         element={
@@ -21,13 +20,11 @@ export function Router() {
           </RedirectIfAuthenticated>
         }
       />
-      {/* Catch-all route that redirects to the login page */}
-      <Route path="*" element={<Navigate to="/" replace={true} />} />
       <Route
-        path={getFullPath(RoutePaths.DASHBOARD)}
+        path={getFullPath(RoutePaths.LANDING)}
         element={
           <GuardedRoute>
-            <Dashboard />
+            <Landing />
           </GuardedRoute>
         }
       />
@@ -47,13 +44,36 @@ export function Router() {
           </GuardedRoute>
         }
       />
-      {/* Questionnaire route guarded by authentication, with optional questionId parameter */}
       <Route
-        path={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/:questionId?`}
+        path={getFullPath(RoutePaths.RESULTS)}
+        element={
+          <GuardedRoute>
+            <Results />
+          </GuardedRoute>
+        }
+      />
+      {/* Questionnaire path with dynamic question ID */}
+      <Route
+        path={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/:questionId`}
         element={
           <GuardedRoute>
             <Questionnaire />
           </GuardedRoute>
+        }
+      />
+      <Route
+        path={getFullPath(RoutePaths.QUESTIONNAIRE)}
+        element={
+          <GuardedRoute>
+            <Questionnaire />
+          </GuardedRoute>
+        }
+      />
+      {/* Wildcard route to catch all other routes */}
+      <Route
+        path="*"
+        element={
+          <Navigate to={getFullPath(RoutePaths.LANDING)} replace={true} />
         }
       />
     </Routes>
