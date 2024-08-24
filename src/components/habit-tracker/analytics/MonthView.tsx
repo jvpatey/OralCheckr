@@ -1,24 +1,42 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { HabitDropdown } from "./HabitDropdown";
-import { Habit } from "../../../containers/habit-tracker/habits/Habits";
-import { colors } from "../../../common/utilities/color-utils";
-import { MonthPicker } from "./MonthPicker";
-import { IconButton } from "../../../components/habit-tracker/habits/IconButton";
 import {
-  faChevronLeft,
-  faChevronRight,
-  faCalendarDay,
-} from "@fortawesome/free-solid-svg-icons";
+  Habit,
+  Logging,
+} from "../../../containers/habit-tracker/habits/Habits";
+import { colors } from "../../../common/utilities/color-utils";
+import { MonthSelector } from "./MonthSelector"; // Import the new unified MonthSelector
+import { HabitCalendar } from "../../../containers/habit-tracker/analytics/HabitCalendar";
 
-// Styled components for the layout
+// Container for the entire month view
 const ViewContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 10px;
+  width: 100%;
 `;
 
+// Wrapper to align the calendar to the right side
+const CalendarWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 20px;
+`;
+
+// Card to contain the monthly calendar
+const CalendarCard = styled.div`
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+`;
+
+// Title for the Habits section
 const HabitsTitle = styled.h3`
   font-size: 24px;
   font-weight: bold;
@@ -26,84 +44,50 @@ const HabitsTitle = styled.h3`
   margin-top: 20px;
 `;
 
-const MonthPickerContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 380px;
-`;
-
+// Props interface for the MonthView component
 interface ViewProps {
   habits: Habit[];
   onSelectHabit: (habitName: string) => void;
+  habitsLog: Logging;
+  selectedHabit: string;
 }
 
-export function MonthView({ habits, onSelectHabit }: ViewProps) {
+// The MonthView component for displaying the monthly analytics view of the habit tracker
+export function MonthView({
+  habits,
+  onSelectHabit,
+  habitsLog,
+  selectedHabit,
+}: ViewProps) {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
 
-  const handleMonthChange = (date: Date) => {
-    setSelectedMonth(date);
-  };
-
-  const decreaseMonth = () => {
-    const prevMonth = new Date(
-      selectedMonth.getFullYear(),
-      selectedMonth.getMonth() - 1,
-      1
-    );
-    setSelectedMonth(prevMonth);
-  };
-
-  const increaseMonth = () => {
-    const nextMonth = new Date(
-      selectedMonth.getFullYear(),
-      selectedMonth.getMonth() + 1,
-      1
-    );
-    setSelectedMonth(nextMonth);
-  };
-
-  const handleTodayClick = () => {
-    setSelectedMonth(new Date());
-  };
+  const habitCount =
+    habits.find((habit) => habit.name === selectedHabit)?.count || 1;
 
   return (
     <ViewContainer>
-      <MonthPickerContainer>
-        <IconButton
-          icon={faChevronLeft}
-          onClick={decreaseMonth}
-          borderColor={colors.blue}
-          backgroundColor={colors.bgWhite}
-          color={colors.blue}
-          hoverBackgroundColor={colors.blue}
-          hoverColor={colors.bgWhite}
-        />
-        <MonthPicker
-          selectedMonth={selectedMonth}
-          onMonthChange={handleMonthChange}
-        />
-        <IconButton
-          icon={faChevronRight}
-          onClick={increaseMonth}
-          borderColor={colors.blue}
-          backgroundColor={colors.bgWhite}
-          color={colors.blue}
-          hoverBackgroundColor={colors.blue}
-          hoverColor={colors.bgWhite}
-        />
-        <IconButton
-          icon={faCalendarDay}
-          onClick={handleTodayClick}
-          borderColor={colors.green}
-          backgroundColor={colors.bgWhite}
-          color={colors.green}
-          hoverBackgroundColor={colors.green}
-          hoverColor={colors.bgWhite}
-        />
-      </MonthPickerContainer>
+      <MonthSelector
+        selectedMonth={selectedMonth}
+        onMonthChange={setSelectedMonth}
+      />
       <HabitsTitle>Habits</HabitsTitle>
       <HabitDropdown habits={habits} onSelectHabit={onSelectHabit} />
+      {selectedHabit && (
+        <CalendarWrapper>
+          <CalendarCard>
+            <HabitCalendar
+              habitsLog={habitsLog}
+              selectedHabit={selectedHabit}
+              year={selectedMonth.getFullYear()}
+              month={selectedMonth
+                .toLocaleDateString("en-US", { month: "long" })
+                .toLowerCase()}
+              habitCount={habitCount}
+              selectedMonth={selectedMonth}
+            />
+          </CalendarCard>
+        </CalendarWrapper>
+      )}
     </ViewContainer>
   );
 }

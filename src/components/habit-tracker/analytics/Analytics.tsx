@@ -4,9 +4,13 @@ import { PageBackground } from "../../PageBackground";
 import { ToggleButton } from "./ToggleButton";
 import { MonthView } from "./MonthView";
 import { YearView } from "./YearView";
-import { Habit } from "../../../containers/habit-tracker/habits/Habits";
+import {
+  Habit,
+  Logging,
+} from "../../../containers/habit-tracker/habits/Habits";
 import { LocalStorage } from "../../../common/constants/local-storage";
 
+// Styled component for the main container of the analytics page
 const AnalyticsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -26,15 +30,25 @@ const AnalyticsContainer = styled.div`
   }
 `;
 
+// The main functional component for the Analytics page of the habit tracker
 export function Analytics() {
+  // State to manage the current view (month or year)
   const [view, setView] = useState<string>("month");
   const [habits, setHabits] = useState<Habit[]>([]);
+  const [habitsLog, setHabitsLog] = useState<Logging>({});
+  const [selectedHabit, setSelectedHabit] = useState<string>("");
 
   useEffect(() => {
-    // Fetch habits from local storage when the component mounts
+    // Fetch habits and logging data from local storage when the component mounts
     const storedHabits = localStorage.getItem(LocalStorage.HABITS);
+    const storedLogging = localStorage.getItem(LocalStorage.HABITS_LOG);
+
     if (storedHabits) {
       setHabits(JSON.parse(storedHabits) as Habit[]);
+    }
+
+    if (storedLogging) {
+      setHabitsLog(JSON.parse(storedLogging) as Logging);
     }
   }, []);
 
@@ -44,7 +58,7 @@ export function Analytics() {
   ];
 
   const handleSelectHabit = (habitName: string) => {
-    console.log(`Selected habit in ${view}: ${habitName}`);
+    setSelectedHabit(habitName);
   };
 
   return (
@@ -56,7 +70,12 @@ export function Analytics() {
           onChange={setView}
         />
         {view === "month" ? (
-          <MonthView habits={habits} onSelectHabit={handleSelectHabit} />
+          <MonthView
+            habits={habits}
+            onSelectHabit={handleSelectHabit}
+            habitsLog={habitsLog}
+            selectedHabit={selectedHabit}
+          />
         ) : (
           <YearView habits={habits} onSelectHabit={handleSelectHabit} />
         )}
