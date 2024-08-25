@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "src/containers/habit-tracker/analytics/.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
