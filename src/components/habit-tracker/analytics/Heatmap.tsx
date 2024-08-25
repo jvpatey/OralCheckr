@@ -29,22 +29,30 @@ const HeatmapCard = styled.div`
   }
 `;
 
-// interface for the heat map props
+// Interface for the heatmap props
 interface HeatmapProps {
   data: { date: string; count: number }[];
+  year: number;
+  habitName: string;
 }
 
 // Functional component to render the heatmap - used in the year view of the analytics page of the habit tracker
-export function Heatmap({ data }: HeatmapProps) {
+export function Heatmap({ data, year, habitName }: HeatmapProps) {
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const weeksInYear = 52;
+
+  // Filter data to include only entries for the selected year
+  const filteredData = data.filter((entry) => {
+    const entryYear = new Date(entry.date).getFullYear();
+    return entryYear === year;
+  });
 
   // Get data for weeks and days of week for axis
   const series = daysOfWeek.map((day, dayIndex) => ({
     name: day,
     data: Array.from({ length: weeksInYear }, (_, weekIndex) => {
       const count =
-        data.find((d) => {
+        filteredData.find((d) => {
           const date = new Date(d.date);
           const weekOfYear = Math.floor(
             (date.getTime() - new Date(date.getFullYear(), 0, 1).getTime()) /
@@ -57,7 +65,7 @@ export function Heatmap({ data }: HeatmapProps) {
     }),
   }));
 
-  // options for heatmap chart from Apex Charts
+  // Options for heatmap chart from Apex Charts
   const options: ApexOptions = {
     chart: {
       height: 350,
@@ -123,7 +131,7 @@ export function Heatmap({ data }: HeatmapProps) {
       enabled: false,
     },
     title: {
-      text: "Habit Logs",
+      text: `${habitName} logs for ${year}`,
     },
     xaxis: {
       labels: {
