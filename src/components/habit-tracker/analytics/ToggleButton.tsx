@@ -15,6 +15,11 @@ const ToggleButtonContainer = styled.div`
   margin-left: 5px;
   width: 370px;
   box-sizing: border-box;
+
+  @media (max-width: 600px) {
+    width: 290px;
+    padding: 0 10px;
+  }
 `;
 
 const Button = styled.button<{ $active: boolean }>`

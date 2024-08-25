@@ -30,26 +30,52 @@ const ViewContainer = styled.div`
 // Container for the tiles and calendar
 const TilesAndCalendarContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 85%;
+  justify-content: center;
+  flex-direction: row;
+  width: 90%;
   margin-top: 20px;
-  height: calc(100vh - 220px);
+  gap: 20px;
+
+  @media (max-width: 1250px) {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 600px) {
+    padding: 0 10px;
+  }
 `;
 
 // Wrapper for the grid of tiles
 const TileWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-gap: 3px;
-  width: 47%;
+  grid-gap: 15px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
   justify-content: center;
-  align-items: start;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 // Wrapper for the calendar or chart
 const CalendarWrapper = styled.div`
-  width: 60%;
+  width: 100%;
+  max-width: 600px;
   position: relative;
+
+  @media (max-width: 1024px) {
+    max-width: 100%;
+  }
 `;
 
 // Styling for the calendar card
@@ -58,25 +84,48 @@ const CalendarCard = styled.div`
   border-radius: 8px;
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 80%;
-  max-height: 80%;
+  height: 100%;
+  max-height: 100%;
+
+  @media (max-width: 1024px) {
+    height: auto;
+    max-height: none;
+  }
+
+  @media (max-width: 600px) {
+    height: auto;
+    max-height: none;
+  }
 `;
 
 // Container for the habits dropdown and title, centered horizontally
 const HabitsContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 10px;
+  width: 100%;
+  max-width: 300px;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 5px;
+  }
 `;
 
 // Styling for the habits title
 const HabitsTitle = styled.h3`
-  font-size: 30px;
+  font-size: 24px;
   font-weight: bold;
   color: ${colors.green};
   margin-top: 10px;
-  margin-right: 10px;
+  text-align: center;
+
+  @media (max-width: 600px) {
+    font-size: 18px;
+  }
 `;
 
 // Interface defining the props for the MonthView component
@@ -141,7 +190,7 @@ export function MonthView({
         onMonthChange={setSelectedMonth}
       />
       <HabitsContainer>
-        <HabitsTitle>Habits: </HabitsTitle>
+        <HabitsTitle>Habits:</HabitsTitle>
         <HabitDropdown habits={habits} onSelectHabit={onSelectHabit} />
       </HabitsContainer>
 

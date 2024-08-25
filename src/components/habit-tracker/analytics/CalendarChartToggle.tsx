@@ -15,11 +15,16 @@ const ToggleButtonContainer = styled.div`
   right: 10px;
   display: flex;
   gap: 10px;
+
+  @media (max-width: 768px) {
+    top: 15px;
+    right: 10px;
+  }
 `;
 
 // Styled component for each toggle button
 const ToggleButton = styled.button<{ active: boolean }>`
-  background-color: ${({ active }) => (active ? colors.green : colors.bgGrey)};
+  background-color: ${({ active }) => (active ? colors.blue : colors.bgGrey)};
   border: none;
   border-radius: 4px;
   padding: 5px 10px;

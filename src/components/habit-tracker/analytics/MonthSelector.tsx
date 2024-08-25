@@ -21,6 +21,11 @@ const MonthPickerContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 380px;
+
+  @media (max-width: 600px) {
+    width: 300px;
+    padding: 0 10px;
+  }
 `;
 
 // Styled component for the custom Month Picker button
@@ -41,6 +46,11 @@ const MonthPickerButton = styled.button`
   margin-bottom: 10px;
   margin-left: 10px;
 
+  @media (max-width: 600px) {
+    min-width: 50px;
+    padding: 0 10px;
+  }
+
   &:hover {
     background-color: ${colors.blue};
     color: ${colors.bgWhite};
@@ -52,7 +62,6 @@ export function MonthSelector({
   selectedMonth,
   onMonthChange,
 }: MonthSelectorProps) {
-  // State to manage the visibility of the DatePicker
   const [isOpen, setIsOpen] = useState(false);
 
   // Handles the change of the selected month from the DatePicker

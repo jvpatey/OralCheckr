@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
@@ -24,6 +24,7 @@ const CalendarContainer = styled.div`
   justify-content: center;
   height: 100%;
   width: 100%;
+  padding-top: 20px;
 
   .react-calendar {
     width: 100%;
@@ -94,6 +95,12 @@ const MonthYearDisplay = styled.div`
   font-size: 20px;
   font-weight: bold;
   margin: 10px 0px;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    margin-top: 30px;
+  }
 `;
 
 // HabitCalendar component to render the calendar with habit tracking progress

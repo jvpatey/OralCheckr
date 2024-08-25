@@ -8,10 +8,19 @@ const ChartContainer = styled.div`
   width: 100%;
   height: calc(100% - 40px);
   margin-top: 40px;
+
   .apexcharts-canvas {
     background: ${colors.white};
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    height: 70vh;
+  }
+
+  @media (max-width: 480px) {
+    height: 50vh;
   }
 `;
 
