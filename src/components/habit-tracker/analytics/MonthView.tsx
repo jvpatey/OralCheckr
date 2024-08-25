@@ -9,6 +9,7 @@ import { colors } from "../../../common/utilities/color-utils";
 import { MonthSelector } from "./MonthSelector";
 import { HabitCalendar } from "../../../containers/habit-tracker/analytics/HabitCalendar";
 import { AnalyticsTile } from "./AnalyticsTile";
+import { calculateTotalCount } from "../../../common/utilities/habit-analytics";
 
 // Container for the entire view, centering all contents
 const ViewContainer = styled.div`
@@ -95,6 +96,14 @@ export function MonthView({
 }: ViewProps) {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
 
+  // Calculate the total count for the selected habit and month using the utility function
+  const totalCount = calculateTotalCount(
+    habitsLog,
+    selectedHabit,
+    selectedMonth.getFullYear(),
+    selectedMonth.toLocaleDateString("en-US", { month: "long" }).toLowerCase()
+  );
+
   const habitCount =
     habits.find((habit) => habit.name === selectedHabit)?.count || 1;
 
@@ -112,9 +121,8 @@ export function MonthView({
       <TilesAndCalendarContainer>
         <TileWrapper>
           <AnalyticsTileAdjusted
-            heading="Heading 1"
-            mainContent="Content 1"
-            subContent="Sub 1"
+            heading="Total Count"
+            mainContent={totalCount}
           />
           <AnalyticsTileAdjusted
             heading="Heading 2"

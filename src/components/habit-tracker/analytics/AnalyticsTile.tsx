@@ -26,13 +26,14 @@ const TileHeading = styled.h3`
   font-size: 16px;
   font-weight: bold;
   color: ${colors.blue};
-  margin-bottom: 8px;
+  margin-top: 10px;
 `;
 
 const TileMainContent = styled.div`
-  font-size: 30px;
+  font-size: 40px;
   font-weight: bold;
   color: ${colors.green};
+  margin-top: 10px;
   margin-bottom: 8px;
 `;
 
