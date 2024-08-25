@@ -6,45 +6,79 @@ import {
   Logging,
 } from "../../../containers/habit-tracker/habits/Habits";
 import { colors } from "../../../common/utilities/color-utils";
-import { MonthSelector } from "./MonthSelector"; // Import the new unified MonthSelector
+import { MonthSelector } from "./MonthSelector";
 import { HabitCalendar } from "../../../containers/habit-tracker/analytics/HabitCalendar";
+import { AnalyticsTile } from "./AnalyticsTile";
 
-// Container for the entire month view
+// Container for the entire view, centering all contents
 const ViewContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 10px;
   width: 100%;
+  margin-top: 5px;
 `;
 
-// Wrapper to align the calendar to the right side
-const CalendarWrapper = styled.div`
+// Container for the tiles and calendar
+const TilesAndCalendarContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
-  width: 100%;
+  justify-content: space-between;
+  width: 85%;
   margin-top: 20px;
+  height: calc(100vh - 220px);
 `;
 
-// Card to contain the monthly calendar
+// Wrapper for the grid of tiles
+const TileWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 3px;
+  width: 47%;
+  justify-content: center;
+  align-items: start;
+`;
+
+// Wrapper for the calendar
+const CalendarWrapper = styled.div`
+  width: 60%;
+`;
+
+// Styling for the calendar card
 const CalendarCard = styled.div`
   background-color: #ffffff;
   border-radius: 8px;
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
+  height: 80%;
+  max-height: 80%;
 `;
 
-// Title for the Habits section
+// Adjusted styling for individual analytics tiles
+const AnalyticsTileAdjusted = styled(AnalyticsTile)`
+  height: auto;
+  max-height: 180px;
+  max-width: 180px;
+  margin: 0 auto;
+`;
+
+// Container for the habits dropdown and title, centered horizontally
+const HabitsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+`;
+
+// Styling for the habits title
 const HabitsTitle = styled.h3`
-  font-size: 24px;
+  font-size: 30px;
   font-weight: bold;
   color: ${colors.green};
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-right: 10px;
 `;
 
-// Props interface for the MonthView component
+// Interface defining the props for the MonthView component
 interface ViewProps {
   habits: Habit[];
   onSelectHabit: (habitName: string) => void;
@@ -52,7 +86,7 @@ interface ViewProps {
   selectedHabit: string;
 }
 
-// The MonthView component for displaying the monthly analytics view of the habit tracker
+// Main component for the MonthView, displaying the month selector, habits dropdown, and tiles with calendar
 export function MonthView({
   habits,
   onSelectHabit,
@@ -70,24 +104,44 @@ export function MonthView({
         selectedMonth={selectedMonth}
         onMonthChange={setSelectedMonth}
       />
-      <HabitsTitle>Habits</HabitsTitle>
-      <HabitDropdown habits={habits} onSelectHabit={onSelectHabit} />
-      {selectedHabit && (
+      <HabitsContainer>
+        <HabitsTitle>Habits: </HabitsTitle>
+        <HabitDropdown habits={habits} onSelectHabit={onSelectHabit} />
+      </HabitsContainer>
+
+      <TilesAndCalendarContainer>
+        <TileWrapper>
+          <AnalyticsTileAdjusted
+            heading="Heading 1"
+            mainContent="Content 1"
+            subContent="Sub 1"
+          />
+          <AnalyticsTileAdjusted
+            heading="Heading 2"
+            mainContent="Content 2"
+            subContent="Sub 2"
+          />
+          <AnalyticsTileAdjusted heading="Heading 3" mainContent="Content 3" />
+          <AnalyticsTileAdjusted heading="Heading 4" mainContent="Content 4" />
+        </TileWrapper>
+
         <CalendarWrapper>
           <CalendarCard>
-            <HabitCalendar
-              habitsLog={habitsLog}
-              selectedHabit={selectedHabit}
-              year={selectedMonth.getFullYear()}
-              month={selectedMonth
-                .toLocaleDateString("en-US", { month: "long" })
-                .toLowerCase()}
-              habitCount={habitCount}
-              selectedMonth={selectedMonth}
-            />
+            {selectedHabit && (
+              <HabitCalendar
+                habitsLog={habitsLog}
+                selectedHabit={selectedHabit}
+                year={selectedMonth.getFullYear()}
+                month={selectedMonth
+                  .toLocaleDateString("en-US", { month: "long" })
+                  .toLowerCase()}
+                habitCount={habitCount}
+                selectedMonth={selectedMonth}
+              />
+            )}
           </CalendarCard>
         </CalendarWrapper>
-      )}
+      </TilesAndCalendarContainer>
     </ViewContainer>
   );
 }

@@ -29,7 +29,7 @@ const CalendarContainer = styled.div`
     width: 100%;
     max-width: 100%;
     border: none;
-    background-color: white;
+    background-color: ${colors.white};
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
     padding: 0px;

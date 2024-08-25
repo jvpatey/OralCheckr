@@ -16,9 +16,8 @@ const CustomDropdownToggle = styled(Dropdown.Toggle)`
   background-color: ${colors.bgWhite};
   color: ${colors.blue};
   border: 2px solid ${colors.blue};
-  padding: 10px 20px;
   font-size: 16px;
-  width: 200px;
+  width: 150px;
 
   &:hover,
   &:focus {
