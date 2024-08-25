@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { HabitDropdown } from "./HabitDropdown";
 import { Habit } from "../../../containers/habit-tracker/habits/Habits";
 import { colors } from "../../../common/utilities/color-utils";
-import { YearSelector } from "./YearSelector"; // Import the YearSelector component
+import { YearSelector } from "./YearSelector";
+import { Heatmap } from "./Heatmap";
 import { useState } from "react";
 
-// Styled component for the container of the YearView
+// Styled components for the layout
 const ViewContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -13,7 +14,6 @@ const ViewContainer = styled.div`
   margin-top: 5px;
 `;
 
-// Styled component for the title of the habits section
 const HabitsTitle = styled.h3`
   font-size: 24px;
   font-weight: bold;
@@ -22,17 +22,16 @@ const HabitsTitle = styled.h3`
   margin-top: 10px;
 `;
 
-// Interface for the YearVIew props
 interface ViewProps {
   habits: Habit[];
   onSelectHabit: (habitName: string) => void;
+  heatmapData: { date: string; count: number }[];
 }
 
-// Functional component for the yearview of the analytics page in the habit tracker
-export function YearView({ habits, onSelectHabit }: ViewProps) {
+export function YearView({ habits, onSelectHabit, heatmapData }: ViewProps) {
   const [selectedYear, setSelectedYear] = useState(new Date());
 
-  // Function to handle the change in selected year
+  // Handle the year change
   const handleYearChange = (date: Date) => {
     setSelectedYear(date);
   };
@@ -45,6 +44,7 @@ export function YearView({ habits, onSelectHabit }: ViewProps) {
       />
       <HabitsTitle>Habits:</HabitsTitle>
       <HabitDropdown habits={habits} onSelectHabit={onSelectHabit} />
+      <Heatmap data={heatmapData} />
     </ViewContainer>
   );
 }

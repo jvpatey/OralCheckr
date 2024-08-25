@@ -64,6 +64,30 @@ export function Analytics() {
     }
   }, []);
 
+  // Function to generate heatmap data from logging information
+  const generateHeatmapData = (
+    habitName: string
+  ): { date: string; count: number }[] => {
+    const habitLog = habitsLog[habitName];
+    if (!habitLog) return [];
+
+    const heatmapData: { date: string; count: number }[] = [];
+
+    for (const year in habitLog) {
+      for (const month in habitLog[year]) {
+        for (const day in habitLog[year][month]) {
+          const date = new Date(`${year}-${month}-${day}`)
+            .toISOString()
+            .split("T")[0];
+          const count = habitLog[year][month][day];
+          heatmapData.push({ date, count });
+        }
+      }
+    }
+
+    return heatmapData;
+  };
+
   const toggleOptions = [
     { label: "Month View", value: "month" },
     { label: "Year View", value: "year" },
@@ -89,7 +113,11 @@ export function Analytics() {
             selectedHabit={selectedHabit}
           />
         ) : (
-          <YearView habits={habits} onSelectHabit={handleSelectHabit} />
+          <YearView
+            habits={habits}
+            onSelectHabit={handleSelectHabit}
+            heatmapData={generateHeatmapData(selectedHabit)}
+          />
         )}
       </AnalyticsContainer>
     </PageBackground>
