@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useState } from "react";
 import { HabitDropdown } from "./HabitDropdown";
 import {
@@ -18,6 +18,17 @@ import {
 import { AnalyticsTile } from "./AnalyticsTile";
 import { CalendarChartToggle } from "./CalendarChartToggle";
 
+const fadeUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 // Container for the entire view, centering all contents
 const ViewContainer = styled.div`
   display: flex;
@@ -25,6 +36,7 @@ const ViewContainer = styled.div`
   align-items: center;
   width: 100%;
   margin-top: 5px;
+  animation: ${fadeUp} 1s ease-out;
 `;
 
 // Container for the tiles and calendar

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { HabitDropdown } from "./HabitDropdown";
 import { Habit } from "../../../containers/habit-tracker/habits/Habits";
 import { colors } from "../../../common/utilities/color-utils";
@@ -6,12 +6,24 @@ import { YearSelector } from "./YearSelector";
 import { Heatmap } from "./Heatmap";
 import { useState } from "react";
 
+const fadeUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 // Styled components for the layout
 const ViewContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 5px;
+  animation: ${fadeUp} 1s ease-out;
 `;
 
 const HabitsTitle = styled.h3`

@@ -7,11 +7,26 @@ import { ApexOptions } from "apexcharts";
 const HeatmapCard = styled.div`
   background-color: ${colors.bgWhite};
   border-radius: 10px;
-  padding: 20px;
+  padding: 10px;
   width: 900px;
-  max-width: 1200px;
+  max-width: 100%;
   margin-top: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 1024px) {
+    width: 600px;
+    padding: 10px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 10px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    padding: 10px;
+  }
 `;
 
 // interface for the heat map props
@@ -45,7 +60,7 @@ export function Heatmap({ data }: HeatmapProps) {
   // options for heatmap chart from Apex Charts
   const options: ApexOptions = {
     chart: {
-      height: 400,
+      height: 350,
       type: "heatmap",
       background: colors.bgWhite,
     },
@@ -178,6 +193,56 @@ export function Heatmap({ data }: HeatmapProps) {
         show: false,
       },
     },
+    responsive: [
+      {
+        breakpoint: 768,
+        options: {
+          chart: {
+            height: 350,
+            width: "100%",
+          },
+          xaxis: {
+            labels: {
+              rotate: -30,
+              style: {
+                fontSize: "10px",
+              },
+            },
+          },
+          yaxis: {
+            labels: {
+              style: {
+                fontSize: "10px",
+              },
+            },
+          },
+        },
+      },
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            height: 300,
+            width: "100%",
+          },
+          xaxis: {
+            labels: {
+              rotate: -30,
+              style: {
+                fontSize: "8px",
+              },
+            },
+          },
+          yaxis: {
+            labels: {
+              style: {
+                fontSize: "8px",
+              },
+            },
+          },
+        },
+      },
+    ],
   };
 
   return (
