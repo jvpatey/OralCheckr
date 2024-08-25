@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { PageBackground } from "../../PageBackground";
 import { ToggleButton } from "./ToggleButton";
 import { MonthView } from "./MonthView";
@@ -9,6 +9,17 @@ import {
   Logging,
 } from "../../../containers/habit-tracker/habits/Habits";
 import { LocalStorage } from "../../../common/constants/local-storage";
+
+const fadeUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 // Styled component for the main container of the analytics page
 const AnalyticsContainer = styled.div`
@@ -23,6 +34,7 @@ const AnalyticsContainer = styled.div`
   left: 190px;
   padding: 20px;
   box-sizing: border-box;
+  animation: ${fadeUp} 1s ease-out;
 
   @media (max-width: 768px) {
     width: calc(100% - 70px);

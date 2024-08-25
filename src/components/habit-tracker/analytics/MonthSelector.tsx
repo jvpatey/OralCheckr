@@ -38,7 +38,7 @@ const MonthPickerButton = styled.button`
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   margin-left: 10px;
 
   &:hover {

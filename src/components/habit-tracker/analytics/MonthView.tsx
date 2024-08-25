@@ -8,6 +8,7 @@ import {
 import { colors } from "../../../common/utilities/color-utils";
 import { MonthSelector } from "./MonthSelector";
 import { HabitCalendar } from "../../../containers/habit-tracker/analytics/HabitCalendar";
+import { LineChart } from "./LineChart";
 import {
   calculateTotalCount,
   calculateMonthlyCompletion,
@@ -15,6 +16,7 @@ import {
   calculateMissedDays,
 } from "../../../common/utilities/habit-analytics";
 import { AnalyticsTile } from "./AnalyticsTile";
+import { CalendarChartToggle } from "./CalendarChartToggle";
 
 // Container for the entire view, centering all contents
 const ViewContainer = styled.div`
@@ -44,9 +46,10 @@ const TileWrapper = styled.div`
   align-items: start;
 `;
 
-// Wrapper for the calendar
+// Wrapper for the calendar or chart
 const CalendarWrapper = styled.div`
   width: 60%;
+  position: relative;
 `;
 
 // Styling for the calendar card
@@ -92,6 +95,7 @@ export function MonthView({
   selectedHabit,
 }: ViewProps) {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
+  const [isCalendarView, setIsCalendarView] = useState(true);
 
   const habitCount =
     habits.find((habit) => habit.name === selectedHabit)?.count || 1;
@@ -157,13 +161,16 @@ export function MonthView({
             heading="Missed Days"
             mainContent={missedDays}
             subContent="days"
-            isMissedDays
           />
         </TileWrapper>
 
         <CalendarWrapper>
           <CalendarCard>
-            {selectedHabit && (
+            <CalendarChartToggle
+              isCalendarView={isCalendarView}
+              setIsCalendarView={setIsCalendarView}
+            />
+            {isCalendarView ? (
               <HabitCalendar
                 habitsLog={habitsLog}
                 selectedHabit={selectedHabit}
@@ -171,6 +178,13 @@ export function MonthView({
                 month={month}
                 habitCount={habitCount}
                 selectedMonth={selectedMonth}
+              />
+            ) : (
+              <LineChart
+                habitsLog={habitsLog}
+                selectedHabit={selectedHabit}
+                year={year}
+                month={month}
               />
             )}
           </CalendarCard>
