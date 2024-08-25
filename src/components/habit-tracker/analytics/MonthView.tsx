@@ -84,7 +84,7 @@ const CalendarCard = styled.div`
   border-radius: 8px;
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 100%;
+  height: 380px;
   max-height: 100%;
 
   @media (max-width: 1024px) {
