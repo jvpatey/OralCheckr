@@ -4,8 +4,8 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { Logging } from "../../../containers/habit-tracker/habits/Habits";
-import { colors } from "../../../common/utilities/color-utils";
+import { Logging } from "../../habits/Habits";
+import { colors } from "../../../../common/utilities/color-utils";
 
 interface CalendarProgressProps {
   habitsLog: Logging;

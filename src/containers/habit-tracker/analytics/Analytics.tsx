@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import { PageBackground } from "../../PageBackground";
-import { ToggleButton } from "./ToggleButton";
-import { MonthView } from "./MonthView";
-import { YearView } from "./YearView";
-import {
-  Habit,
-  Logging,
-} from "../../../containers/habit-tracker/habits/Habits";
+import { PageBackground } from "../../../components/PageBackground";
+import { ToggleButton } from "../../../components/habit-tracker/analytics/ToggleButton";
+import { MonthView } from "./month-view/MonthView";
+import { YearView } from "./year-view/YearView";
+import { Habit, Logging } from "../habits/Habits";
 import { LocalStorage } from "../../../common/constants/local-storage";
 
 const fadeUp = keyframes`

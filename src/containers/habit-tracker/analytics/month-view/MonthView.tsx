@@ -1,22 +1,19 @@
 import styled, { keyframes } from "styled-components";
 import { useState } from "react";
-import { HabitDropdown } from "./HabitDropdown";
-import {
-  Habit,
-  Logging,
-} from "../../../containers/habit-tracker/habits/Habits";
-import { colors } from "../../../common/utilities/color-utils";
+import { HabitDropdown } from "../HabitDropdown";
+import { Habit, Logging } from "../../habits/Habits";
+import { colors } from "../../../../common/utilities/color-utils";
 import { MonthSelector } from "./MonthSelector";
-import { HabitCalendar } from "../../../containers/habit-tracker/analytics/HabitCalendar";
-import { LineChart } from "./LineChart";
+import { HabitCalendar } from "./HabitCalendar";
+import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
 import {
   calculateTotalCount,
   calculateMonthlyCompletion,
   calculateLongestStreak,
   calculateMissedDays,
-} from "../../../common/utilities/habit-analytics";
-import { AnalyticsTile } from "./AnalyticsTile";
-import { CalendarChartToggle } from "./CalendarChartToggle";
+} from "../../../../common/utilities/habit-analytics";
+import { AnalyticsTile } from "../../../../components/habit-tracker/analytics/month-view/AnalyticsTile";
+import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
 
 const fadeUp = keyframes`
   from {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Dropdown } from "react-bootstrap";
-import { Habit } from "../../../containers/habit-tracker/habits/Habits";
+import { Habit } from "../habits/Habits";
 import { colors } from "../../../common/utilities/color-utils";
 
 interface HabitDropdownProps {

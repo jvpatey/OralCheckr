@@ -1,7 +1,7 @@
 import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
-import { Logging } from "../../../containers/habit-tracker/habits/Habits";
-import { colors } from "../../../common/utilities/color-utils";
+import { Logging } from "../../../../containers/habit-tracker/habits/Habits";
+import { colors } from "../../../../common/utilities/color-utils";
 
 // Styled component for the chart container
 const ChartContainer = styled.div`

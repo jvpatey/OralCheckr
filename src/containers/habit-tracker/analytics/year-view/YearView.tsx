@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { HabitDropdown } from "./HabitDropdown";
-import { Habit } from "../../../containers/habit-tracker/habits/Habits";
-import { colors } from "../../../common/utilities/color-utils";
+import { HabitDropdown } from "../HabitDropdown";
+import { Habit } from "../../habits/Habits";
+import { colors } from "../../../../common/utilities/color-utils";
 import { YearSelector } from "./YearSelector";
 import { Heatmap } from "./Heatmap";
 

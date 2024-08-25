@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../../../common/utilities/color-utils";
+import { colors } from "../../../../common/utilities/color-utils";
 
 // Interface for the analytics tile props
 interface AnalyticsTileProps {

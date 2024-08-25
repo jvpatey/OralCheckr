@@ -1,27 +1,26 @@
 import styled from "styled-components";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
-import { IconButton } from "../../../components/habit-tracker/habits/IconButton";
+import { IconButton } from "../../../../components/habit-tracker/habits/IconButton";
 import {
   faChevronLeft,
   faChevronRight,
   faCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../../common/utilities/color-utils";
+import { colors } from "../../../../common/utilities/color-utils";
 import "react-datepicker/dist/react-datepicker.css";
 
-interface YearSelectorProps {
-  selectedYear: Date;
-  onYearChange: (date: Date) => void;
+interface MonthSelectorProps {
+  selectedMonth: Date;
+  onMonthChange: (date: Date) => void;
 }
 
-// Styled component for the Year Picker container
-const YearPickerContainer = styled.div`
+// Styled component for the Month Picker container
+const MonthPickerContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 380px;
-  margin-bottom: 10px;
 
   @media (max-width: 600px) {
     width: 300px;
@@ -29,8 +28,8 @@ const YearPickerContainer = styled.div`
   }
 `;
 
-// Styled component for the custom Year Picker button
-const YearPickerButton = styled.button`
+// Styled component for the custom Month Picker button
+const MonthPickerButton = styled.button`
   background-color: ${colors.bgWhite};
   color: ${colors.blue};
   border: 2px solid ${colors.blue};
@@ -59,51 +58,51 @@ const YearPickerButton = styled.button`
   }
 `;
 
-// The YearSelector component to handle the selection and navigation of years
-export function YearSelector({
-  selectedYear,
-  onYearChange,
-}: YearSelectorProps) {
+// The MonthSelector component to handle the selection and navigation of months for month view of analytics page
+export function MonthSelector({
+  selectedMonth,
+  onMonthChange,
+}: MonthSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Handles the change of the selected year from the DatePicker
-  const handleYearChange = (date: Date | null) => {
+  // Handles the change of the selected month from the DatePicker
+  const handleMonthChange = (date: Date | null) => {
     if (date) {
-      onYearChange(date);
+      onMonthChange(date);
     }
     setIsOpen(false);
   };
 
-  // Decrease the selected year by one
-  const decreaseYear = () => {
-    const prevYear = new Date(
-      selectedYear.getFullYear() - 1,
-      selectedYear.getMonth(),
+  // Decrease the selected month by one
+  const decreaseMonth = () => {
+    const prevMonth = new Date(
+      selectedMonth.getFullYear(),
+      selectedMonth.getMonth() - 1,
       1
     );
-    onYearChange(prevYear);
+    onMonthChange(prevMonth);
   };
 
-  // Increase the selected year by one
-  const increaseYear = () => {
-    const nextYear = new Date(
-      selectedYear.getFullYear() + 1,
-      selectedYear.getMonth(),
+  // Increase the selected month by one
+  const increaseMonth = () => {
+    const nextMonth = new Date(
+      selectedMonth.getFullYear(),
+      selectedMonth.getMonth() + 1,
       1
     );
-    onYearChange(nextYear);
+    onMonthChange(nextMonth);
   };
 
-  // Set the selected year to the current year
+  // Set the selected month to the current month
   const handleTodayClick = () => {
-    onYearChange(new Date());
+    onMonthChange(new Date());
   };
 
   return (
-    <YearPickerContainer>
+    <MonthPickerContainer>
       <IconButton
         icon={faChevronLeft}
-        onClick={decreaseYear}
+        onClick={decreaseMonth}
         borderColor={colors.blue}
         backgroundColor={colors.bgWhite}
         color={colors.blue}
@@ -111,22 +110,25 @@ export function YearSelector({
         hoverColor={colors.bgWhite}
       />
       <DatePicker
-        selected={selectedYear}
-        onChange={handleYearChange}
-        dateFormat="yyyy"
-        showYearPicker
+        selected={selectedMonth}
+        onChange={handleMonthChange}
+        dateFormat="MMMM yyyy"
+        showMonthYearPicker
         showPopperArrow={false}
         open={isOpen}
         onClickOutside={() => setIsOpen(false)}
         customInput={
-          <YearPickerButton onClick={() => setIsOpen(!isOpen)}>
-            {selectedYear.getFullYear()}
-          </YearPickerButton>
+          <MonthPickerButton onClick={() => setIsOpen(!isOpen)}>
+            {selectedMonth.toLocaleDateString("en-US", {
+              month: "long",
+              year: "numeric",
+            })}
+          </MonthPickerButton>
         }
       />
       <IconButton
         icon={faChevronRight}
-        onClick={increaseYear}
+        onClick={increaseMonth}
         borderColor={colors.blue}
         backgroundColor={colors.bgWhite}
         color={colors.blue}
@@ -142,6 +144,6 @@ export function YearSelector({
         hoverBackgroundColor={colors.green}
         hoverColor={colors.bgWhite}
       />
-    </YearPickerContainer>
+    </MonthPickerContainer>
   );
 }

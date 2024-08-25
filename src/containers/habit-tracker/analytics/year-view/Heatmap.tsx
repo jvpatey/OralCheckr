@@ -1,6 +1,9 @@
 import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
-import { colors, heatMapColors } from "../../../common/utilities/color-utils";
+import {
+  colors,
+  heatMapColors,
+} from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
 
 // Styled component for the Heatmap container card
