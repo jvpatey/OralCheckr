@@ -31,10 +31,10 @@ const TileHeading = styled.h3`
   text-align: center;
 `;
 
-const TileMainContent = styled.div<{ isMissedDays?: boolean }>`
+const TileMainContent = styled.div<{ $isMissedDays?: boolean }>`
   font-size: 40px;
   font-weight: bold;
-  color: ${({ isMissedDays }) => (isMissedDays ? colors.red : colors.green)};
+  color: ${({ $isMissedDays }) => ($isMissedDays ? colors.red : colors.green)};
   margin-top: 10px;
   margin-bottom: 8px;
 `;
@@ -54,7 +54,7 @@ export function AnalyticsTile({
   return (
     <TileContainer>
       <TileHeading>{heading}</TileHeading>
-      <TileMainContent isMissedDays={isMissedDays}>
+      <TileMainContent $isMissedDays={isMissedDays}>
         {mainContent}
       </TileMainContent>
       {subContent && <TileSubContent>{subContent}</TileSubContent>}
