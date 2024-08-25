@@ -9,7 +9,11 @@ import { colors } from "../../../common/utilities/color-utils";
 import { MonthSelector } from "./MonthSelector";
 import { HabitCalendar } from "../../../containers/habit-tracker/analytics/HabitCalendar";
 import { AnalyticsTile } from "./AnalyticsTile";
-import { calculateTotalCount } from "../../../common/utilities/habit-analytics";
+import {
+  calculateTotalCount,
+  calculateMonthlyCompletion,
+  calculateLongestStreak,
+} from "../../../common/utilities/habit-analytics";
 
 // Container for the entire view, centering all contents
 const ViewContainer = styled.div`
@@ -96,16 +100,39 @@ export function MonthView({
 }: ViewProps) {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
 
-  // Calculate the total count for the selected habit and month using the utility function
+  const habitCount =
+    habits.find((habit) => habit.name === selectedHabit)?.count || 1;
+
+  const daysInMonth = new Date(
+    selectedMonth.getFullYear(),
+    selectedMonth.getMonth() + 1,
+    0
+  ).getDate();
+
+  const month = selectedMonth
+    .toLocaleDateString("en-US", { month: "long" })
+    .toLowerCase();
+
   const totalCount = calculateTotalCount(
     habitsLog,
     selectedHabit,
     selectedMonth.getFullYear(),
-    selectedMonth.toLocaleDateString("en-US", { month: "long" }).toLowerCase()
+    month
   );
 
-  const habitCount =
-    habits.find((habit) => habit.name === selectedHabit)?.count || 1;
+  const monthlyCompletion = calculateMonthlyCompletion(
+    totalCount,
+    habitCount,
+    daysInMonth
+  );
+
+  const longestStreak = calculateLongestStreak(
+    habitsLog,
+    selectedHabit,
+    selectedMonth.getFullYear(),
+    month,
+    daysInMonth
+  );
 
   return (
     <ViewContainer>
@@ -125,12 +152,14 @@ export function MonthView({
             mainContent={totalCount}
           />
           <AnalyticsTileAdjusted
-            heading="Heading 2"
-            mainContent="Content 2"
-            subContent="Sub 2"
+            heading="Monthly Completion"
+            mainContent={`${Math.round(monthlyCompletion)}%`}
           />
-          <AnalyticsTileAdjusted heading="Heading 3" mainContent="Content 3" />
-          <AnalyticsTileAdjusted heading="Heading 4" mainContent="Content 4" />
+          <AnalyticsTileAdjusted
+            heading="Longest Streak"
+            mainContent={longestStreak}
+            subContent="days"
+          />
         </TileWrapper>
 
         <CalendarWrapper>
@@ -140,9 +169,7 @@ export function MonthView({
                 habitsLog={habitsLog}
                 selectedHabit={selectedHabit}
                 year={selectedMonth.getFullYear()}
-                month={selectedMonth
-                  .toLocaleDateString("en-US", { month: "long" })
-                  .toLowerCase()}
+                month={month}
                 habitCount={habitCount}
                 selectedMonth={selectedMonth}
               />

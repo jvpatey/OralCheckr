@@ -27,6 +27,7 @@ const TileHeading = styled.h3`
   font-weight: bold;
   color: ${colors.blue};
   margin-top: 10px;
+  text-align: center;
 `;
 
 const TileMainContent = styled.div`
