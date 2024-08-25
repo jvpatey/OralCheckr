@@ -41,9 +41,9 @@ const CustomDropdownMenu = styled(Dropdown.Menu)`
   width: 200px;
 `;
 
-const CustomDropdownItem = styled(Dropdown.Item)<{ isActive: boolean }>`
-  color: ${({ isActive }) => (isActive ? colors.blue : colors.textGrey)};
-  font-weight: ${({ isActive }) => (isActive ? "bold" : "normal")};
+const CustomDropdownItem = styled(Dropdown.Item)<{ $isActive: boolean }>`
+  color: ${({ $isActive }) => ($isActive ? colors.blue : colors.textGrey)};
+  font-weight: ${({ $isActive }) => ($isActive ? "bold" : "normal")};
   background-color: transparent; // No background change
 
   &:hover,
@@ -85,7 +85,7 @@ export function HabitDropdown({
 
       <CustomDropdownMenu>
         {habits.length === 0 ? (
-          <CustomDropdownItem disabled isActive={false}>
+          <CustomDropdownItem disabled $isActive={false}>
             No habits found
           </CustomDropdownItem>
         ) : (
@@ -93,7 +93,7 @@ export function HabitDropdown({
             <CustomDropdownItem
               key={index}
               eventKey={habit.name}
-              isActive={habit.name === selectedHabit}
+              $isActive={habit.name === selectedHabit}
             >
               {habit.name}
             </CustomDropdownItem>
