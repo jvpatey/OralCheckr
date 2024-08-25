@@ -210,6 +210,7 @@ export function MonthView({
             heading="Missed Days"
             mainContent={missedDays}
             subContent="days"
+            isMissedDays={true}
           />
         </TileWrapper>
 

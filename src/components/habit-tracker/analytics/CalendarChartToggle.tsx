@@ -23,8 +23,9 @@ const ToggleButtonContainer = styled.div`
 `;
 
 // Styled component for each toggle button
-const ToggleButton = styled.button<{ active: boolean }>`
-  background-color: ${({ active }) => (active ? colors.blue : colors.bgGrey)};
+const ToggleButton = styled.button<{ $active: boolean }>`
+  background-color: ${({ $active }) =>
+    $active ? colors.green : colors.bgGrey};
   border: none;
   border-radius: 4px;
   padding: 5px 10px;
@@ -44,13 +45,13 @@ export function CalendarChartToggle({
   return (
     <ToggleButtonContainer>
       <ToggleButton
-        active={isCalendarView}
+        $active={isCalendarView}
         onClick={() => setIsCalendarView(true)}
       >
         <FontAwesomeIcon icon={faCalendarAlt} />
       </ToggleButton>
       <ToggleButton
-        active={!isCalendarView}
+        $active={!isCalendarView}
         onClick={() => setIsCalendarView(false)}
       >
         <FontAwesomeIcon icon={faChartLine} />

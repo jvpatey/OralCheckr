@@ -53,6 +53,7 @@ const MonthPickerButton = styled.button`
 
   &:hover {
     background-color: ${colors.blue};
+    border: 2px solid ${colors.blue};
     color: ${colors.bgWhite};
   }
 `;

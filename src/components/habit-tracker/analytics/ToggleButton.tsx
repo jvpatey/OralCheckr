@@ -44,6 +44,7 @@ const Button = styled.button<{ $active: boolean }>`
   &:hover {
     background-color: ${({ $active }) =>
       $active ? colors.blue : colors.bgGrey};
+    border: 2px solid ${colors.blue};
   }
 `;
 
