@@ -8,12 +8,13 @@ import {
 import { colors } from "../../../common/utilities/color-utils";
 import { MonthSelector } from "./MonthSelector";
 import { HabitCalendar } from "../../../containers/habit-tracker/analytics/HabitCalendar";
-import { AnalyticsTile } from "./AnalyticsTile";
 import {
   calculateTotalCount,
   calculateMonthlyCompletion,
   calculateLongestStreak,
+  calculateMissedDays,
 } from "../../../common/utilities/habit-analytics";
+import { AnalyticsTile } from "./AnalyticsTile";
 
 // Container for the entire view, centering all contents
 const ViewContainer = styled.div`
@@ -58,14 +59,6 @@ const CalendarCard = styled.div`
   max-height: 80%;
 `;
 
-// Adjusted styling for individual analytics tiles
-const AnalyticsTileAdjusted = styled(AnalyticsTile)`
-  height: auto;
-  max-height: 180px;
-  max-width: 180px;
-  margin: 0 auto;
-`;
-
 // Container for the habits dropdown and title, centered horizontally
 const HabitsContainer = styled.div`
   display: flex;
@@ -91,7 +84,7 @@ interface ViewProps {
   selectedHabit: string;
 }
 
-// Main component for the MonthView, displaying the month selector, habits dropdown, and tiles with calendar
+// Functional component for the month view of the analytics page in the habit tracker
 export function MonthView({
   habits,
   onSelectHabit,
@@ -103,33 +96,36 @@ export function MonthView({
   const habitCount =
     habits.find((habit) => habit.name === selectedHabit)?.count || 1;
 
-  const daysInMonth = new Date(
-    selectedMonth.getFullYear(),
-    selectedMonth.getMonth() + 1,
-    0
-  ).getDate();
-
+  const year = selectedMonth.getFullYear();
   const month = selectedMonth
     .toLocaleDateString("en-US", { month: "long" })
     .toLowerCase();
+  const daysInMonth = new Date(year, selectedMonth.getMonth() + 1, 0).getDate();
 
-  const totalCount = calculateTotalCount(
-    habitsLog,
-    selectedHabit,
-    selectedMonth.getFullYear(),
-    month
-  );
+  // Total count calculation
+  const totalCount = calculateTotalCount(habitsLog, selectedHabit, year, month);
 
+  // Monthly completion percentage calculation
   const monthlyCompletion = calculateMonthlyCompletion(
     totalCount,
     habitCount,
     daysInMonth
   );
 
+  // Longest streak calculation
   const longestStreak = calculateLongestStreak(
     habitsLog,
     selectedHabit,
-    selectedMonth.getFullYear(),
+    year,
+    month,
+    daysInMonth
+  );
+
+  // Missed days calculation
+  const missedDays = calculateMissedDays(
+    habitsLog,
+    selectedHabit,
+    year,
     month,
     daysInMonth
   );
@@ -147,18 +143,21 @@ export function MonthView({
 
       <TilesAndCalendarContainer>
         <TileWrapper>
-          <AnalyticsTileAdjusted
-            heading="Total Count"
-            mainContent={totalCount}
-          />
-          <AnalyticsTileAdjusted
+          <AnalyticsTile heading="Total Count" mainContent={totalCount} />
+          <AnalyticsTile
             heading="Monthly Completion"
-            mainContent={`${Math.round(monthlyCompletion)}%`}
+            mainContent={`${monthlyCompletion}%`}
           />
-          <AnalyticsTileAdjusted
+          <AnalyticsTile
             heading="Longest Streak"
             mainContent={longestStreak}
             subContent="days"
+          />
+          <AnalyticsTile
+            heading="Missed Days"
+            mainContent={missedDays}
+            subContent="days"
+            isMissedDays
           />
         </TileWrapper>
 
@@ -168,7 +167,7 @@ export function MonthView({
               <HabitCalendar
                 habitsLog={habitsLog}
                 selectedHabit={selectedHabit}
-                year={selectedMonth.getFullYear()}
+                year={year}
                 month={month}
                 habitCount={habitCount}
                 selectedMonth={selectedMonth}

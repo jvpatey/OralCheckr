@@ -1,14 +1,15 @@
 import styled from "styled-components";
 import { colors } from "../../../common/utilities/color-utils";
 
-// interface for the analytics tile props
+// Interface for the analytics tile props
 interface AnalyticsTileProps {
   heading: string;
   mainContent: string | number;
   subContent?: string;
+  isMissedDays?: boolean;
 }
 
-// styled components for the analytics tile
+// Styled components for the analytics tile
 const TileContainer = styled.div`
   background-color: ${colors.white};
   border-radius: 8px;
@@ -30,10 +31,10 @@ const TileHeading = styled.h3`
   text-align: center;
 `;
 
-const TileMainContent = styled.div`
+const TileMainContent = styled.div<{ isMissedDays?: boolean }>`
   font-size: 40px;
   font-weight: bold;
-  color: ${colors.green};
+  color: ${({ isMissedDays }) => (isMissedDays ? colors.red : colors.green)};
   margin-top: 10px;
   margin-bottom: 8px;
 `;
@@ -48,11 +49,14 @@ export function AnalyticsTile({
   heading,
   mainContent,
   subContent,
+  isMissedDays,
 }: AnalyticsTileProps) {
   return (
     <TileContainer>
       <TileHeading>{heading}</TileHeading>
-      <TileMainContent>{mainContent}</TileMainContent>
+      <TileMainContent isMissedDays={isMissedDays}>
+        {mainContent}
+      </TileMainContent>
       {subContent && <TileSubContent>{subContent}</TileSubContent>}
     </TileContainer>
   );
