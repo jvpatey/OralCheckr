@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Logging } from "../../habits/Habits";
@@ -25,8 +25,11 @@ const CalendarContainer = styled.div`
   height: 100%;
   width: 100%;
   padding-top: 20px;
+  padding-bottom: 10px;
+  max-height: 500px;
+  overflow: hidden;
 
-  .react-calendar {
+  .react-datepicker {
     width: 100%;
     max-width: 100%;
     border: none;
@@ -34,55 +37,84 @@ const CalendarContainer = styled.div`
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
     padding: 0px;
+    max-height: 100%;
   }
 
-  .react-calendar__navigation {
+  .react-datepicker__header {
     display: none;
   }
 
-  .react-calendar__tile {
+  .react-datepicker__month-container {
+    width: 100%;
+  }
+
+  .react-datepicker__month {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
     padding: 0;
+  }
+
+  .react-datepicker__week {
+    display: flex;
+    width: 100%;
+  }
+
+  .react-datepicker__day-name,
+  .react-datepicker__day {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+    height: 45px;
+    margin: 0;
+    text-align: center;
+    border: none;
     pointer-events: none;
   }
 
-  .react-calendar__month-view__days__day {
-    height: 55px;
-    margin: 0;
+  .react-datepicker__day--selected,
+  .react-datepicker__day--keyboard-selected {
+    background-color: transparent;
+    color: ${colors.blue};
   }
 
-  .react-calendar__month-view__days__day--neighboringMonth,
-  .react-calendar__month-view__days__day > abbr {
+  .react-datepicker__day--outside-month {
     visibility: hidden;
   }
 
-  .react-calendar__month-view__days__day--weekend {
-    color: inherit;
+  .react-datepicker__day--today {
+    background-color: transparent;
+    color: ${colors.blue};
   }
 
-  .react-calendar__tile--active,
-  .react-calendar__tile--now {
-    background: none;
-    border: none;
+  /* Hide the navigation buttons */
+  .react-datepicker__navigation {
+    display: none;
   }
+`;
 
-  .react-calendar__month-view__weekdays {
-    color: ${colors.green};
-  }
+// Custom header container
+const DaysHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: ${colors.green};
+  text-transform: uppercase;
+`;
 
-  .react-calendar__month-view__weekdays__weekday {
-    color: ${colors.green};
-  }
+const DayName = styled.div`
+  flex: 1;
+  text-align: center;
 `;
 
 // Wrapper for each day's circular progress bar
 const DayWrapper = styled.div`
   position: relative;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -102,6 +134,8 @@ const MonthYearDisplay = styled.div`
     margin-top: 30px;
   }
 `;
+
+const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 // HabitCalendar component to render the calendar with habit tracking progress
 export function HabitCalendar({
@@ -126,9 +160,8 @@ export function HabitCalendar({
     return progress;
   };
 
-  // Render content for each day tile in the calendar
-  const tileContent = ({ date }: { date: Date }) => {
-    const day = date.getDate();
+  // Render content for each day in the calendar
+  const renderDayContents = (day: number) => {
     const progress = getDayProgress(day);
 
     return (
@@ -155,11 +188,19 @@ export function HabitCalendar({
   return (
     <CalendarContainer>
       <MonthYearDisplay>{currentMonthYear}</MonthYearDisplay>
-      <Calendar
+      <DaysHeader>
+        {daysOfWeek.map((day, index) => (
+          <DayName key={index}>{day}</DayName>
+        ))}
+      </DaysHeader>
+      <DatePicker
+        selected={selectedDate}
+        inline
+        renderDayContents={(day) => renderDayContents(day)}
+        calendarClassName="custom-calendar"
+        formatWeekDay={() => ""}
+        showPopperArrow={false}
         onChange={() => {}}
-        value={selectedDate}
-        tileContent={tileContent}
-        calendarType="iso8601"
       />
     </CalendarContainer>
   );
