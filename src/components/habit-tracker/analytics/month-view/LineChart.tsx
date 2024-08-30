@@ -2,6 +2,7 @@ import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
 import { Logging } from "../../../../containers/habit-tracker/habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
+import { getDaysInMonth } from "../../../../common/utilities/habit-analytics";
 
 // Styled component for the chart container
 const ChartContainer = styled.div`
@@ -32,6 +33,61 @@ interface LineChartProps {
   month: string;
 }
 
+// Function to generate the ApexCharts options object
+const generateChartOptions = (daysInMonth: number): ApexCharts.ApexOptions => ({
+  chart: {
+    type: "line",
+    height: "100%",
+  },
+  stroke: {
+    curve: "smooth",
+    width: 2,
+  },
+  xaxis: {
+    categories: Array.from({ length: daysInMonth }, (_, i) =>
+      (i + 1).toString()
+    ),
+    title: {
+      text: "Day of the Month",
+      style: {
+        color: colors.textGrey,
+      },
+    },
+  },
+  yaxis: {
+    title: {
+      text: "Logs",
+      style: {
+        color: colors.textGrey,
+      },
+    },
+    min: 0,
+    tickAmount: 5,
+  },
+  colors: [colors.blue],
+  markers: {
+    size: 4,
+    colors: [colors.blue],
+    strokeColors: colors.white,
+    strokeWidth: 2,
+  },
+  tooltip: {
+    enabled: true,
+    x: {
+      show: true,
+    },
+    y: {
+      formatter: (val: number) => `${val} logs`,
+    },
+  },
+  grid: {
+    borderColor: colors.bgGrey,
+  },
+  dataLabels: {
+    enabled: false,
+  },
+});
+
 // functional component to render the line chart for habits logged in a month
 export function LineChart({
   habitsLog,
@@ -40,66 +96,15 @@ export function LineChart({
   month,
 }: LineChartProps) {
   const logsForHabit = habitsLog[selectedHabit]?.[year]?.[month] || {};
-  const daysInMonth = new Date(year, new Date().getMonth() + 1, 0).getDate();
+  const daysInMonth = getDaysInMonth(year, new Date().getMonth());
 
   const seriesData = Array.from(
     { length: daysInMonth },
     (_, i) => logsForHabit[i + 1] || 0
   );
 
-  const options: ApexCharts.ApexOptions = {
-    chart: {
-      type: "line",
-      height: "100%",
-    },
-    stroke: {
-      curve: "smooth",
-      width: 2,
-    },
-    xaxis: {
-      categories: Array.from({ length: daysInMonth }, (_, i) =>
-        (i + 1).toString()
-      ),
-      title: {
-        text: "Day of the Month",
-        style: {
-          color: colors.textGrey,
-        },
-      },
-    },
-    yaxis: {
-      title: {
-        text: "Logs",
-        style: {
-          color: colors.textGrey,
-        },
-      },
-      min: 0,
-      tickAmount: 5,
-    },
-    colors: [colors.blue],
-    markers: {
-      size: 4,
-      colors: [colors.blue],
-      strokeColors: colors.white,
-      strokeWidth: 2,
-    },
-    tooltip: {
-      enabled: true,
-      x: {
-        show: true,
-      },
-      y: {
-        formatter: (val: number) => `${val} logs`,
-      },
-    },
-    grid: {
-      borderColor: colors.bgGrey,
-    },
-    dataLabels: {
-      enabled: false,
-    },
-  };
+  // Get the options object for ApexCharts
+  const options = generateChartOptions(daysInMonth);
 
   const series = [
     {
