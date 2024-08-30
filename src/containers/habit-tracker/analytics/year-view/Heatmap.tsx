@@ -36,6 +36,194 @@ const HeatmapCard = styled.div`
   }
 `;
 
+// Function to generate ApexOptions for the heatmap chart
+const getHeatmapOptions = (habitName: string, year: number): ApexOptions => ({
+  chart: {
+    height: 350,
+    type: "heatmap",
+    background: colors.bgWhite,
+  },
+  plotOptions: {
+    heatmap: {
+      shadeIntensity: 0.5,
+      radius: 0,
+      useFillColorAsStroke: true,
+      colorScale: {
+        ranges: [
+          {
+            from: 1,
+            to: 1,
+            color: greenHeatMapShades.Light,
+            name: "0-1",
+          },
+          {
+            from: 2,
+            to: 3,
+            color: greenHeatMapShades.MediumLight,
+            name: "2-3",
+          },
+          {
+            from: 4,
+            to: 5,
+            color: greenHeatMapShades.Medium,
+            name: "4-5",
+          },
+          {
+            from: 6,
+            to: 7,
+            color: greenHeatMapShades.MediumDark,
+            name: "6-7",
+          },
+          {
+            from: 8,
+            to: 10,
+            color: greenHeatMapShades.Dark,
+            name: "8-10",
+          },
+          {
+            from: 11,
+            to: 20,
+            color: greenHeatMapShades.Darkest,
+            name: "11+",
+          },
+        ],
+      },
+    },
+  },
+  grid: {
+    padding: {
+      top: 10,
+      right: 20,
+      bottom: 10,
+      left: 20,
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  title: {
+    text: `${habitName} logs for ${year}`,
+  },
+  xaxis: {
+    labels: {
+      formatter: function (value) {
+        const weekNumber = Number(value);
+        const monthLabels: Record<number, string> = {
+          1: "Jan",
+          5: "Feb",
+          9: "Mar",
+          14: "Apr",
+          18: "May",
+          22: "Jun",
+          27: "Jul",
+          31: "Aug",
+          35: "Sep",
+          40: "Oct",
+          44: "Nov",
+          48: "Dec",
+        };
+        return Object.keys(monthLabels)
+          .map(Number)
+          .reduce(
+            (prev, curr) =>
+              Math.abs(curr - weekNumber) < Math.abs(prev - weekNumber)
+                ? curr
+                : prev,
+            0
+          ) in monthLabels
+          ? monthLabels[
+              Object.keys(monthLabels)
+                .map(Number)
+                .reduce(
+                  (prev, curr) =>
+                    Math.abs(curr - weekNumber) < Math.abs(prev - weekNumber)
+                      ? curr
+                      : prev,
+                  0
+                )
+            ]
+          : "";
+      },
+      rotate: -45,
+      style: {
+        fontSize: "12px",
+        colors: colors.textGrey,
+      },
+    },
+  },
+  yaxis: {
+    labels: {
+      style: {
+        colors: Array(7).fill(colors.textGrey),
+      },
+    },
+  },
+  tooltip: {
+    enabled: true,
+    y: {
+      formatter: function (value) {
+        return `${value} logs`;
+      },
+    },
+    x: {
+      show: false,
+    },
+    marker: {
+      show: false,
+    },
+  },
+  responsive: [
+    {
+      breakpoint: 768,
+      options: {
+        chart: {
+          height: 350,
+          width: "100%",
+        },
+        xaxis: {
+          labels: {
+            rotate: -30,
+            style: {
+              fontSize: "10px",
+            },
+          },
+        },
+        yaxis: {
+          labels: {
+            style: {
+              fontSize: "10px",
+            },
+          },
+        },
+      },
+    },
+    {
+      breakpoint: 480,
+      options: {
+        chart: {
+          height: 300,
+          width: "100%",
+        },
+        xaxis: {
+          labels: {
+            rotate: -30,
+            style: {
+              fontSize: "8px",
+            },
+          },
+        },
+        yaxis: {
+          labels: {
+            style: {
+              fontSize: "8px",
+            },
+          },
+        },
+      },
+    },
+  ],
+});
+
 // Interface for the heatmap props
 interface HeatmapProps {
   data: { date: string; count: number }[];
@@ -69,193 +257,8 @@ export function Heatmap({ data, year, habitName }: HeatmapProps) {
     }),
   }));
 
-  // Options for heatmap chart from Apex Charts
-  const options: ApexOptions = {
-    chart: {
-      height: 350,
-      type: "heatmap",
-      background: colors.bgWhite,
-    },
-    plotOptions: {
-      heatmap: {
-        shadeIntensity: 0.5,
-        radius: 0,
-        useFillColorAsStroke: true,
-        colorScale: {
-          ranges: [
-            {
-              from: 1,
-              to: 1,
-              color: greenHeatMapShades.Light,
-              name: "0-1",
-            },
-            {
-              from: 2,
-              to: 3,
-              color: greenHeatMapShades.MediumLight,
-              name: "2-3",
-            },
-            {
-              from: 4,
-              to: 5,
-              color: greenHeatMapShades.Medium,
-              name: "4-5",
-            },
-            {
-              from: 6,
-              to: 7,
-              color: greenHeatMapShades.MediumDark,
-              name: "6-7",
-            },
-            {
-              from: 8,
-              to: 10,
-              color: greenHeatMapShades.Dark,
-              name: "8-10",
-            },
-            {
-              from: 11,
-              to: 20,
-              color: greenHeatMapShades.Darkest,
-              name: "11+",
-            },
-          ],
-        },
-      },
-    },
-    grid: {
-      padding: {
-        top: 10,
-        right: 20,
-        bottom: 10,
-        left: 20,
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    title: {
-      text: `${habitName} logs for ${year}`,
-    },
-    xaxis: {
-      labels: {
-        formatter: function (value) {
-          const weekNumber = Number(value);
-          const monthLabels: Record<number, string> = {
-            1: "Jan",
-            5: "Feb",
-            9: "Mar",
-            14: "Apr",
-            18: "May",
-            22: "Jun",
-            27: "Jul",
-            31: "Aug",
-            35: "Sep",
-            40: "Oct",
-            44: "Nov",
-            48: "Dec",
-          };
-          return Object.keys(monthLabels)
-            .map(Number)
-            .reduce(
-              (prev, curr) =>
-                Math.abs(curr - weekNumber) < Math.abs(prev - weekNumber)
-                  ? curr
-                  : prev,
-              0
-            ) in monthLabels
-            ? monthLabels[
-                Object.keys(monthLabels)
-                  .map(Number)
-                  .reduce(
-                    (prev, curr) =>
-                      Math.abs(curr - weekNumber) < Math.abs(prev - weekNumber)
-                        ? curr
-                        : prev,
-                    0
-                  )
-              ]
-            : "";
-        },
-        rotate: -45,
-        style: {
-          fontSize: "12px",
-          colors: colors.textGrey,
-        },
-      },
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: Array(7).fill(colors.textGrey),
-        },
-      },
-    },
-    tooltip: {
-      enabled: true,
-      y: {
-        formatter: function (value) {
-          return `${value} logs`;
-        },
-      },
-      x: {
-        show: false,
-      },
-      marker: {
-        show: false,
-      },
-    },
-    responsive: [
-      {
-        breakpoint: 768,
-        options: {
-          chart: {
-            height: 350,
-            width: "100%",
-          },
-          xaxis: {
-            labels: {
-              rotate: -30,
-              style: {
-                fontSize: "10px",
-              },
-            },
-          },
-          yaxis: {
-            labels: {
-              style: {
-                fontSize: "10px",
-              },
-            },
-          },
-        },
-      },
-      {
-        breakpoint: 480,
-        options: {
-          chart: {
-            height: 300,
-            width: "100%",
-          },
-          xaxis: {
-            labels: {
-              rotate: -30,
-              style: {
-                fontSize: "8px",
-              },
-            },
-          },
-          yaxis: {
-            labels: {
-              style: {
-                fontSize: "8px",
-              },
-            },
-          },
-        },
-      },
-    ],
-  };
+  // Get the options object for ApexCharts
+  const options = getHeatmapOptions(habitName, year);
 
   return (
     <HeatmapCard>
