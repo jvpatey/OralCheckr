@@ -6,6 +6,7 @@ import {
   greenHeatMapShades,
 } from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
+import { HeatmapData } from "../../../../common/utilities/heatmap-utils";
 
 // Global constants
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -227,19 +228,13 @@ const getHeatmapOptions = (habitName: string, year: number): ApexOptions => ({
 
 // Interface for the heatmap props
 interface HeatmapProps {
-  data: { date: string; count: number }[];
+  data: HeatmapData[];
   year: number;
   habitName: string;
 }
 
 // Functional component to render the heatmap - used in the year view of the analytics page of the habit tracker
 export function Heatmap({ data, year, habitName }: HeatmapProps) {
-  // Filter data to include only entries for the selected year
-  const filteredData = data.filter((entry) => {
-    const entryYear = new Date(entry.date).getFullYear();
-    return entryYear === year;
-  });
-
   // Memoized calculation of the series data for weeks and days of the week
   const series = useMemo(() => {
     return DAYS_OF_WEEK.map((day, dayIndex) => {
@@ -247,7 +242,7 @@ export function Heatmap({ data, year, habitName }: HeatmapProps) {
         { length: WEEKS_IN_YEAR },
         (_, weekIndex) => {
           // Find the count for the specific day and week of the year
-          const matchingEntry = filteredData.find((d) => {
+          const matchingEntry = data.find((d) => {
             const date = new Date(d.date);
             const startOfYear = new Date(date.getFullYear(), 0, 1).getTime();
             const currentDay = date.getTime();
@@ -266,7 +261,7 @@ export function Heatmap({ data, year, habitName }: HeatmapProps) {
 
       return { name: day, data: weeklyData };
     });
-  }, [filteredData]);
+  }, [data]);
 
   // Get the options object for ApexCharts
   const options = getHeatmapOptions(habitName, year);

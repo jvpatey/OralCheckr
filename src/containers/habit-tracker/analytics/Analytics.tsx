@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styled, { keyframes } from "styled-components";
 import { PageBackground } from "../../../components/PageBackground";
 import { ToggleButton } from "../../../components/habit-tracker/analytics/ToggleButton";
@@ -6,6 +6,10 @@ import { MonthView } from "./month-view/MonthView";
 import { YearView } from "./year-view/YearView";
 import { Habit, Logging } from "../habits/Habits";
 import { LocalStorage } from "../../../common/constants/local-storage";
+import {
+  generateHeatmapData,
+  HeatmapData,
+} from "../../../common/utilities/heatmap-utils";
 
 // Enum for viewmodes
 enum ViewMode {
@@ -67,29 +71,10 @@ export function Analytics() {
     }
   }, []);
 
-  // Function to generate heatmap data from logging information
-  const generateHeatmapData = (
-    habitName: string
-  ): { date: string; count: number }[] => {
-    const habitLog = habitsLog[habitName];
-    if (!habitLog) return [];
-
-    const heatmapData: { date: string; count: number }[] = [];
-
-    for (const year in habitLog) {
-      for (const month in habitLog[year]) {
-        for (const day in habitLog[year][month]) {
-          const date = new Date(`${year}-${month}-${day}`)
-            .toISOString()
-            .split("T")[0];
-          const count = habitLog[year][month][day];
-          heatmapData.push({ date, count });
-        }
-      }
-    }
-
-    return heatmapData;
-  };
+  // Memoized generation of heatmap data for the selected habit
+  const heatmapData: HeatmapData[] = useMemo(() => {
+    return generateHeatmapData(habitsLog, selectedHabit);
+  }, [habitsLog, selectedHabit]);
 
   const toggleOptions = [
     { label: "Month View", value: ViewMode.MONTH },
@@ -119,7 +104,7 @@ export function Analytics() {
           <YearView
             habits={habits}
             onSelectHabit={handleSelectHabit}
-            heatmapData={generateHeatmapData(selectedHabit)}
+            heatmapData={heatmapData}
           />
         )}
       </AnalyticsContainer>
