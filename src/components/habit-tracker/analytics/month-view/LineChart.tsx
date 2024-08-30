@@ -98,10 +98,12 @@ export function LineChart({
   const logsForHabit = habitsLog[selectedHabit]?.[year]?.[month] || {};
   const daysInMonth = getDaysInMonth(year, new Date().getMonth());
 
-  const seriesData = Array.from(
-    { length: daysInMonth },
-    (_, i) => logsForHabit[i + 1] || 0
-  );
+  // Create an array to store the number of logs for each day of the month
+  const seriesData = Array.from({ length: daysInMonth }, (_, dayIndex) => {
+    const dayOfMonth = dayIndex + 1;
+    const logsForDay = logsForHabit[dayOfMonth] || 0;
+    return logsForDay;
+  });
 
   // Get the options object for ApexCharts
   const options = generateChartOptions(daysInMonth);
