@@ -5,7 +5,7 @@ import { colors } from "../../../../common/utilities/color-utils";
 
 interface ToggleProps {
   isCalendarView: boolean;
-  setIsCalendarView: (value: boolean) => void;
+  onToggleView: (value: boolean) => void;
 }
 
 // Container for the toggle buttons
@@ -40,19 +40,16 @@ const ToggleButton = styled.button<{ $active: boolean }>`
 // functional component to toggle between calendar and line chart view for analytics
 export function CalendarChartToggle({
   isCalendarView,
-  setIsCalendarView,
+  onToggleView,
 }: ToggleProps) {
   return (
     <ToggleButtonContainer>
-      <ToggleButton
-        $active={isCalendarView}
-        onClick={() => setIsCalendarView(true)}
-      >
+      <ToggleButton $active={isCalendarView} onClick={() => onToggleView(true)}>
         <FontAwesomeIcon icon={faCalendarAlt} />
       </ToggleButton>
       <ToggleButton
         $active={!isCalendarView}
-        onClick={() => setIsCalendarView(false)}
+        onClick={() => onToggleView(false)}
       >
         <FontAwesomeIcon icon={faChartLine} />
       </ToggleButton>

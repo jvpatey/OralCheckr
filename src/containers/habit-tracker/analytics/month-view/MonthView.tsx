@@ -163,6 +163,11 @@ export function MonthView({
     .toLocaleDateString("en-US", { month: "long" })
     .toLowerCase();
 
+  // Handler function to toggle calendar view
+  const handleToggleView = (view: boolean) => {
+    setIsCalendarView(view);
+  };
+
   // Total count calculation
   const totalCount = calculateTotalCount(habitsLog, selectedHabit, year, month);
 
@@ -220,7 +225,7 @@ export function MonthView({
           <CalendarCard>
             <CalendarChartToggle
               isCalendarView={isCalendarView}
-              setIsCalendarView={setIsCalendarView}
+              onToggleView={handleToggleView}
             />
             {isCalendarView ? (
               <HabitCalendar
