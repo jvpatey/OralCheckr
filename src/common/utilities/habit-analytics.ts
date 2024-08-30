@@ -1,6 +1,11 @@
 import { Logging } from "../../containers/habit-tracker/habits/Habits";
 import _ from 'lodash';
 
+// Utility function to calculate the number of days in a given month and year
+export function getDaysInMonth(year: number, month: number): number {
+  return new Date(year, month + 1, 0).getDate();
+}
+
 // Calculation of total count for analytics tile
 export function calculateTotalCount(
   habitsLog: Logging,
@@ -22,20 +27,23 @@ export function calculateTotalCount(
 export function calculateMonthlyCompletion(
   totalCount: number,
   habitCount: number,
-  daysInMonth: number
+  year: number,
+  month: string
 ): number {
+  const daysInMonth = getDaysInMonth(year, new Date(`${month} 1, ${year}`).getMonth());
   const totalPossible = habitCount * daysInMonth;
   return totalPossible > 0 ? Math.round((totalCount / totalPossible) * 100) : 0;
 }
+
 
 // Utility function to calculate the longest streak
 export function calculateLongestStreak(
   habitsLog: Logging,
   habitName: string,
   year: number,
-  month: string,
-  daysInMonth: number
+  month: string
 ): number {
+  const daysInMonth = getDaysInMonth(year, new Date(`${month} 1, ${year}`).getMonth());
   const logsForMonth = habitsLog[habitName]?.[year]?.[month] || {};
   let longestStreak = 0;
   let currentStreak = 0;
@@ -59,9 +67,9 @@ export function calculateMissedDays(
   habitsLog: Logging,
   habitName: string,
   year: number,
-  month: string,
-  daysInMonth: number
+  month: string
 ): number {
+  const daysInMonth = getDaysInMonth(year, new Date(`${month} 1, ${year}`).getMonth());
   const logsForMonth = habitsLog[habitName]?.[year]?.[month] || {};
   let missedDays = 0;
 

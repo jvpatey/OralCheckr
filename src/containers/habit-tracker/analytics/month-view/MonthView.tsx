@@ -162,7 +162,6 @@ export function MonthView({
   const month = selectedMonth
     .toLocaleDateString("en-US", { month: "long" })
     .toLowerCase();
-  const daysInMonth = new Date(year, selectedMonth.getMonth() + 1, 0).getDate();
 
   // Total count calculation
   const totalCount = calculateTotalCount(habitsLog, selectedHabit, year, month);
@@ -171,7 +170,8 @@ export function MonthView({
   const monthlyCompletion = calculateMonthlyCompletion(
     totalCount,
     habitCount,
-    daysInMonth
+    year,
+    month
   );
 
   // Longest streak calculation
@@ -179,18 +179,11 @@ export function MonthView({
     habitsLog,
     selectedHabit,
     year,
-    month,
-    daysInMonth
+    month
   );
 
   // Missed days calculation
-  const missedDays = calculateMissedDays(
-    habitsLog,
-    selectedHabit,
-    year,
-    month,
-    daysInMonth
-  );
+  const missedDays = calculateMissedDays(habitsLog, selectedHabit, year, month);
 
   return (
     <ViewContainer>
