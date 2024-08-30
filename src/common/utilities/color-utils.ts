@@ -11,11 +11,11 @@ export const colors = {
   white: "#FFFFFF"
 };
 
-export const heatMapColors = {
-  greenLight: "#9af4a0",
-  greenMediumLight: "#66d979",
-  greenMedium: "#41bc7a",
-  greenMediumDark: "#339a55",
-  greenDark: "#1e7f39",
-  greenDarkest: "#005600",
+export const greenHeatMapShades = {
+  Light: "#9af4a0",
+  MediumLight: "#66d979",
+  Medium: "#41bc7a",
+  MediumDark: "#339a55",
+  Dark: "#1e7f39",
+  Darkest: "#005600",
 };

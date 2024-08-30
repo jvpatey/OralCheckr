@@ -2,7 +2,7 @@ import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
 import {
   colors,
-  heatMapColors,
+  greenHeatMapShades,
 } from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
 
@@ -85,37 +85,37 @@ export function Heatmap({ data, year, habitName }: HeatmapProps) {
             {
               from: 1,
               to: 1,
-              color: heatMapColors.greenLight,
+              color: greenHeatMapShades.Light,
               name: "0-1",
             },
             {
               from: 2,
               to: 3,
-              color: heatMapColors.greenMediumLight,
+              color: greenHeatMapShades.MediumLight,
               name: "2-3",
             },
             {
               from: 4,
               to: 5,
-              color: heatMapColors.greenMedium,
+              color: greenHeatMapShades.Medium,
               name: "4-5",
             },
             {
               from: 6,
               to: 7,
-              color: heatMapColors.greenMediumDark,
+              color: greenHeatMapShades.MediumDark,
               name: "6-7",
             },
             {
               from: 8,
               to: 10,
-              color: heatMapColors.greenDark,
+              color: greenHeatMapShades.Dark,
               name: "8-10",
             },
             {
               from: 11,
               to: 20,
-              color: heatMapColors.greenDarkest,
+              color: greenHeatMapShades.Darkest,
               name: "11+",
             },
           ],
