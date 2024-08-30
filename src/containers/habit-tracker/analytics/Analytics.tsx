@@ -7,6 +7,12 @@ import { YearView } from "./year-view/YearView";
 import { Habit, Logging } from "../habits/Habits";
 import { LocalStorage } from "../../../common/constants/local-storage";
 
+// Enum for viewmodes
+enum ViewMode {
+  MONTH = "month",
+  YEAR = "year",
+}
+
 const fadeUp = keyframes`
   from {
     opacity: 0;
@@ -42,7 +48,7 @@ const AnalyticsContainer = styled.div`
 // The main functional component for the Analytics page of the habit tracker
 export function Analytics() {
   // State to manage the current view (month or year)
-  const [view, setView] = useState<string>("month");
+  const [view, setView] = useState<ViewMode>(ViewMode.MONTH);
   const [habits, setHabits] = useState<Habit[]>([]);
   const [habitsLog, setHabitsLog] = useState<Logging>({});
   const [selectedHabit, setSelectedHabit] = useState<string>("");
@@ -86,8 +92,8 @@ export function Analytics() {
   };
 
   const toggleOptions = [
-    { label: "Month View", value: "month" },
-    { label: "Year View", value: "year" },
+    { label: "Month View", value: ViewMode.MONTH },
+    { label: "Year View", value: ViewMode.YEAR },
   ];
 
   const handleSelectHabit = (habitName: string) => {
@@ -100,9 +106,9 @@ export function Analytics() {
         <ToggleButton
           options={toggleOptions}
           activeValue={view}
-          onChange={setView}
+          onChange={(newView) => setView(newView as ViewMode)}
         />
-        {view === "month" ? (
+        {view === ViewMode.MONTH ? (
           <MonthView
             habits={habits}
             onSelectHabit={handleSelectHabit}
