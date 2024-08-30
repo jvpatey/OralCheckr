@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
 import {
@@ -239,23 +240,33 @@ export function Heatmap({ data, year, habitName }: HeatmapProps) {
     return entryYear === year;
   });
 
-  // Get data for weeks and days of week for axis
-  const series = DAYS_OF_WEEK.map((day, dayIndex) => ({
-    name: day,
-    data: Array.from({ length: WEEKS_IN_YEAR }, (_, weekIndex) => {
-      const count =
-        filteredData.find((d) => {
-          const date = new Date(d.date);
-          const weekOfYear = Math.floor(
-            (date.getTime() - new Date(date.getFullYear(), 0, 1).getTime()) /
-              (1000 * 60 * 60 * 24 * 7)
-          );
-          return date.getDay() === dayIndex && weekOfYear === weekIndex;
-        })?.count || 0;
+  // Memoized calculation of the series data for weeks and days of the week
+  const series = useMemo(() => {
+    return DAYS_OF_WEEK.map((day, dayIndex) => {
+      const weeklyData = Array.from(
+        { length: WEEKS_IN_YEAR },
+        (_, weekIndex) => {
+          // Find the count for the specific day and week of the year
+          const matchingEntry = filteredData.find((d) => {
+            const date = new Date(d.date);
+            const startOfYear = new Date(date.getFullYear(), 0, 1).getTime();
+            const currentDay = date.getTime();
+            const weekOfYear = Math.floor(
+              (currentDay - startOfYear) / (1000 * 60 * 60 * 24 * 7)
+            );
 
-      return { x: weekIndex + 1, y: count };
-    }),
-  }));
+            return date.getDay() === dayIndex && weekOfYear === weekIndex;
+          });
+
+          const countForDay = matchingEntry?.count || 0;
+
+          return { x: weekIndex + 1, y: countForDay };
+        }
+      );
+
+      return { name: day, data: weeklyData };
+    });
+  }, [filteredData]);
 
   // Get the options object for ApexCharts
   const options = getHeatmapOptions(habitName, year);
