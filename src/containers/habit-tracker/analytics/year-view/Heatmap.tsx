@@ -6,6 +6,10 @@ import {
 } from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
 
+// Global constants
+const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const WEEKS_IN_YEAR = 52;
+
 // Styled component for the Heatmap container card
 const HeatmapCard = styled.div`
   background-color: ${colors.bgWhite};
@@ -41,9 +45,6 @@ interface HeatmapProps {
 
 // Functional component to render the heatmap - used in the year view of the analytics page of the habit tracker
 export function Heatmap({ data, year, habitName }: HeatmapProps) {
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const weeksInYear = 52;
-
   // Filter data to include only entries for the selected year
   const filteredData = data.filter((entry) => {
     const entryYear = new Date(entry.date).getFullYear();
@@ -51,9 +52,9 @@ export function Heatmap({ data, year, habitName }: HeatmapProps) {
   });
 
   // Get data for weeks and days of week for axis
-  const series = daysOfWeek.map((day, dayIndex) => ({
+  const series = DAYS_OF_WEEK.map((day, dayIndex) => ({
     name: day,
-    data: Array.from({ length: weeksInYear }, (_, weekIndex) => {
+    data: Array.from({ length: WEEKS_IN_YEAR }, (_, weekIndex) => {
       const count =
         filteredData.find((d) => {
           const date = new Date(d.date);
