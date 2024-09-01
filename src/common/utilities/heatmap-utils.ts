@@ -1,26 +1,34 @@
 import { Logging } from "../../containers/habit-tracker/habits/Habits";
 
-// Interface for heatmap data
-export interface HeatmapData {
-    date: string;
-    count: number;
+export interface HeatmapEntry {
+  month: number;
+  dayOfWeek: number;
+  logCount: number;
+  dayOfMonth: number;
 }
 
 // Function to generate heatmap data from the logging data
-export function generateHeatmapData(habitLog: Logging, habitName: string): HeatmapData[] {
-    const habitData = habitLog[habitName];
-    if (!habitData) return [];
+export function generateHeatmapData(habitLog: Logging, habitName: string): HeatmapEntry[] {
+  const habitLogData = habitLog[habitName];
+  const heatmapEntries: HeatmapEntry[] = [];
 
-    const heatmapData: HeatmapData[] = [];
-  
-    for (const year in habitData) {
-      for (const month in habitData[year]) {
-        for (const day in habitData[year][month]) {
-          const date = new Date(`${year}-${month}-${day}`).toISOString().split("T")[0];
-          const count = habitData[year][month][day];
-          heatmapData.push({ date, count });
-        }
-      }
-    }
-    return heatmapData;
+  // Iterate over each day of the year
+  for (let dayOfYear = 0; dayOfYear < 365; dayOfYear++) {
+    const currentDate = new Date(new Date().getFullYear(), 0, 1 + dayOfYear);
+
+    // Calculate the number of logs for the current date
+    const logCount =
+      habitLogData?.[currentDate.getFullYear()]?.[currentDate.toLocaleString("default", { month: "long" }).toLowerCase()]?.[currentDate.getDate()] || 0;
+
+    // Push a new HeatmapEntry into the array with the necessary information
+    heatmapEntries.push({
+      month: currentDate.getMonth() + 1, // Numeric month value
+      dayOfWeek: currentDate.getDay(),   // Day of the week
+      logCount,                          // Number of logs for the specific date
+      dayOfMonth: currentDate.getDate(), // Day of the month
+    });
+  }
+
+  return heatmapEntries;
 }
+

@@ -8,10 +8,10 @@ import { Habit, Logging } from "../habits/Habits";
 import { LocalStorage } from "../../../common/constants/local-storage";
 import {
   generateHeatmapData,
-  HeatmapData,
+  HeatmapEntry,
 } from "../../../common/utilities/heatmap-utils";
 
-// Enum for viewmodes
+// Enum for view modes
 enum ViewMode {
   MONTH = "month",
   YEAR = "year",
@@ -72,7 +72,7 @@ export function Analytics() {
   }, []);
 
   // Memoized generation of heatmap data for the selected habit
-  const heatmapData: HeatmapData[] = useMemo(() => {
+  const heatmapData: HeatmapEntry[] = useMemo(() => {
     return generateHeatmapData(habitsLog, selectedHabit);
   }, [habitsLog, selectedHabit]);
 

@@ -4,8 +4,10 @@ import { HabitDropdown } from "../HabitDropdown";
 import { Habit } from "../../habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
 import { YearSelector } from "./YearSelector";
-import { Heatmap } from "./Heatmap";
+import { Heatmap } from "./Heatmap"; // Import the updated Heatmap component
+import { HeatmapEntry } from "../../../../common/utilities/heatmap-utils";
 
+// Keyframes for the fade-up animation
 const fadeUp = keyframes`
   from {
     opacity: 0;
@@ -34,15 +36,18 @@ const HabitsTitle = styled.h3`
   margin-top: 10px;
 `;
 
-interface ViewProps {
+interface YearViewProps {
   habits: Habit[];
   onSelectHabit: (habitName: string) => void;
-  heatmapData: { date: string; count: number }[];
+  heatmapData: HeatmapEntry[];
 }
 
-export function YearView({ habits, onSelectHabit, heatmapData }: ViewProps) {
+export function YearView({
+  habits,
+  onSelectHabit,
+  heatmapData,
+}: YearViewProps) {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [selectedHabit, setSelectedHabit] = useState(habits[0]?.name || "");
 
   // Handle the year change
   const handleYearChange = (date: Date) => {
@@ -51,7 +56,6 @@ export function YearView({ habits, onSelectHabit, heatmapData }: ViewProps) {
 
   // Handle the habit selection change
   const handleSelectHabit = (habitName: string) => {
-    setSelectedHabit(habitName);
     onSelectHabit(habitName);
   };
 
@@ -63,11 +67,7 @@ export function YearView({ habits, onSelectHabit, heatmapData }: ViewProps) {
       />
       <HabitsTitle>Habits:</HabitsTitle>
       <HabitDropdown habits={habits} onSelectHabit={handleSelectHabit} />
-      <Heatmap
-        data={heatmapData}
-        year={selectedYear}
-        habitName={selectedHabit}
-      />
+      <Heatmap data={heatmapData} />
     </ViewContainer>
   );
 }
