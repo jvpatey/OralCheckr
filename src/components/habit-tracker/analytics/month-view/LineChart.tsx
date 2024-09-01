@@ -33,7 +33,10 @@ interface LineChartProps {
 }
 
 // Function to generate the ApexCharts options object
-const generateChartOptions = (daysInMonth: number): ApexCharts.ApexOptions => ({
+const generateChartOptions = (
+  daysInMonth: number,
+  month: string
+): ApexCharts.ApexOptions => ({
   chart: {
     type: "line",
     height: "100%",
@@ -86,7 +89,7 @@ const generateChartOptions = (daysInMonth: number): ApexCharts.ApexOptions => ({
   tooltip: {
     enabled: true,
     x: {
-      show: true,
+      formatter: (dayOfMonth: number) => `${month} ${dayOfMonth}`,
     },
     y: {
       formatter: (val: number) => `${val} logs`,
@@ -100,7 +103,7 @@ const generateChartOptions = (daysInMonth: number): ApexCharts.ApexOptions => ({
   },
 });
 
-// functional component to render the line chart for habits logged in a month
+// Functional component to render the line chart for habits logged in a month
 export function LineChart({
   habitsLog,
   selectedHabit,
@@ -118,7 +121,7 @@ export function LineChart({
   });
 
   // Get the options object for ApexCharts
-  const options = generateChartOptions(daysInMonth);
+  const options = generateChartOptions(daysInMonth, month);
 
   const series = [
     {
