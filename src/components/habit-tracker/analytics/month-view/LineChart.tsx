@@ -15,12 +15,16 @@ const ChartContainer = styled.div`
     border-radius: 8px;
   }
 
+  @media (max-width: 1024px) {
+    height: 30vh;
+  }
+
   @media (max-width: 768px) {
-    height: 70vh;
+    height: 60vh;
   }
 
   @media (max-width: 480px) {
-    height: 50vh;
+    height: 40vh;
   }
 `;
 
@@ -61,7 +65,10 @@ const generateChartOptions = (
     labels: {
       style: {
         colors: colors.blue,
+        fontSize: "10px",
       },
+      rotate: -45,
+      hideOverlappingLabels: true,
     },
   },
   yaxis: {
@@ -102,6 +109,48 @@ const generateChartOptions = (
   dataLabels: {
     enabled: false,
   },
+  // adjustments to chart for smaller screens (ipad, iphone sizes)
+  responsive: [
+    {
+      breakpoint: 1024,
+      options: {
+        xaxis: {
+          labels: {
+            rotate: -45,
+            style: {
+              fontSize: "10px",
+            },
+          },
+        },
+      },
+    },
+    {
+      breakpoint: 768,
+      options: {
+        xaxis: {
+          labels: {
+            rotate: -45,
+            style: {
+              fontSize: "10px",
+            },
+          },
+        },
+      },
+    },
+    {
+      breakpoint: 480,
+      options: {
+        xaxis: {
+          labels: {
+            rotate: -90,
+            style: {
+              fontSize: "8px",
+            },
+          },
+        },
+      },
+    },
+  ],
 });
 
 // Functional component to render the line chart for habits logged in a month
