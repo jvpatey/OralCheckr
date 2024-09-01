@@ -13,7 +13,6 @@ const ChartContainer = styled.div`
   .apexcharts-canvas {
     background: ${colors.white};
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   @media (max-width: 768px) {
@@ -38,6 +37,9 @@ const generateChartOptions = (daysInMonth: number): ApexCharts.ApexOptions => ({
   chart: {
     type: "line",
     height: "100%",
+    toolbar: {
+      show: false,
+    },
   },
   stroke: {
     curve: "smooth",
@@ -50,7 +52,12 @@ const generateChartOptions = (daysInMonth: number): ApexCharts.ApexOptions => ({
     title: {
       text: "Day of the Month",
       style: {
-        color: colors.textGrey,
+        color: colors.green,
+      },
+    },
+    labels: {
+      style: {
+        colors: colors.blue,
       },
     },
   },
@@ -58,7 +65,12 @@ const generateChartOptions = (daysInMonth: number): ApexCharts.ApexOptions => ({
     title: {
       text: "Logs",
       style: {
-        color: colors.textGrey,
+        color: colors.green,
+      },
+    },
+    labels: {
+      style: {
+        colors: colors.blue,
       },
     },
     min: 0,

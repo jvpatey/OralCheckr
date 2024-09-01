@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import _ from "lodash";
 import { PageBackground } from "../../../components/PageBackground";
 import { IconTextButton } from "../../../components/habit-tracker/habits/IconTextButton";
-import { DateRangePicker } from "../../../components/habit-tracker/habits/DateRangePicker";
+import { DateRangePicker } from "./DateRangePicker";
 import { AddEditHabitModal } from "./AddEditHabitModal";
 import { cloneDeep } from "lodash";
 import {
