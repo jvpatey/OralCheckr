@@ -105,7 +105,8 @@ const HeatmapOptions = (): ApexOptions => ({
     enabled: false,
   },
   xaxis: {
-    categories: Array.from({ length: 12 }, (_, i) => i + 1), // months of the year represented as numbers
+    categories: Array.from({ length: 12 }, (_, i) => i + 1), // Months represented as numbers
+    tickAmount: 10,
     title: {
       text: "Months",
       style: {
