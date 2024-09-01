@@ -75,6 +75,7 @@ const generateChartOptions = (
       style: {
         colors: colors.blue,
       },
+      formatter: (value: number) => Math.floor(value).toString(),
     },
     min: 0,
     tickAmount: 5,
