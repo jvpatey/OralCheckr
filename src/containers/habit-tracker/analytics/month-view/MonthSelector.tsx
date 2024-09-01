@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import { IconButton } from "../../../../components/habit-tracker/habits/IconButton";
+import { TodayButton } from "../../../../components/habit-tracker/analytics/TodayButton";
 import {
   faChevronLeft,
   faChevronRight,
-  faCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../../../common/utilities/color-utils";
 import "react-datepicker/dist/react-datepicker.css";
@@ -20,7 +20,7 @@ const MonthPickerContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 380px;
+  width: 440px;
 
   @media (max-width: 600px) {
     width: 300px;
@@ -135,15 +135,7 @@ export function MonthSelector({
         hoverBackgroundColor={colors.blue}
         hoverColor={colors.bgWhite}
       />
-      <IconButton
-        icon={faCalendarDay}
-        onClick={handleTodayClick}
-        borderColor={colors.green}
-        backgroundColor={colors.bgWhite}
-        color={colors.green}
-        hoverBackgroundColor={colors.green}
-        hoverColor={colors.bgWhite}
-      />
+      <TodayButton onClick={handleTodayClick} />
     </MonthPickerContainer>
   );
 }
