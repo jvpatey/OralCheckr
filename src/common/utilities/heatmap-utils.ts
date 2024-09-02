@@ -8,17 +8,21 @@ export interface HeatmapEntry {
 }
 
 // Function to generate heatmap data from the logging data
-export function generateHeatmapData(habitLog: Logging, habitName: string): HeatmapEntry[] {
+export function generateHeatmapData(
+  habitLog: Logging,
+  habitName: string,
+  selectedYear: number
+): HeatmapEntry[] {
   const habitLogData = habitLog[habitName];
   const heatmapEntries: HeatmapEntry[] = [];
 
   // Iterate over each day of the year
   for (let dayOfYear = 0; dayOfYear < 365; dayOfYear++) {
-    const currentDate = new Date(new Date().getFullYear(), 0, 1 + dayOfYear);
+    const currentDate = new Date(selectedYear, 0, 1 + dayOfYear);
 
     // Calculate the number of logs for the current date
     const logCount =
-      habitLogData?.[currentDate.getFullYear()]?.[currentDate.toLocaleString("default", { month: "long" }).toLowerCase()]?.[currentDate.getDate()] || 0;
+      habitLogData?.[selectedYear]?.[currentDate.toLocaleString("default", { month: "long" }).toLowerCase()]?.[currentDate.getDate()] || 0;
 
     // Push a new HeatmapEntry into the array with the necessary information
     heatmapEntries.push({
@@ -31,4 +35,5 @@ export function generateHeatmapData(habitLog: Logging, habitName: string): Heatm
 
   return heatmapEntries;
 }
+
 

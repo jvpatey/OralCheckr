@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { HabitDropdown } from "../HabitDropdown";
 import { Habit } from "../../habits/Habits";
@@ -40,31 +39,25 @@ interface YearViewProps {
   habits: Habit[];
   onSelectHabit: (habitName: string) => void;
   heatmapData: HeatmapEntry[];
+  onYearChange: (date: Date) => void;
+  selectedYear: Date;
 }
 
+// YearView component for displaying the heatmap for the selected year
 export function YearView({
   habits,
   onSelectHabit,
   heatmapData,
+  onYearChange,
+  selectedYear,
 }: YearViewProps) {
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
-  // Handle the year change
-  const handleYearChange = (date: Date) => {
-    setSelectedYear(date.getFullYear());
-  };
-
-  // Handle the habit selection change
   const handleSelectHabit = (habitName: string) => {
     onSelectHabit(habitName);
   };
 
   return (
     <ViewContainer>
-      <YearSelector
-        selectedYear={new Date(selectedYear, 0)}
-        onYearChange={handleYearChange}
-      />
+      <YearSelector selectedYear={selectedYear} onYearChange={onYearChange} />
       <HabitsTitle>Habits:</HabitsTitle>
       <HabitDropdown habits={habits} onSelectHabit={handleSelectHabit} />
       <Heatmap data={heatmapData} />
