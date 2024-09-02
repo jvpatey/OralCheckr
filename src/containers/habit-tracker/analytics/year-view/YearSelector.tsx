@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useRef } from "react";
 import DatePicker from "react-datepicker";
 import { IconButton } from "../../../../components/habit-tracker/habits/IconButton";
 import { TodayButton } from "../../../../components/habit-tracker/analytics/TodayButton";
@@ -64,14 +64,16 @@ export function YearSelector({
   selectedYear,
   onYearChange,
 }: YearSelectorProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const datePickerRef = useRef<DatePicker>(null);
 
   // Handles the change of the selected year from the DatePicker
   const handleYearChange = (date: Date | null) => {
     if (date) {
       onYearChange(date);
     }
-    setIsOpen(false);
+    if (datePickerRef.current) {
+      datePickerRef.current.setOpen(false);
+    }
   };
 
   // Decrease the selected year by one
@@ -99,6 +101,13 @@ export function YearSelector({
     onYearChange(new Date());
   };
 
+  // Handle the click on the year button to open the date picker
+  const handleButtonClick = () => {
+    if (datePickerRef.current) {
+      datePickerRef.current.setOpen(true);
+    }
+  };
+
   return (
     <YearPickerContainer>
       <IconButton
@@ -116,10 +125,14 @@ export function YearSelector({
         dateFormat="yyyy"
         showYearPicker
         showPopperArrow={false}
-        open={isOpen}
-        onClickOutside={() => setIsOpen(false)}
+        ref={datePickerRef}
+        onClickOutside={() => {
+          if (datePickerRef.current) {
+            datePickerRef.current.setOpen(false);
+          }
+        }}
         customInput={
-          <YearPickerButton onClick={() => setIsOpen(!isOpen)}>
+          <YearPickerButton onClick={handleButtonClick}>
             {selectedYear.getFullYear()}
           </YearPickerButton>
         }

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useRef } from "react";
 import DatePicker from "react-datepicker";
 import { IconButton } from "../../../../components/habit-tracker/habits/IconButton";
 import { TodayButton } from "../../../../components/habit-tracker/analytics/TodayButton";
@@ -63,14 +63,16 @@ export function MonthSelector({
   selectedMonth,
   onMonthChange,
 }: MonthSelectorProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const datePickerRef = useRef<DatePicker>(null);
 
   // Handles the change of the selected month from the DatePicker
   const handleMonthChange = (date: Date | null) => {
     if (date) {
       onMonthChange(date);
     }
-    setIsOpen(false);
+    if (datePickerRef.current) {
+      datePickerRef.current.setOpen(false);
+    }
   };
 
   // Decrease the selected month by one
@@ -98,6 +100,13 @@ export function MonthSelector({
     onMonthChange(new Date());
   };
 
+  // Handle the click on the month button to open the date picker
+  const handleButtonClick = () => {
+    if (datePickerRef.current) {
+      datePickerRef.current.setOpen(true);
+    }
+  };
+
   return (
     <MonthPickerContainer>
       <IconButton
@@ -115,10 +124,14 @@ export function MonthSelector({
         dateFormat="MMMM yyyy"
         showMonthYearPicker
         showPopperArrow={false}
-        open={isOpen}
-        onClickOutside={() => setIsOpen(false)}
+        ref={datePickerRef}
+        onClickOutside={() => {
+          if (datePickerRef.current) {
+            datePickerRef.current.setOpen(false);
+          }
+        }}
         customInput={
-          <MonthPickerButton onClick={() => setIsOpen(!isOpen)}>
+          <MonthPickerButton onClick={handleButtonClick}>
             {selectedMonth.toLocaleDateString("en-US", {
               month: "long",
               year: "numeric",
