@@ -108,6 +108,11 @@ const DaysHeader = styled.div`
 const DayName = styled.div`
   flex: 1;
   text-align: center;
+  font-size: 14px;
+
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
 `;
 
 // Wrapper for each day's circular progress bar

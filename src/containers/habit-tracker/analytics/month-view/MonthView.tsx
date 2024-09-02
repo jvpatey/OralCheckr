@@ -72,7 +72,9 @@ const TileWrapper = styled.div`
   }
 
   @media (max-width: 600px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    max-width: 300px;
   }
 `;
 

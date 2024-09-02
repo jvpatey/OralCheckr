@@ -37,11 +37,16 @@ const TileMainContent = styled.div<{ $isMissedDays?: boolean }>`
   color: ${({ $isMissedDays }) => ($isMissedDays ? colors.red : colors.green)};
   margin-top: 10px;
   margin-bottom: 8px;
+
+  @media (max-width: 600px) {
+    font-size: 30px;
+  }
 `;
 
 const TileSubContent = styled.div`
   font-size: 12px;
   color: ${colors.textGrey};
+  margin-bottom: 5px;
 `;
 
 // Functional component for the analytics tiles for the month view
