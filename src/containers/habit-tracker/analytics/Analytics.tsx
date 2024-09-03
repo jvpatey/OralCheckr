@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { PageBackground } from "../../../components/PageBackground";
 import { ToggleButton } from "../../../components/habit-tracker/analytics/ToggleButton";
@@ -6,10 +6,6 @@ import { MonthView } from "./month-view/MonthView";
 import { YearView } from "./year-view/YearView";
 import { Habit, Logging } from "../habits/Habits";
 import { LocalStorage } from "../../../common/constants/local-storage";
-import {
-  generateHeatmapData,
-  HeatmapEntry,
-} from "../../../common/utilities/heatmap-utils";
 
 // Enum for view modes
 enum ViewMode {
@@ -79,11 +75,6 @@ export function Analytics() {
     }
   }, []);
 
-  // Memoized generation of heatmap data for the selected habit and year
-  const heatmapData: HeatmapEntry[] = useMemo(() => {
-    return generateHeatmapData(habitsLog, selectedHabit, selectedYear);
-  }, [habitsLog, selectedHabit, selectedYear]);
-
   const handleSelectHabit = (habitName: string) => {
     setSelectedHabit(habitName);
   };
@@ -112,7 +103,8 @@ export function Analytics() {
           <YearView
             habits={habits}
             onSelectHabit={handleSelectHabit}
-            heatmapData={heatmapData}
+            habitsLog={habitsLog}
+            selectedHabit={selectedHabit}
             onYearChange={handleYearChange}
             selectedYear={new Date(selectedYear, 0)}
           />

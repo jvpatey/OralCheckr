@@ -3,8 +3,11 @@ import { HabitDropdown } from "../HabitDropdown";
 import { Habit } from "../../habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
 import { YearSelector } from "./YearSelector";
-import { Heatmap } from "./Heatmap"; // Import the updated Heatmap component
+import { Heatmap } from "./Heatmap";
 import { HeatmapEntry } from "../../../../common/utilities/heatmap-utils";
+import { Logging } from "../../habits/Habits";
+import { useMemo } from "react";
+import { generateHeatmapData } from "../../../../common/utilities/heatmap-utils";
 
 // Keyframes for the fade-up animation
 const fadeUp = keyframes`
@@ -38,7 +41,8 @@ const HabitsTitle = styled.h3`
 interface YearViewProps {
   habits: Habit[];
   onSelectHabit: (habitName: string) => void;
-  heatmapData: HeatmapEntry[];
+  habitsLog: Logging;
+  selectedHabit: string;
   onYearChange: (date: Date) => void;
   selectedYear: Date;
 }
@@ -47,10 +51,20 @@ interface YearViewProps {
 export function YearView({
   habits,
   onSelectHabit,
-  heatmapData,
+  habitsLog,
+  selectedHabit,
   onYearChange,
   selectedYear,
 }: YearViewProps) {
+  // Memoized generation of heatmap data for the selected habit and year
+  const heatmapData: HeatmapEntry[] = useMemo(() => {
+    return generateHeatmapData(
+      habitsLog,
+      selectedHabit,
+      selectedYear.getFullYear()
+    );
+  }, [habitsLog, selectedHabit, selectedYear]);
+
   const handleSelectHabit = (habitName: string) => {
     onSelectHabit(habitName);
   };
