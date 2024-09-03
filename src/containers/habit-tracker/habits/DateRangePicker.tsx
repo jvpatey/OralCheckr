@@ -6,10 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
-  faCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
 import { DayBubble } from "../../../components/habit-tracker/habits/DayBubble";
 import { colors } from "../../../common/utilities/color-utils";
+import { TodayButton } from "../../../components/habit-tracker/analytics/TodayButton";
 
 // Styled component for the container of the date controls
 const DateControlsContainer = styled.div`
@@ -53,13 +53,14 @@ const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
       ? `2px solid ${colors.disabledBgGrey}`
       : `2px solid ${colors.blue}`};
   padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: 5px;
   text-align: center;
   min-width: 150px;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 10px;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
 
   &:hover {
@@ -118,37 +119,6 @@ const ArrowButton = styled.button<{ $disabled: boolean }>`
     width: 20px;
     height: 20px;
     font-size: 14px;
-  }
-`;
-
-// Styled component for the "Today" button
-const TodayButton = styled.button<{ $disabled: boolean }>`
-  background-color: ${({ $disabled }) =>
-    $disabled ? colors.disabledBgGrey : colors.bgWhite};
-  border: ${({ $disabled }) =>
-    $disabled
-      ? `2px solid ${colors.disabledBgGrey}`
-      : `2px solid ${colors.green}`};
-  color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.green)};
-  font-size: 14px;
-  border-radius: 10px;
-  padding: 8px 12px;
-  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-  margin-left: 10px;
-
-  &:hover {
-    background-color: ${({ $disabled }) =>
-      $disabled ? colors.disabledBgGrey : colors.green};
-    border: 2px solid
-      ${({ $disabled }) => ($disabled ? colors.disabledBgGrey : colors.green)};
-    color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.bgWhite)};
-    box-shadow: ${({ $disabled }) =>
-      $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 3px 2px rgba(53, 122, 150, 0.5);
   }
 `;
 
@@ -265,17 +235,7 @@ export function DateRangePicker({
           disabled={isEditMode}
           maxDate={today}
         />
-        <TodayButton
-          onClick={handleTodayClick}
-          $disabled={isEditMode}
-          disabled={isEditMode}
-        >
-          <FontAwesomeIcon
-            icon={faCalendarDay}
-            style={{ marginRight: "5px" }}
-          />
-          Today
-        </TodayButton>
+        <TodayButton onClick={handleTodayClick} disabled={isEditMode} />
       </DatePickerWrapper>
       <DayBubbleContainer>
         <ArrowButton
