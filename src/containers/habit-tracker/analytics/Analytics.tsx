@@ -49,6 +49,11 @@ const AnalyticsContainer = styled.div`
   }
 `;
 
+const toggleOptions = [
+  { label: "Month View", value: ViewMode.MONTH },
+  { label: "Year View", value: ViewMode.YEAR },
+];
+
 // The main functional component for the Analytics page of the habit tracker
 export function Analytics() {
   // State to manage the current view (month or year)
@@ -78,11 +83,6 @@ export function Analytics() {
   const heatmapData: HeatmapEntry[] = useMemo(() => {
     return generateHeatmapData(habitsLog, selectedHabit, selectedYear);
   }, [habitsLog, selectedHabit, selectedYear]);
-
-  const toggleOptions = [
-    { label: "Month View", value: ViewMode.MONTH },
-    { label: "Year View", value: ViewMode.YEAR },
-  ];
 
   const handleSelectHabit = (habitName: string) => {
     setSelectedHabit(habitName);
