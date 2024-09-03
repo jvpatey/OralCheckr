@@ -2,12 +2,13 @@ import styled, { keyframes } from "styled-components";
 import { HabitDropdown } from "../HabitDropdown";
 import { Habit } from "../../habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
-import { YearSelector } from "./YearSelector";
 import { Heatmap } from "./Heatmap";
 import { HeatmapEntry } from "../../../../common/utilities/heatmap-utils";
 import { Logging } from "../../habits/Habits";
 import { useMemo } from "react";
 import { generateHeatmapData } from "../../../../common/utilities/heatmap-utils";
+import { ViewType } from "../AnalyticsDateSelector";
+import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 
 // Keyframes for the fade-up animation
 const fadeUp = keyframes`
@@ -71,7 +72,11 @@ export function YearView({
 
   return (
     <ViewContainer>
-      <YearSelector selectedYear={selectedYear} onYearChange={onYearChange} />
+      <AnalyticsDateSelector
+        selectedDate={selectedYear}
+        onDateChange={onYearChange}
+        viewType={ViewType.YEAR}
+      />
       <HabitsTitle>Habits:</HabitsTitle>
       <HabitDropdown habits={habits} onSelectHabit={handleSelectHabit} />
       <Heatmap data={heatmapData} />

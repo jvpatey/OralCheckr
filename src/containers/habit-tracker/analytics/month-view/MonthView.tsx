@@ -3,7 +3,6 @@ import { useState } from "react";
 import { HabitDropdown } from "../HabitDropdown";
 import { Habit, Logging } from "../../habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
-import { MonthSelector } from "./MonthSelector";
 import { HabitCalendar } from "./HabitCalendar";
 import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
 import {
@@ -14,6 +13,8 @@ import {
 } from "../../../../common/utilities/habit-analytics";
 import { AnalyticsTile } from "../../../../components/habit-tracker/analytics/month-view/AnalyticsTile";
 import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
+import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
+import { ViewType } from "../AnalyticsDateSelector";
 
 const fadeUp = keyframes`
   from {
@@ -170,6 +171,11 @@ export function MonthView({
     setIsCalendarView(view);
   };
 
+  // Handler function to update the selected month
+  const onMonthChange = (date: Date) => {
+    setSelectedMonth(date);
+  };
+
   // Total count calculation
   const totalCount = calculateTotalCount(habitsLog, selectedHabit, year, month);
 
@@ -194,9 +200,10 @@ export function MonthView({
 
   return (
     <ViewContainer>
-      <MonthSelector
-        selectedMonth={selectedMonth}
-        onMonthChange={setSelectedMonth}
+      <AnalyticsDateSelector
+        selectedDate={selectedMonth}
+        onDateChange={onMonthChange}
+        viewType={ViewType.MONTH}
       />
       <HabitsContainer>
         <HabitsTitle>Habits:</HabitsTitle>
