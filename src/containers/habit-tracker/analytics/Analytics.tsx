@@ -40,8 +40,8 @@ const AnalyticsContainer = styled.div`
   animation: ${fadeUp} 1s ease-out;
 
   @media (max-width: 768px) {
-    width: calc(100% - 70px);
-    left: 70px;
+    width: calc(100% - 35px);
+    left: 40px;
   }
 `;
 

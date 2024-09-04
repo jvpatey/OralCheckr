@@ -36,18 +36,18 @@ const HeatmapCard = styled.div`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 1024px) {
-    width: 600px;
-    padding: 10px;
+    width: 95%;
+    padding: 5px;
   }
 
   @media (max-width: 768px) {
     width: 100%;
-    padding: 10px;
+    padding: 5px;
   }
 
   @media (max-width: 480px) {
     width: 100%;
-    padding: 10px;
+    padding: 5px;
   }
 `;
 
@@ -122,7 +122,7 @@ const HeatmapOptions = (): ApexOptions => ({
   },
   yaxis: {
     title: {
-      text: "Week days",
+      text: window.innerWidth > 768 ? "Week days" : "",
       style: {
         color: colors.blue,
         fontSize: "14px",
@@ -136,12 +136,10 @@ const HeatmapOptions = (): ApexOptions => ({
     },
   },
   grid: {
-    padding: {
-      top: 10,
-      right: 20,
-      bottom: 10,
-      left: 20,
-    },
+    padding:
+      window.innerWidth <= 768
+        ? { top: 2, right: 2, bottom: 2, left: 10 }
+        : { top: 10, right: 20, bottom: 10, left: 20 },
     borderColor: colors.bgWhite,
   },
   tooltip: {
