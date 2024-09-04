@@ -74,6 +74,7 @@ export function AnalyticsDateSelector({
   viewType,
 }: AnalyticsDateSelectorProps) {
   const datePickerRef = useRef<DatePicker>(null);
+  const today = new Date();
 
   // Handle the change of the selected date (either month or year)
   const handleDateChange = (date: Date | null) => {
@@ -115,6 +116,14 @@ export function AnalyticsDateSelector({
     }
   };
 
+  // Check to compare selectedDate with the current date to see if next button should be disabled
+  const isNextDisabled =
+    (viewType === ViewType.MONTH &&
+      selectedDate.getFullYear() === today.getFullYear() &&
+      selectedDate.getMonth() === today.getMonth()) ||
+    (viewType === ViewType.YEAR &&
+      selectedDate.getFullYear() === today.getFullYear());
+
   return (
     <DatePickerContainer>
       <IconButton
@@ -134,6 +143,7 @@ export function AnalyticsDateSelector({
         showMonthYearPicker={viewType === ViewType.MONTH}
         showPopperArrow={false}
         ref={datePickerRef}
+        maxDate={today}
         onClickOutside={() => {
           if (datePickerRef.current) {
             datePickerRef.current.setOpen(false);
@@ -158,6 +168,7 @@ export function AnalyticsDateSelector({
         color={colors.blue}
         hoverBackgroundColor={colors.blue}
         hoverColor={colors.bgWhite}
+        disabled={isNextDisabled}
       />
       <TodayButton onClick={handleTodayClick} />
     </DatePickerContainer>
