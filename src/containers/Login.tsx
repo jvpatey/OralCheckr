@@ -48,7 +48,7 @@ const LogoStyle = styled.div`
 
 const LogoImgStyle = styled.img`
   height: 60px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 
 // GradientText component for applying gradient effect to text
