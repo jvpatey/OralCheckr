@@ -203,9 +203,7 @@ export function HabitCalendar({
         inline
         renderDayContents={(day) => renderDayContents(day)}
         calendarClassName="custom-calendar"
-        formatWeekDay={() => ""}
         showPopperArrow={false}
-        onChange={() => {}}
       />
     </CalendarContainer>
   );
