@@ -6,10 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
-  faCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
-import { DayBubble } from "./DayBubble";
-import { colors } from "../../common/utilities/color-utils";
+import { DayBubble } from "../../../components/habit-tracker/habits/DayBubble";
+import { colors } from "../../../common/utilities/color-utils";
+import { TodayButton } from "../../../components/habit-tracker/analytics/TodayButton";
 
 // Styled component for the container of the date controls
 const DateControlsContainer = styled.div`
@@ -53,13 +53,14 @@ const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
       ? `2px solid ${colors.disabledBgGrey}`
       : `2px solid ${colors.blue}`};
   padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: 5px;
   text-align: center;
   min-width: 150px;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 10px;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
 
   &:hover {
@@ -103,6 +104,11 @@ const ArrowButton = styled.button<{ $disabled: boolean }>`
     outline: none;
   }
 
+  &:disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
   @media (max-width: 768px) {
     width: 25px;
     height: 25px;
@@ -113,37 +119,6 @@ const ArrowButton = styled.button<{ $disabled: boolean }>`
     width: 20px;
     height: 20px;
     font-size: 14px;
-  }
-`;
-
-// Styled component for the "Today" button
-const TodayButton = styled.button<{ $disabled: boolean }>`
-  background-color: ${({ $disabled }) =>
-    $disabled ? colors.disabledBgGrey : colors.bgWhite};
-  border: ${({ $disabled }) =>
-    $disabled
-      ? `2px solid ${colors.disabledBgGrey}`
-      : `2px solid ${colors.green}`};
-  color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.green)};
-  font-size: 14px;
-  border-radius: 10px;
-  padding: 8px 12px;
-  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-  margin-left: 10px;
-
-  &:hover {
-    background-color: ${({ $disabled }) =>
-      $disabled ? colors.disabledBgGrey : colors.green};
-    border: 2px solid
-      ${({ $disabled }) => ($disabled ? colors.disabledBgGrey : colors.green)};
-    color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.bgWhite)};
-    box-shadow: ${({ $disabled }) =>
-      $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 3px 2px rgba(53, 122, 150, 0.5);
   }
 `;
 
@@ -209,6 +184,12 @@ export function DateRangePicker({
     newDate.setDate(selectedFullDate.getDate() + 7);
     setSelectedFullDate(newDate);
     setSelectedDayIndex(newDate.getDay());
+
+    // Ensure that the selected day is not in the future
+    if (newDate > today) {
+      setSelectedFullDate(today);
+      setSelectedDayIndex(today.getDay());
+    }
   };
 
   // Handler for clicking on a specific day bubble
@@ -233,6 +214,9 @@ export function DateRangePicker({
     </CustomDatePickerInput>
   ));
 
+  // Determine if the next week arrow should be disabled
+  const isNextWeekDisabled = today <= daysInWeek[6];
+
   return (
     <DateControlsContainer>
       <DatePickerWrapper>
@@ -251,34 +235,32 @@ export function DateRangePicker({
           disabled={isEditMode}
           maxDate={today}
         />
-        {/* Today button to reset to the current date */}
-        <TodayButton
-          onClick={handleTodayClick}
+        <TodayButton onClick={handleTodayClick} disabled={isEditMode} />
+      </DatePickerWrapper>
+      <DayBubbleContainer>
+        <ArrowButton
+          onClick={handlePrevWeek}
           $disabled={isEditMode}
           disabled={isEditMode}
         >
-          <FontAwesomeIcon
-            icon={faCalendarDay}
-            style={{ marginRight: "5px" }}
-          />
-          Today
-        </TodayButton>
-      </DatePickerWrapper>
-      {/* Container for day bubbles and navigation arrows */}
-      <DayBubbleContainer>
-        <ArrowButton onClick={handlePrevWeek} $disabled={isEditMode}>
           <FontAwesomeIcon icon={faChevronLeft} />
         </ArrowButton>
         {daysInWeek.map((day, index) => (
           <DayBubble
             key={index}
-            selected={index === selectedDayIndex}
+            selected={
+              index === selectedDayIndex && !(isEditMode || day > today)
+            }
             onClick={() => handleDayClick(index)}
             date={day}
             isEditMode={isEditMode || day > today}
           />
         ))}
-        <ArrowButton onClick={handleNextWeek} $disabled={isEditMode}>
+        <ArrowButton
+          onClick={handleNextWeek}
+          $disabled={isEditMode || isNextWeekDisabled}
+          disabled={isEditMode || isNextWeekDisabled}
+        >
           <FontAwesomeIcon icon={faChevronRight} />
         </ArrowButton>
       </DayBubbleContainer>

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../../common/utilities/color-utils";
+import { colors } from "../../../common/utilities/color-utils";
 
 // Styled component for the individual day bubbles in the date picker
 const DayBubbleStyled = styled.div<{ selected: boolean; $isEditMode: boolean }>`

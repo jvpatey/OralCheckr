@@ -4,8 +4,8 @@ import { GuardedRoute } from "./containers/authentication/GuardedRoute";
 import { RedirectIfAuthenticated } from "./containers/authentication/RedirectIfAuthenticated";
 import { Login } from "./containers/Login";
 import { Questionnaire } from "./containers/questionnaire/Questionnaire";
-import { Habits } from "./containers/habit-tracker/Habits";
-import { Analytics } from "./containers/habit-tracker/Analytics";
+import { Habits } from "./containers/habit-tracker/habits/Habits";
+import { Analytics } from "./containers/habit-tracker/analytics/Analytics";
 import { Results } from "./components/questionnaire/Results";
 import { Landing } from "./components/landing/Landing";
 
