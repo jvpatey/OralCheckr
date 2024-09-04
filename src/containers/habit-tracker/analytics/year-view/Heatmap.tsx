@@ -161,9 +161,10 @@ const HeatmapOptions = (): ApexOptions => ({
       const logs = series[seriesIndex][dataPointIndex];
 
       // Custom tooltip
-      return `<div>
-                <strong>${month} ${dayOfMonth}</strong><br/>
-                logs: ${logs}
+      return `<div style="padding: 5px; color: ${colors.textGrey}">
+                <div style="color: ${colors.blue}; font-weight: bold;">${month} ${dayOfMonth}
+                </div>
+                Logs: ${logs}
               </div>`;
     },
   },
