@@ -4,7 +4,6 @@ import { HabitDropdown } from "../HabitDropdown";
 import { Habit, Logging } from "../../habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
 import { HabitCalendar } from "./HabitCalendar";
-import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
 import {
   calculateTotalCount,
   calculateMonthlyCompletion,
@@ -12,7 +11,6 @@ import {
   calculateMissedDays,
 } from "../../../../common/utilities/habit-analytics";
 import { AnalyticsTile } from "../../../../components/habit-tracker/analytics/month-view/AnalyticsTile";
-import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
 
@@ -156,7 +154,6 @@ export function MonthView({
   selectedHabit,
 }: ViewProps) {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
-  const [isCalendarView, setIsCalendarView] = useState(true);
 
   const habitCount =
     habits.find((habit) => habit.name === selectedHabit)?.count || 1;
@@ -165,11 +162,6 @@ export function MonthView({
   const month = selectedMonth
     .toLocaleDateString("en-US", { month: "long" })
     .toLowerCase();
-
-  // Handler function to toggle calendar view
-  const handleToggleView = (view: boolean) => {
-    setIsCalendarView(view);
-  };
 
   // Handler function to update the selected month
   const onMonthChange = (date: Date) => {
@@ -233,27 +225,14 @@ export function MonthView({
 
         <CalendarWrapper>
           <CalendarCard>
-            <CalendarChartToggle
-              isCalendarView={isCalendarView}
-              onToggleView={handleToggleView}
+            <HabitCalendar
+              habitsLog={habitsLog}
+              selectedHabit={selectedHabit}
+              year={year}
+              month={month}
+              habitCount={habitCount}
+              selectedMonth={selectedMonth}
             />
-            {isCalendarView ? (
-              <HabitCalendar
-                habitsLog={habitsLog}
-                selectedHabit={selectedHabit}
-                year={year}
-                month={month}
-                habitCount={habitCount}
-                selectedMonth={selectedMonth}
-              />
-            ) : (
-              <LineChart
-                habitsLog={habitsLog}
-                selectedHabit={selectedHabit}
-                year={year}
-                month={month}
-              />
-            )}
           </CalendarCard>
         </CalendarWrapper>
       </TilesAndCalendarContainer>
