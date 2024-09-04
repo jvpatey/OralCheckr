@@ -34,7 +34,7 @@ const ViewContainer = styled.div`
   align-items: center;
   width: 100%;
   margin-top: 5px;
-  animation: ${fadeUp} 1s ease-out;
+  animation: ${fadeUp} 0.5s ease-out;
 `;
 
 // Container for the tiles and calendar

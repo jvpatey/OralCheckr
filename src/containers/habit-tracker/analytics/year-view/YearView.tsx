@@ -28,7 +28,7 @@ const ViewContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 5px;
-  animation: ${fadeUp} 1s ease-out;
+  animation: ${fadeUp} 0.5s ease-out;
 `;
 
 const HabitsTitle = styled.h3`
