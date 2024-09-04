@@ -5,7 +5,7 @@ import { colors } from "../../../../common/utilities/color-utils";
 import { Heatmap } from "./Heatmap";
 import { HeatmapEntry } from "../../../../common/utilities/heatmap-utils";
 import { Logging } from "../../habits/Habits";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { generateHeatmapData } from "../../../../common/utilities/heatmap-utils";
 import { ViewType } from "../AnalyticsDateSelector";
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
@@ -44,8 +44,6 @@ interface YearViewProps {
   onSelectHabit: (habitName: string) => void;
   habitsLog: Logging;
   selectedHabit: string;
-  onYearChange: (date: Date) => void;
-  selectedYear: Date;
 }
 
 // YearView component for displaying the heatmap for the selected year
@@ -54,9 +52,9 @@ export function YearView({
   onSelectHabit,
   habitsLog,
   selectedHabit,
-  onYearChange,
-  selectedYear,
 }: YearViewProps) {
+  const [selectedYear, setSelectedYear] = useState<Date>(new Date());
+
   // Memoized generation of heatmap data for the selected habit and year
   const heatmapData: HeatmapEntry[] = useMemo(() => {
     return generateHeatmapData(
@@ -70,11 +68,16 @@ export function YearView({
     onSelectHabit(habitName);
   };
 
+  // Update the selected year when changed
+  const handleYearChange = (date: Date) => {
+    setSelectedYear(date);
+  };
+
   return (
     <ViewContainer>
       <AnalyticsDateSelector
         selectedDate={selectedYear}
-        onDateChange={onYearChange}
+        onDateChange={handleYearChange}
         viewType={ViewType.YEAR}
       />
       <HabitsTitle>Habits:</HabitsTitle>

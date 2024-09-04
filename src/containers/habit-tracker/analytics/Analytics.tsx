@@ -57,9 +57,6 @@ export function Analytics() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [habitsLog, setHabitsLog] = useState<Logging>({});
   const [selectedHabit, setSelectedHabit] = useState<string>("");
-  const [selectedYear, setSelectedYear] = useState<number>(
-    new Date().getFullYear()
-  );
 
   useEffect(() => {
     // Fetch habits and logging data from local storage when the component mounts
@@ -77,11 +74,6 @@ export function Analytics() {
 
   const handleSelectHabit = (habitName: string) => {
     setSelectedHabit(habitName);
-  };
-
-  // Update the selected year when changed
-  const handleYearChange = (date: Date) => {
-    setSelectedYear(date.getFullYear());
   };
 
   return (
@@ -105,8 +97,6 @@ export function Analytics() {
             onSelectHabit={handleSelectHabit}
             habitsLog={habitsLog}
             selectedHabit={selectedHabit}
-            onYearChange={handleYearChange}
-            selectedYear={new Date(selectedYear, 0)}
           />
         )}
       </AnalyticsContainer>
