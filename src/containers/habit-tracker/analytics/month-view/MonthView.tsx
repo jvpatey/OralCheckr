@@ -192,7 +192,8 @@ export function MonthView({
     habitsLog,
     selectedHabit,
     year,
-    month
+    month,
+    habitCount
   );
 
   // Missed days calculation

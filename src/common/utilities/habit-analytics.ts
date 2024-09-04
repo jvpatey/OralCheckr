@@ -41,7 +41,8 @@ export function calculateLongestStreak(
   habitsLog: Logging,
   habitName: string,
   year: number,
-  month: string
+  month: string,
+  habitCount: number
 ): number {
   const daysInMonth = getDaysInMonth(year, new Date(`${month} 1, ${year}`).getMonth());
   const logsForMonth = habitsLog[habitName]?.[year]?.[month] || {};
@@ -49,7 +50,8 @@ export function calculateLongestStreak(
   let currentStreak = 0;
 
   for (let day = 1; day <= daysInMonth; day++) {
-    if (logsForMonth[day]) {
+    // Check if the log for the day exists and is complete
+    if (logsForMonth[day] && logsForMonth[day] >= habitCount) {
       currentStreak += 1;
       if (currentStreak > longestStreak) {
         longestStreak = currentStreak;
