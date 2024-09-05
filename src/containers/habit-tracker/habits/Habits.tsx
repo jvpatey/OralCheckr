@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import _ from "lodash";
 import { PageBackground } from "../../../components/PageBackground";
 import { IconTextButton } from "../../../components/habit-tracker/habits/IconTextButton";
-import { DateRangePicker } from "./DateRangePicker";
+import { WeekPicker } from "./WeekPicker";
 import { AddEditHabitModal } from "./AddEditHabitModal";
 import { cloneDeep } from "lodash";
 import {
@@ -235,15 +235,19 @@ export function Habits() {
   // Check if the selected date is in the future
   const isFutureDate = selectedDate > new Date();
 
+  // Handler for when the date changes in WeekPicker
+  const handleWeekPickerDateChange = (date: Date) => {
+    setSelectedDate(date);
+  };
+
   return (
     <PageBackground>
       <HabitListContainer>
         <HabitWrapper>
           <DatePickerWrapper>
-            <DateRangePicker
+            <WeekPicker
               isEditMode={isEditMode}
-              selectedFullDate={selectedDate}
-              setSelectedFullDate={setSelectedDate}
+              onDateChange={handleWeekPickerDateChange}
             />
           </DatePickerWrapper>
           <Header>
