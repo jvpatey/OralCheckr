@@ -8,6 +8,7 @@ import { Logging } from "../../habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
 import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
 import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
+import { formatMonthYear } from "../../../../common/utilities/date-utils";
 
 interface CalendarProgressProps {
   habitsLog: Logging;
@@ -194,9 +195,7 @@ export function HabitCalendar({
   };
 
   // Display the current month and year based on the selected date
-  const currentMonthYear = `${selectedDate?.toLocaleDateString("en-US", {
-    month: "long",
-  })} ${selectedDate?.getFullYear()}`;
+  const currentMonthYear = formatMonthYear(selectedDate ?? new Date());
 
   return (
     <CalendarContainer>

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { colors } from "../../../common/utilities/color-utils";
+import { formatWeekdayShort } from "../../../common/utilities/date-utils";
 
 // Styled component for the individual day bubbles in the date picker
 const DayBubbleStyled = styled.div<{ selected: boolean; $isEditMode: boolean }>`
@@ -69,7 +70,7 @@ export function DayBubble({
       $isEditMode={isEditMode}
     >
       <div>{date.getDate()}</div>
-      <div>{date.toLocaleDateString("en", { weekday: "short" })[0]}</div>
+      <div>{formatWeekdayShort(date)}</div>
     </DayBubbleStyled>
   );
 }

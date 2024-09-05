@@ -24,6 +24,7 @@ import {
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../../common/utilities/color-utils";
+import { formatDateLong } from "../../../common/utilities/date-utils";
 
 // Utility function to update habit data in state and localStorage
 const updateHabits = (
@@ -74,9 +75,7 @@ const manageLogging = (
   habits: Habit[]
 ) => {
   const year = selectedDate.getFullYear();
-  const month = selectedDate
-    .toLocaleString("default", { month: "long" })
-    .toLowerCase();
+  const month = formatDateLong(selectedDate);
   const day = selectedDate.getDate();
 
   const updatedLogging = cloneDeep(logging);

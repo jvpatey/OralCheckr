@@ -12,6 +12,7 @@ import {
   faMinusCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../../common/utilities/color-utils";
+import { formatDateLong } from "../../../common/utilities/date-utils";
 
 interface HabitListProps {
   habits: Habit[];
@@ -41,9 +42,7 @@ export function RenderHabits({
     <>
       {habits.map((habit, index) => {
         const year = selectedDate.getFullYear();
-        const month = selectedDate
-          .toLocaleString("default", { month: "long" })
-          .toLowerCase();
+        const month = formatDateLong(selectedDate);
         const day = selectedDate.getDate();
 
         const logCount = habitsLog[habit.name]?.[year]?.[month]?.[day] || 0;

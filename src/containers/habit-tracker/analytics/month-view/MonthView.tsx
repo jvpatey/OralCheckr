@@ -13,6 +13,7 @@ import {
 import { AnalyticsTile } from "../../../../components/habit-tracker/analytics/month-view/AnalyticsTile";
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
+import { formatDateLong } from "../../../../common/utilities/date-utils";
 
 const fadeUp = keyframes`
   from {
@@ -159,9 +160,7 @@ export function MonthView({
     habits.find((habit) => habit.name === selectedHabit)?.count || 1;
 
   const year = selectedMonth.getFullYear();
-  const month = selectedMonth
-    .toLocaleDateString("en-US", { month: "long" })
-    .toLowerCase();
+  const month = formatDateLong(selectedMonth);
 
   // Handler function to update the selected month
   const onMonthChange = (date: Date) => {

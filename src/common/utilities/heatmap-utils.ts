@@ -1,4 +1,5 @@
 import { Logging } from "../../containers/habit-tracker/habits/Habits";
+import { formatDateLong } from "./date-utils";
 
 export interface HeatmapEntry {
   month: number;
@@ -22,7 +23,8 @@ export function generateHeatmapData(
 
     // Calculate the number of logs for the current date
     const logCount =
-      habitLogData?.[selectedYear]?.[currentDate.toLocaleString("default", { month: "long" }).toLowerCase()]?.[currentDate.getDate()] || 0;
+    habitLogData?.[selectedYear]?.[formatDateLong(currentDate)]?.[currentDate.getDate()] || 0;
+  
 
     // Push a new HeatmapEntry into the array with the necessary information
     heatmapEntries.push({

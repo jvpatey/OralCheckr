@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../../common/utilities/color-utils";
 import "react-datepicker/dist/react-datepicker.css";
+import { formatMonthYear } from "../../../common/utilities/date-utils";
 
 // Define the ViewType enum for selecting month or year selector
 export enum ViewType {
@@ -152,10 +153,7 @@ export function AnalyticsDateSelector({
         customInput={
           <DatePickerButton onClick={handleButtonClick}>
             {viewType === ViewType.MONTH
-              ? selectedDate.toLocaleDateString("en-US", {
-                  month: "long",
-                  year: "numeric",
-                })
+              ? formatMonthYear(selectedDate)
               : selectedDate.getFullYear()}
           </DatePickerButton>
         }

@@ -10,6 +10,7 @@ import {
 import { DayBubble } from "../../../components/habit-tracker/habits/DayBubble";
 import { colors } from "../../../common/utilities/color-utils";
 import { TodayButton } from "../../../components/habit-tracker/analytics/TodayButton";
+import { formatDateShort } from "../../../common/utilities/date-utils";
 
 // Styled component for the container of the date controls
 const DateControlsContainer = styled.div`
@@ -160,15 +161,9 @@ export function DateRangePicker({
   const today = new Date();
   const startOfWeek = getStartOfWeek(selectedFullDate);
   const daysInWeek = getDaysInWeek(startOfWeek);
-
-  // Format the week range for display
-  const weekRange = `${startOfWeek.toLocaleDateString("en", {
-    month: "short",
-    day: "numeric",
-  })} - ${daysInWeek[6].toLocaleDateString("en", {
-    month: "short",
-    day: "numeric",
-  })}`;
+  const weekRange = `${formatDateShort(startOfWeek)} - ${formatDateShort(
+    daysInWeek[6]
+  )}`;
 
   // Handler for moving to the previous week
   const handlePrevWeek = () => {
