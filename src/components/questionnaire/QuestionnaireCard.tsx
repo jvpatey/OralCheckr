@@ -1,8 +1,19 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Card } from "react-bootstrap";
 import { colors } from "../../common/utilities/color-utils";
 
 // Styled component for the QuestionnaireCard
+
+const fadeUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 export const QuestionnaireCard = styled(Card)`
   display: flex;
@@ -14,11 +25,12 @@ export const QuestionnaireCard = styled(Card)`
   height: auto;
   max-height: calc(100vh - 100px);
   min-height: 60vh;
-  background-color: ${colors.disabledBgGrey};
+  background-color: ${colors.bgLightGrey};
   border: transparent;
   border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: ${fadeUp} 1s ease-out;
 
   @media (min-width: 1200px) {
     max-width: 900px;

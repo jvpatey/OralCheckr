@@ -1,5 +1,6 @@
 export const colors = {
   disabledBgGrey: "#e0e0e0",
+  bgLightGrey: "#eeeeee",
   bgGrey: "#CCC",
   textGrey: "#848889",
   darkGrey: "#808080",
