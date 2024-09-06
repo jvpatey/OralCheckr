@@ -8,9 +8,15 @@ import { RoutePaths } from "../common/constants/routes";
 import { getFullPath } from "../common/constants/routes";
 import { PageBackground } from "../components/PageBackground";
 import { colors } from "../common/utilities/color-utils";
+import { useState } from "react";
+
+// Enum for login credentials
+enum Credentials {
+  USERNAME = "admin",
+  PASSWORD = "admin",
+}
 
 // styled-component styles for Login Page
-
 const AnimatedCard = styled(Card)`
   border-radius: 15px;
   margin-top: 40px;
@@ -130,11 +136,23 @@ const Button = styled.button<{ $login?: boolean }>`
 
 export function Login() {
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   // Handle login button click
-  const handleLogin = () => {
-    localStorage.setItem("authenticated", "true"); // Set authentication status in local storage
-    navigate(getFullPath(RoutePaths.LANDING));
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (
+      username === Credentials.USERNAME &&
+      password === Credentials.PASSWORD
+    ) {
+      localStorage.setItem("authenticated", "true"); // Set authentication status in local storage
+      navigate(getFullPath(RoutePaths.LANDING));
+    } else {
+      setError("Invalid username or password");
+    }
   };
 
   return (
@@ -150,14 +168,25 @@ export function Login() {
             get personalized recommendations, and track your habits.
           </TextStyle>
           <LoginText>Login</LoginText>
-          <Form>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          <Form onSubmit={handleLogin}>
             <Form.Group controlId="formUsername" className="m-3">
-              <UsernameStyle type="text" placeholder="Enter username" />
+              <UsernameStyle
+                type="text"
+                placeholder="Enter username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </Form.Group>
             <Form.Group controlId="formPassword" className="m-3">
-              <PasswordStyle type="password" placeholder="Enter password" />
+              <PasswordStyle
+                type="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </Form.Group>
-            <Button $login onClick={handleLogin}>
+            <Button $login type="submit">
               Login
             </Button>
           </Form>
