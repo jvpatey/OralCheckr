@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { colors } from "../../../common/utilities/color-utils";
 
 interface ToggleButtonProps {
-  options: { label: string; value: string }[];
+  options: { label: React.ReactNode; value: string }[];
   activeValue: string;
   onChange: (value: string) => void;
 }

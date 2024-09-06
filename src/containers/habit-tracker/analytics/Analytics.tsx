@@ -6,6 +6,9 @@ import { MonthView } from "./month-view/MonthView";
 import { YearView } from "./year-view/YearView";
 import { Habit, Logging } from "../habits/Habits";
 import { LocalStorage } from "../../../common/constants/local-storage";
+import { faCalendarAlt, faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 // Enum for view modes
 enum ViewMode {
@@ -45,9 +48,23 @@ const AnalyticsContainer = styled.div`
   }
 `;
 
+// Helper function to create toggle options
+const createToggleOption = (
+  icon: IconDefinition,
+  label: string,
+  value: ViewMode
+) => ({
+  label: (
+    <>
+      <FontAwesomeIcon icon={icon} /> {label}
+    </>
+  ),
+  value,
+});
+
 const toggleOptions = [
-  { label: "Month View", value: ViewMode.MONTH },
-  { label: "Year View", value: ViewMode.YEAR },
+  createToggleOption(faCalendarAlt, "Monthly Overview", ViewMode.MONTH),
+  createToggleOption(faCalendar, "Yearly Overview", ViewMode.YEAR),
 ];
 
 // The main functional component for the Analytics page of the habit tracker
