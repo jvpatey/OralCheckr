@@ -3,10 +3,12 @@ import { HabitDropdown } from "../HabitDropdown";
 import { Habit } from "../../habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
 import { Heatmap } from "./Heatmap";
-import { HeatmapEntry } from "../../../../common/utilities/heatmap-utils";
 import { Logging } from "../../habits/Habits";
 import { useMemo, useState } from "react";
-import { generateHeatmapData } from "../../../../common/utilities/heatmap-utils";
+import {
+  generateHeatmapData,
+  HeatmapSeries,
+} from "../../../../common/utilities/heatmap-utils";
 import { ViewType } from "../AnalyticsDateSelector";
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 
@@ -55,14 +57,12 @@ export function YearView({
 }: YearViewProps) {
   const [selectedYear, setSelectedYear] = useState<Date>(new Date());
 
-  // Memoized generation of heatmap data for the selected habit and year
-  const heatmapData: HeatmapEntry[] = useMemo(() => {
-    return generateHeatmapData(
-      habitsLog,
-      selectedHabit,
-      selectedYear.getFullYear()
-    );
-  }, [habitsLog, selectedHabit, selectedYear]);
+  // Memoized heatmap data generation
+  const heatmapData: HeatmapSeries[] = useMemo(
+    () =>
+      generateHeatmapData(habitsLog, selectedHabit, selectedYear.getFullYear()),
+    [habitsLog, selectedHabit, selectedYear]
+  );
 
   const handleSelectHabit = (habitName: string) => {
     onSelectHabit(habitName);

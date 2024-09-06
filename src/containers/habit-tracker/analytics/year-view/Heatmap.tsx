@@ -1,14 +1,13 @@
-import { useMemo } from "react";
 import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
+import { useMemo } from "react";
 import {
   colors,
   greenHeatMapShades,
 } from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
-import { HeatmapEntry } from "../../../../common/utilities/heatmap-utils";
 
-// Global constants
+// Global constants for days of the week and month names
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTH_NAMES = [
   "January",
@@ -25,7 +24,7 @@ const MONTH_NAMES = [
   "December",
 ];
 
-// Styled component for the Heatmap container card
+// Styled component for the heatmap container card
 const HeatmapCard = styled.div`
   background-color: ${colors.bgWhite};
   border-radius: 10px;
@@ -51,162 +50,128 @@ const HeatmapCard = styled.div`
   }
 `;
 
-// Function to generate ApexOptions for the heatmap chart
-const HeatmapOptions = (): ApexOptions => ({
-  chart: {
-    height: 350,
-    type: "heatmap",
-    toolbar: {
-      show: false, // disable toolbar on heatmap
-    },
-  },
-  plotOptions: {
-    heatmap: {
-      shadeIntensity: 0.5,
-      colorScale: {
-        ranges: [
-          { from: 0, to: 0, color: colors.bgWhite, name: "0 logs" },
-          { from: 1, to: 1, color: greenHeatMapShades.Light, name: "1 log" },
-          {
-            from: 2,
-            to: 5,
-            color: greenHeatMapShades.MediumLight,
-            name: "2-5 logs",
-          },
-          {
-            from: 6,
-            to: 7,
-            color: greenHeatMapShades.Medium,
-            name: "6-7 logs",
-          },
-          {
-            from: 8,
-            to: 9,
-            color: greenHeatMapShades.MediumDark,
-            name: "8-9 logs",
-          },
-          {
-            from: 10,
-            to: 11,
-            color: greenHeatMapShades.Dark,
-            name: "10-11 logs",
-          },
-          {
-            from: 12,
-            to: Infinity,
-            color: greenHeatMapShades.Darkest,
-            name: "12+ logs",
-          },
-        ],
+// Function to generate the ApexCharts options for the heatmap
+const useHeatmapOptions = (): ApexOptions => {
+  return useMemo(
+    () => ({
+      chart: {
+        height: 350,
+        type: "heatmap",
+        toolbar: { show: false }, // Disable toolbar on the heatmap
       },
-    },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  xaxis: {
-    categories: Array.from({ length: 12 }, (_, i) => i + 1), // Months represented as numbers
-    tickAmount: 10,
-    title: {
-      text: "Months",
-      style: {
-        color: colors.blue,
-        fontSize: "14px",
+      plotOptions: {
+        heatmap: {
+          shadeIntensity: 0.5,
+          colorScale: {
+            ranges: [
+              { from: 0, to: 0, color: colors.bgWhite, name: "0 logs" },
+              {
+                from: 1,
+                to: 1,
+                color: greenHeatMapShades.Light,
+                name: "1 log",
+              },
+              {
+                from: 2,
+                to: 5,
+                color: greenHeatMapShades.MediumLight,
+                name: "2-5 logs",
+              },
+              {
+                from: 6,
+                to: 7,
+                color: greenHeatMapShades.Medium,
+                name: "6-7 logs",
+              },
+              {
+                from: 8,
+                to: 9,
+                color: greenHeatMapShades.MediumDark,
+                name: "8-9 logs",
+              },
+              {
+                from: 10,
+                to: 11,
+                color: greenHeatMapShades.Dark,
+                name: "10-11 logs",
+              },
+              {
+                from: 12,
+                to: Infinity,
+                color: greenHeatMapShades.Darkest,
+                name: "12+ logs",
+              },
+            ],
+          },
+        },
       },
-    },
-    labels: {
-      style: {
-        colors: colors.blue,
+      dataLabels: { enabled: false }, // Disable data labels on heatmap
+      xaxis: {
+        categories: Array.from({ length: 12 }, (_, i) => i + 1), // x-axis categories as months (1-12)
+        tickAmount: 10,
+        title: {
+          text: "Months",
+          style: { color: colors.blue, fontSize: "14px" },
+        },
+        labels: { style: { colors: colors.blue } },
       },
-    },
-  },
-  yaxis: {
-    title: {
-      text: window.innerWidth > 768 ? "Week days" : "",
-      style: {
-        color: colors.blue,
-        fontSize: "14px",
+      yaxis: {
+        title: {
+          text: window.innerWidth > 768 ? "Week days" : "", // Show 'Week days' on large screens
+          style: { color: colors.blue, fontSize: "14px" },
+        },
+        labels: {
+          style: { colors: colors.blue },
+          formatter: (value: number) => DAYS_OF_WEEK[value], // Map numbers to week days
+        },
       },
-    },
-    labels: {
-      style: {
-        colors: colors.blue,
+      grid: {
+        padding:
+          window.innerWidth <= 768
+            ? { top: 2, right: 2, bottom: 2, left: 10 }
+            : { top: 10, right: 20, bottom: 10, left: 20 },
+        borderColor: colors.bgWhite,
       },
-      formatter: (value: number) => DAYS_OF_WEEK[value],
-    },
-  },
-  grid: {
-    padding:
-      window.innerWidth <= 768
-        ? { top: 2, right: 2, bottom: 2, left: 10 }
-        : { top: 10, right: 20, bottom: 10, left: 20 },
-    borderColor: colors.bgWhite,
-  },
-  tooltip: {
-    enabled: true,
-    custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-      // Accessing the day of the month for the current data point
-      const dayOfMonth =
-        w.globals.initialSeries[seriesIndex].data[dataPointIndex].day;
+      tooltip: {
+        enabled: true,
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          // Get the day and month for the current data point
+          const dayOfMonth =
+            w.globals.initialSeries[seriesIndex].data[dataPointIndex].day;
+          const monthIndex = w.globals.seriesX[seriesIndex][dataPointIndex];
+          const month = MONTH_NAMES[monthIndex - 1];
 
-      // Accessing the month index for the current data point
-      const monthIndex = w.globals.seriesX[seriesIndex][dataPointIndex];
+          // Get the log count
+          const logs = series[seriesIndex][dataPointIndex];
 
-      // Mapping the month index to the full month name
-      const month = MONTH_NAMES[monthIndex - 1];
+          // Custom tooltip display
+          return `<div style="padding: 5px; color: ${colors.textGrey}">
+                  <div style="color: ${colors.blue}; font-weight: bold;">${month} ${dayOfMonth}
+                  </div>
+                  Logs: ${logs}
+                </div>`;
+        },
+      },
+    }),
+    []
+  );
+};
 
-      // Accessing the number of logs for the current data point
-      const logs = series[seriesIndex][dataPointIndex];
-
-      // Custom tooltip
-      return `<div style="padding: 5px; color: ${colors.textGrey}">
-                <div style="color: ${colors.blue}; font-weight: bold;">${month} ${dayOfMonth}
-                </div>
-                Logs: ${logs}
-              </div>`;
-    },
-  },
-});
-
+// Interfce for the Heatmap component
 interface HeatmapProps {
-  data: HeatmapEntry[];
+  data: { name: string; data: { x: number; y: number; day: number }[] }[];
 }
 
-// Functional component to render the heatmap - used in the year view of the analytics page of the habit tracker
+// Functional component to render the heatmap chart
 export function Heatmap({ data }: HeatmapProps) {
-  const series = useMemo(() => {
-    // Create a map to group logs by the day of the week
-    const weekDayToLogsMap = new Map<
-      string,
-      { x: number; y: number; day: number }[]
-    >();
+  const options = useHeatmapOptions();
 
-    // Iterate over the data and populate the map
-    data.forEach(({ month, dayOfWeek, logCount, dayOfMonth }) => {
-      // Get existing logs for the day of the week, or initialize a new array
-      const logs = weekDayToLogsMap.get(dayOfWeek.toString()) || [];
-
-      // Add the current log entry to the array
-      logs.push({ x: month, y: logCount, day: dayOfMonth });
-
-      // Update the map with the new log entry
-      weekDayToLogsMap.set(dayOfWeek.toString(), logs);
-    });
-
-    // Convert the map to an array of objects that is suitable for ApexCharts
-    return Array.from(weekDayToLogsMap.entries()).map(([weekDay, logs]) => ({
-      name: weekDay,
-      data: logs,
-    }));
-  }, [data]);
-
-  const options = HeatmapOptions();
-
+  // Render the heatmap chart
   return (
     <HeatmapCard>
       <ReactApexChart
         options={options}
-        series={series}
+        series={data}
         type="heatmap"
         height={350}
       />
