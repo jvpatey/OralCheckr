@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { DayBubble } from "../../../components/habit-tracker/habits/DayBubble";
 import { colors } from "../../../common/utilities/color-utils";
+import { formatDateShort } from "../../../common/utilities/date-utils";
 
 // Container for day bubbles and arrow navigation
 const DayBubbleContainer = styled.div`
@@ -78,7 +79,7 @@ export function DayBubbleSelector({
   onDateChange,
   isEditMode,
 }: DayBubbleSelectorProps) {
-  const today = new Date();
+  const today = formatDateShort(new Date());
 
   // Function to handle week navigation (previous or next) based on direction
   const handleWeekChange = (direction: number) => {
@@ -86,9 +87,9 @@ export function DayBubbleSelector({
     newDate.setDate(selectedFullDate.getDate() + direction * 7); // Move by 7 days
 
     // If the new date is in the future when navigating, set it to today
-    if (newDate > today) {
-      setSelectedFullDate(today);
-      onDateChange(today);
+    if (newDate > new Date()) {
+      setSelectedFullDate(new Date());
+      onDateChange(new Date());
     } else {
       setSelectedFullDate(newDate);
       onDateChange(newDate);
@@ -97,14 +98,16 @@ export function DayBubbleSelector({
 
   // Handler for DayBubble click
   const handleDayClick = (day: Date) => {
-    if (!isEditMode && day <= today) {
+    if (!isEditMode && day <= new Date()) {
       setSelectedFullDate(day);
       onDateChange(day);
     }
   };
 
-  // Check if navigating to the next week should be disabled (if it goes beyond today)
-  const isNextWeekDisabled = today <= daysInWeek[6];
+  // Check if today is in the current week (if yes, disable next arrow)
+  const isCurrentWeek =
+    today >= formatDateShort(daysInWeek[0]) &&
+    today <= formatDateShort(daysInWeek[6]);
 
   return (
     <DayBubbleContainer>
@@ -120,17 +123,20 @@ export function DayBubbleSelector({
       {daysInWeek.map((day, index) => (
         <DayBubble
           key={index}
-          selected={selectedFullDate.getTime() === day.getTime() && !isEditMode}
+          selected={
+            formatDateShort(selectedFullDate) === formatDateShort(day) &&
+            !isEditMode
+          }
           onClick={() => handleDayClick(day)}
           date={day}
-          isEditMode={isEditMode || day > today}
+          isEditMode={isEditMode || day > new Date()}
         />
       ))}
 
       <ArrowButton
         onClick={() => handleWeekChange(1)}
-        $disabled={isEditMode || isNextWeekDisabled}
-        disabled={isEditMode || isNextWeekDisabled}
+        $disabled={isEditMode || isCurrentWeek}
+        disabled={isEditMode || isCurrentWeek}
       >
         <FontAwesomeIcon icon={faChevronRight} />
       </ArrowButton>
