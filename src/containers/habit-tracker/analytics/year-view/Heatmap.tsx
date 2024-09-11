@@ -56,6 +56,7 @@ const useHeatmapOptions = (): ApexOptions => {
       height: 350,
       type: "heatmap",
       toolbar: { show: false }, // Disable toolbar on the heatmap
+      zoom: { enabled: false }, // Disable zooming
     },
     plotOptions: {
       heatmap: {
