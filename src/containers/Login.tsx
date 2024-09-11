@@ -1,4 +1,4 @@
-import { Card } from "react-bootstrap";
+import { Card, Alert } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer";
@@ -69,12 +69,12 @@ const LoginText = styled(Card.Text)`
   font-size: x-large;
   font-weight: 600;
   text-align: center;
-  margin-top: 50px;
+  margin-top: 30px;
 `;
 
 const UsernameStyle = styled(Form.Control)`
   background-color: ${colors.bgWhite};
-  margin-top: 20px;
+  margin-top: 30px;
   border-style: solid;
   border-width: 2px;
   border-color: ${colors.blue};
@@ -87,7 +87,7 @@ const UsernameStyle = styled(Form.Control)`
 
 const PasswordStyle = styled(Form.Control)`
   background-color: #f5f5f5;
-  margin-top: 30px;
+  margin-top: 20px;
   border-style: solid;
   border-width: 2px;
   border-color: ${colors.blue};
@@ -104,8 +104,8 @@ const Button = styled.button<{ $login?: boolean }>`
   color: ${(props) => (props.$login ? colors.bgWhite : colors.bgWhite)};
   font-weight: bold;
   border: 2px solid ${(props) => (props.$login ? colors.blue : colors.blue)};
-  width: 60%;
-  margin-top: 30px;
+  width: 70%;
+  margin-top: 10px;
   border-radius: 20px;
   padding: 0.5em 1em;
   cursor: pointer;
@@ -117,6 +117,13 @@ const Button = styled.button<{ $login?: boolean }>`
     border-color: ${colors.bgWhite};
     border-width: 2px;
   }
+`;
+
+const AlertWrapper = styled.div`
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export function Login() {
@@ -154,7 +161,6 @@ export function Login() {
             get personalized recommendations, and track your habits.
           </TextStyle>
           <LoginText>Login</LoginText>
-          {error && <p style={{ color: "red" }}>{error}</p>}
           <Form onSubmit={handleLogin}>
             <Form.Group controlId="formUsername" className="m-3">
               <UsernameStyle
@@ -172,6 +178,16 @@ export function Login() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
+            <AlertWrapper>
+              <Alert
+                show={!!error}
+                variant="danger"
+                dismissible
+                onClose={() => setError("")}
+              >
+                {error}
+              </Alert>
+            </AlertWrapper>
             <Button $login type="submit">
               Login
             </Button>
