@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import {
   colors,
@@ -46,6 +48,21 @@ const HeatmapCard = styled.div`
   @media (max-width: 480px) {
     width: 100%;
     padding: 5px;
+  }
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 350px;
+`;
+
+const GreenSpinner = styled(Spinner)`
+  color: ${colors.green};
+
+  .spinner-border {
+    border-color: ${colors.green};
   }
 `;
 
@@ -145,33 +162,47 @@ const useHeatmapOptions = (): ApexOptions => {
 
         // Custom tooltip display
         return `<div style="padding: 5px; color: ${colors.textGrey}">
-                <div style="color: ${colors.blue}; font-weight: bold;">${month} ${dayOfMonth}
-                </div>
-                Logs: ${logs}
-              </div>`;
+                  <div style="color: ${colors.blue}; font-weight: bold;">${month} ${dayOfMonth}
+                  </div>
+                  Logs: ${logs}
+                </div>`;
       },
     },
   };
 };
 
-// Interfce for the Heatmap component
+// Interface for the Heatmap component
 interface HeatmapProps {
   data: { name: string; data: { x: number; y: number; day: number }[] }[];
 }
 
 // Functional component to render the heatmap chart
 export function Heatmap({ data }: HeatmapProps) {
+  const [loading, setLoading] = useState(true);
   const options = useHeatmapOptions();
 
-  // Render the heatmap chart
+  useEffect(() => {
+    if (data.length > 0) {
+      setLoading(false); // Set loading to false once the data is ready
+    }
+  }, [data]);
+
   return (
     <HeatmapCard>
-      <ReactApexChart
-        options={options}
-        series={data}
-        type="heatmap"
-        height={350}
-      />
+      {loading ? (
+        <LoadingContainer>
+          <GreenSpinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </GreenSpinner>
+        </LoadingContainer>
+      ) : (
+        <ReactApexChart
+          options={options}
+          series={data}
+          type="heatmap"
+          height={350}
+        />
+      )}
     </HeatmapCard>
   );
 }
