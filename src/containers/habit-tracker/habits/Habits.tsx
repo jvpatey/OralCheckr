@@ -286,6 +286,7 @@ export function Habits() {
                   color={colors.bgWhite}
                   hoverBackgroundColor={colors.bgWhite}
                   hoverColor={colors.red}
+                  disabled={habits.length === 0}
                 />
               )}
               <IconTextButton
