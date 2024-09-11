@@ -79,6 +79,9 @@ export function Analytics() {
     // Fetch habits and logging data from local storage when the component mounts
     const storedHabits = localStorage.getItem(LocalStorage.HABITS);
     const storedLogging = localStorage.getItem(LocalStorage.HABITS_LOG);
+    const storedSelectedHabit = localStorage.getItem(
+      LocalStorage.SELECTED_HABIT
+    );
 
     if (storedHabits) {
       setHabits(JSON.parse(storedHabits) as Habit[]);
@@ -87,10 +90,15 @@ export function Analytics() {
     if (storedLogging) {
       setHabitsLog(JSON.parse(storedLogging) as Logging);
     }
+
+    if (storedSelectedHabit) {
+      setSelectedHabit(storedSelectedHabit);
+    }
   }, []);
 
   const handleSelectHabit = (habitName: string) => {
     setSelectedHabit(habitName);
+    localStorage.setItem(LocalStorage.SELECTED_HABIT, habitName);
   };
 
   return (

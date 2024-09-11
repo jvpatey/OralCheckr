@@ -194,7 +194,16 @@ export function Habits() {
   // Handler for deleting a habit
   const handleDeleteHabit = (index: number) => {
     if (window.confirm("Are you sure you want to delete this habit?")) {
+      const habitToDelete = habits[index].name;
       const updatedHabits = habits.filter((_, idx) => idx !== index);
+
+      // Check if the deleted habit is the selected habit
+      const selectedHabit = localStorage.getItem(LocalStorage.SELECTED_HABIT);
+
+      if (selectedHabit && selectedHabit === habitToDelete) {
+        localStorage.removeItem(LocalStorage.SELECTED_HABIT);
+      }
+
       updateHabits(updatedHabits, setHabits);
     }
   };
@@ -208,6 +217,12 @@ export function Habits() {
       setHabitsLog({});
       localStorage.removeItem(LocalStorage.HABITS);
       localStorage.removeItem(LocalStorage.HABITS_LOG);
+
+      const selectedHabit = localStorage.getItem(LocalStorage.SELECTED_HABIT);
+
+      if (selectedHabit) {
+        localStorage.removeItem(LocalStorage.SELECTED_HABIT);
+      }
     }
   };
 
