@@ -125,16 +125,16 @@ export function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Access environment variables from Vite
-  const storedUsername = import.meta.env.VITE_USERNAME;
-  const storedPassword = import.meta.env.VITE_PASSWORD;
+  // Access environment variables from Vite or use "admin"
+  const storedUsername = import.meta.env.VITE_USERNAME || "admin";
+  const storedPassword = import.meta.env.VITE_PASSWORD || "admin";
 
   // Handle login button click
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (username === storedUsername && password === storedPassword) {
-      localStorage.setItem("authenticated", "true"); // Set authentication status in local storage
+      localStorage.setItem("authenticated", "true");
       navigate(getFullPath(RoutePaths.LANDING));
     } else {
       setError("Invalid username or password");
