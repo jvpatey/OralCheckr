@@ -132,20 +132,34 @@ export function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Access environment variables from Vite or use "admin"
+  // Environment variables or default values
   const storedUsername = import.meta.env.VITE_USERNAME || "admin";
   const storedPassword = import.meta.env.VITE_PASSWORD || "admin";
 
-  // Handle login button click
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Handle username input change
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
 
+  // Handle password input change
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  // Handle form submission for login
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     if (username === storedUsername && password === storedPassword) {
       localStorage.setItem("authenticated", "true");
       navigate(getFullPath(RoutePaths.LANDING));
     } else {
       setError("Invalid username or password");
     }
+  };
+
+  // Handle closing the alert
+  const handleAlertClose = () => {
+    setError("");
   };
 
   return (
@@ -161,13 +175,13 @@ export function Login() {
             get personalized recommendations, and track your habits.
           </TextStyle>
           <LoginText>Login</LoginText>
-          <Form onSubmit={handleLogin}>
+          <Form onSubmit={handleLoginSubmit}>
             <Form.Group controlId="formUsername" className="m-3">
               <UsernameStyle
                 type="text"
                 placeholder="Enter username"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={handleUsernameChange}
               />
             </Form.Group>
             <Form.Group controlId="formPassword" className="m-3">
@@ -175,7 +189,7 @@ export function Login() {
                 type="password"
                 placeholder="Enter password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePasswordChange}
               />
             </Form.Group>
             <AlertWrapper>
@@ -183,7 +197,7 @@ export function Login() {
                 show={!!error}
                 variant="danger"
                 dismissible
-                onClose={() => setError("")}
+                onClose={handleAlertClose}
               >
                 {error}
               </Alert>
