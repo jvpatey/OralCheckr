@@ -10,12 +10,6 @@ import { PageBackground } from "../components/PageBackground";
 import { colors } from "../common/utilities/color-utils";
 import { useState } from "react";
 
-// Enum for login credentials
-enum Credentials {
-  USERNAME = "admin",
-  PASSWORD = "admin",
-}
-
 // styled-component styles for Login Page
 const AnimatedCard = styled(Card)`
   border-radius: 15px;
@@ -57,19 +51,10 @@ const LogoImgStyle = styled.img`
   margin-bottom: 20px;
 `;
 
-// GradientText component for applying gradient effect to text
-const GradientText = styled.span`
+const LogoText = styled.span`
   font-size: 40px;
   font-weight: bold;
-  background: linear-gradient(
-    90deg,
-    ${colors.bgWhite} 0%,
-    ${colors.green} 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
+  color: ${colors.bgWhite};
 `;
 
 const TextStyle = styled(Card.Text)`
@@ -140,14 +125,15 @@ export function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  // Access environment variables from Vite
+  const storedUsername = import.meta.env.VITE_USERNAME;
+  const storedPassword = import.meta.env.VITE_PASSWORD;
+
   // Handle login button click
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (
-      username === Credentials.USERNAME &&
-      password === Credentials.PASSWORD
-    ) {
+    if (username === storedUsername && password === storedPassword) {
       localStorage.setItem("authenticated", "true"); // Set authentication status in local storage
       navigate(getFullPath(RoutePaths.LANDING));
     } else {
@@ -161,7 +147,7 @@ export function Login() {
         <CardBody>
           <LogoStyle>
             <LogoImgStyle src="./OralCheckr/images/logo-white.png" alt="Logo" />
-            <GradientText>OralCheckr</GradientText>
+            <LogoText>OralCheckr</LogoText>
           </LogoStyle>
           <TextStyle>
             Take our questionnaire to get insight on your oral health status,
