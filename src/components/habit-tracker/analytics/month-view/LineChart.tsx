@@ -42,8 +42,6 @@ const generateChartOptions = (
   daysInMonth: number,
   month: string
 ): ApexCharts.ApexOptions => {
-  const capitalizedMonth = upperFirst(month);
-
   return {
     chart: {
       type: "line",
@@ -99,7 +97,7 @@ const generateChartOptions = (
     tooltip: {
       enabled: true,
       x: {
-        formatter: (dayOfMonth: number) => `${capitalizedMonth} ${dayOfMonth}`,
+        formatter: (dayOfMonth: number) => `${upperFirst(month)} ${dayOfMonth}`,
       },
       y: {
         formatter: (val: number) => `${val} logs`,
