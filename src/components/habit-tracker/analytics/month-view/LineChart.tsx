@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Logging } from "../../../../containers/habit-tracker/habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
 import { getDaysInMonth } from "../../../../common/utilities/habit-analytics";
+import { upperFirst } from "lodash";
 
 // Styled component for the chart container
 const ChartContainer = styled.div`
@@ -41,7 +42,7 @@ const generateChartOptions = (
   daysInMonth: number,
   month: string
 ): ApexCharts.ApexOptions => {
-  const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+  const capitalizedMonth = upperFirst(month);
 
   return {
     chart: {
