@@ -182,6 +182,7 @@ export function Login() {
                 placeholder="Enter username"
                 value={username}
                 onChange={handleUsernameChange}
+                autoComplete="username"
               />
             </Form.Group>
             <Form.Group controlId="formPassword" className="m-3">
@@ -190,6 +191,7 @@ export function Login() {
                 placeholder="Enter password"
                 value={password}
                 onChange={handlePasswordChange}
+                autoComplete="current-password"
               />
             </Form.Group>
             <AlertWrapper>
