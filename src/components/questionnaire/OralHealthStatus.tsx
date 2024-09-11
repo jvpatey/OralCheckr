@@ -34,8 +34,8 @@ const StyledText = styled.p`
   }
 `;
 
-const ScoreSpan = styled.span<{ scoreColor: string }>`
-  color: ${(props) => props.scoreColor};
+const ScoreSpan = styled.span<{ $scoreColor: string }>`
+  color: ${(props) => props.$scoreColor};
   font-weight: bold;
   font-size: 20px;
 
@@ -44,11 +44,11 @@ const ScoreSpan = styled.span<{ scoreColor: string }>`
   }
 `;
 
-const CustomProgressBar = styled(ProgressBar)<{ scoreColor: string }>`
+const CustomProgressBar = styled(ProgressBar)<{ $scoreColor: string }>`
   height: 20px;
   margin-top: 20px;
   .progress-bar {
-    background-color: ${(props) => props.scoreColor};
+    background-color: ${(props) => props.$scoreColor};
     font-size: 14px;
     border-radius: 20px;
   }
@@ -103,12 +103,12 @@ export function OralHealthStatus() {
           <>
             <StyledText>
               Your current oral health score is{" "}
-              <ScoreSpan scoreColor={scoreColor}>{score}</ScoreSpan>.
+              <ScoreSpan $scoreColor={scoreColor}>{score}</ScoreSpan>.
             </StyledText>
             <CustomProgressBar
               now={score}
               label={`${score}%`}
-              scoreColor={scoreColor}
+              $scoreColor={scoreColor}
             />
           </>
         )}
