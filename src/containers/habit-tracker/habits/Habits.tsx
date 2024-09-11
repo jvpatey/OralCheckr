@@ -22,6 +22,7 @@ import {
   faPlus,
   faPencilAlt,
   faTimes,
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../../common/utilities/color-utils";
 import { formatDateLong } from "../../../common/utilities/date-utils";
@@ -198,6 +199,18 @@ export function Habits() {
     }
   };
 
+  // Handler for deleting all habits and logs
+  const handleDeleteAllHabits = () => {
+    if (
+      window.confirm("Are you sure you want to delete all habits and logs?")
+    ) {
+      updateHabits([], setHabits);
+      setHabitsLog({});
+      localStorage.removeItem(LocalStorage.HABITS);
+      localStorage.removeItem(LocalStorage.HABITS_LOG);
+    }
+  };
+
   // Handler for editing a habit
   const handleEditHabit = (index: number) => {
     const habitToEdit = habits[index];
@@ -262,6 +275,17 @@ export function Habits() {
                   color={colors.bgWhite}
                   hoverBackgroundColor={colors.bgWhite}
                   hoverColor={colors.green}
+                />
+              )}
+              {isEditMode && (
+                <IconTextButton
+                  icon={faTrashAlt}
+                  label="Delete All"
+                  onClick={handleDeleteAllHabits}
+                  backgroundColor={colors.red}
+                  color={colors.bgWhite}
+                  hoverBackgroundColor={colors.bgWhite}
+                  hoverColor={colors.red}
                 />
               )}
               <IconTextButton
