@@ -1,3 +1,4 @@
+import { eachDayOfInterval } from 'date-fns';
 import { Logging } from "../../containers/habit-tracker/habits/Habits";
 import { formatDateLong } from "./date-utils";
 
@@ -23,9 +24,14 @@ export function generateHeatmapData(
   const logsForHabit = habitLog[habitName]; // Logs specific to the selected habit
   const logsGroupedByWeekday = new Map<string, HeatmapDataPoint[]>(); // Map to group logs by the day of the week
 
+  // Dynamically get th number of days of the selected year
+  const daysInYear = eachDayOfInterval({
+    start: new Date(selectedYear, 0, 1),
+    end: new Date(selectedYear, 11, 31),
+  });
+
   // Iterate over each day of the year
-  for (let dayIndex = 0; dayIndex < 365; dayIndex++) {
-    const currentDate = new Date(selectedYear, 0, 1 + dayIndex);
+  daysInYear.forEach((currentDate) => {
     const logCountForDay =
       logsForHabit?.[selectedYear]?.[formatDateLong(currentDate)]?.[currentDate.getDate()] || 0;
 
@@ -41,7 +47,7 @@ export function generateHeatmapData(
 
     // Update the map with the new log entry for this day of the week
     logsGroupedByWeekday.set(dayOfWeek.toString(), logsForWeekday);
-  }
+  });
 
   // Convert the map to an array of series, suitable for ApexCharts
   return Array.from(logsGroupedByWeekday.entries()).map(([weekday, logs]) => ({
