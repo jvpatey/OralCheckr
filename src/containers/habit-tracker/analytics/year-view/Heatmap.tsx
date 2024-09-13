@@ -25,6 +25,7 @@ const MONTH_NAMES = [
   "December",
 ];
 
+// Heatmap card styles with media queries for responsiveness
 const HeatmapCard = styled.div`
   background-color: ${colors.bgWhite};
   border-radius: 10px;
@@ -81,13 +82,32 @@ const GreenSpinner = styled(Spinner)`
 `;
 
 // Function to generate the ApexCharts options for the heatmap
-const useHeatmapOptions = (windowWidth: number): ApexOptions => {
+const useHeatmapOptions = (
+  windowWidth: number,
+  setRendered: () => void
+): ApexOptions => {
   return {
     chart: {
       height: 350,
       type: "heatmap",
       toolbar: { show: false }, // Disable toolbar on the heatmap
       zoom: { enabled: false }, // Disable zooming
+      animations: {
+        enabled: true,
+        speed: 800,
+        animateGradually: { enabled: true },
+        dynamicAnimation: { enabled: true },
+      },
+      events: {
+        mounted: () => {
+          console.log("Chart mounted event triggered");
+          setRendered();
+        },
+        animationEnd: () => {
+          console.log("Chart animationEnd event triggered");
+          setRendered();
+        },
+      },
     },
     plotOptions: {
       heatmap: {
@@ -188,6 +208,7 @@ interface HeatmapProps {
 // Functional component to render the heatmap chart
 export function Heatmap({ data }: HeatmapProps) {
   const [loading, setLoading] = useState(true);
+  const [rendered, setRendered] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   // Event listener to update windowWidth on resize
@@ -203,17 +224,34 @@ export function Heatmap({ data }: HeatmapProps) {
     };
   }, []);
 
-  const options = useHeatmapOptions(windowWidth);
+  const handleRendered = () => {
+    console.log("Chart rendered, setting 'rendered' to true");
+    setRendered(true);
+  };
+
+  const options = useHeatmapOptions(windowWidth, handleRendered);
 
   useEffect(() => {
     if (data.length > 0) {
-      setLoading(false); // Set loading to false once the data is ready
+      console.log("Data loaded, setting 'loading' to false");
+      setLoading(false);
     }
   }, [data]);
 
+  // Fallback: Remove spinner after 1.5 seconds if mounted/animationEnd doesn't fire
+  useEffect(() => {
+    if (!rendered) {
+      const timeout = setTimeout(() => {
+        console.log("Fallback: forcing spinner to disappear after 1.5 seconds");
+        setRendered(true);
+      }, 1500);
+      return () => clearTimeout(timeout);
+    }
+  }, [rendered]);
+
   return (
     <HeatmapCard>
-      {loading ? (
+      {loading || !rendered ? (
         <LoadingContainer>
           <GreenSpinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
