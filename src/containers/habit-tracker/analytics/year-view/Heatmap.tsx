@@ -25,23 +25,37 @@ const MONTH_NAMES = [
   "December",
 ];
 
-// Styled component for the heatmap container card
 const HeatmapCard = styled.div`
   background-color: ${colors.bgWhite};
   border-radius: 10px;
   padding: 10px;
-  width: 900px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 1100px;
   margin-top: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  @media (min-width: 1280px) {
+    max-width: 1100px;
+    padding: 10px;
+  }
+
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    max-width: 1100px;
+  }
 
   @media (max-width: 1024px) {
-    width: 95%;
+    max-width: 750px;
+    padding: 5px;
+  }
+
+  @media (max-width: 820px) {
+    max-width: 600px;
     padding: 5px;
   }
 
   @media (max-width: 768px) {
-    width: 100%;
+    max-width: 550px;
     padding: 5px;
   }
 
@@ -67,7 +81,7 @@ const GreenSpinner = styled(Spinner)`
 `;
 
 // Function to generate the ApexCharts options for the heatmap
-const useHeatmapOptions = (): ApexOptions => {
+const useHeatmapOptions = (windowWidth: number): ApexOptions => {
   return {
     chart: {
       height: 350,
@@ -81,12 +95,7 @@ const useHeatmapOptions = (): ApexOptions => {
         colorScale: {
           ranges: [
             { from: 0, to: 0, color: colors.bgWhite, name: "0 logs" },
-            {
-              from: 1,
-              to: 1,
-              color: greenHeatMapShades.Light,
-              name: "1 log",
-            },
+            { from: 1, to: 1, color: greenHeatMapShades.Light, name: "1 log" },
             {
               from: 2,
               to: 5,
@@ -133,17 +142,17 @@ const useHeatmapOptions = (): ApexOptions => {
     },
     yaxis: {
       title: {
-        text: window.innerWidth > 768 ? "Week days" : "", // Show 'Week days' on large screens
+        text: windowWidth > 768 ? "Week days" : "", // Show 'Week days' on larger screens, hide on smaller screens
         style: { color: colors.blue, fontSize: "14px" },
       },
       labels: {
         style: { colors: colors.blue },
-        formatter: (value: number) => DAYS_OF_WEEK[value], // Map numbers to week days
+        formatter: (value: number) => DAYS_OF_WEEK[value],
       },
     },
     grid: {
       padding:
-        window.innerWidth <= 768
+        windowWidth <= 768
           ? { top: 2, right: 2, bottom: 2, left: 10 }
           : { top: 10, right: 20, bottom: 10, left: 20 },
       borderColor: colors.bgWhite,
@@ -179,7 +188,22 @@ interface HeatmapProps {
 // Functional component to render the heatmap chart
 export function Heatmap({ data }: HeatmapProps) {
   const [loading, setLoading] = useState(true);
-  const options = useHeatmapOptions();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // Event listener to update windowWidth on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const options = useHeatmapOptions(windowWidth);
 
   useEffect(() => {
     if (data.length > 0) {

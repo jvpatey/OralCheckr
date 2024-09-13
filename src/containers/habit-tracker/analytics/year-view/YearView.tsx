@@ -31,6 +31,16 @@ const ViewContainer = styled.div`
   align-items: center;
   margin-top: 5px;
   animation: ${fadeUp} 0.5s ease-out;
+  width: 90%;
+  max-width: 1200px;
+
+  @media (min-width: 1280px) {
+    max-width: 1200px;
+  }
+
+  @media (min-width: 1024px) {
+    max-width: 1100px;
+  }
 `;
 
 const HabitsTitle = styled.h3`
