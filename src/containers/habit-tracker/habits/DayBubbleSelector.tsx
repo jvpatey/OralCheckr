@@ -7,6 +7,7 @@ import {
 import { DayBubble } from "../../../components/habit-tracker/habits/DayBubble";
 import { colors } from "../../../common/utilities/color-utils";
 import { formatDateShort } from "../../../common/utilities/date-utils";
+import { addWeeks, isSameWeek, subWeeks } from "date-fns";
 
 // Container for day bubbles and arrow navigation
 const DayBubbleContainer = styled.div`
@@ -79,17 +80,16 @@ export function DayBubbleSelector({
   onDateChange,
   isEditMode,
 }: DayBubbleSelectorProps) {
-  const today = formatDateShort(new Date());
+  const today = new Date();
 
   // Function to handle week navigation (previous or next) based on direction
   const handleWeekChange = (direction: number) => {
-    const newDate = new Date(selectedFullDate);
-    newDate.setDate(selectedFullDate.getDate() + direction * 7); // Move by 7 days
-
+    const newDate = direction === -1 ? subWeeks(selectedFullDate, 1) : addWeeks(selectedFullDate, 1);
+    
     // If the new date is in the future when navigating, set it to today
-    if (newDate > new Date()) {
-      setSelectedFullDate(new Date());
-      onDateChange(new Date());
+    if (newDate > today) {
+      setSelectedFullDate(today);
+      onDateChange(today);
     } else {
       setSelectedFullDate(newDate);
       onDateChange(newDate);
@@ -98,16 +98,14 @@ export function DayBubbleSelector({
 
   // Handler for DayBubble click
   const handleDayClick = (day: Date) => {
-    if (!isEditMode && day <= new Date()) {
+    if (!isEditMode && day <= today) {
       setSelectedFullDate(day);
       onDateChange(day);
     }
   };
 
   // Check if today is in the current week (if yes, disable next arrow)
-  const isCurrentWeek =
-    today >= formatDateShort(daysInWeek[0]) &&
-    today <= formatDateShort(daysInWeek[6]);
+  const isCurrentWeek = isSameWeek(today, selectedFullDate);
 
   return (
     <DayBubbleContainer>
@@ -129,7 +127,7 @@ export function DayBubbleSelector({
           }
           onClick={() => handleDayClick(day)}
           date={day}
-          isEditMode={isEditMode || day > new Date()}
+          isEditMode={isEditMode || day > today}
         />
       ))}
 
