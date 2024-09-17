@@ -78,9 +78,8 @@ const getScoreColor = (score: number) => {
     return colors.green;
   } else if (score >= 50) {
     return colors.yellow;
-  } else {
-    return colors.red;
   }
+    return colors.red;
 };
 
 // Functional component for the Oral Health Status Card
