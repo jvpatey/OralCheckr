@@ -24,14 +24,14 @@ export function generateHeatmapData(
   const logsForHabit = habitLog[habitName]; // Logs specific to the selected habit
   const logsGroupedByWeekday = new Map<string, HeatmapDataPoint[]>(); // Map to group logs by the day of the week
 
-  // Dynamically get th number of days of the selected year
+  // Dynamically get the number of days of the selected year
   const daysInYear = eachDayOfInterval({
     start: new Date(selectedYear, 0, 1),
     end: new Date(selectedYear, 11, 31),
   });
 
   // Iterate over each day of the year
-  daysInYear.forEach((currentDate) => {
+  daysInYear.forEach((currentDate: Date) => {
     const logCountForDay =
       logsForHabit?.[selectedYear]?.[formatDateLong(currentDate)]?.[currentDate.getDate()] || 0;
 
