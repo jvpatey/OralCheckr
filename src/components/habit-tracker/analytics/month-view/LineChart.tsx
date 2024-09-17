@@ -2,7 +2,7 @@ import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
 import { Logging } from "../../../../containers/habit-tracker/habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
-import { getDaysInMonth } from "../../../../common/utilities/habit-analytics";
+import { getDaysInMonth } from 'date-fns';
 import { upperFirst } from "lodash";
 
 // Styled component for the chart container
@@ -162,10 +162,7 @@ export function LineChart({
   month,
 }: LineChartProps) {
   const logsForHabit = habitsLog[selectedHabit]?.[year]?.[month] || {};
-  const daysInMonth = getDaysInMonth(
-    year,
-    new Date(`${month} 1, ${year}`).getMonth()
-  );
+  const daysInMonth = getDaysInMonth(new Date(year, Number(month) - 1));
 
   // Create an array to store the number of logs for each day of the month
   const seriesData = Array.from({ length: daysInMonth }, (_, dayIndex) => {
