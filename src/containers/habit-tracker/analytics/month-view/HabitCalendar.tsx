@@ -6,6 +6,9 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Logging } from "../../habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
+import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
+import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
+import { formatMonthYear } from "../../../../common/utilities/date-utils";
 
 interface CalendarProgressProps {
   habitsLog: Logging;
@@ -152,11 +155,17 @@ export function HabitCalendar({
   selectedMonth,
 }: CalendarProgressProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [isCalendarView, setIsCalendarView] = useState(true);
 
   // Update the selected date whenever the selected month changes
   useEffect(() => {
     setSelectedDate(selectedMonth);
   }, [selectedMonth]);
+
+  // Handler function to toggle calendar view
+  const handleToggleView = (view: boolean) => {
+    setIsCalendarView(view);
+  };
 
   // Calculate the progress of logs vs count
   const getDayProgress = (day: number) => {
@@ -186,27 +195,38 @@ export function HabitCalendar({
   };
 
   // Display the current month and year based on the selected date
-  const currentMonthYear = `${selectedDate?.toLocaleDateString("en-US", {
-    month: "long",
-  })} ${selectedDate?.getFullYear()}`;
+  const currentMonthYear = formatMonthYear(selectedDate ?? new Date());
 
   return (
     <CalendarContainer>
       <MonthYearDisplay>{currentMonthYear}</MonthYearDisplay>
-      <DaysHeader>
-        {daysOfWeek.map((day, index) => (
-          <DayName key={index}>{day}</DayName>
-        ))}
-      </DaysHeader>
-      <DatePicker
-        selected={selectedDate}
-        inline
-        renderDayContents={(day) => renderDayContents(day)}
-        calendarClassName="custom-calendar"
-        formatWeekDay={() => ""}
-        showPopperArrow={false}
-        onChange={() => {}}
+      <CalendarChartToggle
+        isCalendarView={isCalendarView}
+        onToggleView={handleToggleView}
       />
+      {isCalendarView ? (
+        <>
+          <DaysHeader>
+            {daysOfWeek.map((day, index) => (
+              <DayName key={index}>{day}</DayName>
+            ))}
+          </DaysHeader>
+          <DatePicker
+            selected={selectedDate}
+            inline
+            renderDayContents={(day) => renderDayContents(day)}
+            calendarClassName="custom-calendar"
+            showPopperArrow={false}
+          />
+        </>
+      ) : (
+        <LineChart
+          habitsLog={habitsLog}
+          selectedHabit={selectedHabit}
+          year={year}
+          month={month}
+        />
+      )}
     </CalendarContainer>
   );
 }

@@ -2,7 +2,8 @@ import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
 import { Logging } from "../../../../containers/habit-tracker/habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
-import { getDaysInMonth } from "../../../../common/utilities/habit-analytics";
+import { getDaysInMonth } from 'date-fns';
+import { upperFirst } from "lodash";
 
 // Styled component for the chart container
 const ChartContainer = styled.div`
@@ -39,13 +40,8 @@ interface LineChartProps {
 // Function to generate the ApexCharts options object
 const generateChartOptions = (
   daysInMonth: number,
-  year: number,
-  monthIndex: number
+  month: string
 ): ApexCharts.ApexOptions => {
-  const monthName = new Date(year, monthIndex).toLocaleString("default", {
-    month: "long",
-  });
-
   return {
     chart: {
       type: "line",
@@ -59,9 +55,7 @@ const generateChartOptions = (
       width: 2,
     },
     xaxis: {
-      categories: Array.from({ length: daysInMonth }, (_, i) =>
-        (i + 1).toString()
-      ),
+      categories: Array.from({ length: daysInMonth }, (_, i) => i + 1),
       title: {
         text: "Day of the Month",
         style: {
@@ -103,7 +97,7 @@ const generateChartOptions = (
     tooltip: {
       enabled: true,
       x: {
-        formatter: (dayOfMonth: number) => `${monthName} ${dayOfMonth}`,
+        formatter: (dayOfMonth: number) => `${upperFirst(month)} ${dayOfMonth}`,
       },
       y: {
         formatter: (val: number) => `${val} logs`,
@@ -168,10 +162,7 @@ export function LineChart({
   month,
 }: LineChartProps) {
   const logsForHabit = habitsLog[selectedHabit]?.[year]?.[month] || {};
-  const daysInMonth = getDaysInMonth(year, new Date().getMonth());
-
-  // Convert month name to zero-based month index
-  const monthIndex = new Date(`${month} 1, ${year}`).getMonth();
+  const daysInMonth = getDaysInMonth(new Date(year, Number(month) - 1));
 
   // Create an array to store the number of logs for each day of the month
   const seriesData = Array.from({ length: daysInMonth }, (_, dayIndex) => {
@@ -181,7 +172,7 @@ export function LineChart({
   });
 
   // Get the options object for ApexCharts
-  const options = generateChartOptions(daysInMonth, year, monthIndex);
+  const options = generateChartOptions(daysInMonth, month);
 
   const series = [
     {

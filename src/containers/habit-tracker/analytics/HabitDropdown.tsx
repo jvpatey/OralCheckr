@@ -3,13 +3,12 @@ import styled from "styled-components";
 import { Dropdown } from "react-bootstrap";
 import { Habit } from "../habits/Habits";
 import { colors } from "../../../common/utilities/color-utils";
+import { LocalStorage } from "../../../common/constants/local-storage";
 
 interface HabitDropdownProps {
   habits?: Habit[];
   onSelectHabit: (habitName: string) => void;
 }
-
-const SELECTED_HABIT_KEY = "selectedHabit";
 
 // Custom styled components for the dropdown
 const CustomDropdownToggle = styled(Dropdown.Toggle)`
@@ -62,7 +61,7 @@ export function HabitDropdown({
 
   useEffect(() => {
     // Retrieve the selected habit from localStorage when the component mounts
-    const storedHabit = localStorage.getItem(SELECTED_HABIT_KEY);
+    const storedHabit = localStorage.getItem(LocalStorage.SELECTED_HABIT);
     if (storedHabit && habits.some((habit) => habit.name === storedHabit)) {
       setSelectedHabit(storedHabit);
       onSelectHabit(storedHabit);
@@ -72,7 +71,7 @@ export function HabitDropdown({
   const handleSelect = (eventKey: string | null) => {
     if (eventKey) {
       setSelectedHabit(eventKey);
-      localStorage.setItem(SELECTED_HABIT_KEY, eventKey);
+      localStorage.setItem(LocalStorage.SELECTED_HABIT, eventKey);
       onSelectHabit(eventKey);
     }
   };

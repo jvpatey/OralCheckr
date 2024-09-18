@@ -1,4 +1,4 @@
-import { Card } from "react-bootstrap";
+import { Card, Alert } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer";
@@ -8,9 +8,9 @@ import { RoutePaths } from "../common/constants/routes";
 import { getFullPath } from "../common/constants/routes";
 import { PageBackground } from "../components/PageBackground";
 import { colors } from "../common/utilities/color-utils";
+import { useState } from "react";
 
 // styled-component styles for Login Page
-
 const AnimatedCard = styled(Card)`
   border-radius: 15px;
   margin-top: 40px;
@@ -48,22 +48,13 @@ const LogoStyle = styled.div`
 
 const LogoImgStyle = styled.img`
   height: 60px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 
-// GradientText component for applying gradient effect to text
-const GradientText = styled.span`
+const LogoText = styled.span`
   font-size: 40px;
   font-weight: bold;
-  background: linear-gradient(
-    90deg,
-    ${colors.bgWhite} 0%,
-    ${colors.green} 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
+  color: ${colors.bgWhite};
 `;
 
 const TextStyle = styled(Card.Text)`
@@ -78,12 +69,12 @@ const LoginText = styled(Card.Text)`
   font-size: x-large;
   font-weight: 600;
   text-align: center;
-  margin-top: 50px;
+  margin-top: 30px;
 `;
 
 const UsernameStyle = styled(Form.Control)`
   background-color: ${colors.bgWhite};
-  margin-top: 20px;
+  margin-top: 30px;
   border-style: solid;
   border-width: 2px;
   border-color: ${colors.blue};
@@ -96,7 +87,7 @@ const UsernameStyle = styled(Form.Control)`
 
 const PasswordStyle = styled(Form.Control)`
   background-color: #f5f5f5;
-  margin-top: 30px;
+  margin-top: 20px;
   border-style: solid;
   border-width: 2px;
   border-color: ${colors.blue};
@@ -113,8 +104,8 @@ const Button = styled.button<{ $login?: boolean }>`
   color: ${(props) => (props.$login ? colors.bgWhite : colors.bgWhite)};
   font-weight: bold;
   border: 2px solid ${(props) => (props.$login ? colors.blue : colors.blue)};
-  width: 60%;
-  margin-top: 30px;
+  width: 70%;
+  margin-top: 10px;
   border-radius: 20px;
   padding: 0.5em 1em;
   cursor: pointer;
@@ -128,13 +119,47 @@ const Button = styled.button<{ $login?: boolean }>`
   }
 `;
 
+const AlertWrapper = styled.div`
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export function Login() {
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  // Handle login button click
-  const handleLogin = () => {
-    localStorage.setItem("authenticated", "true"); // Set authentication status in local storage
-    navigate(getFullPath(RoutePaths.LANDING));
+  // Environment variables or default values
+  const storedUsername = import.meta.env.VITE_USERNAME || "admin";
+  const storedPassword = import.meta.env.VITE_PASSWORD || "admin";
+
+  // Handle username input change
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
+
+  // Handle password input change
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  // Handle form submission for login
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (username === storedUsername && password === storedPassword) {
+      localStorage.setItem("authenticated", "true");
+      navigate(getFullPath(RoutePaths.LANDING));
+    } else {
+      setError("Invalid username or password");
+    }
+  };
+
+  // Handle closing the alert
+  const handleAlertClose = () => {
+    setError("");
   };
 
   return (
@@ -143,21 +168,43 @@ export function Login() {
         <CardBody>
           <LogoStyle>
             <LogoImgStyle src="./OralCheckr/images/logo-white.png" alt="Logo" />
-            <GradientText>OralCheckr</GradientText>
+            <LogoText>OralCheckr</LogoText>
           </LogoStyle>
           <TextStyle>
             Take our questionnaire to get insight on your oral health status,
             get personalized recommendations, and track your habits.
           </TextStyle>
           <LoginText>Login</LoginText>
-          <Form>
+          <Form onSubmit={handleLoginSubmit}>
             <Form.Group controlId="formUsername" className="m-3">
-              <UsernameStyle type="text" placeholder="Enter username" />
+              <UsernameStyle
+                type="text"
+                placeholder="Enter username"
+                value={username}
+                onChange={handleUsernameChange}
+                autoComplete="username"
+              />
             </Form.Group>
             <Form.Group controlId="formPassword" className="m-3">
-              <PasswordStyle type="password" placeholder="Enter password" />
+              <PasswordStyle
+                type="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={handlePasswordChange}
+                autoComplete="current-password"
+              />
             </Form.Group>
-            <Button $login onClick={handleLogin}>
+            <AlertWrapper>
+              <Alert
+                show={!!error}
+                variant="danger"
+                dismissible
+                onClose={handleAlertClose}
+              >
+                {error}
+              </Alert>
+            </AlertWrapper>
+            <Button $login type="submit">
               Login
             </Button>
           </Form>

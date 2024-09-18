@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import _ from "lodash";
 import { PageBackground } from "../../../components/PageBackground";
 import { IconTextButton } from "../../../components/habit-tracker/habits/IconTextButton";
-import { DateRangePicker } from "./DateRangePicker";
+import { WeekPicker } from "./WeekPicker";
 import { AddEditHabitModal } from "./AddEditHabitModal";
 import { cloneDeep } from "lodash";
 import {
@@ -22,8 +22,10 @@ import {
   faPlus,
   faPencilAlt,
   faTimes,
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../../common/utilities/color-utils";
+import { formatDateLong } from "../../../common/utilities/date-utils";
 
 // Utility function to update habit data in state and localStorage
 const updateHabits = (
@@ -74,9 +76,7 @@ const manageLogging = (
   habits: Habit[]
 ) => {
   const year = selectedDate.getFullYear();
-  const month = selectedDate
-    .toLocaleString("default", { month: "long" })
-    .toLowerCase();
+  const month = formatDateLong(selectedDate);
   const day = selectedDate.getDate();
 
   const updatedLogging = cloneDeep(logging);
@@ -191,13 +191,29 @@ export function Habits() {
     resetHabitForm(setNewHabit, setOriginalHabit);
   };
 
-  // Handler for deleting a habit
-  const handleDeleteHabit = (index: number) => {
-    if (window.confirm("Are you sure you want to delete this habit?")) {
-      const updatedHabits = habits.filter((_, idx) => idx !== index);
-      updateHabits(updatedHabits, setHabits);
-    }
-  };
+// Handler for deleting a habit
+const handleDeleteHabit = (index: number) => {
+  if (window.confirm("Are you sure you want to delete this habit?")) {
+    const updatedHabits = habits.filter((_, idx) => idx !== index);
+
+    // Remove the selected habit from localStorage
+    localStorage.removeItem(LocalStorage.SELECTED_HABIT);
+
+    updateHabits(updatedHabits, setHabits);
+  }
+};
+
+// Handler for deleting all habits and logs
+const handleDeleteAllHabits = () => {
+  if (window.confirm("Are you sure you want to delete all habits and logs?")) {
+    updateHabits([], setHabits);
+    setHabitsLog({});
+    localStorage.removeItem(LocalStorage.HABITS);
+    localStorage.removeItem(LocalStorage.HABITS_LOG);
+    localStorage.removeItem(LocalStorage.SELECTED_HABIT);
+  }
+};
+
 
   // Handler for editing a habit
   const handleEditHabit = (index: number) => {
@@ -236,15 +252,19 @@ export function Habits() {
   // Check if the selected date is in the future
   const isFutureDate = selectedDate > new Date();
 
+  // Handler for when the date changes in WeekPicker
+  const handleWeekPickerDateChange = (date: Date) => {
+    setSelectedDate(date);
+  };
+
   return (
     <PageBackground>
       <HabitListContainer>
         <HabitWrapper>
           <DatePickerWrapper>
-            <DateRangePicker
+            <WeekPicker
               isEditMode={isEditMode}
-              selectedFullDate={selectedDate}
-              setSelectedFullDate={setSelectedDate}
+              onDateChange={handleWeekPickerDateChange}
             />
           </DatePickerWrapper>
           <Header>
@@ -259,6 +279,18 @@ export function Habits() {
                   color={colors.bgWhite}
                   hoverBackgroundColor={colors.bgWhite}
                   hoverColor={colors.green}
+                />
+              )}
+              {isEditMode && (
+                <IconTextButton
+                  icon={faTrashAlt}
+                  label="Delete All"
+                  onClick={handleDeleteAllHabits}
+                  backgroundColor={colors.red}
+                  color={colors.bgWhite}
+                  hoverBackgroundColor={colors.bgWhite}
+                  hoverColor={colors.red}
+                  disabled={habits.length === 0}
                 />
               )}
               <IconTextButton

@@ -34,8 +34,8 @@ const StyledText = styled.p`
   }
 `;
 
-const ScoreSpan = styled.span`
-  color: ${colors.green};
+const ScoreSpan = styled.span<{ $scoreColor: string }>`
+  color: ${(props) => props.$scoreColor};
   font-weight: bold;
   font-size: 20px;
 
@@ -44,11 +44,11 @@ const ScoreSpan = styled.span`
   }
 `;
 
-const CustomProgressBar = styled(ProgressBar)`
+const CustomProgressBar = styled(ProgressBar)<{ $scoreColor: string }>`
   height: 20px;
   margin-top: 20px;
   .progress-bar {
-    background-color: ${colors.green};
+    background-color: ${(props) => props.$scoreColor};
     font-size: 14px;
     border-radius: 20px;
   }
@@ -72,10 +72,22 @@ const MessageText = styled.p`
   }
 `;
 
+// Helper function to determine the color based on the score
+const getScoreColor = (score: number) => {
+  if (score >= 70) {
+    return colors.green;
+  } else if (score >= 50) {
+    return colors.yellow;
+  }
+    return colors.red;
+};
+
 // Functional component for the Oral Health Status Card
 export function OralHealthStatus() {
   const storedScore = localStorage.getItem("totalScore");
   const score = storedScore ? parseInt(storedScore, 10) : 0;
+
+  const scoreColor = getScoreColor(score);
 
   return (
     <>
@@ -89,9 +101,14 @@ export function OralHealthStatus() {
         ) : (
           <>
             <StyledText>
-              Your current oral health score is <ScoreSpan>{score}</ScoreSpan>.
+              Your current oral health score is{" "}
+              <ScoreSpan $scoreColor={scoreColor}>{score}</ScoreSpan>.
             </StyledText>
-            <CustomProgressBar now={score} label={`${score}%`} />
+            <CustomProgressBar
+              now={score}
+              label={`${score}%`}
+              $scoreColor={scoreColor}
+            />
           </>
         )}
       </Card.Body>

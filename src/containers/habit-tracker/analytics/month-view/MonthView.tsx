@@ -1,10 +1,9 @@
-import styled, { keyframes } from "styled-components";
 import { useState } from "react";
+import styled, { keyframes } from "styled-components";
 import { HabitDropdown } from "../HabitDropdown";
 import { Habit, Logging } from "../../habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
 import { HabitCalendar } from "./HabitCalendar";
-import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
 import {
   calculateTotalCount,
   calculateMonthlyCompletion,
@@ -12,9 +11,9 @@ import {
   calculateMissedDays,
 } from "../../../../common/utilities/habit-analytics";
 import { AnalyticsTile } from "../../../../components/habit-tracker/analytics/month-view/AnalyticsTile";
-import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
+import { formatDateLong } from "../../../../common/utilities/date-utils";
 
 const fadeUp = keyframes`
   from {
@@ -34,7 +33,7 @@ const ViewContainer = styled.div`
   align-items: center;
   width: 100%;
   margin-top: 5px;
-  animation: ${fadeUp} 1s ease-out;
+  animation: ${fadeUp} 0.5s ease-out;
 `;
 
 // Container for the tiles and calendar
@@ -146,6 +145,7 @@ interface ViewProps {
   onSelectHabit: (habitName: string) => void;
   habitsLog: Logging;
   selectedHabit: string;
+  hideAnalytics: boolean;
 }
 
 // Functional component for the month view of the analytics page in the habit tracker
@@ -154,29 +154,23 @@ export function MonthView({
   onSelectHabit,
   habitsLog,
   selectedHabit,
+  hideAnalytics,
 }: ViewProps) {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
-  const [isCalendarView, setIsCalendarView] = useState(true);
-
-  const habitCount =
-    habits.find((habit) => habit.name === selectedHabit)?.count || 1;
-
-  const year = selectedMonth.getFullYear();
-  const month = selectedMonth
-    .toLocaleDateString("en-US", { month: "long" })
-    .toLowerCase();
-
-  // Handler function to toggle calendar view
-  const handleToggleView = (view: boolean) => {
-    setIsCalendarView(view);
-  };
 
   // Handler function to update the selected month
   const onMonthChange = (date: Date) => {
     setSelectedMonth(date);
   };
 
-  // Total count calculation
+  // Retrieve the habit count or default to 1 if not found
+  const habitCount =
+    habits.find((habit) => habit.name === selectedHabit)?.count || 1;
+
+  const year = selectedMonth.getFullYear();
+  const month = formatDateLong(selectedMonth);
+
+  // Total count calculation for the current month
   const totalCount = calculateTotalCount(habitsLog, selectedHabit, year, month);
 
   // Monthly completion percentage calculation
@@ -192,7 +186,8 @@ export function MonthView({
     habitsLog,
     selectedHabit,
     year,
-    month
+    month,
+    habitCount
   );
 
   // Missed days calculation
@@ -202,7 +197,7 @@ export function MonthView({
     <ViewContainer>
       <AnalyticsDateSelector
         selectedDate={selectedMonth}
-        onDateChange={onMonthChange}
+        onDateChange={onMonthChange} 
         viewType={ViewType.MONTH}
       />
       <HabitsContainer>
@@ -210,33 +205,29 @@ export function MonthView({
         <HabitDropdown habits={habits} onSelectHabit={onSelectHabit} />
       </HabitsContainer>
 
-      <TilesAndCalendarContainer>
-        <TileWrapper>
-          <AnalyticsTile heading="Total Count" mainContent={totalCount} />
-          <AnalyticsTile
-            heading="Monthly Completion"
-            mainContent={`${monthlyCompletion}%`}
-          />
-          <AnalyticsTile
-            heading="Longest Streak"
-            mainContent={longestStreak}
-            subContent="days"
-          />
-          <AnalyticsTile
-            heading="Missed Days"
-            mainContent={missedDays}
-            subContent="days"
-            isMissedDays={true}
-          />
-        </TileWrapper>
-
-        <CalendarWrapper>
-          <CalendarCard>
-            <CalendarChartToggle
-              isCalendarView={isCalendarView}
-              onToggleView={handleToggleView}
+      {!hideAnalytics && (
+        <TilesAndCalendarContainer>
+          <TileWrapper>
+            <AnalyticsTile heading="Total Count" mainContent={totalCount} />
+            <AnalyticsTile
+              heading="Monthly Completion"
+              mainContent={`${monthlyCompletion}%`}
             />
-            {isCalendarView ? (
+            <AnalyticsTile
+              heading="Longest Streak"
+              mainContent={longestStreak}
+              subContent="days"
+            />
+            <AnalyticsTile
+              heading="Missed Days"
+              mainContent={missedDays}
+              subContent="days"
+              isMissedDays={true}
+            />
+          </TileWrapper>
+
+          <CalendarWrapper>
+            <CalendarCard>
               <HabitCalendar
                 habitsLog={habitsLog}
                 selectedHabit={selectedHabit}
@@ -245,17 +236,10 @@ export function MonthView({
                 habitCount={habitCount}
                 selectedMonth={selectedMonth}
               />
-            ) : (
-              <LineChart
-                habitsLog={habitsLog}
-                selectedHabit={selectedHabit}
-                year={year}
-                month={month}
-              />
-            )}
-          </CalendarCard>
-        </CalendarWrapper>
-      </TilesAndCalendarContainer>
+            </CalendarCard>
+          </CalendarWrapper>
+        </TilesAndCalendarContainer>
+      )}
     </ViewContainer>
   );
 }

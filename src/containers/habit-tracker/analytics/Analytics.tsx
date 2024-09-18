@@ -6,6 +6,10 @@ import { MonthView } from "./month-view/MonthView";
 import { YearView } from "./year-view/YearView";
 import { Habit, Logging } from "../habits/Habits";
 import { LocalStorage } from "../../../common/constants/local-storage";
+import { faCalendarAlt, faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../../common/utilities/color-utils";
 
 // Enum for view modes
 enum ViewMode {
@@ -40,31 +44,51 @@ const AnalyticsContainer = styled.div`
   animation: ${fadeUp} 1s ease-out;
 
   @media (max-width: 768px) {
-    width: calc(100% - 70px);
-    left: 70px;
+    width: calc(100% - 35px);
+    left: 40px;
   }
 `;
 
+const NoHabitMessage = styled.div`
+  margin-top: 20px;
+  font-size: 18px;
+  color: ${colors.textGrey};
+  text-align: center;
+`;
+
+// Helper function to create toggle options
+const createToggleOption = (
+  icon: IconDefinition,
+  label: string,
+  value: ViewMode
+) => ({
+  label: (
+    <>
+      <FontAwesomeIcon icon={icon} /> {label}
+    </>
+  ),
+  value,
+});
+
 const toggleOptions = [
-  { label: "Month View", value: ViewMode.MONTH },
-  { label: "Year View", value: ViewMode.YEAR },
+  createToggleOption(faCalendarAlt, "Monthly Overview", ViewMode.MONTH),
+  createToggleOption(faCalendar, "Yearly Overview", ViewMode.YEAR),
 ];
 
 // The main functional component for the Analytics page of the habit tracker
 export function Analytics() {
-  // State to manage the current view (month or year)
   const [view, setView] = useState<ViewMode>(ViewMode.MONTH);
   const [habits, setHabits] = useState<Habit[]>([]);
   const [habitsLog, setHabitsLog] = useState<Logging>({});
   const [selectedHabit, setSelectedHabit] = useState<string>("");
-  const [selectedYear, setSelectedYear] = useState<number>(
-    new Date().getFullYear()
-  );
 
   useEffect(() => {
     // Fetch habits and logging data from local storage when the component mounts
     const storedHabits = localStorage.getItem(LocalStorage.HABITS);
     const storedLogging = localStorage.getItem(LocalStorage.HABITS_LOG);
+    const storedSelectedHabit = localStorage.getItem(
+      LocalStorage.SELECTED_HABIT
+    );
 
     if (storedHabits) {
       setHabits(JSON.parse(storedHabits) as Habit[]);
@@ -73,15 +97,15 @@ export function Analytics() {
     if (storedLogging) {
       setHabitsLog(JSON.parse(storedLogging) as Logging);
     }
+
+    if (storedSelectedHabit) {
+      setSelectedHabit(storedSelectedHabit);
+    }
   }, []);
 
   const handleSelectHabit = (habitName: string) => {
     setSelectedHabit(habitName);
-  };
-
-  // Update the selected year when changed
-  const handleYearChange = (date: Date) => {
-    setSelectedYear(date.getFullYear());
+    localStorage.setItem(LocalStorage.SELECTED_HABIT, habitName);
   };
 
   return (
@@ -98,6 +122,7 @@ export function Analytics() {
             onSelectHabit={handleSelectHabit}
             habitsLog={habitsLog}
             selectedHabit={selectedHabit}
+            hideAnalytics={!selectedHabit}
           />
         ) : (
           <YearView
@@ -105,9 +130,13 @@ export function Analytics() {
             onSelectHabit={handleSelectHabit}
             habitsLog={habitsLog}
             selectedHabit={selectedHabit}
-            onYearChange={handleYearChange}
-            selectedYear={new Date(selectedYear, 0)}
+            hideAnalytics={!selectedHabit}
           />
+        )}
+        {!selectedHabit && (
+          <NoHabitMessage>
+            Please select a habit to display analytics.
+          </NoHabitMessage>
         )}
       </AnalyticsContainer>
     </PageBackground>

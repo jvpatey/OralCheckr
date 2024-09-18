@@ -63,7 +63,6 @@ const BrandText = styled(Navbar.Brand)`
 
 const LogoImage = styled.img`
   height: 45px;
-  margin-bottom: 5px;
 `;
 
 const CustomDropdownToggle = styled(Dropdown.Toggle)`

@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../../common/utilities/color-utils";
 import "react-datepicker/dist/react-datepicker.css";
+import { formatMonthYear } from "../../../common/utilities/date-utils";
 
 // Define the ViewType enum for selecting month or year selector
 export enum ViewType {
@@ -74,6 +75,7 @@ export function AnalyticsDateSelector({
   viewType,
 }: AnalyticsDateSelectorProps) {
   const datePickerRef = useRef<DatePicker>(null);
+  const today = new Date();
 
   // Handle the change of the selected date (either month or year)
   const handleDateChange = (date: Date | null) => {
@@ -115,6 +117,14 @@ export function AnalyticsDateSelector({
     }
   };
 
+  // Check to compare selectedDate with the current date to see if next button should be disabled
+  const isNextDisabled =
+    (viewType === ViewType.MONTH &&
+      selectedDate.getFullYear() === today.getFullYear() &&
+      selectedDate.getMonth() === today.getMonth()) ||
+    (viewType === ViewType.YEAR &&
+      selectedDate.getFullYear() === today.getFullYear());
+
   return (
     <DatePickerContainer>
       <IconButton
@@ -134,6 +144,7 @@ export function AnalyticsDateSelector({
         showMonthYearPicker={viewType === ViewType.MONTH}
         showPopperArrow={false}
         ref={datePickerRef}
+        maxDate={today}
         onClickOutside={() => {
           if (datePickerRef.current) {
             datePickerRef.current.setOpen(false);
@@ -142,10 +153,7 @@ export function AnalyticsDateSelector({
         customInput={
           <DatePickerButton onClick={handleButtonClick}>
             {viewType === ViewType.MONTH
-              ? selectedDate.toLocaleDateString("en-US", {
-                  month: "long",
-                  year: "numeric",
-                })
+              ? formatMonthYear(selectedDate)
               : selectedDate.getFullYear()}
           </DatePickerButton>
         }
@@ -158,6 +166,7 @@ export function AnalyticsDateSelector({
         color={colors.blue}
         hoverBackgroundColor={colors.blue}
         hoverColor={colors.bgWhite}
+        disabled={isNextDisabled}
       />
       <TodayButton onClick={handleTodayClick} />
     </DatePickerContainer>
