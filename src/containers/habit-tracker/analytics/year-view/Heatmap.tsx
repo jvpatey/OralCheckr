@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
-import {
-  colors,
-  greenHeatMapShades,
-} from "../../../../common/utilities/color-utils";
+import { colors, greenHeatMapShades } from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
 
 // Global constants for days of the week and month names
@@ -82,10 +79,7 @@ const GreenSpinner = styled(Spinner)`
 `;
 
 // Function to generate the ApexCharts options for the heatmap
-const useHeatmapOptions = (
-  windowWidth: number,
-  setRendered: () => void
-): ApexOptions => {
+const useHeatmapOptions = (): ApexOptions => {
   return {
     chart: {
       height: 350,
@@ -101,11 +95,6 @@ const useHeatmapOptions = (
       events: {
         mounted: () => {
           console.log("Chart mounted event triggered");
-          setRendered();
-        },
-        animationEnd: () => {
-          console.log("Chart animationEnd event triggered");
-          setRendered();
         },
       },
     },
@@ -162,7 +151,7 @@ const useHeatmapOptions = (
     },
     yaxis: {
       title: {
-        text: windowWidth > 768 ? "Week days" : "", // Show 'Week days' on larger screens, hide on smaller screens
+        // text: windowWidth > 768 ? "Week days" : "", // Show 'Week days' on larger screens, hide on smaller screens
         style: { color: colors.blue, fontSize: "14px" },
       },
       labels: {
@@ -171,18 +160,13 @@ const useHeatmapOptions = (
       },
     },
     grid: {
-      padding:
-        windowWidth <= 768
-          ? { top: 2, right: 2, bottom: 2, left: 10 }
-          : { top: 10, right: 20, bottom: 10, left: 20 },
       borderColor: colors.bgWhite,
     },
     tooltip: {
       enabled: true,
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         // Get the day and month for the current data point
-        const dayOfMonth =
-          w.globals.initialSeries[seriesIndex].data[dataPointIndex].day;
+        const dayOfMonth = w.globals.initialSeries[seriesIndex].data[dataPointIndex].day;
         const monthIndex = w.globals.seriesX[seriesIndex][dataPointIndex];
         const month = MONTH_NAMES[monthIndex - 1];
 
@@ -205,66 +189,44 @@ interface HeatmapProps {
   data: { name: string; data: { x: number; y: number; day: number }[] }[];
 }
 
+interface HeatmapChartProps {
+  options: ApexOptions;
+  data: HeatmapProps["data"];
+  loading: boolean;
+  isCompMounted: (isMounted: boolean) => void;
+}
+
 // Functional component to render the heatmap chart
 export function Heatmap({ data }: HeatmapProps) {
   const [loading, setLoading] = useState(true);
-  const [rendered, setRendered] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  // Event listener to update windowWidth on resize
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const handleRendered = () => {
-    console.log("Chart rendered, setting 'rendered' to true");
-    setRendered(true);
+  const isCompMounted = (isMounted: boolean) => {
+    console.log(isMounted);
+    setLoading(false);
   };
 
-  const options = useHeatmapOptions(windowWidth, handleRendered);
-
-  useEffect(() => {
-    if (data.length > 0) {
-      console.log("Data loaded, setting 'loading' to false");
-      setLoading(false);
-    }
-  }, [data]);
-
-  // Fallback: Remove spinner after 1.5 seconds if mounted/animationEnd doesn't fire
-  useEffect(() => {
-    if (!rendered) {
-      const timeout = setTimeout(() => {
-        console.log("Fallback: forcing spinner to disappear after 1.5 seconds");
-        setRendered(true);
-      }, 1500);
-      return () => clearTimeout(timeout);
-    }
-  }, [rendered]);
+  const options = useHeatmapOptions();
 
   return (
     <HeatmapCard>
-      {loading || !rendered ? (
-        <LoadingContainer>
-          <GreenSpinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </GreenSpinner>
-        </LoadingContainer>
-      ) : (
-        <ReactApexChart
-          options={options}
-          series={data}
-          type="heatmap"
-          height={350}
-        />
-      )}
+      <HeatmapChart options={options} data={data} loading={loading} isCompMounted={isCompMounted} />
     </HeatmapCard>
   );
+}
+
+function HeatmapChart({ options, data, loading, isCompMounted }: HeatmapChartProps) {
+  useEffect(() => {
+    console.log("Mounted");
+    isCompMounted(true);
+  }, []);
+
+  return loading ? <h2>Loading</h2> : <ReactApexChart options={options} series={data} type="heatmap" height={350} />;
+}
+
+{
+  /* <LoadingContainer>
+<GreenSpinner animation="border" role="status">
+  <span className="visually-hidden">Loading...</span>
+</GreenSpinner>
+</LoadingContainer> */
 }
