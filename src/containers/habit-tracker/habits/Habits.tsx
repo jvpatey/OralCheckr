@@ -191,40 +191,29 @@ export function Habits() {
     resetHabitForm(setNewHabit, setOriginalHabit);
   };
 
-  // Handler for deleting a habit
-  const handleDeleteHabit = (index: number) => {
-    if (window.confirm("Are you sure you want to delete this habit?")) {
-      const habitToDelete = habits[index].name;
-      const updatedHabits = habits.filter((_, idx) => idx !== index);
+// Handler for deleting a habit
+const handleDeleteHabit = (index: number) => {
+  if (window.confirm("Are you sure you want to delete this habit?")) {
+    const updatedHabits = habits.filter((_, idx) => idx !== index);
 
-      // Check if the deleted habit is the selected habit
-      const selectedHabit = localStorage.getItem(LocalStorage.SELECTED_HABIT);
+    // Remove the selected habit from localStorage
+    localStorage.removeItem(LocalStorage.SELECTED_HABIT);
 
-      if (selectedHabit && selectedHabit === habitToDelete) {
-        localStorage.removeItem(LocalStorage.SELECTED_HABIT);
-      }
+    updateHabits(updatedHabits, setHabits);
+  }
+};
 
-      updateHabits(updatedHabits, setHabits);
-    }
-  };
+// Handler for deleting all habits and logs
+const handleDeleteAllHabits = () => {
+  if (window.confirm("Are you sure you want to delete all habits and logs?")) {
+    updateHabits([], setHabits);
+    setHabitsLog({});
+    localStorage.removeItem(LocalStorage.HABITS);
+    localStorage.removeItem(LocalStorage.HABITS_LOG);
+    localStorage.removeItem(LocalStorage.SELECTED_HABIT);
+  }
+};
 
-  // Handler for deleting all habits and logs
-  const handleDeleteAllHabits = () => {
-    if (
-      window.confirm("Are you sure you want to delete all habits and logs?")
-    ) {
-      updateHabits([], setHabits);
-      setHabitsLog({});
-      localStorage.removeItem(LocalStorage.HABITS);
-      localStorage.removeItem(LocalStorage.HABITS_LOG);
-
-      const selectedHabit = localStorage.getItem(LocalStorage.SELECTED_HABIT);
-
-      if (selectedHabit) {
-        localStorage.removeItem(LocalStorage.SELECTED_HABIT);
-      }
-    }
-  };
 
   // Handler for editing a habit
   const handleEditHabit = (index: number) => {
