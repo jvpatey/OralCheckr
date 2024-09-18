@@ -1,5 +1,5 @@
-import styled, { keyframes } from "styled-components";
 import { useState } from "react";
+import styled, { keyframes } from "styled-components";
 import { HabitDropdown } from "../HabitDropdown";
 import { Habit, Logging } from "../../habits/Habits";
 import { colors } from "../../../../common/utilities/color-utils";
@@ -145,6 +145,7 @@ interface ViewProps {
   onSelectHabit: (habitName: string) => void;
   habitsLog: Logging;
   selectedHabit: string;
+  hideAnalytics: boolean;
 }
 
 // Functional component for the month view of the analytics page in the habit tracker
@@ -153,21 +154,23 @@ export function MonthView({
   onSelectHabit,
   habitsLog,
   selectedHabit,
+  hideAnalytics,
 }: ViewProps) {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
-
-  const habitCount =
-    habits.find((habit) => habit.name === selectedHabit)?.count || 1;
-
-  const year = selectedMonth.getFullYear();
-  const month = formatDateLong(selectedMonth);
 
   // Handler function to update the selected month
   const onMonthChange = (date: Date) => {
     setSelectedMonth(date);
   };
 
-  // Total count calculation
+  // Retrieve the habit count or default to 1 if not found
+  const habitCount =
+    habits.find((habit) => habit.name === selectedHabit)?.count || 1;
+
+  const year = selectedMonth.getFullYear();
+  const month = formatDateLong(selectedMonth);
+
+  // Total count calculation for the current month
   const totalCount = calculateTotalCount(habitsLog, selectedHabit, year, month);
 
   // Monthly completion percentage calculation
@@ -194,7 +197,7 @@ export function MonthView({
     <ViewContainer>
       <AnalyticsDateSelector
         selectedDate={selectedMonth}
-        onDateChange={onMonthChange}
+        onDateChange={onMonthChange} 
         viewType={ViewType.MONTH}
       />
       <HabitsContainer>
@@ -202,39 +205,41 @@ export function MonthView({
         <HabitDropdown habits={habits} onSelectHabit={onSelectHabit} />
       </HabitsContainer>
 
-      <TilesAndCalendarContainer>
-        <TileWrapper>
-          <AnalyticsTile heading="Total Count" mainContent={totalCount} />
-          <AnalyticsTile
-            heading="Monthly Completion"
-            mainContent={`${monthlyCompletion}%`}
-          />
-          <AnalyticsTile
-            heading="Longest Streak"
-            mainContent={longestStreak}
-            subContent="days"
-          />
-          <AnalyticsTile
-            heading="Missed Days"
-            mainContent={missedDays}
-            subContent="days"
-            isMissedDays={true}
-          />
-        </TileWrapper>
-
-        <CalendarWrapper>
-          <CalendarCard>
-            <HabitCalendar
-              habitsLog={habitsLog}
-              selectedHabit={selectedHabit}
-              year={year}
-              month={month}
-              habitCount={habitCount}
-              selectedMonth={selectedMonth}
+      {!hideAnalytics && (
+        <TilesAndCalendarContainer>
+          <TileWrapper>
+            <AnalyticsTile heading="Total Count" mainContent={totalCount} />
+            <AnalyticsTile
+              heading="Monthly Completion"
+              mainContent={`${monthlyCompletion}%`}
             />
-          </CalendarCard>
-        </CalendarWrapper>
-      </TilesAndCalendarContainer>
+            <AnalyticsTile
+              heading="Longest Streak"
+              mainContent={longestStreak}
+              subContent="days"
+            />
+            <AnalyticsTile
+              heading="Missed Days"
+              mainContent={missedDays}
+              subContent="days"
+              isMissedDays={true}
+            />
+          </TileWrapper>
+
+          <CalendarWrapper>
+            <CalendarCard>
+              <HabitCalendar
+                habitsLog={habitsLog}
+                selectedHabit={selectedHabit}
+                year={year}
+                month={month}
+                habitCount={habitCount}
+                selectedMonth={selectedMonth}
+              />
+            </CalendarCard>
+          </CalendarWrapper>
+        </TilesAndCalendarContainer>
+      )}
     </ViewContainer>
   );
 }

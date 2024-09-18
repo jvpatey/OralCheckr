@@ -9,6 +9,7 @@ import { LocalStorage } from "../../../common/constants/local-storage";
 import { faCalendarAlt, faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../../common/utilities/color-utils";
 
 // Enum for view modes
 enum ViewMode {
@@ -48,6 +49,13 @@ const AnalyticsContainer = styled.div`
   }
 `;
 
+const NoHabitMessage = styled.div`
+  margin-top: 20px;
+  font-size: 18px;
+  color: ${colors.textGrey};
+  text-align: center;
+`;
+
 // Helper function to create toggle options
 const createToggleOption = (
   icon: IconDefinition,
@@ -69,7 +77,6 @@ const toggleOptions = [
 
 // The main functional component for the Analytics page of the habit tracker
 export function Analytics() {
-  // State to manage the current view (month or year)
   const [view, setView] = useState<ViewMode>(ViewMode.MONTH);
   const [habits, setHabits] = useState<Habit[]>([]);
   const [habitsLog, setHabitsLog] = useState<Logging>({});
@@ -115,6 +122,7 @@ export function Analytics() {
             onSelectHabit={handleSelectHabit}
             habitsLog={habitsLog}
             selectedHabit={selectedHabit}
+            hideAnalytics={!selectedHabit}
           />
         ) : (
           <YearView
@@ -122,7 +130,13 @@ export function Analytics() {
             onSelectHabit={handleSelectHabit}
             habitsLog={habitsLog}
             selectedHabit={selectedHabit}
+            hideAnalytics={!selectedHabit}
           />
+        )}
+        {!selectedHabit && (
+          <NoHabitMessage>
+            Please select a habit to display analytics.
+          </NoHabitMessage>
         )}
       </AnalyticsContainer>
     </PageBackground>

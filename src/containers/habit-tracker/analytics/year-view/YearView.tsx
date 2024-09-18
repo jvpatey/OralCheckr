@@ -1,16 +1,12 @@
 import styled, { keyframes } from "styled-components";
 import { HabitDropdown } from "../HabitDropdown";
-import { Habit } from "../../habits/Habits";
-import { colors } from "../../../../common/utilities/color-utils";
+import { Habit, Logging } from "../../habits/Habits";
 import { Heatmap } from "./Heatmap";
-import { Logging } from "../../habits/Habits";
 import { useMemo, useState } from "react";
-import {
-  generateHeatmapData,
-  HeatmapSeries,
-} from "../../../../common/utilities/heatmap-utils";
-import { ViewType } from "../AnalyticsDateSelector";
+import { generateHeatmapData, HeatmapSeries } from "../../../../common/utilities/heatmap-utils";
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
+import { ViewType } from "../AnalyticsDateSelector";
+import { colors } from "../../../../common/utilities/color-utils";
 
 // Keyframes for the fade-up animation
 const fadeUp = keyframes`
@@ -24,7 +20,7 @@ const fadeUp = keyframes`
   }
 `;
 
-// Styled components for the layout
+// Styled component for the main container of the view
 const ViewContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -51,34 +47,38 @@ const HabitsTitle = styled.h3`
   margin-top: 10px;
 `;
 
+// Interface for the props that YearView accepts
 interface YearViewProps {
   habits: Habit[];
   onSelectHabit: (habitName: string) => void;
   habitsLog: Logging;
   selectedHabit: string;
+  hideAnalytics: boolean;
 }
 
-// YearView component for displaying the heatmap for the selected year
+// Functional component to display the heatmap view for the year
 export function YearView({
   habits,
   onSelectHabit,
   habitsLog,
   selectedHabit,
+  hideAnalytics,
 }: YearViewProps) {
   const [selectedYear, setSelectedYear] = useState<Date>(new Date());
 
-  // Memoized heatmap data generation
+  // Memoized heatmap data generation to avoid recalculating on every render
   const heatmapData: HeatmapSeries[] = useMemo(
     () =>
       generateHeatmapData(habitsLog, selectedHabit, selectedYear.getFullYear()),
     [habitsLog, selectedHabit, selectedYear]
   );
 
+  // Function to handle habit selection
   const handleSelectHabit = (habitName: string) => {
     onSelectHabit(habitName);
   };
 
-  // Update the selected year when changed
+  // Function to handle changes to the selected year
   const handleYearChange = (date: Date) => {
     setSelectedYear(date);
   };
@@ -92,7 +92,9 @@ export function YearView({
       />
       <HabitsTitle>Habits:</HabitsTitle>
       <HabitDropdown habits={habits} onSelectHabit={handleSelectHabit} />
-      <Heatmap data={heatmapData} />
+      {!hideAnalytics && (
+        <Heatmap data={heatmapData} />
+      )}
     </ViewContainer>
   );
 }
