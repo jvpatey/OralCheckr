@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { colors, greenHeatMapShades } from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
+import { LoadingComponent } from "../../../../components/habit-tracker/analytics/LoadingComponent";
 
 // Global constants for days of the week and month names
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -60,21 +60,6 @@ const HeatmapCard = styled.div`
   @media (max-width: 480px) {
     width: 100%;
     padding: 5px;
-  }
-`;
-
-const LoadingContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 350px;
-`;
-
-const GreenSpinner = styled(Spinner)`
-  color: ${colors.green};
-
-  .spinner-border {
-    border-color: ${colors.green};
   }
 `;
 
@@ -220,13 +205,9 @@ function HeatmapChart({ options, data, loading, isCompMounted }: HeatmapChartPro
     isCompMounted(true);
   }, []);
 
-  return loading ? <h2>Loading</h2> : <ReactApexChart options={options} series={data} type="heatmap" height={350} />;
-}
-
-{
-  /* <LoadingContainer>
-<GreenSpinner animation="border" role="status">
-  <span className="visually-hidden">Loading...</span>
-</GreenSpinner>
-</LoadingContainer> */
+  return loading ? (
+    <LoadingComponent />
+  ) : (
+    <ReactApexChart options={options} series={data} type="heatmap" height={350} />
+  );
 }
