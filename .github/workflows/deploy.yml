@@ -27,6 +27,11 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "Jeffrey Patey"
+          git config --global user.email "jeffreyvpatey@gmail.com"
+          
       - name: Deploy to GitHub Pages
         run: npm run deploy
         env:
