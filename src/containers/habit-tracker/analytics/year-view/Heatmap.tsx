@@ -77,11 +77,6 @@ const useHeatmapOptions = (): ApexOptions => {
         animateGradually: { enabled: true },
         dynamicAnimation: { enabled: true },
       },
-      events: {
-        mounted: () => {
-          console.log("Chart mounted event triggered");
-        },
-      },
     },
     plotOptions: {
       heatmap: {
