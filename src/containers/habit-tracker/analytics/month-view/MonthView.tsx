@@ -160,15 +160,16 @@ export function MonthView({
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
 
-  // Function to set loading to false after the component is mounted
-  const isCompMounted = (isMounted: boolean) => {
-    console.log(isMounted);
+  // The MonthView rendering causes the MonthView page to load slowly. 
+  // A loading component is displayed initially while the Monthview components are loading. 
+  // Once the Monthview components are fully loaded, the loading state is set to false, 
+  // and the MonthView is displayed in place of the loading component.
+  const isMonthViewMounted = () => {
     setLoading(false);
   };
 
   useEffect(() => {
-    console.log("Mounted");
-    isCompMounted(true);
+    isMonthViewMounted();
   }, []);
 
   // Handler function to update the selected month
