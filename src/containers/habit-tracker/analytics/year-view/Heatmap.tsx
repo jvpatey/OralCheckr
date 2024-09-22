@@ -172,17 +172,18 @@ interface HeatmapChartProps {
   options: ApexOptions;
   data: HeatmapProps["data"];
   loading: boolean;
-  isCompMounted: (isMounted: boolean) => void;
+  isCompMounted: () => void;
 }
+
 
 // Functional component to render the heatmap chart
 export function Heatmap({ data }: HeatmapProps) {
   const [loading, setLoading] = useState(true);
 
-  const isCompMounted = (isMounted: boolean) => {
-    console.log(isMounted);
+  const isCompMounted = () => {
     setLoading(false);
   };
+  
 
   const options = useHeatmapOptions();
 
@@ -195,8 +196,7 @@ export function Heatmap({ data }: HeatmapProps) {
 
 function HeatmapChart({ options, data, loading, isCompMounted }: HeatmapChartProps) {
   useEffect(() => {
-    console.log("Mounted");
-    isCompMounted(true);
+    isCompMounted();
   }, []);
 
   return loading ? (
