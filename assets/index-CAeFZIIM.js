@@ -3335,7 +3335,7 @@ rect.legend-mouseover-inactive,
                   <div style="color: ${te.blue}; font-weight: bold;">${h} ${o}
                   </div>
                   Logs: ${m}
-                </div>`}}});function EQ({data:e}){const[t,n]=z.useState(!0),r=()=>{n(!1)},o=AQ();return H.jsx(CQ,{children:H.jsx(DQ,{options:o,data:e,loading:t,isCompMounted:r})})}function DQ({options:e,data:t,loading:n,isCompMounted:r}){return z.useEffect(()=>{r()},[]),n?H.jsx(O_,{}):H.jsx(rw,{options:e,series:t,type:"heatmap",height:350})}function PQ(e,t,n){const r=e[t],o=new Map;return RU({start:new Date(n,0,1),end:new Date(n,11,31)}).forEach(h=>{var I,F;const m=((F=(I=r==null?void 0:r[n])==null?void 0:I[Rg(h)])==null?void 0:F[h.getDate()])||0,y=h.getDay(),k=h.getMonth()+1,E=h.getDate(),M=o.get(y.toString())||[];M.push({x:k,y:m,day:E}),o.set(y.toString(),M)}),Array.from(o.entries()).map(([h,m])=>({name:h,data:m}))}const MQ=Ko`
+                </div>`}}});function EQ({data:e}){const[t,n]=z.useState(!0),r=()=>{n(!1)},o=AQ();return H.jsx(CQ,{children:H.jsx(DQ,{options:o,data:e,loading:t,isHeatmapChartMounted:r})})}function DQ({options:e,data:t,loading:n,isHeatmapChartMounted:r}){return z.useEffect(()=>{r()},[]),n?H.jsx(O_,{}):H.jsx(rw,{options:e,series:t,type:"heatmap",height:350})}function PQ(e,t,n){const r=e[t],o=new Map;return RU({start:new Date(n,0,1),end:new Date(n,11,31)}).forEach(h=>{var I,F;const m=((F=(I=r==null?void 0:r[n])==null?void 0:I[Rg(h)])==null?void 0:F[h.getDate()])||0,y=h.getDay(),k=h.getMonth()+1,E=h.getDate(),M=o.get(y.toString())||[];M.push({x:k,y:m,day:E}),o.set(y.toString(),M)}),Array.from(o.entries()).map(([h,m])=>({name:h,data:m}))}const MQ=Ko`
   from {
     opacity: 0;
     transform: translateY(20px);
