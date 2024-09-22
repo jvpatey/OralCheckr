@@ -131,7 +131,6 @@ const useHeatmapOptions = (): ApexOptions => {
     },
     yaxis: {
       title: {
-        // text: windowWidth > 768 ? "Week days" : "", // Show 'Week days' on larger screens, hide on smaller screens
         style: { color: colors.blue, fontSize: "14px" },
       },
       labels: {
