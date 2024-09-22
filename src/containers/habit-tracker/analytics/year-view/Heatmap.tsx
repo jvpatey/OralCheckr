@@ -172,31 +172,33 @@ interface HeatmapChartProps {
   options: ApexOptions;
   data: HeatmapProps["data"];
   loading: boolean;
-  isCompMounted: () => void;
+  isHeatmapChartMounted: () => void;
 }
-
 
 // Functional component to render the heatmap chart
 export function Heatmap({ data }: HeatmapProps) {
   const [loading, setLoading] = useState(true);
 
-  const isCompMounted = () => {
+  // The heatmap rendering causes the YearView page to load slowly. 
+  // A loading component is displayed initially while the heatmap is loading. 
+  // Once the heatmap data is fully loaded and the component is ready, the loading state is set to false, 
+  // and the heatmap is displayed in place of the loading component.
+  const isHeatmapChartMounted = () => {
     setLoading(false);
   };
-  
 
   const options = useHeatmapOptions();
 
   return (
     <HeatmapCard>
-      <HeatmapChart options={options} data={data} loading={loading} isCompMounted={isCompMounted} />
+      <HeatmapChart options={options} data={data} loading={loading} isHeatmapChartMounted={isHeatmapChartMounted} />
     </HeatmapCard>
   );
 }
 
-function HeatmapChart({ options, data, loading, isCompMounted }: HeatmapChartProps) {
+function HeatmapChart({ options, data, loading, isHeatmapChartMounted }: HeatmapChartProps) {
   useEffect(() => {
-    isCompMounted();
+    isHeatmapChartMounted();
   }, []);
 
   return loading ? (
