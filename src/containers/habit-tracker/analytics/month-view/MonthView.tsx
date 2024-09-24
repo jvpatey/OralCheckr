@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { HabitDropdown } from "../HabitDropdown";
 import { Habit, Logging } from "../../habits/Habits";
@@ -14,6 +14,7 @@ import { AnalyticsTile } from "../../../../components/habit-tracker/analytics/mo
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
 import { formatDateLong } from "../../../../common/utilities/date-utils";
+import { LoadingComponent } from "../../../../components/habit-tracker/analytics/LoadingComponent";
 
 const fadeUp = keyframes`
   from {
@@ -157,47 +158,44 @@ export function MonthView({
   hideAnalytics,
 }: ViewProps) {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
+  const [loading, setLoading] = useState(true);
+
+  // The MonthView rendering causes the MonthView page to load slowly. 
+  // A loading component is displayed initially while the Monthview components are loading. 
+  // Once the Monthview components are fully loaded, the loading state is set to false, 
+  // and the MonthView is displayed in place of the loading component.
+  const isMonthViewMounted = () => {
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    isMonthViewMounted();
+  }, []);
 
   // Handler function to update the selected month
   const onMonthChange = (date: Date) => {
     setSelectedMonth(date);
   };
 
-  // Retrieve the habit count or default to 1 if not found
-  const habitCount =
-    habits.find((habit) => habit.name === selectedHabit)?.count || 1;
-
+  const habitCount = habits.find((habit) => habit.name === selectedHabit)?.count || 1;
   const year = selectedMonth.getFullYear();
   const month = formatDateLong(selectedMonth);
 
-  // Total count calculation for the current month
   const totalCount = calculateTotalCount(habitsLog, selectedHabit, year, month);
-
-  // Monthly completion percentage calculation
-  const monthlyCompletion = calculateMonthlyCompletion(
-    totalCount,
-    habitCount,
-    year,
-    month
-  );
-
-  // Longest streak calculation
-  const longestStreak = calculateLongestStreak(
-    habitsLog,
-    selectedHabit,
-    year,
-    month,
-    habitCount
-  );
-
-  // Missed days calculation
+  const monthlyCompletion = calculateMonthlyCompletion(totalCount, habitCount, year, month);
+  const longestStreak = calculateLongestStreak(habitsLog, selectedHabit, year, month, habitCount);
   const missedDays = calculateMissedDays(habitsLog, selectedHabit, year, month);
+
+  // If data is loading, show the loading spinner
+  if (loading) {
+    return <LoadingComponent />;
+  }
 
   return (
     <ViewContainer>
       <AnalyticsDateSelector
         selectedDate={selectedMonth}
-        onDateChange={onMonthChange} 
+        onDateChange={onMonthChange}
         viewType={ViewType.MONTH}
       />
       <HabitsContainer>

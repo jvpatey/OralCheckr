@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
-import {
-  colors,
-  greenHeatMapShades,
-} from "../../../../common/utilities/color-utils";
+import { colors, greenHeatMapShades } from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
+import { LoadingComponent } from "../../../../components/habit-tracker/analytics/LoadingComponent";
 
 // Global constants for days of the week and month names
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -66,26 +63,8 @@ const HeatmapCard = styled.div`
   }
 `;
 
-const LoadingContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 350px;
-`;
-
-const GreenSpinner = styled(Spinner)`
-  color: ${colors.green};
-
-  .spinner-border {
-    border-color: ${colors.green};
-  }
-`;
-
 // Function to generate the ApexCharts options for the heatmap
-const useHeatmapOptions = (
-  windowWidth: number,
-  setRendered: () => void
-): ApexOptions => {
+const useHeatmapOptions = (): ApexOptions => {
   return {
     chart: {
       height: 350,
@@ -97,16 +76,6 @@ const useHeatmapOptions = (
         speed: 800,
         animateGradually: { enabled: true },
         dynamicAnimation: { enabled: true },
-      },
-      events: {
-        mounted: () => {
-          console.log("Chart mounted event triggered");
-          setRendered();
-        },
-        animationEnd: () => {
-          console.log("Chart animationEnd event triggered");
-          setRendered();
-        },
       },
     },
     plotOptions: {
@@ -162,7 +131,6 @@ const useHeatmapOptions = (
     },
     yaxis: {
       title: {
-        text: windowWidth > 768 ? "Week days" : "", // Show 'Week days' on larger screens, hide on smaller screens
         style: { color: colors.blue, fontSize: "14px" },
       },
       labels: {
@@ -171,18 +139,13 @@ const useHeatmapOptions = (
       },
     },
     grid: {
-      padding:
-        windowWidth <= 768
-          ? { top: 2, right: 2, bottom: 2, left: 10 }
-          : { top: 10, right: 20, bottom: 10, left: 20 },
       borderColor: colors.bgWhite,
     },
     tooltip: {
       enabled: true,
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         // Get the day and month for the current data point
-        const dayOfMonth =
-          w.globals.initialSeries[seriesIndex].data[dataPointIndex].day;
+        const dayOfMonth = w.globals.initialSeries[seriesIndex].data[dataPointIndex].day;
         const monthIndex = w.globals.seriesX[seriesIndex][dataPointIndex];
         const month = MONTH_NAMES[monthIndex - 1];
 
@@ -205,66 +168,42 @@ interface HeatmapProps {
   data: { name: string; data: { x: number; y: number; day: number }[] }[];
 }
 
+interface HeatmapChartProps {
+  options: ApexOptions;
+  data: HeatmapProps["data"];
+  loading: boolean;
+  isHeatmapChartMounted: () => void;
+}
+
 // Functional component to render the heatmap chart
 export function Heatmap({ data }: HeatmapProps) {
   const [loading, setLoading] = useState(true);
-  const [rendered, setRendered] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  // Event listener to update windowWidth on resize
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const handleRendered = () => {
-    console.log("Chart rendered, setting 'rendered' to true");
-    setRendered(true);
+  // The heatmap rendering causes the YearView page to load slowly. 
+  // A loading component is displayed initially while the heatmap is loading. 
+  // Once the heatmap data is fully loaded and the component is ready, the loading state is set to false, 
+  // and the heatmap is displayed in place of the loading component.
+  const isHeatmapChartMounted = () => {
+    setLoading(false);
   };
 
-  const options = useHeatmapOptions(windowWidth, handleRendered);
-
-  useEffect(() => {
-    if (data.length > 0) {
-      console.log("Data loaded, setting 'loading' to false");
-      setLoading(false);
-    }
-  }, [data]);
-
-  // Fallback: Remove spinner after 1.5 seconds if mounted/animationEnd doesn't fire
-  useEffect(() => {
-    if (!rendered) {
-      const timeout = setTimeout(() => {
-        console.log("Fallback: forcing spinner to disappear after 1.5 seconds");
-        setRendered(true);
-      }, 1500);
-      return () => clearTimeout(timeout);
-    }
-  }, [rendered]);
+  const options = useHeatmapOptions();
 
   return (
     <HeatmapCard>
-      {loading || !rendered ? (
-        <LoadingContainer>
-          <GreenSpinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </GreenSpinner>
-        </LoadingContainer>
-      ) : (
-        <ReactApexChart
-          options={options}
-          series={data}
-          type="heatmap"
-          height={350}
-        />
-      )}
+      <HeatmapChart options={options} data={data} loading={loading} isHeatmapChartMounted={isHeatmapChartMounted} />
     </HeatmapCard>
+  );
+}
+
+function HeatmapChart({ options, data, loading, isHeatmapChartMounted }: HeatmapChartProps) {
+  useEffect(() => {
+    isHeatmapChartMounted();
+  }, []);
+
+  return loading ? (
+    <LoadingComponent />
+  ) : (
+    <ReactApexChart options={options} series={data} type="heatmap" height={350} />
   );
 }
