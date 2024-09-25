@@ -5,8 +5,8 @@ import { colors } from "../../../common/utilities/color-utils";
 
 // Styled component for the "Today" button with an icon
 const TodayButtonStyled = styled.button<{ disabled: boolean }>`
-  background-color: ${({ disabled }) =>
-    disabled ? colors.disabledBgGrey : colors.bgWhite};
+  background-color: ${({ disabled, theme }) =>
+    disabled ? colors.disabledBgGrey : theme.backgroundColor};
   color: ${({ disabled }) => (disabled ? colors.textGrey : colors.green)};
   border: 2px solid
     ${({ disabled }) => (disabled ? colors.disabledBgGrey : colors.green)};
@@ -27,7 +27,7 @@ const TodayButtonStyled = styled.button<{ disabled: boolean }>`
       disabled ? colors.disabledBgGrey : colors.green};
     border: 2px solid
       ${({ disabled }) => (disabled ? colors.disabledBgGrey : colors.green)};
-    color: ${({ disabled }) => (disabled ? colors.textGrey : colors.bgWhite)};
+    color: ${({ disabled, theme }) => (disabled ? colors.textGrey : theme.backgroundColor)};
   }
 
   @media (max-width: 600px) {
