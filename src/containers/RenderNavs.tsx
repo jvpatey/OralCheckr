@@ -13,7 +13,7 @@ import { RoutePaths } from "../common/constants/routes";
 
 interface RenderNavsProps {
   themeToggler: () => void;
-  currentTheme: string;  // Add currentTheme prop
+  currentTheme: string;
 }
 
 // Function to render the navigation components of the app

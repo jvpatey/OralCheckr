@@ -36,6 +36,17 @@ const SaveButton = styled.button<{ disabled: boolean }>`
   }
 `;
 
+const StyledFormControl = styled(Form.Control)`
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
+  color: ${({ theme }) => theme.textGrey};
+
+    &:focus {
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
+      color: ${({ theme }) => theme.textGrey};
+    }
+`;    
+
+
 // Functional component for the add/edit habit modal, used in the Habits component
 export function AddEditHabitModal({
   show,
@@ -79,29 +90,29 @@ export function AddEditHabitModal({
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
-          <Form.Group controlId="habitName">
-            <Form.Label>Habit Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter habit name"
-              value={newHabit.name}
-              onChange={handleHabitNameChange}
-              ref={habitNameRef}
-            />
-          </Form.Group>
-          <Form.Group controlId="habitCount">
-            <Form.Label style={{ marginTop: "10px" }}>
-              Habit Count (times per day)
-            </Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter habit count"
-              value={newHabit.count.toString()}
-              onChange={handleHabitCountChange}
-            />
-          </Form.Group>
-        </Form>
+      <Form>
+        <Form.Group controlId="habitName">
+          <Form.Label>Habit Name</Form.Label>
+          <StyledFormControl
+            type="text"
+            placeholder="Enter habit name"
+            value={newHabit.name}
+            onChange={handleHabitNameChange}
+            ref={habitNameRef}
+          />
+        </Form.Group>
+        <Form.Group controlId="habitCount">
+          <Form.Label style={{ marginTop: "10px" }}>
+            Habit Count (times per day)
+          </Form.Label>
+          <StyledFormControl
+            type="number"
+            placeholder="Enter habit count"
+            value={newHabit.count.toString()}
+            onChange={handleHabitCountChange}
+          />
+        </Form.Group>
+      </Form>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={handleClose}>
