@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { colors } from "../../../common/utilities/color-utils";
 
 interface ToggleButtonProps {
   options: { label: React.ReactNode; value: string }[];
@@ -24,9 +23,9 @@ const ToggleButtonContainer = styled.div`
 
 const Button = styled.button<{ $active: boolean }>`
   background-color: ${({ $active, theme }) =>
-    $active ? colors.blue : theme.backgroundColor};
-  color: ${({ $active, theme }) => ($active ? theme.backgroundColor : colors.textGrey)};
-  border: 2px solid ${colors.blue};
+    $active ? theme.blue : theme.backgroundColor};
+  color: ${({ $active, theme }) => ($active ? theme.backgroundColor : theme.textGrey)};
+  border: 2px solid ${({ theme }) => theme.blue};
   padding: 10px 20px;
   cursor: pointer;
   font-size: 16px;
@@ -43,8 +42,8 @@ const Button = styled.button<{ $active: boolean }>`
 
   &:hover {
     background-color: ${({ $active, theme }) =>
-      $active ? colors.blue : theme.accentBackgroundColor};
-    border: 2px solid ${colors.blue};
+      $active ? theme.blue : theme.accentBackgroundColor};
+    border: 2px solid ${({ theme }) => theme.blue};
   }
 `;
 

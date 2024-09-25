@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import { Modal, Form } from "react-bootstrap";
 import { StyledModal } from "../../../components/questionnaire/Modal";
 import { Habit } from "./Habits";
-import { colors } from "../../../common/utilities/color-utils";
 import styled from "styled-components";
 
 interface AddEditHabitModalProps {
@@ -19,9 +18,9 @@ const SaveButton = styled.button<{ disabled: boolean }>`
   background-color: ${({ disabled, theme }) =>
     disabled ? theme.disabledBackground : theme.accentBackgroundColor };
   border-color: ${({ disabled, theme }) =>
-    disabled ? theme.disabledBackground : colors.blue};
+    disabled ? theme.disabledBackground : theme.blue};
   color: ${({ disabled, theme }) =>
-    disabled ? theme.accentBackgroundColor : colors.blue};
+    disabled ? theme.accentBackgroundColor : theme.blue};
   padding: 8px 16px;
   border-radius: 5px;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
@@ -31,9 +30,9 @@ const SaveButton = styled.button<{ disabled: boolean }>`
     background-color: ${({ disabled, theme }) =>
       disabled ? theme.disabledBackgroundColor : theme.backgroundColor};
     border-color: ${({ disabled, theme }) =>
-      disabled ? theme.disabledBackground : colors.blue};
+      disabled ? theme.disabledBackground : theme.blue};
     color: ${({ disabled, theme }) =>
-      disabled ? theme.accentBackgroundColor : colors.blue};
+      disabled ? theme.accentBackgroundColor : theme.blue};
   }
 `;
 

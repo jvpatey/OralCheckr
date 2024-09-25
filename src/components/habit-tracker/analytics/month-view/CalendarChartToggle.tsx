@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt, faChartLine } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../../../common/utilities/color-utils";
 
 interface ToggleProps {
   isCalendarView: boolean;
@@ -30,7 +29,7 @@ const ToggleButton = styled.button<{ $active: boolean }>`
   border-radius: 4px;
   padding: 5px 10px;
   cursor: pointer;
-  color: ${colors.white};
+  color: ${({ theme }) => theme.white};
 
   &:hover {
     color: ${({ theme }) => theme.green};

@@ -4,10 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { RoutePaths, getFullPath } from "../common/constants/routes";
-import { colors } from "../common/utilities/color-utils";
 import { NavLink } from "../common/links";
 import { useState } from "react";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
+import { useTheme } from "styled-components";
+
 
 interface NavBarProps {
   links: NavLink[];
@@ -45,10 +46,10 @@ const BrandText = styled(Navbar.Brand)`
   display: flex;
   align-items: center;
   font-size: 28px;
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
 
   &:hover {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     font-weight: 600;
   }
 
@@ -70,26 +71,26 @@ const LogoImage = styled.img`
 `;
 
 const CustomDropdownToggle = styled(Dropdown.Toggle)`
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   background: none;
   border: none;
   margin-right: 20px;
 
   &:hover {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     transform: scale(1.1);
     background-color: transparent;
   }
 
   &:focus,
   &:active {
-    color: ${colors.textGrey};
+    color: ${({ theme }) => theme.textGrey};
     background-color: transparent;
     box-shadow: none;
   }
 
   &.show {
-    color: ${colors.textGrey};
+    color: ${({ theme }) => theme.textGrey};
     background-color: transparent;
     transform: scale(1.1);
   }
@@ -103,19 +104,19 @@ const CustomDropdownMenu = styled(Dropdown.Menu)`
 `;
 
 const CustomDropdownItem = styled(Dropdown.Item)`
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   padding: 10px 20px;
   display: block;
   width: 100%;
   text-align: left;
 
   &:hover {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     background-color: transparent;
   }
 
   &.active {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     font-weight: bold;
   }
 `;
@@ -143,17 +144,17 @@ const CustomCollapse = styled(Navbar.Collapse)`
 `;
 
 const CustomNavLink = styled(Nav.Link)`
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   margin-right: 35px;
   font-size: large;
 
   &:hover {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     transform: scale(1.05);
   }
 
   &.active {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     font-weight: bold;
     transform: scale(1.1);
     background-color: transparent;
@@ -168,7 +169,6 @@ const ThemeToggleContainer = styled.div`
   display: flex;
   align-items: center;
 
-  /* Make sure it's always visible even on small screens */
   @media (max-width: 768px) {
     position: absolute;
     right: 10px;
@@ -182,7 +182,8 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
   const isDarkMode = theme === "dark";
-  
+  const themeContext = useTheme();
+
   const [darkMode, setDarkMode] = useState(isDarkMode);
 
   const toggleDarkMode = () => {
@@ -280,8 +281,8 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
             checked={darkMode}
             onChange={toggleDarkMode}
             size={20}
-            moonColor = {colors.blue}
-            sunColor = {colors.blue}
+            moonColor = {themeContext.blue}
+            sunColor = {themeContext.blue}
           />
         </ThemeToggleContainer>
       </Container>

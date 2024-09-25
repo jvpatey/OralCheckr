@@ -12,10 +12,9 @@ import { QuestionnaireCardContainer } from "../../components/questionnaire/Quest
 import { QuestionnaireCard } from "../../components/questionnaire/QuestionnaireCard";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
 import { StyledModal } from "../../components/questionnaire/Modal";
-import { colors } from "../../common/utilities/color-utils";
 
 const TitleText = styled.h1`
-  color: ${colors.blue};
+  color: ${({ theme }) => theme.blue};
   margin-top: 20px;
   margin-bottom: 60px;
   text-align: center;
@@ -29,7 +28,7 @@ const TitleText = styled.h1`
 `;
 
 const CardText = styled.h5`
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   margin-bottom: 20px;
   margin-right: 40px;
   margin-left: 40px;
@@ -59,8 +58,8 @@ const NavButton = styled(NavigationButton)`
   font-size: 1.25rem;
   text-align: center;
   border: solid 2px;
-  border-color: ${colors.green};
-  background-color: ${colors.green};
+  border-color: ${({ theme }) => theme.green};
+  background-color: ${({ theme }) => theme.green};
   color: ${({ theme }) => theme.accentBackgroundColor};
 
   @media (max-width: 768px) {
@@ -71,33 +70,33 @@ const NavButton = styled(NavigationButton)`
 
   &:hover {
     background-color: ${({ theme }) => theme.accentBackgroundColor};
-    color: ${colors.green};
+    color: ${({ theme }) => theme.green};
     border: solid 2px;
-    border-color: ${colors.green};
+    border-color: ${({ theme }) => theme.green};
   }
 `;
 
 const ModalButton = styled(Button)<ButtonProps>`
   &.btn-secondary {
     background-color: ${({ theme }) => theme.accentBackgroundColor};
-    color: ${colors.textGrey};
-    border: 1px solid ${colors.textGrey};
+    color: ${({ theme }) => theme.textGrey};
+    border: 1px solid ${({ theme }) => theme.textGrey};
 
     &:hover {
-      background-color: ${colors.textGrey};
+      background-color: ${({ theme }) => theme.textGrey};
       color: ${({ theme }) => theme.accentBackgroundColor};
-      border-color: ${colors.bgWhite};
+      border-color: ${({ theme }) => theme.backgroundColor};
     }
   }
 
   &.btn-primary {
     background-color: ${({ theme }) => theme.accentBackgroundColor};
-    border-color: ${colors.blue};
-    color: ${colors.blue};
+    border-color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.blue};
 
     &:hover {
-      background-color: ${colors.blue};
-      border-color: ${colors.blue};
+      background-color: ${({ theme }) => theme.blue};
+      border-color: ${({ theme }) => theme.blue};
       color: ${({ theme }) => theme.accentBackgroundColor};
     }
   }

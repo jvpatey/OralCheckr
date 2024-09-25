@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Question, Type } from "./Questionnaire";
-import { colors } from "../../common/utilities/color-utils";
 
 // Styled-components for the Questionnaire component
 
 const QuesTitle = styled.h2`
-  color: ${colors.blue};
+  color: ${({ theme }) => theme.blue};
   margin-bottom: 20px;
   text-align: center;
   font-size: 1.5rem;
@@ -36,7 +35,7 @@ const FormGroup = styled.div.withConfig({
   border-radius: 20px;
   margin-bottom: 15px;
   width: 100%;
-  color: ${colors.darkGrey};
+  color: ${({ theme }) => theme.darkGrey};
 
   &:hover {
     background-color: ${({ theme }) => theme.backgroundColor};

@@ -2,7 +2,6 @@ import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { colors } from "../../common/utilities/color-utils";
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -10,8 +9,8 @@ const StyledCard = styled(Card)`
   margin: 20px auto;
   height: auto;
   min-height: 40vh;
-  background-color: ${colors.blue};
-  border: 4px solid ${colors.blue};
+  background-color: ${({ theme }) => theme.blue};
+  border: 4px solid ${({ theme }) => theme.blue};
   border-radius: 20px;
   animation: fadeInUp 1s ease-out;
   display: flex;
@@ -38,8 +37,8 @@ const StyledCard = styled(Card)`
   }
 
   &:hover {
-    background-color: ${colors.green};
-    border: 4px solid ${colors.green};
+    background-color: ${({ theme }) => theme.green};
+    border: 4px solid ${({ theme }) => theme.green};
     transform: scale(1.05);
   }
 `;

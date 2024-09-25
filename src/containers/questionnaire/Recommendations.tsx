@@ -4,7 +4,6 @@ import Carousel from "react-bootstrap/Carousel";
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import questionData from "../../common/questionnaire.json";
-import { colors } from "../../common/utilities/color-utils";
 
 // Styled-components for Recommendations Component
 const NoRecommendations = styled.div`
@@ -13,7 +12,7 @@ const NoRecommendations = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
 `;
 
 const CarouselContainer = styled.div`
@@ -32,7 +31,7 @@ const CarouselContent = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   padding: 20px 40px;
   overflow-y: auto;
 
@@ -53,7 +52,7 @@ const CategoryText = styled.div`
   font-size: 20px;
   margin-top: 10px;
   margin-bottom: 5px;
-  color: ${colors.green};
+  color: ${({ theme }) => theme.green};
 
   @media (max-width: 950px) {
     font-size: 16px;
@@ -66,7 +65,7 @@ const CategoryText = styled.div`
 
 const StyledHeader = styled(Card.Header)`
   background-color: ${({ theme }) => theme.backgroundColor};
-  color: ${colors.blue};
+  color: ${({ theme }) => theme.blue};
   font-size: 25px;
   font-weight: bold;
   border: none;
@@ -101,11 +100,11 @@ const CustomCarousel = styled(Carousel)`
   }
 
   .carousel-indicators li {
-    background-color: ${colors.disabledBgGrey};
+    background-color: ${({ theme }) => theme.disabledBackground};
   }
 
   .carousel-indicators .active {
-    background-color: ${colors.green};
+    background-color: ${({ theme }) => theme.green};
   }
 
   .carousel-control-prev,
@@ -114,7 +113,7 @@ const CustomCarousel = styled(Carousel)`
     top: 50%;
     transform: translateY(-50%);
     width: auto;
-    color: ${colors.green};
+    color: ${({ theme }) => theme.green};
     margin: 0 -15px;
   }
 

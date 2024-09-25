@@ -1,7 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { colors } from "../common/utilities/color-utils";
 import { getFullPath } from "../common/constants/routes";
 import { RoutePaths } from "../common/constants/routes";
 
@@ -23,7 +22,7 @@ const SidebarContainer = styled.div`
   position: fixed;
   top: 60px;
   left: 0;
-  background-color: ${colors.blue};
+  background-color: ${({ theme }) => theme.blue};
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -64,13 +63,13 @@ const SidebarLink = styled(Link)`
   &:hover {
     color: ${({ theme }) => theme.backgroundColor};
     transform: scale(1.05);
-    background-color: ${colors.green};
+    background-color: ${({ theme }) => theme.green};
   }
 
   &.active {
     font-weight: 800;
     font-size: 17px;
-    background-color: ${colors.green};
+    background-color: ${({ theme }) => theme.green};
     color: ${({ theme }) => theme.backgroundColor};
     border-radius: 10px;
     padding: 10px 20px;
@@ -88,7 +87,7 @@ const SidebarLink = styled(Link)`
       font-weight: 800;
       color: ${({ theme }) => theme.backgroundColor};
       font-size: 18px;
-      background-color: ${colors.green};
+      background-color: ${({ theme }) => theme.green};
       padding: 8px;
       border-radius: 10px;
     }
@@ -101,7 +100,7 @@ const SidebarLink = styled(Link)`
       left: 60px;
       top: 50%;
       transform: translateY(-50%);
-      background: ${colors.darkGrey};
+      background: ${({ theme }) => theme.darkGrey};
       color: ${({ theme }) => theme.backgroundColor};
       padding: 2px 5px;
       border-radius: 4px;

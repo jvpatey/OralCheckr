@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
-import { colors } from "../../common/utilities/color-utils";
 
 // Styled component to style the Questionnaire modal
 export const StyledModal = styled(Modal)`
@@ -17,12 +16,12 @@ export const StyledModal = styled(Modal)`
   }
 
   .modal-title {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     font-size: 1.5rem;
   }
 
   .modal-body {
-    color: ${colors.textGrey};
+    color: ${({ theme }) => theme.textGrey};
     font-size: 1.2rem;
   }
 `;

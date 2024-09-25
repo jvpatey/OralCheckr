@@ -2,15 +2,14 @@ import { useState } from "react";
 import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../../common/utilities/color-utils";
 
 // Common styles for both sides of the flip card
 const flipCardCommonStyles = css<{ $isComplete: boolean }>`
   background-color: ${({ theme }) => theme.backgroundColor};
-  color: ${({ $isComplete }) => ($isComplete ? colors.green : colors.blue)};
+  color: ${({ $isComplete, theme }) => ($isComplete ? theme.green : theme.blue)};
   font-weight: 600;
   border: 2px solid
-    ${({ $isComplete }) => ($isComplete ? colors.green : colors.blue)};
+    ${({ $isComplete, theme }) => ($isComplete ? theme.green : theme.blue)};
   border-radius: 10px;
   width: 100%;
   height: 100%;
@@ -104,7 +103,7 @@ const ArrowIconWrapper = styled.div`
   left: 5px;
   font-size: 12px;
   cursor: pointer;
-  color: ${colors.blue};
+  color: ${({ theme }) => theme.blue};
   opacity: 0;
   transition: opacity 0.3s;
 `;
@@ -121,7 +120,7 @@ const BackText = styled.div`
   padding: 10px;
 
   .label {
-    color: ${colors.textGrey};
+    color: ${({ theme }) => theme.textGrey};
     font-weight: bold;
     overflow: hidden;
     white-space: nowrap;
@@ -131,7 +130,7 @@ const BackText = styled.div`
   }
 
   .value {
-    color: ${colors.green};
+    color: ${({ theme }) => theme.green};
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -146,8 +145,8 @@ const BackText = styled.div`
 // Styled component for displaying the log count in a bubble
 const LogCountBubble = styled.div`
   background-color: ${({ theme }) => theme.backgroundColor};
-  color: ${colors.green};
-  border: 2px solid ${colors.green};
+  color: ${({ theme }) => theme.green};
+  border: 2px solid ${({ theme }) => theme.green};
   font-weight: bold;
   font-size: 14px;
   border-radius: 10px;

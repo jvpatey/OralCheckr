@@ -7,12 +7,12 @@ import styled from "styled-components";
 import { RoutePaths } from "../common/constants/routes";
 import { getFullPath } from "../common/constants/routes";
 import { PageBackground } from "../components/PageBackground";
-import { colors } from "../common/utilities/color-utils";
 import { useState } from "react";
 
 // styled-component styles for Login Page
 const AnimatedCard = styled(Card)`
   border-radius: 15px;
+  border-color: ${({ theme }) => theme.blue};
   margin-top: 40px;
   animation: fadeInUp 1s ease-out;
 
@@ -31,10 +31,10 @@ const AnimatedCard = styled(Card)`
 const CardBody = styled(Card.Body)`
   max-width: 400px;
   min-height: 600px;
-  background-color: ${colors.blue};
+  background-color: ${({ theme }) => theme.blue};
   border-style: solid;
   border-width: 4px;
-  border-color: ${colors.blue};
+  border-color: ${({ theme }) => theme.blue};
   border-radius: 15px;
   padding: 20px;
   text-align: center;
@@ -54,18 +54,18 @@ const LogoImgStyle = styled.img`
 const LogoText = styled.span`
   font-size: 40px;
   font-weight: bold;
-  color: ${colors.bgWhite};
+  color: ${({ theme }) => theme.backgroundColor};
 `;
 
 const TextStyle = styled(Card.Text)`
-  color: ${colors.bgWhite};
+  color: ${({ theme }) => theme.backgroundColor};
   font-weight: 500;
   text-align: center;
   margin-top: 20px;
 `;
 
 const LoginText = styled(Card.Text)`
-  color: ${colors.bgWhite};
+  color: ${({ theme }) => theme.backgroundColor};
   font-size: x-large;
   font-weight: 600;
   text-align: center;
@@ -73,11 +73,11 @@ const LoginText = styled(Card.Text)`
 `;
 
 const UsernameStyle = styled(Form.Control)`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
   margin-top: 30px;
   border-style: solid;
   border-width: 2px;
-  border-color: ${colors.blue};
+  border-color: ${({ theme }) => theme.blue};
 
   ::placeholder {
     opacity: 1 !important;
@@ -86,11 +86,11 @@ const UsernameStyle = styled(Form.Control)`
 `;
 
 const PasswordStyle = styled(Form.Control)`
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
   margin-top: 20px;
   border-style: solid;
   border-width: 2px;
-  border-color: ${colors.blue};
+  border-color: ${({ theme }) => theme.blue};
 
   ::placeholder {
     color: #07889b !important;
@@ -100,10 +100,11 @@ const PasswordStyle = styled(Form.Control)`
 `;
 
 const Button = styled.button<{ $login?: boolean }>`
-  background-color: ${(props) => (props.$login ? colors.green : colors.green)};
-  color: ${(props) => (props.$login ? colors.bgWhite : colors.bgWhite)};
+  background-color: ${(props) =>
+    props.$login ? props.theme.green : props.theme.green};
+  color: ${(props) => (props.$login ? props.theme.backgroundColor : props.theme.backgroundColor)};
   font-weight: bold;
-  border: 2px solid ${(props) => (props.$login ? colors.blue : colors.blue)};
+  border: 2px solid ${(props) => (props.$login ? props.theme.blue : props.theme.blue)};
   width: 70%;
   margin-top: 10px;
   border-radius: 20px;
@@ -112,12 +113,13 @@ const Button = styled.button<{ $login?: boolean }>`
 
   &:hover {
     background-color: ${(props) =>
-      props.$login ? colors.bgWhite : colors.bgWhite};
-    color: ${(props) => (props.$login ? colors.green : colors.green)};
-    border-color: ${colors.bgWhite};
+      props.$login ? props.theme.backgroundColor : props.theme.backgroundColor};
+    color: ${(props) => (props.$login ? props.theme.green : props.theme.green)};
+    border-color: ${(props) => props.theme.backgroundColor};
     border-width: 2px;
   }
 `;
+
 
 const AlertWrapper = styled.div`
   height: 50px;

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { colors } from "../../../../common/utilities/color-utils";
 
 // Interface for the analytics tile props
 interface AnalyticsTileProps {
@@ -26,7 +25,7 @@ const TileContainer = styled.div`
 const TileHeading = styled.h3`
   font-size: 16px;
   font-weight: bold;
-  color: ${colors.blue};
+  color: ${({ theme }) => theme.blue};
   margin-top: 10px;
   text-align: center;
 `;
@@ -34,7 +33,7 @@ const TileHeading = styled.h3`
 const TileMainContent = styled.div<{ $isMissedDays?: boolean }>`
   font-size: 40px;
   font-weight: bold;
-  color: ${({ $isMissedDays }) => ($isMissedDays ? colors.red : colors.green)};
+  color: ${({ $isMissedDays, theme }) => ($isMissedDays ? theme.red : theme.green)};
   margin-top: 10px;
   margin-bottom: 8px;
 
@@ -45,7 +44,7 @@ const TileMainContent = styled.div<{ $isMissedDays?: boolean }>`
 
 const TileSubContent = styled.div`
   font-size: 12px;
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   margin-bottom: 5px;
 `;
 

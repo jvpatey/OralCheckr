@@ -5,7 +5,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Logging } from "../../habits/Habits";
-import { colors } from "../../../../common/utilities/color-utils";
 import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
 import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
 import { formatMonthYear } from "../../../../common/utilities/date-utils";
@@ -80,7 +79,7 @@ const CalendarContainer = styled.div`
   .react-datepicker__day--selected,
   .react-datepicker__day--keyboard-selected {
     background-color: transparent;
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
   }
 
   .react-datepicker__day--outside-month {
@@ -89,7 +88,7 @@ const CalendarContainer = styled.div`
 
   .react-datepicker__day--today {
     background-color: transparent;
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
   }
 
   /* Hide the navigation buttons */
@@ -105,7 +104,7 @@ const DaysHeader = styled.div`
   width: 100%;
   margin-bottom: 10px;
   font-weight: bold;
-  color: ${colors.green};
+  color: ${({ theme }) => theme.green};
   text-transform: uppercase;
 `;
 
@@ -131,7 +130,7 @@ const DayWrapper = styled.div`
 
 // Styled component to display the current month and year
 const MonthYearDisplay = styled.div`
-  color: ${colors.blue};
+  color: ${({ theme }) => theme.blue};
   text-align: center;
   font-size: 20px;
   font-weight: bold;

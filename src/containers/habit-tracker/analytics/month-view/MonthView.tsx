@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { HabitDropdown } from "../HabitDropdown";
 import { Habit, Logging } from "../../habits/Habits";
-import { colors } from "../../../../common/utilities/color-utils";
 import { HabitCalendar } from "./HabitCalendar";
 import {
   calculateTotalCount,
@@ -131,7 +130,7 @@ const HabitsContainer = styled.div`
 const HabitsTitle = styled.h3`
   font-size: 24px;
   font-weight: bold;
-  color: ${colors.green};
+  color: ${({ theme }) => theme.green};
   margin-top: 10px;
   text-align: center;
 
