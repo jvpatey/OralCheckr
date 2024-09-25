@@ -1,7 +1,6 @@
 import ReactApexChart from "react-apexcharts";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { Logging } from "../../../../containers/habit-tracker/habits/Habits";
-import { colors } from "../../../../common/utilities/color-utils";
 import { getDaysInMonth } from 'date-fns';
 import { upperFirst } from "lodash";
 
@@ -40,7 +39,8 @@ interface LineChartProps {
 // Function to generate the ApexCharts options object
 const generateChartOptions = (
   daysInMonth: number,
-  month: string
+  month: string,
+  theme: any
 ): ApexCharts.ApexOptions => {
   return {
     chart: {
@@ -59,12 +59,12 @@ const generateChartOptions = (
       title: {
         text: "Day of the Month",
         style: {
-          color: colors.green,
+          color: theme.green,
         },
       },
       labels: {
         style: {
-          colors: colors.blue,
+          colors: theme.blue,
           fontSize: "10px",
         },
         rotate: -45,
@@ -75,23 +75,23 @@ const generateChartOptions = (
       title: {
         text: "Logs",
         style: {
-          color: colors.green,
+          color: theme.green,
         },
       },
       labels: {
         style: {
-          colors: colors.blue,
+          colors: theme.blue,
         },
         formatter: (value: number) => Math.floor(value).toString(),
       },
       min: 0,
       tickAmount: 5,
     },
-    colors: [colors.blue],
+    colors: [theme.blue],
     markers: {
       size: 4,
-      colors: [colors.blue],
-      strokeColors: colors.white,
+      colors: [theme.blue],
+      strokeColors: "transparent",
       strokeWidth: 2,
     },
     tooltip: {
@@ -104,7 +104,7 @@ const generateChartOptions = (
       },
     },
     grid: {
-      borderColor: colors.bgGrey,
+      borderColor: theme.textGrey,
     },
     dataLabels: {
       enabled: false,
@@ -161,6 +161,7 @@ export function LineChart({
   year,
   month,
 }: LineChartProps) {
+  const theme = useTheme();
   const logsForHabit = habitsLog[selectedHabit]?.[year]?.[month.toLowerCase()] || {};
   // Get the number of days in the current month
   const daysInMonth = getDaysInMonth(new Date(year, new Date(`${month} 1, ${year}`).getMonth()));
@@ -172,7 +173,7 @@ export function LineChart({
   });
 
   // Get the options object for ApexCharts
-  const options = generateChartOptions(daysInMonth, month);
+  const options = generateChartOptions(daysInMonth, month, theme);
 
   const series = [
     {
