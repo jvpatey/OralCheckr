@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../../common/utilities/color-utils";
 
 interface IconButtonProps {
   icon: IconDefinition;
@@ -19,11 +18,11 @@ const ButtonContainer = styled.div<{
   $hoverBackgroundColor: string;
 }>`
   background-color: ${({ $disabled, theme }) =>
-    $disabled ? colors.disabledBgGrey : theme.backgroundColor };
+    $disabled ? theme.disabledBackground : theme.backgroundColor };
   border: 2px solid
-    ${({ $borderColor, $disabled }) =>
-      $disabled ? colors.bgGrey : $borderColor};
-  color: ${({ $color, $disabled }) => ($disabled ? colors.bgGrey : $color)};
+    ${({ $borderColor, $disabled, theme }) =>
+      $disabled ? theme.disabledBackground : $borderColor};
+  color: ${({ $color, $disabled, theme }) => ($disabled ? theme.disabledText : $color)};
   width: 50px;
   height: 45px;
   display: flex;
@@ -37,13 +36,13 @@ const ButtonContainer = styled.div<{
   transition: box-shadow 0.3s, background-color 0.3s;
 
   &:hover {
-    background-color: ${({ $hoverBackgroundColor, $disabled }) =>
-      $disabled ? colors.disabledBgGrey : $hoverBackgroundColor};
+    background-color: ${({ $hoverBackgroundColor, $disabled, theme }) =>
+      $disabled ? theme.disabledBackground : $hoverBackgroundColor};
     border: 2px solid
-      ${({ $borderColor, $disabled }) =>
-        $disabled ? colors.bgGrey : $borderColor};
+      ${({ $borderColor, $disabled, theme }) =>
+        $disabled ? theme.disabledBackground : $borderColor};
     color: ${({ theme, $disabled }) =>
-      $disabled ? colors.bgGrey : theme.backgroundColor};
+      $disabled ? theme.disabledText : theme.backgroundColor};
     box-shadow: ${({ $disabled }) =>
       $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
   }

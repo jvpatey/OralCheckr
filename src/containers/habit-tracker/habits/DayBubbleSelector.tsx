@@ -37,8 +37,8 @@ const ArrowButton = styled.button<{ $disabled: boolean }>`
   justify-content: center;
 
   &:hover {
-    background-color: ${({ $disabled }) =>
-      $disabled ? "none" : colors.disabledBgGrey};
+    background-color: ${({ $disabled, theme }) =>
+      $disabled ? "none" : theme.disabledBackground};
     cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
   }
 

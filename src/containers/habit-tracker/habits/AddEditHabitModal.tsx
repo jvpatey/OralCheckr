@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Modal, Form } from "react-bootstrap";
 import { StyledModal } from "../../../components/questionnaire/Modal";
 import { Habit } from "./Habits";
 import { colors } from "../../../common/utilities/color-utils";
@@ -16,23 +16,41 @@ interface AddEditHabitModalProps {
 
 // Styled component for the Save Button
 const SaveButton = styled.button<{ disabled: boolean }>`
-  background-color: ${({ disabled }) =>
-    disabled ? colors.disabledBgGrey : colors.blue};
-  border-color: ${({ disabled }) =>
-    disabled ? colors.disabledBgGrey : colors.blue};
-  color: white;
+  background-color: ${({ disabled, theme }) =>
+    disabled ? theme.disabledBackground : theme.accentBackgroundColor };
+  border-color: ${({ disabled, theme }) =>
+    disabled ? theme.disabledBackground : colors.blue};
+  color: ${({ disabled, theme }) =>
+    disabled ? theme.accentBackgroundColor : colors.blue};
   padding: 8px 16px;
   border-radius: 5px;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   transition: background-color 0.3s ease, border-color 0.3s ease;
 
   &:hover {
-    background-color: ${({ disabled }) =>
-      disabled ? colors.disabledBgGrey : colors.bgWhite};
-    border-color: ${({ disabled }) =>
-      disabled ? colors.disabledBgGrey : colors.blue};
-    color: ${({ disabled }) =>
-      disabled ? colors.disabledBgGrey : colors.blue};
+    background-color: ${({ disabled, theme }) =>
+      disabled ? theme.disabledBackgroundColor : theme.backgroundColor};
+    border-color: ${({ disabled, theme }) =>
+      disabled ? theme.disabledBackground : colors.blue};
+    color: ${({ disabled, theme }) =>
+      disabled ? theme.accentBackgroundColor : colors.blue};
+  }
+`;
+
+// Styled component for the Cancel Button
+const CancelButton = styled.button`
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
+  border-color: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.blue};
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.backgroundColor};
+    border-color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.blue};
   }
 `;
 
@@ -115,9 +133,9 @@ export function AddEditHabitModal({
       </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-secondary" onClick={handleClose}>
+        <CancelButton onClick={handleClose}>
           Cancel
-        </Button>
+        </CancelButton>
         <SaveButton
           disabled={isSaveDisabled()}
           onClick={() => handleSaveHabit(newHabit)}
