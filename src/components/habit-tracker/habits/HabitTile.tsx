@@ -6,7 +6,7 @@ import { colors } from "../../../common/utilities/color-utils";
 
 // Common styles for both sides of the flip card
 const flipCardCommonStyles = css<{ $isComplete: boolean }>`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   color: ${({ $isComplete }) => ($isComplete ? colors.green : colors.blue)};
   font-weight: 600;
   border: 2px solid
@@ -145,7 +145,7 @@ const BackText = styled.div`
 
 // Styled component for displaying the log count in a bubble
 const LogCountBubble = styled.div`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   color: ${colors.green};
   border: 2px solid ${colors.green};
   font-weight: bold;
