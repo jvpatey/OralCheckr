@@ -7,23 +7,19 @@ interface IconButtonProps {
   icon: IconDefinition;
   onClick: () => void;
   borderColor: string;
-  backgroundColor: string;
   color: string;
   hoverBackgroundColor: string;
-  hoverColor: string;
   disabled?: boolean;
 }
 
 const ButtonContainer = styled.div<{
   $disabled?: boolean;
   $borderColor: string;
-  $backgroundColor: string;
   $color: string;
   $hoverBackgroundColor: string;
-  $hoverColor: string;
 }>`
-  background-color: ${({ $backgroundColor, $disabled }) =>
-    $disabled ? colors.disabledBgGrey : $backgroundColor};
+  background-color: ${({ $disabled, theme }) =>
+    $disabled ? colors.disabledBgGrey : theme.backgroundColor };
   border: 2px solid
     ${({ $borderColor, $disabled }) =>
       $disabled ? colors.bgGrey : $borderColor};
@@ -46,8 +42,8 @@ const ButtonContainer = styled.div<{
     border: 2px solid
       ${({ $borderColor, $disabled }) =>
         $disabled ? colors.bgGrey : $borderColor};
-    color: ${({ $hoverColor, $disabled }) =>
-      $disabled ? colors.bgGrey : $hoverColor};
+    color: ${({ theme, $disabled }) =>
+      $disabled ? colors.bgGrey : theme.backgroundColor};
     box-shadow: ${({ $disabled }) =>
       $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
   }
@@ -69,10 +65,8 @@ export function IconButton({
   icon,
   onClick,
   borderColor,
-  backgroundColor,
   color,
   hoverBackgroundColor,
-  hoverColor,
   disabled = false,
 }: IconButtonProps) {
   return (
@@ -80,10 +74,8 @@ export function IconButton({
       onClick={onClick}
       $disabled={disabled}
       $borderColor={borderColor}
-      $backgroundColor={backgroundColor}
       $color={color}
       $hoverBackgroundColor={hoverBackgroundColor}
-      $hoverColor={hoverColor}
     >
       <ButtonIcon>
         <FontAwesomeIcon icon={icon} />

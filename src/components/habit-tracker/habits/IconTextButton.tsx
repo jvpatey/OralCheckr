@@ -8,8 +8,6 @@ interface IconTextButtonProps {
   label: string;
   onClick: () => void;
   backgroundColor: string;
-  color: string;
-  hoverBackgroundColor: string;
   hoverColor: string;
   isEditMode?: boolean;
   disabled?: boolean;
@@ -17,15 +15,13 @@ interface IconTextButtonProps {
 
 const ButtonContainer = styled.div<{
   $backgroundColor: string;
-  $color: string;
-  $hoverBackgroundColor: string;
   $hoverColor: string;
   $isEditMode?: boolean;
   $disabled?: boolean;
 }>`
   background-color: ${({ $backgroundColor, $disabled }) =>
     $disabled ? colors.disabledBgGrey : $backgroundColor};
-  color: ${({ $color, $disabled }) => ($disabled ? colors.textGrey : $color)};
+  color: ${({ theme, $disabled }) => ($disabled ? colors.textGrey : theme.backgroundColor )};
   width: auto;
   height: 35px;
   display: flex;
@@ -42,10 +38,10 @@ const ButtonContainer = styled.div<{
       $disabled ? colors.disabledBgGrey : $backgroundColor};
 
   &:hover {
-    background-color: ${({ $hoverBackgroundColor, $disabled }) =>
-      $disabled ? colors.disabledBgGrey : $hoverBackgroundColor};
-    border-color: ${({ $hoverBackgroundColor, $disabled }) =>
-      $disabled ? colors.disabledBgGrey : $hoverBackgroundColor};
+    background-color: ${({ theme, $disabled }) =>
+      $disabled ? colors.disabledBgGrey : theme.backgroundColor};
+    border-color: ${({ theme, $disabled }) =>
+      $disabled ? colors.disabledBgGrey : theme.backgroundColor};
     color: ${({ $hoverColor, $disabled }) =>
       $disabled ? colors.textGrey : $hoverColor};
     box-shadow: ${({ $disabled }) =>
@@ -103,8 +99,6 @@ export function IconTextButton({
   label,
   onClick,
   backgroundColor,
-  color,
-  hoverBackgroundColor,
   hoverColor,
   isEditMode = false,
   disabled = false,
@@ -113,8 +107,6 @@ export function IconTextButton({
     <ButtonContainer
       onClick={disabled ? undefined : onClick}
       $backgroundColor={backgroundColor}
-      $color={color}
-      $hoverBackgroundColor={hoverBackgroundColor}
       $hoverColor={hoverColor}
       $isEditMode={isEditMode}
       $disabled={disabled}

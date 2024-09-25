@@ -60,19 +60,15 @@ export function RenderHabits({
                   icon={faPencilAlt}
                   onClick={() => handleEditHabit(index)}
                   borderColor={colors.yellow}
-                  backgroundColor={colors.bgWhite}
                   color={colors.yellow}
                   hoverBackgroundColor={colors.yellow}
-                  hoverColor={colors.bgWhite}
                 />
                 <IconButton
                   icon={faTrashAlt}
                   onClick={() => handleDeleteHabit(index)}
                   borderColor={colors.red}
-                  backgroundColor={colors.bgWhite}
                   color={colors.red}
                   hoverBackgroundColor={colors.red}
-                  hoverColor={colors.bgWhite}
                 />
               </>
             ) : (
@@ -81,20 +77,16 @@ export function RenderHabits({
                   icon={faPlusCircle}
                   onClick={() => handleLog(habit.name, selectedDate)}
                   borderColor={colors.green}
-                  backgroundColor={colors.bgWhite}
                   color={colors.green}
                   hoverBackgroundColor={colors.green}
-                  hoverColor={colors.bgWhite}
                   disabled={isAddLogDisabled}
                 />
                 <IconButton
                   icon={faMinusCircle}
                   onClick={() => handleRemoveLog(habit.name, selectedDate)}
                   borderColor={colors.red}
-                  backgroundColor={colors.bgWhite}
                   color={colors.red}
                   hoverBackgroundColor={colors.red}
-                  hoverColor={colors.bgWhite}
                   disabled={isRemoveLogDisabled}
                 />
               </>
