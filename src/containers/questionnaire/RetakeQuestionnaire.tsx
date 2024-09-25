@@ -61,7 +61,7 @@ const NavButton = styled(NavigationButton)`
   border: solid 2px;
   border-color: ${colors.green};
   background-color: ${colors.green};
-  color: ${colors.bgWhite};
+  color: ${({ theme }) => theme.accentBackgroundColor};
 
   @media (max-width: 768px) {
     width: 70%;
@@ -70,7 +70,7 @@ const NavButton = styled(NavigationButton)`
   }
 
   &:hover {
-    background-color: ${colors.bgWhite};
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
     color: ${colors.green};
     border: solid 2px;
     border-color: ${colors.green};
@@ -79,26 +79,26 @@ const NavButton = styled(NavigationButton)`
 
 const ModalButton = styled(Button)<ButtonProps>`
   &.btn-secondary {
-    background-color: ${colors.bgWhite};
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
     color: ${colors.textGrey};
     border: 1px solid ${colors.textGrey};
 
     &:hover {
       background-color: ${colors.textGrey};
-      color: ${colors.bgWhite};
+      color: ${({ theme }) => theme.accentBackgroundColor};
       border-color: ${colors.bgWhite};
     }
   }
 
   &.btn-primary {
-    background-color: ${colors.bgWhite};
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
     border-color: ${colors.blue};
     color: ${colors.blue};
 
     &:hover {
       background-color: ${colors.blue};
       border-color: ${colors.blue};
-      color: ${colors.bgWhite};
+      color: ${({ theme }) => theme.accentBackgroundColor};
     }
   }
 `;

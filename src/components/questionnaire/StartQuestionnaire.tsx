@@ -59,7 +59,7 @@ const StartButton = styled(NavigationButton)`
   border: solid 2px;
   border-color: ${colors.green};
   background-color: ${colors.green};
-  color: ${colors.bgWhite};
+  color: ${({ theme }) => theme.accentBackgroundColor};
 
   @media (max-width: 768px) {
     width: 80%;
@@ -68,7 +68,7 @@ const StartButton = styled(NavigationButton)`
   }
 
   &:hover {
-    background-color: ${colors.bgWhite};
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
     color: ${colors.green};
     border: solid 2px;
     border-color: ${colors.green};
