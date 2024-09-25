@@ -276,8 +276,6 @@ const handleDeleteAllHabits = () => {
                   label="Add Habit"
                   onClick={handleAddHabitClick}
                   backgroundColor={colors.green}
-                  color={colors.bgWhite}
-                  hoverBackgroundColor={colors.bgWhite}
                   hoverColor={colors.green}
                 />
               )}
@@ -287,8 +285,6 @@ const handleDeleteAllHabits = () => {
                   label="Delete All"
                   onClick={handleDeleteAllHabits}
                   backgroundColor={colors.red}
-                  color={colors.bgWhite}
-                  hoverBackgroundColor={colors.bgWhite}
                   hoverColor={colors.red}
                   disabled={habits.length === 0}
                 />
@@ -298,8 +294,6 @@ const handleDeleteAllHabits = () => {
                 label={isEditMode ? "Exit" : "Edit"}
                 onClick={() => setIsEditMode(!isEditMode)}
                 backgroundColor={isEditMode ? colors.red : colors.yellow}
-                color={colors.bgWhite}
-                hoverBackgroundColor={colors.bgWhite}
                 hoverColor={isEditMode ? colors.red : colors.yellow}
                 disabled={!isEditMode && habits.length === 0}
               />

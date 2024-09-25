@@ -161,9 +161,9 @@ export function LineChart({
   year,
   month,
 }: LineChartProps) {
-  const logsForHabit = habitsLog[selectedHabit]?.[year]?.[month] || {};
-  const daysInMonth = getDaysInMonth(new Date(year, Number(month) - 1));
-
+  const logsForHabit = habitsLog[selectedHabit]?.[year]?.[month.toLowerCase()] || {};
+  // Get the number of days in the current month
+  const daysInMonth = getDaysInMonth(new Date(year, new Date(`${month} 1, ${year}`).getMonth()));
   // Create an array to store the number of logs for each day of the month
   const seriesData = Array.from({ length: daysInMonth }, (_, dayIndex) => {
     const dayOfMonth = dayIndex + 1;
