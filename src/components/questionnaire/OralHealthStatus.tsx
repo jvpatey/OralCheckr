@@ -4,7 +4,7 @@ import { colors } from "../../common/utilities/color-utils";
 
 // Styled-component styles for Oral Health Status Component
 const StyledHeader = styled(Card.Header)`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   color: ${colors.blue};
   font-size: 25px;
   font-weight: bold;

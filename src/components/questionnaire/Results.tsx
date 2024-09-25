@@ -2,7 +2,6 @@ import styled, { keyframes } from "styled-components";
 import { Card } from "react-bootstrap";
 import { OralHealthStatus } from "./OralHealthStatus";
 import { Recommendations } from "../../containers/questionnaire/Recommendations";
-import { colors } from "../../common/utilities/color-utils";
 import { PageBackground } from "../PageBackground";
 
 const fadeUp = keyframes`
@@ -21,7 +20,7 @@ const ResultsCard = styled(Card)`
   max-width: 1200px;
   height: auto;
   max-height: calc(100vh - 120px);
-  background-color: ${colors.bgLightGrey};
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
   border: transparent;
   border-radius: 20px;
   padding: 20px;
@@ -94,7 +93,7 @@ const TileWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;

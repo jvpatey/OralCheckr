@@ -65,7 +65,7 @@ const CategoryText = styled.div`
 `;
 
 const StyledHeader = styled(Card.Header)`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   color: ${colors.blue};
   font-size: 25px;
   font-weight: bold;
