@@ -6,9 +6,13 @@ import { Link, useLocation } from "react-router-dom";
 import { RoutePaths, getFullPath } from "../common/constants/routes";
 import { colors } from "../common/utilities/color-utils";
 import { NavLink } from "../common/links";
+import { useState } from "react";
+import { DarkModeSwitch } from "react-toggle-dark-mode";
 
 interface NavBarProps {
   links: NavLink[];
+  themeToggler: () => void;
+  theme: string;
 }
 
 const fadeInDown = keyframes`
@@ -23,7 +27,7 @@ const fadeInDown = keyframes`
 `;
 
 const CustomNavbar = styled(Navbar)`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   width: 100%;
   animation: ${fadeInDown} 1s ease-out;
 
@@ -69,6 +73,7 @@ const CustomDropdownToggle = styled(Dropdown.Toggle)`
   color: ${colors.textGrey};
   background: none;
   border: none;
+  margin-right: 20px;
 
   &:hover {
     color: ${colors.blue};
@@ -91,7 +96,7 @@ const CustomDropdownToggle = styled(Dropdown.Toggle)`
 `;
 
 const CustomDropdownMenu = styled(Dropdown.Menu)`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   border: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 200px;
@@ -116,7 +121,7 @@ const CustomDropdownItem = styled(Dropdown.Item)`
 `;
 
 const CustomCollapse = styled(Navbar.Collapse)`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
 
   @media (max-width: 768px) {
     position: absolute;
@@ -159,10 +164,31 @@ const Icon = styled.span`
   margin-right: 5px;
 `;
 
+const ThemeToggleContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  /* Make sure it's always visible even on small screens */
+  @media (max-width: 768px) {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    z-index: 10;
+  }
+`;
+
 // Functional component to render the Navbar - used on all pages
-export function NavBar({ links }: NavBarProps) {
+export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
+  const isDarkMode = theme === "dark";
+  
+  const [darkMode, setDarkMode] = useState(isDarkMode);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    themeToggler();
+  };
 
   const isActive = (href: string) => {
     const isQuestionnaireActive =
@@ -249,6 +275,15 @@ export function NavBar({ links }: NavBarProps) {
             ))}
           </Nav>
         </CustomCollapse>
+        <ThemeToggleContainer>
+          <DarkModeSwitch
+            checked={darkMode}
+            onChange={toggleDarkMode}
+            size={20}
+            moonColor = {colors.blue}
+            sunColor = {colors.blue}
+          />
+        </ThemeToggleContainer>
       </Container>
     </CustomNavbar>
   );

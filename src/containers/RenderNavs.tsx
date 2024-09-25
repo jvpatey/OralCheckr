@@ -11,26 +11,25 @@ import { Router } from "../Router";
 import { getFullPath } from "../common/constants/routes";
 import { RoutePaths } from "../common/constants/routes";
 
+interface RenderNavsProps {
+  themeToggler: () => void;
+  currentTheme: string;  // Add currentTheme prop
+}
+
 // Function to render the navigation components of the app
-export function RenderNavs() {
+export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
   const location = useLocation();
   const [sidebarLinks, setSidebarLinks] = useState<NavLink[]>([]);
 
-  // Hook to update the sidebar links whenever the URL path changes.
   useEffect(() => {
     const currentPath = location.pathname;
-
-    // Determine if the current path is related to the habit tracker section
     const isHabitTrackerRoute = currentPath.startsWith(
       getFullPath("/habit-tracker")
     );
-
-    // Determine if the current path is related to the questionnaire section
     const isQuestionnaireRoute = currentPath.startsWith(
       getFullPath("/questionnaire")
     );
 
-    // Update the sidebar links based on the current route
     if (isHabitTrackerRoute) {
       setSidebarLinks(
         sidebarNavLinks.filter(
@@ -54,7 +53,7 @@ export function RenderNavs() {
 
   return (
     <>
-      <NavBar links={navbarLinks} />
+      <NavBar links={navbarLinks} themeToggler={themeToggler} theme={currentTheme} />
       {sidebarLinks.length > 0 && <Sidebar links={sidebarLinks} />}
       <Router />
     </>

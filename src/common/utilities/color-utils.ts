@@ -20,3 +20,33 @@ export const greenHeatMapShades = {
   Dark: "#1e7f39",
   Darkest: "#005600",
 };
+
+export const lightTheme = {
+  disabledBackground: "#e0e0e0",
+  accentBackgroundColor: "#eeeeee",
+  progressBarUnfilled: "#f5f5f5",
+  disabledText: "#CCC",
+  textGrey: "#848889",
+  darkGrey: "#808080",
+  backgroundColor: "#f5f5f5",
+  blue: "#3f93b2",
+  green: "#41bc7a",
+  yellow: "#f1c232",
+  red: "#ff6961",
+  white: "#FFFFFF"
+}
+
+export const darkTheme: typeof lightTheme = {
+  disabledBackground: "#4a4a4a",
+  accentBackgroundColor: "#3a3a3a",
+  progressBarUnfilled: "#2c2c2c",
+  disabledText: "#434343",
+  textGrey: "#848889",
+  darkGrey: "#808080",
+  backgroundColor: "#2c2c2c",
+  blue: "#3f93b2",
+  green: "#41bc7a",
+  yellow: "#f1c232",
+  red: "#ff6961",
+  white: "#3a3a3a"
+}
