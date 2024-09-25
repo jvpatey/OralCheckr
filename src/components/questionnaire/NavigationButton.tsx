@@ -4,7 +4,7 @@ import { colors } from "../../common/utilities/color-utils";
 // Styled component for the Navigation buttons inside the Questionnaire
 export const NavigationButton = styled.button`
   background-color: ${colors.blue};
-  color: white;
+  color: ${({ theme }) => theme.accentBackgroundColor};
   border: none;
   padding: 10px 20px;
   border-radius: 20px;
@@ -14,15 +14,15 @@ export const NavigationButton = styled.button`
   width: 150px;
 
   &:hover {
-    background-color: ${colors.disabledBgGrey};
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
     color: ${colors.blue};
     border: solid 2px ${colors.blue};
   }
 
   &:disabled {
-    background-color: ${colors.disabledBgGrey};
-    border: solid 2px ${colors.bgGrey};
-    color: ${colors.bgGrey};
+    background-color: ${({ theme }) => theme.disabledBackground};
+    border: solid 2px ${({ theme }) => theme.disabledText};
+    color: ${({ theme }) => theme.disabledText};
     cursor: not-allowed;
   }
 

@@ -17,7 +17,7 @@ const FormContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 50px;
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 600px;
@@ -31,7 +31,7 @@ const FormGroup = styled.div.withConfig({
   display: flex;
   flex-direction: ${({ isRange }) => (isRange ? "column" : "row")};
   align-items: center;
-  background-color: ${colors.disabledBgGrey};
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
   padding: 10px 20px;
   border-radius: 20px;
   margin-bottom: 15px;
@@ -39,7 +39,7 @@ const FormGroup = styled.div.withConfig({
   color: ${colors.darkGrey};
 
   &:hover {
-    background-color: ${colors.bgGrey};
+    background-color: ${({ theme }) => theme.backgroundColor};
   }
 
   label {

@@ -7,8 +7,8 @@ export const StyledModal = styled(Modal)`
   padding: 10px;
 
   .modal-content {
-    background-color: ${colors.bgWhite};
-    border: 1px solid ${colors.bgWhite};
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
+    border: 1px solid ${({ theme }) => theme.accentBackgroundColor};
   }
 
   .modal-header,

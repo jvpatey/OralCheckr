@@ -1,6 +1,5 @@
 import styled, { keyframes } from "styled-components";
 import { Card } from "react-bootstrap";
-import { colors } from "../../common/utilities/color-utils";
 
 // Styled component for the QuestionnaireCard
 
