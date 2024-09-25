@@ -53,7 +53,7 @@ const SidebarLink = styled(Link)`
   padding: 10px 20px;
   text-align: left;
   text-decoration: none;
-  color: ${colors.bgWhite};
+  color: ${({ theme }) => theme.backgroundColor};
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -62,7 +62,7 @@ const SidebarLink = styled(Link)`
   overflow: hidden;
 
   &:hover {
-    color: ${colors.bgWhite};
+    color: ${({ theme }) => theme.backgroundColor};
     transform: scale(1.05);
     background-color: ${colors.green};
   }
@@ -71,7 +71,7 @@ const SidebarLink = styled(Link)`
     font-weight: 800;
     font-size: 17px;
     background-color: ${colors.green};
-    color: ${colors.bgWhite};
+    color: ${({ theme }) => theme.backgroundColor};
     border-radius: 10px;
     padding: 10px 20px;
     overflow: hidden;
@@ -86,7 +86,7 @@ const SidebarLink = styled(Link)`
 
     &.active {
       font-weight: 800;
-      color: ${colors.bgWhite};
+      color: ${({ theme }) => theme.backgroundColor};
       font-size: 18px;
       background-color: ${colors.green};
       padding: 8px;
@@ -102,7 +102,7 @@ const SidebarLink = styled(Link)`
       top: 50%;
       transform: translateY(-50%);
       background: ${colors.darkGrey};
-      color: ${colors.bgWhite};
+      color: ${({ theme }) => theme.backgroundColor};
       padding: 2px 5px;
       border-radius: 4px;
       white-space: nowrap;
