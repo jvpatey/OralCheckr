@@ -3338,6 +3338,15 @@ rect.legend-mouseover-inactive,
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
 
+  .apexcharts-heatmap-rect {
+    stroke: ${({theme:e})=>e.accentBackgroundColor};
+    stroke-width: 3px;
+  }
+
+  .apexcharts-legend-marker {
+    stroke: transparent;
+  }
+
   @media (min-width: 1280px) {
     max-width: 1100px;
     padding: 10px;
@@ -3366,8 +3375,8 @@ rect.legend-mouseover-inactive,
     width: 100%;
     padding: 5px;
   }
-`,Gee=e=>({chart:{height:350,type:"heatmap",toolbar:{show:!1},zoom:{enabled:!1},animations:{enabled:!0,speed:800,animateGradually:{enabled:!0},dynamicAnimation:{enabled:!0}}},plotOptions:{heatmap:{shadeIntensity:.5,colorScale:{ranges:[{from:0,to:0,color:e.accentBackgroundColor,name:"0 logs"},{from:1,to:1,color:zl.Light,name:"1 log"},{from:2,to:5,color:zl.MediumLight,name:"2-5 logs"},{from:6,to:7,color:zl.Medium,name:"6-7 logs"},{from:8,to:9,color:zl.MediumDark,name:"8-9 logs"},{from:10,to:11,color:zl.Dark,name:"10-11 logs"},{from:12,to:1/0,color:zl.Darkest,name:"12+ logs"}]}}},legend:{labels:{colors:e.textGrey}},dataLabels:{enabled:!1},xaxis:{categories:Array.from({length:12},(t,n)=>n+1),tickAmount:10,title:{text:"Months",style:{color:ce.blue,fontSize:"14px"}},labels:{style:{colors:ce.blue}}},yaxis:{title:{style:{color:ce.blue,fontSize:"14px"}},labels:{style:{colors:ce.blue},formatter:t=>Wee[t]}},grid:{borderColor:e.accentBackgroundColor},tooltip:{enabled:!0,custom:function({series:t,seriesIndex:n,dataPointIndex:r,w:o}){const l=o.globals.initialSeries[n].data[r].day,h=o.globals.seriesX[n][r],m=Xee[h-1],x=t[n][r];return`<div style="padding: 5px; color: ${ce.textGrey}">
-                  <div style="color: ${ce.blue}; font-weight: bold;">${m} ${l}</div>
+`,Gee=e=>({chart:{height:350,type:"heatmap",toolbar:{show:!1},zoom:{enabled:!1},animations:{enabled:!0,speed:800,animateGradually:{enabled:!0},dynamicAnimation:{enabled:!0}}},plotOptions:{heatmap:{shadeIntensity:.8,colorScale:{ranges:[{from:0,to:0,color:e.backgroundColor,name:"0 logs"},{from:1,to:1,color:zl.Light,name:"1 log"},{from:2,to:5,color:zl.MediumLight,name:"2-5 logs"},{from:6,to:7,color:zl.Medium,name:"6-7 logs"},{from:8,to:9,color:zl.MediumDark,name:"8-9 logs"},{from:10,to:11,color:zl.Dark,name:"10-11 logs"},{from:12,to:1/0,color:zl.Darkest,name:"12+ logs"}]}}},legend:{labels:{colors:e.textGrey}},dataLabels:{enabled:!1},xaxis:{categories:Array.from({length:12},(t,n)=>n+1),tickAmount:10,title:{text:"Months",style:{color:e.blue,fontSize:"14px"}},labels:{style:{colors:e.blue}}},yaxis:{title:{style:{color:e.blue,fontSize:"14px"}},labels:{style:{colors:e.blue},formatter:t=>Wee[t]}},grid:{borderColor:"transparent"},tooltip:{enabled:!0,custom:function({series:t,seriesIndex:n,dataPointIndex:r,w:o}){const l=o.globals.initialSeries[n].data[r].day,h=o.globals.seriesX[n][r],m=Xee[h-1],x=t[n][r];return`<div style="padding: 5px; color: ${e.textGrey}">
+                  <div style="color: ${e.blue}; font-weight: bold;">${m} ${l}</div>
                   Logs: ${x}
                 </div>`}}});function Uee({data:e}){const[t,n]=F.useState(!0),r=()=>{n(!1)},o=_1(),l=Gee(o);return H.jsx(Vee,{children:H.jsx(qee,{options:l,data:e,loading:t,isHeatmapChartMounted:r})})}function qee({options:e,data:t,loading:n,isHeatmapChartMounted:r}){return F.useEffect(()=>{r()},[]),n?H.jsx(EL,{}):H.jsx(Gw,{options:e,series:t,type:"heatmap",height:350})}function Qee(e,t,n){const r=e[t],o=new Map;return rJ({start:new Date(n,0,1),end:new Date(n,11,31)}).forEach(h=>{var I,N;const m=((N=(I=r==null?void 0:r[n])==null?void 0:I[Gm(h)])==null?void 0:N[h.getDate()])||0,x=h.getDay(),w=h.getMonth()+1,E=h.getDate(),_=o.get(x.toString())||[];_.push({x:w,y:m,day:E}),o.set(x.toString(),_)}),Array.from(o.entries()).map(([h,m])=>({name:h,data:m}))}const Kee=gs`
   from {
