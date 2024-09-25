@@ -28,8 +28,8 @@ const DatePickerWrapper = styled.div`
 
 // Custom-styled button to be used as the input field for the DatePicker
 const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
-  background-color: ${({ $disabled }) =>
-    $disabled ? colors.disabledBgGrey : colors.bgWhite};
+  background-color: ${({ $disabled, theme }) =>
+    $disabled ? colors.disabledBgGrey : theme.backgroundColor};
   color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.blue)};
   border: ${({ $disabled }) =>
     $disabled
@@ -49,7 +49,7 @@ const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
   &:hover {
     background-color: ${({ $disabled }) =>
       $disabled ? colors.disabledBgGrey : colors.blue};
-    color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.bgWhite)};
+    color: ${({ $disabled, theme }) => ($disabled ? colors.textGrey : theme.backgroundColor)};
     border: ${({ $disabled }) =>
       $disabled
         ? `2px solid ${colors.disabledBgGrey}`

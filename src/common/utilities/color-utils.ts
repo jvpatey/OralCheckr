@@ -24,7 +24,6 @@ export const greenHeatMapShades = {
 export const lightTheme = {
   disabledBackground: "#e0e0e0",
   accentBackgroundColor: "#eeeeee",
-  progressBarUnfilled: "#f5f5f5",
   disabledText: "#CCC",
   textGrey: "#848889",
   darkGrey: "#808080",
@@ -39,7 +38,6 @@ export const lightTheme = {
 export const darkTheme: typeof lightTheme = {
   disabledBackground: "#4a4a4a",
   accentBackgroundColor: "#3a3a3a",
-  progressBarUnfilled: "#2c2c2c",
   disabledText: "#434343",
   textGrey: "#848889",
   darkGrey: "#808080",
