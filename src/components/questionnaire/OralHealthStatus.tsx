@@ -45,11 +45,15 @@ const ScoreSpan = styled.span<{ $scoreColor: string }>`
 `;
 
 const CustomProgressBar = styled(ProgressBar)<{ $scoreColor: string }>`
-  height: 20px;
+  height: 25px;
   margin-top: 20px;
+  border-radius: 20px;
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
+
   .progress-bar {
+    color: ${({ theme }) => theme.accentBackgroundColor};
     background-color: ${(props) => props.$scoreColor};
-    font-size: 14px;
+    font-size: 15px;
     border-radius: 20px;
   }
 
