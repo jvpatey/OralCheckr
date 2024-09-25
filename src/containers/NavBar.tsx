@@ -5,9 +5,10 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { RoutePaths, getFullPath } from "../common/constants/routes";
 import { NavLink } from "../common/links";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { useTheme } from "styled-components";
+import { ThemeType } from "../App";
 
 
 interface NavBarProps {
@@ -181,15 +182,25 @@ const ThemeToggleContainer = styled.div`
 export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
-  const isDarkMode = theme === "dark";
   const themeContext = useTheme();
-
+  const storedTheme = (localStorage.getItem("theme") as ThemeType) || ThemeType.LIGHT;
+  const isDarkMode = storedTheme === ThemeType.DARK;
   const [darkMode, setDarkMode] = useState(isDarkMode);
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    const newMode = !darkMode;
+    setDarkMode(newMode);
     themeToggler();
+    localStorage.setItem("theme", newMode ? ThemeType.DARK : ThemeType.LIGHT);
   };
+
+  // Apply theme on component mount
+  useEffect(() => {
+    if (storedTheme !== theme) {
+      themeToggler();
+    }
+  }, [storedTheme, theme, themeToggler]);
+
 
   const isActive = (href: string) => {
     const isQuestionnaireActive =
@@ -213,6 +224,10 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
 
   const handleLogout = () => {
     localStorage.setItem("authenticated", "false");
+
+    if (darkMode) {
+      toggleDarkMode();
+    }
   };
 
   if (!isAuthenticated) {
