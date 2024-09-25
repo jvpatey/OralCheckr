@@ -58,20 +58,20 @@ const StyledCardBody = styled(Card.Body)`
 const CardTitle = styled.h2`
   margin-bottom: 10px;
   font-size: 30px;
-  color: ${colors.bgWhite};
+  color: ${({ theme }) => theme.backgroundColor};
   transition: color 0.3s ease;
 `;
 
 const CardIcon = styled(FontAwesomeIcon)`
   font-size: 36px;
-  color: ${colors.bgWhite};
+  color: ${({ theme }) => theme.backgroundColor};
   margin-bottom: 15px;
   transition: color 0.3s ease;
 `;
 
 const CardText = styled.p`
   font-size: 16px;
-  color: ${colors.bgWhite};
+  color: ${({ theme }) => theme.backgroundColor};
   margin: 10px;
 `;
 
