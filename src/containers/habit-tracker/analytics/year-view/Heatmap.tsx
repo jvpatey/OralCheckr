@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { colors, greenHeatMapShades } from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
 import { LoadingComponent } from "../../../../components/habit-tracker/analytics/LoadingComponent";
+import { useTheme } from "styled-components";
 
 // Global constants for days of the week and month names
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -24,7 +25,7 @@ const MONTH_NAMES = [
 
 // Heatmap card styles with media queries for responsiveness
 const HeatmapCard = styled.div`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
   border-radius: 10px;
   padding: 10px;
   width: 100%;
@@ -64,7 +65,7 @@ const HeatmapCard = styled.div`
 `;
 
 // Function to generate the ApexCharts options for the heatmap
-const useHeatmapOptions = (): ApexOptions => {
+const useHeatmapOptions = (theme: any): ApexOptions => {
   return {
     chart: {
       height: 350,
@@ -83,40 +84,20 @@ const useHeatmapOptions = (): ApexOptions => {
         shadeIntensity: 0.5,
         colorScale: {
           ranges: [
-            { from: 0, to: 0, color: colors.bgWhite, name: "0 logs" },
+            { from: 0, to: 0, color: theme.accentBackgroundColor, name: "0 logs" }, // Updated to use theme.accentBackgroundColor
             { from: 1, to: 1, color: greenHeatMapShades.Light, name: "1 log" },
-            {
-              from: 2,
-              to: 5,
-              color: greenHeatMapShades.MediumLight,
-              name: "2-5 logs",
-            },
-            {
-              from: 6,
-              to: 7,
-              color: greenHeatMapShades.Medium,
-              name: "6-7 logs",
-            },
-            {
-              from: 8,
-              to: 9,
-              color: greenHeatMapShades.MediumDark,
-              name: "8-9 logs",
-            },
-            {
-              from: 10,
-              to: 11,
-              color: greenHeatMapShades.Dark,
-              name: "10-11 logs",
-            },
-            {
-              from: 12,
-              to: Infinity,
-              color: greenHeatMapShades.Darkest,
-              name: "12+ logs",
-            },
+            { from: 2, to: 5, color: greenHeatMapShades.MediumLight, name: "2-5 logs" },
+            { from: 6, to: 7, color: greenHeatMapShades.Medium, name: "6-7 logs" },
+            { from: 8, to: 9, color: greenHeatMapShades.MediumDark, name: "8-9 logs" },
+            { from: 10, to: 11, color: greenHeatMapShades.Dark, name: "10-11 logs" },
+            { from: 12, to: Infinity, color: greenHeatMapShades.Darkest, name: "12+ logs" },
           ],
         },
+      },
+    },
+    legend: {
+      labels: {
+        colors: theme.textGrey,
       },
     },
     dataLabels: { enabled: false }, // Disable data labels on heatmap
@@ -139,7 +120,7 @@ const useHeatmapOptions = (): ApexOptions => {
       },
     },
     grid: {
-      borderColor: colors.bgWhite,
+      borderColor: theme.accentBackgroundColor,
     },
     tooltip: {
       enabled: true,
@@ -154,14 +135,14 @@ const useHeatmapOptions = (): ApexOptions => {
 
         // Custom tooltip display
         return `<div style="padding: 5px; color: ${colors.textGrey}">
-                  <div style="color: ${colors.blue}; font-weight: bold;">${month} ${dayOfMonth}
-                  </div>
+                  <div style="color: ${colors.blue}; font-weight: bold;">${month} ${dayOfMonth}</div>
                   Logs: ${logs}
                 </div>`;
       },
     },
   };
 };
+
 
 // Interface for the Heatmap component
 interface HeatmapProps {
@@ -187,7 +168,8 @@ export function Heatmap({ data }: HeatmapProps) {
     setLoading(false);
   };
 
-  const options = useHeatmapOptions();
+  const theme = useTheme();
+  const options = useHeatmapOptions(theme);
 
   return (
     <HeatmapCard>
