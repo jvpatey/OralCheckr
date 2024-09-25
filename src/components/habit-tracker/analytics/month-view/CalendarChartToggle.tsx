@@ -24,8 +24,8 @@ const ToggleButtonContainer = styled.div`
 
 // Styled component for each toggle button
 const ToggleButton = styled.button<{ $active: boolean }>`
-  background-color: ${({ $active }) =>
-    $active ? colors.green : colors.bgGrey};
+  background-color: ${({ $active, theme }) =>
+    $active ? theme.green : theme.disabledBackground};
   border: none;
   border-radius: 4px;
   padding: 5px 10px;
@@ -33,7 +33,8 @@ const ToggleButton = styled.button<{ $active: boolean }>`
   color: ${colors.white};
 
   &:hover {
-    background-color: ${colors.darkGrey};
+    color: ${({ theme }) => theme.green};
+    background-color: ${({ theme }) => theme.backgroundColor};
   }
 `;
 

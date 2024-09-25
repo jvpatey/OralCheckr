@@ -9,6 +9,7 @@ import { colors } from "../../../../common/utilities/color-utils";
 import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
 import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
 import { formatMonthYear } from "../../../../common/utilities/date-utils";
+import { useTheme } from "styled-components";
 
 interface CalendarProgressProps {
   habitsLog: Logging;
@@ -156,6 +157,7 @@ export function HabitCalendar({
 }: CalendarProgressProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [isCalendarView, setIsCalendarView] = useState(true);
+  const theme = useTheme();
 
   // Update the selected date whenever the selected month changes
   useEffect(() => {
@@ -184,10 +186,10 @@ export function HabitCalendar({
           value={progress}
           text={day.toString()}
           styles={buildStyles({
-            textSize: "24px",
-            pathColor: progress === 100 ? colors.green : colors.blue,
-            textColor: colors.blue,
-            trailColor: "#f4f4f4",
+            textSize: "30px",
+            pathColor: progress === 100 ? theme.green : theme.blue,
+            textColor: theme.blue,
+            trailColor: theme.backgroundColor,
           })}
         />
       </DayWrapper>
