@@ -12,7 +12,7 @@ interface HabitDropdownProps {
 
 // Custom styled components for the dropdown
 const CustomDropdownToggle = styled(Dropdown.Toggle)`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   color: ${colors.blue};
   border: 2px solid ${colors.blue};
   font-size: 16px;
@@ -21,20 +21,20 @@ const CustomDropdownToggle = styled(Dropdown.Toggle)`
   &:hover,
   &:focus {
     background-color: ${colors.blue};
-    color: ${colors.bgWhite};
+    color: ${({ theme }) => theme.backgroundColor};
     border-color: ${colors.blue};
     box-shadow: none;
   }
 
   &:active {
     background-color: ${colors.blue};
-    color: ${colors.bgWhite};
+    color: ${({ theme }) => theme.backgroundColor};
     border-color: ${colors.blue};
   }
 `;
 
 const CustomDropdownMenu = styled(Dropdown.Menu)`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   border: 1px solid ${colors.blue};
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 200px;
@@ -85,11 +85,11 @@ export function HabitDropdown({
       <CustomDropdownMenu>
         {habits.length === 0 ? (
           <CustomDropdownItem disabled $isActive={false}>
-            No habits found
+            <span style={{color: colors.blue}}>No habits found </span>
           </CustomDropdownItem>
         ) : (
           habits.map((habit, index) => (
-            <CustomDropdownItem
+            <CustomDropdownItem 
               key={index}
               eventKey={habit.name}
               $isActive={habit.name === selectedHabit}

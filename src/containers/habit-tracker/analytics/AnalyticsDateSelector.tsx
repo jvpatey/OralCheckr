@@ -40,7 +40,7 @@ const DatePickerContainer = styled.div`
 
 // Styled component for the custom Date Picker button
 const DatePickerButton = styled.button`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   color: ${colors.blue};
   border: 2px solid ${colors.blue};
   padding: 0 30px;
@@ -64,7 +64,7 @@ const DatePickerButton = styled.button`
   &:hover {
     background-color: ${colors.blue};
     border: 2px solid ${colors.blue};
-    color: ${colors.bgWhite};
+    color: ${({ theme }) => theme.backgroundColor};
   }
 `;
 
@@ -131,10 +131,8 @@ export function AnalyticsDateSelector({
         icon={faChevronLeft}
         onClick={decreaseDate}
         borderColor={colors.blue}
-        backgroundColor={colors.bgWhite}
         color={colors.blue}
         hoverBackgroundColor={colors.blue}
-        hoverColor={colors.bgWhite}
       />
       <DatePicker
         selected={selectedDate}
@@ -162,10 +160,8 @@ export function AnalyticsDateSelector({
         icon={faChevronRight}
         onClick={increaseDate}
         borderColor={colors.blue}
-        backgroundColor={colors.bgWhite}
         color={colors.blue}
         hoverBackgroundColor={colors.blue}
-        hoverColor={colors.bgWhite}
         disabled={isNextDisabled}
       />
       <TodayButton onClick={handleTodayClick} />

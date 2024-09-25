@@ -36,7 +36,7 @@ const CalendarContainer = styled.div`
     width: 100%;
     max-width: 100%;
     border: none;
-    background-color: ${colors.white};
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
     padding: 0px;

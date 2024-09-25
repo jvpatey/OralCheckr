@@ -11,7 +11,7 @@ interface AnalyticsTileProps {
 
 // Styled components for the analytics tile
 const TileContainer = styled.div`
-  background-color: ${colors.white};
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
   border-radius: 8px;
   padding: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

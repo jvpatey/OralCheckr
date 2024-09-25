@@ -12,7 +12,7 @@ const ChartContainer = styled.div`
   margin-top: 40px;
 
   .apexcharts-canvas {
-    background: ${colors.white};
+    background: ${({ theme }) => theme.accentBackgroundColor};
     border-radius: 8px;
   }
 

@@ -92,7 +92,7 @@ const CalendarWrapper = styled.div`
 
 // Styling for the calendar card
 const CalendarCard = styled.div`
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
   border-radius: 8px;
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
