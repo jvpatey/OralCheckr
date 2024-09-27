@@ -3,6 +3,7 @@ import styled, { useTheme } from "styled-components";
 import { Logging } from "../../../../containers/habit-tracker/habits/Habits";
 import { getDaysInMonth } from 'date-fns';
 import { upperFirst } from "lodash";
+import { lightTheme } from "../../../../common/utilities/color-utils";
 
 // Styled component for the chart container
 const ChartContainer = styled.div`
@@ -36,11 +37,14 @@ interface LineChartProps {
   month: string;
 }
 
+// typeof lightTheme to type the theme
+type ThemeType = typeof lightTheme;
+
 // Function to generate the ApexCharts options object
 const generateChartOptions = (
   daysInMonth: number,
   month: string,
-  theme: any
+  theme: ThemeType
 ): ApexCharts.ApexOptions => {
   return {
     chart: {
@@ -161,7 +165,7 @@ export function LineChart({
   year,
   month,
 }: LineChartProps) {
-  const theme = useTheme();
+  const theme = useTheme() as ThemeType;
   const logsForHabit = habitsLog[selectedHabit]?.[year]?.[month.toLowerCase()] || {};
   // Get the number of days in the current month
   const daysInMonth = getDaysInMonth(new Date(year, new Date(`${month} 1, ${year}`).getMonth()));

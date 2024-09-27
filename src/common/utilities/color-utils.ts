@@ -1,5 +1,7 @@
+import { DefaultTheme } from "styled-components/dist/types";
+
 // theme colors for light mode
-export const lightTheme = {
+export const lightTheme: DefaultTheme = {
   disabledBackground: "#e0e0e0",
   accentBackgroundColor: "#eeeeee",
   disabledText: "#CCC",
@@ -14,7 +16,7 @@ export const lightTheme = {
 }
 
 // theme colors for dark mode
-export const darkTheme: typeof lightTheme = {
+export const darkTheme: DefaultTheme = {
   disabledBackground: "#4a4a4a",
   accentBackgroundColor: "#3a3a3a",
   disabledText: "#434343",

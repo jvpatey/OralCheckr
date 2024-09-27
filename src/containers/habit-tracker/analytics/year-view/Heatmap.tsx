@@ -5,6 +5,7 @@ import { greenHeatMapShades } from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
 import { LoadingComponent } from "../../../../components/habit-tracker/analytics/LoadingComponent";
 import { useTheme } from "styled-components";
+import { lightTheme } from "../../../../common/utilities/color-utils";
 
 // Global constants for days of the week and month names
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -75,7 +76,7 @@ const HeatmapCard = styled.div`
 
 
 // Function to generate the ApexCharts options for the heatmap
-const useHeatmapOptions = (theme: any): ApexOptions => {
+const useHeatmapOptions = (theme: ThemeType): ApexOptions => {
   return {
     chart: {
       height: 350,
@@ -166,6 +167,9 @@ interface HeatmapChartProps {
   isHeatmapChartMounted: () => void;
 }
 
+// typeof lightTheme to type the theme
+type ThemeType = typeof lightTheme;
+
 // Functional component to render the heatmap chart
 export function Heatmap({ data }: HeatmapProps) {
   const [loading, setLoading] = useState(true);
@@ -178,7 +182,7 @@ export function Heatmap({ data }: HeatmapProps) {
     setLoading(false);
   };
 
-  const theme = useTheme();
+  const theme = useTheme() as ThemeType;
   const options = useHeatmapOptions(theme);
 
   return (
