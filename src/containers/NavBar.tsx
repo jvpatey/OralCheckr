@@ -1,20 +1,17 @@
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, useTheme } from "styled-components";
 import { Navbar, Container, Dropdown, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { RoutePaths, getFullPath } from "../common/constants/routes";
 import { NavLink } from "../common/links";
-import { useState, useEffect } from "react";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
-import { useTheme } from "styled-components";
 import { ThemeType } from "../App";
-
 
 interface NavBarProps {
   links: NavLink[];
   themeToggler: () => void;
-  theme: string;
+  theme: ThemeType;
 }
 
 const fadeInDown = keyframes`
@@ -178,29 +175,26 @@ const ThemeToggleContainer = styled.div`
   }
 `;
 
-// Functional component to render the Navbar - used on all pages
+// Functional component to render the Navbar
 export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
   const themeContext = useTheme();
-  const storedTheme = (localStorage.getItem("theme") as ThemeType) || ThemeType.LIGHT;
-  const isDarkMode = storedTheme === ThemeType.DARK;
-  const [darkMode, setDarkMode] = useState(isDarkMode);
+  const isDarkMode = theme === ThemeType.DARK;
 
+  // Handle the toggle for dark mode
   const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
     themeToggler();
-    localStorage.setItem("theme", newMode ? ThemeType.DARK : ThemeType.LIGHT);
+    localStorage.setItem("theme", isDarkMode ? ThemeType.LIGHT : ThemeType.DARK);
   };
 
-  // Apply theme on component mount
-  useEffect(() => {
-    if (storedTheme !== theme) {
-      themeToggler();
+  // Handle logout logic
+  const handleLogout = () => {
+    localStorage.setItem("authenticated", "false");
+    if (isDarkMode) {
+      toggleDarkMode(); // Toggle dark mode back to light when logging out
     }
-  }, [storedTheme, theme, themeToggler]);
-
+  };
 
   const isActive = (href: string) => {
     const isQuestionnaireActive =
@@ -222,14 +216,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
     );
   };
 
-  const handleLogout = () => {
-    localStorage.setItem("authenticated", "false");
-
-    if (darkMode) {
-      toggleDarkMode();
-    }
-  };
-
+  // Return null if the user is not authenticated
   if (!isAuthenticated) {
     return null;
   }
@@ -245,7 +232,6 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
           <CustomDropdownToggle id="dropdown-basic">
             <FontAwesomeIcon icon={faBars} />
           </CustomDropdownToggle>
-
           <CustomDropdownMenu align="end">
             {links.map((link) => (
               <CustomDropdownItem
@@ -293,11 +279,11 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
         </CustomCollapse>
         <ThemeToggleContainer>
           <DarkModeSwitch
-            checked={darkMode}
+            checked={isDarkMode}
             onChange={toggleDarkMode}
             size={20}
-            moonColor = {themeContext.blue}
-            sunColor = {themeContext.blue}
+            moonColor={themeContext.blue}
+            sunColor={themeContext.blue}
           />
         </ThemeToggleContainer>
       </Container>
