@@ -54,6 +54,7 @@ const CustomProgressBar = styled(ProgressBar)<{ $scoreColor: string }>`
     color: ${({ theme }) => theme.accentBackgroundColor};
     background-color: ${(props) => props.$scoreColor};
     font-size: 15px;
+    font-weight: bold;
     border-radius: 20px;
   }
 
@@ -107,7 +108,7 @@ export function OralHealthStatus() {
           <>
             <StyledText>
               Your current oral health score is{" "}
-              <ScoreSpan $scoreColor={scoreColor}>{score}</ScoreSpan>.
+              <ScoreSpan $scoreColor={scoreColor}>{score}</ScoreSpan>
             </StyledText>
             <CustomProgressBar
               now={score}
