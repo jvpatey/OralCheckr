@@ -7,7 +7,12 @@ const StyledFooter = styled.footer`
   width: 100%;
   text-align: start;
   color: ${({ theme }) => theme.textGrey};
+  font-size: 15px;
   margin-left: 10px;
+
+  @media (max-width: 430px) {
+    font-size: 10px;
+  }
 `;
 
 // Functional component to style the footer

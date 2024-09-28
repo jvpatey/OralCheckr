@@ -3,29 +3,38 @@ import { Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { RoutePaths } from "../common/constants/routes";
 import { getFullPath } from "../common/constants/routes";
 import { PageBackground } from "../components/PageBackground";
 import { useState } from "react";
 
-// styled-component styles for Login Page
+const fadeUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const PageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+// styled-component styles for Login Page card
 const AnimatedCard = styled(Card)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 15px;
   border-color: ${({ theme }) => theme.blue};
-  margin-top: 40px;
-  animation: fadeInUp 1s ease-out;
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translate3d(0, 40px, 0);
-    }
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
-  }
+  animation: ${fadeUp} 1s ease-out;
 `;
 
 const CardBody = styled(Card.Body)`
@@ -166,6 +175,7 @@ export function Login() {
 
   return (
     <PageBackground>
+    <PageContainer>
       <AnimatedCard>
         <CardBody>
           <LogoStyle>
@@ -212,6 +222,7 @@ export function Login() {
           </Form>
         </CardBody>
       </AnimatedCard>
+      </PageContainer>
       <Footer />
     </PageBackground>
   );
