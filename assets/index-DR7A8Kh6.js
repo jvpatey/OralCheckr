@@ -996,13 +996,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   z-index: 5;
   animation: ${iV} 1s ease-in-out;
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     width: 50px;
     align-items: center;
     padding-left: 0;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     padding-left: 0;
     padding-top: 10px;
     margin-top: 10px;
@@ -1037,7 +1037,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
     overflow: hidden;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     justify-content: center;
     padding: 10px;
     margin-right: 0;
@@ -1054,7 +1054,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     &::after {
       content: attr(data-tooltip);
       position: absolute;
@@ -1079,11 +1079,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 `,sV=me.span`
   margin-right: 10px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     margin-right: 0;
   }
 `,lV=me.span`
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     display: none;
   }
 `;function cV({links:e}){const t=ps();return B.jsx(aV,{children:e.map((n,r)=>B.jsxs(oV,{to:n.path,className:t.pathname===n.path||n.path===bt(ft.QUESTIONNAIRE)&&t.pathname.startsWith(bt(ft.QUESTIONNAIRE))&&t.pathname!==bt(ft.RESULTS)?"active":"","data-tooltip":n.name,children:[B.jsx(sV,{children:B.jsx(tr,{icon:n.icon})}),B.jsx(lV,{children:n.name})]},r))})}const uV=[{name:"Questionnaire",path:bt(ft.QUESTIONNAIRE),icon:hw,displayIn:"navbar"},{name:"Habit Tracker",path:bt(ft.HABITS),icon:VI,displayIn:"navbar"},{name:"Log Out",path:bt(ft.LOGIN),icon:lX,displayIn:"navbar"}],lE=[{name:"Questionnaire",path:bt(ft.QUESTIONNAIRE),icon:hw,displayIn:"sidebar"},{name:"Habits",path:bt(ft.HABITS),icon:cX,displayIn:"sidebar"},{name:"Analytics",path:bt(ft.ANALYTICS),icon:uX,displayIn:"sidebar"},{name:"Results",path:bt(ft.RESULTS),icon:dX,displayIn:"sidebar"}];function Yl({children:e}){return localStorage.getItem("authenticated")==="true"?e:B.jsx(w1,{to:"/"})}function dV({children:e}){return localStorage.getItem("authenticated")==="true"?B.jsx(w1,{to:bt(ft.LANDING),replace:!0}):e}const fV=me.footer`
@@ -1328,6 +1328,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   display: flex;
   justify-content: space-between;
   width: 100%;
+
+    @media (max-width: 600px) {
+    font-size: 0.4rem;
+  }
 `;function JG(e){const{id:t,title:n,type:r,options:o,onResponseChange:l,initialResponse:h}=e,[m,x]=N.useState(null),[w,A]=N.useState([]);N.useEffect(()=>{if(h!==void 0)switch(r){case Po.RADIO:x(h);break;case Po.CHECKBOX:A(h);break;case Po.RANGE:x(h);break}else x(null),A([])},[t,h,r]),N.useEffect(()=>{r===Po.RANGE&&(h===void 0?(x(1),l(t,1)):x(h))},[t,r]);const P=Y=>{const X=Number(Y.target.value)+1;x(X),l(t,X)},I=Y=>{const X=Number(Y.target.value);x(X),l(t,X)},F=Y=>{const X=Number(Y.target.value),Q=Y.target.checked?[...w,X]:w.filter(H=>H!==X);A(Q),l(t,Q)};return B.jsxs(UG,{children:[B.jsx(GG,{children:n}),B.jsx("form",{style:{width:"100%"},children:(()=>{switch(r){case Po.RADIO:return o.map(Y=>B.jsxs(c0,{isRange:!1,children:[B.jsx(qG,{type:"radio",id:`${t}-${Y.optionId}`,name:`question-${t}`,value:Y.optionId,onChange:I,checked:m===Y.optionId}),B.jsx("label",{htmlFor:`${t}-${Y.optionId}`,children:Y.optionLabel})]},Y.optionId));case Po.CHECKBOX:return o.map(Y=>B.jsxs(c0,{isRange:!1,children:[B.jsx(QG,{type:"checkbox",id:`${t}-${Y.optionId}`,name:`question-${t}`,value:Y.optionId,onChange:F,checked:w.includes(Y.optionId)}),B.jsx("label",{htmlFor:`${t}-${Y.optionId}`,children:Y.optionLabel})]},Y.optionId));case Po.RANGE:return B.jsxs(c0,{isRange:!0,children:[B.jsx(KG,{type:"range",id:`question-${t}`,name:`question-${t}`,min:"0",max:o.length-1,value:m!==null?m-1:0,onChange:P}),B.jsx(ZG,{children:o.map(Y=>B.jsx("span",{children:Y.optionLabel},Y.optionId))})]});default:return null}})()})]})}const nf=me.button`
   background-color: ${({theme:e})=>e.blue};
   color: ${({theme:e})=>e.accentBackgroundColor};
@@ -1677,7 +1681,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   }
 
   @media (max-width: 600px) {
-    font-size: 14px;
+    font-size: 12px;
     padding: 0 10px;
   }
 
@@ -2120,7 +2124,7 @@ function print() { __p += __j.call(arguments, '') }
   box-sizing: border-box;
 
   @media (max-width: 600px) {
-    width: 290px;
+    width: 295px;
     padding: 0 10px;
   }
 `,BJ=me.button`
@@ -2145,6 +2149,12 @@ function print() { __p += __j.call(arguments, '') }
     background-color: ${({$active:e,theme:t})=>e?t.blue:t.accentBackgroundColor};
     border: 2px solid ${({theme:e})=>e.blue};
   }
+
+  @media (max-width: 600px) {
+  width: 290px;
+  padding: 8px 10px;
+  font-size: 10px;
+
 `;function $J({options:e,activeValue:t,onChange:n}){return B.jsx(HJ,{children:e.map(r=>B.jsx(BJ,{$active:t===r.value,onClick:()=>n(r.value),children:r.label},r.value))})}const jJ=me(ys.Toggle)`
   background-color: ${({theme:e})=>e.backgroundColor};
   color: ${({theme:e})=>e.blue};
@@ -3164,20 +3174,23 @@ rect.legend-mouseover-inactive,
   color: ${({theme:e})=>e.blue};
   margin-top: 10px;
   text-align: center;
+
+    @media (max-width: 1024px) {
+    font-size: 12px;
+  }
 `,_ee=me.div`
   font-size: 40px;
   font-weight: bold;
   color: ${({$isMissedDays:e,theme:t})=>e?t.red:t.green};
   margin-top: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 
-  @media (max-width: 600px) {
+  @media (max-width: 1024px) {
     font-size: 30px;
   }
 `,Pee=me.div`
   font-size: 12px;
   color: ${({theme:e})=>e.textGrey};
-  margin-bottom: 5px;
 `;function mp({heading:e,mainContent:t,subContent:n,isMissedDays:r}){return B.jsxs(Aee,{children:[B.jsx(Eee,{children:e}),B.jsx(_ee,{$isMissedDays:r,children:t}),n&&B.jsx(Pee,{children:n})]})}var Qw=(e=>(e.MONTH="month",e.YEAR="year",e))(Qw||{});const Dee=me.div`
   display: flex;
   align-items: center;
@@ -3209,6 +3222,8 @@ rect.legend-mouseover-inactive,
   @media (max-width: 600px) {
     min-width: 50px;
     padding: 0 10px;
+    font-size: 10px;
+    font-weight: bold;
   }
 
   &:hover {
@@ -3216,7 +3231,7 @@ rect.legend-mouseover-inactive,
     border: 2px solid ${({theme:e})=>e.blue};
     color: ${({theme:e})=>e.backgroundColor};
   }
-`;function AL({selectedDate:e,onDateChange:t,viewType:n}){const r=lo(),o=N.useRef(null),l=new Date,h=I=>{I&&t(I),o.current&&o.current.setOpen(!1)},m=()=>{const I=n==="month"?new Date(e.getFullYear(),e.getMonth()-1,1):new Date(e.getFullYear()-1,e.getMonth(),1);t(I)},x=()=>{const I=n==="month"?new Date(e.getFullYear(),e.getMonth()+1,1):new Date(e.getFullYear()+1,e.getMonth(),1);t(I)},w=()=>{t(new Date)},A=()=>{o.current&&o.current.setOpen(!0)},P=n==="month"&&e.getFullYear()===l.getFullYear()&&e.getMonth()===l.getMonth()||n==="year"&&e.getFullYear()===l.getFullYear();return B.jsxs(Dee,{children:[B.jsx(ac,{icon:GI,onClick:m,borderColor:r.blue,color:r.blue,hoverBackgroundColor:r.blue}),B.jsx(Ww,{selected:e,onChange:h,dateFormat:n==="month"?"MMMM yyyy":"yyyy",showYearPicker:n==="year",showMonthYearPicker:n==="month",showPopperArrow:!1,ref:o,maxDate:l,onClickOutside:()=>{o.current&&o.current.setOpen(!1)},customInput:B.jsx(Mee,{onClick:A,children:n==="month"?vL(e):e.getFullYear()})}),B.jsx(ac,{icon:UI,onClick:x,borderColor:r.blue,color:r.blue,hoverBackgroundColor:r.blue,disabled:P}),B.jsx(mL,{onClick:w})]})}const Tee=me.div`
+`;function AL({selectedDate:e,onDateChange:t,viewType:n}){const r=lo(),o=N.useRef(null),l=new Date,h=I=>{I&&t(I),o.current&&o.current.setOpen(!1)},m=()=>{const I=n==="month"?new Date(e.getFullYear(),e.getMonth()-1,1):new Date(e.getFullYear()-1,e.getMonth(),1);t(I)},x=()=>{if(P)return;const I=n==="month"?new Date(e.getFullYear(),e.getMonth()+1,1):new Date(e.getFullYear()+1,e.getMonth(),1);t(I)},w=()=>{t(new Date)},A=()=>{o.current&&o.current.setOpen(!0)},P=n==="month"&&e.getFullYear()===l.getFullYear()&&e.getMonth()===l.getMonth()||n==="year"&&e.getFullYear()===l.getFullYear();return B.jsxs(Dee,{children:[B.jsx(ac,{icon:GI,onClick:m,borderColor:r.blue,color:r.blue,hoverBackgroundColor:r.blue}),B.jsx(Ww,{selected:e,onChange:h,dateFormat:n==="month"?"MMMM yyyy":"yyyy",showYearPicker:n==="year",showMonthYearPicker:n==="month",showPopperArrow:!1,ref:o,maxDate:l,onClickOutside:()=>{o.current&&o.current.setOpen(!1)},customInput:B.jsx(Mee,{onClick:A,children:n==="month"?vL(e):e.getFullYear()})}),B.jsx(ac,{icon:UI,onClick:x,borderColor:r.blue,color:r.blue,hoverBackgroundColor:r.blue,disabled:P}),B.jsx(mL,{onClick:w})]})}const Tee=me.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3251,10 +3266,10 @@ rect.legend-mouseover-inactive,
   margin-top: 20px;
   gap: 20px;
 
-  @media (max-width: 1250px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 90%;
     height: auto;
   }
 
@@ -3271,12 +3286,13 @@ rect.legend-mouseover-inactive,
   justify-content: center;
 
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    grid-template-columns: repeat(4, minmax(130px, 1fr));
+    max-width: 800px;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
+    grid-gap: 40px;
     max-width: 300px;
   }
 `,Fee=me.div`
@@ -3432,7 +3448,7 @@ rect.legend-mouseover-inactive,
   box-sizing: border-box;
   animation: ${tte} 1s ease-out;
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     width: calc(100% - 35px);
     left: 40px;
   }
