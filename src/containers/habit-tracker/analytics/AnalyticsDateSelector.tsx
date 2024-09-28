@@ -59,6 +59,8 @@ const DatePickerButton = styled.button`
   @media (max-width: 600px) {
     min-width: 50px;
     padding: 0 10px;
+    font-size: 10px;
+    font-weight: bold;
   }
 
   &:hover {

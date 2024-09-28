@@ -16,7 +16,7 @@ const ToggleButtonContainer = styled.div`
   box-sizing: border-box;
 
   @media (max-width: 600px) {
-    width: 290px;
+    width: 295px;
     padding: 0 10px;
   }
 `;
@@ -45,6 +45,12 @@ const Button = styled.button<{ $active: boolean }>`
       $active ? theme.blue : theme.accentBackgroundColor};
     border: 2px solid ${({ theme }) => theme.blue};
   }
+
+  @media (max-width: 600px) {
+  width: 290px;
+  padding: 8px 10px;
+  font-size: 10px;
+
 `;
 
 export function ToggleButton({
