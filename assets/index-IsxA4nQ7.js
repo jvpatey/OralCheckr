@@ -3502,6 +3502,7 @@ rect.legend-mouseover-inactive,
     color: ${({theme:e})=>e.accentBackgroundColor};
     background-color: ${e=>e.$scoreColor};
     font-size: 15px;
+    font-weight: bold;
     border-radius: 20px;
   }
 
@@ -3520,7 +3521,7 @@ rect.legend-mouseover-inactive,
   @media (max-width: 950px) {
     font-size: 14px;
   }
-`,dte=e=>{const t=lo();return e>=70?t.green:e>=50?t.yellow:t.red};function fte(){const e=localStorage.getItem("totalScore"),t=e?parseInt(e,10):0,n=dte(t);return B.jsxs(B.Fragment,{children:[B.jsx(ote,{children:"Oral Health Status"}),B.jsx(_i.Body,{children:t===0?B.jsx(ute,{children:"Please complete the oral health questionnaire to get your oral health score."}):B.jsxs(B.Fragment,{children:[B.jsxs(ste,{children:["Your current oral health score is"," ",B.jsx(lte,{$scoreColor:n,children:t}),"."]}),B.jsx(cte,{now:t,label:`${t}%`,$scoreColor:n})]})})]})}const hte=me.div`
+`,dte=e=>{const t=lo();return e>=70?t.green:e>=50?t.yellow:t.red};function fte(){const e=localStorage.getItem("totalScore"),t=e?parseInt(e,10):0,n=dte(t);return B.jsxs(B.Fragment,{children:[B.jsx(ote,{children:"Oral Health Status"}),B.jsx(_i.Body,{children:t===0?B.jsx(ute,{children:"Please complete the oral health questionnaire to get your oral health score."}):B.jsxs(B.Fragment,{children:[B.jsxs(ste,{children:["Your current oral health score is"," ",B.jsx(lte,{$scoreColor:n,children:t})]}),B.jsx(cte,{now:t,label:`${t}%`,$scoreColor:n})]})})]})}const hte=me.div`
   display: flex;
   font-size: 18px;
   align-items: center;
