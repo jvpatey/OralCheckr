@@ -5,7 +5,6 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { DayBubble } from "../../../components/habit-tracker/habits/DayBubble";
-import { colors } from "../../../common/utilities/color-utils";
 import { formatDateShort } from "../../../common/utilities/date-utils";
 import { addWeeks, isSameWeek, subWeeks } from "date-fns";
 
@@ -26,7 +25,7 @@ const DayBubbleContainer = styled.div`
 const ArrowButton = styled.button<{ $disabled: boolean }>`
   background: none;
   border: none;
-  color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.blue)};
+  color: ${({ $disabled, theme }) => ($disabled ? theme.textGrey : theme.blue)};
   font-size: 20px;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
   border-radius: 50%;
@@ -37,8 +36,8 @@ const ArrowButton = styled.button<{ $disabled: boolean }>`
   justify-content: center;
 
   &:hover {
-    background-color: ${({ $disabled }) =>
-      $disabled ? "none" : colors.disabledBgGrey};
+    background-color: ${({ $disabled, theme }) =>
+      $disabled ? "none" : theme.disabledBackground};
     cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
   }
 

@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Modal, Form } from "react-bootstrap";
 import { StyledModal } from "../../../components/questionnaire/Modal";
 import { Habit } from "./Habits";
-import { colors } from "../../../common/utilities/color-utils";
 import styled from "styled-components";
 
 interface AddEditHabitModalProps {
@@ -16,25 +15,54 @@ interface AddEditHabitModalProps {
 
 // Styled component for the Save Button
 const SaveButton = styled.button<{ disabled: boolean }>`
-  background-color: ${({ disabled }) =>
-    disabled ? colors.disabledBgGrey : colors.blue};
-  border-color: ${({ disabled }) =>
-    disabled ? colors.disabledBgGrey : colors.blue};
-  color: white;
+  background-color: ${({ disabled, theme }) =>
+    disabled ? theme.disabledBackground : theme.accentBackgroundColor };
+  border-color: ${({ disabled, theme }) =>
+    disabled ? theme.disabledBackground : theme.blue};
+  color: ${({ disabled, theme }) =>
+    disabled ? theme.accentBackgroundColor : theme.blue};
   padding: 8px 16px;
   border-radius: 5px;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   transition: background-color 0.3s ease, border-color 0.3s ease;
 
   &:hover {
-    background-color: ${({ disabled }) =>
-      disabled ? colors.disabledBgGrey : colors.bgWhite};
-    border-color: ${({ disabled }) =>
-      disabled ? colors.disabledBgGrey : colors.blue};
-    color: ${({ disabled }) =>
-      disabled ? colors.disabledBgGrey : colors.blue};
+    background-color: ${({ disabled, theme }) =>
+      disabled ? theme.disabledBackgroundColor : theme.backgroundColor};
+    border-color: ${({ disabled, theme }) =>
+      disabled ? theme.disabledBackground : theme.blue};
+    color: ${({ disabled, theme }) =>
+      disabled ? theme.accentBackgroundColor : theme.blue};
   }
 `;
+
+// Styled component for the Cancel Button
+const CancelButton = styled.button`
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
+  border-color: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.blue};
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.backgroundColor};
+    border-color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.blue};
+  }
+`;
+
+const StyledFormControl = styled(Form.Control)`
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
+  color: ${({ theme }) => theme.textGrey};
+
+    &:focus {
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
+      color: ${({ theme }) => theme.textGrey};
+    }
+`;    
+
 
 // Functional component for the add/edit habit modal, used in the Habits component
 export function AddEditHabitModal({
@@ -79,34 +107,34 @@ export function AddEditHabitModal({
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
-          <Form.Group controlId="habitName">
-            <Form.Label>Habit Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter habit name"
-              value={newHabit.name}
-              onChange={handleHabitNameChange}
-              ref={habitNameRef}
-            />
-          </Form.Group>
-          <Form.Group controlId="habitCount">
-            <Form.Label style={{ marginTop: "10px" }}>
-              Habit Count (times per day)
-            </Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter habit count"
-              value={newHabit.count.toString()}
-              onChange={handleHabitCountChange}
-            />
-          </Form.Group>
-        </Form>
+      <Form>
+        <Form.Group controlId="habitName">
+          <Form.Label>Habit Name</Form.Label>
+          <StyledFormControl
+            type="text"
+            placeholder="Enter habit name"
+            value={newHabit.name}
+            onChange={handleHabitNameChange}
+            ref={habitNameRef}
+          />
+        </Form.Group>
+        <Form.Group controlId="habitCount">
+          <Form.Label style={{ marginTop: "10px" }}>
+            Habit Count (times per day)
+          </Form.Label>
+          <StyledFormControl
+            type="number"
+            placeholder="Enter habit count"
+            value={newHabit.count.toString()}
+            onChange={handleHabitCountChange}
+          />
+        </Form.Group>
+      </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-secondary" onClick={handleClose}>
+        <CancelButton onClick={handleClose}>
           Cancel
-        </Button>
+        </CancelButton>
         <SaveButton
           disabled={isSaveDisabled()}
           onClick={() => handleSaveHabit(newHabit)}

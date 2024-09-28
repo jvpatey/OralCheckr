@@ -1,33 +1,28 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../../common/utilities/color-utils";
 
 interface IconButtonProps {
   icon: IconDefinition;
   onClick: () => void;
   borderColor: string;
-  backgroundColor: string;
   color: string;
   hoverBackgroundColor: string;
-  hoverColor: string;
   disabled?: boolean;
 }
 
 const ButtonContainer = styled.div<{
   $disabled?: boolean;
   $borderColor: string;
-  $backgroundColor: string;
   $color: string;
   $hoverBackgroundColor: string;
-  $hoverColor: string;
 }>`
-  background-color: ${({ $backgroundColor, $disabled }) =>
-    $disabled ? colors.disabledBgGrey : $backgroundColor};
+  background-color: ${({ $disabled, theme }) =>
+    $disabled ? theme.disabledBackground : theme.backgroundColor };
   border: 2px solid
-    ${({ $borderColor, $disabled }) =>
-      $disabled ? colors.bgGrey : $borderColor};
-  color: ${({ $color, $disabled }) => ($disabled ? colors.bgGrey : $color)};
+    ${({ $borderColor, $disabled, theme }) =>
+      $disabled ? theme.disabledBackground : $borderColor};
+  color: ${({ $color, $disabled, theme }) => ($disabled ? theme.disabledText : $color)};
   width: 50px;
   height: 45px;
   display: flex;
@@ -41,13 +36,13 @@ const ButtonContainer = styled.div<{
   transition: box-shadow 0.3s, background-color 0.3s;
 
   &:hover {
-    background-color: ${({ $hoverBackgroundColor, $disabled }) =>
-      $disabled ? colors.disabledBgGrey : $hoverBackgroundColor};
+    background-color: ${({ $hoverBackgroundColor, $disabled, theme }) =>
+      $disabled ? theme.disabledBackground : $hoverBackgroundColor};
     border: 2px solid
-      ${({ $borderColor, $disabled }) =>
-        $disabled ? colors.bgGrey : $borderColor};
-    color: ${({ $hoverColor, $disabled }) =>
-      $disabled ? colors.bgGrey : $hoverColor};
+      ${({ $borderColor, $disabled, theme }) =>
+        $disabled ? theme.disabledBackground : $borderColor};
+    color: ${({ theme, $disabled }) =>
+      $disabled ? theme.disabledText : theme.backgroundColor};
     box-shadow: ${({ $disabled }) =>
       $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
   }
@@ -69,10 +64,8 @@ export function IconButton({
   icon,
   onClick,
   borderColor,
-  backgroundColor,
   color,
   hoverBackgroundColor,
-  hoverColor,
   disabled = false,
 }: IconButtonProps) {
   return (
@@ -80,10 +73,8 @@ export function IconButton({
       onClick={onClick}
       $disabled={disabled}
       $borderColor={borderColor}
-      $backgroundColor={backgroundColor}
       $color={color}
       $hoverBackgroundColor={hoverBackgroundColor}
-      $hoverColor={hoverColor}
     >
       <ButtonIcon>
         <FontAwesomeIcon icon={icon} />

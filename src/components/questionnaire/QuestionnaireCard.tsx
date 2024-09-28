@@ -1,6 +1,5 @@
 import styled, { keyframes } from "styled-components";
 import { Card } from "react-bootstrap";
-import { colors } from "../../common/utilities/color-utils";
 
 // Styled component for the QuestionnaireCard
 
@@ -25,7 +24,7 @@ export const QuestionnaireCard = styled(Card)`
   height: auto;
   max-height: calc(100vh - 100px);
   min-height: 60vh;
-  background-color: ${colors.bgLightGrey};
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
   border: transparent;
   border-radius: 20px;
   padding: 20px;

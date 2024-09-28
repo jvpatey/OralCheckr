@@ -5,10 +5,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Logging } from "../../habits/Habits";
-import { colors } from "../../../../common/utilities/color-utils";
 import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
 import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
 import { formatMonthYear } from "../../../../common/utilities/date-utils";
+import { useTheme } from "styled-components";
 
 interface CalendarProgressProps {
   habitsLog: Logging;
@@ -36,7 +36,7 @@ const CalendarContainer = styled.div`
     width: 100%;
     max-width: 100%;
     border: none;
-    background-color: ${colors.white};
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
     padding: 0px;
@@ -79,7 +79,7 @@ const CalendarContainer = styled.div`
   .react-datepicker__day--selected,
   .react-datepicker__day--keyboard-selected {
     background-color: transparent;
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
   }
 
   .react-datepicker__day--outside-month {
@@ -88,7 +88,7 @@ const CalendarContainer = styled.div`
 
   .react-datepicker__day--today {
     background-color: transparent;
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
   }
 
   /* Hide the navigation buttons */
@@ -104,7 +104,7 @@ const DaysHeader = styled.div`
   width: 100%;
   margin-bottom: 10px;
   font-weight: bold;
-  color: ${colors.green};
+  color: ${({ theme }) => theme.green};
   text-transform: uppercase;
 `;
 
@@ -130,7 +130,7 @@ const DayWrapper = styled.div`
 
 // Styled component to display the current month and year
 const MonthYearDisplay = styled.div`
-  color: ${colors.blue};
+  color: ${({ theme }) => theme.blue};
   text-align: center;
   font-size: 20px;
   font-weight: bold;
@@ -156,6 +156,7 @@ export function HabitCalendar({
 }: CalendarProgressProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [isCalendarView, setIsCalendarView] = useState(true);
+  const theme = useTheme();
 
   // Update the selected date whenever the selected month changes
   useEffect(() => {
@@ -184,10 +185,10 @@ export function HabitCalendar({
           value={progress}
           text={day.toString()}
           styles={buildStyles({
-            textSize: "24px",
-            pathColor: progress === 100 ? colors.green : colors.blue,
-            textColor: colors.blue,
-            trailColor: "#f4f4f4",
+            textSize: "30px",
+            pathColor: progress === 100 ? theme.green : theme.blue,
+            textColor: theme.blue,
+            trailColor: theme.backgroundColor,
           })}
         />
       </DayWrapper>

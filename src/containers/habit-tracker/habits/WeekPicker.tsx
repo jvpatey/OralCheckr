@@ -3,7 +3,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 import { TodayButton } from "../../../components/habit-tracker/analytics/TodayButton";
-import { colors } from "../../../common/utilities/color-utils";
 import { formatDateShort } from "../../../common/utilities/date-utils";
 import { DayBubbleSelector } from "./DayBubbleSelector";
 
@@ -28,13 +27,13 @@ const DatePickerWrapper = styled.div`
 
 // Custom-styled button to be used as the input field for the DatePicker
 const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
-  background-color: ${({ $disabled }) =>
-    $disabled ? colors.disabledBgGrey : colors.bgWhite};
-  color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.blue)};
-  border: ${({ $disabled }) =>
+  background-color: ${({ $disabled, theme }) =>
+    $disabled ? theme.disabledBackground : theme.backgroundColor};
+  color: ${({ $disabled, theme }) => ($disabled ? theme.textGrey : theme.blue)};
+  border: ${({ $disabled, theme }) =>
     $disabled
-      ? `2px solid ${colors.disabledBgGrey}`
-      : `2px solid ${colors.blue}`};
+      ? `2px solid ${theme.disabledBackground}`
+      : `2px solid ${theme.blue}`};
   padding: 8px 12px;
   border-radius: 5px;
   text-align: center;
@@ -47,13 +46,13 @@ const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
 
   &:hover {
-    background-color: ${({ $disabled }) =>
-      $disabled ? colors.disabledBgGrey : colors.blue};
-    color: ${({ $disabled }) => ($disabled ? colors.textGrey : colors.bgWhite)};
-    border: ${({ $disabled }) =>
+    background-color: ${({ $disabled, theme }) =>
+      $disabled ? theme.disabledBackground : theme.blue};
+    color: ${({ $disabled, theme }) => ($disabled ? theme.textGrey : theme.backgroundColor)};
+    border: ${({ $disabled, theme }) =>
       $disabled
-        ? `2px solid ${colors.disabledBgGrey}`
-        : `2px solid ${colors.blue}`};
+        ? `2px solid ${theme.disabledBackground}`
+        : `2px solid ${theme.blue}`};
   }
 
   &:focus {

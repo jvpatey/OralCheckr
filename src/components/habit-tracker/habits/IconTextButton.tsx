@@ -1,15 +1,12 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../../common/utilities/color-utils";
 
 interface IconTextButtonProps {
   icon: IconDefinition;
   label: string;
   onClick: () => void;
   backgroundColor: string;
-  color: string;
-  hoverBackgroundColor: string;
   hoverColor: string;
   isEditMode?: boolean;
   disabled?: boolean;
@@ -17,15 +14,13 @@ interface IconTextButtonProps {
 
 const ButtonContainer = styled.div<{
   $backgroundColor: string;
-  $color: string;
-  $hoverBackgroundColor: string;
   $hoverColor: string;
   $isEditMode?: boolean;
   $disabled?: boolean;
 }>`
-  background-color: ${({ $backgroundColor, $disabled }) =>
-    $disabled ? colors.disabledBgGrey : $backgroundColor};
-  color: ${({ $color, $disabled }) => ($disabled ? colors.textGrey : $color)};
+  background-color: ${({ $backgroundColor, $disabled, theme }) =>
+    $disabled ? theme.disabledBackground : $backgroundColor};
+  color: ${({ theme, $disabled }) => ($disabled ? theme.textGrey : theme.backgroundColor )};
   width: auto;
   height: 35px;
   display: flex;
@@ -38,16 +33,16 @@ const ButtonContainer = styled.div<{
   transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
   white-space: nowrap;
   border: 2px solid
-    ${({ $backgroundColor, $disabled }) =>
-      $disabled ? colors.disabledBgGrey : $backgroundColor};
+    ${({ $backgroundColor, $disabled, theme }) =>
+      $disabled ? theme.disabledBackground : $backgroundColor};
 
   &:hover {
-    background-color: ${({ $hoverBackgroundColor, $disabled }) =>
-      $disabled ? colors.disabledBgGrey : $hoverBackgroundColor};
-    border-color: ${({ $hoverBackgroundColor, $disabled }) =>
-      $disabled ? colors.disabledBgGrey : $hoverBackgroundColor};
-    color: ${({ $hoverColor, $disabled }) =>
-      $disabled ? colors.textGrey : $hoverColor};
+    background-color: ${({ theme, $disabled }) =>
+      $disabled ? theme.disabledBackground : theme.backgroundColor};
+    border-color: ${({ theme, $disabled }) =>
+      $disabled ? theme.disabledBackground : theme.backgroundColor};
+    color: ${({ $hoverColor, $disabled, theme }) =>
+      $disabled ? theme.textGrey : $hoverColor};
     box-shadow: ${({ $disabled }) =>
       $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
   }
@@ -103,8 +98,6 @@ export function IconTextButton({
   label,
   onClick,
   backgroundColor,
-  color,
-  hoverBackgroundColor,
   hoverColor,
   isEditMode = false,
   disabled = false,
@@ -113,8 +106,6 @@ export function IconTextButton({
     <ButtonContainer
       onClick={disabled ? undefined : onClick}
       $backgroundColor={backgroundColor}
-      $color={color}
-      $hoverBackgroundColor={hoverBackgroundColor}
       $hoverColor={hoverColor}
       $isEditMode={isEditMode}
       $disabled={disabled}

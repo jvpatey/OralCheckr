@@ -1,14 +1,17 @@
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, useTheme } from "styled-components";
 import { Navbar, Container, Dropdown, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { RoutePaths, getFullPath } from "../common/constants/routes";
-import { colors } from "../common/utilities/color-utils";
 import { NavLink } from "../common/links";
+import { DarkModeSwitch } from "react-toggle-dark-mode";
+import { ThemeType } from "../App";
 
 interface NavBarProps {
   links: NavLink[];
+  themeToggler: () => void;
+  theme: ThemeType;
 }
 
 const fadeInDown = keyframes`
@@ -23,7 +26,7 @@ const fadeInDown = keyframes`
 `;
 
 const CustomNavbar = styled(Navbar)`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   width: 100%;
   animation: ${fadeInDown} 1s ease-out;
 
@@ -41,10 +44,10 @@ const BrandText = styled(Navbar.Brand)`
   display: flex;
   align-items: center;
   font-size: 28px;
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
 
   &:hover {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     font-weight: 600;
   }
 
@@ -66,57 +69,58 @@ const LogoImage = styled.img`
 `;
 
 const CustomDropdownToggle = styled(Dropdown.Toggle)`
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   background: none;
   border: none;
+  margin-right: 20px;
 
   &:hover {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     transform: scale(1.1);
     background-color: transparent;
   }
 
   &:focus,
   &:active {
-    color: ${colors.textGrey};
+    color: ${({ theme }) => theme.textGrey};
     background-color: transparent;
     box-shadow: none;
   }
 
   &.show {
-    color: ${colors.textGrey};
+    color: ${({ theme }) => theme.textGrey};
     background-color: transparent;
     transform: scale(1.1);
   }
 `;
 
 const CustomDropdownMenu = styled(Dropdown.Menu)`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   border: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 200px;
 `;
 
 const CustomDropdownItem = styled(Dropdown.Item)`
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   padding: 10px 20px;
   display: block;
   width: 100%;
   text-align: left;
 
   &:hover {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     background-color: transparent;
   }
 
   &.active {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     font-weight: bold;
   }
 `;
 
 const CustomCollapse = styled(Navbar.Collapse)`
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
 
   @media (max-width: 768px) {
     position: absolute;
@@ -138,17 +142,17 @@ const CustomCollapse = styled(Navbar.Collapse)`
 `;
 
 const CustomNavLink = styled(Nav.Link)`
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   margin-right: 35px;
   font-size: large;
 
   &:hover {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     transform: scale(1.05);
   }
 
   &.active {
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     font-weight: bold;
     transform: scale(1.1);
     background-color: transparent;
@@ -159,10 +163,38 @@ const Icon = styled.span`
   margin-right: 5px;
 `;
 
-// Functional component to render the Navbar - used on all pages
-export function NavBar({ links }: NavBarProps) {
+const ThemeToggleContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    z-index: 10;
+  }
+`;
+
+// Functional component to render the Navbar
+export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
+  const themeContext = useTheme();
+  const isDarkMode = theme === ThemeType.DARK;
+
+  // Handle the toggle for dark mode
+  const toggleDarkMode = () => {
+    themeToggler();
+    localStorage.setItem("theme", isDarkMode ? ThemeType.LIGHT : ThemeType.DARK);
+  };
+
+  // Handle logout logic
+  const handleLogout = () => {
+    localStorage.setItem("authenticated", "false");
+    if (isDarkMode) {
+      toggleDarkMode(); // Toggle dark mode back to light when logging out
+    }
+  };
 
   const isActive = (href: string) => {
     const isQuestionnaireActive =
@@ -184,10 +216,7 @@ export function NavBar({ links }: NavBarProps) {
     );
   };
 
-  const handleLogout = () => {
-    localStorage.setItem("authenticated", "false");
-  };
-
+  // Return null if the user is not authenticated
   if (!isAuthenticated) {
     return null;
   }
@@ -203,7 +232,6 @@ export function NavBar({ links }: NavBarProps) {
           <CustomDropdownToggle id="dropdown-basic">
             <FontAwesomeIcon icon={faBars} />
           </CustomDropdownToggle>
-
           <CustomDropdownMenu align="end">
             {links.map((link) => (
               <CustomDropdownItem
@@ -249,6 +277,15 @@ export function NavBar({ links }: NavBarProps) {
             ))}
           </Nav>
         </CustomCollapse>
+        <ThemeToggleContainer>
+          <DarkModeSwitch
+            checked={isDarkMode}
+            onChange={toggleDarkMode}
+            size={20}
+            moonColor={themeContext.blue}
+            sunColor={themeContext.blue}
+          />
+        </ThemeToggleContainer>
       </Container>
     </CustomNavbar>
   );

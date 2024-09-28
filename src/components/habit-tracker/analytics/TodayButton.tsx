@@ -1,15 +1,14 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDay } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../../common/utilities/color-utils";
 
 // Styled component for the "Today" button with an icon
 const TodayButtonStyled = styled.button<{ disabled: boolean }>`
-  background-color: ${({ disabled }) =>
-    disabled ? colors.disabledBgGrey : colors.bgWhite};
-  color: ${({ disabled }) => (disabled ? colors.textGrey : colors.green)};
+  background-color: ${({ disabled, theme }) =>
+    disabled ? theme.disabledBackground : theme.backgroundColor};
+  color: ${({ disabled, theme }) => (disabled ? theme.textGrey : theme.green)};
   border: 2px solid
-    ${({ disabled }) => (disabled ? colors.disabledBgGrey : colors.green)};
+    ${({ disabled, theme }) => (disabled ? theme.disabledBackground : theme.green)};
   padding: 0 15px;
   border-radius: 5px;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
@@ -23,11 +22,11 @@ const TodayButtonStyled = styled.button<{ disabled: boolean }>`
   margin-bottom: 11px;
 
   &:hover {
-    background-color: ${({ disabled }) =>
-      disabled ? colors.disabledBgGrey : colors.green};
+    background-color: ${({ disabled, theme }) =>
+      disabled ? theme.disabledBackground : theme.green};
     border: 2px solid
-      ${({ disabled }) => (disabled ? colors.disabledBgGrey : colors.green)};
-    color: ${({ disabled }) => (disabled ? colors.textGrey : colors.bgWhite)};
+      ${({ disabled, theme }) => (disabled ? theme.disabledBackground : theme.green)};
+    color: ${({ disabled, theme }) => (disabled ? theme.textGrey : theme.backgroundColor)};
   }
 
   @media (max-width: 600px) {

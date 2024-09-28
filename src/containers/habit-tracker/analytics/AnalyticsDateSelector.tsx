@@ -7,9 +7,9 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../../common/utilities/color-utils";
 import "react-datepicker/dist/react-datepicker.css";
 import { formatMonthYear } from "../../../common/utilities/date-utils";
+import { useTheme } from "styled-components";
 
 // Define the ViewType enum for selecting month or year selector
 export enum ViewType {
@@ -40,9 +40,9 @@ const DatePickerContainer = styled.div`
 
 // Styled component for the custom Date Picker button
 const DatePickerButton = styled.button`
-  background-color: ${colors.bgWhite};
-  color: ${colors.blue};
-  border: 2px solid ${colors.blue};
+  background-color: ${({ theme }) => theme.backgroundColor};
+  color: ${({ theme }) => theme.blue};
+  border: 2px solid ${({ theme }) => theme.blue};
   padding: 0 30px;
   border-radius: 5px;
   cursor: pointer;
@@ -62,9 +62,9 @@ const DatePickerButton = styled.button`
   }
 
   &:hover {
-    background-color: ${colors.blue};
-    border: 2px solid ${colors.blue};
-    color: ${colors.bgWhite};
+    background-color: ${({ theme }) => theme.blue};
+    border: 2px solid ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.backgroundColor};
   }
 `;
 
@@ -74,6 +74,7 @@ export function AnalyticsDateSelector({
   onDateChange,
   viewType,
 }: AnalyticsDateSelectorProps) {
+  const theme = useTheme()
   const datePickerRef = useRef<DatePicker>(null);
   const today = new Date();
 
@@ -130,11 +131,9 @@ export function AnalyticsDateSelector({
       <IconButton
         icon={faChevronLeft}
         onClick={decreaseDate}
-        borderColor={colors.blue}
-        backgroundColor={colors.bgWhite}
-        color={colors.blue}
-        hoverBackgroundColor={colors.blue}
-        hoverColor={colors.bgWhite}
+        borderColor={theme.blue}
+        color={theme.blue}
+        hoverBackgroundColor={theme.blue}
       />
       <DatePicker
         selected={selectedDate}
@@ -161,11 +160,9 @@ export function AnalyticsDateSelector({
       <IconButton
         icon={faChevronRight}
         onClick={increaseDate}
-        borderColor={colors.blue}
-        backgroundColor={colors.bgWhite}
-        color={colors.blue}
-        hoverBackgroundColor={colors.blue}
-        hoverColor={colors.bgWhite}
+        borderColor={theme.blue}
+        color={theme.blue}
+        hoverBackgroundColor={theme.blue}
         disabled={isNextDisabled}
       />
       <TodayButton onClick={handleTodayClick} />

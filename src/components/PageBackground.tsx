@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import { colors } from "../common/utilities/color-utils";
 
 // Styled component for the page background
 export const PageBackground = styled.div`
   height: 100vh;
   width: 100vw;
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

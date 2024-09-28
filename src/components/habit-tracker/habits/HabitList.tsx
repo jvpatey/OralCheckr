@@ -11,8 +11,8 @@ import {
   faPlusCircle,
   faMinusCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../../common/utilities/color-utils";
 import { formatDateLong } from "../../../common/utilities/date-utils";
+import { useTheme } from "styled-components";
 
 interface HabitListProps {
   habits: Habit[];
@@ -38,6 +38,8 @@ export function RenderHabits({
   habitsLog,
   isFutureDate,
 }: HabitListProps) {
+  const theme = useTheme();
+
   return (
     <>
       {habits.map((habit, index) => {
@@ -59,20 +61,16 @@ export function RenderHabits({
                 <IconButton
                   icon={faPencilAlt}
                   onClick={() => handleEditHabit(index)}
-                  borderColor={colors.yellow}
-                  backgroundColor={colors.bgWhite}
-                  color={colors.yellow}
-                  hoverBackgroundColor={colors.yellow}
-                  hoverColor={colors.bgWhite}
+                  borderColor={theme.yellow}
+                  color={theme.yellow}
+                  hoverBackgroundColor={theme.yellow}
                 />
                 <IconButton
                   icon={faTrashAlt}
                   onClick={() => handleDeleteHabit(index)}
-                  borderColor={colors.red}
-                  backgroundColor={colors.bgWhite}
-                  color={colors.red}
-                  hoverBackgroundColor={colors.red}
-                  hoverColor={colors.bgWhite}
+                  borderColor={theme.red}
+                  color={theme.red}
+                  hoverBackgroundColor={theme.red}
                 />
               </>
             ) : (
@@ -80,21 +78,17 @@ export function RenderHabits({
                 <IconButton
                   icon={faPlusCircle}
                   onClick={() => handleLog(habit.name, selectedDate)}
-                  borderColor={colors.green}
-                  backgroundColor={colors.bgWhite}
-                  color={colors.green}
-                  hoverBackgroundColor={colors.green}
-                  hoverColor={colors.bgWhite}
+                  borderColor={theme.green}
+                  color={theme.green}
+                  hoverBackgroundColor={theme.green}
                   disabled={isAddLogDisabled}
                 />
                 <IconButton
                   icon={faMinusCircle}
                   onClick={() => handleRemoveLog(habit.name, selectedDate)}
-                  borderColor={colors.red}
-                  backgroundColor={colors.bgWhite}
-                  color={colors.red}
-                  hoverBackgroundColor={colors.red}
-                  hoverColor={colors.bgWhite}
+                  borderColor={theme.red}
+                  color={theme.red}
+                  hoverBackgroundColor={theme.red}
                   disabled={isRemoveLogDisabled}
                 />
               </>

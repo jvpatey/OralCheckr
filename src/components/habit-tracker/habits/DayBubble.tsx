@@ -1,18 +1,17 @@
 import styled from "styled-components";
-import { colors } from "../../../common/utilities/color-utils";
 import { formatWeekdayShort } from "../../../common/utilities/date-utils";
 
 // Styled component for the individual day bubbles in the date picker
 const DayBubbleStyled = styled.div<{ selected: boolean; $isEditMode: boolean }>`
   // Background color changes based on selection and edit mode
-  background-color: ${({ selected, $isEditMode }) =>
+  background-color: ${({ selected, $isEditMode, theme }) =>
     selected
-      ? colors.blue
+      ? theme.blue
       : $isEditMode
-      ? colors.disabledBgGrey
-      : colors.bgGrey};
-  color: ${({ selected, $isEditMode }) =>
-    selected || $isEditMode ? colors.bgWhite : colors.darkGrey};
+      ? theme.disabledBackground
+      : theme.disabledBackground};
+  color: ${({ selected, $isEditMode, theme }) =>
+    selected || $isEditMode ? theme.backgroundColor : theme.blue};
 
   width: 50px;
   height: 50px;
@@ -25,12 +24,12 @@ const DayBubbleStyled = styled.div<{ selected: boolean; $isEditMode: boolean }>`
   cursor: ${({ $isEditMode }) => ($isEditMode ? "not-allowed" : "pointer")};
 
   &:hover {
-    background-color: ${({ selected, $isEditMode }) =>
+    background-color: ${({ selected, $isEditMode, theme }) =>
       $isEditMode
-        ? colors.disabledBgGrey
+        ? theme.disabledBackground
         : selected
-        ? colors.blue
-        : colors.bgGrey};
+        ? theme.blue
+        : theme.disabledBackground};
     transform: ${({ $isEditMode }) => ($isEditMode ? "none" : "scale(1.05)")};
   }
 

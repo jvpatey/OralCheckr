@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Question, Type } from "./Questionnaire";
-import { colors } from "../../common/utilities/color-utils";
 
 // Styled-components for the Questionnaire component
 
 const QuesTitle = styled.h2`
-  color: ${colors.blue};
+  color: ${({ theme }) => theme.blue};
   margin-bottom: 20px;
   text-align: center;
   font-size: 1.5rem;
@@ -17,7 +16,7 @@ const FormContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 50px;
-  background-color: ${colors.bgWhite};
+  background-color: ${({ theme }) => theme.backgroundColor};
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 600px;
@@ -31,15 +30,15 @@ const FormGroup = styled.div.withConfig({
   display: flex;
   flex-direction: ${({ isRange }) => (isRange ? "column" : "row")};
   align-items: center;
-  background-color: ${colors.disabledBgGrey};
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
   padding: 10px 20px;
   border-radius: 20px;
   margin-bottom: 15px;
   width: 100%;
-  color: ${colors.darkGrey};
+  color: ${({ theme }) => theme.darkGrey};
 
   &:hover {
-    background-color: ${colors.bgGrey};
+    background-color: ${({ theme }) => theme.backgroundColor};
   }
 
   label {

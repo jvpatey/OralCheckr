@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Dropdown } from "react-bootstrap";
 import { Habit } from "../habits/Habits";
-import { colors } from "../../../common/utilities/color-utils";
 import { LocalStorage } from "../../../common/constants/local-storage";
+import { useTheme } from "styled-components";
 
 interface HabitDropdownProps {
   habits?: Habit[];
@@ -12,43 +12,43 @@ interface HabitDropdownProps {
 
 // Custom styled components for the dropdown
 const CustomDropdownToggle = styled(Dropdown.Toggle)`
-  background-color: ${colors.bgWhite};
-  color: ${colors.blue};
-  border: 2px solid ${colors.blue};
+  background-color: ${({ theme }) => theme.backgroundColor};
+  color: ${({ theme }) => theme.blue};
+  border: 2px solid ${({ theme }) => theme.blue};
   font-size: 16px;
   width: 150px;
 
   &:hover,
   &:focus {
-    background-color: ${colors.blue};
-    color: ${colors.bgWhite};
-    border-color: ${colors.blue};
+    background-color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.backgroundColor};
+    border-color: ${({ theme }) => theme.blue};
     box-shadow: none;
   }
 
   &:active {
-    background-color: ${colors.blue};
-    color: ${colors.bgWhite};
-    border-color: ${colors.blue};
+    background-color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.backgroundColor};
+    border-color: ${({ theme }) => theme.blue};
   }
 `;
 
 const CustomDropdownMenu = styled(Dropdown.Menu)`
-  background-color: ${colors.bgWhite};
-  border: 1px solid ${colors.blue};
+  background-color: ${({ theme }) => theme.backgroundColor};
+  border: 1px solid ${({ theme }) => theme.blue};
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 200px;
 `;
 
 const CustomDropdownItem = styled(Dropdown.Item)<{ $isActive: boolean }>`
-  color: ${({ $isActive }) => ($isActive ? colors.blue : colors.textGrey)};
+  color: ${({ $isActive, theme }) => ($isActive ? theme.blue : theme.textGrey)};
   font-weight: ${({ $isActive }) => ($isActive ? "bold" : "normal")};
-  background-color: transparent; // No background change
+  background-color: transparent;
 
   &:hover,
   &:focus {
     background-color: transparent;
-    color: ${colors.blue};
+    color: ${({ theme }) => theme.blue};
     font-weight: bold;
   }
 `;
@@ -57,6 +57,7 @@ export function HabitDropdown({
   habits = [],
   onSelectHabit,
 }: HabitDropdownProps) {
+  const theme = useTheme()
   const [selectedHabit, setSelectedHabit] = useState<string>("Select Habit");
 
   useEffect(() => {
@@ -85,11 +86,11 @@ export function HabitDropdown({
       <CustomDropdownMenu>
         {habits.length === 0 ? (
           <CustomDropdownItem disabled $isActive={false}>
-            No habits found
+            <span style={{color: theme.blue}}>No habits found </span>
           </CustomDropdownItem>
         ) : (
           habits.map((habit, index) => (
-            <CustomDropdownItem
+            <CustomDropdownItem 
               key={index}
               eventKey={habit.name}
               $isActive={habit.name === selectedHabit}

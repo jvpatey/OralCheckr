@@ -8,12 +8,11 @@ import { LandingContainer } from "../landing/LandingContainer";
 import { QuestionnaireCardContainer } from "./QuestionnaireCardContainer";
 import { QuestionnaireCard } from "./QuestionnaireCard";
 import { NavigationButton } from "./NavigationButton";
-import { colors } from "../../common/utilities/color-utils";
 
 // Styled-components for Start Questionnaire Page
 
 const TitleText = styled.h1`
-  color: ${colors.blue};
+  color: ${({ theme }) => theme.blue};
   margin-top: 20px;
   margin-bottom: 60px;
   text-align: center;
@@ -27,7 +26,7 @@ const TitleText = styled.h1`
 `;
 
 const CardText = styled.h5`
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   margin-bottom: 20px;
   margin-right: 40px;
   margin-left: 40px;
@@ -57,9 +56,9 @@ const StartButton = styled(NavigationButton)`
   font-size: 1.5rem;
   text-align: center;
   border: solid 2px;
-  border-color: ${colors.green};
-  background-color: ${colors.green};
-  color: ${colors.bgWhite};
+  border-color: ${({ theme }) => theme.green};
+  background-color: ${({ theme }) => theme.green};
+  color: ${({ theme }) => theme.accentBackgroundColor};
 
   @media (max-width: 768px) {
     width: 80%;
@@ -68,10 +67,10 @@ const StartButton = styled(NavigationButton)`
   }
 
   &:hover {
-    background-color: ${colors.bgWhite};
-    color: ${colors.green};
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
+    color: ${({ theme }) => theme.green};
     border: solid 2px;
-    border-color: ${colors.green};
+    border-color: ${({ theme }) => theme.green};
   }
 `;
 

@@ -9,7 +9,6 @@ import { LocalStorage } from "../../../common/constants/local-storage";
 import { faCalendarAlt, faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../../common/utilities/color-utils";
 
 // Enum for view modes
 enum ViewMode {
@@ -52,7 +51,7 @@ const AnalyticsContainer = styled.div`
 const NoHabitMessage = styled.div`
   margin-top: 20px;
   font-size: 18px;
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   text-align: center;
 `;
 

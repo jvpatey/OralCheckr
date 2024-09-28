@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import { colors } from "../../common/utilities/color-utils";
 
 // Styled component for the Navigation buttons inside the Questionnaire
 export const NavigationButton = styled.button`
-  background-color: ${colors.blue};
-  color: white;
+  background-color: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.accentBackgroundColor};
   border: none;
   padding: 10px 20px;
   border-radius: 20px;
@@ -14,15 +13,15 @@ export const NavigationButton = styled.button`
   width: 150px;
 
   &:hover {
-    background-color: ${colors.disabledBgGrey};
-    color: ${colors.blue};
-    border: solid 2px ${colors.blue};
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
+    color: ${({ theme }) => theme.blue};
+    border: solid 2px ${({ theme }) => theme.blue};
   }
 
   &:disabled {
-    background-color: ${colors.disabledBgGrey};
-    border: solid 2px ${colors.bgGrey};
-    color: ${colors.bgGrey};
+    background-color: ${({ theme }) => theme.disabledBackground};
+    border: solid 2px ${({ theme }) => theme.disabledText};
+    color: ${({ theme }) => theme.disabledText};
     cursor: not-allowed;
   }
 

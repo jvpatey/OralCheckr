@@ -6,7 +6,6 @@ import { useMemo, useState } from "react";
 import { generateHeatmapData, HeatmapSeries } from "../../../../common/utilities/heatmap-utils";
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
-import { colors } from "../../../../common/utilities/color-utils";
 
 // Keyframes for the fade-up animation
 const fadeUp = keyframes`
@@ -42,7 +41,7 @@ const ViewContainer = styled.div`
 const HabitsTitle = styled.h3`
   font-size: 24px;
   font-weight: bold;
-  color: ${colors.green};
+  color: ${({ theme }) => theme.green};
   margin-bottom: 8px;
   margin-top: 10px;
 `;

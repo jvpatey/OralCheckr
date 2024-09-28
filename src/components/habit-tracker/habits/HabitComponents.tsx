@@ -1,5 +1,4 @@
 import styled, { keyframes } from "styled-components";
-import { colors } from "../../../common/utilities/color-utils";
 
 // Styled components for the Habits component
 
@@ -58,7 +57,7 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid ${colors.bgGrey};
+  border-bottom: 1px solid ${({ theme }) => theme.disabledText};
   width: 100%;
   white-space: nowrap;
 `;
@@ -66,7 +65,7 @@ export const Header = styled.div`
 export const HeaderText = styled.div`
   font-size: 25px;
   font-weight: bold;
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   white-space: nowrap;
 
   @media (max-width: 768px) {
@@ -104,7 +103,7 @@ export const HabitRow = styled.div`
 
 export const PlaceholderText = styled.div`
   font-size: 18px;
-  color: ${colors.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   margin-top: 20px;
 `;
 

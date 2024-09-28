@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { colors } from "../../../common/utilities/color-utils";
 import { Spinner } from "react-bootstrap";
 
 const LoadingContainer = styled.div`
@@ -10,10 +9,10 @@ const LoadingContainer = styled.div`
 `;
 
 const GreenSpinner = styled(Spinner)`
-  color: ${colors.green};
+  color: ${({ theme }) => theme.green};
 
   .spinner-border {
-    border-color: ${colors.green};
+    border-color: ${({ theme }) => theme.green};
   }
 `;
 
