@@ -10,10 +10,11 @@ import {
 import { Router } from "../Router";
 import { getFullPath } from "../common/constants/routes";
 import { RoutePaths } from "../common/constants/routes";
+import { ThemeType } from "../App";
 
 interface RenderNavsProps {
   themeToggler: () => void;
-  currentTheme: string;
+  currentTheme: ThemeType;
 }
 
 // Function to render the navigation components of the app
