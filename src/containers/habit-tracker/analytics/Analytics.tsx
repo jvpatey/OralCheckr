@@ -42,7 +42,7 @@ const AnalyticsContainer = styled.div`
   box-sizing: border-box;
   animation: ${fadeUp} 1s ease-out;
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     width: calc(100% - 35px);
     left: 40px;
   }

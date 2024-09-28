@@ -45,7 +45,7 @@ const TilesAndCalendarContainer = styled.div`
   margin-top: 20px;
   gap: 20px;
 
-  @media (max-width: 1250px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
     align-items: center;
     width: 90%;
@@ -72,7 +72,7 @@ const TileWrapper = styled.div`
     max-width: 800px;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 40px;
     max-width: 300px;
