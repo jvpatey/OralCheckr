@@ -23,7 +23,7 @@ export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
   const [sidebarLinks, setSidebarLinks] = useState<NavLink[]>([]);
 
   useEffect(() => {
-    const currentPath = location.pathname;
+    const currentPath = location.hash.replace("#", "");
     const isHabitTrackerRoute = currentPath.startsWith(
       getFullPath("/habit-tracker")
     );
@@ -50,7 +50,7 @@ export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
     } else {
       setSidebarLinks([]);
     }
-  }, [location.pathname]);
+  }, [location.hash]);
 
   return (
     <>

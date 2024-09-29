@@ -141,28 +141,29 @@ export function Sidebar({ links }: SidebarProps) {
 
   return (
     <SidebarContainer>
-      {links.map((link, index) => (
-        <SidebarLink
-          to={link.path}
-          key={index}
-          className={
-            location.pathname === link.path ||
-            (link.path === getFullPath(RoutePaths.QUESTIONNAIRE) &&
-              location.pathname.startsWith(
-                getFullPath(RoutePaths.QUESTIONNAIRE)
-              ) &&
-              location.pathname !== getFullPath(RoutePaths.RESULTS))
-              ? "active"
-              : ""
-          }
-          data-tooltip={link.name}
-        >
-          <Icon>
-            <FontAwesomeIcon icon={link.icon} />
-          </Icon>
-          <Text>{link.name}</Text>
-        </SidebarLink>
-      ))}
+      {links.map((link, index) => {
+        const currentPath = location.hash.replace("#", "");
+        return (
+          <SidebarLink
+            to={link.path}
+            key={index}
+            className={
+              currentPath === link.path ||
+              (link.path === getFullPath(RoutePaths.QUESTIONNAIRE) &&
+                currentPath.startsWith(getFullPath(RoutePaths.QUESTIONNAIRE)) &&
+                currentPath !== getFullPath(RoutePaths.RESULTS))
+                ? "active"
+                : ""
+            }
+            data-tooltip={link.name}
+          >
+            <Icon>
+              <FontAwesomeIcon icon={link.icon} />
+            </Icon>
+            <Text>{link.name}</Text>
+          </SidebarLink>
+        );
+      })}
     </SidebarContainer>
   );
 }

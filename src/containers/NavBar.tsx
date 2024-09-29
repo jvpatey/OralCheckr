@@ -197,16 +197,18 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   };
 
   const isActive = (href: string) => {
+    const currentPath = location.hash.replace("#", "");
+  
     const isQuestionnaireActive =
-      location.pathname.startsWith(getFullPath(RoutePaths.QUESTIONNAIRE)) ||
-      location.pathname.startsWith(getFullPath(RoutePaths.RESULTS));
-
+      currentPath.startsWith(getFullPath(RoutePaths.QUESTIONNAIRE)) ||
+      currentPath.startsWith(getFullPath(RoutePaths.RESULTS));
+  
     const isHabitTrackerActive =
-      location.pathname.startsWith(getFullPath(RoutePaths.HABITS)) ||
-      location.pathname.startsWith(getFullPath(RoutePaths.ANALYTICS));
-
+      currentPath.startsWith(getFullPath(RoutePaths.HABITS)) ||
+      currentPath.startsWith(getFullPath(RoutePaths.ANALYTICS));
+  
     return (
-      location.pathname === href ||
+      currentPath === href ||
       (isHabitTrackerActive &&
         (href.includes(RoutePaths.HABITS) ||
           href.includes(RoutePaths.ANALYTICS))) ||

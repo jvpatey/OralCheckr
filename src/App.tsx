@@ -1,4 +1,4 @@
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { RenderNavs } from "./containers/RenderNavs";
 import { useState } from "react";
 import { ThemeProvider } from "styled-components";
@@ -18,9 +18,9 @@ export function App() {
 
   return (
     <ThemeProvider theme={theme === ThemeType.LIGHT ? lightTheme : darkTheme}>
-      <BrowserRouter>
+      <HashRouter>
         <RenderNavs themeToggler={themeToggler} currentTheme={theme} />
-      </BrowserRouter>
+      </HashRouter>
     </ThemeProvider>
   );
 }
