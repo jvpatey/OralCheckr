@@ -4,7 +4,6 @@ import { Modal, Button } from "react-bootstrap";
 import { ButtonProps } from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import { RoutePaths } from "../../common/constants/routes";
-import { getFullPath } from "../../common/constants/routes";
 import styled from "styled-components";
 import { PageBackground } from "../../components/PageBackground";
 import { LandingContainer } from "../../components/landing/LandingContainer";
@@ -122,7 +121,7 @@ export function RetakeQuestionnaire({
     localStorage.removeItem("totalScore");
     setShowModal(false);
     resetResponses();
-    navigate(`${getFullPath(RoutePaths.QUESTIONNAIRE)}/1`);
+    navigate(`${RoutePaths.QUESTIONNAIRE}/1`);
   };
 
   const handleCloseModal = () => {

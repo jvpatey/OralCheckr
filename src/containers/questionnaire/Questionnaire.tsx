@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import round from "lodash/round";
 import questionData from "../../common/questionnaire.json";
 import styled from "styled-components";
-import { getFullPath } from "../../common/constants/routes";
 import { PageBackground } from "../../components/PageBackground";
 import { LandingContainer } from "../../components/landing/LandingContainer";
 import { QuestionnaireCardContainer } from "../../components/questionnaire/QuestionnaireCardContainer";
@@ -233,18 +232,14 @@ export function Questionnaire() {
   // Navigate to the next question
   const handleNext = () => {
     if (currentQuestion < questions.length) {
-      navigate(
-        `${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion + 1}`
-      );
+      navigate(`${RoutePaths.QUESTIONNAIRE}/${currentQuestion + 1}`);
     }
   };
 
   // Navigate to the previous question
   const handlePrevious = () => {
     if (currentQuestion > 1) {
-      navigate(
-        `${getFullPath(RoutePaths.QUESTIONNAIRE)}/${currentQuestion - 1}`
-      );
+      navigate(`${RoutePaths.QUESTIONNAIRE}/${currentQuestion - 1}`);
     }
   };
 
@@ -254,8 +249,7 @@ export function Questionnaire() {
     localStorage.setItem("questionnaire", JSON.stringify(responses));
     localStorage.setItem("totalScore", JSON.stringify(totalScore));
     localStorage.removeItem("currentQuestion");
-    console.log("Submit questionnaire", responses);
-    console.log("Total Score", totalScore);
+    navigate(RoutePaths.RESULTS);
   };
 
   // Determine if the "Next" button should be disabled
@@ -318,21 +312,20 @@ export function Questionnaire() {
                   Previous
                 </NavigationButton>
                 {currentQuestion === questions.length ? (
-                  <SubmitButton
-                    href={getFullPath(RoutePaths.RESULTS)}
-                    onClick={handleSubmit}
-                    disabled={isSubmitDisabled}
-                  >
-                    Submit
-                  </SubmitButton>
-                ) : (
-                  <NavigationButton
-                    onClick={handleNext}
-                    disabled={isNextDisabled}
-                  >
-                    Next
-                  </NavigationButton>
-                )}
+                <SubmitButton
+                onClick={handleSubmit}
+                disabled={isSubmitDisabled}
+              >
+                Submit
+              </SubmitButton>
+              ) : (
+              <NavigationButton
+                onClick={handleNext}
+                disabled={isNextDisabled}
+              >
+                Next
+              </NavigationButton>
+              )}
               </div>
             </QuesContainer>
           </QuestionnaireCard>

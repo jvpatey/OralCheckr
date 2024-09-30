@@ -7,8 +7,6 @@ import {
   sidebarLinks as sidebarNavLinks,
   NavLink,
 } from "../common/links";
-import { Router } from "../Router";
-import { getFullPath } from "../common/constants/routes";
 import { RoutePaths } from "../common/constants/routes";
 import { ThemeType } from "../App";
 
@@ -23,40 +21,35 @@ export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
   const [sidebarLinks, setSidebarLinks] = useState<NavLink[]>([]);
 
   useEffect(() => {
-    const currentPath = location.hash.replace("#", "");
-    const isHabitTrackerRoute = currentPath.startsWith(
-      getFullPath("/habit-tracker")
-    );
-    const isQuestionnaireRoute = currentPath.startsWith(
-      getFullPath("/questionnaire")
-    );
+    const currentPath = location.pathname;
+    const isHabitTrackerRoute = currentPath.startsWith(RoutePaths.HABITS);
+    const isQuestionnaireRoute = currentPath.startsWith(RoutePaths.QUESTIONNAIRE);
 
     if (isHabitTrackerRoute) {
       setSidebarLinks(
         sidebarNavLinks.filter(
           (link) =>
-            link.path.startsWith(getFullPath(RoutePaths.HABITS)) ||
-            link.path.startsWith(getFullPath(RoutePaths.ANALYTICS))
+            link.path.startsWith(RoutePaths.HABITS) ||
+            link.path.startsWith(RoutePaths.ANALYTICS)
         )
       );
     } else if (isQuestionnaireRoute) {
       setSidebarLinks(
         sidebarNavLinks.filter(
           (link) =>
-            link.path.startsWith(getFullPath(RoutePaths.QUESTIONNAIRE)) ||
-            link.path.startsWith(getFullPath(RoutePaths.RESULTS))
+            link.path.startsWith(RoutePaths.QUESTIONNAIRE) ||
+            link.path.startsWith(RoutePaths.RESULTS)
         )
       );
     } else {
       setSidebarLinks([]);
     }
-  }, [location.hash]);
+  }, [location.pathname]);
 
   return (
     <>
       <NavBar links={navbarLinks} themeToggler={themeToggler} theme={currentTheme} />
       {sidebarLinks.length > 0 && <Sidebar links={sidebarLinks} />}
-      <Router />
     </>
   );
 }

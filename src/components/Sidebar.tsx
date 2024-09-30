@@ -1,7 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getFullPath } from "../common/constants/routes";
 import { RoutePaths } from "../common/constants/routes";
 
 // Fade-in from left animation
@@ -142,16 +141,17 @@ export function Sidebar({ links }: SidebarProps) {
   return (
     <SidebarContainer>
       {links.map((link, index) => {
-        const currentPath = location.hash.replace("#", "");
+        const currentPath = location.pathname + location.hash.replace("#", "");
+
         return (
           <SidebarLink
             to={link.path}
             key={index}
             className={
               currentPath === link.path ||
-              (link.path === getFullPath(RoutePaths.QUESTIONNAIRE) &&
-                currentPath.startsWith(getFullPath(RoutePaths.QUESTIONNAIRE)) &&
-                currentPath !== getFullPath(RoutePaths.RESULTS))
+              (link.path === RoutePaths.QUESTIONNAIRE &&
+                currentPath.startsWith(RoutePaths.QUESTIONNAIRE) &&
+                currentPath !== RoutePaths.RESULTS)
                 ? "active"
                 : ""
             }

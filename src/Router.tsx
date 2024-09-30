@@ -1,5 +1,5 @@
-import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
-import { RoutePaths, getFullPath } from "./common/constants/routes";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { RoutePaths } from "./common/constants/routes";
 import { GuardedRoute } from "./containers/authentication/GuardedRoute";
 import { RedirectIfAuthenticated } from "./containers/authentication/RedirectIfAuthenticated";
 import { Login } from "./containers/Login";
@@ -11,73 +11,68 @@ import { Landing } from "./components/landing/Landing";
 
 export function Router() {
   return (
-    <HashRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <RedirectIfAuthenticated>
-              <Login />
-            </RedirectIfAuthenticated>
-          }
-        />
-        <Route
-          path={getFullPath(RoutePaths.LANDING)}
-          element={
-            <GuardedRoute>
-              <Landing />
-            </GuardedRoute>
-          }
-        />
-        <Route
-          path={getFullPath(RoutePaths.HABITS)}
-          element={
-            <GuardedRoute>
-              <Habits />
-            </GuardedRoute>
-          }
-        />
-        <Route
-          path={getFullPath(RoutePaths.ANALYTICS)}
-          element={
-            <GuardedRoute>
-              <Analytics />
-            </GuardedRoute>
-          }
-        />
-        <Route
-          path={getFullPath(RoutePaths.RESULTS)}
-          element={
-            <GuardedRoute>
-              <Results />
-            </GuardedRoute>
-          }
-        />
-        {/* Questionnaire path with dynamic question ID */}
-        <Route
-          path={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/:questionId`}
-          element={
-            <GuardedRoute>
-              <Questionnaire />
-            </GuardedRoute>
-          }
-        />
-        <Route
-          path={getFullPath(RoutePaths.QUESTIONNAIRE)}
-          element={
-            <GuardedRoute>
-              <Questionnaire />
-            </GuardedRoute>
-          }
-        />
-        {/* Wildcard route to catch all other routes */}
-        <Route
-          path="*"
-          element={
-            <Navigate to={getFullPath(RoutePaths.LANDING)} replace={true} />
-          }
-        />
-      </Routes>
-    </HashRouter>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <RedirectIfAuthenticated>
+            <Login />
+          </RedirectIfAuthenticated>
+        }
+      />
+      <Route
+      path={RoutePaths.LANDING}
+      element={
+        <GuardedRoute>
+          <Landing />
+        </GuardedRoute>
+      }
+      />
+      <Route
+        path={RoutePaths.HABITS}
+        element={
+          <GuardedRoute>
+            <Habits />
+          </GuardedRoute>
+        }
+      />
+      <Route
+        path={RoutePaths.ANALYTICS}
+        element={
+          <GuardedRoute>
+            <Analytics />
+          </GuardedRoute>
+        }
+      />
+      <Route
+        path={RoutePaths.RESULTS}
+        element={
+          <GuardedRoute>
+            <Results />
+          </GuardedRoute>
+        }
+      />
+      <Route
+        path={`${RoutePaths.QUESTIONNAIRE}/:questionId`}
+        element={
+          <GuardedRoute>
+            <Questionnaire />
+          </GuardedRoute>
+        }
+      />
+      <Route
+        path={RoutePaths.QUESTIONNAIRE}
+        element={
+          <GuardedRoute>
+            <Questionnaire />
+          </GuardedRoute>
+        }
+      />
+      {/* Wildcard route */}
+      <Route
+        path="*"
+        element={<Navigate to={RoutePaths.LANDING} replace={true} />}
+      />
+    </Routes>
   );
 }

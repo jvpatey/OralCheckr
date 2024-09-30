@@ -1,7 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { RoutePaths } from "../../common/constants/routes";
-import { getFullPath } from "../../common/constants/routes";
 import styled from "styled-components";
 import { PageBackground } from "../PageBackground";
 import { LandingContainer } from "../landing/LandingContainer";
@@ -94,7 +93,7 @@ export function StartQuestionnaire() {
             <ButtonContainer>
               <StartButton
                 as={Link}
-                to={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/1`}
+                to={`${RoutePaths.QUESTIONNAIRE}/1`}
               >
                 Begin
               </StartButton>
