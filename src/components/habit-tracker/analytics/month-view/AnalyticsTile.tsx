@@ -28,6 +28,10 @@ const TileHeading = styled.h3`
   color: ${({ theme }) => theme.blue};
   margin-top: 10px;
   text-align: center;
+
+    @media (max-width: 1024px) {
+    font-size: 12px;
+  }
 `;
 
 const TileMainContent = styled.div<{ $isMissedDays?: boolean }>`
@@ -35,9 +39,9 @@ const TileMainContent = styled.div<{ $isMissedDays?: boolean }>`
   font-weight: bold;
   color: ${({ $isMissedDays, theme }) => ($isMissedDays ? theme.red : theme.green)};
   margin-top: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 
-  @media (max-width: 600px) {
+  @media (max-width: 1024px) {
     font-size: 30px;
   }
 `;
@@ -45,7 +49,6 @@ const TileMainContent = styled.div<{ $isMissedDays?: boolean }>`
 const TileSubContent = styled.div`
   font-size: 12px;
   color: ${({ theme }) => theme.textGrey};
-  margin-bottom: 5px;
 `;
 
 // Functional component for the analytics tiles for the month view

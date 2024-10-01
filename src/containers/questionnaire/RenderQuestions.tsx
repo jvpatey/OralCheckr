@@ -66,6 +66,10 @@ const RangeLabels = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+
+    @media (max-width: 600px) {
+    font-size: 0.4rem;
+  }
 `;
 
 // Interface for the RenderQuestions component props, extending Question interface

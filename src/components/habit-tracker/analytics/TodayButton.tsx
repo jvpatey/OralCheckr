@@ -30,7 +30,7 @@ const TodayButtonStyled = styled.button<{ disabled: boolean }>`
   }
 
   @media (max-width: 600px) {
-    font-size: 14px;
+    font-size: 12px;
     padding: 0 10px;
   }
 

@@ -45,10 +45,10 @@ const TilesAndCalendarContainer = styled.div`
   margin-top: 20px;
   gap: 20px;
 
-  @media (max-width: 1250px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 90%;
     height: auto;
   }
 
@@ -68,12 +68,13 @@ const TileWrapper = styled.div`
   justify-content: center;
 
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    grid-template-columns: repeat(4, minmax(130px, 1fr));
+    max-width: 800px;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
+    grid-gap: 40px;
     max-width: 300px;
   }
 `;

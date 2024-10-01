@@ -59,6 +59,8 @@ const DatePickerButton = styled.button`
   @media (max-width: 600px) {
     min-width: 50px;
     padding: 0 10px;
+    font-size: 10px;
+    font-weight: bold;
   }
 
   &:hover {
@@ -97,14 +99,17 @@ export function AnalyticsDateSelector({
     onDateChange(newDate);
   };
 
-  // Increase the selected month or year by one
-  const increaseDate = () => {
-    const newDate =
-      viewType === ViewType.MONTH
-        ? new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1)
-        : new Date(selectedDate.getFullYear() + 1, selectedDate.getMonth(), 1);
-    onDateChange(newDate);
-  };
+// Increase the selected month or year by one
+const increaseDate = () => {
+  if (isNextDisabled) return;
+
+  const newDate =
+    viewType === ViewType.MONTH
+      ? new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1)
+      : new Date(selectedDate.getFullYear() + 1, selectedDate.getMonth(), 1);
+  onDateChange(newDate);
+};
+
 
   // Set the selected date to the current month or year
   const handleTodayClick = () => {

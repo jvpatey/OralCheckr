@@ -33,13 +33,13 @@ const SidebarContainer = styled.div`
   z-index: 5;
   animation: ${fadeInLeft} 1s ease-in-out;
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     width: 50px;
     align-items: center;
     padding-left: 0;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     padding-left: 0;
     padding-top: 10px;
     margin-top: 10px;
@@ -76,7 +76,7 @@ const SidebarLink = styled(Link)`
     overflow: hidden;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     justify-content: center;
     padding: 10px;
     margin-right: 0;
@@ -93,7 +93,7 @@ const SidebarLink = styled(Link)`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     &::after {
       content: attr(data-tooltip);
       position: absolute;
@@ -120,13 +120,13 @@ const SidebarLink = styled(Link)`
 const Icon = styled.span`
   margin-right: 10px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     margin-right: 0;
   }
 `;
 
 const Text = styled.span`
-  @media (max-width: 768px) {
+  @media (max-width: 800px) {
     display: none;
   }
 `;
