@@ -4,7 +4,7 @@
 OralCheckr is a comprehensive application designed to assess and improve your oral health. Through an in-depth questionnaire that covers all aspects of your oral hygiene, the app generates a personalized oral health score and provides tailored recommendations based on your responses. Additionally, OralCheckr includes a habit tracker to help you monitor and maintain your daily oral health habits. With detailed analytics, you can also track your progress through monthly and yearly insights.
 
 ## ✨ Motivation
-As a dental hygienist transitioning into the tech field, I wanted to create a tool that helps patients take control of their oral health. OralCheckr combines my background in oral health with technology to provide users with personalized insights and tips. It’s designed to help patients track their habits and improve their oral hygiene, making it a valuable tool for education and self-care.
+As a dental hygienist, I wanted to create a tool that helps patients take control of their oral health. OralCheckr combines my background in oral health with technology to provide users with personalized insights and tips. It’s designed to help patients track their habits and improve their oral hygiene, making it a valuable tool for education and self-care.
 
 ## 🛠️ Built with
 [![My Skills](https://skillicons.dev/icons?i=react,vite,ts,styledcomponents,bootstrap,)](https://skillicons.dev)
