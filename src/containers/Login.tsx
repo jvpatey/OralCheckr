@@ -180,7 +180,7 @@ export function Login() {
           <CardBody>
             <LogoStyle>
               <LogoImgStyle src="images/logo-white.png" alt="Logo" />
-              <LogoText>OralCheckrs</LogoText>
+              <LogoText>OralCheckr</LogoText>
             </LogoStyle>
             <TextStyle>
               Take our questionnaire to get insight on your oral health status,
