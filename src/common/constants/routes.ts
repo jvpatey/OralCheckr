@@ -1,6 +1,6 @@
 export enum RoutePaths {
   LOGIN = '/login',
-  LANDING = '/landing',
+  LANDING = '/dashboard',
   QUESTIONNAIRE = '/questionnaire',
   HABITS = '/habit-tracker',
   ANALYTICS = '/habit-tracker/analytics',
