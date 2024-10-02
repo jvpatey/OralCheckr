@@ -14,6 +14,20 @@ This project is hosted and deployed through Github Pages. To access the applicat
 
 https://jvpatey.github.io/OralCheckr/
 
+## 🛠️ Custom Installation
+To run the OralCheckr frontend locally, you'll need to serve the files with a server. 
+Since it's a React app built with Vite, you can easily start a development server using the following commands:
+
+On MacOS or Windows:
+
+```
+npm install
+npm run dev
+```
+Local Storage:
+
+OralCheckr uses local storage to keep track of user data, including questionnaire responses and habit logs. No backend or cloud service is required at this point, so all data is stored directly in the browser's local storage.
+
 ## 📋 How to use
 Login Page:
 - The login page requires the user to enter a username and password to access the application.
