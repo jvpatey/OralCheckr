@@ -1,5 +1,5 @@
 import { faClipboardList, faTasksAlt, faArrowRightFromBracket, faChartSimple, faList, faSquarePollVertical } from "@fortawesome/free-solid-svg-icons";
-import { RoutePaths, getFullPath } from "./constants/routes";
+import { RoutePaths } from "./constants/routes";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 // Interface for links
@@ -14,19 +14,19 @@ export interface NavLink {
 export const navbarLinks: NavLink[] = [
   {
     name: "Questionnaire",
-    path: getFullPath(RoutePaths.QUESTIONNAIRE),
+    path: RoutePaths.QUESTIONNAIRE,
     icon: faClipboardList,
     displayIn: "navbar",
   },
   {
     name: "Habit Tracker",
-    path: getFullPath(RoutePaths.HABITS),
+    path: RoutePaths.HABITS,
     icon: faTasksAlt,
     displayIn: "navbar",
   },
   {
     name: "Log Out",
-    path: getFullPath(RoutePaths.LOGIN),
+    path: RoutePaths.LOGIN,
     icon: faArrowRightFromBracket,
     displayIn: "navbar",
   },
@@ -36,28 +36,26 @@ export const navbarLinks: NavLink[] = [
 export const sidebarLinks: NavLink[] = [
   {
     name: "Questionnaire",
-    path: getFullPath(RoutePaths.QUESTIONNAIRE),
+    path: RoutePaths.QUESTIONNAIRE,
     icon: faClipboardList,
     displayIn: "sidebar",
   },
   {
     name: "Habits",
-    path: getFullPath(RoutePaths.HABITS),
+    path: RoutePaths.HABITS,
     icon: faList,
     displayIn: "sidebar",
   },
   {
     name: "Analytics",
-    path: getFullPath(RoutePaths.ANALYTICS),
+    path: RoutePaths.ANALYTICS,
     icon: faChartSimple,
     displayIn: "sidebar",
   },
   {
     name: "Results",
-    path: getFullPath(RoutePaths.RESULTS),
+    path: RoutePaths.RESULTS,
     icon: faSquarePollVertical,
     displayIn: "sidebar",
   },
 ];
-
-

@@ -3,7 +3,7 @@ import { Navbar, Container, Dropdown, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
-import { RoutePaths, getFullPath } from "../common/constants/routes";
+import { RoutePaths } from "../common/constants/routes";
 import { NavLink } from "../common/links";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { ThemeType } from "../App";
@@ -197,23 +197,8 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   };
 
   const isActive = (href: string) => {
-    const isQuestionnaireActive =
-      location.pathname.startsWith(getFullPath(RoutePaths.QUESTIONNAIRE)) ||
-      location.pathname.startsWith(getFullPath(RoutePaths.RESULTS));
-
-    const isHabitTrackerActive =
-      location.pathname.startsWith(getFullPath(RoutePaths.HABITS)) ||
-      location.pathname.startsWith(getFullPath(RoutePaths.ANALYTICS));
-
-    return (
-      location.pathname === href ||
-      (isHabitTrackerActive &&
-        (href.includes(RoutePaths.HABITS) ||
-          href.includes(RoutePaths.ANALYTICS))) ||
-      (isQuestionnaireActive &&
-        (href.includes(RoutePaths.QUESTIONNAIRE) ||
-          href.includes(RoutePaths.RESULTS)))
-    );
+    const currentPath = location.pathname + location.hash.replace("#", "");
+    return currentPath === href;
   };
 
   // Return null if the user is not authenticated
@@ -224,8 +209,8 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   return (
     <CustomNavbar expand="lg" fixed="top">
       <Container fluid>
-        <BrandText as={Link} to={getFullPath(RoutePaths.LANDING)}>
-          <LogoImage src="/OralCheckr/images/logo-blue.png" alt="Logo" />
+        <BrandText as={Link} to={RoutePaths.LANDING}>
+        <LogoImage src="images/logo-blue.png" alt="Logo" />
           OralCheckr
         </BrandText>
         <Dropdown className="ms-auto d-lg-none">
@@ -238,14 +223,8 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
                 key={link.path}
                 className={isActive(link.path) ? "active" : ""}
                 as={Link}
-                to={
-                  link.path === getFullPath(RoutePaths.LOGIN) ? "/" : link.path
-                }
-                onClick={
-                  link.path === getFullPath(RoutePaths.LOGIN)
-                    ? handleLogout
-                    : undefined
-                }
+                to={link.path === RoutePaths.LOGIN ? "/" : link.path}
+                onClick={link.path === RoutePaths.LOGIN ? handleLogout : undefined}
               >
                 <Icon>
                   <FontAwesomeIcon icon={link.icon} />
@@ -263,11 +242,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
                 className={isActive(link.path) ? "active" : ""}
                 as={Link}
                 to={link.path}
-                onClick={
-                  link.path === getFullPath(RoutePaths.LOGIN)
-                    ? handleLogout
-                    : undefined
-                }
+                onClick={link.path === RoutePaths.LOGIN ? handleLogout : undefined}
               >
                 <Icon>
                   <FontAwesomeIcon icon={link.icon} />

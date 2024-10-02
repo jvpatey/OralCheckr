@@ -5,7 +5,6 @@ import { Footer } from "../components/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled, { keyframes } from "styled-components";
 import { RoutePaths } from "../common/constants/routes";
-import { getFullPath } from "../common/constants/routes";
 import { PageBackground } from "../components/PageBackground";
 import { useState } from "react";
 
@@ -129,7 +128,6 @@ const Button = styled.button<{ $login?: boolean }>`
   }
 `;
 
-
 const AlertWrapper = styled.div`
   height: 50px;
   display: flex;
@@ -160,13 +158,15 @@ export function Login() {
   // Handle form submission for login
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+  
     if (username === storedUsername && password === storedPassword) {
       localStorage.setItem("authenticated", "true");
-      navigate(getFullPath(RoutePaths.LANDING));
+      navigate(RoutePaths.LANDING);
     } else {
       setError("Invalid username or password");
     }
   };
+  
 
   // Handle closing the alert
   const handleAlertClose = () => {
@@ -175,53 +175,53 @@ export function Login() {
 
   return (
     <PageBackground>
-    <PageContainer>
-      <AnimatedCard>
-        <CardBody>
-          <LogoStyle>
-            <LogoImgStyle src="./OralCheckr/images/logo-white.png" alt="Logo" />
-            <LogoText>OralCheckr</LogoText>
-          </LogoStyle>
-          <TextStyle>
-            Take our questionnaire to get insight on your oral health status,
-            get personalized recommendations, and track your habits.
-          </TextStyle>
-          <LoginText>Login</LoginText>
-          <Form onSubmit={handleLoginSubmit}>
-            <Form.Group controlId="formUsername" className="m-3">
-              <UsernameStyle
-                type="text"
-                placeholder="Enter username"
-                value={username}
-                onChange={handleUsernameChange}
-                autoComplete="username"
-              />
-            </Form.Group>
-            <Form.Group controlId="formPassword" className="m-3">
-              <PasswordStyle
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                onChange={handlePasswordChange}
-                autoComplete="current-password"
-              />
-            </Form.Group>
-            <AlertWrapper>
-              <Alert
-                show={!!error}
-                variant="danger"
-                dismissible
-                onClose={handleAlertClose}
-              >
-                {error}
-              </Alert>
-            </AlertWrapper>
-            <Button $login type="submit">
-              Login
-            </Button>
-          </Form>
-        </CardBody>
-      </AnimatedCard>
+      <PageContainer>
+        <AnimatedCard>
+          <CardBody>
+            <LogoStyle>
+              <LogoImgStyle src="images/logo-white.png" alt="Logo" />
+              <LogoText>OralCheckrs</LogoText>
+            </LogoStyle>
+            <TextStyle>
+              Take our questionnaire to get insight on your oral health status,
+              get personalized recommendations, and track your habits.
+            </TextStyle>
+            <LoginText>Login</LoginText>
+            <Form onSubmit={handleLoginSubmit}>
+              <Form.Group controlId="formUsername" className="m-3">
+                <UsernameStyle
+                  type="text"
+                  placeholder="Enter username"
+                  value={username}
+                  onChange={handleUsernameChange}
+                  autoComplete="username"
+                />
+              </Form.Group>
+              <Form.Group controlId="formPassword" className="m-3">
+                <PasswordStyle
+                  type="password"
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                  autoComplete="current-password"
+                />
+              </Form.Group>
+              <AlertWrapper>
+                <Alert
+                  show={!!error}
+                  variant="danger"
+                  dismissible
+                  onClose={handleAlertClose}
+                >
+                  {error}
+                </Alert>
+              </AlertWrapper>
+              <Button $login type="submit">
+                Login
+              </Button>
+            </Form>
+          </CardBody>
+        </AnimatedCard>
       </PageContainer>
       <Footer />
     </PageBackground>

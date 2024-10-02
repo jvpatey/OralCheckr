@@ -1,7 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getFullPath } from "../common/constants/routes";
 import { RoutePaths } from "../common/constants/routes";
 
 // Fade-in from left animation
@@ -141,28 +140,30 @@ export function Sidebar({ links }: SidebarProps) {
 
   return (
     <SidebarContainer>
-      {links.map((link, index) => (
-        <SidebarLink
-          to={link.path}
-          key={index}
-          className={
-            location.pathname === link.path ||
-            (link.path === getFullPath(RoutePaths.QUESTIONNAIRE) &&
-              location.pathname.startsWith(
-                getFullPath(RoutePaths.QUESTIONNAIRE)
-              ) &&
-              location.pathname !== getFullPath(RoutePaths.RESULTS))
-              ? "active"
-              : ""
-          }
-          data-tooltip={link.name}
-        >
-          <Icon>
-            <FontAwesomeIcon icon={link.icon} />
-          </Icon>
-          <Text>{link.name}</Text>
-        </SidebarLink>
-      ))}
+      {links.map((link, index) => {
+        const currentPath = location.pathname + location.hash.replace("#", "");
+
+        return (
+          <SidebarLink
+            to={link.path}
+            key={index}
+            className={
+              currentPath === link.path ||
+              (link.path === RoutePaths.QUESTIONNAIRE &&
+                currentPath.startsWith(RoutePaths.QUESTIONNAIRE) &&
+                currentPath !== RoutePaths.RESULTS)
+                ? "active"
+                : ""
+            }
+            data-tooltip={link.name}
+          >
+            <Icon>
+              <FontAwesomeIcon icon={link.icon} />
+            </Icon>
+            <Text>{link.name}</Text>
+          </SidebarLink>
+        );
+      })}
     </SidebarContainer>
   );
 }

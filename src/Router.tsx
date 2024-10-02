@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { RoutePaths, getFullPath } from "./common/constants/routes";
+import { RoutePaths } from "./common/constants/routes";
 import { GuardedRoute } from "./containers/authentication/GuardedRoute";
 import { RedirectIfAuthenticated } from "./containers/authentication/RedirectIfAuthenticated";
 import { Login } from "./containers/Login";
@@ -21,15 +21,15 @@ export function Router() {
         }
       />
       <Route
-        path={getFullPath(RoutePaths.LANDING)}
-        element={
-          <GuardedRoute>
-            <Landing />
-          </GuardedRoute>
-        }
+      path={RoutePaths.LANDING}
+      element={
+        <GuardedRoute>
+          <Landing />
+        </GuardedRoute>
+      }
       />
       <Route
-        path={getFullPath(RoutePaths.HABITS)}
+        path={RoutePaths.HABITS}
         element={
           <GuardedRoute>
             <Habits />
@@ -37,7 +37,7 @@ export function Router() {
         }
       />
       <Route
-        path={getFullPath(RoutePaths.ANALYTICS)}
+        path={RoutePaths.ANALYTICS}
         element={
           <GuardedRoute>
             <Analytics />
@@ -45,16 +45,15 @@ export function Router() {
         }
       />
       <Route
-        path={getFullPath(RoutePaths.RESULTS)}
+        path={RoutePaths.RESULTS}
         element={
           <GuardedRoute>
             <Results />
           </GuardedRoute>
         }
       />
-      {/* Questionnaire path with dynamic question ID */}
       <Route
-        path={`${getFullPath(RoutePaths.QUESTIONNAIRE)}/:questionId`}
+        path={`${RoutePaths.QUESTIONNAIRE}/:questionId`}
         element={
           <GuardedRoute>
             <Questionnaire />
@@ -62,19 +61,17 @@ export function Router() {
         }
       />
       <Route
-        path={getFullPath(RoutePaths.QUESTIONNAIRE)}
+        path={RoutePaths.QUESTIONNAIRE}
         element={
           <GuardedRoute>
             <Questionnaire />
           </GuardedRoute>
         }
       />
-      {/* Wildcard route to catch all other routes */}
+      {/* Wildcard route */}
       <Route
         path="*"
-        element={
-          <Navigate to={getFullPath(RoutePaths.LANDING)} replace={true} />
-        }
+        element={<Navigate to={RoutePaths.LANDING} replace={true} />}
       />
     </Routes>
   );
