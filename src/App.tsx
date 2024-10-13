@@ -21,7 +21,7 @@ export function App() {
     <ThemeProvider theme={theme === ThemeType.LIGHT ? lightTheme : darkTheme}>
       <HashRouter>
         <RenderNavs themeToggler={themeToggler} currentTheme={theme} />
-        <Router />
+        <Router themeToggler={themeToggler} currentTheme={theme} />
       </HashRouter>
     </ThemeProvider>
   );

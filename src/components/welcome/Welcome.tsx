@@ -1,6 +1,13 @@
 import styled, { keyframes } from "styled-components";
 import { Card } from "react-bootstrap";
-import { PageBackground } from "./PageBackground";
+import { PageBackground } from "../PageBackground";
+import { WelcomeNavBar } from "./WelcomeNavBar";
+import { ThemeType } from "../../App";
+
+interface WelcomeProps {
+  themeToggler: () => void;
+  theme: ThemeType;
+}
 
 const fadeUp = keyframes`
   from {
@@ -72,7 +79,6 @@ export const TitleText = styled.h1`
   margin-bottom: 10px;
   text-align: center;
   font-size: 2rem;
-  margin-top: 50px;
 
   @media (max-width: 768px) {
     font-size: 1.75rem;
@@ -131,11 +137,12 @@ const ColoredText = styled.span`
   font-weight: 600;
 `;
 
-export function Welcome() {
+export function Welcome({ themeToggler, theme }: WelcomeProps) {
   return (
     <PageBackground>
       <WelcomeContainer>
         <WelcomeCard>
+        <WelcomeNavBar themeToggler={themeToggler} theme={theme} />
         <TitleText>Welcome to</TitleText>
         <LogoStyle>
               <LogoImgStyle src="images/logo-blue.png" alt="Logo" />
@@ -144,10 +151,8 @@ export function Welcome() {
         <SubText>OralCheckr is a tool designed to help you self-assess your oral health. 
           It provides habit tracking and personalized feedback to guide you on improving 
           your oral hygiene and maintaining a healthy routine.</SubText>
-        <CardText>To find out your <ColoredText> oral health score</ColoredText>, take our quick and easy
+        <CardText>To get started and find out your <ColoredText> oral health score</ColoredText>, take our quick and easy
           <ColoredText> questionnaire</ColoredText>.</CardText>
-        <CardText>Once you've completed the questionnaire, you can <ColoredText>create an account</ColoredText> to
-        track your progress and maintain healthy habits.</CardText>
         </WelcomeCard>
       </WelcomeContainer>
     </PageBackground>
