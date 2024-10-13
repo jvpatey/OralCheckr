@@ -8,6 +8,7 @@ import { Habits } from "./containers/habit-tracker/habits/Habits";
 import { Analytics } from "./containers/habit-tracker/analytics/Analytics";
 import { Results } from "./components/questionnaire/Results";
 import { Landing } from "./components/landing/Landing";
+import { Welcome } from "./components/Welcome";
 
 export function Router() {
   return (
@@ -16,7 +17,7 @@ export function Router() {
         path="/"
         element={
           <RedirectIfAuthenticated>
-            <Login />
+            <Welcome />
           </RedirectIfAuthenticated>
         }
       />
