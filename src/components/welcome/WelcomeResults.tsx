@@ -2,10 +2,10 @@ import { useState } from "react";
 import { getScoreColor } from "../questionnaire/OralHealthStatus";
 import styled from "styled-components";
 import { PageBackground } from "../PageBackground";
-import { WelcomeNavBar } from "./WelcomeNavBar";
+import { WelcomeNavBar } from "../../containers/welcome/WelcomeNavBar";
 import { ProgressBar } from "react-bootstrap";
 import { WelcomeCard, WelcomeContainer } from "./Welcome";
-import { SignUpModal } from "./SignUpModal";
+import { SignUpModal } from "../../containers/welcome/SignUpModal";
 import { ThemeType } from "../../App";
 
 export const TitleText = styled.h1`

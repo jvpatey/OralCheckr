@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { Card } from "react-bootstrap";
 import { PageBackground } from "../PageBackground";
-import { WelcomeNavBar } from "./WelcomeNavBar";
+import { WelcomeNavBar } from "../../containers/welcome/WelcomeNavBar";
 import { ThemeType } from "../../App";
 import { TakeQuestionnaireButton } from "./TakeQuestionnaireButton";
 
@@ -185,7 +185,7 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
           <CardText>
             To get started, take our quick and easy{" "}
             <ColoredText>questionnaire</ColoredText> to find out your
-            <ColoredText>oral health score</ColoredText>.
+            <ColoredText> oral health score</ColoredText>.
           </CardText>
           <TakeQuestionnaireButton />
         </WelcomeCard>

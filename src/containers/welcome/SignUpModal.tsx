@@ -46,9 +46,11 @@ const InputStyle = styled(Form.Control)`
 const Button = styled.button<{ $signup?: boolean }>`
   background-color: ${(props) =>
     props.$signup ? props.theme.green : props.theme.green};
-  color: ${(props) => (props.$signup ? props.theme.backgroundColor : props.theme.backgroundColor)};
+  color: ${(props) =>
+    props.$signup ? props.theme.backgroundColor : props.theme.backgroundColor};
   font-weight: bold;
-  border: 2px solid ${(props) => (props.$signup ? props.theme.green : props.theme.green)};
+  border: 2px solid
+    ${(props) => (props.$signup ? props.theme.green : props.theme.green)};
   width: 50%;
   margin-top: 10px;
   border-radius: 20px;
@@ -59,8 +61,11 @@ const Button = styled.button<{ $signup?: boolean }>`
 
   &:hover {
     background-color: ${(props) =>
-      props.$signup ? props.theme.accentBackgroundColor : props.theme.accentBackgroundColor};
-    color: ${(props) => (props.$signup ? props.theme.green : props.theme.green)};
+      props.$signup
+        ? props.theme.accentBackgroundColor
+        : props.theme.accentBackgroundColor};
+    color: ${(props) =>
+      props.$signup ? props.theme.green : props.theme.green};
     border-color: ${(props) => props.theme.green};
     border-width: 2px;
   }
@@ -104,7 +109,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
     localStorage.setItem("authenticated", "true");
 
     // Redirect to the landing page after successful signup
-    navigate(RoutePaths.LANDING); 
+    navigate(RoutePaths.LANDING);
     handleClose();
   };
 
@@ -114,7 +119,9 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
         <HeaderText>Sign Up</HeaderText>
       </ModalHeader>
       <ModalBody>
-        <CardText>Please fill out the following fields to create a user account</CardText>
+        <CardText>
+          Please fill out the following fields to create a user account
+        </CardText>
         <Form onSubmit={handleSignUpSubmit}>
           <Form.Group controlId="formFirstName" className="m-3">
             <InputStyle
