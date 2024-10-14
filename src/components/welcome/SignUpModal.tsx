@@ -101,6 +101,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
     };
 
     localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("authenticated", "true");
 
     // Redirect to the landing page after successful signup
     navigate(RoutePaths.LANDING); 

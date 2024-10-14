@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-// Add a prop to determine if the user is authenticated
+// Prop to determine if the user is authenticated
 interface QuestionnaireCardContainerProps {
   isAuthenticated: boolean;
 }
