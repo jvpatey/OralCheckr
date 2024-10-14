@@ -18,6 +18,7 @@ interface RouterProps {
 export function Router({ themeToggler, currentTheme }: RouterProps) {
   return (
     <Routes>
+      {/* Welcome page as root */}
       <Route
         path="/"
         element={
@@ -26,6 +27,8 @@ export function Router({ themeToggler, currentTheme }: RouterProps) {
           </RedirectIfAuthenticated>
         }
       />
+
+      {/* Authenticated routes (Landing, Habits, Analytics, Results) */}
       <Route
         path={RoutePaths.LANDING}
         element={
@@ -58,27 +61,13 @@ export function Router({ themeToggler, currentTheme }: RouterProps) {
           </GuardedRoute>
         }
       />
-      <Route
-        path={`${RoutePaths.QUESTIONNAIRE}/:questionId`}
-        element={
-          <GuardedRoute>
-            <Questionnaire />
-          </GuardedRoute>
-        }
-      />
-      <Route
-        path={RoutePaths.QUESTIONNAIRE}
-        element={
-          <GuardedRoute>
-            <Questionnaire />
-          </GuardedRoute>
-        }
-      />
+
+      {/* Questionnaire routes accessible without authentication */}
+      <Route path={RoutePaths.QUESTIONNAIRE} element={<Questionnaire />} />
+      <Route path={`${RoutePaths.QUESTIONNAIRE}/:questionId`} element={<Questionnaire />} />
+
       {/* Wildcard route */}
-      <Route
-        path="*"
-        element={<Navigate to={RoutePaths.LANDING} replace={true} />}
-      />
+      <Route path="*" element={<Navigate to={RoutePaths.LANDING} replace={true} />} />
     </Routes>
   );
 }

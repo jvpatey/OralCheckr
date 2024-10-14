@@ -48,7 +48,7 @@ export function TakeQuestionnaireButton() {
 
   const handleTakeQuestionnaireClick = () => {
     // Navigate to the questionnaire route
-    navigate(RoutePaths.QUESTIONNAIRE);
+    navigate(`${RoutePaths.QUESTIONNAIRE}/1`);
   };
 
   return (
