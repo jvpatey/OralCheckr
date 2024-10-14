@@ -1,6 +1,6 @@
-import styled, { keyframes } from "styled-components";
-import { Link, useLocation } from "react-router-dom";
+import {Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styled, { keyframes } from "styled-components";
 import { RoutePaths } from "../common/constants/routes";
 
 // Fade-in from left animation
@@ -137,6 +137,12 @@ interface SidebarProps {
 // Functional component to render the sidebar - used on the habit tracker pages
 export function Sidebar({ links }: SidebarProps) {
   const location = useLocation();
+  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+
+  // Don't render sidebar if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <SidebarContainer>

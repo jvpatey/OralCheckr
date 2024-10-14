@@ -187,6 +187,9 @@ export function Questionnaire() {
   const navigate = useNavigate();
   const storedResponses = localStorage.getItem("questionnaire");
 
+  // Check if the user is authenticated
+  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+
   // State to keep track of the current question number
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   // State to store the user's responses
@@ -283,7 +286,7 @@ export function Questionnaire() {
   return (
     <PageBackground>
       <LandingContainer>
-        <QuestionnaireCardContainer>
+        <QuestionnaireCardContainer isAuthenticated={isAuthenticated}>
           <QuestionnaireCard>
             <QuesContainer>
               <ProgressBar>

@@ -1,19 +1,24 @@
 import styled from "styled-components";
 
+// Add a prop to determine if the user is authenticated
+interface QuestionnaireCardContainerProps {
+  isAuthenticated: boolean;
+}
+
 // Styled component to contain the questionnaire card
-export const QuestionnaireCardContainer = styled.div`
+export const QuestionnaireCardContainer = styled.div<QuestionnaireCardContainerProps>`
   display: flex;
   justify-content: center;
   align-items: flex-start;
   flex: 1;
-  width: calc(100% - 200px);
-  margin-left: 200px;
+  width: ${({ isAuthenticated }) => (isAuthenticated ? 'calc(100% - 200px)' : '100%')};
+  margin-left: ${({ isAuthenticated }) => (isAuthenticated ? '200px' : '0')};
   padding: 20px;
   margin-top: 70px;
 
   @media (max-width: 768px) {
-    width: calc(100% - 50px);
-    margin-left: 50px;
+    width: ${({ isAuthenticated }) => (isAuthenticated ? 'calc(100% - 50px)' : '100%')};
+    margin-left: ${({ isAuthenticated }) => (isAuthenticated ? '50px' : '0')};
     padding: 10px;
   }
 
