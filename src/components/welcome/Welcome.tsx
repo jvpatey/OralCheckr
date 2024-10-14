@@ -30,8 +30,6 @@ export const WelcomeCard = styled(Card)`
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   animation: ${fadeUp} 1s ease-out;
-  
-  /* Remove fixed height values and let content drive the height */
   height: auto;
 
   @media (min-width: 1200px) {
@@ -60,7 +58,6 @@ export const WelcomeCard = styled(Card)`
     padding: 10px;
   }
 `;
-
 
 const WelcomeContainer = styled.div`
   display: flex;
