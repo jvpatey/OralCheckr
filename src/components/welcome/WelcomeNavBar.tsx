@@ -31,7 +31,7 @@ const WelcomeNavbar = styled(Navbar)`
 
 const CustomNavLink = styled(Nav.Link)`
   color: ${({ theme }) => theme.textGrey};
-  margin-left: 20px;
+  margin-left: 15px;
   cursor: pointer;
   font-size: 1rem;
 
@@ -51,6 +51,22 @@ const NavContainer = styled.div`
   justify-content: flex-end;
   align-items: center;
   width: 100%;
+  flex-wrap: nowrap;
+  
+  @media (max-width: 576px) {
+    justify-content: flex-end;
+  }
+`;
+
+const LinksWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @media (max-width: 576px) {
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
 `;
 
 const ThemeToggleContainer = styled.div`
@@ -88,31 +104,31 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
 
   return (
     <>
-    <WelcomeNavbar expand="lg">
-      <Container>
-        <NavContainer>
-          <Nav>
-          <CustomNavLink as="span" onClick={handleLoginClick}>
-            Login
-          </CustomNavLink>
-          <CustomNavLink as="span" onClick={handleSignUpClick}>
-            Sign Up
-          </CustomNavLink>
-          </Nav>
-          <ThemeToggleContainer>
-            <DarkModeSwitch
-              checked={isDarkMode}
-              onChange={toggleDarkMode}
-              size={20}
-              moonColor={themeContext.blue}
-              sunColor={themeContext.blue}
-            />
-          </ThemeToggleContainer>
-        </NavContainer>
-      </Container>
-    </WelcomeNavbar>
-    <LoginModal show={showLoginModal} handleClose={handleCloseLoginModal} />
-    <SignUpModal show={showSignUpModal} handleClose={handleCloseSignUpModal} />
-   </>
+      <WelcomeNavbar expand="lg">
+        <Container>
+          <NavContainer>
+            <LinksWrapper>
+              <CustomNavLink as="span" onClick={handleLoginClick}>
+                Login
+              </CustomNavLink>
+              <CustomNavLink as="span" onClick={handleSignUpClick}>
+                Sign Up
+              </CustomNavLink>
+            </LinksWrapper>
+            <ThemeToggleContainer>
+              <DarkModeSwitch
+                checked={isDarkMode}
+                onChange={toggleDarkMode}
+                size={20}
+                moonColor={themeContext.blue}
+                sunColor={themeContext.blue}
+              />
+            </ThemeToggleContainer>
+          </NavContainer>
+        </Container>
+      </WelcomeNavbar>
+      <LoginModal show={showLoginModal} handleClose={handleCloseLoginModal} />
+      <SignUpModal show={showSignUpModal} handleClose={handleCloseSignUpModal} />
+    </>
   );
 }
