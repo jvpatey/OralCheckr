@@ -151,8 +151,7 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
         <SubText>OralCheckr is a tool designed to help you self-assess your oral health. 
           It provides habit tracking and personalized feedback to guide you on improving 
           your oral hygiene and maintaining a healthy routine.</SubText>
-        <CardText>To get started and find out your <ColoredText> oral health score</ColoredText>, take our quick and easy
-          <ColoredText> questionnaire</ColoredText>.</CardText>
+        <CardText>To get started, take our quick and easy <ColoredText> questionnaire</ColoredText> to find out your <ColoredText> oral health score</ColoredText>.</CardText>
         </WelcomeCard>
       </WelcomeContainer>
     </PageBackground>

@@ -1,9 +1,10 @@
 import styled, { keyframes, useTheme } from "styled-components";
 import { Navbar, Container, Nav } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { RoutePaths } from "../../common/constants/routes";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { ThemeType } from "../../App";
+import { LoginModal } from "./LoginModal";
+import { useState } from "react";
 
 interface WelcomeNavBarProps {
   themeToggler: () => void;
@@ -31,6 +32,7 @@ const WelcomeNavbar = styled(Navbar)`
 const CustomNavLink = styled(Nav.Link)`
   color: ${({ theme }) => theme.textGrey};
   margin-left: 20px;
+  cursor: pointer;
   font-size: 1rem;
 
   &:hover {
@@ -58,6 +60,7 @@ const ThemeToggleContainer = styled.div`
 `;
 
 export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const themeContext = useTheme();
   const isDarkMode = theme === ThemeType.DARK;
 
@@ -66,15 +69,24 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
     localStorage.setItem("theme", isDarkMode ? ThemeType.LIGHT : ThemeType.DARK);
   };
 
+  const handleLoginClick = () => {
+    setShowLoginModal(true);
+  };
+
+  const handleCloseLoginModal = () => {
+    setShowLoginModal(false);
+  };
+
   return (
+    <>
     <WelcomeNavbar expand="lg">
       <Container>
         <NavContainer>
           <Nav>
-            <CustomNavLink as={Link} to={RoutePaths.LOGIN}>
-              Login
-            </CustomNavLink>
-            <CustomNavLink as={Link} to={RoutePaths.LOGIN}>
+          <CustomNavLink as="span" onClick={handleLoginClick}>
+                Login
+              </CustomNavLink>
+            <CustomNavLink as="span" to={RoutePaths.LOGIN}>
               Sign Up
             </CustomNavLink>
           </Nav>
@@ -90,5 +102,7 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
         </NavContainer>
       </Container>
     </WelcomeNavbar>
+    <LoginModal show={showLoginModal} handleClose={handleCloseLoginModal} />
+   </>
   );
 }
