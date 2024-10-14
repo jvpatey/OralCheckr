@@ -31,7 +31,7 @@ const WelcomeNavbar = styled(Navbar)`
 
 const CustomNavLink = styled(Nav.Link)`
   color: ${({ theme }) => theme.textGrey};
-  margin-left: 15px;
+  margin-left: 10px;
   cursor: pointer;
   font-size: 1rem;
 
@@ -52,7 +52,7 @@ const NavContainer = styled.div`
   align-items: center;
   width: 100%;
   flex-wrap: nowrap;
-  
+
   @media (max-width: 576px) {
     justify-content: flex-end;
   }
@@ -61,7 +61,7 @@ const NavContainer = styled.div`
 const LinksWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 
   @media (max-width: 576px) {
     flex-wrap: nowrap;
@@ -83,7 +83,10 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
 
   const toggleDarkMode = () => {
     themeToggler();
-    localStorage.setItem("theme", isDarkMode ? ThemeType.LIGHT : ThemeType.DARK);
+    localStorage.setItem(
+      "theme",
+      isDarkMode ? ThemeType.LIGHT : ThemeType.DARK
+    );
   };
 
   const handleLoginClick = () => {
@@ -128,7 +131,10 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
         </Container>
       </WelcomeNavbar>
       <LoginModal show={showLoginModal} handleClose={handleCloseLoginModal} />
-      <SignUpModal show={showSignUpModal} handleClose={handleCloseSignUpModal} />
+      <SignUpModal
+        show={showSignUpModal}
+        handleClose={handleCloseSignUpModal}
+      />
     </>
   );
 }

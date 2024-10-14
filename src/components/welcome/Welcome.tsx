@@ -59,7 +59,7 @@ export const WelcomeCard = styled(Card)`
   }
 `;
 
-const WelcomeContainer = styled.div`
+export const WelcomeContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -177,13 +177,15 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
             <LogoText>OralCheckr</LogoText>
           </LogoStyle>
           <SubText>
-            OralCheckr is a tool designed to help you self-assess your oral health. It provides
-            habit tracking and personalized feedback to guide you on improving your oral hygiene and
-            maintaining a healthy routine.
+            OralCheckr is a tool designed to help you self-assess your oral
+            health. It provides habit tracking and personalized feedback to
+            guide you on improving your oral hygiene and maintaining a healthy
+            routine.
           </SubText>
           <CardText>
-            To get started, take our quick and easy <ColoredText>questionnaire</ColoredText> to find
-            out your <ColoredText>oral health score</ColoredText>.
+            To get started, take our quick and easy{" "}
+            <ColoredText>questionnaire</ColoredText> to find out your
+            <ColoredText>oral health score</ColoredText>.
           </CardText>
           <TakeQuestionnaireButton />
         </WelcomeCard>

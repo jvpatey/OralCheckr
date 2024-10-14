@@ -252,7 +252,14 @@ export function Questionnaire() {
     localStorage.setItem("questionnaire", JSON.stringify(responses));
     localStorage.setItem("totalScore", JSON.stringify(totalScore));
     localStorage.removeItem("currentQuestion");
-    navigate(RoutePaths.RESULTS);
+
+    // If the user is authenticated, navigate to the regular results page
+    if (isAuthenticated) {
+      navigate(RoutePaths.RESULTS);
+    } else {
+      // If the user is not authenticated, navigate to the WelcomeResults page
+      navigate(RoutePaths.WELCOME_RESULTS);
+    }
   };
 
   // Determine if the "Next" button should be disabled
