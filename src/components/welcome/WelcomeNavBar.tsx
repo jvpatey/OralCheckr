@@ -1,9 +1,9 @@
 import styled, { keyframes, useTheme } from "styled-components";
 import { Navbar, Container, Nav } from "react-bootstrap";
-import { RoutePaths } from "../../common/constants/routes";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { ThemeType } from "../../App";
 import { LoginModal } from "./LoginModal";
+import { SignUpModal } from "./SignUpModal";
 import { useState } from "react";
 
 interface WelcomeNavBarProps {
@@ -61,6 +61,7 @@ const ThemeToggleContainer = styled.div`
 
 export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
   const themeContext = useTheme();
   const isDarkMode = theme === ThemeType.DARK;
 
@@ -77,6 +78,14 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
     setShowLoginModal(false);
   };
 
+  const handleSignUpClick = () => {
+    setShowSignUpModal(true);
+  };
+
+  const handleCloseSignUpModal = () => {
+    setShowSignUpModal(false);
+  };
+
   return (
     <>
     <WelcomeNavbar expand="lg">
@@ -84,11 +93,11 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
         <NavContainer>
           <Nav>
           <CustomNavLink as="span" onClick={handleLoginClick}>
-                Login
-              </CustomNavLink>
-            <CustomNavLink as="span" to={RoutePaths.LOGIN}>
-              Sign Up
-            </CustomNavLink>
+            Login
+          </CustomNavLink>
+          <CustomNavLink as="span" onClick={handleSignUpClick}>
+            Sign Up
+          </CustomNavLink>
           </Nav>
           <ThemeToggleContainer>
             <DarkModeSwitch
@@ -103,6 +112,7 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
       </Container>
     </WelcomeNavbar>
     <LoginModal show={showLoginModal} handleClose={handleCloseLoginModal} />
+    <SignUpModal show={showSignUpModal} handleClose={handleCloseSignUpModal} />
    </>
   );
 }

@@ -37,7 +37,6 @@ const StyledModal = styled(Modal)`
 
 const UsernameStyle = styled(Form.Control)`
   background-color: ${({ theme }) => theme.disabledBackground};
-  margin-top: 30px;
   border-style: solid;
   border-width: 2px;
   border-color: ${({ theme }) => theme.blue};
@@ -67,7 +66,7 @@ const Button = styled.button<{ $login?: boolean }>`
 
   &:hover {
     background-color: ${(props) =>
-      props.$login ? props.theme.backgroundColor : props.theme.backgroundColor};
+      props.$login ? props.theme.accentBackgroundColor : props.theme.accentBackgroundColor};
     color: ${(props) => (props.$login ? props.theme.green : props.theme.green)};
     border-color: ${(props) => props.theme.green};
     border-width: 2px;
