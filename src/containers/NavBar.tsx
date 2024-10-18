@@ -185,7 +185,10 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   // Handle the toggle for dark mode
   const toggleDarkMode = () => {
     themeToggler();
-    localStorage.setItem("theme", isDarkMode ? ThemeType.LIGHT : ThemeType.DARK);
+    localStorage.setItem(
+      "theme",
+      isDarkMode ? ThemeType.LIGHT : ThemeType.DARK
+    );
   };
 
   // Handle logout logic
@@ -210,7 +213,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
     <CustomNavbar expand="lg" fixed="top">
       <Container fluid>
         <BrandText as={Link} to={RoutePaths.LANDING}>
-        <LogoImage src="images/logo-blue.png" alt="Logo" />
+          <LogoImage src="images/logo-blue.png" alt="Logo" />
           OralCheckr
         </BrandText>
         <Dropdown className="ms-auto d-lg-none">
@@ -223,8 +226,8 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
                 key={link.path}
                 className={isActive(link.path) ? "active" : ""}
                 as={Link}
-                to={link.path === RoutePaths.LOGIN ? "/" : link.path}
-                onClick={link.path === RoutePaths.LOGIN ? handleLogout : undefined}
+                to={link.path === "/" ? "/" : link.path}
+                onClick={link.name === "Log Out" ? handleLogout : undefined}
               >
                 <Icon>
                   <FontAwesomeIcon icon={link.icon} />
@@ -241,8 +244,8 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
                 key={link.path}
                 className={isActive(link.path) ? "active" : ""}
                 as={Link}
-                to={link.path}
-                onClick={link.path === RoutePaths.LOGIN ? handleLogout : undefined}
+                to={link.path === "/" ? "/" : link.path}
+                onClick={link.name === "Log Out" ? handleLogout : undefined}
               >
                 <Icon>
                   <FontAwesomeIcon icon={link.icon} />

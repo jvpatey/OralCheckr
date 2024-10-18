@@ -1,4 +1,11 @@
-import { faClipboardList, faTasksAlt, faArrowRightFromBracket, faChartSimple, faList, faSquarePollVertical } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClipboardList,
+  faTasksAlt,
+  faArrowRightFromBracket,
+  faChartSimple,
+  faList,
+  faSquarePollVertical,
+} from "@fortawesome/free-solid-svg-icons";
 import { RoutePaths } from "./constants/routes";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
@@ -26,7 +33,7 @@ export const navbarLinks: NavLink[] = [
   },
   {
     name: "Log Out",
-    path: RoutePaths.LOGIN,
+    path: "/",
     icon: faArrowRightFromBracket,
     displayIn: "navbar",
   },
