@@ -78,14 +78,14 @@ const MessageText = styled.p`
 `;
 
 // Helper function to determine the color based on the score
-const getScoreColor = (score: number) => {
+export const getScoreColor = (score: number) => {
   const theme = useTheme();
   if (score >= 70) {
     return theme.green;
   } else if (score >= 50) {
     return theme.yellow;
   }
-    return theme.red;
+  return theme.red;
 };
 
 // Functional component for the Oral Health Status Card

@@ -187,6 +187,9 @@ export function Questionnaire() {
   const navigate = useNavigate();
   const storedResponses = localStorage.getItem("questionnaire");
 
+  // Check if the user is authenticated
+  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+
   // State to keep track of the current question number
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   // State to store the user's responses
@@ -249,7 +252,14 @@ export function Questionnaire() {
     localStorage.setItem("questionnaire", JSON.stringify(responses));
     localStorage.setItem("totalScore", JSON.stringify(totalScore));
     localStorage.removeItem("currentQuestion");
-    navigate(RoutePaths.RESULTS);
+
+    // If the user is authenticated, navigate to the regular results page
+    if (isAuthenticated) {
+      navigate(RoutePaths.RESULTS);
+    } else {
+      // If the user is not authenticated, navigate to the WelcomeResults page
+      navigate(RoutePaths.WELCOME_RESULTS);
+    }
   };
 
   // Determine if the "Next" button should be disabled
@@ -274,16 +284,21 @@ export function Questionnaire() {
   // Render the start-questionnaire page if the current question is 0
   if (currentQuestion === 0) {
     if (storedResponses) {
-      return <RetakeQuestionnaire resetResponses={resetResponses} />;
+      return (
+        <RetakeQuestionnaire
+          resetResponses={resetResponses}
+          isAuthenticated={isAuthenticated}
+        />
+      );
     }
-    return <StartQuestionnaire />;
+    return <StartQuestionnaire isAuthenticated={isAuthenticated} />;
   }
 
   // Render the questionnaire pages
   return (
     <PageBackground>
       <LandingContainer>
-        <QuestionnaireCardContainer>
+        <QuestionnaireCardContainer isAuthenticated={isAuthenticated}>
           <QuestionnaireCard>
             <QuesContainer>
               <ProgressBar>
@@ -312,20 +327,20 @@ export function Questionnaire() {
                   Previous
                 </NavigationButton>
                 {currentQuestion === questions.length ? (
-                <SubmitButton
-                onClick={handleSubmit}
-                disabled={isSubmitDisabled}
-              >
-                Submit
-              </SubmitButton>
-              ) : (
-              <NavigationButton
-                onClick={handleNext}
-                disabled={isNextDisabled}
-              >
-                Next
-              </NavigationButton>
-              )}
+                  <SubmitButton
+                    onClick={handleSubmit}
+                    disabled={isSubmitDisabled}
+                  >
+                    Submit
+                  </SubmitButton>
+                ) : (
+                  <NavigationButton
+                    onClick={handleNext}
+                    disabled={isNextDisabled}
+                  >
+                    Next
+                  </NavigationButton>
+                )}
               </div>
             </QuesContainer>
           </QuestionnaireCard>
