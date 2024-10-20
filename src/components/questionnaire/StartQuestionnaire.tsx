@@ -74,11 +74,15 @@ const StartButton = styled(NavigationButton)`
 `;
 
 // Functional component for the page to start the questionnaire if not completed previously
-export function StartQuestionnaire() {
+export function StartQuestionnaire({
+  isAuthenticated,
+}: {
+  isAuthenticated: boolean;
+}) {
   return (
     <PageBackground>
       <LandingContainer>
-        <QuestionnaireCardContainer>
+        <QuestionnaireCardContainer isAuthenticated={isAuthenticated}>
           <QuestionnaireCard>
             <TitleText>Oral Health Questionnaire</TitleText>
             <CardText>
@@ -91,10 +95,7 @@ export function StartQuestionnaire() {
               health.
             </CardText>
             <ButtonContainer>
-              <StartButton
-                as={Link}
-                to={`${RoutePaths.QUESTIONNAIRE}/1`}
-              >
+              <StartButton as={Link} to={`${RoutePaths.QUESTIONNAIRE}/1`}>
                 Begin
               </StartButton>
             </ButtonContainer>
