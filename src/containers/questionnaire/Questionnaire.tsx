@@ -284,9 +284,14 @@ export function Questionnaire() {
   // Render the start-questionnaire page if the current question is 0
   if (currentQuestion === 0) {
     if (storedResponses) {
-      return <RetakeQuestionnaire resetResponses={resetResponses} />;
+      return (
+        <RetakeQuestionnaire
+          resetResponses={resetResponses}
+          isAuthenticated={isAuthenticated}
+        />
+      );
     }
-    return <StartQuestionnaire />;
+    return <StartQuestionnaire isAuthenticated={isAuthenticated} />;
   }
 
   // Render the questionnaire pages
@@ -322,20 +327,20 @@ export function Questionnaire() {
                   Previous
                 </NavigationButton>
                 {currentQuestion === questions.length ? (
-                <SubmitButton
-                onClick={handleSubmit}
-                disabled={isSubmitDisabled}
-              >
-                Submit
-              </SubmitButton>
-              ) : (
-              <NavigationButton
-                onClick={handleNext}
-                disabled={isNextDisabled}
-              >
-                Next
-              </NavigationButton>
-              )}
+                  <SubmitButton
+                    onClick={handleSubmit}
+                    disabled={isSubmitDisabled}
+                  >
+                    Submit
+                  </SubmitButton>
+                ) : (
+                  <NavigationButton
+                    onClick={handleNext}
+                    disabled={isNextDisabled}
+                  >
+                    Next
+                  </NavigationButton>
+                )}
               </div>
             </QuesContainer>
           </QuestionnaireCard>
