@@ -84,12 +84,17 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const storedUsername = import.meta.env.VITE_USERNAME || "admin";
-  const storedPassword = import.meta.env.VITE_PASSWORD || "admin";
+  // Fetch stored credentials from local storage or fallback to environment variables
+  const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const storedUsername =
+    storedUser.email || import.meta.env.VITE_USERNAME || "admin";
+  const storedPassword =
+    storedUser.password || import.meta.env.VITE_PASSWORD || "admin";
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Check if the entered username and password match either the signup credentials or the defaults
     if (username === storedUsername && password === storedPassword) {
       localStorage.setItem("authenticated", "true");
       navigate(RoutePaths.LANDING);
