@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
+import { useEffect } from "react";
 
 interface LoginModalProps {
   show: boolean;
@@ -53,9 +54,11 @@ const PasswordStyle = styled(Form.Control)`
 const Button = styled.button<{ $login?: boolean }>`
   background-color: ${(props) =>
     props.$login ? props.theme.green : props.theme.green};
-  color: ${(props) => (props.$login ? props.theme.backgroundColor : props.theme.backgroundColor)};
+  color: ${(props) =>
+    props.$login ? props.theme.backgroundColor : props.theme.backgroundColor};
   font-weight: bold;
-  border: 2px solid ${(props) => (props.$login ? props.theme.green : props.theme.green)};
+  border: 2px solid
+    ${(props) => (props.$login ? props.theme.green : props.theme.green)};
   width: 50%;
   margin-top: 10px;
   border-radius: 20px;
@@ -66,7 +69,9 @@ const Button = styled.button<{ $login?: boolean }>`
 
   &:hover {
     background-color: ${(props) =>
-      props.$login ? props.theme.accentBackgroundColor : props.theme.accentBackgroundColor};
+      props.$login
+        ? props.theme.accentBackgroundColor
+        : props.theme.accentBackgroundColor};
     color: ${(props) => (props.$login ? props.theme.green : props.theme.green)};
     border-color: ${(props) => props.theme.green};
     border-width: 2px;
@@ -93,6 +98,15 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       setError("Invalid username or password");
     }
   };
+
+  // Reset form states when modal is closed
+  useEffect(() => {
+    if (!show) {
+      setUsername("");
+      setPassword("");
+      setError("");
+    }
+  }, [show]);
 
   return (
     <StyledModal show={show} onHide={handleClose} centered>

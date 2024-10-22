@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
+import { useEffect } from "react";
 
 interface SignUpModalProps {
   show: boolean;
@@ -112,6 +113,17 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
     navigate(RoutePaths.LANDING);
     handleClose();
   };
+
+  // Reset form states when modal is closed
+  useEffect(() => {
+    if (!show) {
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      setError("");
+    }
+  }, [show]);
 
   return (
     <StyledModal show={show} onHide={handleClose} centered>
