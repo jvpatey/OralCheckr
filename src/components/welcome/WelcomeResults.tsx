@@ -3,10 +3,10 @@ import { getScoreColor } from "../questionnaire/OralHealthStatus";
 import styled from "styled-components";
 import { PageBackground } from "../PageBackground";
 import { WelcomeNavBar } from "../../containers/welcome/WelcomeNavBar";
-import { ProgressBar } from "react-bootstrap";
 import { WelcomeCard, WelcomeContainer } from "./Welcome";
 import { SignUpModal } from "../../containers/welcome/SignUpModal";
 import { ThemeType } from "../../App";
+import { ProgressBar as BootstrapProgressBar } from "react-bootstrap";
 
 export const TitleText = styled.h1`
   color: ${({ theme }) => theme.blue};
@@ -112,16 +112,25 @@ const ProgressBarContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  text-align: center;
   margin-bottom: 30px;
+`;
+
+const ProgressBarStyled = styled(BootstrapProgressBar)<{ $scoreColor: string }>`
+  width: 90%;
+  max-width: 700px;
+  height: 40px;
+  border-radius: 15px;
+  margin: 0 auto;
+  background-color: ${({ theme }) => theme.backgroundColor};
 
   .progress {
     background-color: ${({ theme }) => theme.backgroundColor};
-    width: 80%;
-    height: 40px;
     border-radius: 15px;
   }
 
   .progress-bar {
+    background-color: ${({ $scoreColor }) => $scoreColor};
     color: ${({ theme }) => theme.backgroundColor};
     font-size: 1.2rem;
     font-weight: bold;
@@ -157,30 +166,11 @@ export function WelcomeResults({ themeToggler, theme }: WelcomeResultsProps) {
           </CardText>
 
           <ProgressBarContainer>
-            <ProgressBar
+            <ProgressBarStyled
               now={score}
               label={`${score}%`}
-              style={{
-                width: "80%",
-                height: "40px",
-                borderRadius: "15px",
-              }}
-            >
-              <div
-                className="progress-bar"
-                style={{
-                  width: `${score}%`,
-                  backgroundColor: scoreColor,
-                  fontSize: "1.2rem",
-                  fontWeight: "bold",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {score}%
-              </div>
-            </ProgressBar>
+              $scoreColor={scoreColor}
+            />
           </ProgressBarContainer>
 
           <SubText>
