@@ -1,9 +1,8 @@
 import { Modal, Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
-import { useEffect } from "react";
 
 interface LoginModalProps {
   show: boolean;
@@ -84,18 +83,29 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Fetch stored credentials from local storage or fallback to environment variables
+  // Fetch environment variables
+  const envUsername = import.meta.env.VITE_USERNAME || "admin";
+  const envPassword = import.meta.env.VITE_PASSWORD || "admin";
+
+  // Fetch stored credentials from local storage or fallback to "admin/admin"
   const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-  const storedUsername =
-    storedUser.email || import.meta.env.VITE_USERNAME || "admin";
-  const storedPassword =
-    storedUser.password || import.meta.env.VITE_PASSWORD || "admin";
+  const storedUsername = storedUser?.email || "admin";
+  const storedPassword = storedUser?.password || "admin";
+
+  const validCredentials = [
+    { username: envUsername, password: envPassword },
+    { username: storedUsername, password: storedPassword },
+  ];
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check if the entered username and password match either the signup credentials or the defaults
-    if (username === storedUsername && password === storedPassword) {
+    // Check if entered credentials match any of the valid credentials
+    const isValid = validCredentials.some(
+      (cred) => cred.username === username && cred.password === password
+    );
+
+    if (isValid) {
       localStorage.setItem("authenticated", "true");
       navigate(RoutePaths.LANDING);
       handleClose(); // Close modal on successful login
