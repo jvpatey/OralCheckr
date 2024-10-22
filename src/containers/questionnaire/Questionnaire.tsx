@@ -12,6 +12,8 @@ import { RoutePaths } from "../../common/constants/routes";
 import { StartQuestionnaire } from "../../components/questionnaire/StartQuestionnaire";
 import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 // styled-component styles for Questionnaire Page
 
@@ -92,6 +94,18 @@ const SubmitButton = styled(NavigationButton).attrs({ as: "a" })`
     padding: 8px 16px;
     width: 80px;
     font-size: 0.7rem;
+  }
+`;
+
+const QuitButton = styled(NavigationButton)`
+  background-color: ${({ theme }) => theme.red};
+  color: white;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
+    color: ${({ theme }) => theme.red};
+    border: solid 2px ${({ theme }) => theme.red};
+  }
   }
 `;
 
@@ -246,6 +260,11 @@ export function Questionnaire() {
     }
   };
 
+  // Exit questionnaire and go back to welcome page when not auth
+  const handleQuit = () => {
+    navigate("/");
+  };
+
   // Handle the submission of the questionnaire
   const handleSubmit = () => {
     const totalScore = calculateTotalScore(questions, responses);
@@ -320,6 +339,11 @@ export function Questionnaire() {
                 initialResponse={responses[currentQuestion]}
               />
               <div>
+                {!isAuthenticated && (
+                  <QuitButton onClick={handleQuit}>
+                    <FontAwesomeIcon icon={faArrowLeft} /> Quit
+                  </QuitButton>
+                )}
                 <NavigationButton
                   onClick={handlePrevious}
                   disabled={currentQuestion === 1}
