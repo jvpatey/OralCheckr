@@ -317,7 +317,7 @@ export function Questionnaire() {
   return (
     <PageBackground>
       <LandingContainer>
-        <QuestionnaireCardContainer isAuthenticated={isAuthenticated}>
+        <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
           <QuestionnaireCard>
             <QuesContainer>
               <ProgressBar>

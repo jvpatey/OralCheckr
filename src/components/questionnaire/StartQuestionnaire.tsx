@@ -82,7 +82,7 @@ export function StartQuestionnaire({
   return (
     <PageBackground>
       <LandingContainer>
-        <QuestionnaireCardContainer isAuthenticated={isAuthenticated}>
+        <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
           <QuestionnaireCard>
             <TitleText>Oral Health Questionnaire</TitleText>
             <CardText>
