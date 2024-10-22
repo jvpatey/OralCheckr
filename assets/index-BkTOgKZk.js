@@ -4130,16 +4130,23 @@ rect.legend-mouseover-inactive,
   justify-content: center;
   align-items: center;
   width: 100%;
+  text-align: center;
   margin-bottom: 30px;
+`,lne=fe(rw)`
+  width: 90%;
+  max-width: 700px;
+  height: 40px;
+  border-radius: 15px;
+  margin: 0 auto;
+  background-color: ${({theme:e})=>e.backgroundColor};
 
   .progress {
     background-color: ${({theme:e})=>e.backgroundColor};
-    width: 80%;
-    height: 40px;
     border-radius: 15px;
   }
 
   .progress-bar {
+    background-color: ${({$scoreColor:e})=>e};
     color: ${({theme:e})=>e.backgroundColor};
     font-size: 1.2rem;
     font-weight: bold;
@@ -4148,4 +4155,4 @@ rect.legend-mouseover-inactive,
     justify-content: center;
     border-radius: 15px;
   }
-`;function lne({themeToggler:e,theme:t}){const[n,r]=N.useState(!1),o=localStorage.getItem("totalScore"),l=o?parseInt(o,10):0,h=TL(l),m=x=>{r(x)};return z.jsx(fo,{children:z.jsx(RL,{children:z.jsxs(LL,{children:[z.jsx(OL,{themeToggler:e,theme:t}),z.jsx(tne,{children:"Your Results"}),z.jsx(rne,{children:"Based on your responses, your oral health score is:"}),z.jsx(sne,{children:z.jsx(rw,{now:l,label:`${l}%`,style:{width:"80%",height:"40px",borderRadius:"15px"},children:z.jsxs("div",{className:"progress-bar",style:{width:`${l}%`,backgroundColor:h,fontSize:"1.2rem",fontWeight:"bold",display:"flex",alignItems:"center",justifyContent:"center"},children:[l,"%"]})})}),z.jsxs(nne,{children:["Want to improve your oral health?",z.jsx(one,{children:" Create an account"})," to receive personalized recommendations and start tracking your habits."]}),z.jsx(ine,{children:z.jsx(ane,{onClick:()=>m(!0),children:"Create an Account"})}),z.jsx(IL,{show:n,handleClose:()=>m(!1)})]})})})}function cne({themeToggler:e,currentTheme:t}){return z.jsxs(N8,{children:[z.jsx(Zi,{path:"/",element:z.jsx(wV,{children:z.jsx(ene,{themeToggler:e,theme:t})})}),z.jsx(Zi,{path:kt.LANDING,element:z.jsx(sp,{children:z.jsx(Ate,{})})}),z.jsx(Zi,{path:kt.HABITS,element:z.jsx(sp,{children:z.jsx(NJ,{})})}),z.jsx(Zi,{path:kt.ANALYTICS,element:z.jsx(sp,{children:z.jsx(ete,{})})}),z.jsx(Zi,{path:kt.RESULTS,element:z.jsx(sp,{children:z.jsx(xte,{})})}),z.jsx(Zi,{path:kt.QUESTIONNAIRE,element:z.jsx(PE,{})}),z.jsx(Zi,{path:`${kt.QUESTIONNAIRE}/:questionId`,element:z.jsx(PE,{})}),z.jsx(Zi,{path:kt.WELCOME_RESULTS,element:z.jsx(lne,{themeToggler:e,theme:t})}),z.jsx(Zi,{path:"*",element:z.jsx(C1,{to:kt.LANDING,replace:!0})})]})}var Js=(e=>(e.LIGHT="light",e.DARK="dark",e))(Js||{});function une(){const[e,t]=N.useState("light"),n=()=>{t(e==="light"?"dark":"light")};return z.jsx(XH,{theme:e==="light"?yV:bV,children:z.jsxs(j8,{children:[z.jsx(xV,{themeToggler:n,currentTheme:e}),z.jsx(cne,{themeToggler:n,currentTheme:e})]})})}S0.createRoot(document.getElementById("root")).render(z.jsx(ge.StrictMode,{children:z.jsx(une,{})}));
+`;function cne({themeToggler:e,theme:t}){const[n,r]=N.useState(!1),o=localStorage.getItem("totalScore"),l=o?parseInt(o,10):0,h=TL(l),m=x=>{r(x)};return z.jsx(fo,{children:z.jsx(RL,{children:z.jsxs(LL,{children:[z.jsx(OL,{themeToggler:e,theme:t}),z.jsx(tne,{children:"Your Results"}),z.jsx(rne,{children:"Based on your responses, your oral health score is:"}),z.jsx(sne,{children:z.jsx(lne,{now:l,label:`${l}%`,$scoreColor:h})}),z.jsxs(nne,{children:["Want to improve your oral health?",z.jsx(one,{children:" Create an account"})," to receive personalized recommendations and start tracking your habits."]}),z.jsx(ine,{children:z.jsx(ane,{onClick:()=>m(!0),children:"Create an Account"})}),z.jsx(IL,{show:n,handleClose:()=>m(!1)})]})})})}function une({themeToggler:e,currentTheme:t}){return z.jsxs(N8,{children:[z.jsx(Zi,{path:"/",element:z.jsx(wV,{children:z.jsx(ene,{themeToggler:e,theme:t})})}),z.jsx(Zi,{path:kt.LANDING,element:z.jsx(sp,{children:z.jsx(Ate,{})})}),z.jsx(Zi,{path:kt.HABITS,element:z.jsx(sp,{children:z.jsx(NJ,{})})}),z.jsx(Zi,{path:kt.ANALYTICS,element:z.jsx(sp,{children:z.jsx(ete,{})})}),z.jsx(Zi,{path:kt.RESULTS,element:z.jsx(sp,{children:z.jsx(xte,{})})}),z.jsx(Zi,{path:kt.QUESTIONNAIRE,element:z.jsx(PE,{})}),z.jsx(Zi,{path:`${kt.QUESTIONNAIRE}/:questionId`,element:z.jsx(PE,{})}),z.jsx(Zi,{path:kt.WELCOME_RESULTS,element:z.jsx(cne,{themeToggler:e,theme:t})}),z.jsx(Zi,{path:"*",element:z.jsx(C1,{to:kt.LANDING,replace:!0})})]})}var Js=(e=>(e.LIGHT="light",e.DARK="dark",e))(Js||{});function dne(){const[e,t]=N.useState("light"),n=()=>{t(e==="light"?"dark":"light")};return z.jsx(XH,{theme:e==="light"?yV:bV,children:z.jsxs(j8,{children:[z.jsx(xV,{themeToggler:n,currentTheme:e}),z.jsx(une,{themeToggler:n,currentTheme:e})]})})}S0.createRoot(document.getElementById("root")).render(z.jsx(ge.StrictMode,{children:z.jsx(dne,{})}));
