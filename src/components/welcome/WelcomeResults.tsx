@@ -142,8 +142,9 @@ export function WelcomeResults({ themeToggler, theme }: WelcomeResultsProps) {
   const storedScore = localStorage.getItem("totalScore");
   const score = storedScore ? parseInt(storedScore, 10) : 0;
   const scoreColor = getScoreColor(score);
-  const handleShowModal = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+  const handleToggleModal = (mode: boolean) => {
+    setShowModal(mode);
+  };
 
   return (
     <PageBackground>
@@ -189,12 +190,15 @@ export function WelcomeResults({ themeToggler, theme }: WelcomeResultsProps) {
           </SubText>
 
           <ButtonWrapper>
-            <SignUpButton onClick={handleShowModal}>
+            <SignUpButton onClick={() => handleToggleModal(true)}>
               Create an Account
             </SignUpButton>
           </ButtonWrapper>
 
-          <SignUpModal show={showModal} handleClose={handleCloseModal} />
+          <SignUpModal
+            show={showModal}
+            handleClose={() => handleToggleModal(false)}
+          />
         </WelcomeCard>
       </WelcomeContainer>
     </PageBackground>
