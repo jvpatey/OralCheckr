@@ -103,10 +103,12 @@ const ModalButton = styled(Button)<ButtonProps>`
 
 interface RetakeQuestionnaireProps {
   resetResponses: () => void;
+  isAuthenticated: boolean;
 }
 
 export function RetakeQuestionnaire({
   resetResponses,
+  isAuthenticated,
 }: RetakeQuestionnaireProps) {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
@@ -131,7 +133,7 @@ export function RetakeQuestionnaire({
   return (
     <PageBackground>
       <LandingContainer>
-        <QuestionnaireCardContainer>
+        <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
           <QuestionnaireCard>
             <TitleText>Oral Health Questionnaire</TitleText>
             <CardText>

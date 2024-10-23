@@ -20,6 +20,9 @@ export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
   const location = useLocation();
   const [sidebarLinks, setSidebarLinks] = useState<NavLink[]>([]);
 
+  // Check for the user's authentication status
+  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+
   useEffect(() => {
     const currentPath = location.pathname;
     const isHabitTrackerRoute = currentPath.startsWith(RoutePaths.HABITS);
@@ -49,7 +52,7 @@ export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
   return (
     <>
       <NavBar links={navbarLinks} themeToggler={themeToggler} theme={currentTheme} />
-      {sidebarLinks.length > 0 && <Sidebar links={sidebarLinks} />}
+      {isAuthenticated && sidebarLinks.length > 0 && <Sidebar links={sidebarLinks} />}
     </>
   );
 }

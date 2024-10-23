@@ -12,6 +12,8 @@ import { RoutePaths } from "../../common/constants/routes";
 import { StartQuestionnaire } from "../../components/questionnaire/StartQuestionnaire";
 import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 // styled-component styles for Questionnaire Page
 
@@ -92,6 +94,18 @@ const SubmitButton = styled(NavigationButton).attrs({ as: "a" })`
     padding: 8px 16px;
     width: 80px;
     font-size: 0.7rem;
+  }
+`;
+
+const QuitButton = styled(NavigationButton)`
+  background-color: ${({ theme }) => theme.red};
+  color: white;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
+    color: ${({ theme }) => theme.red};
+    border: solid 2px ${({ theme }) => theme.red};
+  }
   }
 `;
 
@@ -187,6 +201,9 @@ export function Questionnaire() {
   const navigate = useNavigate();
   const storedResponses = localStorage.getItem("questionnaire");
 
+  // Check if the user is authenticated
+  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+
   // State to keep track of the current question number
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   // State to store the user's responses
@@ -243,13 +260,25 @@ export function Questionnaire() {
     }
   };
 
+  // Exit questionnaire and go back to welcome page when not auth
+  const handleQuit = () => {
+    navigate("/");
+  };
+
   // Handle the submission of the questionnaire
   const handleSubmit = () => {
     const totalScore = calculateTotalScore(questions, responses);
     localStorage.setItem("questionnaire", JSON.stringify(responses));
     localStorage.setItem("totalScore", JSON.stringify(totalScore));
     localStorage.removeItem("currentQuestion");
-    navigate(RoutePaths.RESULTS);
+
+    // If the user is authenticated, navigate to the regular results page
+    if (isAuthenticated) {
+      navigate(RoutePaths.RESULTS);
+    } else {
+      // If the user is not authenticated, navigate to the WelcomeResults page
+      navigate(RoutePaths.WELCOME_RESULTS);
+    }
   };
 
   // Determine if the "Next" button should be disabled
@@ -274,16 +303,21 @@ export function Questionnaire() {
   // Render the start-questionnaire page if the current question is 0
   if (currentQuestion === 0) {
     if (storedResponses) {
-      return <RetakeQuestionnaire resetResponses={resetResponses} />;
+      return (
+        <RetakeQuestionnaire
+          resetResponses={resetResponses}
+          isAuthenticated={isAuthenticated}
+        />
+      );
     }
-    return <StartQuestionnaire />;
+    return <StartQuestionnaire isAuthenticated={isAuthenticated} />;
   }
 
   // Render the questionnaire pages
   return (
     <PageBackground>
       <LandingContainer>
-        <QuestionnaireCardContainer>
+        <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
           <QuestionnaireCard>
             <QuesContainer>
               <ProgressBar>
@@ -305,6 +339,11 @@ export function Questionnaire() {
                 initialResponse={responses[currentQuestion]}
               />
               <div>
+                {!isAuthenticated && (
+                  <QuitButton onClick={handleQuit}>
+                    <FontAwesomeIcon icon={faArrowLeft} /> Quit
+                  </QuitButton>
+                )}
                 <NavigationButton
                   onClick={handlePrevious}
                   disabled={currentQuestion === 1}
@@ -312,20 +351,20 @@ export function Questionnaire() {
                   Previous
                 </NavigationButton>
                 {currentQuestion === questions.length ? (
-                <SubmitButton
-                onClick={handleSubmit}
-                disabled={isSubmitDisabled}
-              >
-                Submit
-              </SubmitButton>
-              ) : (
-              <NavigationButton
-                onClick={handleNext}
-                disabled={isNextDisabled}
-              >
-                Next
-              </NavigationButton>
-              )}
+                  <SubmitButton
+                    onClick={handleSubmit}
+                    disabled={isSubmitDisabled}
+                  >
+                    Submit
+                  </SubmitButton>
+                ) : (
+                  <NavigationButton
+                    onClick={handleNext}
+                    disabled={isNextDisabled}
+                  >
+                    Next
+                  </NavigationButton>
+                )}
               </div>
             </QuesContainer>
           </QuestionnaireCard>
