@@ -131,7 +131,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       </ModalHeader>
       <ModalBody>
         <CardText>
-          Please fill out the following fields to create a user account
+          To get started, enter your details below to create an account:
         </CardText>
         <Form onSubmit={handleSignUpSubmit}>
           <Form.Group controlId="formFirstName" className="m-3">

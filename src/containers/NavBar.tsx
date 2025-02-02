@@ -193,7 +193,10 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
 
   // Handle logout logic
   const handleLogout = () => {
-    localStorage.setItem("authenticated", "false");
+    // clear authentication data on logout
+    localStorage.removeItem("authenticated");
+    localStorage.removeItem("user");
+
     if (isDarkMode) {
       toggleDarkMode(); // Toggle dark mode back to light when logging out
     }
