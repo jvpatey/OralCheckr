@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
 import { useEffect } from "react";
-import { REGISTER_ENDPOINT } from "../../config/apiConfig";
+import { registerUser } from "../../services/authService";
 
 interface SignUpModalProps {
   show: boolean;
@@ -93,50 +93,23 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    //Basic validation for empy fields
     if (!firstName || !lastName || !email || !password) {
       setError("All fields are required");
       return;
     }
 
-    //Prepare the user data
-    const userData = {
-      firstName,
-      lastName,
-      email,
-      password,
-    };
+    const userData = { firstName, lastName, email, password };
 
     try {
-      // Send a POST request to your backend registration endpoint
-      const response = await fetch(REGISTER_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-
-      if (!response.ok) {
-        // If response is not OK, extract and display the error message
-        const data = await response.json();
-        setError(data.error || "registration failed");
-        return;
-      }
-
-      //Registration succceeded
-      const data = await response.json();
-
-      // store token and auth status in local storage
+      const data = await registerUser(userData);
+      // Store token in local storage
       localStorage.setItem("user", JSON.stringify(data));
       localStorage.setItem("authenticated", "true");
 
-      // Redirect to the landing page after successful signup
       navigate(RoutePaths.LANDING);
       handleClose();
-    } catch (error: any) {
-      setError("An error occurred during registration");
-      console.error("Registration error:", error);
+    } catch (err: any) {
+      setError(err.message);
     }
   };
 
