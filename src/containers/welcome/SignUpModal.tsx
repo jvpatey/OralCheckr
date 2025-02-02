@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
 import { useEffect } from "react";
+import { REGISTER_ENDPOINT } from "../../config/apiConfig";
 
 interface SignUpModalProps {
   show: boolean;
@@ -89,16 +90,16 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSignUpSubmit = (e: React.FormEvent) => {
+  const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation for empty fields
+    //Basic validation for empy fields
     if (!firstName || !lastName || !email || !password) {
       setError("All fields are required");
       return;
     }
 
-    // Save the data in local storage
+    //Prepare the user data
     const userData = {
       firstName,
       lastName,
@@ -106,12 +107,37 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       password,
     };
 
-    localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("authenticated", "true");
+    try {
+      // Send a POST request to your backend registration endpoint
+      const response = await fetch(REGISTER_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
 
-    // Redirect to the landing page after successful signup
-    navigate(RoutePaths.LANDING);
-    handleClose();
+      if (!response.ok) {
+        // If response is not OK, extract and display the error message
+        const data = await response.json();
+        setError(data.error || "registration failed");
+        return;
+      }
+
+      //Registration succceeded
+      const data = await response.json();
+
+      // store token and auth status in local storage
+      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("authenticated", "true");
+
+      // Redirect to the landing page after successful signup
+      navigate(RoutePaths.LANDING);
+      handleClose();
+    } catch (error: any) {
+      setError("An error occurred during registration");
+      console.error("Registration error:", error);
+    }
   };
 
   // Reset form states when modal is closed
