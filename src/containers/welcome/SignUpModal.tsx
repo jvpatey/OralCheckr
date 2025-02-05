@@ -90,6 +90,25 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const validatePassword = (password: string): string | null => {
+    const requirements = [
+      { regex: /.{8,}/, message: "Password must be at least 8 characters" },
+      { regex: /[A-Z]/, message: "Must contain at least one uppercase letter" },
+      { regex: /[a-z]/, message: "Must contain at least one lowercase letter" },
+      { regex: /\d/, message: "Must contain at least one digit" },
+      {
+        regex: /[!@#$%^&*(),.?":{}|<>]/,
+        message: "Must contain at least one special character",
+      },
+    ];
+
+    const errors = requirements
+      .filter((req) => !req.regex.test(password))
+      .map((req) => req.message);
+
+    return errors.length > 0 ? errors.join(", ") : null;
+  };
+
   const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -98,11 +117,16 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       return;
     }
 
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
     const userData = { firstName, lastName, email, password };
 
     try {
       const data = await registerUser(userData);
-      // Store token in local storage
       localStorage.setItem("user", JSON.stringify(data));
       localStorage.setItem("authenticated", "true");
 
@@ -166,10 +190,19 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                const passwordFeedback = validatePassword(e.target.value);
+                if (passwordFeedback) {
+                  setError(passwordFeedback);
+                } else {
+                  setError("");
+                }
+              }}
               autoComplete="new-password"
             />
           </Form.Group>
+
           {error && (
             <Alert variant="danger" dismissible onClose={() => setError("")}>
               {error}
