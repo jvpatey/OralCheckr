@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
+import { loginUser, LoginData } from "../../services/authService";
 
 interface LoginModalProps {
   show: boolean;
@@ -79,45 +80,41 @@ const Button = styled.button<{ $login?: boolean }>`
 
 export function LoginModal({ show, handleClose }: LoginModalProps) {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Fetch environment variables
-  const envUsername = import.meta.env.VITE_USERNAME || "admin";
-  const envPassword = import.meta.env.VITE_PASSWORD || "admin";
-
-  // Fetch stored credentials from local storage or fallback to "admin/admin"
-  const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-  const storedUsername = storedUser?.email || "admin";
-  const storedPassword = storedUser?.password || "admin";
-
-  const validCredentials = [
-    { username: envUsername, password: envPassword },
-    { username: storedUsername, password: storedPassword },
-  ];
-
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check if entered credentials match any of the valid credentials
-    const isValid = validCredentials.some(
-      (cred) => cred.username === username && cred.password === password
-    );
+    // Basic validation for empty fields
+    if (!email || !password) {
+      setError("Email and Password are required");
+      return;
+    }
 
-    if (isValid) {
+    const loginData: LoginData = { email, password };
+
+    try {
+      // Call the backend login endpoint via the loginUser service function
+      const data = await loginUser(loginData);
+
+      // Store user data or token in local storage
+      localStorage.setItem("user", JSON.stringify(data));
       localStorage.setItem("authenticated", "true");
+
+      // Redirect to landing page upon successful login
       navigate(RoutePaths.LANDING);
-      handleClose(); // Close modal on successful login
-    } else {
-      setError("Invalid username or password");
+      handleClose();
+    } catch (err: any) {
+      setError(err.message);
     }
   };
 
   // Reset form states when modal is closed
   useEffect(() => {
     if (!show) {
-      setUsername("");
+      setEmail("");
       setPassword("");
       setError("");
     }
@@ -133,10 +130,10 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
           <Form.Group controlId="formUsername" className="m-3">
             <UsernameStyle
               type="text"
-              placeholder="Enter username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              autoComplete="username"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
             />
           </Form.Group>
           <Form.Group controlId="formPassword" className="m-3">

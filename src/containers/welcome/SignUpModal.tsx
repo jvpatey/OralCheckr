@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
 import { useEffect } from "react";
+import { registerUser } from "../../services/authService";
 
 interface SignUpModalProps {
   show: boolean;
@@ -89,29 +90,27 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSignUpSubmit = (e: React.FormEvent) => {
+  const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation for empty fields
     if (!firstName || !lastName || !email || !password) {
       setError("All fields are required");
       return;
     }
 
-    // Save the data in local storage
-    const userData = {
-      firstName,
-      lastName,
-      email,
-      password,
-    };
+    const userData = { firstName, lastName, email, password };
 
-    localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("authenticated", "true");
+    try {
+      const data = await registerUser(userData);
+      // Store token in local storage
+      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("authenticated", "true");
 
-    // Redirect to the landing page after successful signup
-    navigate(RoutePaths.LANDING);
-    handleClose();
+      navigate(RoutePaths.LANDING);
+      handleClose();
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
   // Reset form states when modal is closed
@@ -132,7 +131,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       </ModalHeader>
       <ModalBody>
         <CardText>
-          Please fill out the following fields to create a user account
+          To get started, enter your details below to create an account:
         </CardText>
         <Form onSubmit={handleSignUpSubmit}>
           <Form.Group controlId="formFirstName" className="m-3">
