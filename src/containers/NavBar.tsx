@@ -194,6 +194,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   // Handle logout logic
   const handleLogout = () => {
     // clear authentication data on logout
+    localStorage.removeItem("accessToken");
     localStorage.removeItem("authenticated");
     localStorage.removeItem("user");
 

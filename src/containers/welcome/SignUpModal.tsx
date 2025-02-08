@@ -127,7 +127,8 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
 
     try {
       const data = await registerUser(userData);
-      localStorage.setItem("user", JSON.stringify(data));
+
+      localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("authenticated", "true");
 
       navigate(RoutePaths.LANDING);

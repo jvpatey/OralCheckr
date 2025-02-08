@@ -99,8 +99,8 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       // Call the backend login endpoint via the loginUser service function
       const data = await loginUser(loginData);
 
-      // Store user data or token in local storage
-      localStorage.setItem("user", JSON.stringify(data));
+      // Store user data in local storage
+      localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("authenticated", "true");
 
       // Redirect to landing page upon successful login

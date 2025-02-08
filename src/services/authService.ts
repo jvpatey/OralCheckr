@@ -12,8 +12,9 @@ interface RegisterData {
 
 interface RegisterResponse {
   message: string;
+  email: string;
   userId: number;
-  access_token: string;
+  accessToken: string;
 }
 
 export const registerUser = async (
@@ -45,7 +46,7 @@ export interface LoginData {
 export interface LoginResponse {
   userId: number;
   email: string;
-  access_token: string;
+  accessToken: string;
 }
 
 export const loginUser = async (
