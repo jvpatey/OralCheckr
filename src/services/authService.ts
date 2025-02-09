@@ -1,5 +1,6 @@
 import { REGISTER_ENDPOINT } from "../config/apiConfig";
 import { LOGIN_ENDPOINT } from "../config/apiConfig";
+import { GUEST_LOGIN_ENDPOINT } from "../config/apiConfig";
 
 /* -- Registration Service -- */
 
@@ -64,4 +65,38 @@ export const loginUser = async (
   }
 
   return response.json();
+};
+
+/* -- Guest Login -- */
+
+export const handleGuestLogin = async () => {
+  try {
+    const response = await fetch(GUEST_LOGIN_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to log in as guest");
+    }
+
+    const data = await response.json();
+
+    // Store the guest token
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        userId: data.userId,
+        role: data.role,
+      })
+    );
+    localStorage.setItem("authenticated", "true");
+  } catch (err: any) {
+    console.error("Guest login error:", err.message);
+    throw new Error("Unable to log in as guest. Please try again.");
+  }
 };

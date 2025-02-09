@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
-import { loginUser, LoginData } from "../../services/authService";
+import {
+  loginUser,
+  LoginData,
+  handleGuestLogin,
+} from "../../services/authService";
 
 interface LoginModalProps {
   show: boolean;
@@ -78,6 +82,33 @@ const Button = styled.button<{ $login?: boolean }>`
   }
 `;
 
+const GuestButton = styled.button<{ $login?: boolean }>`
+  background-color: ${(props) =>
+    props.$login ? props.theme.blue : props.theme.blue};
+  color: ${(props) =>
+    props.$login ? props.theme.backgroundColor : props.theme.backgroundColor};
+  font-weight: bold;
+  border: 2px solid
+    ${(props) => (props.$login ? props.theme.blue : props.theme.blue)};
+  width: 50%;
+  margin-top: 10px;
+  border-radius: 20px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  margin: 10px auto;
+  display: block;
+
+  &:hover {
+    background-color: ${(props) =>
+      props.$login
+        ? props.theme.accentBackgroundColor
+        : props.theme.accentBackgroundColor};
+    color: ${(props) => (props.$login ? props.theme.blue : props.theme.blue)};
+    border-color: ${(props) => props.theme.blue};
+    border-width: 2px;
+  }
+`;
+
 export function LoginModal({ show, handleClose }: LoginModalProps) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -120,6 +151,17 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
     }
   }, [show]);
 
+  // Guest login function
+  const handleGuestLoginClick = async () => {
+    try {
+      await handleGuestLogin();
+      navigate(RoutePaths.LANDING);
+      handleClose();
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
   return (
     <StyledModal show={show} onHide={handleClose} centered>
       <ModalHeader closeButton>
@@ -150,6 +192,9 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
               {error}
             </Alert>
           )}
+          <GuestButton $login type="button" onClick={handleGuestLoginClick}>
+            Login as guest
+          </GuestButton>
           <Button $login type="submit">
             Login
           </Button>
