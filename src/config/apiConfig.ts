@@ -9,3 +9,6 @@ export const REGISTER_ENDPOINT = `${BASE_URL}${BASE_PATH}/auth/register`;
 
 // Login endpoint URL
 export const LOGIN_ENDPOINT = `${BASE_URL}${BASE_PATH}/auth/login`;
+
+// Guest Login endpoint URL
+export const GUEST_LOGIN_ENDPOINT = `${BASE_URL}${BASE_PATH}/auth/guest-login`;
