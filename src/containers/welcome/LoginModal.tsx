@@ -82,30 +82,18 @@ const Button = styled.button<{ $login?: boolean }>`
   }
 `;
 
-const GuestButton = styled.button<{ $login?: boolean }>`
-  background-color: ${(props) =>
-    props.$login ? props.theme.blue : props.theme.blue};
-  color: ${(props) =>
-    props.$login ? props.theme.backgroundColor : props.theme.backgroundColor};
+const GuestLink = styled.a`
+  color: ${({ theme }) => theme.blue};
   font-weight: bold;
-  border: 2px solid
-    ${(props) => (props.$login ? props.theme.blue : props.theme.blue)};
-  width: 50%;
-  margin-top: 10px;
-  border-radius: 20px;
-  padding: 0.5em 1em;
-  cursor: pointer;
-  margin: 10px auto;
   display: block;
+  width: fit-content;
+  margin: 5px auto;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
 
   &:hover {
-    background-color: ${(props) =>
-      props.$login
-        ? props.theme.accentBackgroundColor
-        : props.theme.accentBackgroundColor};
-    color: ${(props) => (props.$login ? props.theme.blue : props.theme.blue)};
-    border-color: ${(props) => props.theme.blue};
-    border-width: 2px;
+    color: ${({ theme }) => theme.green};
   }
 `;
 
@@ -192,9 +180,9 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
               {error}
             </Alert>
           )}
-          <GuestButton $login type="button" onClick={handleGuestLoginClick}>
-            Login as guest
-          </GuestButton>
+          <GuestLink onClick={handleGuestLoginClick}>
+            New user? Login as guest
+          </GuestLink>
           <Button $login type="submit">
             Login
           </Button>
