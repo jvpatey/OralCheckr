@@ -1,6 +1,6 @@
-import { REGISTER_ENDPOINT } from "../config/apiConfig";
-import { LOGIN_ENDPOINT } from "../config/apiConfig";
-import { GUEST_LOGIN_ENDPOINT } from "../config/apiConfig";
+import { REGISTER_ENDPOINT } from "../config/authApiConfig";
+import { LOGIN_ENDPOINT } from "../config/authApiConfig";
+import { GUEST_LOGIN_ENDPOINT } from "../config/authApiConfig";
 
 /* -- Registration Service -- */
 
@@ -21,20 +21,23 @@ interface RegisterResponse {
 export const registerUser = async (
   userData: RegisterData
 ): Promise<RegisterResponse> => {
-  const response = await fetch(REGISTER_ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  });
+  try {
+    const response = await fetch(REGISTER_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || "Registration failed");
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Registration failed");
+    }
+
+    return response.json();
+  } catch (error: any) {
+    console.error("Network or server error:", error.message);
+    throw new Error("Unable to connect to the server. Please try again later.");
   }
-
-  return response.json();
 };
 
 /* -- Login Service -- */
