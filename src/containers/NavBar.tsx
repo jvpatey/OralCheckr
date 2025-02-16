@@ -2,7 +2,7 @@ import styled, { keyframes, useTheme } from "styled-components";
 import { Navbar, Container, Dropdown, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { RoutePaths } from "../common/constants/routes";
 import { NavLink } from "../common/links";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
@@ -196,6 +196,8 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   // Handle logout logic
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
       if (isLoggingOut) return;
@@ -209,7 +211,9 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
         toggleDarkMode(); // Toggle dark mode back to light when logging out
       }
 
-      setTimeout(() => setIsLoggingOut(false), 100);
+      navigate("/");
+
+      setIsLoggingOut(false);
     } catch (error) {
       console.error("Logout error:", error);
       setIsLoggingOut(false);
