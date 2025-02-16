@@ -1,6 +1,9 @@
-import { REGISTER_ENDPOINT } from "../config/authApiConfig";
-import { LOGIN_ENDPOINT } from "../config/authApiConfig";
-import { GUEST_LOGIN_ENDPOINT } from "../config/authApiConfig";
+import {
+  REGISTER_ENDPOINT,
+  LOGIN_ENDPOINT,
+  GUEST_LOGIN_ENDPOINT,
+  LOGOUT_ENDPOINT,
+} from "../config/authApiConfig";
 
 /* -- Registration Service -- */
 
@@ -13,9 +16,7 @@ interface RegisterData {
 
 interface RegisterResponse {
   message: string;
-  email: string;
   userId: number;
-  accessToken: string;
 }
 
 export const registerUser = async (
@@ -26,6 +27,7 @@ export const registerUser = async (
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -49,57 +51,62 @@ export interface LoginData {
 
 export interface LoginResponse {
   userId: number;
-  email: string;
-  accessToken: string;
+  message: string;
 }
 
 export const loginUser = async (
   loginData: LoginData
 ): Promise<LoginResponse> => {
-  const response = await fetch(LOGIN_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(loginData),
-  });
+  try {
+    const response = await fetch(LOGIN_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(loginData),
+      credentials: "include",
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || "Login failed");
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Login failed");
+    }
+
+    return response.json();
+  } catch (error: any) {
+    console.error("Network or server error:", error.message);
+    throw new Error("Unable to connect to the server. Please try again later.");
   }
-
-  return response.json();
 };
 
-/* -- Guest Login -- */
+/* -- Guest Login Service -- */
 
-export const handleGuestLogin = async () => {
+export const handleGuestLogin = async (): Promise<void> => {
   try {
     const response = await fetch(GUEST_LOGIN_ENDPOINT, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
     });
 
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.error || "Failed to log in as guest");
     }
-
-    const data = await response.json();
-
-    // Store the guest token
-    localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        userId: data.userId,
-        role: data.role,
-      })
-    );
     localStorage.setItem("authenticated", "true");
   } catch (err: any) {
     console.error("Guest login error:", err.message);
     throw new Error("Unable to log in as guest. Please try again.");
+  }
+};
+
+/* -- Logout Service -- */
+
+export const logoutUser = async (): Promise<void> => {
+  try {
+    await fetch(LOGOUT_ENDPOINT, {
+      method: "POST",
+      credentials: "include",
+    });
+  } catch (error) {
+    console.error("Logout failed:", error);
   }
 };

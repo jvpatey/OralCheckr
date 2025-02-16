@@ -1,9 +1,8 @@
 import { Modal, Form, Alert } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
-import { useEffect } from "react";
 import { registerUser } from "../../services/authService";
 
 interface SignUpModalProps {
@@ -126,9 +125,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
     const userData = { firstName, lastName, email, password };
 
     try {
-      const data = await registerUser(userData);
-
-      localStorage.setItem("accessToken", data.accessToken);
+      await registerUser(userData);
       localStorage.setItem("authenticated", "true");
 
       navigate(RoutePaths.LANDING);
