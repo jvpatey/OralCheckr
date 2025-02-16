@@ -31,14 +31,20 @@ export const registerUser = async (
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Registration failed");
+      let errorMessage = "Registration failed";
+      try {
+        const errorData = await response.json();
+        if (errorData.error) errorMessage = errorData.error;
+      } catch {
+        console.error("Error parsing server response");
+      }
+      throw new Error(errorMessage);
     }
 
     return response.json();
   } catch (error: any) {
     console.error("Network or server error:", error.message);
-    throw new Error("Unable to connect to the server. Please try again later.");
+    throw new Error(error.message || "Unexpected error occurred.");
   }
 };
 
@@ -66,14 +72,20 @@ export const loginUser = async (
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Login failed");
+      let errorMessage = "Login failed";
+      try {
+        const errorData = await response.json();
+        if (errorData.error) errorMessage = errorData.error;
+      } catch {
+        console.error("Error parsing server response");
+      }
+      throw new Error(errorMessage);
     }
 
     return response.json();
   } catch (error: any) {
     console.error("Network or server error:", error.message);
-    throw new Error("Unable to connect to the server. Please try again later.");
+    throw new Error(error.message || "Unexpected error occurred.");
   }
 };
 
