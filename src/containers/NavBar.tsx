@@ -7,6 +7,8 @@ import { RoutePaths } from "../common/constants/routes";
 import { NavLink } from "../common/links";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { ThemeType } from "../App";
+import { logoutUser } from "../services/authService";
+import { useState } from "react";
 
 interface NavBarProps {
   links: NavLink[];
@@ -192,14 +194,25 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   };
 
   // Handle logout logic
-  const handleLogout = () => {
-    // clear authentication data on logout
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("authenticated");
-    localStorage.removeItem("user");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-    if (isDarkMode) {
-      toggleDarkMode(); // Toggle dark mode back to light when logging out
+  const handleLogout = async () => {
+    try {
+      if (isLoggingOut) return;
+      setIsLoggingOut(true);
+
+      await logoutUser();
+      localStorage.removeItem("authenticated");
+      localStorage.removeItem("user");
+
+      if (isDarkMode) {
+        toggleDarkMode(); // Toggle dark mode back to light when logging out
+      }
+
+      setTimeout(() => setIsLoggingOut(false), 100);
+    } catch (error) {
+      console.error("Logout error:", error);
+      setIsLoggingOut(false);
     }
   };
 

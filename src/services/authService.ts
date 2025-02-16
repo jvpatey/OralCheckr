@@ -111,13 +111,17 @@ export const handleGuestLogin = async (): Promise<void> => {
 };
 
 /* -- Logout Service -- */
-
 export const logoutUser = async (): Promise<void> => {
   try {
-    await fetch(LOGOUT_ENDPOINT, {
+    const response = await fetch(LOGOUT_ENDPOINT, {
       method: "POST",
       credentials: "include",
     });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Logout failed");
+    }
   } catch (error) {
     console.error("Logout failed:", error);
   }
