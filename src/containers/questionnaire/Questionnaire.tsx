@@ -15,6 +15,7 @@ import { NavigationButton } from "../../components/questionnaire/NavigationButto
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { saveQuestionnaireResponse } from "../../services/quesService";
+import { hasSavedResponse } from "../../services/quesService";
 
 // styled-component styles for Questionnaire Page
 
@@ -201,6 +202,16 @@ export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
   const storedResponses = localStorage.getItem("questionnaire");
+  const [hasResponses, setHasResponses] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkForSavedResponses = async () => {
+      const exists = await hasSavedResponse();
+      setHasResponses(exists);
+    };
+
+    checkForSavedResponses();
+  }, []);
 
   // Check if the user is authenticated
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
@@ -306,7 +317,11 @@ export function Questionnaire() {
 
   // Render the start-questionnaire page if the current question is 0
   if (currentQuestion === 0) {
-    if (storedResponses) {
+    if (hasResponses === null) {
+      return <div>Loading...</div>;
+    }
+
+    if (hasResponses) {
       return (
         <RetakeQuestionnaire
           resetResponses={resetResponses}
@@ -314,6 +329,7 @@ export function Questionnaire() {
         />
       );
     }
+
     return <StartQuestionnaire isAuthenticated={isAuthenticated} />;
   }
 

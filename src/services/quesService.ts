@@ -54,3 +54,23 @@ export const getQuestionnaireResponse = async (): Promise<Record<
     return null;
   }
 };
+
+// API call to check if user has questionnaire data saved
+export const hasSavedResponse = async (): Promise<boolean> => {
+  try {
+    const response = await fetch(QUESTIONNAIRE_RESPONSE_ENDPOINT, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      return false;
+    }
+
+    const data = await response.json();
+    return !!data.responses;
+  } catch (error) {
+    console.error("Error checking for saved responses:", error);
+    return false;
+  }
+};
