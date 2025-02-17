@@ -292,6 +292,9 @@ export function Questionnaire() {
       }
       navigate(RoutePaths.RESULTS);
     } else {
+      // Store in localStorage for guests
+      localStorage.setItem("questionnaire", JSON.stringify(responses));
+      localStorage.setItem("totalScore", totalScore.toString());
       navigate(RoutePaths.WELCOME_RESULTS);
     }
   };
