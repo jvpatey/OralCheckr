@@ -14,6 +14,7 @@ import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { saveQuestionnaireResponse } from "../../services/quesService";
 
 // styled-component styles for Questionnaire Page
 
@@ -266,17 +267,20 @@ export function Questionnaire() {
   };
 
   // Handle the submission of the questionnaire
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const totalScore = calculateTotalScore(questions, responses);
-    localStorage.setItem("questionnaire", JSON.stringify(responses));
-    localStorage.setItem("totalScore", JSON.stringify(totalScore));
+    localStorage.removeItem("questionnaire");
     localStorage.removeItem("currentQuestion");
 
-    // If the user is authenticated, navigate to the regular results page
     if (isAuthenticated) {
+      try {
+        await saveQuestionnaireResponse({ responses, totalScore });
+        console.log("Successfully saved questionnaire response.");
+      } catch (error) {
+        console.error("Error submitting questionnaire:", error);
+      }
       navigate(RoutePaths.RESULTS);
     } else {
-      // If the user is not authenticated, navigate to the WelcomeResults page
       navigate(RoutePaths.WELCOME_RESULTS);
     }
   };
