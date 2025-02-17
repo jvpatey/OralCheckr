@@ -74,3 +74,24 @@ export const hasSavedResponse = async (): Promise<boolean> => {
     return false;
   }
 };
+
+//API call to get total score from questionnaire data
+export const getTotalScore = async (): Promise<number | null> => {
+  try {
+    const response = await fetch(QUESTIONNAIRE_RESPONSE_ENDPOINT, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      console.error("Failed to fetch total score.");
+      return null;
+    }
+
+    const data = await response.json();
+    return data.totalScore || 0;
+  } catch (error) {
+    console.error("Error fetching total score:", error);
+    return null;
+  }
+};
