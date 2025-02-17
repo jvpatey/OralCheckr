@@ -5,6 +5,7 @@ interface SaveResponseData {
   totalScore: number;
 }
 
+// API call save questionnaire responses
 export const saveQuestionnaireResponse = async (
   responseData: SaveResponseData
 ): Promise<void> => {
@@ -27,5 +28,29 @@ export const saveQuestionnaireResponse = async (
   } catch (error: any) {
     console.error("Error saving questionnaire response:", error.message);
     throw new Error("Error saving response. Please try again.");
+  }
+};
+
+// API call to retrieve questionnaire data
+export const getQuestionnaireResponse = async (): Promise<Record<
+  number,
+  number | number[]
+> | null> => {
+  try {
+    const response = await fetch(QUESTIONNAIRE_RESPONSE_ENDPOINT, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      console.error("Failed to fetch questionnaire response.");
+      return null;
+    }
+
+    const data = await response.json();
+    return data.responses;
+  } catch (error) {
+    console.error("Error fetching questionnaire response:", error);
+    return null;
   }
 };
