@@ -207,13 +207,16 @@ export function Questionnaire() {
   const navigate = useNavigate();
   const storedResponses = localStorage.getItem("questionnaire");
   const [hasResponses, setHasResponses] = useState<boolean | null>(null);
+  const [retakeMode, setRetakeMode] = useState<boolean>(false);
 
   useEffect(() => {
     const checkForSavedResponses = async () => {
       const exists = await hasSavedResponse();
       setHasResponses(exists);
+      if (exists) {
+        setRetakeMode(true);
+      }
     };
-
     checkForSavedResponses();
   }, []);
 
@@ -251,7 +254,7 @@ export function Questionnaire() {
   useEffect(() => {
     const fetchProgress = async () => {
       const progressData = await getQuestionnaireProgress();
-      if (progressData) {
+      if (progressData && !retakeMode) {
         if (progressData.responses) {
           setResponses(progressData.responses);
         }
@@ -264,7 +267,7 @@ export function Questionnaire() {
     if (isAuthenticated) {
       fetchProgress();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, retakeMode]);
 
   // Save current question in local storage or DB based on auth status
   useEffect(() => {
@@ -272,6 +275,19 @@ export function Questionnaire() {
       localStorage.setItem("currentQuestion", currentQuestion.toString());
     }
   }, [currentQuestion, isAuthenticated]);
+
+  if (retakeMode) {
+    return (
+      <RetakeQuestionnaire
+        resetResponses={() => {
+          setResponses({});
+          setCurrentQuestion(1);
+          setRetakeMode(false);
+        }}
+        isAuthenticated={isAuthenticated}
+      />
+    );
+  }
 
   // Handle response change
   const handleResponseChange = (
