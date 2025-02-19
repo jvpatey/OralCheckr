@@ -4,6 +4,7 @@ import Carousel from "react-bootstrap/Carousel";
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import questionData from "../../common/questionnaire.json";
+import { getQuestionnaireResponse } from "../../services/quesService";
 
 // Styled-components for Recommendations Component
 const NoRecommendations = styled.div`
@@ -162,27 +163,31 @@ export function Recommendations() {
   useEffect(() => {
     if (hasFetchedRef.current) return;
 
-    const storedResponses = JSON.parse(
-      localStorage.getItem("questionnaire") || "{}"
-    );
-    const recs: Recommendation[] = [];
+    const fetchResponses = async () => {
+      const storedResponses = await getQuestionnaireResponse();
+      if (!storedResponses) return;
 
-    questionData.questions.forEach((question) => {
-      const response = storedResponses[question.id];
+      const recs: Recommendation[] = [];
 
-      if (Array.isArray(response)) {
-        response.forEach((res) => {
-          const recommendation = processOption(res, question);
+      questionData.questions.forEach((question) => {
+        const response = storedResponses[question.id];
+
+        if (Array.isArray(response)) {
+          response.forEach((res) => {
+            const recommendation = processOption(res, question);
+            addRecommendation(recs, recommendation);
+          });
+        } else if (response !== undefined) {
+          const recommendation = processOption(response, question);
           addRecommendation(recs, recommendation);
-        });
-      } else if (response !== undefined) {
-        const recommendation = processOption(response, question);
-        addRecommendation(recs, recommendation);
-      }
-    });
+        }
+      });
 
-    setRecommendations(recs);
-    hasFetchedRef.current = true;
+      setRecommendations(recs);
+      hasFetchedRef.current = true;
+    };
+
+    fetchResponses();
   }, []);
 
   const handleSelect = (selectedIndex: number) => {

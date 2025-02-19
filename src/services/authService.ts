@@ -4,6 +4,31 @@ import {
   GUEST_LOGIN_ENDPOINT,
   LOGOUT_ENDPOINT,
 } from "../config/authApiConfig";
+import { QUESTIONNAIRE_RESPONSE_ENDPOINT } from "../config/quesApiConfig";
+
+/* -- Questionnaire Data Service for Registration/Login -- */
+export const moveLocalResponsesToDB = async (userId: number) => {
+  const storedResponses = localStorage.getItem("questionnaire");
+  const storedScore = localStorage.getItem("totalScore");
+
+  if (storedResponses && storedScore) {
+    await fetch(QUESTIONNAIRE_RESPONSE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId,
+        responses: JSON.parse(storedResponses),
+        totalScore: parseInt(storedScore, 10),
+      }),
+      credentials: "include",
+    });
+
+    // Clear localStorage after saving
+    localStorage.removeItem("questionnaire");
+    localStorage.removeItem("currentQuestion");
+    localStorage.removeItem("totalScore");
+  }
+};
 
 /* -- Registration Service -- */
 
@@ -31,19 +56,16 @@ export const registerUser = async (
     });
 
     if (!response.ok) {
-      let errorMessage = "Registration failed";
-      try {
-        const errorData = await response.json();
-        if (errorData.error) errorMessage = errorData.error;
-      } catch {
-        console.error("Error parsing server response");
-      }
-      throw new Error(errorMessage);
+      throw new Error("Registration failed");
     }
 
-    return response.json();
+    const result = await response.json();
+
+    // Move local responses to DB after registration
+    await moveLocalResponsesToDB(result.userId);
+
+    return result;
   } catch (error: any) {
-    console.error("Network or server error:", error.message);
     throw new Error(error.message || "Unexpected error occurred.");
   }
 };
@@ -72,19 +94,16 @@ export const loginUser = async (
     });
 
     if (!response.ok) {
-      let errorMessage = "Login failed";
-      try {
-        const errorData = await response.json();
-        if (errorData.error) errorMessage = errorData.error;
-      } catch {
-        console.error("Error parsing server response");
-      }
-      throw new Error(errorMessage);
+      throw new Error("Login failed");
     }
 
-    return response.json();
+    const result = await response.json();
+
+    // Move local responses to DB after login
+    await moveLocalResponsesToDB(result.userId);
+
+    return result;
   } catch (error: any) {
-    console.error("Network or server error:", error.message);
     throw new Error(error.message || "Unexpected error occurred.");
   }
 };

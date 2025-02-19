@@ -14,6 +14,12 @@ import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { saveQuestionnaireResponse } from "../../services/quesService";
+import { hasSavedResponse } from "../../services/quesService";
+import {
+  getQuestionnaireProgress,
+  saveQuestionnaireProgress,
+} from "../../services/quesService";
 
 // styled-component styles for Questionnaire Page
 
@@ -200,95 +206,170 @@ export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
   const storedResponses = localStorage.getItem("questionnaire");
+  const [hasResponses, setHasResponses] = useState<boolean | null>(null);
+  const [retakeMode, setRetakeMode] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkForSavedResponses = async () => {
+      const exists = await hasSavedResponse();
+      setHasResponses(exists);
+      if (exists) {
+        setRetakeMode(true);
+      }
+    };
+    checkForSavedResponses();
+  }, []);
 
   // Check if the user is authenticated
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
 
-  // State to keep track of the current question number
+  // State to keep track of the current question number and responses
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
-  // State to store the user's responses
   const [responses, setResponses] = useState<Responses>(
     storedResponses ? JSON.parse(storedResponses) : {}
   );
 
-  // Map the questions from the JSON data to the Question type
+  // Map questions from JSON data
   const questions: Question[] = questionData.questions.map((question) => ({
     ...question,
     type: question.type as Type,
   }));
 
-  // Updates local storage for current question
+  // When component mounts, determine currentQuestion from URL, localStorage, or DB (if authenticated)
   useEffect(() => {
-    const savedCurrentQuestion = localStorage.getItem("currentQuestion");
-    if (questionId) {
-      setCurrentQuestion(parseInt(questionId));
-    } else if (savedCurrentQuestion) {
-      setCurrentQuestion(parseInt(savedCurrentQuestion));
-    } else {
-      setCurrentQuestion(0);
-    }
-  }, [questionId]);
+    const loadCurrentQuestion = async () => {
+      if (questionId) {
+        setCurrentQuestion(parseInt(questionId));
+      } else if (!isAuthenticated && localStorage.getItem("currentQuestion")) {
+        setCurrentQuestion(parseInt(localStorage.getItem("currentQuestion")!));
+      } else {
+        setCurrentQuestion(0);
+      }
+    };
 
-  // Effect to save the current question number to local storage whenever it changes
+    loadCurrentQuestion();
+  }, [questionId, isAuthenticated]);
+
+  // Fetch progress from the DB for authenticated users
   useEffect(() => {
-    if (currentQuestion > 0) {
+    const fetchProgress = async () => {
+      const progressData = await getQuestionnaireProgress();
+      if (progressData && !retakeMode) {
+        if (progressData.responses) {
+          setResponses(progressData.responses);
+        }
+        if (progressData.currentQuestion) {
+          setCurrentQuestion(progressData.currentQuestion);
+        }
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchProgress();
+    }
+  }, [isAuthenticated, retakeMode]);
+
+  // Save current question in local storage or DB based on auth status
+  useEffect(() => {
+    if (!isAuthenticated && currentQuestion > 0) {
       localStorage.setItem("currentQuestion", currentQuestion.toString());
     }
-  }, [currentQuestion]);
+  }, [currentQuestion, isAuthenticated]);
 
-  // Handle the change in response for a question
+  if (retakeMode) {
+    return (
+      <RetakeQuestionnaire
+        resetResponses={() => {
+          setResponses({});
+          setCurrentQuestion(1);
+          setRetakeMode(false);
+        }}
+        isAuthenticated={isAuthenticated}
+      />
+    );
+  }
+
+  // Handle response change
   const handleResponseChange = (
     questionId: number,
     response: number | number[]
   ) => {
     const updatedResponses = { ...responses, [questionId]: response };
-    localStorage.setItem("questionnaire", JSON.stringify(updatedResponses));
     setResponses(updatedResponses);
+
+    if (isAuthenticated) {
+      saveQuestionnaireProgress({
+        responses: updatedResponses,
+        currentQuestion,
+      });
+    } else {
+      localStorage.setItem("questionnaire", JSON.stringify(updatedResponses));
+    }
   };
 
-  // Navigate to the next question
+  // Navigate to the next question and save progress if authenticated
   const handleNext = () => {
     if (currentQuestion < questions.length) {
-      navigate(`${RoutePaths.QUESTIONNAIRE}/${currentQuestion + 1}`);
+      const newQuestion = currentQuestion + 1;
+      setCurrentQuestion(newQuestion);
+      if (isAuthenticated) {
+        saveQuestionnaireProgress({ responses, currentQuestion: newQuestion });
+      } else {
+        localStorage.setItem("currentQuestion", newQuestion.toString());
+      }
+      navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
     }
   };
 
-  // Navigate to the previous question
+  // Navigate to the previous question and save progress if authenticated
   const handlePrevious = () => {
     if (currentQuestion > 1) {
-      navigate(`${RoutePaths.QUESTIONNAIRE}/${currentQuestion - 1}`);
+      const newQuestion = currentQuestion - 1;
+      setCurrentQuestion(newQuestion);
+      if (isAuthenticated) {
+        saveQuestionnaireProgress({ responses, currentQuestion: newQuestion });
+      } else {
+        localStorage.setItem("currentQuestion", newQuestion.toString());
+      }
+      navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
     }
   };
 
-  // Exit questionnaire and go back to welcome page when not auth
+  // Exit questionnaire and go back to welcome page when not authenticated
   const handleQuit = () => {
     navigate("/");
   };
 
   // Handle the submission of the questionnaire
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const totalScore = calculateTotalScore(questions, responses);
-    localStorage.setItem("questionnaire", JSON.stringify(responses));
-    localStorage.setItem("totalScore", JSON.stringify(totalScore));
+    // Clear local storage
+    localStorage.removeItem("questionnaire");
     localStorage.removeItem("currentQuestion");
 
-    // If the user is authenticated, navigate to the regular results page
     if (isAuthenticated) {
+      try {
+        await saveQuestionnaireResponse({ responses, totalScore });
+        console.log("Successfully saved questionnaire response.");
+      } catch (error) {
+        console.error("Error submitting questionnaire:", error);
+      }
       navigate(RoutePaths.RESULTS);
     } else {
-      // If the user is not authenticated, navigate to the WelcomeResults page
+      // For guests, continue to use local storage
+      localStorage.setItem("questionnaire", JSON.stringify(responses));
+      localStorage.setItem("totalScore", totalScore.toString());
       navigate(RoutePaths.WELCOME_RESULTS);
     }
   };
 
-  // Determine if the "Next" button should be disabled
+  // Determine if "Next" or "Submit" buttons should be disabled
   const currentQuestionType = questions[currentQuestion - 1]?.type;
   const isNextDisabled =
     currentQuestionType !== Type.RANGE &&
     (responses[currentQuestion] === undefined ||
       responses[currentQuestion] === null);
 
-  // Determine if the "Submit" button should be disabled
   const isSubmitDisabled =
     currentQuestion === questions.length &&
     (responses[questions.length] === undefined ||
@@ -300,9 +381,13 @@ export function Questionnaire() {
     setCurrentQuestion(1);
   };
 
-  // Render the start-questionnaire page if the current question is 0
+  // Render the start/questionnaire page
   if (currentQuestion === 0) {
-    if (storedResponses) {
+    if (hasResponses === null) {
+      return <div>Loading...</div>;
+    }
+
+    if (hasResponses) {
       return (
         <RetakeQuestionnaire
           resetResponses={resetResponses}
@@ -310,6 +395,7 @@ export function Questionnaire() {
         />
       );
     }
+
     return <StartQuestionnaire isAuthenticated={isAuthenticated} />;
   }
 

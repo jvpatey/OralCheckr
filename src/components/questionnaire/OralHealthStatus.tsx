@@ -1,6 +1,8 @@
 import { Card, ProgressBar } from "react-bootstrap";
 import styled from "styled-components";
 import { useTheme } from "styled-components";
+import { getTotalScore } from "../../services/quesService";
+import { useState, useEffect } from "react";
 
 // Styled-component styles for Oral Health Status Component
 const StyledHeader = styled(Card.Header)`
@@ -90,8 +92,16 @@ export const getScoreColor = (score: number) => {
 
 // Functional component for the Oral Health Status Card
 export function OralHealthStatus() {
-  const storedScore = localStorage.getItem("totalScore");
-  const score = storedScore ? parseInt(storedScore, 10) : 0;
+  const [score, setScore] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchScore = async () => {
+      const fetchedScore = await getTotalScore();
+      setScore(fetchedScore ?? 0);
+    };
+
+    fetchScore();
+  }, []);
 
   const scoreColor = getScoreColor(score);
 
