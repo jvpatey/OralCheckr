@@ -2,13 +2,14 @@ import styled, { keyframes, useTheme } from "styled-components";
 import { Navbar, Container, Dropdown, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { RoutePaths } from "../common/constants/routes";
 import { NavLink } from "../common/links";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { ThemeType } from "../App";
 import { logoutUser } from "../services/authService";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "./authentication/AuthContext";
 
 interface NavBarProps {
   links: NavLink[];
@@ -180,9 +181,10 @@ const ThemeToggleContainer = styled.div`
 // Functional component to render the Navbar
 export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const location = useLocation();
-  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+  const { isAuthenticated, updateAuth } = useContext(AuthContext);
   const themeContext = useTheme();
   const isDarkMode = theme === ThemeType.DARK;
+  const navigate = useNavigate();
 
   // Handle the toggle for dark mode
   const toggleDarkMode = () => {
@@ -196,18 +198,19 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   // Handle logout logic
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const handleLogout = async () => {
-    if (isLoggingOut) return;
+  const handleLogout = async (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    e.preventDefault();
 
+    if (isLoggingOut) return;
     setIsLoggingOut(true);
 
     try {
       await logoutUser();
 
-      // Remove user session data
-      localStorage.removeItem("authenticated");
-      localStorage.removeItem("user");
-      window.location.href = "/";
+      updateAuth(null);
+      navigate("/");
 
       if (isDarkMode) {
         toggleDarkMode();

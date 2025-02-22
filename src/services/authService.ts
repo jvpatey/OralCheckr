@@ -2,6 +2,7 @@ import {
   REGISTER_ENDPOINT,
   LOGIN_ENDPOINT,
   GUEST_LOGIN_ENDPOINT,
+  VALIDATION_ENDPOINT,
   LOGOUT_ENDPOINT,
 } from "../config/authApiConfig";
 import { QUESTIONNAIRE_RESPONSE_ENDPOINT } from "../config/quesApiConfig";
@@ -122,7 +123,6 @@ export const handleGuestLogin = async (): Promise<void> => {
       const errorData = await response.json();
       throw new Error(errorData.error || "Failed to log in as guest");
     }
-    localStorage.setItem("authenticated", "true");
   } catch (err: any) {
     console.error("Guest login error:", err.message);
     throw new Error("Unable to log in as guest. Please try again.");
@@ -143,5 +143,25 @@ export const logoutUser = async (): Promise<void> => {
     }
   } catch (error) {
     console.error("Logout failed:", error);
+  }
+};
+
+/* -- User Authorization Service -- */
+
+export interface AuthResponse {
+  user: { userId: number | "guest"; role?: string };
+}
+
+export const validateAuth = async (): Promise<AuthResponse | null> => {
+  try {
+    const res = await fetch(VALIDATION_ENDPOINT, { credentials: "include" });
+    if (res.ok) {
+      return res.json();
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Auth validation failed:", error);
+    return null;
   }
 };

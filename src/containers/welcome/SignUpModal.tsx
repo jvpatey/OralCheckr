@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
-import { registerUser } from "../../services/authService";
+import { registerUser, validateAuth } from "../../services/authService";
+import { useContext } from "react";
+import { AuthContext } from "../authentication/AuthContext";
 
 interface SignUpModalProps {
   show: boolean;
@@ -88,6 +90,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { updateAuth } = useContext(AuthContext);
 
   const validatePassword = (password: string): string | null => {
     const requirements = [
@@ -126,8 +129,12 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
 
     try {
       await registerUser(userData);
-      localStorage.setItem("authenticated", "true");
-
+      const authData = await validateAuth();
+      if (authData) {
+        updateAuth(authData.user);
+      } else {
+        updateAuth(null);
+      }
       navigate(RoutePaths.LANDING);
       handleClose();
     } catch (err: any) {

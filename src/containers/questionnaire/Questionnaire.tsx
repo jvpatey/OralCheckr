@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import round from "lodash/round";
 import questionData from "../../common/questionnaire.json";
@@ -20,6 +20,7 @@ import {
   getQuestionnaireProgress,
   saveQuestionnaireProgress,
 } from "../../services/quesService";
+import { AuthContext } from "../authentication/AuthContext";
 
 // styled-component styles for Questionnaire Page
 
@@ -208,6 +209,7 @@ export function Questionnaire() {
   const storedResponses = localStorage.getItem("questionnaire");
   const [hasResponses, setHasResponses] = useState<boolean | null>(null);
   const [retakeMode, setRetakeMode] = useState<boolean>(false);
+  const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     const checkForSavedResponses = async () => {
@@ -219,9 +221,6 @@ export function Questionnaire() {
     };
     checkForSavedResponses();
   }, []);
-
-  // Check if the user is authenticated
-  const isAuthenticated = localStorage.getItem("authenticated") === "true";
 
   // State to keep track of the current question number and responses
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
@@ -284,7 +283,6 @@ export function Questionnaire() {
           setCurrentQuestion(1);
           setRetakeMode(false);
         }}
-        isAuthenticated={isAuthenticated}
       />
     );
   }
@@ -388,12 +386,7 @@ export function Questionnaire() {
     }
 
     if (hasResponses) {
-      return (
-        <RetakeQuestionnaire
-          resetResponses={resetResponses}
-          isAuthenticated={isAuthenticated}
-        />
-      );
+      return <RetakeQuestionnaire resetResponses={resetResponses} />;
     }
 
     return <StartQuestionnaire isAuthenticated={isAuthenticated} />;

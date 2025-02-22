@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { ButtonProps } from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import { QuestionnaireCardContainer } from "../../components/questionnaire/Quest
 import { QuestionnaireCard } from "../../components/questionnaire/QuestionnaireCard";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
 import { StyledModal } from "../../components/questionnaire/Modal";
+import { AuthContext } from "../authentication/AuthContext";
 
 const TitleText = styled.h1`
   color: ${({ theme }) => theme.blue};
@@ -103,15 +104,14 @@ const ModalButton = styled(Button)<ButtonProps>`
 
 interface RetakeQuestionnaireProps {
   resetResponses: () => void;
-  isAuthenticated: boolean;
 }
 
 export function RetakeQuestionnaire({
   resetResponses,
-  isAuthenticated,
 }: RetakeQuestionnaireProps) {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const { isAuthenticated } = useContext(AuthContext);
 
   const handleRetakeClick = () => {
     setShowModal(true);

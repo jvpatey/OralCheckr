@@ -1,12 +1,18 @@
 import { Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "./AuthContext";
 import { RoutePaths } from "../../common/constants/routes";
 
-export function RedirectIfAuthenticated({ children }: { children: JSX.Element }) {
-  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+export function RedirectIfAuthenticated({
+  children,
+}: {
+  children: JSX.Element;
+}) {
+  const { isAuthenticated, loading } = useContext(AuthContext);
 
-  if (isAuthenticated) {
-    return <Navigate to={RoutePaths.LANDING} />;
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
-  return children;
+  return isAuthenticated ? <Navigate to={RoutePaths.LANDING} /> : children;
 }
