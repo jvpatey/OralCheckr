@@ -8,7 +8,8 @@ import { NavLink } from "../common/links";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { ThemeType } from "../App";
 import { logoutUser } from "../services/authService";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "./authentication/AuthContext";
 
 interface NavBarProps {
   links: NavLink[];
@@ -180,7 +181,7 @@ const ThemeToggleContainer = styled.div`
 // Functional component to render the Navbar
 export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const location = useLocation();
-  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+  const { isAuthenticated, updateAuth } = useContext(AuthContext);
   const themeContext = useTheme();
   const isDarkMode = theme === ThemeType.DARK;
   const navigate = useNavigate();
@@ -208,9 +209,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
     try {
       await logoutUser();
 
-      // Remove user session data
-      localStorage.removeItem("authenticated");
-      localStorage.removeItem("user");
+      updateAuth(null);
       navigate("/");
 
       if (isDarkMode) {

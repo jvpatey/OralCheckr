@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavBar } from "./NavBar";
 import { Sidebar } from "../components/Sidebar";
 import {
@@ -9,6 +9,7 @@ import {
 } from "../common/links";
 import { RoutePaths } from "../common/constants/routes";
 import { ThemeType } from "../App";
+import { AuthContext } from "./authentication/AuthContext";
 
 interface RenderNavsProps {
   themeToggler: () => void;
@@ -19,14 +20,14 @@ interface RenderNavsProps {
 export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
   const location = useLocation();
   const [sidebarLinks, setSidebarLinks] = useState<NavLink[]>([]);
-
-  // Check for the user's authentication status
-  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+  const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     const currentPath = location.pathname;
     const isHabitTrackerRoute = currentPath.startsWith(RoutePaths.HABITS);
-    const isQuestionnaireRoute = currentPath.startsWith(RoutePaths.QUESTIONNAIRE);
+    const isQuestionnaireRoute = currentPath.startsWith(
+      RoutePaths.QUESTIONNAIRE
+    );
 
     if (isHabitTrackerRoute) {
       setSidebarLinks(
@@ -51,8 +52,14 @@ export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
 
   return (
     <>
-      <NavBar links={navbarLinks} themeToggler={themeToggler} theme={currentTheme} />
-      {isAuthenticated && sidebarLinks.length > 0 && <Sidebar links={sidebarLinks} />}
+      <NavBar
+        links={navbarLinks}
+        themeToggler={themeToggler}
+        theme={currentTheme}
+      />
+      {isAuthenticated && sidebarLinks.length > 0 && (
+        <Sidebar links={sidebarLinks} />
+      )}
     </>
   );
 }
