@@ -1,28 +1,47 @@
 import React, { createContext, useEffect, useState } from "react";
-import { validateAuth, AuthResponse } from "../../services/authService";
+import { validateAuth } from "../../services/authService";
+
+interface User {
+  userId: number | "guest";
+  role?: string;
+}
 
 interface AuthContextProps {
   isAuthenticated: boolean;
   loading: boolean;
-  user?: { userId: number | "guest"; role?: string };
+  user?: User;
+  updateAuth: (user: User | null) => void;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
   loading: true,
+  updateAuth: () => {},
 });
 
 export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
-  const [authState, setAuthState] = useState<AuthContextProps>({
+  const [authState, setAuthState] = useState<{
+    isAuthenticated: boolean;
+    loading: boolean;
+    user?: User;
+  }>({
     isAuthenticated: false,
     loading: true,
   });
 
+  const updateAuth = (user: User | null) => {
+    if (user) {
+      setAuthState({ isAuthenticated: true, loading: false, user });
+    } else {
+      setAuthState({ isAuthenticated: false, loading: false });
+    }
+  };
+
   useEffect(() => {
     (async () => {
-      const data: AuthResponse | null = await validateAuth();
+      const data = await validateAuth();
       if (data) {
         setAuthState({
           isAuthenticated: true,
@@ -36,6 +55,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   }, []);
 
   return (
-    <AuthContext.Provider value={authState}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ ...authState, updateAuth }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
