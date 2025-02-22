@@ -1,11 +1,13 @@
+import { useContext } from "react";
+import { AuthContext } from "./AuthContext";
 import { Navigate } from "react-router-dom";
 
 export function GuardedRoute({ children }: { children: JSX.Element }) {
-  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+  const { isAuthenticated, loading } = useContext(AuthContext);
 
-  if (isAuthenticated) {
-    return children;
+  if (loading) {
+    return <div>Loading... </div>;
   }
 
-  return <Navigate to="/" />;
+  return isAuthenticated ? children : <Navigate to="/" />;
 }

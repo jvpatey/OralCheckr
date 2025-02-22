@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
+import { validateAuth, AuthResponse } from "../../services/authService";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -20,23 +21,18 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   });
 
   useEffect(() => {
-    // Replace with your actual endpoint to validate the token
-    fetch("/api/auth/validate", { credentials: "include" })
-      .then(async (res) => {
-        if (res.ok) {
-          const data = await res.json();
-          setAuthState({
-            isAuthenticated: true,
-            loading: false,
-            user: data.user,
-          });
-        } else {
-          setAuthState({ isAuthenticated: false, loading: false });
-        }
-      })
-      .catch(() => {
+    (async () => {
+      const data: AuthResponse | null = await validateAuth();
+      if (data) {
+        setAuthState({
+          isAuthenticated: true,
+          loading: false,
+          user: data.user,
+        });
+      } else {
         setAuthState({ isAuthenticated: false, loading: false });
-      });
+      }
+    })();
   }, []);
 
   return (

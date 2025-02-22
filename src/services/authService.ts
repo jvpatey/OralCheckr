@@ -2,6 +2,7 @@ import {
   REGISTER_ENDPOINT,
   LOGIN_ENDPOINT,
   GUEST_LOGIN_ENDPOINT,
+  VALIDATION_ENDPOINT,
   LOGOUT_ENDPOINT,
 } from "../config/authApiConfig";
 import { QUESTIONNAIRE_RESPONSE_ENDPOINT } from "../config/quesApiConfig";
@@ -143,5 +144,25 @@ export const logoutUser = async (): Promise<void> => {
     }
   } catch (error) {
     console.error("Logout failed:", error);
+  }
+};
+
+/* -- User Authorization Service -- */
+
+export interface AuthResponse {
+  user: { userId: number | "guest"; role?: string };
+}
+
+export const validateAuth = async (): Promise<AuthResponse | null> => {
+  try {
+    const res = await fetch(VALIDATION_ENDPOINT, { credentials: "include" });
+    if (res.ok) {
+      return res.json();
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Auth validation failed:", error);
+    return null;
   }
 };
