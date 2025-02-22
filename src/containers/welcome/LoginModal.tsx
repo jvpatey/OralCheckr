@@ -7,7 +7,10 @@ import {
   loginUser,
   LoginData,
   handleGuestLogin,
+  validateAuth,
 } from "../../services/authService";
+import { useContext } from "react";
+import { AuthContext } from "../authentication/AuthContext";
 
 interface LoginModalProps {
   show: boolean;
@@ -99,6 +102,7 @@ const GuestLink = styled.a`
 
 export function LoginModal({ show, handleClose }: LoginModalProps) {
   const navigate = useNavigate();
+  const { updateAuth } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -115,11 +119,14 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
     const loginData: LoginData = { email, password };
 
     try {
-      // Call the backend login endpoint via the loginUser service function
+      // Call the login endpoint
       await loginUser(loginData);
-      localStorage.setItem("authenticated", "true");
-
-      // Redirect to landing page upon successful login
+      const authData = await validateAuth();
+      if (authData) {
+        updateAuth(authData.user);
+      } else {
+        updateAuth(null);
+      }
       navigate(RoutePaths.LANDING);
       handleClose();
     } catch (err: any) {
