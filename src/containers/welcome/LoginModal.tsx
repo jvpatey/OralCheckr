@@ -147,6 +147,12 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const handleGuestLoginClick = async () => {
     try {
       await handleGuestLogin();
+      const authData = await validateAuth();
+      if (authData) {
+        updateAuth(authData.user);
+      } else {
+        updateAuth(null);
+      }
       navigate(RoutePaths.LANDING);
       handleClose();
     } catch (err: any) {
