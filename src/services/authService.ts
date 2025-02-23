@@ -149,7 +149,7 @@ export const logoutUser = async (): Promise<void> => {
 /* -- User Authorization Service -- */
 
 export interface AuthResponse {
-  user: { userId: number | "guest"; role?: string };
+  user: { userId: number; role?: string };
 }
 
 export const validateAuth = async (): Promise<AuthResponse | null> => {
