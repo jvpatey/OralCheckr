@@ -206,7 +206,7 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
 export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
-  const storedResponses = localStorage.getItem("questionnaire");
+  const storedResponses = sessionStorage.getItem("questionnaire");
   const [hasResponses, setHasResponses] = useState<boolean | null>(null);
   const [retakeMode, setRetakeMode] = useState<boolean>(false);
   const { isAuthenticated } = useContext(AuthContext);
@@ -234,13 +234,18 @@ export function Questionnaire() {
     type: question.type as Type,
   }));
 
-  // When component mounts, determine currentQuestion from URL, localStorage, or DB (if authenticated)
+  // When component mounts, determine currentQuestion from URL, sessionStorage, or DB (if authenticated)
   useEffect(() => {
     const loadCurrentQuestion = async () => {
       if (questionId) {
         setCurrentQuestion(parseInt(questionId));
-      } else if (!isAuthenticated && localStorage.getItem("currentQuestion")) {
-        setCurrentQuestion(parseInt(localStorage.getItem("currentQuestion")!));
+      } else if (
+        !isAuthenticated &&
+        sessionStorage.getItem("currentQuestion")
+      ) {
+        setCurrentQuestion(
+          parseInt(sessionStorage.getItem("currentQuestion")!)
+        );
       } else {
         setCurrentQuestion(0);
       }
@@ -271,7 +276,7 @@ export function Questionnaire() {
   // Save current question in local storage or DB based on auth status
   useEffect(() => {
     if (!isAuthenticated && currentQuestion > 0) {
-      localStorage.setItem("currentQuestion", currentQuestion.toString());
+      sessionStorage.setItem("currentQuestion", currentQuestion.toString());
     }
   }, [currentQuestion, isAuthenticated]);
 
@@ -301,7 +306,7 @@ export function Questionnaire() {
         currentQuestion,
       });
     } else {
-      localStorage.setItem("questionnaire", JSON.stringify(updatedResponses));
+      sessionStorage.setItem("questionnaire", JSON.stringify(updatedResponses));
     }
   };
 
@@ -313,7 +318,7 @@ export function Questionnaire() {
       if (isAuthenticated) {
         saveQuestionnaireProgress({ responses, currentQuestion: newQuestion });
       } else {
-        localStorage.setItem("currentQuestion", newQuestion.toString());
+        sessionStorage.setItem("currentQuestion", newQuestion.toString());
       }
       navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
     }
@@ -327,7 +332,7 @@ export function Questionnaire() {
       if (isAuthenticated) {
         saveQuestionnaireProgress({ responses, currentQuestion: newQuestion });
       } else {
-        localStorage.setItem("currentQuestion", newQuestion.toString());
+        sessionStorage.setItem("currentQuestion", newQuestion.toString());
       }
       navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
     }
@@ -342,8 +347,8 @@ export function Questionnaire() {
   const handleSubmit = async () => {
     const totalScore = calculateTotalScore(questions, responses);
     // Clear local storage
-    localStorage.removeItem("questionnaire");
-    localStorage.removeItem("currentQuestion");
+    sessionStorage.removeItem("questionnaire");
+    sessionStorage.removeItem("currentQuestion");
 
     if (isAuthenticated) {
       try {
@@ -355,8 +360,8 @@ export function Questionnaire() {
       navigate(RoutePaths.RESULTS);
     } else {
       // For guests, continue to use local storage
-      localStorage.setItem("questionnaire", JSON.stringify(responses));
-      localStorage.setItem("totalScore", totalScore.toString());
+      sessionStorage.setItem("questionnaire", JSON.stringify(responses));
+      sessionStorage.setItem("totalScore", totalScore.toString());
       navigate(RoutePaths.WELCOME_RESULTS);
     }
   };

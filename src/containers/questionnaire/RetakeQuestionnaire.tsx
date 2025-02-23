@@ -118,9 +118,9 @@ export function RetakeQuestionnaire({
   };
 
   const handleConfirmRetake = () => {
-    localStorage.removeItem("questionnaire");
-    localStorage.removeItem("currentQuestion");
-    localStorage.removeItem("totalScore");
+    sessionStorage.removeItem("questionnaire");
+    sessionStorage.removeItem("currentQuestion");
+    sessionStorage.removeItem("totalScore");
     setShowModal(false);
     resetResponses();
     navigate(`${RoutePaths.QUESTIONNAIRE}/1`);

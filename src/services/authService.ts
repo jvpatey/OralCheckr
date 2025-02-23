@@ -26,9 +26,9 @@ export const moveLocalResponsesToDB = async (userId: number) => {
     });
 
     // Clear localStorage after saving
-    localStorage.removeItem("questionnaire");
-    localStorage.removeItem("currentQuestion");
-    localStorage.removeItem("totalScore");
+    sessionStorage.removeItem("questionnaire");
+    sessionStorage.removeItem("currentQuestion");
+    sessionStorage.removeItem("totalScore");
   }
 };
 
