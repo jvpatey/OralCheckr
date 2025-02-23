@@ -6,6 +6,7 @@ import { RoutePaths } from "../../common/constants/routes";
 import { registerUser, validateAuth } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
+import { convertGuestToUser } from "../../services/authService";
 
 interface SignUpModalProps {
   show: boolean;
@@ -90,7 +91,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { updateAuth } = useContext(AuthContext);
+  const { updateAuth, user } = useContext(AuthContext);
 
   const validatePassword = (password: string): string | null => {
     const requirements = [
@@ -128,7 +129,11 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
     const userData = { firstName, lastName, email, password };
 
     try {
-      await registerUser(userData);
+      if (user && user.role === "guest") {
+        await convertGuestToUser(userData);
+      } else {
+        await registerUser(userData);
+      }
       const authData = await validateAuth();
       if (authData) {
         updateAuth(authData.user);

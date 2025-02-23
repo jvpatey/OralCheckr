@@ -4,6 +4,7 @@ import {
   GUEST_LOGIN_ENDPOINT,
   VALIDATION_ENDPOINT,
   LOGOUT_ENDPOINT,
+  CONVERT_GUEST_ENDPOINT,
 } from "../config/authApiConfig";
 import { QUESTIONNAIRE_RESPONSE_ENDPOINT } from "../config/quesApiConfig";
 
@@ -164,4 +165,25 @@ export const validateAuth = async (): Promise<AuthResponse | null> => {
     console.error("Auth validation failed:", error);
     return null;
   }
+};
+
+/* -- Convert guest user to registered user on signup service -- */
+
+export const convertGuestToUser = async (userData: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}): Promise<{ userId: number }> => {
+  const response = await fetch(CONVERT_GUEST_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(userData),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Conversion failed");
+  }
+  return response.json();
 };
