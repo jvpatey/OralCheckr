@@ -1,8 +1,11 @@
+import { useState, useContext } from "react";
 import styled, { keyframes } from "styled-components";
 import { Card } from "react-bootstrap";
 import { OralHealthStatus } from "./OralHealthStatus";
 import { Recommendations } from "../../containers/questionnaire/Recommendations";
 import { PageBackground } from "../PageBackground";
+import { AuthContext } from "../../containers/authentication/AuthContext";
+import { SignUpModal } from "../../containers/welcome/SignUpModal";
 
 const fadeUp = keyframes`
   from {
@@ -115,7 +118,43 @@ const TileWrapper = styled.div`
   }
 `;
 
+const ConvertButton = styled.button`
+  background-color: ${({ theme }) => theme.green};
+  color: ${({ theme }) => theme.backgroundColor};
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 20px auto 0 auto;
+  display: block;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background-color: ${({ theme }) => theme.backgroundColor};
+    color: ${({ theme }) => theme.green};
+    border-color: ${({ theme }) => theme.green};
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    margin: 15px auto 0 auto;
+    width: 90%;
+  }
+
+  @media (max-width: 375px) {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    margin: 10px auto 0 auto;
+    width: 95%;
+  }
+`;
+
 export function Results() {
+  const { user } = useContext(AuthContext);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+
   return (
     <PageBackground>
       <ResultsCardContainer>
@@ -128,8 +167,20 @@ export function Results() {
               <Recommendations />
             </TileWrapper>
           </TilesContainer>
+          {/* If the user is a guest, display a sign up button*/}
+          {user && user.role === "guest" && (
+            <ConvertButton onClick={() => setShowSignUpModal(true)}>
+              Want a more personalized experience? Create an account today.
+            </ConvertButton>
+          )}
         </ResultsCard>
       </ResultsCardContainer>
+      {showSignUpModal && (
+        <SignUpModal
+          show={showSignUpModal}
+          handleClose={() => setShowSignUpModal(false)}
+        />
+      )}
     </PageBackground>
   );
 }

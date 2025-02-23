@@ -4,6 +4,7 @@ import {
   GUEST_LOGIN_ENDPOINT,
   VALIDATION_ENDPOINT,
   LOGOUT_ENDPOINT,
+  CONVERT_GUEST_ENDPOINT,
 } from "../config/authApiConfig";
 import { QUESTIONNAIRE_RESPONSE_ENDPOINT } from "../config/quesApiConfig";
 
@@ -25,9 +26,9 @@ export const moveLocalResponsesToDB = async (userId: number) => {
     });
 
     // Clear localStorage after saving
-    localStorage.removeItem("questionnaire");
-    localStorage.removeItem("currentQuestion");
-    localStorage.removeItem("totalScore");
+    sessionStorage.removeItem("questionnaire");
+    sessionStorage.removeItem("currentQuestion");
+    sessionStorage.removeItem("totalScore");
   }
 };
 
@@ -149,7 +150,7 @@ export const logoutUser = async (): Promise<void> => {
 /* -- User Authorization Service -- */
 
 export interface AuthResponse {
-  user: { userId: number | "guest"; role?: string };
+  user: { userId: number; role?: string };
 }
 
 export const validateAuth = async (): Promise<AuthResponse | null> => {
@@ -164,4 +165,25 @@ export const validateAuth = async (): Promise<AuthResponse | null> => {
     console.error("Auth validation failed:", error);
     return null;
   }
+};
+
+/* -- Convert guest user to registered user on signup service -- */
+
+export const convertGuestToUser = async (userData: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}): Promise<{ userId: number }> => {
+  const response = await fetch(CONVERT_GUEST_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(userData),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Conversion failed");
+  }
+  return response.json();
 };

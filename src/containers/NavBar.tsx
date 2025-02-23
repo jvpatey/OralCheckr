@@ -1,7 +1,7 @@
 import styled, { keyframes, useTheme } from "styled-components";
 import { Navbar, Container, Dropdown, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { RoutePaths } from "../common/constants/routes";
 import { NavLink } from "../common/links";
@@ -10,6 +10,7 @@ import { ThemeType } from "../App";
 import { logoutUser } from "../services/authService";
 import { useState, useContext } from "react";
 import { AuthContext } from "./authentication/AuthContext";
+import { SignUpModal } from "./welcome/SignUpModal";
 
 interface NavBarProps {
   links: NavLink[];
@@ -178,13 +179,40 @@ const ThemeToggleContainer = styled.div`
   }
 `;
 
+const CreateAccountButton = styled.button`
+  background-color: ${({ theme }) => theme.green};
+  color: ${({ theme }) => theme.backgroundColor};
+  border: none;
+  padding: 3px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 20px;
+
+  @media (min-width: 768px) {
+    align-self: center;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    text-align: left;
+    padding: 10px 20px;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.backgroundColor};
+  }
+`;
+
 // Functional component to render the Navbar
 export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const location = useLocation();
-  const { isAuthenticated, updateAuth } = useContext(AuthContext);
+  const { isAuthenticated, updateAuth, user } = useContext(AuthContext);
   const themeContext = useTheme();
   const isDarkMode = theme === ThemeType.DARK;
   const navigate = useNavigate();
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
 
   // Handle the toggle for dark mode
   const toggleDarkMode = () => {
@@ -234,61 +262,82 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   }
 
   return (
-    <CustomNavbar expand="lg" fixed="top">
-      <Container fluid>
-        <BrandText as={Link} to={RoutePaths.LANDING}>
-          <LogoImage src="images/logo-blue.png" alt="Logo" />
-          OralCheckr
-        </BrandText>
-        <Dropdown className="ms-auto d-lg-none">
-          <CustomDropdownToggle id="dropdown-basic">
-            <FontAwesomeIcon icon={faBars} />
-          </CustomDropdownToggle>
-          <CustomDropdownMenu align="end">
-            {links.map((link) => (
-              <CustomDropdownItem
-                key={link.path}
-                className={isActive(link.path) ? "active" : ""}
-                as={Link}
-                to={link.path === "/" ? "/" : link.path}
-                onClick={link.name === "Log Out" ? handleLogout : undefined}
-              >
-                <Icon>
-                  <FontAwesomeIcon icon={link.icon} />
-                </Icon>
-                {link.name}
-              </CustomDropdownItem>
-            ))}
-          </CustomDropdownMenu>
-        </Dropdown>
-        <CustomCollapse id="basic-navbar-nav">
-          <Nav className="ms-auto d-none d-lg-flex">
-            {links.map((link) => (
-              <CustomNavLink
-                key={link.path}
-                className={isActive(link.path) ? "active" : ""}
-                as={Link}
-                to={link.path === "/" ? "/" : link.path}
-                onClick={link.name === "Log Out" ? handleLogout : undefined}
-              >
-                <Icon>
-                  <FontAwesomeIcon icon={link.icon} />
-                </Icon>
-                {link.name}
-              </CustomNavLink>
-            ))}
-          </Nav>
-        </CustomCollapse>
-        <ThemeToggleContainer>
-          <DarkModeSwitch
-            checked={isDarkMode}
-            onChange={toggleDarkMode}
-            size={20}
-            moonColor={themeContext.blue}
-            sunColor={themeContext.blue}
-          />
-        </ThemeToggleContainer>
-      </Container>
-    </CustomNavbar>
+    <>
+      <CustomNavbar expand="lg" fixed="top">
+        <Container fluid>
+          <BrandText as={Link} to={RoutePaths.LANDING}>
+            <LogoImage src="images/logo-blue.png" alt="Logo" />
+            OralCheckr
+          </BrandText>
+          <Dropdown className="ms-auto d-lg-none">
+            <CustomDropdownToggle id="dropdown-basic">
+              <FontAwesomeIcon icon={faBars} />
+            </CustomDropdownToggle>
+            <CustomDropdownMenu align="end">
+              {user && user.role === "guest" && (
+                <CustomDropdownItem onClick={() => setShowSignUpModal(true)}>
+                  <Icon>
+                    <FontAwesomeIcon icon={faPlus} />
+                  </Icon>
+                  Create Account
+                </CustomDropdownItem>
+              )}
+              {links.map((link) => (
+                <CustomDropdownItem
+                  key={link.path}
+                  className={isActive(link.path) ? "active" : ""}
+                  as={Link}
+                  to={link.path === "/" ? "/" : link.path}
+                  onClick={link.name === "Log Out" ? handleLogout : undefined}
+                >
+                  <Icon>
+                    <FontAwesomeIcon icon={link.icon} />
+                  </Icon>
+                  {link.name}
+                </CustomDropdownItem>
+              ))}
+            </CustomDropdownMenu>
+          </Dropdown>
+          <CustomCollapse id="basic-navbar-nav">
+            <Nav className="ms-auto d-none d-lg-flex">
+              {links.map((link) => (
+                <CustomNavLink
+                  key={link.path}
+                  className={isActive(link.path) ? "active" : ""}
+                  as={Link}
+                  to={link.path === "/" ? "/" : link.path}
+                  onClick={link.name === "Log Out" ? handleLogout : undefined}
+                >
+                  <Icon>
+                    <FontAwesomeIcon icon={link.icon} />
+                  </Icon>
+                  {link.name}
+                </CustomNavLink>
+              ))}
+              {user && user.role === "guest" && (
+                <CreateAccountButton onClick={() => setShowSignUpModal(true)}>
+                  Create Account
+                </CreateAccountButton>
+              )}
+            </Nav>
+          </CustomCollapse>
+          <ThemeToggleContainer>
+            <DarkModeSwitch
+              checked={isDarkMode}
+              onChange={toggleDarkMode}
+              size={20}
+              moonColor={themeContext.blue}
+              sunColor={themeContext.blue}
+            />
+          </ThemeToggleContainer>
+        </Container>
+      </CustomNavbar>
+      {showSignUpModal && (
+        <SignUpModal
+          show={showSignUpModal}
+          handleClose={() => setShowSignUpModal(false)}
+        />
+      )}
+    </>
   );
 }

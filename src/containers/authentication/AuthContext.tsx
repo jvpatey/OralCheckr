@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import { validateAuth } from "../../services/authService";
 
 interface User {
-  userId: number | "guest";
+  userId: number;
   role?: string;
 }
 
