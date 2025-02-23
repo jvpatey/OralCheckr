@@ -215,9 +215,6 @@ export function Questionnaire() {
     const checkForSavedResponses = async () => {
       const exists = await hasSavedResponse();
       setHasResponses(exists);
-      if (exists) {
-        setRetakeMode(true);
-      }
     };
     checkForSavedResponses();
   }, []);
@@ -258,12 +255,22 @@ export function Questionnaire() {
   useEffect(() => {
     const fetchProgress = async () => {
       const progressData = await getQuestionnaireProgress();
-      if (progressData && !retakeMode) {
+      if (progressData) {
         if (progressData.responses) {
           setResponses(progressData.responses);
         }
         if (progressData.currentQuestion) {
           setCurrentQuestion(progressData.currentQuestion);
+        }
+        const totalQuestions = questionData.questions.length;
+        if (
+          progressData.currentQuestion === totalQuestions &&
+          progressData.responses &&
+          progressData.responses[totalQuestions] !== undefined
+        ) {
+          setRetakeMode(true);
+        } else {
+          setRetakeMode(false);
         }
       }
     };
@@ -271,7 +278,7 @@ export function Questionnaire() {
     if (isAuthenticated) {
       fetchProgress();
     }
-  }, [isAuthenticated, retakeMode]);
+  }, [isAuthenticated]);
 
   // Save current question in local storage or DB based on auth status
   useEffect(() => {
@@ -390,7 +397,8 @@ export function Questionnaire() {
       return <div>Loading...</div>;
     }
 
-    if (hasResponses) {
+    // Only show retake if responses exist and the questionnaire is complete (retakeMode is true)
+    if (hasResponses && retakeMode) {
       return <RetakeQuestionnaire resetResponses={resetResponses} />;
     }
 
