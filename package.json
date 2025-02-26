@@ -12,11 +12,12 @@
     "predeploy": "npm run build",
     "deploy:local": "gh-pages -d dist",
     "deploy": "gh-pages -d dist -r https://x-access-token:${GITHUB_TOKEN}@github.com/jvpatey/OralCheckr.git"
-    },
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@tanstack/react-query": "^5.66.9",
     "apexcharts": "^3.52.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",

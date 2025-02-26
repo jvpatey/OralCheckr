@@ -9,9 +9,10 @@ import {
 import { QUESTIONNAIRE_RESPONSE_ENDPOINT } from "../config/quesApiConfig";
 
 /* -- Questionnaire Data Service for Registration/Login -- */
+
 export const moveLocalResponsesToDB = async (userId: number) => {
-  const storedResponses = localStorage.getItem("questionnaire");
-  const storedScore = localStorage.getItem("totalScore");
+  const storedResponses = sessionStorage.getItem("questionnaire");
+  const storedScore = sessionStorage.getItem("totalScore");
 
   if (storedResponses && storedScore) {
     await fetch(QUESTIONNAIRE_RESPONSE_ENDPOINT, {
@@ -25,7 +26,7 @@ export const moveLocalResponsesToDB = async (userId: number) => {
       credentials: "include",
     });
 
-    // Clear localStorage after saving
+    // Clear sessionStorage after saving
     sessionStorage.removeItem("questionnaire");
     sessionStorage.removeItem("currentQuestion");
     sessionStorage.removeItem("totalScore");
@@ -34,15 +35,15 @@ export const moveLocalResponsesToDB = async (userId: number) => {
 
 /* -- Registration Service -- */
 
-interface RegisterData {
+export interface RegisterData {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
 }
 
-interface RegisterResponse {
-  message: string;
+export interface RegisterResponse {
+  message?: string;
   userId: number;
 }
 
