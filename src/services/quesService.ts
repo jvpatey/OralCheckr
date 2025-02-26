@@ -3,7 +3,7 @@ import {
   QUESTIONNAIRE_PROGRESS_ENDPOINT,
 } from "../config/quesApiConfig";
 
-interface SaveResponseData {
+export interface SaveResponseData {
   responses: Record<number, number | number[]>;
   totalScore: number;
 }
