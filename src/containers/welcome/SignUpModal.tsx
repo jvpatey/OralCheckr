@@ -3,10 +3,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
-import { registerUser, validateAuth } from "../../services/authService";
+import { validateAuth } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { convertGuestToUser } from "../../services/authService";
+import { useRegisterUser } from "../../hooks/useRegisterUser";
 
 interface SignUpModalProps {
   show: boolean;
@@ -92,6 +93,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { updateAuth, user } = useContext(AuthContext);
+  const { mutate: registerMutate } = useRegisterUser();
 
   const validatePassword = (password: string): string | null => {
     const requirements = [
@@ -130,18 +132,26 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
 
     try {
       if (user && user.role === "guest") {
+        // If the current user is a guest, convert them to a registered user.
         await convertGuestToUser(userData);
       } else {
-        await registerUser(userData);
+        // Use the mutation to register a new user.
+        registerMutate(userData, {
+          onSuccess: async () => {
+            const authData = await validateAuth();
+            if (authData) {
+              updateAuth(authData.user);
+            } else {
+              updateAuth(null);
+            }
+            navigate(RoutePaths.LANDING);
+            handleClose();
+          },
+          onError: (err: Error) => {
+            setError(err.message);
+          },
+        });
       }
-      const authData = await validateAuth();
-      if (authData) {
-        updateAuth(authData.user);
-      } else {
-        updateAuth(null);
-      }
-      navigate(RoutePaths.LANDING);
-      handleClose();
     } catch (err: any) {
       setError(err.message);
     }
