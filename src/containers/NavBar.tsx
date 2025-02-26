@@ -7,10 +7,10 @@ import { RoutePaths } from "../common/constants/routes";
 import { NavLink } from "../common/links";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { ThemeType } from "../App";
-import { logoutUser } from "../services/authService";
 import { useState, useContext } from "react";
 import { AuthContext } from "./authentication/AuthContext";
 import { SignUpModal } from "./welcome/SignUpModal";
+import { useLogoutUser } from "../hooks/useLogoutUser";
 
 interface NavBarProps {
   links: NavLink[];
@@ -213,6 +213,8 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const isDarkMode = theme === ThemeType.DARK;
   const navigate = useNavigate();
   const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { mutate: logoutMutate } = useLogoutUser();
 
   // Handle the toggle for dark mode
   const toggleDarkMode = () => {
@@ -223,32 +225,24 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
     );
   };
 
-  // Handle logout logic
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  const handleLogout = async (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => {
+  const handleLogout = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
 
     if (isLoggingOut) return;
     setIsLoggingOut(true);
 
-    try {
-      await logoutUser();
-
-      updateAuth(null);
-      navigate("/");
-
-      if (isDarkMode) {
-        toggleDarkMode();
-      }
-
-      setIsLoggingOut(false);
-    } catch (error) {
-      console.error("Logout error:", error);
-      setIsLoggingOut(false);
-    }
+    // Logout mutation
+    logoutMutate(undefined, {
+      onSuccess: () => {
+        updateAuth(null);
+        navigate("/");
+        setIsLoggingOut(false);
+      },
+      onError: (error: Error) => {
+        console.error("Logout error:", error);
+        setIsLoggingOut(false);
+      },
+    });
   };
 
   const isActive = (href: string) => {
