@@ -5,9 +5,9 @@ import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
-import { convertGuestToUser } from "../../services/authService";
 import { useRegisterUser } from "../../hooks/useRegisterUser";
 import { useMoveLocalResponsesToDB } from "../../hooks/useMoveLocalResponsesToDB";
+import { useConvertGuestToUser } from "../../hooks/useConvertGuestToUser";
 
 interface SignUpModalProps {
   show: boolean;
@@ -95,8 +95,10 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const { updateAuth, user } = useContext(AuthContext);
   // registration mutation
   const { mutate: registerMutate } = useRegisterUser();
-  //mutation for moving local responses to DB
+  // mutation for moving local responses to DB
   const { mutateAsync: moveLocalResponses } = useMoveLocalResponsesToDB();
+  // mutation for converting guest to a registered user
+  const { mutate: convertGuestMutate } = useConvertGuestToUser();
 
   const validatePassword = (password: string): string | null => {
     const requirements = [
@@ -135,12 +137,18 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
 
     try {
       if (user && user.role === "guest") {
-        // For guest conversion, convert and then move local responses.
-        const convertResponse = await convertGuestToUser(userData);
-        await moveLocalResponses(convertResponse.userId);
-        updateAuth(null);
-        navigate(RoutePaths.LANDING);
-        handleClose();
+        // convert guest mutation when guest signs up for account
+        convertGuestMutate(userData, {
+          onSuccess: async (data) => {
+            await moveLocalResponses(data.userId);
+            updateAuth(null);
+            navigate(RoutePaths.LANDING);
+            handleClose();
+          },
+          onError: (err: Error) => {
+            setError(err.message);
+          },
+        });
       } else {
         // For new registrations, use the registration mutation.
         registerMutate(userData, {
