@@ -156,7 +156,6 @@ const addRecommendation = (
 
 // Functional component for the Recommendations card
 export function Recommendations() {
-  // Use the custom hook to fetch questionnaire responses
   const {
     data: storedResponses,
     isLoading,
