@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
-import { validateAuth } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { convertGuestToUser } from "../../services/authService";
@@ -139,8 +138,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
         // For guest conversion, convert and then move local responses.
         const convertResponse = await convertGuestToUser(userData);
         await moveLocalResponses(convertResponse.userId);
-        const authData = await validateAuth();
-        updateAuth(authData ? authData.user : null);
+        updateAuth(null);
         navigate(RoutePaths.LANDING);
         handleClose();
       } else {
@@ -148,8 +146,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
         registerMutate(userData, {
           onSuccess: async (data) => {
             await moveLocalResponses(data.userId);
-            const authData = await validateAuth();
-            updateAuth(authData ? authData.user : null);
+            updateAuth(null);
             navigate(RoutePaths.LANDING);
             handleClose();
           },

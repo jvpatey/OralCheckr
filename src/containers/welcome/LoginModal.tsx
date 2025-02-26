@@ -3,11 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
-import {
-  LoginData,
-  handleGuestLogin,
-  validateAuth,
-} from "../../services/authService";
+import { LoginData, handleGuestLogin } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useLoginUser } from "../../hooks/useLoginUser";
@@ -129,8 +125,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
         onSuccess: async (data) => {
           // moveLocalResponses mutation
           await moveLocalResponses(data.userId);
-          const authData = await validateAuth();
-          updateAuth(authData ? authData.user : null);
+          updateAuth(null);
           navigate(RoutePaths.LANDING);
           handleClose();
         },
@@ -156,12 +151,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const handleGuestLoginClick = async () => {
     try {
       await handleGuestLogin();
-      const authData = await validateAuth();
-      if (authData) {
-        updateAuth(authData.user);
-      } else {
-        updateAuth(null);
-      }
+      updateAuth(null);
       navigate(RoutePaths.LANDING);
       handleClose();
     } catch (err: any) {

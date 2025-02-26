@@ -1,5 +1,5 @@
-import React, { createContext, useEffect, useState } from "react";
-import { validateAuth } from "../../services/authService";
+import React, { createContext } from "react";
+import { useValidateAuth } from "../../hooks/useValidateAuth";
 
 interface User {
   userId: number;
@@ -22,40 +22,28 @@ export const AuthContext = createContext<AuthContextProps>({
 export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
-  const [authState, setAuthState] = useState<{
-    isAuthenticated: boolean;
-    loading: boolean;
-    user?: User;
-  }>({
-    isAuthenticated: false,
-    loading: true,
-  });
+  const { data, isLoading, refetch } = useValidateAuth();
 
-  const updateAuth = (user: User | null) => {
-    if (user) {
-      setAuthState({ isAuthenticated: true, loading: false, user });
-    } else {
-      setAuthState({ isAuthenticated: false, loading: false });
-    }
+  const updateAuth = (_user: User | null) => {
+    // After login or logout refetch to update auth state.
+    refetch();
   };
 
-  useEffect(() => {
-    (async () => {
-      const data = await validateAuth();
-      if (data) {
-        setAuthState({
-          isAuthenticated: true,
-          loading: false,
-          user: data.user,
-        });
-      } else {
-        setAuthState({ isAuthenticated: false, loading: false });
-      }
-    })();
-  }, []);
+  const authState = {
+    isAuthenticated: !!data,
+    loading: isLoading,
+    authUser: data?.user,
+  };
 
   return (
-    <AuthContext.Provider value={{ ...authState, updateAuth }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated: authState.isAuthenticated,
+        loading: authState.loading,
+        user: authState.authUser,
+        updateAuth,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
