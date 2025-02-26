@@ -6,8 +6,8 @@ import { RoutePaths } from "../../common/constants/routes";
 import { LoginData, handleGuestLogin } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
-import { useLoginUser } from "../../hooks/useLoginUser";
-import { useMoveLocalResponsesToDB } from "../../hooks/useMoveLocalResponsesToDB";
+import { useLoginUser } from "../../hooks/auth/useLoginUser";
+import { useMoveLocalResponsesToDB } from "../../hooks/auth/useMoveLocalResponsesToDB";
 
 interface LoginModalProps {
   show: boolean;

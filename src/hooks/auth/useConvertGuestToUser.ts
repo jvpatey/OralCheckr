@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { convertGuestToUser } from "../services/authService";
+import { convertGuestToUser } from "../../services/authService";
 
 export const useConvertGuestToUser = () => {
   return useMutation<

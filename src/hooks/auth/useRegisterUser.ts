@@ -3,7 +3,7 @@ import {
   registerUser,
   RegisterData,
   RegisterResponse,
-} from "../services/authService";
+} from "../../services/authService";
 
 export const useRegisterUser = () => {
   return useMutation<RegisterResponse, Error, RegisterData>({

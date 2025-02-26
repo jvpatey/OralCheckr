@@ -10,7 +10,7 @@ import { ThemeType } from "../App";
 import { useState, useContext } from "react";
 import { AuthContext } from "./authentication/AuthContext";
 import { SignUpModal } from "./welcome/SignUpModal";
-import { useLogoutUser } from "../hooks/useLogoutUser";
+import { useLogoutUser } from "../hooks/auth/useLogoutUser";
 
 interface NavBarProps {
   links: NavLink[];

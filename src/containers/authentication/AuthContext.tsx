@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { useValidateAuth } from "../../hooks/useValidateAuth";
+import { useValidateAuth } from "../../hooks/auth/useValidateAuth";
 
 interface User {
   userId: number;

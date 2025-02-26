@@ -5,9 +5,9 @@ import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
-import { useRegisterUser } from "../../hooks/useRegisterUser";
-import { useMoveLocalResponsesToDB } from "../../hooks/useMoveLocalResponsesToDB";
-import { useConvertGuestToUser } from "../../hooks/useConvertGuestToUser";
+import { useRegisterUser } from "../../hooks/auth/useRegisterUser";
+import { useMoveLocalResponsesToDB } from "../../hooks/auth/useMoveLocalResponsesToDB";
+import { useConvertGuestToUser } from "../../hooks/auth/useConvertGuestToUser";
 
 interface SignUpModalProps {
   show: boolean;
