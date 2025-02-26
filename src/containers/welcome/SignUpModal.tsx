@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { convertGuestToUser } from "../../services/authService";
 import { useRegisterUser } from "../../hooks/useRegisterUser";
+import { useMoveLocalResponsesToDB } from "../../hooks/useMoveLocalResponsesToDB";
 
 interface SignUpModalProps {
   show: boolean;
@@ -93,7 +94,10 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { updateAuth, user } = useContext(AuthContext);
+  // registration mutation
   const { mutate: registerMutate } = useRegisterUser();
+  //mutation for moving local responses to DB
+  const { mutateAsync: moveLocalResponses } = useMoveLocalResponsesToDB();
 
   const validatePassword = (password: string): string | null => {
     const requirements = [
@@ -132,18 +136,20 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
 
     try {
       if (user && user.role === "guest") {
-        // If the current user is a guest, convert them to a registered user.
-        await convertGuestToUser(userData);
+        // For guest conversion, convert and then move local responses.
+        const convertResponse = await convertGuestToUser(userData);
+        await moveLocalResponses(convertResponse.userId);
+        const authData = await validateAuth();
+        updateAuth(authData ? authData.user : null);
+        navigate(RoutePaths.LANDING);
+        handleClose();
       } else {
-        // Use the mutation to register a new user.
+        // For new registrations, use the registration mutation.
         registerMutate(userData, {
-          onSuccess: async () => {
+          onSuccess: async (data) => {
+            await moveLocalResponses(data.userId);
             const authData = await validateAuth();
-            if (authData) {
-              updateAuth(authData.user);
-            } else {
-              updateAuth(null);
-            }
+            updateAuth(authData ? authData.user : null);
             navigate(RoutePaths.LANDING);
             handleClose();
           },

@@ -64,9 +64,6 @@ export const registerUser = async (
 
     const result = await response.json();
 
-    // Move local responses to DB after registration
-    await moveLocalResponsesToDB(result.userId);
-
     return result;
   } catch (error: any) {
     throw new Error(error.message || "Unexpected error occurred.");
