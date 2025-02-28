@@ -14,11 +14,11 @@ import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { getQuestionnaireProgress } from "../../services/quesService";
 import { AuthContext } from "../authentication/AuthContext";
 import { useSaveQuestionnaireResponse } from "../../hooks/questionnaire/useSaveQuestionnaireResponse";
 import { useHasSavedResponse } from "../../hooks/questionnaire/useHasSavedResponse";
 import { useSaveQuestionnaireProgress } from "../../hooks/questionnaire/useSaveQuestionnaireProgress";
+import { useGetQuestionnaireProgress } from "../../hooks/questionnaire/useGetQuestionnaireProgress";
 
 // styled-component styles for Questionnaire Page
 
@@ -173,7 +173,6 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
     let questionScore = 0;
 
     if (response !== undefined) {
-      // Check if the response is an array (checkbox input) before calculating the score
       if (Array.isArray(response)) {
         response.forEach((ele) => {
           questionScore += findOptionScore(ele, question, maxPointsPerQuestion);
@@ -186,12 +185,9 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
         );
       }
     }
-    // Ensure the score for this question does not exceed the max points per question
     totalScore += Math.min(questionScore, maxPointsPerQuestion);
   });
-  // Ensure the total score does not exceed 100
   totalScore = Math.min(totalScore, 100);
-  // Round the total score to the nearest integer
   totalScore = round(totalScore, 0);
 
   return totalScore;
@@ -209,10 +205,10 @@ export function Questionnaire() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [retakeMode, setRetakeMode] = useState(false);
 
-  // Check if saved responses exist
+  // Check if saved responses exist (for guests)
   const { isLoading: isLoadingResponses } = useHasSavedResponse();
 
-  // React Query mutation for saving questionnaire responses
+  // Mutation hook for saving questionnaire responses (final submission)
   const {
     mutateAsync: saveResponseMutate,
     status,
@@ -220,10 +216,14 @@ export function Questionnaire() {
   } = useSaveQuestionnaireResponse();
   const isSaving = status === "pending";
 
-  // React Query mutation for saving questionnaire progress
+  // mutation hook for saving progress
   const { mutateAsync: saveProgressMutate } = useSaveQuestionnaireProgress();
 
-  // Determine currentQuestion from URL, sessionStorage, or DB (if authenticated)
+  // React Query hook to fetch progress for authenticated users
+  const { data: progressData, isLoading: isLoadingProgress } =
+    useGetQuestionnaireProgress();
+
+  // Determine currentQuestion from URL or sessionStorage (for guests)
   useEffect(() => {
     const loadCurrentQuestion = async () => {
       if (questionId) {
@@ -242,40 +242,33 @@ export function Questionnaire() {
     loadCurrentQuestion();
   }, [questionId, isAuthenticated]);
 
-  // Fetch progress from the DB for authenticated users
+  // For authenticated users, update progress when the hook returns data
   useEffect(() => {
-    const fetchProgress = async () => {
-      const progressData = await getQuestionnaireProgress();
-      if (progressData) {
-        if (progressData.responses) {
-          setResponses(progressData.responses);
-        }
-        if (progressData.currentQuestion) {
-          setCurrentQuestion(progressData.currentQuestion);
-        }
-        const totalQuestions = questionData.questions.length;
-        if (
-          progressData.currentQuestion === totalQuestions &&
-          progressData.responses &&
-          progressData.responses[totalQuestions] !== undefined
-        ) {
-          setRetakeMode(true);
-        }
+    if (isAuthenticated && progressData) {
+      if (progressData.responses) {
+        setResponses(progressData.responses);
       }
-    };
-    if (isAuthenticated) {
-      fetchProgress();
+      if (progressData.currentQuestion) {
+        setCurrentQuestion(progressData.currentQuestion);
+      }
+      const totalQuestions = questionData.questions.length;
+      if (
+        progressData.currentQuestion === totalQuestions &&
+        progressData.responses &&
+        progressData.responses[totalQuestions] !== undefined
+      ) {
+        setRetakeMode(true);
+      }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, progressData]);
 
-  // Save current question in local storage or DB based on auth status
+  // Save current question in sessionStorage for guests
   useEffect(() => {
     if (!isAuthenticated && currentQuestion > 0) {
       sessionStorage.setItem("currentQuestion", currentQuestion.toString());
     }
   }, [currentQuestion, isAuthenticated]);
 
-  // If retake mode is set, render the RetakeQuestionnaire component
   if (retakeMode) {
     return (
       <RetakeQuestionnaire
@@ -288,8 +281,7 @@ export function Questionnaire() {
     );
   }
 
-  // Show loading screen until we know if saved responses exist
-  if (isLoadingResponses) {
+  if (isLoadingResponses || (isAuthenticated && isLoadingProgress)) {
     return <div>Loading...</div>;
   }
 
@@ -307,7 +299,6 @@ export function Questionnaire() {
     setResponses(updated);
 
     if (isAuthenticated) {
-      // Use our new hook to save progress
       try {
         await saveProgressMutate({ responses: updated, currentQuestion });
       } catch (err) {
@@ -325,7 +316,6 @@ export function Questionnaire() {
       setCurrentQuestion(newQuestion);
 
       if (isAuthenticated) {
-        // Save progress for authenticated users
         try {
           await saveProgressMutate({ responses, currentQuestion: newQuestion });
         } catch (err) {
@@ -346,7 +336,6 @@ export function Questionnaire() {
       setCurrentQuestion(newQuestion);
 
       if (isAuthenticated) {
-        // Save progress for authenticated users
         try {
           await saveProgressMutate({ responses, currentQuestion: newQuestion });
         } catch (err) {
@@ -373,9 +362,8 @@ export function Questionnaire() {
 
     if (isAuthenticated) {
       try {
-        // Optionally, save final progress before submitting
+        // Optionally, save final progress before submission
         await saveProgressMutate({ responses, currentQuestion });
-        // Then save the final questionnaire response
         await saveResponseMutate({ responses, totalScore });
         console.log("Successfully saved questionnaire response.");
       } catch (err) {
@@ -394,7 +382,6 @@ export function Questionnaire() {
     return <StartQuestionnaire isAuthenticated={isAuthenticated} />;
   }
 
-  // Button state logic
   const currentQuestionType = questions[currentQuestion - 1]?.type;
   const isNextDisabled =
     currentQuestionType !== Type.RANGE &&
