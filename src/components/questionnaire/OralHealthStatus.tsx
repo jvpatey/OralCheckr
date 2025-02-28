@@ -1,8 +1,7 @@
 import { Card, ProgressBar } from "react-bootstrap";
 import styled from "styled-components";
 import { useTheme } from "styled-components";
-import { getTotalScore } from "../../services/quesService";
-import { useState, useEffect } from "react";
+import { useGetTotalScore } from "../../hooks/questionnaire/useGetTotalScore";
 
 // Styled-component styles for Oral Health Status Component
 const StyledHeader = styled(Card.Header)`
@@ -92,18 +91,17 @@ export const getScoreColor = (score: number) => {
 
 // Functional component for the Oral Health Status Card
 export function OralHealthStatus() {
-  const [score, setScore] = useState<number>(0);
+  // Use react query hook to fetch the total score
+  const { data: score, isLoading, error } = useGetTotalScore();
+  const scoreColor = getScoreColor(score ?? 0);
 
-  useEffect(() => {
-    const fetchScore = async () => {
-      const fetchedScore = await getTotalScore();
-      setScore(fetchedScore ?? 0);
-    };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-    fetchScore();
-  }, []);
-
-  const scoreColor = getScoreColor(score);
+  if (error || score === null) {
+    return <div>Error loading your score.</div>;
+  }
 
   return (
     <>
