@@ -14,13 +14,11 @@ import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import {
-  getQuestionnaireProgress,
-  saveQuestionnaireProgress,
-} from "../../services/quesService";
+import { getQuestionnaireProgress } from "../../services/quesService";
 import { AuthContext } from "../authentication/AuthContext";
 import { useSaveQuestionnaireResponse } from "../../hooks/questionnaire/useSaveQuestionnaireResponse";
 import { useHasSavedResponse } from "../../hooks/questionnaire/useHasSavedResponse";
+import { useSaveQuestionnaireProgress } from "../../hooks/questionnaire/useSaveQuestionnaireProgress";
 
 // styled-component styles for Questionnaire Page
 
@@ -211,7 +209,7 @@ export function Questionnaire() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [retakeMode, setRetakeMode] = useState(false);
 
-  // Use query hook to check if saved responses exist
+  // Check if saved responses exist
   const { isLoading: isLoadingResponses } = useHasSavedResponse();
 
   // React Query mutation for saving questionnaire responses
@@ -221,6 +219,9 @@ export function Questionnaire() {
     error: saveError,
   } = useSaveQuestionnaireResponse();
   const isSaving = status === "pending";
+
+  // React Query mutation for saving questionnaire progress
+  const { mutateAsync: saveProgressMutate } = useSaveQuestionnaireProgress();
 
   // Determine currentQuestion from URL, sessionStorage, or DB (if authenticated)
   useEffect(() => {
@@ -274,6 +275,7 @@ export function Questionnaire() {
     }
   }, [currentQuestion, isAuthenticated]);
 
+  // If retake mode is set, render the RetakeQuestionnaire component
   if (retakeMode) {
     return (
       <RetakeQuestionnaire
@@ -297,46 +299,68 @@ export function Questionnaire() {
   }));
 
   // Handle response change
-  const handleResponseChange = (qid: number, response: number | number[]) => {
+  const handleResponseChange = async (
+    qid: number,
+    response: number | number[]
+  ) => {
     const updated = { ...responses, [qid]: response };
     setResponses(updated);
 
     if (isAuthenticated) {
-      saveQuestionnaireProgress({ responses: updated, currentQuestion });
+      // Use our new hook to save progress
+      try {
+        await saveProgressMutate({ responses: updated, currentQuestion });
+      } catch (err) {
+        console.error("Error saving progress:", err);
+      }
     } else {
       sessionStorage.setItem("questionnaire", JSON.stringify(updated));
     }
   };
 
-  // Navigate to the next question and save progress if authenticated
-  const handleNext = () => {
+  // Navigate to the next question
+  const handleNext = async () => {
     if (currentQuestion < questions.length) {
       const newQuestion = currentQuestion + 1;
       setCurrentQuestion(newQuestion);
+
       if (isAuthenticated) {
-        saveQuestionnaireProgress({ responses, currentQuestion: newQuestion });
+        // Save progress for authenticated users
+        try {
+          await saveProgressMutate({ responses, currentQuestion: newQuestion });
+        } catch (err) {
+          console.error("Error saving progress:", err);
+        }
       } else {
         sessionStorage.setItem("currentQuestion", newQuestion.toString());
       }
+
       navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
     }
   };
 
-  // Navigate to the previous question and save progress if authenticated
-  const handlePrevious = () => {
+  // Navigate to the previous question
+  const handlePrevious = async () => {
     if (currentQuestion > 1) {
       const newQuestion = currentQuestion - 1;
       setCurrentQuestion(newQuestion);
+
       if (isAuthenticated) {
-        saveQuestionnaireProgress({ responses, currentQuestion: newQuestion });
+        // Save progress for authenticated users
+        try {
+          await saveProgressMutate({ responses, currentQuestion: newQuestion });
+        } catch (err) {
+          console.error("Error saving progress:", err);
+        }
       } else {
         sessionStorage.setItem("currentQuestion", newQuestion.toString());
       }
+
       navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
     }
   };
 
-  // Exit questionnaire and go back to welcome page when not authenticated
+  // Exit questionnaire for guests
   const handleQuit = () => {
     navigate("/");
   };
@@ -349,6 +373,9 @@ export function Questionnaire() {
 
     if (isAuthenticated) {
       try {
+        // Optionally, save final progress before submitting
+        await saveProgressMutate({ responses, currentQuestion });
+        // Then save the final questionnaire response
         await saveResponseMutate({ responses, totalScore });
         console.log("Successfully saved questionnaire response.");
       } catch (err) {
@@ -367,6 +394,7 @@ export function Questionnaire() {
     return <StartQuestionnaire isAuthenticated={isAuthenticated} />;
   }
 
+  // Button state logic
   const currentQuestionType = questions[currentQuestion - 1]?.type;
   const isNextDisabled =
     currentQuestionType !== Type.RANGE &&
