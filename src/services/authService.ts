@@ -107,7 +107,10 @@ export const loginUser = async (
 
 /* -- Guest Login Service -- */
 
-export const handleGuestLogin = async (): Promise<void> => {
+export const handleGuestLogin = async (): Promise<{
+  userId: number;
+  role: string;
+}> => {
   try {
     const response = await fetch(GUEST_LOGIN_ENDPOINT, {
       method: "POST",
@@ -119,6 +122,9 @@ export const handleGuestLogin = async (): Promise<void> => {
       const errorData = await response.json();
       throw new Error(errorData.error || "Failed to log in as guest");
     }
+
+    const { userId, role } = await response.json();
+    return { userId, role };
   } catch (err: any) {
     console.error("Guest login error:", err.message);
     throw new Error("Unable to log in as guest. Please try again.");
