@@ -118,9 +118,6 @@ export function RetakeQuestionnaire({
   };
 
   const handleConfirmRetake = () => {
-    sessionStorage.removeItem("questionnaire");
-    sessionStorage.removeItem("currentQuestion");
-    sessionStorage.removeItem("totalScore");
     setShowModal(false);
     resetResponses();
     navigate(`${RoutePaths.QUESTIONNAIRE}/1`);

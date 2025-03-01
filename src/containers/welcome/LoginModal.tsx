@@ -7,7 +7,6 @@ import { LoginData } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useLoginUser } from "../../hooks/auth/useLoginUser";
-import { useMoveLocalResponsesToDB } from "../../hooks/auth/useMoveLocalResponsesToDB";
 
 interface LoginModalProps {
   show: boolean;
@@ -90,8 +89,6 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [error, setError] = useState("");
   // Login mutation
   const { mutate: loginMutate } = useLoginUser();
-  // Mutation for moving local responses to DB
-  const { mutateAsync: moveLocalResponses } = useMoveLocalResponsesToDB();
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,8 +105,6 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       // Login mutation
       loginMutate(loginData, {
         onSuccess: async (data) => {
-          // moveLocalResponses mutation
-          await moveLocalResponses(data.userId);
           updateAuth(null);
           navigate(RoutePaths.LANDING);
           handleClose();

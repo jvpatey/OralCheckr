@@ -198,14 +198,11 @@ export function Questionnaire() {
   const navigate = useNavigate();
   const { isAuthenticated } = useContext(AuthContext);
 
-  const storedResponses = sessionStorage.getItem("questionnaire");
-  const [responses, setResponses] = useState<Responses>(
-    storedResponses ? JSON.parse(storedResponses) : {}
-  );
+  const [responses, setResponses] = useState<Responses>({});
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [retakeMode, setRetakeMode] = useState(false);
 
-  // Check if saved responses exist (for guests)
+  // Check if saved responses exist
   const { isLoading: isLoadingResponses } = useHasSavedResponse();
 
   // Mutation hook for saving questionnaire responses (final submission)
@@ -219,32 +216,22 @@ export function Questionnaire() {
   // mutation hook for saving progress
   const { mutateAsync: saveProgressMutate } = useSaveQuestionnaireProgress();
 
-  // React Query hook to fetch progress for authenticated users
+  // React Query hook to fetch progress
   const { data: progressData, isLoading: isLoadingProgress } =
     useGetQuestionnaireProgress();
 
-  // Determine currentQuestion from URL or sessionStorage (for guests)
+  // Determine currentQuestion from URL or progress data
   useEffect(() => {
-    const loadCurrentQuestion = async () => {
-      if (questionId) {
-        setCurrentQuestion(parseInt(questionId));
-      } else if (
-        !isAuthenticated &&
-        sessionStorage.getItem("currentQuestion")
-      ) {
-        setCurrentQuestion(
-          parseInt(sessionStorage.getItem("currentQuestion")!)
-        );
-      } else {
-        setCurrentQuestion(0);
-      }
-    };
-    loadCurrentQuestion();
-  }, [questionId, isAuthenticated]);
+    if (questionId) {
+      setCurrentQuestion(parseInt(questionId));
+    } else {
+      setCurrentQuestion(0);
+    }
+  }, [questionId]);
 
-  // For authenticated users, update progress when the hook returns data
+  // Update progress when the hook returns data
   useEffect(() => {
-    if (isAuthenticated && progressData) {
+    if (progressData) {
       if (progressData.responses) {
         setResponses(progressData.responses);
       }
@@ -260,14 +247,7 @@ export function Questionnaire() {
         setRetakeMode(true);
       }
     }
-  }, [isAuthenticated, progressData]);
-
-  // Save current question in sessionStorage for guests
-  useEffect(() => {
-    if (!isAuthenticated && currentQuestion > 0) {
-      sessionStorage.setItem("currentQuestion", currentQuestion.toString());
-    }
-  }, [currentQuestion, isAuthenticated]);
+  }, [progressData]);
 
   if (retakeMode) {
     return (
@@ -281,7 +261,7 @@ export function Questionnaire() {
     );
   }
 
-  if (isLoadingResponses || (isAuthenticated && isLoadingProgress)) {
+  if (isLoadingResponses || isLoadingProgress) {
     return <div>Loading...</div>;
   }
 
@@ -298,14 +278,10 @@ export function Questionnaire() {
     const updated = { ...responses, [qid]: response };
     setResponses(updated);
 
-    if (isAuthenticated) {
-      try {
-        await saveProgressMutate({ responses: updated, currentQuestion });
-      } catch (err) {
-        console.error("Error saving progress:", err);
-      }
-    } else {
-      sessionStorage.setItem("questionnaire", JSON.stringify(updated));
+    try {
+      await saveProgressMutate({ responses: updated, currentQuestion });
+    } catch (err) {
+      console.error("Error saving progress:", err);
     }
   };
 
@@ -315,14 +291,10 @@ export function Questionnaire() {
       const newQuestion = currentQuestion + 1;
       setCurrentQuestion(newQuestion);
 
-      if (isAuthenticated) {
-        try {
-          await saveProgressMutate({ responses, currentQuestion: newQuestion });
-        } catch (err) {
-          console.error("Error saving progress:", err);
-        }
-      } else {
-        sessionStorage.setItem("currentQuestion", newQuestion.toString());
+      try {
+        await saveProgressMutate({ responses, currentQuestion: newQuestion });
+      } catch (err) {
+        console.error("Error saving progress:", err);
       }
 
       navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
@@ -335,21 +307,17 @@ export function Questionnaire() {
       const newQuestion = currentQuestion - 1;
       setCurrentQuestion(newQuestion);
 
-      if (isAuthenticated) {
-        try {
-          await saveProgressMutate({ responses, currentQuestion: newQuestion });
-        } catch (err) {
-          console.error("Error saving progress:", err);
-        }
-      } else {
-        sessionStorage.setItem("currentQuestion", newQuestion.toString());
+      try {
+        await saveProgressMutate({ responses, currentQuestion: newQuestion });
+      } catch (err) {
+        console.error("Error saving progress:", err);
       }
 
       navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
     }
   };
 
-  // Exit questionnaire for guests
+  // Exit questionnaire
   const handleQuit = () => {
     navigate("/");
   };
@@ -357,22 +325,20 @@ export function Questionnaire() {
   // Handle the submission of the questionnaire
   const handleSubmit = async () => {
     const totalScore = calculateTotalScore(questions, responses);
-    sessionStorage.removeItem("questionnaire");
-    sessionStorage.removeItem("currentQuestion");
 
+    try {
+      // Save final progress before submission
+      await saveProgressMutate({ responses, currentQuestion });
+      await saveResponseMutate({ responses, totalScore });
+      console.log("Successfully saved questionnaire response.");
+    } catch (err) {
+      console.error("Error submitting questionnaire:", err);
+    }
+
+    // Navigate to appropriate results page
     if (isAuthenticated) {
-      try {
-        // Optionally, save final progress before submission
-        await saveProgressMutate({ responses, currentQuestion });
-        await saveResponseMutate({ responses, totalScore });
-        console.log("Successfully saved questionnaire response.");
-      } catch (err) {
-        console.error("Error submitting questionnaire:", err);
-      }
       navigate(RoutePaths.RESULTS);
     } else {
-      sessionStorage.setItem("questionnaire", JSON.stringify(responses));
-      sessionStorage.setItem("totalScore", totalScore.toString());
       navigate(RoutePaths.WELCOME_RESULTS);
     }
   };

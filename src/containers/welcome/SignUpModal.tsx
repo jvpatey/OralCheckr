@@ -6,7 +6,6 @@ import { RoutePaths } from "../../common/constants/routes";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useRegisterUser } from "../../hooks/auth/useRegisterUser";
-import { useMoveLocalResponsesToDB } from "../../hooks/auth/useMoveLocalResponsesToDB";
 import { useConvertGuestToUser } from "../../hooks/auth/useConvertGuestToUser";
 
 interface SignUpModalProps {
@@ -95,8 +94,6 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const { updateAuth, user } = useContext(AuthContext);
   // registration mutation
   const { mutate: registerMutate } = useRegisterUser();
-  // mutation for moving local responses to DB
-  const { mutateAsync: moveLocalResponses } = useMoveLocalResponsesToDB();
   // mutation for converting guest to a registered user
   const { mutate: convertGuestMutate } = useConvertGuestToUser();
 
@@ -140,7 +137,6 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
         // convert guest mutation when guest signs up for account
         convertGuestMutate(userData, {
           onSuccess: async (data) => {
-            await moveLocalResponses(data.userId);
             updateAuth(null);
             navigate(RoutePaths.LANDING);
             handleClose();
@@ -153,7 +149,6 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
         // For new registrations, use the registration mutation.
         registerMutate(userData, {
           onSuccess: async (data) => {
-            await moveLocalResponses(data.userId);
             updateAuth(null);
             navigate(RoutePaths.LANDING);
             handleClose();
