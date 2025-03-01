@@ -1,4 +1,3 @@
-// src/hooks/questionnaire/useGetQuestionnaireProgress.ts
 import { useQuery } from "@tanstack/react-query";
 import { getQuestionnaireProgress } from "../../services/quesService";
 
