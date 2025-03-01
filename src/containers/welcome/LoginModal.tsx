@@ -104,7 +104,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
     try {
       // Login mutation
       loginMutate(loginData, {
-        onSuccess: async (data) => {
+        onSuccess: async () => {
           updateAuth(null);
           navigate(RoutePaths.LANDING);
           handleClose();

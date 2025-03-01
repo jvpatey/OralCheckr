@@ -136,7 +136,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       if (user && user.role === "guest") {
         // convert guest mutation when guest signs up for account
         convertGuestMutate(userData, {
-          onSuccess: async (data) => {
+          onSuccess: async () => {
             updateAuth(null);
             navigate(RoutePaths.LANDING);
             handleClose();
@@ -148,7 +148,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       } else {
         // For new registrations, use the registration mutation.
         registerMutate(userData, {
-          onSuccess: async (data) => {
+          onSuccess: async () => {
             updateAuth(null);
             navigate(RoutePaths.LANDING);
             handleClose();
