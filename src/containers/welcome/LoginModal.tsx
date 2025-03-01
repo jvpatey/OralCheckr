@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
-import { LoginData, handleGuestLogin } from "../../services/authService";
+import { LoginData } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useLoginUser } from "../../hooks/auth/useLoginUser";
@@ -82,21 +82,6 @@ const Button = styled.button<{ $login?: boolean }>`
   }
 `;
 
-const GuestLink = styled.a`
-  color: ${({ theme }) => theme.blue};
-  font-weight: bold;
-  display: block;
-  width: fit-content;
-  margin: 5px auto;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
-
-  &:hover {
-    color: ${({ theme }) => theme.green};
-  }
-`;
-
 export function LoginModal({ show, handleClose }: LoginModalProps) {
   const navigate = useNavigate();
   const { updateAuth } = useContext(AuthContext);
@@ -147,18 +132,6 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
     }
   }, [show]);
 
-  // Guest login function
-  const handleGuestLoginClick = async () => {
-    try {
-      await handleGuestLogin();
-      updateAuth(null);
-      navigate(RoutePaths.LANDING);
-      handleClose();
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
   return (
     <StyledModal show={show} onHide={handleClose} centered>
       <ModalHeader closeButton>
@@ -189,9 +162,6 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
               {error}
             </Alert>
           )}
-          <GuestLink onClick={handleGuestLoginClick}>
-            New user? Login as guest
-          </GuestLink>
           <Button $login type="submit">
             Login
           </Button>
