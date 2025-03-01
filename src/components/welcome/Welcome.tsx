@@ -3,7 +3,12 @@ import { Card } from "react-bootstrap";
 import { PageBackground } from "../PageBackground";
 import { WelcomeNavBar } from "../../containers/welcome/WelcomeNavBar";
 import { ThemeType } from "../../App";
-import { TakeQuestionnaireButton } from "./TakeQuestionnaireButton";
+import { ContinueAsGuestButton } from "./ContinueAsGuestButton";
+import { CreateAnAccountButton } from "./CreateAnAccountButton";
+import { SignUpModal } from "../../containers/welcome/SignUpModal";
+import { LoginModal } from "../../containers/welcome/LoginModal";
+import { WelcomeLoginButton } from "./WelcomeLoginButton";
+import { useState } from "react";
 
 interface WelcomeProps {
   themeToggler: () => void;
@@ -99,7 +104,7 @@ export const SubText = styled.h1`
   text-align: center;
   font-size: 1.5rem;
   margin-left: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 
   @media (max-width: 768px) {
     font-size: 1.5rem;
@@ -115,7 +120,7 @@ export const SubText = styled.h1`
 
 const CardText = styled.h5`
   color: ${({ theme }) => theme.textGrey};
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   margin-right: 50px;
   margin-left: 50px;
   text-align: center;
@@ -165,7 +170,27 @@ const ColoredText = styled.span`
   font-weight: 600;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
 export function Welcome({ themeToggler, theme }: WelcomeProps) {
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const handleShowSignUpModal = () => setShowSignUpModal(true);
+  const handleCloseSignUpModal = () => setShowSignUpModal(false);
+  const handleShowLoginModal = () => setShowLoginModal(true);
+  const handleCloseLoginModal = () => setShowLoginModal(false);
+
   return (
     <PageBackground>
       <WelcomeContainer>
@@ -183,11 +208,26 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
             routine.
           </SubText>
           <CardText>
-            To get started, take our quick and easy{" "}
-            <ColoredText>questionnaire</ColoredText> to find out your
-            <ColoredText> oral health score</ColoredText>.
+            To explore the app, you can continue as a{" "}
+            <ColoredText>Guest.</ColoredText>
           </CardText>
-          <TakeQuestionnaireButton />
+          <CardText>
+            <ColoredText>Create an account</ColoredText> or{" "}
+            <ColoredText>Login</ColoredText> for a more personalized experience.
+          </CardText>
+          <ButtonContainer>
+            <ContinueAsGuestButton />
+            <CreateAnAccountButton onClick={handleShowSignUpModal} />
+            <WelcomeLoginButton onClick={handleShowLoginModal} />
+          </ButtonContainer>
+          <SignUpModal
+            show={showSignUpModal}
+            handleClose={handleCloseSignUpModal}
+          />
+          <LoginModal
+            show={showLoginModal}
+            handleClose={handleCloseLoginModal}
+          />
         </WelcomeCard>
       </WelcomeContainer>
     </PageBackground>

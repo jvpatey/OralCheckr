@@ -1,10 +1,7 @@
 import styled, { keyframes, useTheme } from "styled-components";
-import { Navbar, Container, Nav } from "react-bootstrap";
+import { Navbar, Container } from "react-bootstrap";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { ThemeType } from "../../App";
-import { LoginModal } from "./LoginModal";
-import { SignUpModal } from "./SignUpModal";
-import { useState } from "react";
 
 interface WelcomeNavBarProps {
   themeToggler: () => void;
@@ -27,23 +24,6 @@ const WelcomeNavbar = styled(Navbar)`
   width: 100%;
   animation: ${fadeInDown} 1s ease-out;
   padding: 10px 0;
-`;
-
-const CustomNavLink = styled(Nav.Link)`
-  color: ${({ theme }) => theme.textGrey};
-  margin-left: 10px;
-  cursor: pointer;
-  font-size: 1rem;
-
-  &:hover {
-    color: ${({ theme }) => theme.blue};
-    font-weight: bold;
-  }
-
-  &.active {
-    color: ${({ theme }) => theme.blue};
-    font-weight: bold;
-  }
 `;
 
 const NavContainer = styled.div`
@@ -76,8 +56,6 @@ const ThemeToggleContainer = styled.div`
 `;
 
 export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showSignUpModal, setShowSignUpModal] = useState(false);
   const themeContext = useTheme();
   const isDarkMode = theme === ThemeType.DARK;
 
@@ -89,35 +67,12 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
     );
   };
 
-  const handleLoginClick = () => {
-    setShowLoginModal(true);
-  };
-
-  const handleCloseLoginModal = () => {
-    setShowLoginModal(false);
-  };
-
-  const handleSignUpClick = () => {
-    setShowSignUpModal(true);
-  };
-
-  const handleCloseSignUpModal = () => {
-    setShowSignUpModal(false);
-  };
-
   return (
     <>
       <WelcomeNavbar expand="lg">
         <Container>
           <NavContainer>
-            <LinksWrapper>
-              <CustomNavLink as="span" onClick={handleLoginClick}>
-                Login
-              </CustomNavLink>
-              <CustomNavLink as="span" onClick={handleSignUpClick}>
-                Sign Up
-              </CustomNavLink>
-            </LinksWrapper>
+            <LinksWrapper></LinksWrapper>
             <ThemeToggleContainer>
               <DarkModeSwitch
                 checked={isDarkMode}
@@ -130,11 +85,6 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
           </NavContainer>
         </Container>
       </WelcomeNavbar>
-      <LoginModal show={showLoginModal} handleClose={handleCloseLoginModal} />
-      <SignUpModal
-        show={showSignUpModal}
-        handleClose={handleCloseSignUpModal}
-      />
     </>
   );
 }
