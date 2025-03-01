@@ -335,12 +335,8 @@ export function Questionnaire() {
       console.error("Error submitting questionnaire:", err);
     }
 
-    // Navigate to appropriate results page
-    if (isAuthenticated) {
-      navigate(RoutePaths.RESULTS);
-    } else {
-      navigate(RoutePaths.WELCOME_RESULTS);
-    }
+    // Navigate to results page
+    navigate(RoutePaths.RESULTS);
   };
 
   // If currentQuestion is 0, show the start screen

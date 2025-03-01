@@ -4,5 +4,4 @@ export enum RoutePaths {
   HABITS = "/habit-tracker",
   ANALYTICS = "/habit-tracker/analytics",
   RESULTS = "/questionnaire/results",
-  WELCOME_RESULTS = "/results",
 }
