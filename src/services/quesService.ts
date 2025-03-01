@@ -79,7 +79,7 @@ export const hasSavedResponse = async (): Promise<boolean> => {
 };
 
 // API call to get total score from questionnaire data
-export const getTotalScore = async (): Promise<number | null> => {
+export const getTotalScore = async (): Promise<number> => {
   try {
     const response = await fetch(QUESTIONNAIRE_RESPONSE_ENDPOINT, {
       method: "GET",
@@ -87,15 +87,15 @@ export const getTotalScore = async (): Promise<number | null> => {
     });
 
     if (!response.ok) {
-      console.error("Failed to fetch total score.");
-      return null;
+      console.error("Failed to fetch total score. Returning 0 as fallback.");
+      return 0;
     }
 
     const data = await response.json();
-    return data.totalScore || 0;
+    return data.totalScore ?? 0;
   } catch (error) {
     console.error("Error fetching total score:", error);
-    return null;
+    return 0;
   }
 };
 
