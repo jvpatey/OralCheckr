@@ -14,13 +14,11 @@ import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { NavigationButton } from "../../components/questionnaire/NavigationButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { saveQuestionnaireResponse } from "../../services/quesService";
-import { hasSavedResponse } from "../../services/quesService";
-import {
-  getQuestionnaireProgress,
-  saveQuestionnaireProgress,
-} from "../../services/quesService";
 import { AuthContext } from "../authentication/AuthContext";
+import { useSaveQuestionnaireResponse } from "../../hooks/questionnaire/useSaveQuestionnaireResponse";
+import { useHasSavedResponse } from "../../hooks/questionnaire/useHasSavedResponse";
+import { useSaveQuestionnaireProgress } from "../../hooks/questionnaire/useSaveQuestionnaireProgress";
+import { useGetQuestionnaireProgress } from "../../hooks/questionnaire/useGetQuestionnaireProgress";
 
 // styled-component styles for Questionnaire Page
 
@@ -113,7 +111,6 @@ const QuitButton = styled(NavigationButton)`
     color: ${({ theme }) => theme.red};
     border: solid 2px ${({ theme }) => theme.red};
   }
-  }
 `;
 
 // types
@@ -176,7 +173,6 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
     let questionScore = 0;
 
     if (response !== undefined) {
-      // Check if the response is an array (checkbox input) before calculating the score
       if (Array.isArray(response)) {
         response.forEach((ele) => {
           questionScore += findOptionScore(ele, question, maxPointsPerQuestion);
@@ -189,15 +185,9 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
         );
       }
     }
-
-    // Ensure the score for this question does not exceed the max points per question
     totalScore += Math.min(questionScore, maxPointsPerQuestion);
   });
-
-  // Ensure the total score does not exceed 100
   totalScore = Math.min(totalScore, 100);
-
-  // Round the total score to the nearest integer
   totalScore = round(totalScore, 0);
 
   return totalScore;
@@ -206,32 +196,34 @@ const calculateTotalScore = (questions: Question[], responses: Responses) => {
 export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
-  const storedResponses = sessionStorage.getItem("questionnaire");
-  const [hasResponses, setHasResponses] = useState<boolean | null>(null);
-  const [retakeMode, setRetakeMode] = useState<boolean>(false);
   const { isAuthenticated } = useContext(AuthContext);
 
-  useEffect(() => {
-    const checkForSavedResponses = async () => {
-      const exists = await hasSavedResponse();
-      setHasResponses(exists);
-    };
-    checkForSavedResponses();
-  }, []);
-
-  // State to keep track of the current question number and responses
-  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  const storedResponses = sessionStorage.getItem("questionnaire");
   const [responses, setResponses] = useState<Responses>(
     storedResponses ? JSON.parse(storedResponses) : {}
   );
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [retakeMode, setRetakeMode] = useState(false);
 
-  // Map questions from JSON data
-  const questions: Question[] = questionData.questions.map((question) => ({
-    ...question,
-    type: question.type as Type,
-  }));
+  // Check if saved responses exist (for guests)
+  const { isLoading: isLoadingResponses } = useHasSavedResponse();
 
-  // When component mounts, determine currentQuestion from URL, sessionStorage, or DB (if authenticated)
+  // Mutation hook for saving questionnaire responses (final submission)
+  const {
+    mutateAsync: saveResponseMutate,
+    status,
+    error: saveError,
+  } = useSaveQuestionnaireResponse();
+  const isSaving = status === "pending";
+
+  // mutation hook for saving progress
+  const { mutateAsync: saveProgressMutate } = useSaveQuestionnaireProgress();
+
+  // React Query hook to fetch progress for authenticated users
+  const { data: progressData, isLoading: isLoadingProgress } =
+    useGetQuestionnaireProgress();
+
+  // Determine currentQuestion from URL or sessionStorage (for guests)
   useEffect(() => {
     const loadCurrentQuestion = async () => {
       if (questionId) {
@@ -247,40 +239,30 @@ export function Questionnaire() {
         setCurrentQuestion(0);
       }
     };
-
     loadCurrentQuestion();
   }, [questionId, isAuthenticated]);
 
-  // Fetch progress from the DB for authenticated users
+  // For authenticated users, update progress when the hook returns data
   useEffect(() => {
-    const fetchProgress = async () => {
-      const progressData = await getQuestionnaireProgress();
-      if (progressData) {
-        if (progressData.responses) {
-          setResponses(progressData.responses);
-        }
-        if (progressData.currentQuestion) {
-          setCurrentQuestion(progressData.currentQuestion);
-        }
-        const totalQuestions = questionData.questions.length;
-        if (
-          progressData.currentQuestion === totalQuestions &&
-          progressData.responses &&
-          progressData.responses[totalQuestions] !== undefined
-        ) {
-          setRetakeMode(true);
-        } else {
-          setRetakeMode(false);
-        }
+    if (isAuthenticated && progressData) {
+      if (progressData.responses) {
+        setResponses(progressData.responses);
       }
-    };
-
-    if (isAuthenticated) {
-      fetchProgress();
+      if (progressData.currentQuestion) {
+        setCurrentQuestion(progressData.currentQuestion);
+      }
+      const totalQuestions = questionData.questions.length;
+      if (
+        progressData.currentQuestion === totalQuestions &&
+        progressData.responses &&
+        progressData.responses[totalQuestions] !== undefined
+      ) {
+        setRetakeMode(true);
+      }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, progressData]);
 
-  // Save current question in local storage or DB based on auth status
+  // Save current question in sessionStorage for guests
   useEffect(() => {
     if (!isAuthenticated && currentQuestion > 0) {
       sessionStorage.setItem("currentQuestion", currentQuestion.toString());
@@ -299,53 +281,75 @@ export function Questionnaire() {
     );
   }
 
+  if (isLoadingResponses || (isAuthenticated && isLoadingProgress)) {
+    return <div>Loading...</div>;
+  }
+
+  const questions: Question[] = questionData.questions.map((q) => ({
+    ...q,
+    type: q.type as Type,
+  }));
+
   // Handle response change
-  const handleResponseChange = (
-    questionId: number,
+  const handleResponseChange = async (
+    qid: number,
     response: number | number[]
   ) => {
-    const updatedResponses = { ...responses, [questionId]: response };
-    setResponses(updatedResponses);
+    const updated = { ...responses, [qid]: response };
+    setResponses(updated);
 
     if (isAuthenticated) {
-      saveQuestionnaireProgress({
-        responses: updatedResponses,
-        currentQuestion,
-      });
+      try {
+        await saveProgressMutate({ responses: updated, currentQuestion });
+      } catch (err) {
+        console.error("Error saving progress:", err);
+      }
     } else {
-      sessionStorage.setItem("questionnaire", JSON.stringify(updatedResponses));
+      sessionStorage.setItem("questionnaire", JSON.stringify(updated));
     }
   };
 
-  // Navigate to the next question and save progress if authenticated
-  const handleNext = () => {
+  // Navigate to the next question
+  const handleNext = async () => {
     if (currentQuestion < questions.length) {
       const newQuestion = currentQuestion + 1;
       setCurrentQuestion(newQuestion);
+
       if (isAuthenticated) {
-        saveQuestionnaireProgress({ responses, currentQuestion: newQuestion });
+        try {
+          await saveProgressMutate({ responses, currentQuestion: newQuestion });
+        } catch (err) {
+          console.error("Error saving progress:", err);
+        }
       } else {
         sessionStorage.setItem("currentQuestion", newQuestion.toString());
       }
+
       navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
     }
   };
 
-  // Navigate to the previous question and save progress if authenticated
-  const handlePrevious = () => {
+  // Navigate to the previous question
+  const handlePrevious = async () => {
     if (currentQuestion > 1) {
       const newQuestion = currentQuestion - 1;
       setCurrentQuestion(newQuestion);
+
       if (isAuthenticated) {
-        saveQuestionnaireProgress({ responses, currentQuestion: newQuestion });
+        try {
+          await saveProgressMutate({ responses, currentQuestion: newQuestion });
+        } catch (err) {
+          console.error("Error saving progress:", err);
+        }
       } else {
         sessionStorage.setItem("currentQuestion", newQuestion.toString());
       }
+
       navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
     }
   };
 
-  // Exit questionnaire and go back to welcome page when not authenticated
+  // Exit questionnaire for guests
   const handleQuit = () => {
     navigate("/");
   };
@@ -353,27 +357,31 @@ export function Questionnaire() {
   // Handle the submission of the questionnaire
   const handleSubmit = async () => {
     const totalScore = calculateTotalScore(questions, responses);
-    // Clear local storage
     sessionStorage.removeItem("questionnaire");
     sessionStorage.removeItem("currentQuestion");
 
     if (isAuthenticated) {
       try {
-        await saveQuestionnaireResponse({ responses, totalScore });
+        // Optionally, save final progress before submission
+        await saveProgressMutate({ responses, currentQuestion });
+        await saveResponseMutate({ responses, totalScore });
         console.log("Successfully saved questionnaire response.");
-      } catch (error) {
-        console.error("Error submitting questionnaire:", error);
+      } catch (err) {
+        console.error("Error submitting questionnaire:", err);
       }
       navigate(RoutePaths.RESULTS);
     } else {
-      // For guests, continue to use local storage
       sessionStorage.setItem("questionnaire", JSON.stringify(responses));
       sessionStorage.setItem("totalScore", totalScore.toString());
       navigate(RoutePaths.WELCOME_RESULTS);
     }
   };
 
-  // Determine if "Next" or "Submit" buttons should be disabled
+  // If currentQuestion is 0, show the start screen
+  if (currentQuestion === 0) {
+    return <StartQuestionnaire isAuthenticated={isAuthenticated} />;
+  }
+
   const currentQuestionType = questions[currentQuestion - 1]?.type;
   const isNextDisabled =
     currentQuestionType !== Type.RANGE &&
@@ -385,27 +393,6 @@ export function Questionnaire() {
     (responses[questions.length] === undefined ||
       responses[questions.length] === null);
 
-  // Reset responses when retaking the questionnaire
-  const resetResponses = () => {
-    setResponses({});
-    setCurrentQuestion(1);
-  };
-
-  // Render the start/questionnaire page
-  if (currentQuestion === 0) {
-    if (hasResponses === null) {
-      return <div>Loading...</div>;
-    }
-
-    // Only show retake if responses exist and the questionnaire is complete (retakeMode is true)
-    if (hasResponses && retakeMode) {
-      return <RetakeQuestionnaire resetResponses={resetResponses} />;
-    }
-
-    return <StartQuestionnaire isAuthenticated={isAuthenticated} />;
-  }
-
-  // Render the questionnaire pages
   return (
     <PageBackground>
       <LandingContainer>
@@ -413,42 +400,54 @@ export function Questionnaire() {
           <QuestionnaireCard>
             <QuesContainer>
               <ProgressBar>
-                {questions.map((_, index) => (
+                {questions.map((_, idx) => (
                   <div
-                    key={index}
+                    key={idx}
                     className={`progress-segment ${
-                      index < currentQuestion ? "filled" : ""
+                      idx < currentQuestion ? "filled" : ""
                     }`}
-                  ></div>
+                  />
                 ))}
               </ProgressBar>
+
               <ProgressIndicator>
                 Question {currentQuestion} / {questions.length}
               </ProgressIndicator>
+
               <RenderQuestions
                 {...questions[currentQuestion - 1]}
                 onResponseChange={handleResponseChange}
                 initialResponse={responses[currentQuestion]}
               />
+
               <div>
                 {!isAuthenticated && (
                   <QuitButton onClick={handleQuit}>
                     <FontAwesomeIcon icon={faArrowLeft} /> Quit
                   </QuitButton>
                 )}
+
                 <NavigationButton
                   onClick={handlePrevious}
                   disabled={currentQuestion === 1}
                 >
                   Previous
                 </NavigationButton>
+
                 {currentQuestion === questions.length ? (
-                  <SubmitButton
-                    onClick={handleSubmit}
-                    disabled={isSubmitDisabled}
-                  >
-                    Submit
-                  </SubmitButton>
+                  <>
+                    <SubmitButton
+                      onClick={handleSubmit}
+                      disabled={isSubmitDisabled || isSaving}
+                    >
+                      {isSaving ? "Submitting..." : "Submit"}
+                    </SubmitButton>
+                    {saveError && (
+                      <div style={{ color: "red", marginTop: "10px" }}>
+                        Error: {saveError.message}
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <NavigationButton
                     onClick={handleNext}

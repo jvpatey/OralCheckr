@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Carousel from "react-bootstrap/Carousel";
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
 import questionData from "../../common/questionnaire.json";
-import { getQuestionnaireResponse } from "../../services/quesService";
+import { useGetQuestionnaireResponse } from "../../hooks/questionnaire/useGetQuestionnaireResponse";
 
 // Styled-components for Recommendations Component
 const NoRecommendations = styled.div`
@@ -156,43 +156,44 @@ const addRecommendation = (
 
 // Functional component for the Recommendations card
 export function Recommendations() {
+  const {
+    data: storedResponses,
+    isLoading,
+    error,
+  } = useGetQuestionnaireResponse();
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [index, setIndex] = useState(0);
-  const hasFetchedRef = useRef(false);
 
+  // When responses change, process them to generate recommendations
   useEffect(() => {
-    if (hasFetchedRef.current) return;
-
-    const fetchResponses = async () => {
-      const storedResponses = await getQuestionnaireResponse();
-      if (!storedResponses) return;
-
-      const recs: Recommendation[] = [];
-
-      questionData.questions.forEach((question) => {
-        const response = storedResponses[question.id];
-
-        if (Array.isArray(response)) {
-          response.forEach((res) => {
-            const recommendation = processOption(res, question);
-            addRecommendation(recs, recommendation);
-          });
-        } else if (response !== undefined) {
-          const recommendation = processOption(response, question);
+    if (!storedResponses) return;
+    const recs: Recommendation[] = [];
+    questionData.questions.forEach((question) => {
+      const response = storedResponses[question.id];
+      if (Array.isArray(response)) {
+        response.forEach((res) => {
+          const recommendation = processOption(res, question);
           addRecommendation(recs, recommendation);
-        }
-      });
-
-      setRecommendations(recs);
-      hasFetchedRef.current = true;
-    };
-
-    fetchResponses();
-  }, []);
+        });
+      } else if (response !== undefined) {
+        const recommendation = processOption(response, question);
+        addRecommendation(recs, recommendation);
+      }
+    });
+    setRecommendations(recs);
+  }, [storedResponses]);
 
   const handleSelect = (selectedIndex: number) => {
     setIndex(selectedIndex);
   };
+
+  if (isLoading) {
+    return <div>Loading recommendations...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <>

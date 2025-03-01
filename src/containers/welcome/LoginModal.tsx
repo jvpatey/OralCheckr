@@ -3,14 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
-import {
-  loginUser,
-  LoginData,
-  handleGuestLogin,
-  validateAuth,
-} from "../../services/authService";
+import { LoginData, handleGuestLogin } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
+import { useLoginUser } from "../../hooks/auth/useLoginUser";
+import { useMoveLocalResponsesToDB } from "../../hooks/auth/useMoveLocalResponsesToDB";
 
 interface LoginModalProps {
   show: boolean;
@@ -106,6 +103,10 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  // Login mutation
+  const { mutate: loginMutate } = useLoginUser();
+  // Mutation for moving local responses to DB
+  const { mutateAsync: moveLocalResponses } = useMoveLocalResponsesToDB();
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,16 +120,19 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
     const loginData: LoginData = { email, password };
 
     try {
-      // Call the login endpoint
-      await loginUser(loginData);
-      const authData = await validateAuth();
-      if (authData) {
-        updateAuth(authData.user);
-      } else {
-        updateAuth(null);
-      }
-      navigate(RoutePaths.LANDING);
-      handleClose();
+      // Login mutation
+      loginMutate(loginData, {
+        onSuccess: async (data) => {
+          // moveLocalResponses mutation
+          await moveLocalResponses(data.userId);
+          updateAuth(null);
+          navigate(RoutePaths.LANDING);
+          handleClose();
+        },
+        onError: (err: Error) => {
+          setError(err.message);
+        },
+      });
     } catch (err: any) {
       setError(err.message);
     }
@@ -147,12 +151,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const handleGuestLoginClick = async () => {
     try {
       await handleGuestLogin();
-      const authData = await validateAuth();
-      if (authData) {
-        updateAuth(authData.user);
-      } else {
-        updateAuth(null);
-      }
+      updateAuth(null);
       navigate(RoutePaths.LANDING);
       handleClose();
     } catch (err: any) {

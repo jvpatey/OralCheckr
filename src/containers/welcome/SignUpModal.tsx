@@ -3,10 +3,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
-import { registerUser, validateAuth } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
-import { convertGuestToUser } from "../../services/authService";
+import { useRegisterUser } from "../../hooks/auth/useRegisterUser";
+import { useMoveLocalResponsesToDB } from "../../hooks/auth/useMoveLocalResponsesToDB";
+import { useConvertGuestToUser } from "../../hooks/auth/useConvertGuestToUser";
 
 interface SignUpModalProps {
   show: boolean;
@@ -92,6 +93,12 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { updateAuth, user } = useContext(AuthContext);
+  // registration mutation
+  const { mutate: registerMutate } = useRegisterUser();
+  // mutation for moving local responses to DB
+  const { mutateAsync: moveLocalResponses } = useMoveLocalResponsesToDB();
+  // mutation for converting guest to a registered user
+  const { mutate: convertGuestMutate } = useConvertGuestToUser();
 
   const validatePassword = (password: string): string | null => {
     const requirements = [
@@ -130,18 +137,32 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
 
     try {
       if (user && user.role === "guest") {
-        await convertGuestToUser(userData);
+        // convert guest mutation when guest signs up for account
+        convertGuestMutate(userData, {
+          onSuccess: async (data) => {
+            await moveLocalResponses(data.userId);
+            updateAuth(null);
+            navigate(RoutePaths.LANDING);
+            handleClose();
+          },
+          onError: (err: Error) => {
+            setError(err.message);
+          },
+        });
       } else {
-        await registerUser(userData);
+        // For new registrations, use the registration mutation.
+        registerMutate(userData, {
+          onSuccess: async (data) => {
+            await moveLocalResponses(data.userId);
+            updateAuth(null);
+            navigate(RoutePaths.LANDING);
+            handleClose();
+          },
+          onError: (err: Error) => {
+            setError(err.message);
+          },
+        });
       }
-      const authData = await validateAuth();
-      if (authData) {
-        updateAuth(authData.user);
-      } else {
-        updateAuth(null);
-      }
-      navigate(RoutePaths.LANDING);
-      handleClose();
     } catch (err: any) {
       setError(err.message);
     }
