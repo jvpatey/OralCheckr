@@ -7,7 +7,7 @@ import { Habits } from "./containers/habit-tracker/habits/Habits";
 import { Analytics } from "./containers/habit-tracker/analytics/Analytics";
 import { Results } from "./components/questionnaire/Results";
 import { Landing } from "./components/landing/Landing";
-import { Welcome } from "./components/welcome/Welcome";
+import { Welcome } from "./containers/welcome/Welcome";
 import { ThemeType } from "./App";
 
 interface RouterProps {

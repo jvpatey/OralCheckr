@@ -1,19 +1,5 @@
 import styled, { keyframes } from "styled-components";
 import { Card } from "react-bootstrap";
-import { PageBackground } from "../PageBackground";
-import { WelcomeNavBar } from "../../containers/welcome/WelcomeNavBar";
-import { ThemeType } from "../../App";
-import { ContinueAsGuestButton } from "./ContinueAsGuestButton";
-import { CreateAnAccountButton } from "./CreateAnAccountButton";
-import { SignUpModal } from "../../containers/welcome/SignUpModal";
-import { LoginModal } from "../../containers/welcome/LoginModal";
-import { WelcomeLoginButton } from "./WelcomeLoginButton";
-import { useState } from "react";
-
-interface WelcomeProps {
-  themeToggler: () => void;
-  theme: ThemeType;
-}
 
 const fadeUp = keyframes`
   from {
@@ -118,7 +104,7 @@ export const SubText = styled.h1`
   }
 `;
 
-const CardText = styled.h5`
+export const CardText = styled.h5`
   color: ${({ theme }) => theme.textGrey};
   margin-bottom: 20px;
   margin-right: 50px;
@@ -138,11 +124,11 @@ const CardText = styled.h5`
   }
 `;
 
-const LogoStyle = styled.div`
+export const LogoStyle = styled.div`
   text-align: center;
 `;
 
-const LogoImgStyle = styled.img`
+export const LogoImgStyle = styled.img`
   height: 60px;
   margin-bottom: 25px;
 
@@ -151,7 +137,7 @@ const LogoImgStyle = styled.img`
   }
 `;
 
-const LogoText = styled.span`
+export const LogoText = styled.span`
   font-size: 3rem;
   font-weight: 500;
   color: ${({ theme }) => theme.blue};
@@ -165,12 +151,12 @@ const LogoText = styled.span`
   }
 `;
 
-const ColoredText = styled.span`
+export const ColoredText = styled.span`
   color: ${({ theme }) => theme.blue};
   font-weight: 600;
 `;
 
-const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -181,55 +167,3 @@ const ButtonContainer = styled.div`
     align-items: center;
   }
 `;
-
-export function Welcome({ themeToggler, theme }: WelcomeProps) {
-  const [showSignUpModal, setShowSignUpModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-
-  const handleShowSignUpModal = () => setShowSignUpModal(true);
-  const handleCloseSignUpModal = () => setShowSignUpModal(false);
-  const handleShowLoginModal = () => setShowLoginModal(true);
-  const handleCloseLoginModal = () => setShowLoginModal(false);
-
-  return (
-    <PageBackground>
-      <WelcomeContainer>
-        <WelcomeCard>
-          <WelcomeNavBar themeToggler={themeToggler} theme={theme} />
-          <TitleText>Welcome to</TitleText>
-          <LogoStyle>
-            <LogoImgStyle src="images/logo-blue.png" alt="Logo" />
-            <LogoText>OralCheckr</LogoText>
-          </LogoStyle>
-          <SubText>
-            OralCheckr is a tool designed to help you self-assess your oral
-            health. It provides habit tracking and personalized feedback to
-            guide you on improving your oral hygiene and maintaining a healthy
-            routine.
-          </SubText>
-          <CardText>
-            To explore the app, you can continue as a{" "}
-            <ColoredText>Guest.</ColoredText>
-          </CardText>
-          <CardText>
-            <ColoredText>Create an account</ColoredText> or{" "}
-            <ColoredText>Login</ColoredText> for a more personalized experience.
-          </CardText>
-          <ButtonContainer>
-            <ContinueAsGuestButton />
-            <CreateAnAccountButton onClick={handleShowSignUpModal} />
-            <WelcomeLoginButton onClick={handleShowLoginModal} />
-          </ButtonContainer>
-          <SignUpModal
-            show={showSignUpModal}
-            handleClose={handleCloseSignUpModal}
-          />
-          <LoginModal
-            show={showLoginModal}
-            handleClose={handleCloseLoginModal}
-          />
-        </WelcomeCard>
-      </WelcomeContainer>
-    </PageBackground>
-  );
-}

@@ -1,75 +1,25 @@
-import { Modal, Form, Alert } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
 import { LoginData } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useLoginUser } from "../../hooks/auth/useLoginUser";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FormButton } from "../../components/questionnaire/styles/FormButton";
+import { PasswordField } from "./components";
+import {
+  StyledModal,
+  ModalHeader,
+  HeaderText,
+  ModalBody,
+  InputStyle,
+} from "./styles/ModalStyles";
 
 interface LoginModalProps {
   show: boolean;
   handleClose: () => void;
 }
-
-const ModalHeader = styled(Modal.Header)`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  color: ${({ theme }) => theme.blue};
-  border: transparent;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-`;
-
-const HeaderText = styled(Modal.Title)`
-  font-size: 30px;
-  margin-left: 20px;
-`;
-
-const ModalBody = styled(Modal.Body)`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
-`;
-
-const StyledModal = styled(Modal)`
-  .modal-content {
-    border-radius: 15px;
-    border: transparent;
-  }
-`;
-
-const UsernameStyle = styled(Form.Control)`
-  background-color: ${({ theme }) => theme.disabledBackground};
-  border-style: solid;
-  border-width: 2px;
-  border-color: ${({ theme }) => theme.blue};
-`;
-
-const PasswordContainer = styled.div`
-  position: relative;
-  margin-top: 20px;
-`;
-
-const PasswordToggle = styled.span`
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: ${({ theme }) => theme.blue};
-`;
-
-const PasswordStyle = styled(Form.Control)`
-  background-color: ${({ theme }) => theme.disabledBackground};
-  margin-top: 20px;
-  border-style: solid;
-  border-width: 2px;
-  border-color: ${({ theme }) => theme.blue};
-`;
 
 export function LoginModal({ show, handleClose }: LoginModalProps) {
   const navigate = useNavigate();
@@ -77,15 +27,10 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [formValid, setFormValid] = useState(false);
   const [isServerError, setIsServerError] = useState(false);
   // Login mutation
   const { mutate: loginMutate } = useLoginUser();
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
 
   // Check if form is valid - just check if fields have content
   useEffect(() => {
@@ -156,7 +101,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       <ModalBody>
         <Form onSubmit={handleLoginSubmit}>
           <Form.Group controlId="formUsername" className="m-3">
-            <UsernameStyle
+            <InputStyle
               type="text"
               placeholder="Enter email"
               value={email}
@@ -165,18 +110,12 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
             />
           </Form.Group>
           <Form.Group controlId="formPassword" className="m-3">
-            <PasswordContainer>
-              <PasswordStyle
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password"
-              />
-              <PasswordToggle onClick={togglePasswordVisibility}>
-                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-              </PasswordToggle>
-            </PasswordContainer>
+            <PasswordField
+              value={password}
+              onChange={setPassword}
+              placeholder="Enter password"
+              autoComplete="current-password"
+            />
           </Form.Group>
           {error && (
             <Alert
