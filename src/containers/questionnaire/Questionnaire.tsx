@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import round from "lodash/round";
 import questionData from "../../common/questionnaire.json";
 import styled from "styled-components";
 import { PageBackground } from "../../components/PageBackground";
@@ -19,6 +18,10 @@ import { useSaveQuestionnaireResponse } from "../../hooks/questionnaire/useSaveQ
 import { useHasSavedResponse } from "../../hooks/questionnaire/useHasSavedResponse";
 import { useSaveQuestionnaireProgress } from "../../hooks/questionnaire/useSaveQuestionnaireProgress";
 import { useGetQuestionnaireProgress } from "../../hooks/questionnaire/useGetQuestionnaireProgress";
+import {
+  calculateTotalScore,
+  Responses,
+} from "../../common/utilities/scoreCalculation";
 
 // styled-component styles for Questionnaire Page
 
@@ -165,69 +168,14 @@ export interface Question {
   options: Option[];
 }
 
-type Responses = Record<number, number | number[]>;
-
-// Helper function to calculate the score for each option
-const calculateOptionScore = (
-  points: number,
-  numberOfOptions: number,
-  maxPointsPerQuestion: number
-) => {
-  return (points / numberOfOptions) * maxPointsPerQuestion;
-};
-
-// Helper function to find the option and calculate its score
-const findOptionScore = (
-  optionId: number,
-  question: Question,
-  maxPointsPerQuestion: number
-) => {
-  const option = question.options.find((opt) => opt.optionId === optionId);
-  if (option) {
-    return calculateOptionScore(
-      option.points,
-      question.options.length,
-      maxPointsPerQuestion
-    );
-  }
-  return 0;
-};
-
-// Function to calculate the total score when the user submits the questionnaire
-const calculateTotalScore = (questions: Question[], responses: Responses) => {
-  const numberOfQuestions = questions.length;
-  const maxPointsPerQuestion = 100 / numberOfQuestions;
-  let totalScore = 0;
-
-  questions.forEach((question) => {
-    const response = responses[question.id];
-    let questionScore = 0;
-
-    if (response !== undefined) {
-      if (Array.isArray(response)) {
-        response.forEach((ele) => {
-          questionScore += findOptionScore(ele, question, maxPointsPerQuestion);
-        });
-      } else {
-        questionScore += findOptionScore(
-          response,
-          question,
-          maxPointsPerQuestion
-        );
-      }
-    }
-    totalScore += Math.min(questionScore, maxPointsPerQuestion);
-  });
-  totalScore = Math.min(totalScore, 100);
-  totalScore = round(totalScore, 0);
-
-  return totalScore;
-};
-
 export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
   const { isAuthenticated } = useContext(AuthContext);
+  const questions: Question[] = questionData.questions.map((q: any) => ({
+    ...q,
+    type: q.type as Type,
+  }));
 
   const [responses, setResponses] = useState<Responses>({});
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -423,11 +371,6 @@ export function Questionnaire() {
     );
   }
 
-  const questions: Question[] = questionData.questions.map((q) => ({
-    ...q,
-    type: q.type as Type,
-  }));
-
   // Handle response change
   const handleResponseChange = async (
     qid: number,
@@ -553,7 +496,7 @@ export function Questionnaire() {
           <QuestionnaireCard>
             <QuesContainer>
               <ProgressBar>
-                {questions.map((_, idx) => (
+                {questions.map((_, idx: number) => (
                   <div
                     key={idx}
                     className={`progress-segment ${
