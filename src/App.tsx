@@ -1,5 +1,5 @@
 import { HashRouter } from "react-router-dom";
-import { RenderNavs } from "./containers/Navigation/RenderNavs";
+import { RenderNavs } from "./containers/navigation/RenderNavs";
 import { useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "./common/utilities/color-utils";
