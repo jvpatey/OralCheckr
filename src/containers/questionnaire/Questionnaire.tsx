@@ -102,14 +102,45 @@ const SubmitButton = styled(NavigationButton).attrs({ as: "a" })`
   }
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    gap: 8px;
+  }
+
+  @media (max-width: 375px) {
+    gap: 5px;
+  }
+`;
+
 const QuitButton = styled(NavigationButton)`
   background-color: ${({ theme }) => theme.red};
   color: white;
+  font-size: 1rem;
+  padding: 10px 20px;
+  white-space: nowrap;
+  min-width: max-content;
 
   &:hover {
     background-color: ${({ theme }) => theme.accentBackgroundColor};
     color: ${({ theme }) => theme.red};
     border: solid 2px ${({ theme }) => theme.red};
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  @media (max-width: 375px) {
+    padding: 8px 16px;
+    font-size: 0.7rem;
   }
 `;
 
@@ -447,8 +478,28 @@ export function Questionnaire() {
   };
 
   // Exit questionnaire
-  const handleQuit = () => {
-    navigate("/");
+  const handleQuit = async () => {
+    // If user has completed a questionnaire before
+    if (hasCompletedQuestionnaire) {
+      try {
+        // Clear in-progress state but keep responses
+        await saveProgressMutate({ responses, currentQuestion: 0 });
+
+        // Update local state
+        setIsRetaking(false);
+        setHasInProgressQuestionnaire(false);
+
+        // Navigate to results page
+        navigate(RoutePaths.RESULTS);
+      } catch (err) {
+        console.error("Error clearing progress:", err);
+        // Navigate anyway in case of error
+        navigate(RoutePaths.RESULTS);
+      }
+    } else {
+      // If no completed questionnaire, go to dashboard
+      navigate(RoutePaths.LANDING);
+    }
   };
 
   // Handle the submission of the questionnaire
@@ -522,12 +573,11 @@ export function Questionnaire() {
                 initialResponse={responses[currentQuestion]}
               />
 
-              <div>
-                {!isAuthenticated && (
-                  <QuitButton onClick={handleQuit}>
-                    <FontAwesomeIcon icon={faArrowLeft} /> Quit
-                  </QuitButton>
-                )}
+              <ButtonContainer>
+                <QuitButton onClick={handleQuit}>
+                  <FontAwesomeIcon icon={faArrowLeft} />{" "}
+                  {hasCompletedQuestionnaire ? "Exit to Results" : "Quit"}
+                </QuitButton>
 
                 <NavigationButton
                   onClick={handlePrevious}
@@ -537,19 +587,12 @@ export function Questionnaire() {
                 </NavigationButton>
 
                 {currentQuestion === questions.length ? (
-                  <>
-                    <SubmitButton
-                      onClick={handleSubmit}
-                      disabled={isSubmitDisabled || isSaving}
-                    >
-                      {isSaving ? "Submitting..." : "Submit"}
-                    </SubmitButton>
-                    {saveError && (
-                      <div style={{ color: "red", marginTop: "10px" }}>
-                        Error: {saveError.message}
-                      </div>
-                    )}
-                  </>
+                  <SubmitButton
+                    onClick={handleSubmit}
+                    disabled={isSubmitDisabled || isSaving}
+                  >
+                    {isSaving ? "Submitting..." : "Submit"}
+                  </SubmitButton>
                 ) : (
                   <NavigationButton
                     onClick={handleNext}
@@ -558,7 +601,13 @@ export function Questionnaire() {
                     Next
                   </NavigationButton>
                 )}
-              </div>
+              </ButtonContainer>
+
+              {saveError && (
+                <div style={{ color: "red", marginTop: "10px" }}>
+                  Error: {saveError.message}
+                </div>
+              )}
             </QuesContainer>
           </QuestionnaireCard>
         </QuestionnaireCardContainer>
