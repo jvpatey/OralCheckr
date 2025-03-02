@@ -33,7 +33,8 @@ export const registerUser = async (
     });
 
     if (!response.ok) {
-      throw new Error("Registration failed");
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Registration failed");
     }
 
     const result = await response.json();
@@ -68,7 +69,8 @@ export const loginUser = async (
     });
 
     if (!response.ok) {
-      throw new Error("Login failed");
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Login failed");
     }
 
     const result = await response.json();

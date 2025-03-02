@@ -79,6 +79,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [formValid, setFormValid] = useState(false);
+  const [isServerError, setIsServerError] = useState(false);
   // Login mutation
   const { mutate: loginMutate } = useLoginUser();
 
@@ -86,10 +87,11 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
     setShowPassword(!showPassword);
   };
 
-  // Check if form is valid
+  // Check if form is valid - just check if fields have content
   useEffect(() => {
-    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    setFormValid(isEmailValid && password.length > 0);
+    const hasEmail = email.length > 0;
+    const hasPassword = password.length > 0;
+    setFormValid(hasEmail && hasPassword);
   }, [email, password]);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
@@ -100,6 +102,17 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       setError("Email and Password are required");
       return;
     }
+
+    // Validate email format on submission
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!isEmailValid) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    // Clear any previous errors before submitting
+    setError("");
+    setIsServerError(false);
 
     const loginData: LoginData = { email, password };
 
@@ -112,11 +125,15 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
           handleClose();
         },
         onError: (err: Error) => {
+          // Display the specific error message from the server
           setError(err.message);
+          setIsServerError(true);
         },
       });
     } catch (err: any) {
+      // Display any other errors that might occur
       setError(err.message);
+      setIsServerError(true);
     }
   };
 
@@ -126,6 +143,8 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       setEmail("");
       setPassword("");
       setError("");
+      setIsServerError(false);
+      setFormValid(false);
     }
   }, [show]);
 
@@ -160,7 +179,16 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
             </PasswordContainer>
           </Form.Group>
           {error && (
-            <Alert variant="danger" dismissible onClose={() => setError("")}>
+            <Alert
+              variant="danger"
+              dismissible
+              onClose={() => {
+                setError("");
+                if (isServerError) {
+                  setIsServerError(false);
+                }
+              }}
+            >
               {error}
             </Alert>
           )}

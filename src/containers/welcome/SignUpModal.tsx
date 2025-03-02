@@ -105,7 +105,6 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [passwordTouched, setPasswordTouched] = useState(false);
   const [formValid, setFormValid] = useState(false);
   const { updateAuth, user } = useContext(AuthContext);
   // registration mutation
@@ -146,9 +145,10 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   // Check if all form fields are valid
   useEffect(() => {
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    const isPasswordValid = validatePassword(password) === null;
+    // Only check if fields have content, not if password meets requirements
+    const hasPassword = password.length > 0;
 
-    setFormValid(!!firstName && !!lastName && isEmailValid && isPasswordValid);
+    setFormValid(!!firstName && !!lastName && isEmailValid && hasPassword);
   }, [firstName, lastName, email, password]);
 
   const handleSignUpSubmit = async (e: React.FormEvent) => {
@@ -162,7 +162,6 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
     const passwordError = validatePassword(password);
     if (passwordError) {
       setError(passwordError);
-      setPasswordTouched(true);
       return;
     }
 
@@ -207,7 +206,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       setEmail("");
       setPassword("");
       setError("");
-      setPasswordTouched(false);
+      setFormValid(false);
     }
   }, [show]);
 
@@ -272,17 +271,9 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  if (passwordTouched) {
-                    const passwordFeedback = validatePassword(e.target.value);
-                    if (passwordFeedback) {
-                      setError(passwordFeedback);
-                    } else {
-                      setError("");
-                    }
-                  }
                 }}
-                onBlur={() => setPasswordTouched(true)}
                 autoComplete="new-password"
+                title="Hover over the info icon to see password requirements"
               />
               <OverlayTrigger
                 trigger={["hover", "focus"]}
@@ -299,7 +290,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
             </PasswordContainer>
           </Form.Group>
 
-          {error && passwordTouched && (
+          {error && (
             <Alert variant="danger" dismissible onClose={() => setError("")}>
               {error}
             </Alert>
