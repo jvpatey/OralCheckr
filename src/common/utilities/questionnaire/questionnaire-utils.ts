@@ -1,7 +1,10 @@
-import { Question, Responses } from "../../common/types/questionnaire.types";
-import { RoutePaths } from "../../common/constants/routes";
+import {
+  Question,
+  Responses,
+} from "../../types/questionnaire/questionnaire.types";
+import { RoutePaths } from "../../constants/routes";
 import { NavigateFunction } from "react-router-dom";
-import { calculateTotalScore } from "../../common/utilities/scoreCalculation";
+import { calculateTotalScore } from "./score-calculation-utils";
 
 // Handles response changes in the questionnaire
 

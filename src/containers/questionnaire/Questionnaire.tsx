@@ -21,7 +21,7 @@ import {
   Question,
   QuestionType,
   Responses,
-} from "../../common/types/questionnaire.types";
+} from "../../common/types/questionnaire/questionnaire.types";
 import {
   QuesContainer,
   ProgressBar,
@@ -29,14 +29,14 @@ import {
   SubmitButton,
   ButtonContainer,
   QuitButton,
-} from "./QuestionnaireStyles";
+} from "./styles/QuestionnaireStyles";
 import {
   createResponseChangeHandler,
   createNextHandler,
   createPreviousHandler,
   createQuitHandler,
   createSubmitHandler,
-} from "./QuestionnaireHandlers";
+} from "../../common/utilities/questionnaire/questionnaire-utils";
 
 export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();

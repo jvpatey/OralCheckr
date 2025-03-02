@@ -1,15 +1,15 @@
 import { useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { NavBar } from "./NavBar";
-import { Sidebar } from "../components/Sidebar";
+import { Sidebar } from "../../components/Sidebar";
 import {
   navbarLinks,
   sidebarLinks as sidebarNavLinks,
   NavLink,
-} from "../common/links";
-import { RoutePaths } from "../common/constants/routes";
-import { ThemeType } from "../App";
-import { AuthContext } from "./authentication/AuthContext";
+} from "../../common/links";
+import { RoutePaths } from "../../common/constants/routes";
+import { ThemeType } from "../../App";
+import { AuthContext } from "../authentication/AuthContext";
 
 interface RenderNavsProps {
   themeToggler: () => void;

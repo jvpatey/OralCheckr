@@ -1,5 +1,8 @@
 import round from "lodash/round";
-import { Question, Responses } from "../types/questionnaire.types";
+import {
+  Question,
+  Responses,
+} from "../../types/questionnaire/questionnaire.types";
 
 /**
  * Calculates a score (0-100) based on questionnaire responses.

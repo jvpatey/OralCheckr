@@ -3,14 +3,14 @@ import { Navbar, Container, Dropdown, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { RoutePaths } from "../common/constants/routes";
-import { NavLink } from "../common/links";
+import { RoutePaths } from "../../common/constants/routes";
+import { NavLink } from "../../common/links";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
-import { ThemeType } from "../App";
+import { ThemeType } from "../../App";
 import { useState, useContext } from "react";
-import { AuthContext } from "./authentication/AuthContext";
-import { SignUpModal } from "./welcome/SignUpModal";
-import { useLogoutUser } from "../hooks/auth/useLogoutUser";
+import { AuthContext } from "../authentication/AuthContext";
+import { SignUpModal } from "../welcome/SignUpModal";
+import { useLogoutUser } from "../../hooks/auth/useLogoutUser";
 
 interface NavBarProps {
   links: NavLink[];

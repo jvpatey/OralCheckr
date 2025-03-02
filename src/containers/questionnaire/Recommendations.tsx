@@ -2,157 +2,17 @@ import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Carousel from "react-bootstrap/Carousel";
 import { Card } from "react-bootstrap";
-import styled from "styled-components";
-import questionData from "../../common/questionnaire.json";
 import { useGetQuestionnaireResponse } from "../../hooks/questionnaire/useGetQuestionnaireResponse";
-
-// Styled-components for Recommendations Component
-const NoRecommendations = styled.div`
-  display: flex;
-  font-size: 18px;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: ${({ theme }) => theme.textGrey};
-`;
-
-const CarouselContainer = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
-`;
-
-const CarouselContent = styled.div`
-  flex-grow: 1;
-  font-size: 14px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: ${({ theme }) => theme.textGrey};
-  padding: 20px 40px;
-  overflow-y: auto;
-
-  @media (max-width: 950px) {
-    font-size: 12px;
-    padding: 15px 30px;
-  }
-
-  @media (max-width: 430px) {
-    font-size: 10px;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-  }
-`;
-
-const CategoryText = styled.div`
-  font-weight: bold;
-  font-size: 20px;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  color: ${({ theme }) => theme.green};
-
-  @media (max-width: 950px) {
-    font-size: 16px;
-  }
-
-  @media (max-width: 430px) {
-    font-size: 14px;
-  }
-`;
-
-const StyledHeader = styled(Card.Header)`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  color: ${({ theme }) => theme.blue};
-  font-size: 25px;
-  font-weight: bold;
-  border: none;
-  text-align: center;
-  margin-top: 50px;
-
-  @media (max-width: 375px) {
-    margin-top: 20px;
-    font-size: 22px;
-  }
-
-  @media (max-width: 430px) {
-    margin-top: 10px;
-    font-size: 18px;
-  }
-`;
-
-const CustomCarousel = styled(Carousel)`
-  width: 100%;
-  height: 100%;
-  position: relative;
-
-  .carousel-indicators {
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    padding: 5px;
-  }
-
-  .carousel-indicators li {
-    background-color: ${({ theme }) => theme.disabledBackground};
-  }
-
-  .carousel-indicators .active {
-    background-color: ${({ theme }) => theme.green};
-  }
-
-  .carousel-control-prev,
-  .carousel-control-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: auto;
-    color: ${({ theme }) => theme.green};
-    margin: 0 -15px;
-  }
-
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
-    filter: invert(50%) sepia(100%) saturate(5000%) hue-rotate(90deg);
-  }
-`;
-
-interface Recommendation {
-  category: string;
-  feedback: string;
-}
-
-// Helper function to process a single option and return a recommendation
-const processOption = (
-  optionId: number,
-  question: (typeof questionData.questions)[0]
-): Recommendation | null => {
-  const option = question.options.find((opt) => opt.optionId === optionId);
-  if (option && option.feedback) {
-    return {
-      category: question.Category,
-      feedback: option.feedback,
-    };
-  }
-  return null;
-};
-
-// Helper function to add recommendation to recs array
-const addRecommendation = (
-  recs: Recommendation[],
-  recommendation: Recommendation | null
-) => {
-  if (recommendation) {
-    recs.push(recommendation);
-  }
-};
+import type { Recommendation } from "../../common/types/questionnaire/recommendations.types";
+import { generateRecommendations } from "../../common/utilities/questionnaire/recommendations-utils";
+import {
+  NoRecommendations,
+  CarouselContainer,
+  CarouselContent,
+  CategoryText,
+  StyledHeader,
+  CustomCarousel,
+} from "./styles/RecommendationsStyles";
 
 // Functional component for the Recommendations card
 export function Recommendations() {
@@ -167,19 +27,7 @@ export function Recommendations() {
   // When responses change, process them to generate recommendations
   useEffect(() => {
     if (!storedResponses) return;
-    const recs: Recommendation[] = [];
-    questionData.questions.forEach((question) => {
-      const response = storedResponses[question.id];
-      if (Array.isArray(response)) {
-        response.forEach((res) => {
-          const recommendation = processOption(res, question);
-          addRecommendation(recs, recommendation);
-        });
-      } else if (response !== undefined) {
-        const recommendation = processOption(response, question);
-        addRecommendation(recs, recommendation);
-      }
-    });
+    const recs = generateRecommendations(storedResponses);
     setRecommendations(recs);
   }, [storedResponses]);
 
