@@ -7,6 +7,8 @@ import { LoginData } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useLoginUser } from "../../hooks/auth/useLoginUser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 interface LoginModalProps {
   show: boolean;
@@ -44,6 +46,20 @@ const UsernameStyle = styled(Form.Control)`
   border-style: solid;
   border-width: 2px;
   border-color: ${({ theme }) => theme.blue};
+`;
+
+const PasswordContainer = styled.div`
+  position: relative;
+  margin-top: 20px;
+`;
+
+const PasswordToggle = styled.span`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: ${({ theme }) => theme.blue};
 `;
 
 const PasswordStyle = styled(Form.Control)`
@@ -87,8 +103,13 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   // Login mutation
   const { mutate: loginMutate } = useLoginUser();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,13 +165,18 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
             />
           </Form.Group>
           <Form.Group controlId="formPassword" className="m-3">
-            <PasswordStyle
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-            />
+            <PasswordContainer>
+              <PasswordStyle
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+              />
+              <PasswordToggle onClick={togglePasswordVisibility}>
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </PasswordToggle>
+            </PasswordContainer>
           </Form.Group>
           {error && (
             <Alert variant="danger" dismissible onClose={() => setError("")}>

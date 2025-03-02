@@ -7,6 +7,8 @@ import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useRegisterUser } from "../../hooks/auth/useRegisterUser";
 import { useConvertGuestToUser } from "../../hooks/auth/useConvertGuestToUser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 interface SignUpModalProps {
   show: boolean;
@@ -45,6 +47,20 @@ const InputStyle = styled(Form.Control)`
   border-width: 2px;
   border-color: ${({ theme }) => theme.blue};
   margin-top: 15px;
+`;
+
+const PasswordContainer = styled.div`
+  position: relative;
+  margin-top: 15px;
+`;
+
+const PasswordToggle = styled.span`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: ${({ theme }) => theme.blue};
 `;
 
 const Button = styled.button<{ $signup?: boolean }>`
@@ -91,11 +107,16 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { updateAuth, user } = useContext(AuthContext);
   // registration mutation
   const { mutate: registerMutate } = useRegisterUser();
   // mutation for converting guest to a registered user
   const { mutate: convertGuestMutate } = useConvertGuestToUser();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const validatePassword = (password: string): string | null => {
     const requirements = [
@@ -212,21 +233,26 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
             />
           </Form.Group>
           <Form.Group controlId="formPassword" className="m-3">
-            <InputStyle
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                const passwordFeedback = validatePassword(e.target.value);
-                if (passwordFeedback) {
-                  setError(passwordFeedback);
-                } else {
-                  setError("");
-                }
-              }}
-              autoComplete="new-password"
-            />
+            <PasswordContainer>
+              <InputStyle
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  const passwordFeedback = validatePassword(e.target.value);
+                  if (passwordFeedback) {
+                    setError(passwordFeedback);
+                  } else {
+                    setError("");
+                  }
+                }}
+                autoComplete="new-password"
+              />
+              <PasswordToggle onClick={togglePasswordVisibility}>
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </PasswordToggle>
+            </PasswordContainer>
           </Form.Group>
 
           {error && (
