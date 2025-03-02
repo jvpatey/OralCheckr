@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Modal, Form } from "react-bootstrap";
-import { StyledModal } from "../../../components/questionnaire/Modal";
+import { StyledModal } from "../../../components/questionnaire/styles/Modal";
 import { Habit } from "./Habits";
 import styled from "styled-components";
 
@@ -16,7 +16,7 @@ interface AddEditHabitModalProps {
 // Styled component for the Save Button
 const SaveButton = styled.button<{ disabled: boolean }>`
   background-color: ${({ disabled, theme }) =>
-    disabled ? theme.disabledBackground : theme.accentBackgroundColor };
+    disabled ? theme.disabledBackground : theme.accentBackgroundColor};
   border-color: ${({ disabled, theme }) =>
     disabled ? theme.disabledBackground : theme.blue};
   color: ${({ disabled, theme }) =>
@@ -57,12 +57,11 @@ const StyledFormControl = styled(Form.Control)`
   background-color: ${({ theme }) => theme.accentBackgroundColor};
   color: ${({ theme }) => theme.textGrey};
 
-    &:focus {
+  &:focus {
     background-color: ${({ theme }) => theme.accentBackgroundColor};
-      color: ${({ theme }) => theme.textGrey};
-    }
-`;    
-
+    color: ${({ theme }) => theme.textGrey};
+  }
+`;
 
 // Functional component for the add/edit habit modal, used in the Habits component
 export function AddEditHabitModal({
@@ -107,34 +106,32 @@ export function AddEditHabitModal({
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      <Form>
-        <Form.Group controlId="habitName">
-          <Form.Label>Habit Name</Form.Label>
-          <StyledFormControl
-            type="text"
-            placeholder="Enter habit name"
-            value={newHabit.name}
-            onChange={handleHabitNameChange}
-            ref={habitNameRef}
-          />
-        </Form.Group>
-        <Form.Group controlId="habitCount">
-          <Form.Label style={{ marginTop: "10px" }}>
-            Habit Count (times per day)
-          </Form.Label>
-          <StyledFormControl
-            type="number"
-            placeholder="Enter habit count"
-            value={newHabit.count.toString()}
-            onChange={handleHabitCountChange}
-          />
-        </Form.Group>
-      </Form>
+        <Form>
+          <Form.Group controlId="habitName">
+            <Form.Label>Habit Name</Form.Label>
+            <StyledFormControl
+              type="text"
+              placeholder="Enter habit name"
+              value={newHabit.name}
+              onChange={handleHabitNameChange}
+              ref={habitNameRef}
+            />
+          </Form.Group>
+          <Form.Group controlId="habitCount">
+            <Form.Label style={{ marginTop: "10px" }}>
+              Habit Count (times per day)
+            </Form.Label>
+            <StyledFormControl
+              type="number"
+              placeholder="Enter habit count"
+              value={newHabit.count.toString()}
+              onChange={handleHabitCountChange}
+            />
+          </Form.Group>
+        </Form>
       </Modal.Body>
       <Modal.Footer>
-        <CancelButton onClick={handleClose}>
-          Cancel
-        </CancelButton>
+        <CancelButton onClick={handleClose}>Cancel</CancelButton>
         <SaveButton
           disabled={isSaveDisabled()}
           onClick={() => handleSaveHabit(newHabit)}

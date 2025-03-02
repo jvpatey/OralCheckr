@@ -1,101 +1,25 @@
-import { Modal, Form, Alert } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
-import { LoginData, handleGuestLogin } from "../../services/authService";
+import { LoginData } from "../../services/authService";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useLoginUser } from "../../hooks/auth/useLoginUser";
-import { useMoveLocalResponsesToDB } from "../../hooks/auth/useMoveLocalResponsesToDB";
+import { FormButton } from "../../components/questionnaire/styles/FormButton";
+import { PasswordField } from "./components";
+import {
+  StyledModal,
+  ModalHeader,
+  HeaderText,
+  ModalBody,
+  InputStyle,
+} from "./styles/ModalStyles";
 
 interface LoginModalProps {
   show: boolean;
   handleClose: () => void;
 }
-
-const ModalHeader = styled(Modal.Header)`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  color: ${({ theme }) => theme.blue};
-  border: transparent;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-`;
-
-const HeaderText = styled(Modal.Title)`
-  font-size: 30px;
-  margin-left: 20px;
-`;
-
-const ModalBody = styled(Modal.Body)`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
-`;
-
-const StyledModal = styled(Modal)`
-  .modal-content {
-    border-radius: 15px;
-    border: transparent;
-  }
-`;
-
-const UsernameStyle = styled(Form.Control)`
-  background-color: ${({ theme }) => theme.disabledBackground};
-  border-style: solid;
-  border-width: 2px;
-  border-color: ${({ theme }) => theme.blue};
-`;
-
-const PasswordStyle = styled(Form.Control)`
-  background-color: ${({ theme }) => theme.disabledBackground};
-  margin-top: 20px;
-  border-style: solid;
-  border-width: 2px;
-  border-color: ${({ theme }) => theme.blue};
-`;
-
-const Button = styled.button<{ $login?: boolean }>`
-  background-color: ${(props) =>
-    props.$login ? props.theme.green : props.theme.green};
-  color: ${(props) =>
-    props.$login ? props.theme.backgroundColor : props.theme.backgroundColor};
-  font-weight: bold;
-  border: 2px solid
-    ${(props) => (props.$login ? props.theme.green : props.theme.green)};
-  width: 50%;
-  margin-top: 10px;
-  border-radius: 20px;
-  padding: 0.5em 1em;
-  cursor: pointer;
-  margin: 10px auto;
-  display: block;
-
-  &:hover {
-    background-color: ${(props) =>
-      props.$login
-        ? props.theme.accentBackgroundColor
-        : props.theme.accentBackgroundColor};
-    color: ${(props) => (props.$login ? props.theme.green : props.theme.green)};
-    border-color: ${(props) => props.theme.green};
-    border-width: 2px;
-  }
-`;
-
-const GuestLink = styled.a`
-  color: ${({ theme }) => theme.blue};
-  font-weight: bold;
-  display: block;
-  width: fit-content;
-  margin: 5px auto;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
-
-  &:hover {
-    color: ${({ theme }) => theme.green};
-  }
-`;
 
 export function LoginModal({ show, handleClose }: LoginModalProps) {
   const navigate = useNavigate();
@@ -103,10 +27,17 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [formValid, setFormValid] = useState(false);
+  const [isServerError, setIsServerError] = useState(false);
   // Login mutation
   const { mutate: loginMutate } = useLoginUser();
-  // Mutation for moving local responses to DB
-  const { mutateAsync: moveLocalResponses } = useMoveLocalResponsesToDB();
+
+  // Check if form is valid - just check if fields have content
+  useEffect(() => {
+    const hasEmail = email.length > 0;
+    const hasPassword = password.length > 0;
+    setFormValid(hasEmail && hasPassword);
+  }, [email, password]);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,24 +48,37 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       return;
     }
 
+    // Validate email format on submission
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!isEmailValid) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    // Clear any previous errors before submitting
+    setError("");
+    setIsServerError(false);
+
     const loginData: LoginData = { email, password };
 
     try {
       // Login mutation
       loginMutate(loginData, {
-        onSuccess: async (data) => {
-          // moveLocalResponses mutation
-          await moveLocalResponses(data.userId);
+        onSuccess: async () => {
           updateAuth(null);
           navigate(RoutePaths.LANDING);
           handleClose();
         },
         onError: (err: Error) => {
+          // Display the specific error message from the server
           setError(err.message);
+          setIsServerError(true);
         },
       });
     } catch (err: any) {
+      // Display any other errors that might occur
       setError(err.message);
+      setIsServerError(true);
     }
   };
 
@@ -144,20 +88,10 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       setEmail("");
       setPassword("");
       setError("");
+      setIsServerError(false);
+      setFormValid(false);
     }
   }, [show]);
-
-  // Guest login function
-  const handleGuestLoginClick = async () => {
-    try {
-      await handleGuestLogin();
-      updateAuth(null);
-      navigate(RoutePaths.LANDING);
-      handleClose();
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
 
   return (
     <StyledModal show={show} onHide={handleClose} centered>
@@ -167,7 +101,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       <ModalBody>
         <Form onSubmit={handleLoginSubmit}>
           <Form.Group controlId="formUsername" className="m-3">
-            <UsernameStyle
+            <InputStyle
               type="text"
               placeholder="Enter email"
               value={email}
@@ -176,25 +110,30 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
             />
           </Form.Group>
           <Form.Group controlId="formPassword" className="m-3">
-            <PasswordStyle
-              type="password"
-              placeholder="Enter password"
+            <PasswordField
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={setPassword}
+              placeholder="Enter password"
               autoComplete="current-password"
             />
           </Form.Group>
           {error && (
-            <Alert variant="danger" dismissible onClose={() => setError("")}>
+            <Alert
+              variant="danger"
+              dismissible
+              onClose={() => {
+                setError("");
+                if (isServerError) {
+                  setIsServerError(false);
+                }
+              }}
+            >
               {error}
             </Alert>
           )}
-          <GuestLink onClick={handleGuestLoginClick}>
-            New user? Login as guest
-          </GuestLink>
-          <Button $login type="submit">
+          <FormButton type="submit" disabled={!formValid} variant="login">
             Login
-          </Button>
+          </FormButton>
         </Form>
       </ModalBody>
     </StyledModal>

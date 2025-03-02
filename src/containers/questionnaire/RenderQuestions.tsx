@@ -1,82 +1,20 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Question, Type } from "./Questionnaire";
-
-// Styled-components for the Questionnaire component
-
-const QuesTitle = styled.h2`
-  color: ${({ theme }) => theme.blue};
-  margin-bottom: 20px;
-  text-align: center;
-  font-size: 1.5rem;
-`;
-
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 50px;
-  background-color: ${({ theme }) => theme.backgroundColor};
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  margin: auto;
-  width: 100%;
-`;
-
-const FormGroup = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== "isRange",
-})<{ isRange: boolean }>`
-  display: flex;
-  flex-direction: ${({ isRange }) => (isRange ? "column" : "row")};
-  align-items: center;
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  padding: 10px 20px;
-  border-radius: 20px;
-  margin-bottom: 15px;
-  width: 100%;
-  color: ${({ theme }) => theme.darkGrey};
-
-  &:hover {
-    background-color: ${({ theme }) => theme.backgroundColor};
-  }
-
-  label {
-    margin-left: 10px;
-    font-size: 1rem;
-    cursor: pointer;
-    flex-grow: 1;
-  }
-`;
-
-const RadioInput = styled.input`
-  margin-right: 10px;
-`;
-
-const CheckboxInput = styled.input`
-  margin-right: 10px;
-`;
-
-const RangeInput = styled.input`
-  width: 100%;
-  margin: 10px 0;
-`;
-
-const RangeLabels = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-
-    @media (max-width: 600px) {
-    font-size: 0.4rem;
-  }
-`;
-
-// Interface for the RenderQuestions component props, extending Question interface
-interface RenderQuestionsProps extends Question {
-  onResponseChange: (questionId: number, response: number | number[]) => void;
-  initialResponse?: number | number[];
-}
+import { QuestionType } from "../../common/types/questionnaire/questionnaire.types";
+import { RenderQuestionsProps } from "../../common/types/questionnaire/render-questions.types";
+import {
+  QuesTitle,
+  FormContainer,
+  FormGroup,
+  RadioInput,
+  CheckboxInput,
+  RangeInput,
+  RangeLabels,
+} from "./styles/RenderQuestionsStyles";
+import {
+  createRangeChangeHandler,
+  createRadioChangeHandler,
+  createCheckboxChangeHandler,
+} from "./utils/render-questions-utils";
 
 // RenderQuestions functional component for rendering the questions inside the Questionnaire
 export function RenderQuestions(props: RenderQuestionsProps) {
@@ -88,13 +26,13 @@ export function RenderQuestions(props: RenderQuestionsProps) {
   useEffect(() => {
     if (initialResponse !== undefined) {
       switch (type) {
-        case Type.RADIO:
+        case QuestionType.RADIO:
           setRangeValue(initialResponse as number);
           break;
-        case Type.CHECKBOX:
+        case QuestionType.CHECKBOX:
           setSelectedOptions(initialResponse as number[]);
           break;
-        case Type.RANGE:
+        case QuestionType.RANGE:
           setRangeValue(initialResponse as number);
           break;
         default:
@@ -108,7 +46,7 @@ export function RenderQuestions(props: RenderQuestionsProps) {
 
   // Initialize range value when the component mounts if it's a range question
   useEffect(() => {
-    if (type === Type.RANGE) {
+    if (type === QuestionType.RANGE) {
       if (initialResponse === undefined) {
         const initialValue = 1;
         setRangeValue(initialValue);
@@ -119,29 +57,23 @@ export function RenderQuestions(props: RenderQuestionsProps) {
     }
   }, [id, type]);
 
-  // Handler for range input changes
-  const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value) + 1;
-    setRangeValue(value);
-    onResponseChange(id, value);
-  };
-
-  // Handler for radio input changes
-  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
-    setRangeValue(value);
-    onResponseChange(id, value);
-  };
-
-  // Handler for checkbox input changes
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
-    const newSelectedOptions = event.target.checked
-      ? [...selectedOptions, value]
-      : selectedOptions.filter((option) => option !== value);
-    setSelectedOptions(newSelectedOptions);
-    onResponseChange(id, newSelectedOptions);
-  };
+  // Create handlers using the factory functions
+  const handleRangeChange = createRangeChangeHandler(
+    id,
+    setRangeValue,
+    onResponseChange
+  );
+  const handleRadioChange = createRadioChangeHandler(
+    id,
+    setRangeValue,
+    onResponseChange
+  );
+  const handleCheckboxChange = createCheckboxChangeHandler(
+    id,
+    selectedOptions,
+    setSelectedOptions,
+    onResponseChange
+  );
 
   return (
     <FormContainer>
@@ -150,7 +82,7 @@ export function RenderQuestions(props: RenderQuestionsProps) {
         {(() => {
           // Render inputs based on question type
           switch (type) {
-            case Type.RADIO:
+            case QuestionType.RADIO:
               return options.map((option) => (
                 <FormGroup key={option.optionId} isRange={false}>
                   <RadioInput
@@ -166,7 +98,7 @@ export function RenderQuestions(props: RenderQuestionsProps) {
                   </label>
                 </FormGroup>
               ));
-            case Type.CHECKBOX:
+            case QuestionType.CHECKBOX:
               return options.map((option) => (
                 <FormGroup key={option.optionId} isRange={false}>
                   <CheckboxInput
@@ -182,7 +114,7 @@ export function RenderQuestions(props: RenderQuestionsProps) {
                   </label>
                 </FormGroup>
               ));
-            case Type.RANGE:
+            case QuestionType.RANGE:
               return (
                 <FormGroup isRange={true}>
                   <RangeInput

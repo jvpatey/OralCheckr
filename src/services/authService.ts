@@ -6,32 +6,6 @@ import {
   LOGOUT_ENDPOINT,
   CONVERT_GUEST_ENDPOINT,
 } from "../config/authApiConfig";
-import { QUESTIONNAIRE_RESPONSE_ENDPOINT } from "../config/quesApiConfig";
-
-/* -- Questionnaire Data Service for Registration/Login -- */
-
-export const moveLocalResponsesToDB = async (userId: number) => {
-  const storedResponses = sessionStorage.getItem("questionnaire");
-  const storedScore = sessionStorage.getItem("totalScore");
-
-  if (storedResponses && storedScore) {
-    await fetch(QUESTIONNAIRE_RESPONSE_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId,
-        responses: JSON.parse(storedResponses),
-        totalScore: parseInt(storedScore, 10),
-      }),
-      credentials: "include",
-    });
-
-    // Clear sessionStorage after saving
-    sessionStorage.removeItem("questionnaire");
-    sessionStorage.removeItem("currentQuestion");
-    sessionStorage.removeItem("totalScore");
-  }
-};
 
 /* -- Registration Service -- */
 
@@ -59,7 +33,8 @@ export const registerUser = async (
     });
 
     if (!response.ok) {
-      throw new Error("Registration failed");
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Registration failed");
     }
 
     const result = await response.json();
@@ -94,7 +69,8 @@ export const loginUser = async (
     });
 
     if (!response.ok) {
-      throw new Error("Login failed");
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Login failed");
     }
 
     const result = await response.json();
@@ -107,7 +83,10 @@ export const loginUser = async (
 
 /* -- Guest Login Service -- */
 
-export const handleGuestLogin = async (): Promise<void> => {
+export const handleGuestLogin = async (): Promise<{
+  userId: number;
+  role: string;
+}> => {
   try {
     const response = await fetch(GUEST_LOGIN_ENDPOINT, {
       method: "POST",
@@ -119,6 +98,9 @@ export const handleGuestLogin = async (): Promise<void> => {
       const errorData = await response.json();
       throw new Error(errorData.error || "Failed to log in as guest");
     }
+
+    const { userId, role } = await response.json();
+    return { userId, role };
   } catch (err: any) {
     console.error("Guest login error:", err.message);
     throw new Error("Unable to log in as guest. Please try again.");

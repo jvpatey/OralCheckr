@@ -1,14 +1,5 @@
 import styled, { keyframes } from "styled-components";
 import { Card } from "react-bootstrap";
-import { PageBackground } from "../PageBackground";
-import { WelcomeNavBar } from "../../containers/welcome/WelcomeNavBar";
-import { ThemeType } from "../../App";
-import { TakeQuestionnaireButton } from "./TakeQuestionnaireButton";
-
-interface WelcomeProps {
-  themeToggler: () => void;
-  theme: ThemeType;
-}
 
 const fadeUp = keyframes`
   from {
@@ -99,7 +90,7 @@ export const SubText = styled.h1`
   text-align: center;
   font-size: 1.5rem;
   margin-left: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 
   @media (max-width: 768px) {
     font-size: 1.5rem;
@@ -113,9 +104,9 @@ export const SubText = styled.h1`
   }
 `;
 
-const CardText = styled.h5`
+export const CardText = styled.h5`
   color: ${({ theme }) => theme.textGrey};
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   margin-right: 50px;
   margin-left: 50px;
   text-align: center;
@@ -133,11 +124,11 @@ const CardText = styled.h5`
   }
 `;
 
-const LogoStyle = styled.div`
+export const LogoStyle = styled.div`
   text-align: center;
 `;
 
-const LogoImgStyle = styled.img`
+export const LogoImgStyle = styled.img`
   height: 60px;
   margin-bottom: 25px;
 
@@ -146,7 +137,7 @@ const LogoImgStyle = styled.img`
   }
 `;
 
-const LogoText = styled.span`
+export const LogoText = styled.span`
   font-size: 3rem;
   font-weight: 500;
   color: ${({ theme }) => theme.blue};
@@ -160,36 +151,19 @@ const LogoText = styled.span`
   }
 `;
 
-const ColoredText = styled.span`
+export const ColoredText = styled.span`
   color: ${({ theme }) => theme.blue};
   font-weight: 600;
 `;
 
-export function Welcome({ themeToggler, theme }: WelcomeProps) {
-  return (
-    <PageBackground>
-      <WelcomeContainer>
-        <WelcomeCard>
-          <WelcomeNavBar themeToggler={themeToggler} theme={theme} />
-          <TitleText>Welcome to</TitleText>
-          <LogoStyle>
-            <LogoImgStyle src="images/logo-blue.png" alt="Logo" />
-            <LogoText>OralCheckr</LogoText>
-          </LogoStyle>
-          <SubText>
-            OralCheckr is a tool designed to help you self-assess your oral
-            health. It provides habit tracking and personalized feedback to
-            guide you on improving your oral hygiene and maintaining a healthy
-            routine.
-          </SubText>
-          <CardText>
-            To get started, take our quick and easy{" "}
-            <ColoredText>questionnaire</ColoredText> to find out your
-            <ColoredText> oral health score</ColoredText>.
-          </CardText>
-          <TakeQuestionnaireButton />
-        </WelcomeCard>
-      </WelcomeContainer>
-    </PageBackground>
-  );
-}
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;

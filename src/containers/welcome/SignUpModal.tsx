@@ -1,89 +1,27 @@
-import { Modal, Form, Alert } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useRegisterUser } from "../../hooks/auth/useRegisterUser";
-import { useMoveLocalResponsesToDB } from "../../hooks/auth/useMoveLocalResponsesToDB";
 import { useConvertGuestToUser } from "../../hooks/auth/useConvertGuestToUser";
+import { FormButton } from "../../components/questionnaire/styles/FormButton";
+import { PasswordField } from "./components";
+import { validatePassword } from "./utils/password-utils";
+import {
+  StyledModal,
+  ModalHeader,
+  HeaderText,
+  ModalBody,
+  InputStyle,
+  CardText,
+} from "./styles/ModalStyles";
 
 interface SignUpModalProps {
   show: boolean;
   handleClose: () => void;
 }
-
-const ModalHeader = styled(Modal.Header)`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  color: ${({ theme }) => theme.blue};
-  border: transparent;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-`;
-
-const HeaderText = styled(Modal.Title)`
-  font-size: 30px;
-  margin-left: 20px;
-`;
-
-const ModalBody = styled(Modal.Body)`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
-`;
-
-const StyledModal = styled(Modal)`
-  .modal-content {
-    border-radius: 15px;
-    border: transparent;
-  }
-`;
-
-const InputStyle = styled(Form.Control)`
-  background-color: ${({ theme }) => theme.disabledBackground};
-  border-style: solid;
-  border-width: 2px;
-  border-color: ${({ theme }) => theme.blue};
-  margin-top: 15px;
-`;
-
-const Button = styled.button<{ $signup?: boolean }>`
-  background-color: ${(props) =>
-    props.$signup ? props.theme.green : props.theme.green};
-  color: ${(props) =>
-    props.$signup ? props.theme.backgroundColor : props.theme.backgroundColor};
-  font-weight: bold;
-  border: 2px solid
-    ${(props) => (props.$signup ? props.theme.green : props.theme.green)};
-  width: 50%;
-  margin-top: 10px;
-  border-radius: 20px;
-  padding: 0.5em 1em;
-  cursor: pointer;
-  margin: 10px auto;
-  display: block;
-
-  &:hover {
-    background-color: ${(props) =>
-      props.$signup
-        ? props.theme.accentBackgroundColor
-        : props.theme.accentBackgroundColor};
-    color: ${(props) =>
-      props.$signup ? props.theme.green : props.theme.green};
-    border-color: ${(props) => props.theme.green};
-    border-width: 2px;
-  }
-`;
-
-const CardText = styled.h5`
-  color: ${({ theme }) => theme.textGrey};
-  margin-bottom: 20px;
-  margin-right: 50px;
-  margin-left: 50px;
-  text-align: center;
-  font-size: 1.25rem;
-`;
 
 export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const navigate = useNavigate();
@@ -92,32 +30,21 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [formValid, setFormValid] = useState(false);
   const { updateAuth, user } = useContext(AuthContext);
   // registration mutation
   const { mutate: registerMutate } = useRegisterUser();
-  // mutation for moving local responses to DB
-  const { mutateAsync: moveLocalResponses } = useMoveLocalResponsesToDB();
   // mutation for converting guest to a registered user
   const { mutate: convertGuestMutate } = useConvertGuestToUser();
 
-  const validatePassword = (password: string): string | null => {
-    const requirements = [
-      { regex: /.{8,}/, message: "Password must be at least 8 characters" },
-      { regex: /[A-Z]/, message: "Must contain at least one uppercase letter" },
-      { regex: /[a-z]/, message: "Must contain at least one lowercase letter" },
-      { regex: /\d/, message: "Must contain at least one digit" },
-      {
-        regex: /[!@#$%^&*(),.?":{}|<>]/,
-        message: "Must contain at least one special character",
-      },
-    ];
+  // Check if all form fields are valid
+  useEffect(() => {
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    // Only check if fields have content, not if password meets requirements
+    const hasPassword = password.length > 0;
 
-    const errors = requirements
-      .filter((req) => !req.regex.test(password))
-      .map((req) => req.message);
-
-    return errors.length > 0 ? errors.join(", ") : null;
-  };
+    setFormValid(!!firstName && !!lastName && isEmailValid && hasPassword);
+  }, [firstName, lastName, email, password]);
 
   const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,8 +66,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       if (user && user.role === "guest") {
         // convert guest mutation when guest signs up for account
         convertGuestMutate(userData, {
-          onSuccess: async (data) => {
-            await moveLocalResponses(data.userId);
+          onSuccess: async () => {
             updateAuth(null);
             navigate(RoutePaths.LANDING);
             handleClose();
@@ -152,8 +78,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       } else {
         // For new registrations, use the registration mutation.
         registerMutate(userData, {
-          onSuccess: async (data) => {
-            await moveLocalResponses(data.userId);
+          onSuccess: async () => {
             updateAuth(null);
             navigate(RoutePaths.LANDING);
             handleClose();
@@ -176,6 +101,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       setEmail("");
       setPassword("");
       setError("");
+      setFormValid(false);
     }
   }, [show]);
 
@@ -217,19 +143,11 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
             />
           </Form.Group>
           <Form.Group controlId="formPassword" className="m-3">
-            <InputStyle
-              type="password"
-              placeholder="Password"
+            <PasswordField
               value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                const passwordFeedback = validatePassword(e.target.value);
-                if (passwordFeedback) {
-                  setError(passwordFeedback);
-                } else {
-                  setError("");
-                }
-              }}
+              onChange={setPassword}
+              placeholder="Password"
+              showRequirements={true}
               autoComplete="new-password"
             />
           </Form.Group>
@@ -239,9 +157,9 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
               {error}
             </Alert>
           )}
-          <Button $signup type="submit">
+          <FormButton type="submit" disabled={!formValid} variant="signup">
             Sign Up
-          </Button>
+          </FormButton>
         </Form>
       </ModalBody>
     </StyledModal>
