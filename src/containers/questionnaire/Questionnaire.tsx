@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import questionData from "../../common/questionnaire.json";
-import styled from "styled-components";
 import { PageBackground } from "../../components/PageBackground";
 import { LandingContainer } from "../../components/landing/LandingContainer";
 import { QuestionnaireCardContainer } from "../../components/questionnaire/QuestionnaireCardContainer";
@@ -19,154 +18,25 @@ import { useHasSavedResponse } from "../../hooks/questionnaire/useHasSavedRespon
 import { useSaveQuestionnaireProgress } from "../../hooks/questionnaire/useSaveQuestionnaireProgress";
 import { useGetQuestionnaireProgress } from "../../hooks/questionnaire/useGetQuestionnaireProgress";
 import {
-  calculateTotalScore,
+  Question,
+  QuestionType,
   Responses,
-} from "../../common/utilities/scoreCalculation";
-
-// styled-component styles for Questionnaire Page
-
-const QuesContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  padding: 20px;
-  overflow-y: auto;
-
-  @media (max-width: 768px) {
-    padding: 15px;
-  }
-
-  @media (max-width: 375px) {
-    padding: 10px;
-  }
-`;
-
-const ProgressBar = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-
-  .progress-segment {
-    width: 100%;
-    height: 8px;
-    background-color: ${({ theme }) => theme.textGrey};
-    border-radius: 4px;
-    margin-right: 4px;
-
-    &.filled {
-      background-color: ${({ theme }) => theme.green};
-    }
-  }
-
-  @media (max-width: 768px) {
-    margin-bottom: 15px;
-  }
-`;
-
-const ProgressIndicator = styled.div`
-  font-size: 1.15rem;
-  color: ${({ theme }) => theme.blue};
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
-
-  @media (max-width: 768px) {
-    font-size: 1rem;
-    margin-bottom: 15px;
-  }
-
-  @media (max-width: 375px) {
-    font-size: 0.9rem;
-  }
-`;
-
-const SubmitButton = styled(NavigationButton).attrs({ as: "a" })`
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
-  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
-  font-size: 1rem;
-  padding: 10px 20px;
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-    padding: 8px 16px;
-  }
-
-  @media (max-width: 768px) {
-    padding: 8px 16px;
-    width: 80px;
-    font-size: 0.7rem;
-  }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
-  width: 100%;
-
-  @media (max-width: 768px) {
-    gap: 8px;
-  }
-
-  @media (max-width: 375px) {
-    gap: 5px;
-  }
-`;
-
-const QuitButton = styled(NavigationButton)`
-  background-color: ${({ theme }) => theme.red};
-  color: white;
-  font-size: 1rem;
-  padding: 10px 20px;
-  white-space: nowrap;
-  min-width: max-content;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.accentBackgroundColor};
-    color: ${({ theme }) => theme.red};
-    border: solid 2px ${({ theme }) => theme.red};
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-    padding: 8px 16px;
-  }
-
-  @media (max-width: 375px) {
-    padding: 8px 16px;
-    font-size: 0.7rem;
-  }
-`;
-
-// types
-
-export enum Type {
-  RADIO = "radio",
-  CHECKBOX = "checkbox",
-  RANGE = "range",
-}
-
-interface Option {
-  optionId: number;
-  optionLabel: string;
-  points: number;
-}
-
-export interface Question {
-  id: number;
-  title: string;
-  type: Type;
-  options: Option[];
-}
+} from "../../common/types/questionnaire.types";
+import {
+  QuesContainer,
+  ProgressBar,
+  ProgressIndicator,
+  SubmitButton,
+  ButtonContainer,
+  QuitButton,
+} from "./QuestionnaireStyles";
+import {
+  createResponseChangeHandler,
+  createNextHandler,
+  createPreviousHandler,
+  createQuitHandler,
+  createSubmitHandler,
+} from "./QuestionnaireHandlers";
 
 export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();
@@ -174,7 +44,7 @@ export function Questionnaire() {
   const { isAuthenticated } = useContext(AuthContext);
   const questions: Question[] = questionData.questions.map((q: any) => ({
     ...q,
-    type: q.type as Type,
+    type: q.type as QuestionType,
   }));
 
   const [responses, setResponses] = useState<Responses>({});
@@ -371,107 +241,52 @@ export function Questionnaire() {
     );
   }
 
-  // Handle response change
-  const handleResponseChange = async (
-    qid: number,
-    response: number | number[]
-  ) => {
-    const updated = { ...responses, [qid]: response };
-    setResponses(updated);
-    setHasInProgressQuestionnaire(true);
+  // Create handler functions
+  const handleResponseChange = createResponseChangeHandler(
+    responses,
+    setResponses,
+    setHasInProgressQuestionnaire,
+    saveProgressMutate,
+    currentQuestion
+  );
 
-    try {
-      await saveProgressMutate({ responses: updated, currentQuestion });
-    } catch (err) {
-      console.error("Error saving progress:", err);
-    }
-  };
+  const handleNext = createNextHandler(
+    currentQuestion,
+    questions,
+    setCurrentQuestion,
+    setHasInProgressQuestionnaire,
+    saveProgressMutate,
+    responses,
+    navigate
+  );
 
-  // Navigate to the next question
-  const handleNext = async () => {
-    if (currentQuestion < questions.length) {
-      const newQuestion = currentQuestion + 1;
-      setCurrentQuestion(newQuestion);
-      setHasInProgressQuestionnaire(true);
+  const handlePrevious = createPreviousHandler(
+    currentQuestion,
+    setCurrentQuestion,
+    saveProgressMutate,
+    responses,
+    navigate
+  );
 
-      try {
-        await saveProgressMutate({ responses, currentQuestion: newQuestion });
-      } catch (err) {
-        console.error("Error saving progress:", err);
-      }
+  const handleQuit = createQuitHandler(
+    hasCompletedQuestionnaire,
+    saveProgressMutate,
+    responses,
+    setIsRetaking,
+    setHasInProgressQuestionnaire,
+    navigate
+  );
 
-      navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
-    }
-  };
-
-  // Navigate to the previous question
-  const handlePrevious = async () => {
-    if (currentQuestion > 1) {
-      const newQuestion = currentQuestion - 1;
-      setCurrentQuestion(newQuestion);
-
-      try {
-        await saveProgressMutate({ responses, currentQuestion: newQuestion });
-      } catch (err) {
-        console.error("Error saving progress:", err);
-      }
-
-      navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
-    }
-  };
-
-  // Exit questionnaire
-  const handleQuit = async () => {
-    // If user has completed a questionnaire before
-    if (hasCompletedQuestionnaire) {
-      try {
-        // Clear in-progress state but keep responses
-        await saveProgressMutate({ responses, currentQuestion: 0 });
-
-        // Update local state
-        setIsRetaking(false);
-        setHasInProgressQuestionnaire(false);
-
-        // Navigate to results page
-        navigate(RoutePaths.RESULTS);
-      } catch (err) {
-        console.error("Error clearing progress:", err);
-        // Navigate anyway in case of error
-        navigate(RoutePaths.RESULTS);
-      }
-    } else {
-      // If no completed questionnaire, go to dashboard
-      navigate(RoutePaths.LANDING);
-    }
-  };
-
-  // Handle the submission of the questionnaire
-  const handleSubmit = async () => {
-    const totalScore = calculateTotalScore(questions, responses);
-
-    try {
-      // Save to completed questionnaire table
-      await saveResponseMutate({ responses, totalScore });
-      console.log("Successfully saved questionnaire response.");
-
-      // Update state
-      setHasCompletedQuestionnaire(true);
-      setIsRetaking(false);
-      setHasInProgressQuestionnaire(false);
-
-      // Keep responses but mark as completed (currentQuestion = 0)
-      try {
-        await saveProgressMutate({ responses, currentQuestion: 0 });
-      } catch (err) {
-        console.error("Error updating progress:", err);
-      }
-
-      // Navigate to results page
-      navigate(RoutePaths.RESULTS);
-    } catch (err) {
-      console.error("Error submitting questionnaire:", err);
-    }
-  };
+  const handleSubmit = createSubmitHandler(
+    questions,
+    responses,
+    saveResponseMutate,
+    setHasCompletedQuestionnaire,
+    setIsRetaking,
+    setHasInProgressQuestionnaire,
+    saveProgressMutate,
+    navigate
+  );
 
   // If currentQuestion is 0, show the start screen
   if (currentQuestion === 0) {
@@ -480,7 +295,7 @@ export function Questionnaire() {
 
   const currentQuestionType = questions[currentQuestion - 1]?.type;
   const isNextDisabled =
-    currentQuestionType !== Type.RANGE &&
+    currentQuestionType !== QuestionType.RANGE &&
     (responses[currentQuestion] === undefined ||
       responses[currentQuestion] === null);
 

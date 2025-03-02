@@ -1,13 +1,12 @@
 import round from "lodash/round";
-import { Question } from "../../containers/questionnaire/Questionnaire";
-
-export type Responses = Record<number, number | number[]>;
+import { Question, Responses } from "../types/questionnaire.types";
 
 /**
  * Calculates a score (0-100) based on questionnaire responses.
  * Scores each question as a percentage of its maximum points,
  * then averages these percentages.
  */
+
 export const calculateTotalScore = (
   questions: Question[],
   responses: Responses

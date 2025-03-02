@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Question, Type } from "./Questionnaire";
+import { Question, QuestionType } from "../../common/types/questionnaire.types";
 
 // Styled-components for the Questionnaire component
 
@@ -67,7 +67,7 @@ const RangeLabels = styled.div`
   justify-content: space-between;
   width: 100%;
 
-    @media (max-width: 600px) {
+  @media (max-width: 600px) {
     font-size: 0.4rem;
   }
 `;
@@ -88,13 +88,13 @@ export function RenderQuestions(props: RenderQuestionsProps) {
   useEffect(() => {
     if (initialResponse !== undefined) {
       switch (type) {
-        case Type.RADIO:
+        case QuestionType.RADIO:
           setRangeValue(initialResponse as number);
           break;
-        case Type.CHECKBOX:
+        case QuestionType.CHECKBOX:
           setSelectedOptions(initialResponse as number[]);
           break;
-        case Type.RANGE:
+        case QuestionType.RANGE:
           setRangeValue(initialResponse as number);
           break;
         default:
@@ -108,7 +108,7 @@ export function RenderQuestions(props: RenderQuestionsProps) {
 
   // Initialize range value when the component mounts if it's a range question
   useEffect(() => {
-    if (type === Type.RANGE) {
+    if (type === QuestionType.RANGE) {
       if (initialResponse === undefined) {
         const initialValue = 1;
         setRangeValue(initialValue);
@@ -150,7 +150,7 @@ export function RenderQuestions(props: RenderQuestionsProps) {
         {(() => {
           // Render inputs based on question type
           switch (type) {
-            case Type.RADIO:
+            case QuestionType.RADIO:
               return options.map((option) => (
                 <FormGroup key={option.optionId} isRange={false}>
                   <RadioInput
@@ -166,7 +166,7 @@ export function RenderQuestions(props: RenderQuestionsProps) {
                   </label>
                 </FormGroup>
               ));
-            case Type.CHECKBOX:
+            case QuestionType.CHECKBOX:
               return options.map((option) => (
                 <FormGroup key={option.optionId} isRange={false}>
                   <CheckboxInput
@@ -182,7 +182,7 @@ export function RenderQuestions(props: RenderQuestionsProps) {
                   </label>
                 </FormGroup>
               ));
-            case Type.RANGE:
+            case QuestionType.RANGE:
               return (
                 <FormGroup isRange={true}>
                   <RangeInput
