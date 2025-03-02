@@ -201,9 +201,16 @@ export function Questionnaire() {
   const [responses, setResponses] = useState<Responses>({});
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [retakeMode, setRetakeMode] = useState(false);
+  const [hasCompletedQuestionnaire, setHasCompletedQuestionnaire] =
+    useState(false);
+  const [isRetaking, setIsRetaking] = useState(false);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
+  const [hasInProgressQuestionnaire, setHasInProgressQuestionnaire] =
+    useState(false);
 
-  // Check if saved responses exist
-  const { isLoading: isLoadingResponses } = useHasSavedResponse();
+  // Check if saved responses exist (completed questionnaire)
+  const { data: hasSavedResponseData, isLoading: isLoadingResponses } =
+    useHasSavedResponse();
 
   // Mutation hook for saving questionnaire responses (final submission)
   const {
@@ -220,49 +227,169 @@ export function Questionnaire() {
   const { data: progressData, isLoading: isLoadingProgress } =
     useGetQuestionnaireProgress();
 
-  // Determine currentQuestion from URL or progress data
+  // Determine if user has completed the questionnaire before
   useEffect(() => {
-    if (questionId) {
-      setCurrentQuestion(parseInt(questionId));
-    } else {
-      setCurrentQuestion(0);
+    if (hasSavedResponseData) {
+      setHasCompletedQuestionnaire(true);
+
+      // Show retake screen at root path if not already retaking
+      if (!questionId && !isRetaking && !hasInProgressQuestionnaire) {
+        setRetakeMode(true);
+      }
     }
-  }, [questionId]);
+
+    // Mark initial load complete
+    if (!isLoadingResponses) {
+      setInitialLoadDone((prevState) => prevState || !isLoadingResponses);
+    }
+  }, [
+    hasSavedResponseData,
+    isLoadingResponses,
+    questionId,
+    isRetaking,
+    hasInProgressQuestionnaire,
+  ]);
 
   // Update progress when the hook returns data
   useEffect(() => {
     if (progressData) {
-      if (progressData.responses) {
-        setResponses(progressData.responses);
-      }
-      if (progressData.currentQuestion) {
-        setCurrentQuestion(progressData.currentQuestion);
-      }
-      const totalQuestions = questionData.questions.length;
+      // Check if there's any saved responses
       if (
-        progressData.currentQuestion === totalQuestions &&
         progressData.responses &&
-        progressData.responses[totalQuestions] !== undefined
+        Object.keys(progressData.responses).length > 0
       ) {
-        setRetakeMode(true);
+        // Active questionnaire (currentQuestion > 0)
+        if (progressData.currentQuestion && progressData.currentQuestion > 0) {
+          setHasInProgressQuestionnaire(true);
+          setRetakeMode(false);
+
+          // Load responses if not retaking
+          if (!isRetaking) {
+            setResponses(progressData.responses);
+
+            // Update current question if no URL param
+            if (progressData.currentQuestion && !questionId) {
+              setCurrentQuestion(progressData.currentQuestion);
+            }
+          }
+        } else {
+          // Completed questionnaire (has responses but currentQuestion = 0)
+          setHasInProgressQuestionnaire(false);
+
+          // Load responses if not retaking
+          if (!isRetaking) {
+            setResponses(progressData.responses);
+          }
+        }
+      } else {
+        // No saved responses
+        setHasInProgressQuestionnaire(false);
       }
     }
-  }, [progressData]);
 
-  if (retakeMode) {
-    return (
-      <RetakeQuestionnaire
-        resetResponses={() => {
-          setResponses({});
-          setCurrentQuestion(1);
-          setRetakeMode(false);
-        }}
-      />
-    );
-  }
+    // Mark progress data loaded
+    if (!isLoadingProgress) {
+      setInitialLoadDone((prevState) => prevState || !isLoadingProgress);
+    }
+  }, [progressData, isRetaking, questionId, isLoadingProgress]);
+
+  // Determine currentQuestion from URL
+  useEffect(() => {
+    if (questionId) {
+      const parsedQuestionId = parseInt(questionId);
+      setCurrentQuestion(parsedQuestionId);
+
+      // Set retaking mode if navigating to a specific question
+      if (parsedQuestionId > 0 && hasCompletedQuestionnaire) {
+        setIsRetaking(true);
+        setRetakeMode(false);
+      }
+    } else if (!progressData?.currentQuestion) {
+      // Reset to start if no progress
+      setCurrentQuestion(0);
+    }
+  }, [questionId, hasCompletedQuestionnaire, progressData]);
+
+  // Determine if we should show the retake screen
+  useEffect(() => {
+    // Wait for initial data load
+    if (!initialLoadDone) return;
+
+    // Check for completed questionnaire (responses exist but currentQuestion = 0)
+    const hasCompletedProgress =
+      progressData?.responses &&
+      Object.keys(progressData.responses).length > 0 &&
+      (!progressData.currentQuestion || progressData.currentQuestion === 0);
+
+    // Show retake screen for completed questionnaires at root path
+    if (
+      hasCompletedQuestionnaire &&
+      (currentQuestion === 0 || !questionId) &&
+      !isRetaking &&
+      (hasCompletedProgress || !hasInProgressQuestionnaire)
+    ) {
+      setRetakeMode(true);
+
+      // Ensure not marked as in-progress
+      if (hasInProgressQuestionnaire) {
+        setHasInProgressQuestionnaire(false);
+      }
+    } else if (
+      isRetaking ||
+      (questionId && parseInt(questionId) > 0) ||
+      (hasInProgressQuestionnaire && !hasCompletedProgress)
+    ) {
+      setRetakeMode(false);
+    }
+  }, [
+    hasCompletedQuestionnaire,
+    currentQuestion,
+    isRetaking,
+    questionId,
+    initialLoadDone,
+    hasInProgressQuestionnaire,
+    progressData,
+  ]);
+
+  // Debug logging
+  useEffect(() => {
+    console.log({
+      hasCompletedQuestionnaire,
+      hasInProgressQuestionnaire,
+      retakeMode,
+      isRetaking,
+      currentQuestion,
+      questionId,
+      initialLoadDone,
+    });
+  }, [
+    hasCompletedQuestionnaire,
+    hasInProgressQuestionnaire,
+    retakeMode,
+    isRetaking,
+    currentQuestion,
+    questionId,
+    initialLoadDone,
+  ]);
 
   if (isLoadingResponses || isLoadingProgress) {
     return <div>Loading...</div>;
+  }
+
+  // Show retake screen if conditions are met
+  if (retakeMode && hasCompletedQuestionnaire) {
+    return (
+      <RetakeQuestionnaire
+        resetResponses={() => {
+          // Start retake with previous responses
+          setCurrentQuestion(1);
+          setRetakeMode(false);
+          setIsRetaking(true);
+          setHasInProgressQuestionnaire(false);
+          navigate(`${RoutePaths.QUESTIONNAIRE}/1`);
+        }}
+      />
+    );
   }
 
   const questions: Question[] = questionData.questions.map((q) => ({
@@ -277,6 +404,7 @@ export function Questionnaire() {
   ) => {
     const updated = { ...responses, [qid]: response };
     setResponses(updated);
+    setHasInProgressQuestionnaire(true);
 
     try {
       await saveProgressMutate({ responses: updated, currentQuestion });
@@ -290,6 +418,7 @@ export function Questionnaire() {
     if (currentQuestion < questions.length) {
       const newQuestion = currentQuestion + 1;
       setCurrentQuestion(newQuestion);
+      setHasInProgressQuestionnaire(true);
 
       try {
         await saveProgressMutate({ responses, currentQuestion: newQuestion });
@@ -327,16 +456,27 @@ export function Questionnaire() {
     const totalScore = calculateTotalScore(questions, responses);
 
     try {
-      // Save final progress before submission
-      await saveProgressMutate({ responses, currentQuestion });
+      // Save to completed questionnaire table
       await saveResponseMutate({ responses, totalScore });
       console.log("Successfully saved questionnaire response.");
+
+      // Update state
+      setHasCompletedQuestionnaire(true);
+      setIsRetaking(false);
+      setHasInProgressQuestionnaire(false);
+
+      // Keep responses but mark as completed (currentQuestion = 0)
+      try {
+        await saveProgressMutate({ responses, currentQuestion: 0 });
+      } catch (err) {
+        console.error("Error updating progress:", err);
+      }
+
+      // Navigate to results page
+      navigate(RoutePaths.RESULTS);
     } catch (err) {
       console.error("Error submitting questionnaire:", err);
     }
-
-    // Navigate to results page
-    navigate(RoutePaths.RESULTS);
   };
 
   // If currentQuestion is 0, show the start screen
