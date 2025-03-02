@@ -1,8 +1,8 @@
 import {
   Question,
   Responses,
-} from "../../types/questionnaire/questionnaire.types";
-import { RoutePaths } from "../../constants/routes";
+} from "../../../common/types/questionnaire/questionnaire.types";
+import { RoutePaths } from "../../../common/constants/routes";
 import { NavigateFunction } from "react-router-dom";
 import { calculateTotalScore } from "./score-calculation-utils";
 

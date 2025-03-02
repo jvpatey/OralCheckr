@@ -1,9 +1,5 @@
-import { Link, useLocation } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled, { keyframes } from "styled-components";
-import { RoutePaths } from "../common/constants/routes";
-import { AuthContext } from "../containers/authentication/AuthContext";
-import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 // Fade-in from left animation
 const fadeInLeft = keyframes`
@@ -17,7 +13,7 @@ const fadeInLeft = keyframes`
   }
 `;
 
-const SidebarContainer = styled.div`
+export const SidebarContainer = styled.div`
   height: calc(100vh - 56px);
   width: 200px;
   position: fixed;
@@ -47,7 +43,7 @@ const SidebarContainer = styled.div`
   }
 `;
 
-const SidebarLink = styled(Link)`
+export const SidebarLink = styled(Link)`
   width: calc(100% - 20px);
   font-size: 17px;
   padding: 10px 20px;
@@ -118,7 +114,7 @@ const SidebarLink = styled(Link)`
   }
 `;
 
-const Icon = styled.span`
+export const Icon = styled.span`
   margin-right: 10px;
 
   @media (max-width: 800px) {
@@ -126,52 +122,8 @@ const Icon = styled.span`
   }
 `;
 
-const Text = styled.span`
+export const Text = styled.span`
   @media (max-width: 800px) {
     display: none;
   }
 `;
-
-interface SidebarProps {
-  links: { name: string; path: string; icon: any }[];
-}
-
-// Functional component to render the sidebar - used on the habit tracker pages
-export function Sidebar({ links }: SidebarProps) {
-  const location = useLocation();
-  const { isAuthenticated } = useContext(AuthContext);
-
-  // Don't render sidebar if not authenticated
-  if (!isAuthenticated) {
-    return null;
-  }
-
-  return (
-    <SidebarContainer>
-      {links.map((link, index) => {
-        const currentPath = location.pathname + location.hash.replace("#", "");
-
-        return (
-          <SidebarLink
-            to={link.path}
-            key={index}
-            className={
-              currentPath === link.path ||
-              (link.path === RoutePaths.QUESTIONNAIRE &&
-                currentPath.startsWith(RoutePaths.QUESTIONNAIRE) &&
-                currentPath !== RoutePaths.RESULTS)
-                ? "active"
-                : ""
-            }
-            data-tooltip={link.name}
-          >
-            <Icon>
-              <FontAwesomeIcon icon={link.icon} />
-            </Icon>
-            <Text>{link.name}</Text>
-          </SidebarLink>
-        );
-      })}
-    </SidebarContainer>
-  );
-}

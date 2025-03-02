@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { NavBar } from "./NavBar";
-import { Sidebar } from "../../components/Sidebar";
+import { Sidebar } from "./components/Sidebar";
 import {
   navbarLinks,
   sidebarLinks as sidebarNavLinks,

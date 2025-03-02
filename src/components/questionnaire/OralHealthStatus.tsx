@@ -1,7 +1,7 @@
 import { Card } from "react-bootstrap";
 import { useTheme } from "styled-components";
 import { useGetTotalScore } from "../../hooks/questionnaire/useGetTotalScore";
-import { getScoreColor } from "../../common/utilities/questionnaire/oral-health-status-utils";
+import { getScoreColor } from "../../containers/questionnaire/utils/oral-health-status-utils";
 import { StyledHeader, MessageText } from "./styles/SharedQuestionnaireStyles";
 import {
   StyledText,

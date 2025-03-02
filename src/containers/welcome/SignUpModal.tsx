@@ -8,7 +8,7 @@ import { useRegisterUser } from "../../hooks/auth/useRegisterUser";
 import { useConvertGuestToUser } from "../../hooks/auth/useConvertGuestToUser";
 import { FormButton } from "../../components/questionnaire/styles/FormButton";
 import { PasswordField } from "./components";
-import { validatePassword } from "../../common/utilities/welcome/password-utils";
+import { validatePassword } from "./utils/password-utils";
 import {
   StyledModal,
   ModalHeader,

@@ -14,7 +14,7 @@ import {
   RequirementList,
   RequirementItem,
 } from "../styles/ModalStyles";
-import { passwordRequirements } from "../../../common/utilities/welcome/password-utils";
+import { passwordRequirements } from "../utils/password-utils";
 
 interface PasswordFieldProps {
   value: string;

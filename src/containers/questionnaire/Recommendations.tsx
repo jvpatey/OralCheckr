@@ -4,7 +4,7 @@ import Carousel from "react-bootstrap/Carousel";
 import { Card } from "react-bootstrap";
 import { useGetQuestionnaireResponse } from "../../hooks/questionnaire/useGetQuestionnaireResponse";
 import type { Recommendation } from "../../common/types/questionnaire/recommendations.types";
-import { generateRecommendations } from "../../common/utilities/questionnaire/recommendations-utils";
+import { generateRecommendations } from "./utils/recommendations-utils";
 import { StyledHeader } from "../../components/questionnaire/styles/SharedQuestionnaireStyles";
 import {
   NoRecommendations,

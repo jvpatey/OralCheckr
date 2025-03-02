@@ -14,7 +14,7 @@ import {
   createRangeChangeHandler,
   createRadioChangeHandler,
   createCheckboxChangeHandler,
-} from "../../common/utilities/questionnaire/render-questions-utils";
+} from "./utils/render-questions-utils";
 
 // RenderQuestions functional component for rendering the questions inside the Questionnaire
 export function RenderQuestions(props: RenderQuestionsProps) {

@@ -36,7 +36,7 @@ import {
   createPreviousHandler,
   createQuitHandler,
   createSubmitHandler,
-} from "../../common/utilities/questionnaire/questionnaire-utils";
+} from "./utils/questionnaire-utils";
 
 export function Questionnaire() {
   const { questionId } = useParams<{ questionId: string }>();
