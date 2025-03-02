@@ -1,5 +1,5 @@
 import questionData from "../../../common/questionnaire.json";
-import { Recommendation } from "../../types/questionnaire/recommendations.types";
+import { Recommendation } from "../../../common/types/questionnaire/recommendations.types";
 
 // Processes a single option and returns a recommendation if feedback exists
 

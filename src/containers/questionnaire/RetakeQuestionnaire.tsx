@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { RoutePaths } from "../../common/constants/routes";
 import { PageBackground } from "../../components/PageBackground";
 import { LandingContainer } from "../../components/landing/LandingContainer";
-import { QuestionnaireCardContainer } from "../../components/questionnaire/QuestionnaireCardContainer";
-import { QuestionnaireCard } from "../../components/questionnaire/QuestionnaireCard";
-import { StyledModal } from "../../components/questionnaire/Modal";
+import { QuestionnaireCardContainer } from "../../components/questionnaire/styles/QuestionnaireCardContainer";
+import { QuestionnaireCard } from "../../components/questionnaire/styles/QuestionnaireCard";
+import { StyledModal } from "../../components/questionnaire/styles/Modal";
 import { AuthContext } from "../authentication/AuthContext";
 import { RetakeQuestionnaireProps } from "../../common/types/questionnaire/retake-questionnaire.types";
 import {

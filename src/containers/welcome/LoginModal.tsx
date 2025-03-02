@@ -9,7 +9,7 @@ import { AuthContext } from "../authentication/AuthContext";
 import { useLoginUser } from "../../hooks/auth/useLoginUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { FormButton } from "../../components/questionnaire/FormButton";
+import { FormButton } from "../../components/questionnaire/styles/FormButton";
 
 interface LoginModalProps {
   show: boolean;

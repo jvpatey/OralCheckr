@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { NavigationButton } from "../../../components/questionnaire/NavigationButton";
+import { NavigationButton } from "../../../components/questionnaire/styles/NavigationButton";
 
 export const QuesContainer = styled.div`
   display: flex;
