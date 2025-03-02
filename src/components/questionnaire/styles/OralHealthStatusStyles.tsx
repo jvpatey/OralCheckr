@@ -60,17 +60,3 @@ export const CustomProgressBar = styled(ProgressBar)<{ $scoreColor: string }>`
     margin-bottom: 10px;
   }
 `;
-
-export const MessageText = styled.p`
-  color: ${({ theme }) => theme.textGrey};
-  display: flex;
-  font-size: 16px;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 10px;
-
-  @media (max-width: 950px) {
-    font-size: 14px;
-  }
-`;

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Carousel from "react-bootstrap/Carousel";
-import { Card } from "react-bootstrap";
 
 export const NoRecommendations = styled.div`
   display: flex;
@@ -56,26 +55,6 @@ export const CategoryText = styled.div`
 
   @media (max-width: 430px) {
     font-size: 14px;
-  }
-`;
-
-export const StyledHeader = styled(Card.Header)`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  color: ${({ theme }) => theme.blue};
-  font-size: 25px;
-  font-weight: bold;
-  border: none;
-  text-align: center;
-  margin-top: 50px;
-
-  @media (max-width: 375px) {
-    margin-top: 20px;
-    font-size: 22px;
-  }
-
-  @media (max-width: 430px) {
-    margin-top: 10px;
-    font-size: 18px;
   }
 `;
 

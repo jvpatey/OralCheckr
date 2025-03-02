@@ -2,12 +2,11 @@ import { Card } from "react-bootstrap";
 import { useTheme } from "styled-components";
 import { useGetTotalScore } from "../../hooks/questionnaire/useGetTotalScore";
 import { getScoreColor } from "../../common/utilities/questionnaire/oral-health-status-utils";
+import { StyledHeader, MessageText } from "./styles/SharedQuestionnaireStyles";
 import {
-  StyledHeader,
   StyledText,
   ScoreSpan,
   CustomProgressBar,
-  MessageText,
 } from "./styles/OralHealthStatusStyles";
 
 // Functional component for the Oral Health Status Card

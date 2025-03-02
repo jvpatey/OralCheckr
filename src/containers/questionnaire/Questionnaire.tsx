@@ -22,12 +22,12 @@ import {
   QuestionType,
   Responses,
 } from "../../common/types/questionnaire/questionnaire.types";
+import { ButtonContainer } from "../../components/questionnaire/styles/SharedQuestionnaireStyles";
 import {
   QuesContainer,
   ProgressBar,
   ProgressIndicator,
   SubmitButton,
-  ButtonContainer,
   QuitButton,
 } from "./styles/QuestionnaireStyles";
 import {

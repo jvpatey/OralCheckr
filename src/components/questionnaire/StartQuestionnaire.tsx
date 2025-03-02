@@ -10,8 +10,8 @@ import {
   TitleText,
   CardText,
   ButtonContainer,
-  StartButton,
-} from "./styles/StartQuestionnaireStyles";
+  PrimaryButton,
+} from "./styles/SharedQuestionnaireStyles";
 
 // Functional component for the page to start the questionnaire if not completed previously
 export function StartQuestionnaire({
@@ -33,9 +33,13 @@ export function StartQuestionnaire({
               health.
             </CardText>
             <ButtonContainer>
-              <StartButton as={Link} to={`${RoutePaths.QUESTIONNAIRE}/1`}>
+              <PrimaryButton
+                as={Link}
+                to={`${RoutePaths.QUESTIONNAIRE}/1`}
+                style={{ width: "80%" }}
+              >
                 Begin
-              </StartButton>
+              </PrimaryButton>
             </ButtonContainer>
           </QuestionnaireCard>
         </QuestionnaireCardContainer>

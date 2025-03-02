@@ -5,12 +5,12 @@ import { Card } from "react-bootstrap";
 import { useGetQuestionnaireResponse } from "../../hooks/questionnaire/useGetQuestionnaireResponse";
 import type { Recommendation } from "../../common/types/questionnaire/recommendations.types";
 import { generateRecommendations } from "../../common/utilities/questionnaire/recommendations-utils";
+import { StyledHeader } from "../../components/questionnaire/styles/SharedQuestionnaireStyles";
 import {
   NoRecommendations,
   CarouselContainer,
   CarouselContent,
   CategoryText,
-  StyledHeader,
   CustomCarousel,
 } from "./styles/RecommendationsStyles";
 

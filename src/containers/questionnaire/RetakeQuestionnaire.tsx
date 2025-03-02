@@ -14,9 +14,9 @@ import {
   TitleText,
   CardText,
   ButtonContainer,
-  NavButton,
-  ModalButton,
-} from "./styles/RetakeQuestionnaireStyles";
+  PrimaryButton,
+} from "../../components/questionnaire/styles/SharedQuestionnaireStyles";
+import { ModalButton } from "./styles/RetakeQuestionnaireStyles";
 
 export function RetakeQuestionnaire({
   resetResponses,
@@ -54,9 +54,12 @@ export function RetakeQuestionnaire({
               status, please click the button below.
             </CardText>
             <ButtonContainer>
-              <NavButton onClick={handleRetakeClick}>
+              <PrimaryButton
+                onClick={handleRetakeClick}
+                style={{ width: "80%" }}
+              >
                 Retake Questionnaire
-              </NavButton>
+              </PrimaryButton>
             </ButtonContainer>
           </QuestionnaireCard>
         </QuestionnaireCardContainer>
