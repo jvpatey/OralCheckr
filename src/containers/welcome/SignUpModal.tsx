@@ -1,4 +1,4 @@
-import { Modal, Form, Alert } from "react-bootstrap";
+import { Modal, Form, Alert, OverlayTrigger, Popover } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -8,7 +8,12 @@ import { AuthContext } from "../authentication/AuthContext";
 import { useRegisterUser } from "../../hooks/auth/useRegisterUser";
 import { useConvertGuestToUser } from "../../hooks/auth/useConvertGuestToUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faEyeSlash,
+  faInfoCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { FormButton } from "../../components/questionnaire/FormButton";
 
 interface SignUpModalProps {
   show: boolean;
@@ -63,32 +68,24 @@ const PasswordToggle = styled.span`
   color: ${({ theme }) => theme.blue};
 `;
 
-const Button = styled.button<{ $signup?: boolean }>`
-  background-color: ${(props) =>
-    props.$signup ? props.theme.green : props.theme.green};
-  color: ${(props) =>
-    props.$signup ? props.theme.backgroundColor : props.theme.backgroundColor};
-  font-weight: bold;
-  border: 2px solid
-    ${(props) => (props.$signup ? props.theme.green : props.theme.green)};
-  width: 50%;
-  margin-top: 10px;
-  border-radius: 20px;
-  padding: 0.5em 1em;
+const InfoIcon = styled.span`
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
-  margin: 10px auto;
-  display: block;
+  color: ${({ theme }) => theme.blue};
+`;
 
-  &:hover {
-    background-color: ${(props) =>
-      props.$signup
-        ? props.theme.accentBackgroundColor
-        : props.theme.accentBackgroundColor};
-    color: ${(props) =>
-      props.$signup ? props.theme.green : props.theme.green};
-    border-color: ${(props) => props.theme.green};
-    border-width: 2px;
-  }
+const RequirementList = styled.ul`
+  padding-left: 20px;
+  margin-bottom: 0;
+`;
+
+const RequirementItem = styled.li<{ $isMet: boolean }>`
+  color: ${(props) =>
+    props.$isMet ? props.theme.green : props.theme.textGrey};
+  font-size: 0.9rem;
 `;
 
 const CardText = styled.h5`
@@ -108,6 +105,8 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [formValid, setFormValid] = useState(false);
   const { updateAuth, user } = useContext(AuthContext);
   // registration mutation
   const { mutate: registerMutate } = useRegisterUser();
@@ -118,24 +117,39 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
     setShowPassword(!showPassword);
   };
 
-  const validatePassword = (password: string): string | null => {
-    const requirements = [
-      { regex: /.{8,}/, message: "Password must be at least 8 characters" },
-      { regex: /[A-Z]/, message: "Must contain at least one uppercase letter" },
-      { regex: /[a-z]/, message: "Must contain at least one lowercase letter" },
-      { regex: /\d/, message: "Must contain at least one digit" },
-      {
-        regex: /[!@#$%^&*(),.?":{}|<>]/,
-        message: "Must contain at least one special character",
-      },
-    ];
+  const passwordRequirements = [
+    { regex: /.{8,}/, message: "At least 8 characters" },
+    { regex: /[A-Z]/, message: "At least one uppercase letter" },
+    { regex: /[a-z]/, message: "At least one lowercase letter" },
+    { regex: /\d/, message: "At least one digit" },
+    {
+      regex: /[!@#$%^&*(),.?":{}|<>]/,
+      message: "At least one special character",
+    },
+  ];
 
-    const errors = requirements
+  const checkPasswordRequirements = (password: string) => {
+    return passwordRequirements.map((req) => ({
+      message: req.message,
+      isMet: req.regex.test(password),
+    }));
+  };
+
+  const validatePassword = (password: string): string | null => {
+    const errors = passwordRequirements
       .filter((req) => !req.regex.test(password))
       .map((req) => req.message);
 
     return errors.length > 0 ? errors.join(", ") : null;
   };
+
+  // Check if all form fields are valid
+  useEffect(() => {
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const isPasswordValid = validatePassword(password) === null;
+
+    setFormValid(!!firstName && !!lastName && isEmailValid && isPasswordValid);
+  }, [firstName, lastName, email, password]);
 
   const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -148,6 +162,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
     const passwordError = validatePassword(password);
     if (passwordError) {
       setError(passwordError);
+      setPasswordTouched(true);
       return;
     }
 
@@ -192,8 +207,25 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       setEmail("");
       setPassword("");
       setError("");
+      setPasswordTouched(false);
     }
   }, [show]);
+
+  // Password requirements popover
+  const passwordRequirementsPopover = (
+    <Popover id="password-requirements-popover">
+      <Popover.Header as="h3">Password Requirements</Popover.Header>
+      <Popover.Body>
+        <RequirementList>
+          {checkPasswordRequirements(password).map((req, index) => (
+            <RequirementItem key={index} $isMet={req.isMet}>
+              {req.message}
+            </RequirementItem>
+          ))}
+        </RequirementList>
+      </Popover.Body>
+    </Popover>
+  );
 
   return (
     <StyledModal show={show} onHide={handleClose} centered>
@@ -240,29 +272,41 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  const passwordFeedback = validatePassword(e.target.value);
-                  if (passwordFeedback) {
-                    setError(passwordFeedback);
-                  } else {
-                    setError("");
+                  if (passwordTouched) {
+                    const passwordFeedback = validatePassword(e.target.value);
+                    if (passwordFeedback) {
+                      setError(passwordFeedback);
+                    } else {
+                      setError("");
+                    }
                   }
                 }}
+                onBlur={() => setPasswordTouched(true)}
                 autoComplete="new-password"
               />
+              <OverlayTrigger
+                trigger={["hover", "focus"]}
+                placement="left"
+                overlay={passwordRequirementsPopover}
+              >
+                <InfoIcon>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                </InfoIcon>
+              </OverlayTrigger>
               <PasswordToggle onClick={togglePasswordVisibility}>
                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
               </PasswordToggle>
             </PasswordContainer>
           </Form.Group>
 
-          {error && (
+          {error && passwordTouched && (
             <Alert variant="danger" dismissible onClose={() => setError("")}>
               {error}
             </Alert>
           )}
-          <Button $signup type="submit">
+          <FormButton type="submit" disabled={!formValid} variant="signup">
             Sign Up
-          </Button>
+          </FormButton>
         </Form>
       </ModalBody>
     </StyledModal>

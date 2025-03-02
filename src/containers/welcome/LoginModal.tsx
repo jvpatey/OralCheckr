@@ -9,6 +9,7 @@ import { AuthContext } from "../authentication/AuthContext";
 import { useLoginUser } from "../../hooks/auth/useLoginUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FormButton } from "../../components/questionnaire/FormButton";
 
 interface LoginModalProps {
   show: boolean;
@@ -70,33 +71,6 @@ const PasswordStyle = styled(Form.Control)`
   border-color: ${({ theme }) => theme.blue};
 `;
 
-const Button = styled.button<{ $login?: boolean }>`
-  background-color: ${(props) =>
-    props.$login ? props.theme.green : props.theme.green};
-  color: ${(props) =>
-    props.$login ? props.theme.backgroundColor : props.theme.backgroundColor};
-  font-weight: bold;
-  border: 2px solid
-    ${(props) => (props.$login ? props.theme.green : props.theme.green)};
-  width: 50%;
-  margin-top: 10px;
-  border-radius: 20px;
-  padding: 0.5em 1em;
-  cursor: pointer;
-  margin: 10px auto;
-  display: block;
-
-  &:hover {
-    background-color: ${(props) =>
-      props.$login
-        ? props.theme.accentBackgroundColor
-        : props.theme.accentBackgroundColor};
-    color: ${(props) => (props.$login ? props.theme.green : props.theme.green)};
-    border-color: ${(props) => props.theme.green};
-    border-width: 2px;
-  }
-`;
-
 export function LoginModal({ show, handleClose }: LoginModalProps) {
   const navigate = useNavigate();
   const { updateAuth } = useContext(AuthContext);
@@ -104,12 +78,19 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [formValid, setFormValid] = useState(false);
   // Login mutation
   const { mutate: loginMutate } = useLoginUser();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  // Check if form is valid
+  useEffect(() => {
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    setFormValid(isEmailValid && password.length > 0);
+  }, [email, password]);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -183,9 +164,9 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
               {error}
             </Alert>
           )}
-          <Button $login type="submit">
+          <FormButton type="submit" disabled={!formValid} variant="login">
             Login
-          </Button>
+          </FormButton>
         </Form>
       </ModalBody>
     </StyledModal>
