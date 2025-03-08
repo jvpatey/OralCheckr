@@ -82,7 +82,6 @@ export const logoutUser = async (): Promise<void> => {
     await apiRequest<void>(LOGOUT_ENDPOINT, "POST");
   } catch (error) {
     console.error("Logout failed:", error);
-    // We don't rethrow here to prevent errors during logout
   }
 };
 
