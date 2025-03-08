@@ -36,7 +36,6 @@ import {
 } from "../../../hooks/habitLogs";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
-import { useQueryClient } from "@tanstack/react-query";
 
 // Utility function to reset habit form
 const resetHabitForm = (
@@ -58,7 +57,6 @@ export function Habits() {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const theme = useTheme();
-  const queryClient = useQueryClient();
 
   // Fetch habits using TanStack Query
   const {
@@ -80,6 +78,9 @@ export function Habits() {
   // Fetch logs for all habits
   const {
     habitLogsMap,
+    updateLogCount,
+    clearPendingUpdate,
+    syncWithServer,
     isLoading: isLoadingLogs,
     isError: isLogsError,
   } = useHabitLogsForAllHabits(habitIds, currentYear, currentMonth);
@@ -208,23 +209,28 @@ export function Habits() {
       return;
     }
 
+    // Ensure habitId is a number
+    const habitId = Number(habit.habitId);
+
+    // Update the local state immediately for a responsive UI
+    updateLogCount(habitId, selectedDate, logCount + 1);
+
+    // Send the update to the server
     incrementHabitLogMutation.mutate(
-      { habitId: habit.habitId, date: selectedDate },
+      { habitId, date: selectedDate },
       {
         onSuccess: () => {
-          // Invalidate all related queries to ensure fresh data
-          queryClient.invalidateQueries({ queryKey: ["allHabitLogs"] });
-          queryClient.invalidateQueries({
-            queryKey: ["habitLogs", habit.habitId],
-          });
-
-          // Force a refetch to ensure we have the latest data
-          queryClient.refetchQueries({ queryKey: ["allHabitLogs"] });
-
+          // Clear the pending update since it's now synced with the server
+          clearPendingUpdate(habitId, selectedDate);
           toast.success("Habit logged successfully");
         },
         onError: (error) => {
+          // Revert the local state update on error
+          updateLogCount(habitId, selectedDate, logCount);
           toast.error(`Failed to log habit: ${error}`);
+
+          // Force a sync with the server to ensure we have the latest data
+          syncWithServer();
         },
       }
     );
@@ -244,23 +250,28 @@ export function Habits() {
       return;
     }
 
+    // Ensure habitId is a number
+    const habitId = Number(habit.habitId);
+
+    // Update the local state immediately for a responsive UI
+    updateLogCount(habitId, selectedDate, logCount - 1);
+
+    // Then send the update to the server
     decrementHabitLogMutation.mutate(
-      { habitId: habit.habitId, date: selectedDate },
+      { habitId, date: selectedDate },
       {
         onSuccess: () => {
-          // Invalidate all related queries to ensure fresh data
-          queryClient.invalidateQueries({ queryKey: ["allHabitLogs"] });
-          queryClient.invalidateQueries({
-            queryKey: ["habitLogs", habit.habitId],
-          });
-
-          // Force a refetch to ensure we have the latest data
-          queryClient.refetchQueries({ queryKey: ["allHabitLogs"] });
-
+          // Clear the pending update since it's now synced with the server
+          clearPendingUpdate(habitId, selectedDate);
           toast.success("Habit log removed successfully");
         },
         onError: (error) => {
+          // Revert the local state update on error
+          updateLogCount(habitId, selectedDate, logCount);
           toast.error(`Failed to remove log: ${error}`);
+
+          // Force a sync with the server to ensure we have the latest data
+          syncWithServer();
         },
       }
     );
@@ -271,10 +282,13 @@ export function Habits() {
 
   // Handler for when the date changes in WeekPicker
   const handleWeekPickerDateChange = (date: Date) => {
+    // Update the selected date
     setSelectedDate(date);
 
-    // Invalidate habit logs queries when the date changes
-    queryClient.invalidateQueries({ queryKey: ["allHabitLogs"] });
+    // Only refetch if have habits
+    if (habitIds.length > 0) {
+      syncWithServer();
+    }
   };
 
   // Function to get log count for a specific habit and date
