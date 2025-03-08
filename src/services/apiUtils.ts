@@ -1,4 +1,5 @@
 // Common utilities for API services
+import { format } from "date-fns";
 
 // Common fetch options for all requests
 export const fetchOptions = {
@@ -10,11 +11,13 @@ export const fetchOptions = {
 
 // Helper function to format a date for the API
 export const formatDateForApi = (date: Date) => {
-  return {
+  const formattedDate = {
     year: date.getFullYear(),
-    month: date.toLocaleString("en-US", { month: "long" }), // "January", "February", etc.
+    month: format(date, "MMMM"),
     day: date.getDate(),
   };
+
+  return formattedDate;
 };
 
 // Helper function to make API requests

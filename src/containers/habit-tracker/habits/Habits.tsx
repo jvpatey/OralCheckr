@@ -197,12 +197,30 @@ export function Habits() {
     const habit = habits.find((h) => h.name === habitName);
     if (!habit || !habit.habitId) return;
 
+    // Get current log count
+    const logCount = getLogCount(habitName, selectedDate);
+
+    // Check if should allow logging
+    if (logCount >= habit.count) {
+      toast.error(
+        `Cannot exceed the maximum count of ${habit.count} for this habit`
+      );
+      return;
+    }
+
     incrementHabitLogMutation.mutate(
       { habitId: habit.habitId, date: selectedDate },
       {
         onSuccess: () => {
-          // Invalidate queries to refresh the data
+          // Invalidate all related queries to ensure fresh data
           queryClient.invalidateQueries({ queryKey: ["allHabitLogs"] });
+          queryClient.invalidateQueries({
+            queryKey: ["habitLogs", habit.habitId],
+          });
+
+          // Force a refetch to ensure we have the latest data
+          queryClient.refetchQueries({ queryKey: ["allHabitLogs"] });
+
           toast.success("Habit logged successfully");
         },
         onError: (error) => {
@@ -217,12 +235,28 @@ export function Habits() {
     const habit = habits.find((h) => h.name === habitName);
     if (!habit || !habit.habitId) return;
 
+    // Get current log count
+    const logCount = getLogCount(habitName, selectedDate);
+
+    // Check if we should allow removing
+    if (logCount <= 0) {
+      toast.error(`No logs to remove for this date`);
+      return;
+    }
+
     decrementHabitLogMutation.mutate(
       { habitId: habit.habitId, date: selectedDate },
       {
         onSuccess: () => {
-          // Invalidate queries to refresh the data
+          // Invalidate all related queries to ensure fresh data
           queryClient.invalidateQueries({ queryKey: ["allHabitLogs"] });
+          queryClient.invalidateQueries({
+            queryKey: ["habitLogs", habit.habitId],
+          });
+
+          // Force a refetch to ensure we have the latest data
+          queryClient.refetchQueries({ queryKey: ["allHabitLogs"] });
+
           toast.success("Habit log removed successfully");
         },
         onError: (error) => {
