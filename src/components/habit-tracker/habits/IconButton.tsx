@@ -18,11 +18,12 @@ const ButtonContainer = styled.div<{
   $hoverBackgroundColor: string;
 }>`
   background-color: ${({ $disabled, theme }) =>
-    $disabled ? theme.disabledBackground : theme.backgroundColor };
+    $disabled ? theme.disabledBackground : theme.backgroundColor};
   border: 2px solid
     ${({ $borderColor, $disabled, theme }) =>
       $disabled ? theme.disabledBackground : $borderColor};
-  color: ${({ $color, $disabled, theme }) => ($disabled ? theme.disabledText : $color)};
+  color: ${({ $color, $disabled, theme }) =>
+    $disabled ? theme.disabledText : $color};
   width: 50px;
   height: 45px;
   display: flex;
@@ -68,9 +69,16 @@ export function IconButton({
   hoverBackgroundColor,
   disabled = false,
 }: IconButtonProps) {
+  // handler that only calls onClick if not disabled
+  const handleClick = () => {
+    if (!disabled) {
+      onClick();
+    }
+  };
+
   return (
     <ButtonContainer
-      onClick={onClick}
+      onClick={handleClick}
       $disabled={disabled}
       $borderColor={borderColor}
       $color={color}

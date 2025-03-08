@@ -6,7 +6,8 @@ import { faSync } from "@fortawesome/free-solid-svg-icons";
 // Common styles for both sides of the flip card
 const flipCardCommonStyles = css<{ $isComplete: boolean }>`
   background-color: ${({ theme }) => theme.backgroundColor};
-  color: ${({ $isComplete, theme }) => ($isComplete ? theme.green : theme.blue)};
+  color: ${({ $isComplete, theme }) =>
+    $isComplete ? theme.green : theme.blue};
   font-weight: 600;
   border: 2px solid
     ${({ $isComplete, theme }) => ($isComplete ? theme.green : theme.blue)};
