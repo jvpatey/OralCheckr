@@ -1,7 +1,4 @@
-import {
-  Habit,
-  Logging,
-} from "../../../containers/habit-tracker/habits/Habits";
+import { Habit } from "../../../services/habitService";
 import { HabitRow, PlaceholderText } from "./HabitComponents";
 import { HabitTile } from "./HabitTile";
 import { IconButton } from "./IconButton";
@@ -11,10 +8,9 @@ import {
   faPlusCircle,
   faMinusCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { formatDateLong } from "../../../common/utilities/date-utils";
 import { useTheme } from "styled-components";
 
-interface HabitListProps {
+export interface HabitListProps {
   habits: Habit[];
   selectedDate: Date;
   isEditMode: boolean;
@@ -22,7 +18,7 @@ interface HabitListProps {
   handleDeleteHabit: (index: number) => void;
   handleLog: (habitName: string, selectedDate: Date) => void;
   handleRemoveLog: (habitName: string, selectedDate: Date) => void;
-  habitsLog: Logging;
+  getLogCount: (habitName: string, date: Date) => number;
   isFutureDate: boolean;
 }
 
@@ -35,7 +31,7 @@ export function RenderHabits({
   handleDeleteHabit,
   handleLog,
   handleRemoveLog,
-  habitsLog,
+  getLogCount,
   isFutureDate,
 }: HabitListProps) {
   const theme = useTheme();
@@ -43,15 +39,9 @@ export function RenderHabits({
   return (
     <>
       {habits.map((habit, index) => {
-        const year = selectedDate.getFullYear();
-        const month = formatDateLong(selectedDate);
-        const day = selectedDate.getDate();
-
-        const logCount = habitsLog[habit.name]?.[year]?.[month]?.[day] || 0;
-
+        const logCount = getLogCount(habit.name, selectedDate);
         const isAddLogDisabled = isFutureDate || logCount >= habit.count;
-        const isRemoveLogDisabled =
-          isFutureDate || !(habitsLog[habit.name]?.[year]?.[month]?.[day] > 0);
+        const isRemoveLogDisabled = isFutureDate || logCount <= 0;
 
         return (
           <HabitRow key={index}>
@@ -109,7 +99,7 @@ export function HabitList({
   handleDeleteHabit,
   handleLog,
   handleRemoveLog,
-  habitsLog,
+  getLogCount,
   isFutureDate,
 }: HabitListProps) {
   return habits.length === 0 ? (
@@ -125,7 +115,7 @@ export function HabitList({
       handleDeleteHabit={handleDeleteHabit}
       handleLog={handleLog}
       handleRemoveLog={handleRemoveLog}
-      habitsLog={habitsLog}
+      getLogCount={getLogCount}
       isFutureDate={isFutureDate}
     />
   );

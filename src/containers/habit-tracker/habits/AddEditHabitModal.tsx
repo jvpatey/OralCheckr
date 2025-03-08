@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { Modal, Form } from "react-bootstrap";
 import { StyledModal } from "../../../components/questionnaire/styles/Modal";
-import { Habit } from "./Habits";
+import { Habit } from "../../../services/habitService";
 import styled from "styled-components";
 
 interface AddEditHabitModalProps {
   show: boolean;
   handleClose: () => void;
-  handleSaveHabit: (habit: Habit) => void;
+  handleSaveHabit: () => void;
   originalHabit: Habit;
   newHabit: Habit;
   setNewHabit: (habit: Habit) => void;
@@ -102,7 +102,7 @@ export function AddEditHabitModal({
     <StyledModal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>
-          {originalHabit.name ? "Edit a Habit" : "Add a New Habit"}
+          {originalHabit.habitId ? "Edit a Habit" : "Add a New Habit"}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -132,10 +132,7 @@ export function AddEditHabitModal({
       </Modal.Body>
       <Modal.Footer>
         <CancelButton onClick={handleClose}>Cancel</CancelButton>
-        <SaveButton
-          disabled={isSaveDisabled()}
-          onClick={() => handleSaveHabit(newHabit)}
-        >
+        <SaveButton disabled={isSaveDisabled()} onClick={handleSaveHabit}>
           Save Habit
         </SaveButton>
       </Modal.Footer>

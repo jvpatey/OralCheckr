@@ -10,3 +10,4 @@ export {
   useDecrementHabitLog,
   useDecrementHabitLogErrorMessage,
 } from "./useDecrementHabitLog";
+export { useHabitLogsForAllHabits } from "./useHabitLogsForAllHabits";

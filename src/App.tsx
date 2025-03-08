@@ -6,6 +6,8 @@ import { lightTheme, darkTheme } from "./common/utilities/color-utils";
 import { Router } from "./Router";
 import { AuthProvider } from "./containers/authentication/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export enum ThemeType {
   LIGHT = "light",
@@ -28,6 +30,7 @@ export function App() {
           <HashRouter>
             <RenderNavs themeToggler={themeToggler} currentTheme={theme} />
             <Router themeToggler={themeToggler} currentTheme={theme} />
+            <ToastContainer position="top-right" autoClose={3000} />
           </HashRouter>
         </AuthProvider>
       </QueryClientProvider>
