@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   incrementHabitLog,
   handleHabitLogServiceError,
+  HabitLogResponse,
 } from "../../services/habitLogService";
 
 /* -- Hook for incrementing a habit log count -- */
@@ -11,10 +12,13 @@ export const useIncrementHabitLog = () => {
   return useMutation({
     mutationFn: ({ habitId, date }: { habitId: number; date: Date }) =>
       incrementHabitLog(habitId, date),
-    onSuccess: (_, variables) => {
-      // Invalidate the specific habit logs query
+    onSuccess: (_data: HabitLogResponse, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["habitLogs", variables.habitId],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["allHabitLogs"],
       });
     },
   });

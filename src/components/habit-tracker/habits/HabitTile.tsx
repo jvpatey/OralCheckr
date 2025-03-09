@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, memo } from "react";
 import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
@@ -170,14 +170,20 @@ interface HabitTileProps {
 }
 
 // Functional component to render the tile that stores the habit name, count, and logs - used in the Habits component
-export function HabitTile({ habit, logCount }: HabitTileProps) {
+const HabitTile = memo(({ habit, logCount }: HabitTileProps) => {
   const [flipped, setFlipped] = useState(false);
+  const [displayedLogCount, setDisplayedLogCount] = useState(logCount);
+
+  // Update the displayed log count when the prop changes
+  useEffect(() => {
+    setDisplayedLogCount(logCount);
+  }, [logCount]);
 
   // Calculate the progress as a percentage
-  const progress = Math.min((logCount / habit.count) * 100, 100);
+  const progress = Math.min((displayedLogCount / habit.count) * 100, 100);
 
   // Determine if the habit is complete
-  const isComplete = logCount >= habit.count;
+  const isComplete = displayedLogCount >= habit.count;
 
   // Handler for flipping the card
   const handleFlip = () => setFlipped(!flipped);
@@ -188,7 +194,7 @@ export function HabitTile({ habit, logCount }: HabitTileProps) {
         <FlipCardFront $isComplete={isComplete}>
           <ProgressBar $progress={progress} $isComplete={isComplete} />
           <HabitName>{habit.name}</HabitName>
-          <LogCountBubble>{logCount}</LogCountBubble>
+          <LogCountBubble>{displayedLogCount}</LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>
@@ -202,7 +208,7 @@ export function HabitTile({ habit, logCount }: HabitTileProps) {
               Count (times/day): <span className="value">{habit.count}</span>
             </div>
           </BackText>
-          <LogCountBubble>{logCount}</LogCountBubble>
+          <LogCountBubble>{displayedLogCount}</LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>
@@ -210,4 +216,7 @@ export function HabitTile({ habit, logCount }: HabitTileProps) {
       </FlipCard>
     </TileContainer>
   );
-}
+});
+
+// Export the memoized component
+export { HabitTile };

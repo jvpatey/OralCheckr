@@ -36,6 +36,7 @@ import {
 } from "../../../hooks/habitLogs";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
+import { HabitLogResponse } from "../../../services/habitLogService";
 
 // Utility function to reset habit form
 const resetHabitForm = (
@@ -219,10 +220,16 @@ export function Habits() {
     incrementHabitLogMutation.mutate(
       { habitId, date: selectedDate },
       {
-        onSuccess: () => {
+        onSuccess: (data: HabitLogResponse) => {
           // Clear the pending update since it's now synced with the server
           clearPendingUpdate(habitId, selectedDate);
           toast.success("Habit logged successfully");
+
+          // Get the updated count from the server response
+          const updatedCount = data.logs?.[0]?.count || logCount + 1;
+
+          // Update the local state with the server's count to ensure consistency
+          updateLogCount(habitId, selectedDate, updatedCount);
         },
         onError: (error) => {
           // Revert the local state update on error
@@ -260,10 +267,17 @@ export function Habits() {
     decrementHabitLogMutation.mutate(
       { habitId, date: selectedDate },
       {
-        onSuccess: () => {
+        onSuccess: (data: HabitLogResponse) => {
           // Clear the pending update since it's now synced with the server
           clearPendingUpdate(habitId, selectedDate);
           toast.success("Habit log removed successfully");
+
+          // Get the updated count from the server response
+          const updatedCount =
+            data.logs?.[0]?.count || Math.max(0, logCount - 1);
+
+          // Update the local state with the server's count to ensure consistency
+          updateLogCount(habitId, selectedDate, updatedCount);
         },
         onError: (error) => {
           // Revert the local state update on error

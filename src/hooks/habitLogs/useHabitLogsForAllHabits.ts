@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { fetchHabitLogs, HabitLog } from "../../services/habitLogService";
 
@@ -23,6 +23,9 @@ export const useHabitLogsForAllHabits = (
   const [habitLogsMap, setHabitLogsMap] = useState<
     Record<number, Record<string, number>>
   >({});
+
+  // Get the query client for manual cache updates
+  const queryClient = useQueryClient();
 
   // Keep track of pending updates
   const pendingUpdatesRef = useRef<PendingUpdate[]>([]);
@@ -66,7 +69,7 @@ export const useHabitLogsForAllHabits = (
       }));
     },
     enabled: habitIds.length > 0,
-    staleTime: 0,
+    staleTime: 0, // Always consider data stale to ensure fresh fetches
     gcTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true,
     retry: 1,
@@ -170,8 +173,54 @@ export const useHabitLogsForAllHabits = (
 
       // Update the state
       setHabitLogsMap(updatedHabitLogsMap);
+
+      // Update the query cache to ensure consistent UI updates
+      queryClient.setQueryData<HabitLogsData[]>(
+        ["allHabitLogs", habitIds, year, month],
+        (oldData) => {
+          if (!oldData) return oldData;
+
+          return oldData.map((habitData) => {
+            if (habitData.habitId !== habitId) return habitData;
+
+            // Create a new logs array with the updated count
+            const updatedLogs = habitData.logs ? [...habitData.logs] : [];
+
+            // Find if there's an existing log for this date
+            const existingLogIndex = updatedLogs.findIndex(
+              (log) => format(new Date(log.date), "yyyy-MM-dd") === dateStr
+            );
+
+            if (existingLogIndex >= 0) {
+              // Update existing log
+              if (count <= 0) {
+                // Remove the log if count is 0 or negative
+                updatedLogs.splice(existingLogIndex, 1);
+              } else {
+                // Update the count
+                updatedLogs[existingLogIndex] = {
+                  ...updatedLogs[existingLogIndex],
+                  count,
+                };
+              }
+            } else if (count > 0) {
+              // Add new log if count is positive
+              updatedLogs.push({
+                habitId,
+                date: dateStr,
+                count,
+              });
+            }
+
+            return {
+              ...habitData,
+              logs: updatedLogs,
+            };
+          });
+        }
+      );
     },
-    [habitLogsMap]
+    [habitLogsMap, queryClient, habitIds, year, month]
   );
 
   // Function to clear pending updates for a specific habit and date
