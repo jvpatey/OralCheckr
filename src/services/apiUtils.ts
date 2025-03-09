@@ -1,5 +1,9 @@
 // Common utilities for API services
 import { format } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
+
+// Get the local timezone
+const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 // Common fetch options for all requests
 export const fetchOptions = {
@@ -11,11 +15,14 @@ export const fetchOptions = {
 
 // Helper function to format a date for the API
 export const formatDateForApi = (date: Date) => {
+  // Convert to zoned time to ensure consistent handling across timezones
+  const zonedDate = toZonedTime(date, TIMEZONE);
+
   // Format date
   return {
-    year: date.getFullYear(),
-    month: format(date, "MMMM"),
-    day: date.getDate(),
+    year: zonedDate.getFullYear(),
+    month: format(zonedDate, "MMMM"),
+    day: zonedDate.getDate(),
   };
 };
 

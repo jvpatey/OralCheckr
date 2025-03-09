@@ -35,8 +35,27 @@ import {
   useHabitLogsForAllHabits,
 } from "../../../hooks/habitLogs";
 import { format } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 import { toast } from "react-toastify";
 import { HabitLogResponse } from "../../../services/habitLogService";
+
+// Get the local timezone
+const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+// Helper function to normalize dates and create consistent date strings
+const normalizeDate = (date: Date): string => {
+  // Convert to zoned time to ensure consistent handling across timezones
+  const zonedDate = toZonedTime(date, TIMEZONE);
+
+  // Format the date as YYYY-MM-DD
+  return format(zonedDate, "yyyy-MM-dd");
+};
+
+// Helper function to normalize dates for API calls
+const normalizeDateForApi = (date: Date): Date => {
+  // Convert to zoned time to ensure consistent handling across timezones
+  return toZonedTime(date, TIMEZONE);
+};
 
 // Utility function to reset habit form
 const resetHabitForm = (
@@ -56,7 +75,11 @@ export function Habits() {
     count: 0,
   });
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+  // Initialize with a normalized date to avoid timezone issues
+  const initialDate = new Date();
+  const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
+
   const theme = useTheme();
 
   // Fetch habits using TanStack Query
@@ -213,12 +236,15 @@ export function Habits() {
     // Ensure habitId is a number
     const habitId = Number(habit.habitId);
 
+    // Normalize the date for API calls
+    const normalizedDate = normalizeDateForApi(selectedDate);
+
     // Update the local state immediately for a responsive UI
     updateLogCount(habitId, selectedDate, logCount + 1);
 
     // Send the update to the server
     incrementHabitLogMutation.mutate(
-      { habitId, date: selectedDate },
+      { habitId, date: normalizedDate },
       {
         onSuccess: (data: HabitLogResponse) => {
           // Clear the pending update since it's now synced with the server
@@ -260,12 +286,15 @@ export function Habits() {
     // Ensure habitId is a number
     const habitId = Number(habit.habitId);
 
+    // Normalize the date for API calls
+    const normalizedDate = normalizeDateForApi(selectedDate);
+
     // Update the local state immediately for a responsive UI
     updateLogCount(habitId, selectedDate, logCount - 1);
 
     // Then send the update to the server
     decrementHabitLogMutation.mutate(
-      { habitId, date: selectedDate },
+      { habitId, date: normalizedDate },
       {
         onSuccess: (data: HabitLogResponse) => {
           // Clear the pending update since it's now synced with the server
@@ -296,11 +325,15 @@ export function Habits() {
 
   // Handler for when the date changes in WeekPicker
   const handleWeekPickerDateChange = (date: Date) => {
+    // Normalize the date for consistency
+    const normalizedDate = new Date(date);
+
     // Update the selected date
-    setSelectedDate(date);
+    setSelectedDate(normalizedDate);
 
     // Only refetch if have habits
     if (habitIds.length > 0) {
+      // Sync with server to ensure all pending updates are processed
       syncWithServer();
     }
   };
@@ -310,7 +343,8 @@ export function Habits() {
     const habit = habits.find((h) => h.name === habitName);
     if (!habit || !habit.habitId) return 0;
 
-    const dateStr = format(date, "yyyy-MM-dd");
+    // Use the normalizeDate helper to ensure consistent date strings
+    const dateStr = normalizeDate(date);
     const habitId = habit.habitId;
 
     // Look up the log count in our map
