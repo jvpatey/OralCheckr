@@ -11,13 +11,10 @@ export const fetchOptions = {
 
 // Helper function to format a date for the API
 export const formatDateForApi = (date: Date) => {
-  const formattedDate = {
-    year: date.getFullYear(),
-    month: format(date, "MMMM"),
-    day: date.getDate(),
+  // Format the date as "MMMM d, yyyy"
+  return {
+    date: format(date, "MMMM d, yyyy"),
   };
-
-  return formattedDate;
 };
 
 // Helper function to make API requests
