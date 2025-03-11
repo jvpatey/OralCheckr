@@ -30,7 +30,16 @@ export function App() {
           <HashRouter>
             <RenderNavs themeToggler={themeToggler} currentTheme={theme} />
             <Router themeToggler={themeToggler} currentTheme={theme} />
-            <ToastContainer position="top-right" autoClose={3000} />
+            <ToastContainer
+              position="top-right"
+              autoClose={800}
+              hideProgressBar={false}
+              closeOnClick
+              pauseOnHover={false}
+              draggable={false}
+              limit={3}
+              theme={theme === ThemeType.LIGHT ? "light" : "dark"}
+            />
           </HashRouter>
         </AuthProvider>
       </QueryClientProvider>
