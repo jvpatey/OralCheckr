@@ -39,25 +39,18 @@ import { toZonedTime } from "date-fns-tz";
 import { toast } from "react-toastify";
 import { HabitLogResponse } from "../../../services/habitLogService";
 
-// Get the local timezone
+// Local timezone
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-// Helper function to normalize dates and create consistent date strings
+// Format dates consistently as YYYY-MM-DD with timezone handling
 const normalizeDate = (date: Date): string => {
-  // Convert to zoned time to ensure consistent handling across timezones
+  // Apply timezone
   const zonedDate = toZonedTime(date, TIMEZONE);
 
-  // Format the date as YYYY-MM-DD
   return format(zonedDate, "yyyy-MM-dd");
 };
 
-// Helper function to normalize dates for API calls
-const normalizeDateForApi = (date: Date): Date => {
-  // Convert to zoned time to ensure consistent handling across timezones
-  return toZonedTime(date, TIMEZONE);
-};
-
-// Utility function to reset habit form
+// Reset habit form to default values
 const resetHabitForm = (
   setNewHabit: (habit: Habit) => void,
   setOriginalHabit: (habit: Habit) => void
@@ -103,7 +96,6 @@ export function Habits() {
   const {
     habitLogsMap,
     updateLogCount,
-    clearPendingUpdate,
     syncWithServer,
     isLoading: isLoadingLogs,
     isError: isLogsError,
@@ -142,10 +134,12 @@ export function Habits() {
             onSuccess: () => {
               setShowAddHabitModal(false);
               resetHabitForm(setNewHabit, setOriginalHabit);
-              toast.success("Habit updated successfully");
+              toast.success("Habit updated successfully", { autoClose: 800 });
             },
             onError: (error) => {
-              toast.error(`Failed to update habit: ${error}`);
+              toast.error(`Failed to update habit: ${error}`, {
+                autoClose: 800,
+              });
             },
           }
         );
@@ -157,10 +151,12 @@ export function Habits() {
             onSuccess: () => {
               setShowAddHabitModal(false);
               resetHabitForm(setNewHabit, setOriginalHabit);
-              toast.success("Habit created successfully");
+              toast.success("Habit created successfully", { autoClose: 800 });
             },
             onError: (error) => {
-              toast.error(`Failed to create habit: ${error}`);
+              toast.error(`Failed to create habit: ${error}`, {
+                autoClose: 800,
+              });
             },
           }
         );
@@ -182,10 +178,10 @@ export function Habits() {
     if (window.confirm("Are you sure you want to delete this habit?")) {
       deleteHabitMutation.mutate(habitToDelete.habitId, {
         onSuccess: () => {
-          toast.success("Habit deleted successfully");
+          toast.success("Habit deleted successfully", { autoClose: 800 });
         },
         onError: (error) => {
-          toast.error(`Failed to delete habit: ${error}`);
+          toast.error(`Failed to delete habit: ${error}`, { autoClose: 800 });
         },
       });
     }
@@ -198,10 +194,12 @@ export function Habits() {
     ) {
       deleteAllHabitsMutation.mutate(undefined, {
         onSuccess: () => {
-          toast.success("All habits deleted successfully");
+          toast.success("All habits deleted successfully", { autoClose: 800 });
         },
         onError: (error) => {
-          toast.error(`Failed to delete all habits: ${error}`);
+          toast.error(`Failed to delete all habits: ${error}`, {
+            autoClose: 800,
+          });
         },
       });
     }
@@ -225,10 +223,11 @@ export function Habits() {
     // Get current log count
     const logCount = getLogCount(habitName, selectedDate);
 
-    // Check if should allow logging
+    // Validate against maximum count
     if (logCount >= habit.count) {
       toast.error(
-        `Cannot exceed the maximum count of ${habit.count} for this habit`
+        `Cannot exceed the maximum count of ${habit.count} for this habit`,
+        { autoClose: 800 }
       );
       return;
     }
@@ -236,33 +235,28 @@ export function Habits() {
     // Ensure habitId is a number
     const habitId = Number(habit.habitId);
 
-    // Normalize the date for API calls
-    const normalizedDate = normalizeDateForApi(selectedDate);
-
-    // Update the local state immediately for a responsive UI
+    // Update UI immediately
     updateLogCount(habitId, selectedDate, logCount + 1);
 
-    // Send the update to the server
+    // Send to server
     incrementHabitLogMutation.mutate(
-      { habitId, date: normalizedDate },
+      { habitId, date: selectedDate },
       {
         onSuccess: (data: HabitLogResponse) => {
-          // Clear the pending update since it's now synced with the server
-          clearPendingUpdate(habitId, selectedDate);
-          toast.success("Habit logged successfully");
+          toast.success("Habit logged successfully", { autoClose: 800 });
 
-          // Get the updated count from the server response
+          // Use server count or fallback to local count
           const updatedCount = data.logs?.[0]?.count || logCount + 1;
 
-          // Update the local state with the server's count to ensure consistency
+          // Sync with server data
           updateLogCount(habitId, selectedDate, updatedCount);
         },
         onError: (error) => {
-          // Revert the local state update on error
+          // Revert on error
           updateLogCount(habitId, selectedDate, logCount);
-          toast.error(`Failed to log habit: ${error}`);
+          toast.error(`Failed to log habit: ${error}`, { autoClose: 800 });
 
-          // Force a sync with the server to ensure we have the latest data
+          // Refresh data
           syncWithServer();
         },
       }
@@ -277,43 +271,38 @@ export function Habits() {
     // Get current log count
     const logCount = getLogCount(habitName, selectedDate);
 
-    // Check if we should allow removing
+    // Validate minimum count
     if (logCount <= 0) {
-      toast.error(`No logs to remove for this date`);
+      toast.error(`No logs to remove for this date`, { autoClose: 800 });
       return;
     }
 
     // Ensure habitId is a number
     const habitId = Number(habit.habitId);
 
-    // Normalize the date for API calls
-    const normalizedDate = normalizeDateForApi(selectedDate);
-
-    // Update the local state immediately for a responsive UI
+    // Update UI immediately
     updateLogCount(habitId, selectedDate, logCount - 1);
 
-    // Then send the update to the server
+    // Send to server
     decrementHabitLogMutation.mutate(
-      { habitId, date: normalizedDate },
+      { habitId, date: selectedDate },
       {
         onSuccess: (data: HabitLogResponse) => {
-          // Clear the pending update since it's now synced with the server
-          clearPendingUpdate(habitId, selectedDate);
-          toast.success("Habit log removed successfully");
+          toast.success("Habit log removed successfully", { autoClose: 800 });
 
-          // Get the updated count from the server response
+          // Use server count or fallback to calculated count
           const updatedCount =
             data.logs?.[0]?.count || Math.max(0, logCount - 1);
 
-          // Update the local state with the server's count to ensure consistency
+          // Sync with server data
           updateLogCount(habitId, selectedDate, updatedCount);
         },
         onError: (error) => {
-          // Revert the local state update on error
+          // Revert on error
           updateLogCount(habitId, selectedDate, logCount);
-          toast.error(`Failed to remove log: ${error}`);
+          toast.error(`Failed to remove log: ${error}`, { autoClose: 800 });
 
-          // Force a sync with the server to ensure we have the latest data
+          // Refresh data
           syncWithServer();
         },
       }
@@ -343,11 +332,9 @@ export function Habits() {
     const habit = habits.find((h) => h.name === habitName);
     if (!habit || !habit.habitId) return 0;
 
-    // Use the normalizeDate helper to ensure consistent date strings
     const dateStr = normalizeDate(date);
     const habitId = habit.habitId;
 
-    // Look up the log count in our map
     return habitLogsMap[habitId]?.[dateStr] || 0;
   };
 
