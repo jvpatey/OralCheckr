@@ -2,10 +2,10 @@
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 
-// Get the local timezone
+// Local timezone
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-// Common fetch options for all requests
+// Common fetch options
 export const fetchOptions = {
   credentials: "include" as RequestCredentials,
   headers: {
@@ -13,12 +13,11 @@ export const fetchOptions = {
   },
 };
 
-// Helper function to format a date for the API
+// Format date for API requests
 export const formatDateForApi = (date: Date) => {
-  // Convert to zoned time to ensure consistent handling across timezones
+  // Convert to zoned time for consistent timezone handling
   const zonedDate = toZonedTime(date, TIMEZONE);
 
-  // Format date
   return {
     year: zonedDate.getFullYear(),
     month: format(zonedDate, "MMMM"),
@@ -26,11 +25,11 @@ export const formatDateForApi = (date: Date) => {
   };
 };
 
-// Helper function to make API requests
+// Make API requests with proper error handling
 export const apiRequest = async <T>(
   url: string,
   method: "GET" | "POST" | "PUT" | "DELETE",
-  body?: any
+  body?: Record<string, unknown>
 ): Promise<T> => {
   try {
     const response = await fetch(url, {
@@ -50,13 +49,12 @@ export const apiRequest = async <T>(
   }
 };
 
-// Error handler for API errors
-export const handleApiError = (error: any, context?: string): string => {
+// Convert API errors to user-friendly messages
+export const handleApiError = (error: unknown, context?: string): string => {
   const contextPrefix = context ? `${context}: ` : "";
 
   if (error instanceof Error) {
     if (error.message.startsWith("Error: 400")) {
-      // Check for specific error messages
       if (error.message.includes("exceed")) {
         return `${contextPrefix}Cannot exceed the maximum count for this habit`;
       } else if (error.message.includes("future")) {
@@ -72,7 +70,16 @@ export const handleApiError = (error: any, context?: string): string => {
     }
   }
 
-  if (error.name === "TypeError" && error.message.includes("fetch")) {
+  // Handle network errors
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "name" in error &&
+    error.name === "TypeError" &&
+    "message" in error &&
+    typeof error.message === "string" &&
+    error.message.includes("fetch")
+  ) {
     return `${contextPrefix}No response from server. Please check your internet connection`;
   }
 
