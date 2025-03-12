@@ -16,6 +16,8 @@ import {
   ModalBody,
   InputStyle,
   CardText,
+  RequiredFormGroup,
+  RequiredNote,
 } from "./styles/ModalStyles";
 
 interface SignUpModalProps {
@@ -115,48 +117,53 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
           To get started, enter your details below to create an account:
         </CardText>
         <Form onSubmit={handleSignUpSubmit}>
-          <Form.Group controlId="formFirstName" className="m-3">
+          <RequiredFormGroup controlId="formFirstName" className="m-3">
             <InputStyle
               type="text"
               placeholder="First Name"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               autoComplete="given-name"
+              required
             />
-          </Form.Group>
-          <Form.Group controlId="formLastName" className="m-3">
+          </RequiredFormGroup>
+          <RequiredFormGroup controlId="formLastName" className="m-3">
             <InputStyle
               type="text"
               placeholder="Last Name"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               autoComplete="family-name"
+              required
             />
-          </Form.Group>
-          <Form.Group controlId="formEmail" className="m-3">
+          </RequiredFormGroup>
+          <RequiredFormGroup controlId="formEmail" className="m-3">
             <InputStyle
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
+              required
             />
-          </Form.Group>
-          <Form.Group controlId="formPassword" className="m-3">
+          </RequiredFormGroup>
+          <RequiredFormGroup controlId="formPassword" className="m-3">
             <PasswordField
               value={password}
               onChange={setPassword}
               placeholder="Password"
               showRequirements={true}
               autoComplete="new-password"
+              required
             />
-          </Form.Group>
+          </RequiredFormGroup>
 
           {error && (
             <Alert variant="danger" dismissible onClose={() => setError("")}>
               {error}
             </Alert>
           )}
+          <RequiredNote>Required field</RequiredNote>
           <FormButton type="submit" disabled={!formValid} variant="signup">
             Sign Up
           </FormButton>

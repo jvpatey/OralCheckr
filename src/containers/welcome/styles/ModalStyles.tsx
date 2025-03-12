@@ -37,10 +37,36 @@ export const InputStyle = styled(Form.Control)`
   margin-top: 15px;
 `;
 
+// Required form group with asterisk
+export const RequiredFormGroup = styled(Form.Group)`
+  position: relative;
+
+  &::before {
+    content: "*";
+    color: ${({ theme }) => theme.red || "#dc3545"};
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    font-size: 1.2rem;
+  }
+
+  ${InputStyle} {
+    padding-left: 20px;
+  }
+`;
+
 // Password field styles
 export const PasswordContainer = styled.div`
   position: relative;
   margin-top: 15px;
+
+  ${RequiredFormGroup} & {
+    ${InputStyle} {
+      padding-left: 20px;
+    }
+  }
 `;
 
 export const PasswordToggle = styled.span`
@@ -69,6 +95,48 @@ export const CardText = styled.h5`
   margin-left: 50px;
   text-align: center;
   font-size: 1.25rem;
+`;
+
+// Required fields note
+export const RequiredFieldsNote = styled.div`
+  color: ${({ theme }) => theme.textGrey};
+  font-size: 0.8rem;
+  margin-left: 15px;
+  margin-bottom: 5px;
+
+  &::before {
+    content: "*";
+    color: ${({ theme }) => theme.red || "#dc3545"};
+    margin-right: 4px;
+  }
+`;
+
+// Required field label
+export const RequiredLabel = styled.label`
+  color: ${({ theme }) => theme.textGrey};
+  font-size: 0.9rem;
+  margin-left: 5px;
+
+  &::after {
+    content: " *";
+    color: ${({ theme }) => theme.red || "#dc3545"};
+    margin-left: 2px;
+  }
+`;
+
+// Small note for required fields
+export const RequiredNote = styled.div`
+  color: ${({ theme }) => theme.textGrey};
+  font-size: 0.7rem;
+  text-align: right;
+  margin-top: 5px;
+  margin-right: 15px;
+  font-style: italic;
+
+  &::before {
+    content: "* ";
+    color: ${({ theme }) => theme.red || "#dc3545"};
+  }
 `;
 
 // Password requirement styles
