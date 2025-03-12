@@ -4,15 +4,15 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { Logging } from "../../habits/Habits";
+import { Logging } from "../Analytics";
 import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
 import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
 import { formatMonthYear } from "../../../../common/utilities/date-utils";
 import { useTheme } from "styled-components";
+import { useHabitContext } from "../../../../contexts/HabitContext";
 
 interface CalendarProgressProps {
   habitsLog: Logging;
-  selectedHabit: string;
   year: number;
   month: string;
   habitCount: number;
@@ -148,25 +148,20 @@ const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 // HabitCalendar component to render the calendar with habit tracking progress
 export function HabitCalendar({
   habitsLog,
-  selectedHabit,
   year,
   month,
   habitCount,
   selectedMonth,
 }: CalendarProgressProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [isCalendarView, setIsCalendarView] = useState(true);
+  const [showChart, setShowChart] = useState<boolean>(false);
   const theme = useTheme();
+  const { selectedHabit } = useHabitContext();
 
   // Update the selected date whenever the selected month changes
   useEffect(() => {
     setSelectedDate(selectedMonth);
   }, [selectedMonth]);
-
-  // Handler function to toggle calendar view
-  const handleToggleView = (view: boolean) => {
-    setIsCalendarView(view);
-  };
 
   // Calculate the progress of logs vs count
   const getDayProgress = (day: number) => {
@@ -202,10 +197,10 @@ export function HabitCalendar({
     <CalendarContainer>
       <MonthYearDisplay>{currentMonthYear}</MonthYearDisplay>
       <CalendarChartToggle
-        isCalendarView={isCalendarView}
-        onToggleView={handleToggleView}
+        isCalendarView={!showChart}
+        onToggleView={() => setShowChart(!showChart)}
       />
-      {isCalendarView ? (
+      {!showChart ? (
         <>
           <DaysHeader>
             {daysOfWeek.map((day, index) => (
@@ -221,12 +216,7 @@ export function HabitCalendar({
           />
         </>
       ) : (
-        <LineChart
-          habitsLog={habitsLog}
-          selectedHabit={selectedHabit}
-          year={year}
-          month={month}
-        />
+        <LineChart habitsLog={habitsLog} year={year} month={month} />
       )}
     </CalendarContainer>
   );

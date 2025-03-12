@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { HabitDropdown } from "../HabitDropdown";
-import { Habit, Logging } from "../../habits/Habits";
+import { Habit } from "../../../../services/habitService";
+import { Logging } from "../Analytics";
 import { HabitCalendar } from "./HabitCalendar";
 import {
   calculateTotalCount,
@@ -14,6 +15,7 @@ import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
 import { formatDateLong } from "../../../../common/utilities/date-utils";
 import { LoadingComponent } from "../../../../components/habit-tracker/analytics/LoadingComponent";
+import { useHabitContext } from "../../../../contexts/HabitContext";
 
 const fadeUp = keyframes`
   from {
@@ -145,7 +147,6 @@ interface ViewProps {
   habits: Habit[];
   onSelectHabit: (habitName: string) => void;
   habitsLog: Logging;
-  selectedHabit: string;
   hideAnalytics: boolean;
 }
 
@@ -154,15 +155,15 @@ export function MonthView({
   habits,
   onSelectHabit,
   habitsLog,
-  selectedHabit,
   hideAnalytics,
 }: ViewProps) {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
+  const { selectedHabit } = useHabitContext();
 
-  // The MonthView rendering causes the MonthView page to load slowly. 
-  // A loading component is displayed initially while the Monthview components are loading. 
-  // Once the Monthview components are fully loaded, the loading state is set to false, 
+  // The MonthView rendering causes the MonthView page to load slowly.
+  // A loading component is displayed initially while the Monthview components are loading.
+  // Once the Monthview components are fully loaded, the loading state is set to false,
   // and the MonthView is displayed in place of the loading component.
   const isMonthViewMounted = () => {
     setLoading(false);
@@ -177,13 +178,25 @@ export function MonthView({
     setSelectedMonth(date);
   };
 
-  const habitCount = habits.find((habit) => habit.name === selectedHabit)?.count || 1;
+  const habitCount =
+    habits.find((habit) => habit.name === selectedHabit)?.count || 1;
   const year = selectedMonth.getFullYear();
   const month = formatDateLong(selectedMonth);
 
   const totalCount = calculateTotalCount(habitsLog, selectedHabit, year, month);
-  const monthlyCompletion = calculateMonthlyCompletion(totalCount, habitCount, year, month);
-  const longestStreak = calculateLongestStreak(habitsLog, selectedHabit, year, month, habitCount);
+  const monthlyCompletion = calculateMonthlyCompletion(
+    totalCount,
+    habitCount,
+    year,
+    month
+  );
+  const longestStreak = calculateLongestStreak(
+    habitsLog,
+    selectedHabit,
+    year,
+    month,
+    habitCount
+  );
   const missedDays = calculateMissedDays(habitsLog, selectedHabit, year, month);
 
   // If data is loading, show the loading spinner
@@ -228,7 +241,6 @@ export function MonthView({
             <CalendarCard>
               <HabitCalendar
                 habitsLog={habitsLog}
-                selectedHabit={selectedHabit}
                 year={year}
                 month={month}
                 habitCount={habitCount}

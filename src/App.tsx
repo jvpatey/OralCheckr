@@ -8,6 +8,7 @@ import { AuthProvider } from "./containers/authentication/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { HabitProvider } from "./contexts/HabitContext";
 
 export enum ThemeType {
   LIGHT = "light",
@@ -27,20 +28,22 @@ export function App() {
     <ThemeProvider theme={theme === ThemeType.LIGHT ? lightTheme : darkTheme}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <HashRouter>
-            <RenderNavs themeToggler={themeToggler} currentTheme={theme} />
-            <Router themeToggler={themeToggler} currentTheme={theme} />
-            <ToastContainer
-              position="top-right"
-              autoClose={800}
-              hideProgressBar={false}
-              closeOnClick
-              pauseOnHover={false}
-              draggable={false}
-              limit={3}
-              theme={theme === ThemeType.LIGHT ? "light" : "dark"}
-            />
-          </HashRouter>
+          <HabitProvider>
+            <HashRouter>
+              <RenderNavs themeToggler={themeToggler} currentTheme={theme} />
+              <Router themeToggler={themeToggler} currentTheme={theme} />
+              <ToastContainer
+                position="top-right"
+                autoClose={800}
+                hideProgressBar={false}
+                closeOnClick
+                pauseOnHover={false}
+                draggable={false}
+                limit={3}
+                theme={theme === ThemeType.LIGHT ? "light" : "dark"}
+              />
+            </HashRouter>
+          </HabitProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>

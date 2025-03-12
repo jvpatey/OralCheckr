@@ -1,46 +1,28 @@
 import ReactApexChart from "react-apexcharts";
 import styled, { useTheme } from "styled-components";
-import { Logging } from "../../../../containers/habit-tracker/habits/Habits";
-import { getDaysInMonth } from 'date-fns';
+import { Logging } from "../../../../containers/habit-tracker/analytics/Analytics";
+import { getDaysInMonth } from "date-fns";
 import { upperFirst } from "lodash";
 import { lightTheme } from "../../../../common/utilities/color-utils";
+import { useHabitContext } from "../../../../contexts/HabitContext";
 
 // Styled component for the chart container
 const ChartContainer = styled.div`
   width: 100%;
-  height: calc(100% - 40px);
-  margin-top: 40px;
-
-  .apexcharts-canvas {
-    background: ${({ theme }) => theme.accentBackgroundColor};
-    border-radius: 8px;
-  }
-
-  @media (max-width: 1024px) {
-    height: 30vh;
-  }
-
-  @media (max-width: 768px) {
-    height: 60vh;
-  }
-
-  @media (max-width: 480px) {
-    height: 40vh;
-  }
+  height: 100%;
+  padding: 10px;
 `;
 
-// interface for the line chart props
+// Type definition for the theme
+type ThemeType = typeof lightTheme;
+
 interface LineChartProps {
   habitsLog: Logging;
-  selectedHabit: string;
   year: number;
   month: string;
 }
 
-// typeof lightTheme to type the theme
-type ThemeType = typeof lightTheme;
-
-// Function to generate the ApexCharts options object
+// Function to generate chart options
 const generateChartOptions = (
   daysInMonth: number,
   month: string,
@@ -159,16 +141,17 @@ const generateChartOptions = (
 };
 
 // Functional component to render the line chart for habits logged in a month
-export function LineChart({
-  habitsLog,
-  selectedHabit,
-  year,
-  month,
-}: LineChartProps) {
+export function LineChart({ habitsLog, year, month }: LineChartProps) {
   const theme = useTheme() as ThemeType;
-  const logsForHabit = habitsLog[selectedHabit]?.[year]?.[month.toLowerCase()] || {};
+  const { selectedHabit } = useHabitContext();
+  const logsForHabit =
+    habitsLog[selectedHabit]?.[year]?.[month.toLowerCase()] || {};
+
   // Get the number of days in the current month
-  const daysInMonth = getDaysInMonth(new Date(year, new Date(`${month} 1, ${year}`).getMonth()));
+  const daysInMonth = getDaysInMonth(
+    new Date(year, new Date(`${month} 1, ${year}`).getMonth())
+  );
+
   // Create an array to store the number of logs for each day of the month
   const seriesData = Array.from({ length: daysInMonth }, (_, dayIndex) => {
     const dayOfMonth = dayIndex + 1;

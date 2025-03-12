@@ -1,11 +1,16 @@
 import styled, { keyframes } from "styled-components";
 import { HabitDropdown } from "../HabitDropdown";
-import { Habit, Logging } from "../../habits/Habits";
+import { Habit } from "../../../../services/habitService";
+import { Logging } from "../Analytics";
 import { Heatmap } from "./Heatmap";
 import { useMemo, useState } from "react";
-import { generateHeatmapData, HeatmapSeries } from "../../../../common/utilities/heatmap-utils";
+import {
+  generateHeatmapData,
+  HeatmapSeries,
+} from "../../../../common/utilities/heatmap-utils";
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
+import { useHabitContext } from "../../../../contexts/HabitContext";
 
 // Keyframes for the fade-up animation
 const fadeUp = keyframes`
@@ -51,7 +56,6 @@ interface YearViewProps {
   habits: Habit[];
   onSelectHabit: (habitName: string) => void;
   habitsLog: Logging;
-  selectedHabit: string;
   hideAnalytics: boolean;
 }
 
@@ -60,10 +64,10 @@ export function YearView({
   habits,
   onSelectHabit,
   habitsLog,
-  selectedHabit,
   hideAnalytics,
 }: YearViewProps) {
   const [selectedYear, setSelectedYear] = useState<Date>(new Date());
+  const { selectedHabit } = useHabitContext();
 
   // Memoized heatmap data generation to avoid recalculating on every render
   const heatmapData: HeatmapSeries[] = useMemo(
@@ -91,9 +95,7 @@ export function YearView({
       />
       <HabitsTitle>Habits:</HabitsTitle>
       <HabitDropdown habits={habits} onSelectHabit={handleSelectHabit} />
-      {!hideAnalytics && (
-        <Heatmap data={heatmapData} />
-      )}
+      {!hideAnalytics && <Heatmap data={heatmapData} />}
     </ViewContainer>
   );
 }
