@@ -45,13 +45,11 @@ export function MonthView({
   const [showChart, setShowChart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check if the component is mounted to prevent memory leaks
-  const isMonthViewMounted = () => {
-    let mounted = true;
-    return () => {
-      mounted = false;
-    };
-  };
+  // Set loading state to false after component mounts
+  useEffect(() => {
+    setIsLoading(false);
+    return () => {};
+  }, []);
 
   // Handle month change from the date selector
   const onMonthChange = (date: Date) => {
@@ -62,13 +60,6 @@ export function MonthView({
   const handleToggleView = () => {
     setShowChart(!showChart);
   };
-
-  // Set loading state to false after component mounts
-  useEffect(() => {
-    const checkMounted = isMonthViewMounted();
-    setIsLoading(false);
-    return checkMounted;
-  }, []);
 
   // If loading, show loading component
   if (isLoading) {
@@ -144,7 +135,7 @@ export function MonthView({
               <AnalyticsTile
                 heading="Completion Rate"
                 mainContent={`${completionRate}%`}
-                subContent="of days completed"
+                subContent=""
               />
               <AnalyticsTile
                 heading="Longest Streak"
@@ -154,7 +145,7 @@ export function MonthView({
               <AnalyticsTile
                 heading="Missed Days"
                 mainContent={missedDays}
-                subContent="days missed"
+                subContent=""
                 isMissedDays={true}
               />
             </TilesContainer>
