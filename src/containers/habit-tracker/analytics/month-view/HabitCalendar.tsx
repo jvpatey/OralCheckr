@@ -17,6 +17,8 @@ interface CalendarProgressProps {
   month: string;
   habitCount: number;
   selectedMonth: Date;
+  showChart?: boolean;
+  onToggleView?: () => void;
 }
 
 // Container for the entire calendar component
@@ -27,16 +29,16 @@ const CalendarContainer = styled.div`
   justify-content: center;
   height: 100%;
   width: 100%;
-  padding-top: 20px;
-  padding-bottom: 10px;
-  max-height: 500px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  max-height: none;
   overflow: hidden;
 
   .react-datepicker {
     width: 100%;
     max-width: 100%;
     border: none;
-    background-color: ${({ theme }) => theme.accentBackgroundColor};
+    background-color: transparent;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
     padding: 0px;
@@ -102,44 +104,52 @@ const DaysHeader = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
   font-weight: bold;
-  color: ${({ theme }) => theme.green};
+  color: ${({ theme }) => theme.blue};
   text-transform: uppercase;
+  padding: 0 5px;
 `;
 
 const DayName = styled.div`
   flex: 1;
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
 
   @media (max-width: 600px) {
-    font-size: 12px;
+    font-size: 10px;
   }
 `;
 
 // Wrapper for each day's circular progress bar
 const DayWrapper = styled.div`
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 600px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 // Styled component to display the current month and year
 const MonthYearDisplay = styled.div`
   color: ${({ theme }) => theme.blue};
   text-align: center;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
-  margin: 10px 0px;
+  margin: 5px 0px 20px 0px;
   position: relative;
   z-index: 1;
 
   @media (max-width: 768px) {
-    margin-top: 30px;
+    font-size: 16px;
+    margin-bottom: 15px;
   }
 `;
 
@@ -152,9 +162,10 @@ export function HabitCalendar({
   month,
   habitCount,
   selectedMonth,
+  showChart = false,
+  onToggleView,
 }: CalendarProgressProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [showChart, setShowChart] = useState<boolean>(false);
   const theme = useTheme();
   const { selectedHabit } = useHabitContext();
 
@@ -166,13 +177,22 @@ export function HabitCalendar({
   // Calculate the progress of logs vs count
   const getDayProgress = (day: number) => {
     const logs = habitsLog[selectedHabit]?.[year]?.[month]?.[day] || 0;
-    const progress = (logs / habitCount) * 100;
+
+    // If habitCount is 0 or undefined, return 0 to avoid division by zero
+    if (!habitCount) return 0;
+
+    // Calculate progress as a percentage of logs compared to habitCount
+    // Cap progress at 100% if logs are equal to or greater than habitCount
+    const progress = Math.min((logs / habitCount) * 100, 100);
+
     return progress;
   };
 
   // Render content for each day in the calendar
   const renderDayContents = (day: number) => {
+    const logs = habitsLog[selectedHabit]?.[year]?.[month]?.[day] || 0;
     const progress = getDayProgress(day);
+    const isComplete = logs >= habitCount;
 
     return (
       <DayWrapper>
@@ -181,7 +201,7 @@ export function HabitCalendar({
           text={day.toString()}
           styles={buildStyles({
             textSize: "30px",
-            pathColor: progress === 100 ? theme.green : theme.blue,
+            pathColor: isComplete ? theme.green : theme.blue,
             textColor: theme.blue,
             trailColor: theme.backgroundColor,
           })}
@@ -193,12 +213,19 @@ export function HabitCalendar({
   // Display the current month and year based on the selected date
   const currentMonthYear = formatMonthYear(selectedDate ?? new Date());
 
+  // Handle toggle view with a default implementation if not provided
+  const handleToggleView = () => {
+    if (onToggleView) {
+      onToggleView();
+    }
+  };
+
   return (
     <CalendarContainer>
       <MonthYearDisplay>{currentMonthYear}</MonthYearDisplay>
       <CalendarChartToggle
         isCalendarView={!showChart}
-        onToggleView={() => setShowChart(!showChart)}
+        onToggleView={handleToggleView}
       />
       {!showChart ? (
         <>

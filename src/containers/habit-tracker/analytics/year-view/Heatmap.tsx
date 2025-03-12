@@ -74,7 +74,6 @@ const HeatmapCard = styled.div`
   }
 `;
 
-
 // Function to generate the ApexCharts options for the heatmap
 const useHeatmapOptions = (theme: ThemeType): ApexOptions => {
   return {
@@ -97,11 +96,36 @@ const useHeatmapOptions = (theme: ThemeType): ApexOptions => {
           ranges: [
             { from: 0, to: 0, color: theme.backgroundColor, name: "0 logs" },
             { from: 1, to: 1, color: greenHeatMapShades.Light, name: "1 log" },
-            { from: 2, to: 5, color: greenHeatMapShades.MediumLight, name: "2-5 logs" },
-            { from: 6, to: 7, color: greenHeatMapShades.Medium, name: "6-7 logs" },
-            { from: 8, to: 9, color: greenHeatMapShades.MediumDark, name: "8-9 logs" },
-            { from: 10, to: 11, color: greenHeatMapShades.Dark, name: "10-11 logs" },
-            { from: 12, to: Infinity, color: greenHeatMapShades.Darkest, name: "12+ logs" },
+            {
+              from: 2,
+              to: 5,
+              color: greenHeatMapShades.MediumLight,
+              name: "2-5 logs",
+            },
+            {
+              from: 6,
+              to: 7,
+              color: greenHeatMapShades.Medium,
+              name: "6-7 logs",
+            },
+            {
+              from: 8,
+              to: 9,
+              color: greenHeatMapShades.MediumDark,
+              name: "8-9 logs",
+            },
+            {
+              from: 10,
+              to: 11,
+              color: greenHeatMapShades.Dark,
+              name: "10-11 logs",
+            },
+            {
+              from: 12,
+              to: Infinity,
+              color: greenHeatMapShades.Darkest,
+              name: "12+ logs",
+            },
           ],
         },
       },
@@ -109,8 +133,8 @@ const useHeatmapOptions = (theme: ThemeType): ApexOptions => {
     legend: {
       labels: {
         colors: theme.textGrey,
+      },
     },
-  },
     dataLabels: { enabled: false }, // Disable data labels on heatmap
     xaxis: {
       categories: Array.from({ length: 12 }, (_, i) => i + 1), // x-axis categories as months (1-12)
@@ -137,7 +161,8 @@ const useHeatmapOptions = (theme: ThemeType): ApexOptions => {
       enabled: true,
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         // Get the day and month for the current data point
-        const dayOfMonth = w.globals.initialSeries[seriesIndex].data[dataPointIndex].day;
+        const dayOfMonth =
+          w.globals.initialSeries[seriesIndex].data[dataPointIndex].day;
         const monthIndex = w.globals.seriesX[seriesIndex][dataPointIndex];
         const month = MONTH_NAMES[monthIndex - 1];
 
@@ -154,7 +179,6 @@ const useHeatmapOptions = (theme: ThemeType): ApexOptions => {
   };
 };
 
-
 // Interface for the Heatmap component
 interface HeatmapProps {
   data: { name: string; data: { x: number; y: number; day: number }[] }[];
@@ -170,29 +194,35 @@ interface HeatmapChartProps {
 // typeof lightTheme to type the theme
 type ThemeType = typeof lightTheme;
 
-// Functional component to render the heatmap chart
+// Main Heatmap component
 export function Heatmap({ data }: HeatmapProps) {
+  const theme = useTheme() as ThemeType;
   const [loading, setLoading] = useState(true);
+  const options = useHeatmapOptions(theme);
 
-  // The heatmap rendering causes the YearView page to load slowly. 
-  // A loading component is displayed initially while the heatmap is loading. 
-  // Once the heatmap data is fully loaded and the component is ready, the loading state is set to false, 
-  // and the heatmap is displayed in place of the loading component.
   const isHeatmapChartMounted = () => {
     setLoading(false);
   };
 
-  const theme = useTheme() as ThemeType;
-  const options = useHeatmapOptions(theme);
-
   return (
     <HeatmapCard>
-      <HeatmapChart options={options} data={data} loading={loading} isHeatmapChartMounted={isHeatmapChartMounted} />
+      <HeatmapChart
+        options={options}
+        data={data}
+        loading={loading}
+        isHeatmapChartMounted={isHeatmapChartMounted}
+      />
     </HeatmapCard>
   );
 }
 
-function HeatmapChart({ options, data, loading, isHeatmapChartMounted }: HeatmapChartProps) {
+// HeatmapChart component for rendering the actual chart
+function HeatmapChart({
+  options,
+  data,
+  loading,
+  isHeatmapChartMounted,
+}: HeatmapChartProps) {
   useEffect(() => {
     isHeatmapChartMounted();
   }, []);
@@ -200,6 +230,11 @@ function HeatmapChart({ options, data, loading, isHeatmapChartMounted }: Heatmap
   return loading ? (
     <LoadingComponent />
   ) : (
-    <ReactApexChart options={options} series={data} type="heatmap" height={350} />
+    <ReactApexChart
+      options={options}
+      series={data}
+      type="heatmap"
+      height={350}
+    />
   );
 }

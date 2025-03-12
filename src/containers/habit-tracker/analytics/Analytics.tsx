@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from "react";
-import styled, { keyframes } from "styled-components";
 import { PageBackground } from "../../../components/PageBackground";
 import { ToggleButton } from "../../../components/habit-tracker/analytics/ToggleButton";
 import { MonthView } from "./month-view/MonthView";
@@ -13,6 +12,10 @@ import { useHabitLogsForAllHabits } from "../../../hooks/habitLogs";
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { useHabitContext } from "../../../contexts/HabitContext";
+import {
+  AnalyticsContainer,
+  NoHabitMessage,
+} from "../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
 
 // Enum for view modes
 enum ViewMode {
@@ -77,45 +80,6 @@ const transformHabitLogsToAnalyticsFormat = (
 
   return result;
 };
-
-const fadeUp = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-// Styled component for the main container of the analytics page
-const AnalyticsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: calc(100% - 190px);
-  height: calc(100vh - 56px);
-  overflow-y: auto;
-  position: absolute;
-  top: 56px;
-  left: 190px;
-  padding: 20px;
-  box-sizing: border-box;
-  animation: ${fadeUp} 1s ease-out;
-
-  @media (max-width: 800px) {
-    width: calc(100% - 35px);
-    left: 40px;
-  }
-`;
-
-const NoHabitMessage = styled.div`
-  margin-top: 20px;
-  font-size: 18px;
-  color: ${({ theme }) => theme.textGrey};
-  text-align: center;
-`;
 
 // Helper function to create toggle options
 const createToggleOption = (

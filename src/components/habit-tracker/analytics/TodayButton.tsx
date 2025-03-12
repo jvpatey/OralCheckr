@@ -1,37 +1,27 @@
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDay } from "@fortawesome/free-solid-svg-icons";
+import { TodayButtonContainer } from "./styles/DateSelectorStyles";
+import styled from "styled-components";
 
-// Styled component for the "Today" button with an icon
-const TodayButtonStyled = styled.button<{ disabled: boolean }>`
+// Styled component that extends the shared TodayButtonContainer
+const StyledTodayButton = styled(TodayButtonContainer)<{ disabled: boolean }>`
   background-color: ${({ disabled, theme }) =>
     disabled ? theme.disabledBackground : theme.backgroundColor};
   color: ${({ disabled, theme }) => (disabled ? theme.textGrey : theme.green)};
   border: 2px solid
-    ${({ disabled, theme }) => (disabled ? theme.disabledBackground : theme.green)};
-  padding: 0 15px;
-  border-radius: 5px;
+    ${({ disabled, theme }) =>
+      disabled ? theme.disabledBackground : theme.green};
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-  font-size: 16px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  margin-left: 10px;
   margin-bottom: 11px;
 
   &:hover {
     background-color: ${({ disabled, theme }) =>
       disabled ? theme.disabledBackground : theme.green};
     border: 2px solid
-      ${({ disabled, theme }) => (disabled ? theme.disabledBackground : theme.green)};
-    color: ${({ disabled, theme }) => (disabled ? theme.textGrey : theme.backgroundColor)};
-  }
-
-  @media (max-width: 600px) {
-    font-size: 12px;
-    padding: 0 10px;
+      ${({ disabled, theme }) =>
+        disabled ? theme.disabledBackground : theme.green};
+    color: ${({ disabled, theme }) =>
+      disabled ? theme.textGrey : theme.backgroundColor};
   }
 
   svg {
@@ -47,9 +37,9 @@ interface TodayButtonProps {
 // TodayButton functional component - used in YearSelector, MonthSelector, and DateRangePicker components
 export function TodayButton({ onClick, disabled = false }: TodayButtonProps) {
   return (
-    <TodayButtonStyled onClick={onClick} disabled={disabled}>
+    <StyledTodayButton onClick={onClick} disabled={disabled}>
       <FontAwesomeIcon icon={faCalendarDay} />
       Today
-    </TodayButtonStyled>
+    </StyledTodayButton>
   );
 }
