@@ -4,6 +4,7 @@ import { saveQuestionnaireProgress } from "../../services/quesService";
 interface ProgressData {
   responses: Record<number, number | number[]>;
   currentQuestion: number;
+  [key: string]: unknown;
 }
 
 export const useSaveQuestionnaireProgress = () => {
