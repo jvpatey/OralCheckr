@@ -2,55 +2,52 @@ import {
   QUESTIONNAIRE_RESPONSE_ENDPOINT,
   QUESTIONNAIRE_PROGRESS_ENDPOINT,
 } from "../config/quesApiConfig";
+import { apiRequest, handleApiError } from "./apiUtils";
 
 export interface SaveResponseData {
   responses: Record<number, number | number[]>;
   totalScore: number;
+  [key: string]: unknown;
 }
 
-// API call save questionnaire responses
+export interface QuestionnaireResponse {
+  responses: Record<number, number | number[]>;
+  totalScore: number;
+}
+
+export interface QuestionnaireProgress {
+  responses: Record<number, number | number[]>;
+  currentQuestion: number;
+  [key: string]: unknown;
+}
+
+/* -- Service to save questionnaire responses -- */
 export const saveQuestionnaireResponse = async (
   responseData: SaveResponseData
 ): Promise<void> => {
   try {
-    const response = await fetch(QUESTIONNAIRE_RESPONSE_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(responseData),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        errorData.error || "Failed to save questionnaire response"
-      );
-    }
-
+    await apiRequest<void>(
+      QUESTIONNAIRE_RESPONSE_ENDPOINT,
+      "POST",
+      responseData
+    );
     console.log("Questionnaire response saved successfully.");
-  } catch (error: any) {
-    console.error("Error saving questionnaire response:", error.message);
-    throw new Error("Error saving response. Please try again.");
+  } catch (error) {
+    console.error("Error saving questionnaire response:", error);
+    throw error;
   }
 };
 
-// API call to retrieve questionnaire data
+/* -- Service to retrieve questionnaire data -- */
 export const getQuestionnaireResponse = async (): Promise<Record<
   number,
   number | number[]
 > | null> => {
   try {
-    const response = await fetch(QUESTIONNAIRE_RESPONSE_ENDPOINT, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      console.error("Failed to fetch questionnaire response.");
-      return null;
-    }
-
-    const data = await response.json();
+    const data = await apiRequest<QuestionnaireResponse>(
+      QUESTIONNAIRE_RESPONSE_ENDPOINT,
+      "GET"
+    );
     return data.responses;
   } catch (error) {
     console.error("Error fetching questionnaire response:", error);
@@ -58,19 +55,13 @@ export const getQuestionnaireResponse = async (): Promise<Record<
   }
 };
 
-// API call to check if user has questionnaire data saved
+/* -- Service to check if user has questionnaire data saved -- */
 export const hasSavedResponse = async (): Promise<boolean> => {
   try {
-    const response = await fetch(QUESTIONNAIRE_RESPONSE_ENDPOINT, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      return false;
-    }
-
-    const data = await response.json();
+    const data = await apiRequest<QuestionnaireResponse>(
+      QUESTIONNAIRE_RESPONSE_ENDPOINT,
+      "GET"
+    );
     return !!data.responses;
   } catch (error) {
     console.error("Error checking for saved responses:", error);
@@ -78,20 +69,13 @@ export const hasSavedResponse = async (): Promise<boolean> => {
   }
 };
 
-// API call to get total score from questionnaire data
+/* -- Service to get total score from questionnaire data -- */
 export const getTotalScore = async (): Promise<number> => {
   try {
-    const response = await fetch(QUESTIONNAIRE_RESPONSE_ENDPOINT, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      console.error("Failed to fetch total score. Returning 0 as fallback.");
-      return 0;
-    }
-
-    const data = await response.json();
+    const data = await apiRequest<QuestionnaireResponse>(
+      QUESTIONNAIRE_RESPONSE_ENDPOINT,
+      "GET"
+    );
     return data.totalScore ?? 0;
   } catch (error) {
     console.error("Error fetching total score:", error);
@@ -99,48 +83,37 @@ export const getTotalScore = async (): Promise<number> => {
   }
 };
 
-// API call to save questionnaire progress
-export const saveQuestionnaireProgress = async (progressData: {
-  responses: Record<number, number | number[]>;
-  currentQuestion: number;
-}): Promise<void> => {
+/* -- Service to save questionnaire progress -- */
+export const saveQuestionnaireProgress = async (
+  progressData: QuestionnaireProgress
+): Promise<void> => {
   try {
-    const response = await fetch(QUESTIONNAIRE_PROGRESS_ENDPOINT, {
-      method: "PUT",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(progressData),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Failed to save progress");
-    }
-  } catch (err) {
-    console.error("Error saving progress:", err);
+    await apiRequest<void>(
+      QUESTIONNAIRE_PROGRESS_ENDPOINT,
+      "PUT",
+      progressData
+    );
+  } catch (error) {
+    console.error("Error saving progress:", error);
+    // Not rethrowing to prevent disrupting the user experience
   }
 };
 
-// API call to get questionnaire progress
-export const getQuestionnaireProgress = async (): Promise<{
-  responses: Record<number, number | number[]>;
-  currentQuestion: number;
-} | null> => {
-  try {
-    const response = await fetch(QUESTIONNAIRE_PROGRESS_ENDPOINT, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      console.error("Failed to fetch progress.");
+/* -- Service to get questionnaire progress -- */
+export const getQuestionnaireProgress =
+  async (): Promise<QuestionnaireProgress | null> => {
+    try {
+      return await apiRequest<QuestionnaireProgress>(
+        QUESTIONNAIRE_PROGRESS_ENDPOINT,
+        "GET"
+      );
+    } catch (error) {
+      console.error("Error fetching progress:", error);
       return null;
     }
+  };
 
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.error("Error fetching progress:", err);
-    return null;
-  }
+/* -- Error handler for questionnaire service errors -- */
+export const handleQuesServiceError = (error: any): string => {
+  return handleApiError(error, "Questionnaire");
 };

@@ -1,5 +1,5 @@
-import { eachDayOfInterval } from 'date-fns';
-import { Logging } from "../../containers/habit-tracker/habits/Habits";
+import { eachDayOfInterval } from "date-fns";
+import { Logging } from "../../containers/habit-tracker/analytics/Analytics";
 import { formatDateLong } from "./date-utils";
 
 // Interface for the structure of a single heatmap data point
@@ -33,7 +33,9 @@ export function generateHeatmapData(
   // Iterate over each day of the year
   daysInYear.forEach((currentDate: Date) => {
     const logCountForDay =
-      logsForHabit?.[selectedYear]?.[formatDateLong(currentDate)]?.[currentDate.getDate()] || 0;
+      logsForHabit?.[selectedYear]?.[formatDateLong(currentDate)]?.[
+        currentDate.getDate()
+      ] || 0;
 
     const dayOfWeek = currentDate.getDay();
     const month = currentDate.getMonth() + 1;

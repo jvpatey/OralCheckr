@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import { IconButton } from "../../../components/habit-tracker/habits/IconButton";
 import { TodayButton } from "../../../components/habit-tracker/analytics/TodayButton";
@@ -10,6 +9,10 @@ import {
 import "react-datepicker/dist/react-datepicker.css";
 import { formatMonthYear } from "../../../common/utilities/date-utils";
 import { useTheme } from "styled-components";
+import {
+  DatePickerContainer,
+  DatePickerButton,
+} from "../../../components/habit-tracker/analytics/styles/DateSelectorStyles";
 
 // Define the ViewType enum for selecting month or year selector
 export enum ViewType {
@@ -24,59 +27,13 @@ interface AnalyticsDateSelectorProps {
   viewType: ViewType;
 }
 
-// Styled component for the Date Picker container
-const DatePickerContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 440px;
-  margin-bottom: 10px;
-
-  @media (max-width: 600px) {
-    width: 300px;
-    padding: 0 10px;
-  }
-`;
-
-// Styled component for the custom Date Picker button
-const DatePickerButton = styled.button`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  color: ${({ theme }) => theme.blue};
-  border: 2px solid ${({ theme }) => theme.blue};
-  padding: 0 30px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  height: 45px;
-  min-width: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-  margin-left: 10px;
-
-  @media (max-width: 600px) {
-    min-width: 50px;
-    padding: 0 10px;
-    font-size: 10px;
-    font-weight: bold;
-  }
-
-  &:hover {
-    background-color: ${({ theme }) => theme.blue};
-    border: 2px solid ${({ theme }) => theme.blue};
-    color: ${({ theme }) => theme.backgroundColor};
-  }
-`;
-
 // The AnalyticsDateSelector functional component to handle both month and year selection - used in month and year view analytics
 export function AnalyticsDateSelector({
   selectedDate,
   onDateChange,
   viewType,
 }: AnalyticsDateSelectorProps) {
-  const theme = useTheme()
+  const theme = useTheme();
   const datePickerRef = useRef<DatePicker>(null);
   const today = new Date();
 
@@ -99,17 +56,16 @@ export function AnalyticsDateSelector({
     onDateChange(newDate);
   };
 
-// Increase the selected month or year by one
-const increaseDate = () => {
-  if (isNextDisabled) return;
+  // Increase the selected month or year by one
+  const increaseDate = () => {
+    if (isNextDisabled) return;
 
-  const newDate =
-    viewType === ViewType.MONTH
-      ? new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1)
-      : new Date(selectedDate.getFullYear() + 1, selectedDate.getMonth(), 1);
-  onDateChange(newDate);
-};
-
+    const newDate =
+      viewType === ViewType.MONTH
+        ? new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1)
+        : new Date(selectedDate.getFullYear() + 1, selectedDate.getMonth(), 1);
+    onDateChange(newDate);
+  };
 
   // Set the selected date to the current month or year
   const handleTodayClick = () => {

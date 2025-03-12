@@ -23,6 +23,7 @@ interface PasswordFieldProps {
   showRequirements?: boolean;
   autoComplete?: string;
   id?: string;
+  required?: boolean;
 }
 
 export function PasswordField({
@@ -32,6 +33,7 @@ export function PasswordField({
   showRequirements = false,
   autoComplete = "current-password",
   id = "formPassword",
+  required = false,
 }: PasswordFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -71,6 +73,7 @@ export function PasswordField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         autoComplete={autoComplete}
+        required={required}
         title={
           showRequirements
             ? "Hover over the info icon to see password requirements"

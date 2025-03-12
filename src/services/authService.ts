@@ -6,6 +6,7 @@ import {
   LOGOUT_ENDPOINT,
   CONVERT_GUEST_ENDPOINT,
 } from "../config/authApiConfig";
+import { apiRequest, handleApiError } from "./apiUtils";
 
 /* -- Registration Service -- */
 
@@ -14,6 +15,7 @@ export interface RegisterData {
   lastName: string;
   email: string;
   password: string;
+  [key: string]: unknown;
 }
 
 export interface RegisterResponse {
@@ -25,23 +27,14 @@ export const registerUser = async (
   userData: RegisterData
 ): Promise<RegisterResponse> => {
   try {
-    const response = await fetch(REGISTER_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Registration failed");
-    }
-
-    const result = await response.json();
-
-    return result;
-  } catch (error: any) {
-    throw new Error(error.message || "Unexpected error occurred.");
+    return await apiRequest<RegisterResponse>(
+      REGISTER_ENDPOINT,
+      "POST",
+      userData
+    );
+  } catch (error) {
+    console.error("Registration failed:", error);
+    throw error;
   }
 };
 
@@ -50,6 +43,7 @@ export const registerUser = async (
 export interface LoginData {
   email: string;
   password: string;
+  [key: string]: unknown;
 }
 
 export interface LoginResponse {
@@ -61,64 +55,33 @@ export const loginUser = async (
   loginData: LoginData
 ): Promise<LoginResponse> => {
   try {
-    const response = await fetch(LOGIN_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(loginData),
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Login failed");
-    }
-
-    const result = await response.json();
-
-    return result;
-  } catch (error: any) {
-    throw new Error(error.message || "Unexpected error occurred.");
+    return await apiRequest<LoginResponse>(LOGIN_ENDPOINT, "POST", loginData);
+  } catch (error) {
+    console.error("Login failed:", error);
+    throw error;
   }
 };
 
 /* -- Guest Login Service -- */
 
-export const handleGuestLogin = async (): Promise<{
+export interface GuestLoginResponse {
   userId: number;
   role: string;
-}> => {
+}
+
+export const handleGuestLogin = async (): Promise<GuestLoginResponse> => {
   try {
-    const response = await fetch(GUEST_LOGIN_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Failed to log in as guest");
-    }
-
-    const { userId, role } = await response.json();
-    return { userId, role };
-  } catch (err: any) {
-    console.error("Guest login error:", err.message);
-    throw new Error("Unable to log in as guest. Please try again.");
+    return await apiRequest<GuestLoginResponse>(GUEST_LOGIN_ENDPOINT, "POST");
+  } catch (error) {
+    console.error("Guest login error:", error);
+    throw error;
   }
 };
 
 /* -- Logout Service -- */
 export const logoutUser = async (): Promise<void> => {
   try {
-    const response = await fetch(LOGOUT_ENDPOINT, {
-      method: "POST",
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Logout failed");
-    }
+    await apiRequest<void>(LOGOUT_ENDPOINT, "POST");
   } catch (error) {
     console.error("Logout failed:", error);
   }
@@ -132,12 +95,7 @@ export interface AuthResponse {
 
 export const validateAuth = async (): Promise<AuthResponse | null> => {
   try {
-    const res = await fetch(VALIDATION_ENDPOINT, { credentials: "include" });
-    if (res.ok) {
-      return res.json();
-    } else {
-      return null;
-    }
+    return await apiRequest<AuthResponse>(VALIDATION_ENDPOINT, "GET");
   } catch (error) {
     console.error("Auth validation failed:", error);
     return null;
@@ -146,21 +104,22 @@ export const validateAuth = async (): Promise<AuthResponse | null> => {
 
 /* -- Convert guest user to registered user on signup service -- */
 
-export const convertGuestToUser = async (userData: {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}): Promise<{ userId: number }> => {
-  const response = await fetch(CONVERT_GUEST_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(userData),
-  });
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || "Conversion failed");
+export const convertGuestToUser = async (
+  userData: RegisterData
+): Promise<{ userId: number }> => {
+  try {
+    return await apiRequest<{ userId: number }>(
+      CONVERT_GUEST_ENDPOINT,
+      "POST",
+      userData
+    );
+  } catch (error) {
+    console.error("Guest conversion failed:", error);
+    throw error;
   }
-  return response.json();
+};
+
+/* -- Error handler for authentication service errors -- */
+export const handleAuthServiceError = (error: any): string => {
+  return handleApiError(error, "Authentication");
 };

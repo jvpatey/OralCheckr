@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Dropdown } from "react-bootstrap";
-import { Habit } from "../habits/Habits";
-import { LocalStorage } from "../../../common/constants/local-storage";
+import { Habit } from "../../../services/habitService";
 import { useTheme } from "styled-components";
+import { useHabitContext } from "../../../contexts/HabitContext";
 
 interface HabitDropdownProps {
   habits?: Habit[];
@@ -57,22 +57,24 @@ export function HabitDropdown({
   habits = [],
   onSelectHabit,
 }: HabitDropdownProps) {
-  const theme = useTheme()
-  const [selectedHabit, setSelectedHabit] = useState<string>("Select Habit");
+  const theme = useTheme();
+  const { selectedHabit } = useHabitContext();
+  const [displayHabit, setDisplayHabit] = useState<string>("Select Habit");
 
   useEffect(() => {
-    // Retrieve the selected habit from localStorage when the component mounts
-    const storedHabit = localStorage.getItem(LocalStorage.SELECTED_HABIT);
-    if (storedHabit && habits.some((habit) => habit.name === storedHabit)) {
-      setSelectedHabit(storedHabit);
-      onSelectHabit(storedHabit);
+    // Update the displayed habit when the selected habit changes
+    if (selectedHabit && habits.some((habit) => habit.name === selectedHabit)) {
+      setDisplayHabit(selectedHabit);
+    } else if (habits.length > 0 && displayHabit === "Select Habit") {
+      // If no habit is selected and we have habits, select the first one
+      setDisplayHabit(habits[0].name);
+      onSelectHabit(habits[0].name);
     }
-  }, [habits, onSelectHabit]);
+  }, [habits, selectedHabit, onSelectHabit, displayHabit]);
 
   const handleSelect = (eventKey: string | null) => {
     if (eventKey) {
-      setSelectedHabit(eventKey);
-      localStorage.setItem(LocalStorage.SELECTED_HABIT, eventKey);
+      setDisplayHabit(eventKey);
       onSelectHabit(eventKey);
     }
   };
@@ -80,20 +82,20 @@ export function HabitDropdown({
   return (
     <Dropdown onSelect={handleSelect}>
       <CustomDropdownToggle id="dropdown-basic">
-        {selectedHabit}
+        {displayHabit}
       </CustomDropdownToggle>
 
       <CustomDropdownMenu>
         {habits.length === 0 ? (
           <CustomDropdownItem disabled $isActive={false}>
-            <span style={{color: theme.blue}}>No habits found </span>
+            <span style={{ color: theme.blue }}>No habits found </span>
           </CustomDropdownItem>
         ) : (
           habits.map((habit, index) => (
-            <CustomDropdownItem 
+            <CustomDropdownItem
               key={index}
               eventKey={habit.name}
-              $isActive={habit.name === selectedHabit}
+              $isActive={habit.name === displayHabit}
             >
               {habit.name}
             </CustomDropdownItem>

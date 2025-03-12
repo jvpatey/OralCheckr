@@ -14,6 +14,8 @@ import {
   HeaderText,
   ModalBody,
   InputStyle,
+  RequiredFormGroup,
+  RequiredNote,
 } from "./styles/ModalStyles";
 
 interface LoginModalProps {
@@ -100,23 +102,25 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       </ModalHeader>
       <ModalBody>
         <Form onSubmit={handleLoginSubmit}>
-          <Form.Group controlId="formUsername" className="m-3">
+          <RequiredFormGroup controlId="formUsername" className="m-3">
             <InputStyle
               type="text"
-              placeholder="Enter email"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
+              required
             />
-          </Form.Group>
-          <Form.Group controlId="formPassword" className="m-3">
+          </RequiredFormGroup>
+          <RequiredFormGroup controlId="formPassword" className="m-3">
             <PasswordField
               value={password}
               onChange={setPassword}
-              placeholder="Enter password"
+              placeholder="Password"
               autoComplete="current-password"
+              required
             />
-          </Form.Group>
+          </RequiredFormGroup>
           {error && (
             <Alert
               variant="danger"
@@ -131,6 +135,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
               {error}
             </Alert>
           )}
+          <RequiredNote>Required field</RequiredNote>
           <FormButton type="submit" disabled={!formValid} variant="login">
             Login
           </FormButton>

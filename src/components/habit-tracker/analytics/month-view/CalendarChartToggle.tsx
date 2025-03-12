@@ -14,10 +14,11 @@ const ToggleButtonContainer = styled.div`
   right: 10px;
   display: flex;
   gap: 10px;
+  z-index: 10;
 
   @media (max-width: 768px) {
-    top: 15px;
-    right: 10px;
+    top: 5px;
+    right: 5px;
   }
 `;
 

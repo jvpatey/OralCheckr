@@ -1,7 +1,4 @@
-import {
-  Habit,
-  Logging,
-} from "../../../containers/habit-tracker/habits/Habits";
+import { Habit } from "../../../services/habitService";
 import { HabitRow, PlaceholderText } from "./HabitComponents";
 import { HabitTile } from "./HabitTile";
 import { IconButton } from "./IconButton";
@@ -11,10 +8,10 @@ import {
   faPlusCircle,
   faMinusCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { formatDateLong } from "../../../common/utilities/date-utils";
 import { useTheme } from "styled-components";
+import { memo } from "react";
 
-interface HabitListProps {
+export interface HabitListProps {
   habits: Habit[];
   selectedDate: Date;
   isEditMode: boolean;
@@ -22,83 +19,128 @@ interface HabitListProps {
   handleDeleteHabit: (index: number) => void;
   handleLog: (habitName: string, selectedDate: Date) => void;
   handleRemoveLog: (habitName: string, selectedDate: Date) => void;
-  habitsLog: Logging;
+  getLogCount: (habitName: string, date: Date) => number;
   isFutureDate: boolean;
 }
 
-// RenderHabits Component
-export function RenderHabits({
-  habits,
-  selectedDate,
-  isEditMode,
-  handleEditHabit,
-  handleDeleteHabit,
-  handleLog,
-  handleRemoveLog,
-  habitsLog,
-  isFutureDate,
-}: HabitListProps) {
-  const theme = useTheme();
+// HabitRow component to render a single habit row
+const HabitRowComponent = memo(
+  ({
+    habit,
+    index,
+    logCount,
+    isEditMode,
+    isAddLogDisabled,
+    isRemoveLogDisabled,
+    handleEditHabit,
+    handleDeleteHabit,
+    handleLog,
+    handleRemoveLog,
+    selectedDate,
+    theme,
+  }: {
+    habit: Habit;
+    index: number;
+    logCount: number;
+    isEditMode: boolean;
+    isAddLogDisabled: boolean;
+    isRemoveLogDisabled: boolean;
+    handleEditHabit: (index: number) => void;
+    handleDeleteHabit: (index: number) => void;
+    handleLog: (habitName: string, selectedDate: Date) => void;
+    handleRemoveLog: (habitName: string, selectedDate: Date) => void;
+    selectedDate: Date;
+    theme: ReturnType<typeof useTheme>;
+  }) => {
+    return (
+      <HabitRow key={index}>
+        <HabitTile habit={habit} logCount={logCount} />
+        {isEditMode ? (
+          <>
+            <IconButton
+              icon={faPencilAlt}
+              onClick={() => handleEditHabit(index)}
+              borderColor={theme.yellow}
+              color={theme.yellow}
+              hoverBackgroundColor={theme.yellow}
+            />
+            <IconButton
+              icon={faTrashAlt}
+              onClick={() => handleDeleteHabit(index)}
+              borderColor={theme.red}
+              color={theme.red}
+              hoverBackgroundColor={theme.red}
+            />
+          </>
+        ) : (
+          <>
+            <IconButton
+              icon={faPlusCircle}
+              onClick={() => handleLog(habit.name, selectedDate)}
+              borderColor={theme.green}
+              color={theme.green}
+              hoverBackgroundColor={theme.green}
+              disabled={isAddLogDisabled}
+            />
+            <IconButton
+              icon={faMinusCircle}
+              onClick={() => handleRemoveLog(habit.name, selectedDate)}
+              borderColor={theme.red}
+              color={theme.red}
+              hoverBackgroundColor={theme.red}
+              disabled={isRemoveLogDisabled}
+            />
+          </>
+        )}
+      </HabitRow>
+    );
+  }
+);
 
-  return (
-    <>
-      {habits.map((habit, index) => {
-        const year = selectedDate.getFullYear();
-        const month = formatDateLong(selectedDate);
-        const day = selectedDate.getDate();
+// RenderHabits Component - Memoized to prevent unnecessary re-renders
+const RenderHabits = memo(
+  ({
+    habits,
+    selectedDate,
+    isEditMode,
+    handleEditHabit,
+    handleDeleteHabit,
+    handleLog,
+    handleRemoveLog,
+    getLogCount,
+    isFutureDate,
+  }: HabitListProps) => {
+    const theme = useTheme();
 
-        const logCount = habitsLog[habit.name]?.[year]?.[month]?.[day] || 0;
+    return (
+      <>
+        {habits.map((habit, index) => {
+          const logCount = getLogCount(habit.name, selectedDate);
+          const isAddLogDisabled = isFutureDate || logCount >= habit.count;
+          const isRemoveLogDisabled = isFutureDate || logCount <= 0;
 
-        const isAddLogDisabled = isFutureDate || logCount >= habit.count;
-        const isRemoveLogDisabled =
-          isFutureDate || !(habitsLog[habit.name]?.[year]?.[month]?.[day] > 0);
-
-        return (
-          <HabitRow key={index}>
-            <HabitTile habit={habit} logCount={logCount} />
-            {isEditMode ? (
-              <>
-                <IconButton
-                  icon={faPencilAlt}
-                  onClick={() => handleEditHabit(index)}
-                  borderColor={theme.yellow}
-                  color={theme.yellow}
-                  hoverBackgroundColor={theme.yellow}
-                />
-                <IconButton
-                  icon={faTrashAlt}
-                  onClick={() => handleDeleteHabit(index)}
-                  borderColor={theme.red}
-                  color={theme.red}
-                  hoverBackgroundColor={theme.red}
-                />
-              </>
-            ) : (
-              <>
-                <IconButton
-                  icon={faPlusCircle}
-                  onClick={() => handleLog(habit.name, selectedDate)}
-                  borderColor={theme.green}
-                  color={theme.green}
-                  hoverBackgroundColor={theme.green}
-                  disabled={isAddLogDisabled}
-                />
-                <IconButton
-                  icon={faMinusCircle}
-                  onClick={() => handleRemoveLog(habit.name, selectedDate)}
-                  borderColor={theme.red}
-                  color={theme.red}
-                  hoverBackgroundColor={theme.red}
-                  disabled={isRemoveLogDisabled}
-                />
-              </>
-            )}
-          </HabitRow>
-        );
-      })}
-    </>
-  );
-}
+          return (
+            <HabitRowComponent
+              key={`${habit.name}-${index}`}
+              habit={habit}
+              index={index}
+              logCount={logCount}
+              isEditMode={isEditMode}
+              isAddLogDisabled={isAddLogDisabled}
+              isRemoveLogDisabled={isRemoveLogDisabled}
+              handleEditHabit={handleEditHabit}
+              handleDeleteHabit={handleDeleteHabit}
+              handleLog={handleLog}
+              handleRemoveLog={handleRemoveLog}
+              selectedDate={selectedDate}
+              theme={theme}
+            />
+          );
+        })}
+      </>
+    );
+  }
+);
 
 // Functional component to render the list of entered habits - used in the Habits component
 export function HabitList({
@@ -109,7 +151,7 @@ export function HabitList({
   handleDeleteHabit,
   handleLog,
   handleRemoveLog,
-  habitsLog,
+  getLogCount,
   isFutureDate,
 }: HabitListProps) {
   return habits.length === 0 ? (
@@ -125,7 +167,7 @@ export function HabitList({
       handleDeleteHabit={handleDeleteHabit}
       handleLog={handleLog}
       handleRemoveLog={handleRemoveLog}
-      habitsLog={habitsLog}
+      getLogCount={getLogCount}
       isFutureDate={isFutureDate}
     />
   );
