@@ -7,6 +7,7 @@ import { apiRequest, handleApiError } from "./apiUtils";
 export interface SaveResponseData {
   responses: Record<number, number | number[]>;
   totalScore: number;
+  [key: string]: unknown;
 }
 
 export interface QuestionnaireResponse {
@@ -17,6 +18,7 @@ export interface QuestionnaireResponse {
 export interface QuestionnaireProgress {
   responses: Record<number, number | number[]>;
   currentQuestion: number;
+  [key: string]: unknown;
 }
 
 /* -- Service to save questionnaire responses -- */

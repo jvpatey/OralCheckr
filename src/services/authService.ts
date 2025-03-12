@@ -15,6 +15,7 @@ export interface RegisterData {
   lastName: string;
   email: string;
   password: string;
+  [key: string]: unknown;
 }
 
 export interface RegisterResponse {
@@ -42,6 +43,7 @@ export const registerUser = async (
 export interface LoginData {
   email: string;
   password: string;
+  [key: string]: unknown;
 }
 
 export interface LoginResponse {
