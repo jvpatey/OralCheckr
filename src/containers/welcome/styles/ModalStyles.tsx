@@ -15,11 +15,22 @@ export const ModalHeader = styled(Modal.Header)`
   border: transparent;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+
+  .btn-close {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 `;
 
 export const HeaderText = styled(Modal.Title)`
   font-size: 30px;
-  margin-left: 20px;
+  text-align: center;
+  margin: 0 auto;
 `;
 
 export const ModalBody = styled(Modal.Body)`
