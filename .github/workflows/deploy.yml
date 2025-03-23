@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - feat/backend/connect-to-render
   pull_request:
     branches:
       - master
