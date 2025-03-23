@@ -1,4 +1,4 @@
-export const API_BASE_URL = "http://localhost:3000";
+import { API_BASE_URL } from "./environment";
 
 // Habit Endpoints
 export const GET_HABITS_ENDPOINT = `${API_BASE_URL}/habits`;

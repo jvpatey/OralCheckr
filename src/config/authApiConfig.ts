@@ -1,4 +1,4 @@
-export const API_BASE_URL = "http://localhost:3000";
+import { API_BASE_URL } from "./environment";
 
 // Authentication Endpoints
 export const REGISTER_ENDPOINT = `${API_BASE_URL}/auth/register`;
