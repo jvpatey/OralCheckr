@@ -14,8 +14,31 @@ import {
   TabContent,
   Nav,
 } from "./styles/ProfileStyles";
+import { useProfile } from "../../hooks/profile/useProfile";
 
 export function Profile() {
+  const { profile, loading, error } = useProfile();
+
+  if (loading) {
+    return (
+      <PageContainer>
+        <ProfileCard>
+          <div>Loading...</div>
+        </ProfileCard>
+      </PageContainer>
+    );
+  }
+
+  if (error) {
+    return (
+      <PageContainer>
+        <ProfileCard>
+          <div>{error}</div>
+        </ProfileCard>
+      </PageContainer>
+    );
+  }
+
   return (
     <PageContainer>
       <ProfileCard>
@@ -30,19 +53,15 @@ export function Profile() {
           <ProfileInfo>
             <InfoGroup>
               <Label>First Name</Label>
-              <Value>John</Value>
+              <Value>{profile?.firstName}</Value>
             </InfoGroup>
             <InfoGroup>
               <Label>Last Name</Label>
-              <Value>Doe</Value>
+              <Value>{profile?.lastName}</Value>
             </InfoGroup>
             <InfoGroup>
               <Label>Email</Label>
-              <Value>john.doe@example.com</Value>
-            </InfoGroup>
-            <InfoGroup>
-              <Label>Location</Label>
-              <Value>Halifax, NS</Value>
+              <Value>{profile?.email}</Value>
             </InfoGroup>
           </ProfileInfo>
         </ProfileHeader>

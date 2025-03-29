@@ -91,18 +91,37 @@ export const ProfilePicture = styled.div`
 `;
 
 export const UploadButton = styled.button`
-  background: ${({ theme }) => theme.blue};
-  color: ${({ theme }) => theme.white};
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  background-color: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.backgroundColor};
+  width: auto;
+  height: 35px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: 25px;
+  padding: 0 20px;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: opacity 0.2s;
-  width: fit-content;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  white-space: nowrap;
+  border: 2px solid ${({ theme }) => theme.blue};
+  font-size: 15px;
 
   &:hover {
-    opacity: 0.9;
+    background-color: ${({ theme }) => theme.backgroundColor};
+    border-color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.blue};
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 15px;
+    font-size: 14px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 10px;
+    font-size: 12px;
   }
 `;
 
