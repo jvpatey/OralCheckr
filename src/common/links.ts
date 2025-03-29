@@ -5,6 +5,7 @@ import {
   faChartSimple,
   faList,
   faSquarePollVertical,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { RoutePaths } from "./constants/routes";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
@@ -19,6 +20,12 @@ export interface NavLink {
 
 // Navbar links
 export const navbarLinks: NavLink[] = [
+  {
+    name: "Profile",
+    path: RoutePaths.PROFILE,
+    icon: faUser,
+    displayIn: "navbar",
+  },
   {
     name: "Questionnaire",
     path: RoutePaths.QUESTIONNAIRE,

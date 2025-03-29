@@ -8,6 +8,7 @@ import { Analytics } from "./containers/habit-tracker/analytics/Analytics";
 import { Results } from "./components/questionnaire/Results";
 import { Landing } from "./components/landing/Landing";
 import { Welcome } from "./containers/welcome/Welcome";
+import { Profile } from "./containers/profile/Profile";
 import { ThemeType } from "./App";
 
 interface RouterProps {
@@ -76,6 +77,16 @@ export function Router({ themeToggler, currentTheme }: RouterProps) {
         element={
           <GuardedRoute>
             <Questionnaire />
+          </GuardedRoute>
+        }
+      />
+
+      {/* Profile route */}
+      <Route
+        path={RoutePaths.PROFILE}
+        element={
+          <GuardedRoute>
+            <Profile />
           </GuardedRoute>
         }
       />
