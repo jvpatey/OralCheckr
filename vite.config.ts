@@ -14,7 +14,7 @@ export default defineConfig({
     }),
   ],
   base: "/OralCheckr/",
-  // Explicitly handle environment variables for production builds
+  // Define environment variables for production builds
   define: {
     "import.meta.env.VITE_GOOGLE_CLIENT_ID": JSON.stringify(
       process.env.VITE_GOOGLE_CLIENT_ID

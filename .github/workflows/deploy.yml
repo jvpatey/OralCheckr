@@ -24,21 +24,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Debug environment
+      - name: Create config file in public directory
         run: |
-          echo "Has VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID != '' }}"
-          echo "API URL: https://oralcheckr-backend.onrender.com"
+          echo "window.APP_CONFIG = { GOOGLE_CLIENT_ID: '${{ secrets.VITE_GOOGLE_CLIENT_ID }}', API_URL: 'https://oralcheckr-backend.onrender.com' };" > public/config.js
 
       - name: Build project
         run: npm run build
         env:
           VITE_API_URL: https://oralcheckr-backend.onrender.com
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
-
-      - name: Create config file in build output
-        run: |
-          echo "window.APP_CONFIG = { GOOGLE_CLIENT_ID: '${{ secrets.VITE_GOOGLE_CLIENT_ID }}', API_URL: 'https://oralcheckr-backend.onrender.com' };" > dist/config.js
-          echo "Config file created with Google Client ID"
 
       - name: Configure Git
         run: |
@@ -50,4 +44,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_ASKPASS: echo
-          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
