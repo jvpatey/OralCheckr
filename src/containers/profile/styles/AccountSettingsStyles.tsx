@@ -6,12 +6,28 @@ export const SettingsContainer = styled.div`
 `;
 
 export const Section = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 2rem;
+    left: 0;
+    width: 50%;
+    height: 2px;
+    background-color: ${({ theme }) => theme.blue};
+  }
 `;
 
-export const SectionTitle = styled.h4`
-  color: ${({ theme }) => theme.blue};
-  margin-bottom: 1rem;
+export const SectionTitle = styled.h3`
+  && {
+    color: ${({ theme }) => theme.blue};
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    padding-bottom: 0.25rem;
+  }
 `;
 
 export const StyledForm = styled(Form)`
@@ -113,10 +129,21 @@ export const StyledToastContainer = styled(ToastContainer)`
   }
 `;
 
-export const DeleteSection = styled(Section)`
+export const DeleteSection = styled.div`
   margin-top: 2rem;
-  border-top: 1px solid ${({ theme }) => theme.borderGrey};
-  padding-top: 2rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+  padding-top: 1rem;
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 3rem;
+    left: 0;
+    width: 50%;
+    height: 2px;
+    background-color: ${({ theme }) => theme.blue};
+  }
 `;
 
 export const DeleteButton = styled(StyledButton)`

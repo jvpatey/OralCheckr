@@ -8,24 +8,59 @@ import {
   Value,
   HabitList,
   HabitItem,
+  HabitName,
+  HabitDate,
+  EmptyHabit,
+  WarningText,
+  DescriptionText,
+  DataGrid,
 } from "../styles/DataTabStyles";
 import { useQuestionnaireData } from "../../../hooks/questionnaire/useQuestionnaireData";
 import { deleteQuestionnaireData } from "../../../services/quesService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
 import { toast } from "react-toastify";
+import { useHabitsWithLastTracked } from "../../../hooks/habits/useHabitsWithLastTracked";
+import { useDeleteAllHabits } from "../../../hooks/habits/useDeleteAllHabits";
+import styled from "styled-components";
+
+// Green label for "Last tracked:" text
+const GreenLabel = styled.span`
+  color: ${({ theme }) => theme.green};
+`;
+
+// Spacing div for habits section
+const Spacing = styled.div`
+  margin-top: 1.5rem;
+`;
 
 export function DataTab() {
+  // State for modals and loading
   const [isDeleting, setIsDeleting] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const {
-    data: questionnaireData,
-    isLoading,
-    isError,
-    hasNoData,
-  } = useQuestionnaireData();
+  const [showDeleteQuestionnaireModal, setShowDeleteQuestionnaireModal] =
+    useState(false);
+  const [showDeleteHabitsModal, setShowDeleteHabitsModal] = useState(false);
+
+  // Query client for cache management
   const queryClient = useQueryClient();
 
+  // Questionnaire data
+  const {
+    data: questionnaireData,
+    isLoading: isLoadingQuestionnaire,
+    isError: isQuestionnaireError,
+    hasNoData: hasNoQuestionnaireData,
+  } = useQuestionnaireData();
+
+  // Habits data
+  const {
+    data: habitsData,
+    isLoading: isLoadingHabits,
+    isError: isHabitsError,
+    hasNoData: hasNoHabitsData,
+  } = useHabitsWithLastTracked();
+
+  // Questionnaire deletion mutation
   const deleteQuestionnaireMutation = useMutation({
     mutationFn: deleteQuestionnaireData,
     onMutate: async () => {
@@ -56,6 +91,39 @@ export function DataTab() {
     },
   });
 
+  // Habits deletion mutation
+  const deleteAllHabitsMutation = useMutation({
+    mutationFn: useDeleteAllHabits().mutateAsync,
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["habits"] });
+      const previousData = queryClient.getQueryData(["habits"]);
+      queryClient.setQueryData(["habits"], []);
+      return { previousData };
+    },
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData(["habits"], context?.previousData);
+      toast.error("Failed to delete habits", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["habits"] });
+      queryClient.invalidateQueries({ queryKey: ["habitLogs"] });
+      toast.success("All habits deleted successfully", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      // Force immediate UI update by setting hasNoData
+      queryClient.setQueryData(["habits"], []);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["habits"] });
+    },
+  });
+
+  // Questionnaire deletion handler
   const handleDeleteQuestionnaire = async () => {
     try {
       setIsDeleting(true);
@@ -64,44 +132,122 @@ export function DataTab() {
       console.error("Error deleting questionnaire data:", error);
     } finally {
       setIsDeleting(false);
-      setShowDeleteModal(false);
+      setShowDeleteQuestionnaireModal(false);
     }
+  };
+
+  // Habits deletion handler
+  const handleDeleteAllHabits = async () => {
+    try {
+      setIsDeleting(true);
+      await deleteAllHabitsMutation.mutateAsync();
+    } catch (error) {
+      console.error("Error deleting all habits:", error);
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteHabitsModal(false);
+    }
+  };
+
+  // Render questionnaire content based on loading/error/data state
+  const renderQuestionnaireContent = () => {
+    if (isLoadingQuestionnaire) {
+      return (
+        <DataItem style={{ gridColumn: "1 / -1", textAlign: "center" }}>
+          <Value>Loading questionnaire data...</Value>
+        </DataItem>
+      );
+    }
+
+    if (isQuestionnaireError) {
+      return (
+        <DataItem style={{ gridColumn: "1 / -1", textAlign: "center" }}>
+          <Value>Error loading questionnaire data</Value>
+        </DataItem>
+      );
+    }
+
+    if (hasNoQuestionnaireData) {
+      return (
+        <DataItem style={{ gridColumn: "1 / -1", textAlign: "center" }}>
+          <Value>No questionnaire data available</Value>
+        </DataItem>
+      );
+    }
+
+    return (
+      <>
+        <DataItem>
+          <Label>Most Recent Completion</Label>
+          <Value>
+            {questionnaireData.lastCompleted || "Not completed yet"}
+          </Value>
+        </DataItem>
+        <DataItem>
+          <Label>Oral Health Score</Label>
+          <Value>
+            {questionnaireData.score !== null
+              ? `${questionnaireData.score}`
+              : "No score available"}
+          </Value>
+        </DataItem>
+      </>
+    );
+  };
+
+  // Render habit content based on loading/error/data state
+  const renderHabitContent = () => {
+    if (isLoadingHabits) {
+      return <EmptyHabit>Loading habits...</EmptyHabit>;
+    }
+
+    if (isHabitsError) {
+      return <EmptyHabit>Error loading habits</EmptyHabit>;
+    }
+
+    if (hasNoHabitsData) {
+      return <EmptyHabit>No habits tracked yet</EmptyHabit>;
+    }
+
+    return (
+      <HabitList>
+        {habitsData.map((habit) => (
+          <HabitItem key={habit.habitId}>
+            <HabitName>{habit.name}</HabitName>
+            <HabitDate>
+              {habit.lastTracked ? (
+                <>
+                  <GreenLabel>Last tracked:</GreenLabel> {habit.lastTracked}
+                </>
+              ) : (
+                "Not tracked yet"
+              )}
+            </HabitDate>
+          </HabitItem>
+        ))}
+      </HabitList>
+    );
   };
 
   return (
     <>
       <Section>
         <SectionTitle>Questionnaire Data</SectionTitle>
-        <DataItem>
-          <Label>Most Recent Completion</Label>
-          <Value>
-            {isLoading
-              ? "Loading..."
-              : isError
-              ? "Error loading data"
-              : hasNoData || !questionnaireData.lastCompleted
-              ? "No questionnaire data"
-              : questionnaireData.lastCompleted}
-          </Value>
-        </DataItem>
-        <DataItem>
-          <Label>Oral Health Score</Label>
-          <Value>
-            {isLoading
-              ? "Loading..."
-              : isError
-              ? "Error loading data"
-              : hasNoData || questionnaireData.score === null
-              ? "No oral health score"
-              : `${questionnaireData.score}`}
-          </Value>
-        </DataItem>
+        <DataGrid>{renderQuestionnaireContent()}</DataGrid>
+
+        <WarningText>Warning: This action cannot be undone.</WarningText>
+        <DescriptionText>
+          Deleting your questionnaire data will permanently remove all your oral
+          health assessments and scores. Your habit tracking data will not be
+          affected.
+        </DescriptionText>
+
         <DeleteButton
-          onClick={() => setShowDeleteModal(true)}
+          onClick={() => setShowDeleteQuestionnaireModal(true)}
           disabled={
             isDeleting ||
-            isLoading ||
-            hasNoData ||
+            isLoadingQuestionnaire ||
+            hasNoQuestionnaireData ||
             (!questionnaireData?.lastCompleted && !questionnaireData?.score)
           }
         >
@@ -111,20 +257,41 @@ export function DataTab() {
 
       <Section>
         <SectionTitle>Habit Tracking Data</SectionTitle>
-        <HabitList>
-          <HabitItem>No habits tracked yet</HabitItem>
-        </HabitList>
-        <DeleteButton style={{ marginTop: "1rem" }}>
+        {renderHabitContent()}
+
+        <Spacing />
+        <WarningText>Warning: This action cannot be undone.</WarningText>
+        <DescriptionText>
+          Deleting your habit tracking data will permanently remove all your
+          tracked habits and their history. Your questionnaire data will not be
+          affected.
+        </DescriptionText>
+
+        <DeleteButton
+          onClick={() => setShowDeleteHabitsModal(true)}
+          disabled={isDeleting || isLoadingHabits || hasNoHabitsData}
+        >
           Delete All Habits
         </DeleteButton>
       </Section>
 
+      {/* Questionnaire Delete Confirmation Modal */}
       <DeleteConfirmationModal
-        show={showDeleteModal}
-        onHide={() => setShowDeleteModal(false)}
+        show={showDeleteQuestionnaireModal}
+        onHide={() => setShowDeleteQuestionnaireModal(false)}
         onConfirm={handleDeleteQuestionnaire}
         title="Delete Questionnaire Data"
         message="Are you sure you want to delete your questionnaire data? This action cannot be undone."
+        isDeleting={isDeleting}
+      />
+
+      {/* Habits Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        show={showDeleteHabitsModal}
+        onHide={() => setShowDeleteHabitsModal(false)}
+        onConfirm={handleDeleteAllHabits}
+        title="Delete All Habits"
+        message="Are you sure you want to delete all your habits and tracking data? This action cannot be undone."
         isDeleting={isDeleting}
       />
     </>
