@@ -20,7 +20,6 @@ import {
   GoogleButton,
   StyledFormButton,
 } from "./styles/ModalStyles";
-import { CredentialResponse } from "@react-oauth/google";
 
 interface LoginModalProps {
   show: boolean;
@@ -91,13 +90,13 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   };
 
   // Handle Google login success
-  const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
+  const handleGoogleSuccess = (response: any) => {
     setError("");
     setIsServerError(false);
 
-    if (credentialResponse.credential) {
+    if (response && response.credential) {
       googleLoginMutate(
-        { credential: credentialResponse.credential },
+        { credential: response.credential },
         {
           onSuccess: () => {
             updateAuth(null);
@@ -199,13 +198,6 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={handleGoogleError}
-              useOneTap
-              type="standard"
-              theme="outline"
-              size="large"
-              text="continue_with"
-              shape="rectangular"
-              width="100%"
               containerProps={{ id: "google-login-button" }}
             />
           </div>
