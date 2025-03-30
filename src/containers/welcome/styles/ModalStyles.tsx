@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { Modal, Form } from "react-bootstrap";
+import { Modal, Form, Button } from "react-bootstrap";
+import { FormButton } from "../../../components/questionnaire/styles/FormButton";
 
 // Modal structure styles
 export const StyledModal = styled(Modal)`
@@ -160,4 +161,72 @@ export const RequirementItem = styled.li<{ $isMet: boolean }>`
   color: ${(props) =>
     props.$isMet ? props.theme.green : props.theme.textGrey};
   font-size: 0.9rem;
+`;
+
+export const OrSeparator = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1rem 0;
+  color: ${({ theme }) => theme.textGrey};
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid ${({ theme }) => theme.textGrey};
+  }
+
+  &::before {
+    margin-right: 0.5rem;
+  }
+
+  &::after {
+    margin-left: 0.5rem;
+  }
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+`;
+
+export const GoogleButton = styled(Button)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  height: 44px;
+  background-color: white;
+  color: #757575;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+  width: 48%;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: #f8f8f8;
+    color: #757575;
+    border-color: #ccc;
+  }
+
+  img {
+    height: 18px;
+    margin-right: 8px;
+  }
+`;
+
+export const StyledFormButton = styled(FormButton)`
+  border-radius: 6px;
+  width: 48%;
+  margin: 0;
+  height: 44px;
+  padding: 10px 16px;
 `;

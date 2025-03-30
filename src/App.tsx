@@ -9,6 +9,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { HabitProvider } from "./contexts/HabitContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GOOGLE_CLIENT_ID } from "./config/environment";
 
 export enum ThemeType {
   LIGHT = "light",
@@ -25,27 +27,29 @@ export function App() {
   const queryClient = new QueryClient();
 
   return (
-    <ThemeProvider theme={theme === ThemeType.LIGHT ? lightTheme : darkTheme}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <HabitProvider>
-            <HashRouter>
-              <RenderNavs themeToggler={themeToggler} currentTheme={theme} />
-              <Router themeToggler={themeToggler} currentTheme={theme} />
-              <ToastContainer
-                position="top-right"
-                autoClose={800}
-                hideProgressBar={false}
-                closeOnClick
-                pauseOnHover={false}
-                draggable={false}
-                limit={3}
-                theme={theme === ThemeType.LIGHT ? "light" : "dark"}
-              />
-            </HashRouter>
-          </HabitProvider>
-        </AuthProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <ThemeProvider theme={theme === ThemeType.LIGHT ? lightTheme : darkTheme}>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <HabitProvider>
+              <HashRouter>
+                <RenderNavs themeToggler={themeToggler} currentTheme={theme} />
+                <Router themeToggler={themeToggler} currentTheme={theme} />
+                <ToastContainer
+                  position="top-right"
+                  autoClose={800}
+                  hideProgressBar={false}
+                  closeOnClick
+                  pauseOnHover={false}
+                  draggable={false}
+                  limit={3}
+                  theme={theme === ThemeType.LIGHT ? "light" : "dark"}
+                />
+              </HashRouter>
+            </HabitProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </GoogleOAuthProvider>
   );
 }

@@ -1,13 +1,13 @@
+import React, { useState, useEffect, useContext } from "react";
 import { Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { RoutePaths } from "../../common/constants/routes";
 import { LoginData } from "../../services/authService";
-import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useLoginUser } from "../../hooks/auth/useLoginUser";
-import { FormButton } from "../../components/questionnaire/styles/FormButton";
+import { useGoogleLogin } from "../../hooks/auth/useGoogleLogin";
 import { PasswordField } from "./components";
+import { GoogleLogin } from "@react-oauth/google";
 import {
   StyledModal,
   ModalHeader,
@@ -16,6 +16,9 @@ import {
   InputStyle,
   RequiredFormGroup,
   RequiredNote,
+  ButtonContainer,
+  GoogleButton,
+  StyledFormButton,
 } from "./styles/ModalStyles";
 
 interface LoginModalProps {
@@ -31,8 +34,10 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [error, setError] = useState("");
   const [formValid, setFormValid] = useState(false);
   const [isServerError, setIsServerError] = useState(false);
-  // Login mutation
+
+  // Login mutations
   const { mutate: loginMutate } = useLoginUser();
+  const { mutate: googleLoginMutate } = useGoogleLogin();
 
   // Check if form is valid - just check if fields have content
   useEffect(() => {
@@ -82,6 +87,33 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       setError(err.message);
       setIsServerError(true);
     }
+  };
+
+  // Handle Google login success
+  const handleGoogleSuccess = (credentialResponse: any) => {
+    setError("");
+    setIsServerError(false);
+
+    googleLoginMutate(
+      { credential: credentialResponse.credential },
+      {
+        onSuccess: () => {
+          updateAuth(null);
+          navigate(RoutePaths.LANDING);
+          handleClose();
+        },
+        onError: (err: Error) => {
+          setError(err.message);
+          setIsServerError(true);
+        },
+      }
+    );
+  };
+
+  // Handle Google login error
+  const handleGoogleError = () => {
+    setError("Google login failed. Please try again.");
+    setIsServerError(true);
   };
 
   // Reset form states when modal is closed
@@ -136,9 +168,41 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
             </Alert>
           )}
           <RequiredNote>Required field</RequiredNote>
-          <FormButton type="submit" disabled={!formValid} variant="login">
-            Login
-          </FormButton>
+
+          <ButtonContainer>
+            <GoogleButton
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("google-login-button")?.click();
+              }}
+            >
+              <img
+                src="https://developers.google.com/identity/images/g-logo.png"
+                alt="Google logo"
+              />
+              Sign in with Google
+            </GoogleButton>
+
+            <StyledFormButton type="submit" disabled={!formValid}>
+              Login
+            </StyledFormButton>
+          </ButtonContainer>
+
+          {/* Hidden Google login button that gets triggered by our custom button */}
+          <div style={{ display: "none" }}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+              useOneTap
+              type="standard"
+              theme="outline"
+              size="large"
+              text="continue_with"
+              shape="rectangular"
+              width="100%"
+              containerProps={{ id: "google-login-button" }}
+            />
+          </div>
         </Form>
       </ModalBody>
     </StyledModal>

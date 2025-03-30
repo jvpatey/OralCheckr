@@ -7,6 +7,8 @@ interface FormButtonProps {
   onClick?: () => void;
   variant?: "login" | "signup";
   children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 const StyledButton = styled.button<{ $variant?: string }>`
@@ -47,6 +49,8 @@ export const FormButton: React.FC<FormButtonProps> = ({
   onClick,
   variant = "login",
   children,
+  className,
+  style,
 }) => {
   return (
     <StyledButton
@@ -54,6 +58,8 @@ export const FormButton: React.FC<FormButtonProps> = ({
       disabled={disabled}
       onClick={onClick}
       $variant={variant}
+      className={className}
+      style={style}
     >
       {children}
     </StyledButton>
