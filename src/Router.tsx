@@ -8,7 +8,7 @@ import { Analytics } from "./containers/habit-tracker/analytics/Analytics";
 import { Results } from "./components/questionnaire/Results";
 import { Landing } from "./components/landing/Landing";
 import { Welcome } from "./containers/welcome/Welcome";
-import { Profile } from "./containers/profile/Profile";
+import { Profile } from "./containers/profile/components/Profile";
 import { ThemeType } from "./App";
 
 interface RouterProps {

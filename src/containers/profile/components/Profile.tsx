@@ -1,23 +1,39 @@
 import { Tab } from "react-bootstrap";
+import { useState, useEffect } from "react";
 import {
   PageContainer,
   ProfileCard,
-  ProfileHeader,
-  ProfilePictureSection,
-  ProfilePicture,
-  UploadButton,
-  ProfileInfo,
-  InfoGroup,
-  Label,
-  Value,
   StyledNav,
   TabContent,
   Nav,
-} from "./styles/ProfileStyles";
-import { useProfile } from "../../hooks/profile/useProfile";
+} from "../styles/ProfileStyles";
+import { useProfile } from "../../../hooks/profile/useProfile";
+import { AvatarSelectionModal } from "./AvatarSelectionModal";
+import { ProfileSection } from "./ProfileSection";
+import { updateProfile } from "../../../services/profileService";
 
 export function Profile() {
-  const { profile, loading, error } = useProfile();
+  const { profile, loading, error, refetch } = useProfile();
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [localAvatar, setLocalAvatar] = useState<string | undefined>();
+
+  // Update localAvatar whenever profile changes
+  useEffect(() => {
+    if (profile?.avatar) {
+      setLocalAvatar(profile.avatar);
+    }
+  }, [profile]);
+
+  const handleAvatarSelect = async (avatar: string) => {
+    try {
+      const updatedProfile = await updateProfile({ avatar });
+      setLocalAvatar(updatedProfile.avatar);
+      setShowAvatarModal(false);
+      await refetch();
+    } catch (error) {
+      console.error("Error updating avatar:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -42,29 +58,13 @@ export function Profile() {
   return (
     <PageContainer>
       <ProfileCard>
-        <ProfileHeader>
-          <ProfilePictureSection>
-            <ProfilePicture>
-              <span>Click to upload</span>
-            </ProfilePicture>
-            <UploadButton>Upload Photo</UploadButton>
-          </ProfilePictureSection>
-
-          <ProfileInfo>
-            <InfoGroup>
-              <Label>First Name</Label>
-              <Value>{profile?.firstName}</Value>
-            </InfoGroup>
-            <InfoGroup>
-              <Label>Last Name</Label>
-              <Value>{profile?.lastName}</Value>
-            </InfoGroup>
-            <InfoGroup>
-              <Label>Email</Label>
-              <Value>{profile?.email}</Value>
-            </InfoGroup>
-          </ProfileInfo>
-        </ProfileHeader>
+        <ProfileSection
+          firstName={profile?.firstName}
+          lastName={profile?.lastName}
+          email={profile?.email}
+          avatar={localAvatar}
+          onAvatarClick={() => setShowAvatarModal(true)}
+        />
 
         <Tab.Container defaultActiveKey="account">
           <StyledNav variant="tabs">
@@ -100,6 +100,13 @@ export function Profile() {
             </Tab.Pane>
           </Tab.Content>
         </Tab.Container>
+
+        <AvatarSelectionModal
+          show={showAvatarModal}
+          onHide={() => setShowAvatarModal(false)}
+          onSelect={handleAvatarSelect}
+          currentAvatar={localAvatar}
+        />
       </ProfileCard>
     </PageContainer>
   );

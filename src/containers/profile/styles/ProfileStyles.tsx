@@ -63,7 +63,7 @@ export const ProfilePictureSection = styled.div`
   gap: 1rem;
 `;
 
-export const ProfilePicture = styled.div`
+export const ProfilePicture = styled.div<{ $hasAvatar?: boolean }>`
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -71,17 +71,30 @@ export const ProfilePicture = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px dashed ${({ theme }) => theme.textGrey};
+  border: 2px
+    ${({ $hasAvatar, theme }) =>
+      $hasAvatar ? `solid ${theme.blue}` : `dashed ${theme.textGrey}`};
   color: ${({ theme }) => theme.textGrey};
   font-size: 0.9rem;
   cursor: pointer;
   overflow: hidden;
   text-align: center;
   padding: 1rem;
+  position: relative;
 
   &:hover {
     border-color: ${({ theme }) => theme.blue};
     color: ${({ theme }) => theme.blue};
+  }
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 0.5rem;
   }
 
   @media (max-width: 480px) {
