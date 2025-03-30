@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { RoutePaths } from "../../common/constants/routes";
@@ -7,7 +7,6 @@ import { AuthContext } from "../authentication/AuthContext";
 import { useLoginUser } from "../../hooks/auth/useLoginUser";
 import { useGoogleLogin } from "../../hooks/auth/useGoogleLogin";
 import { PasswordField } from "./components";
-import { GoogleLogin } from "@react-oauth/google";
 import {
   StyledModal,
   ModalHeader,
@@ -17,9 +16,9 @@ import {
   RequiredFormGroup,
   RequiredNote,
   ButtonContainer,
-  GoogleButton,
   StyledFormButton,
 } from "./styles/ModalStyles";
+import { GOOGLE_CLIENT_ID } from "../../config/environment";
 
 interface LoginModalProps {
   show: boolean;
@@ -34,6 +33,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [error, setError] = useState("");
   const [formValid, setFormValid] = useState(false);
   const [isServerError, setIsServerError] = useState(false);
+  const googleButtonRef = useRef<HTMLDivElement>(null);
 
   // Login mutations
   const { mutate: loginMutate } = useLoginUser();
@@ -115,11 +115,47 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
     }
   };
 
-  // Handle Google login error
-  const handleGoogleError = () => {
-    setError("Google login failed. Please try again.");
-    setIsServerError(true);
-  };
+  // Initialize Google OAuth Client when modal shows
+  useEffect(() => {
+    if (show) {
+      // Clean up any previous instances
+      const oldScripts = document.querySelectorAll(
+        'script[src="https://accounts.google.com/gsi/client"]'
+      );
+      oldScripts.forEach((script) => script.remove());
+
+      // Add Google's script
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        // @ts-ignore - window.google is provided by the script
+        window.google?.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleSuccess,
+        });
+
+        if (googleButtonRef.current) {
+          // @ts-ignore
+          window.google?.accounts.id.renderButton(googleButtonRef.current, {
+            type: "standard",
+            theme: "outline",
+            size: "large",
+            text: "signin_with",
+            shape: "rectangular",
+            width: 250,
+          });
+        }
+      };
+      document.body.appendChild(script);
+
+      // Cleanup function
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
+  }, [show]);
 
   // Reset form states when modal is closed
   useEffect(() => {
@@ -175,32 +211,11 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
           <RequiredNote>Required field</RequiredNote>
 
           <ButtonContainer>
-            <GoogleButton
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("google-login-button")?.click();
-              }}
-            >
-              <img
-                src="https://developers.google.com/identity/images/g-logo.png"
-                alt="Google logo"
-              />
-              Sign in with Google
-            </GoogleButton>
-
+            <div ref={googleButtonRef}></div>
             <StyledFormButton type="submit" disabled={!formValid}>
               Login
             </StyledFormButton>
           </ButtonContainer>
-
-          {/* Hidden Google login button that gets triggered by our custom button */}
-          <div style={{ display: "none" }}>
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
-              containerProps={{ id: "google-login-button" }}
-            />
-          </div>
         </Form>
       </ModalBody>
     </StyledModal>
