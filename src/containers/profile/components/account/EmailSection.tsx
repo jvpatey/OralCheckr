@@ -42,6 +42,8 @@ export function EmailSection({
     }
   };
 
+  const handleClick = (_: React.MouseEvent<HTMLButtonElement>) => {};
+
   return (
     <Section>
       <SectionTitle>Change Email Address</SectionTitle>
@@ -60,7 +62,7 @@ export function EmailSection({
             required
           />
         </Form.Group>
-        <StyledButton type="submit" disabled={isLoading}>
+        <StyledButton type="submit" disabled={isLoading} onClick={handleClick}>
           Update Email
         </StyledButton>
       </StyledForm>

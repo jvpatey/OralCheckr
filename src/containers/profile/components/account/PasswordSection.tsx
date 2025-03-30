@@ -55,6 +55,8 @@ export function PasswordSection({ showToast }: PasswordSectionProps) {
     }
   };
 
+  const handleClick = (_: React.MouseEvent<HTMLButtonElement>) => {};
+
   const passwordsDoNotMatch =
     confirmPassword !== "" && newPassword !== confirmPassword;
 
@@ -105,6 +107,7 @@ export function PasswordSection({ showToast }: PasswordSectionProps) {
         <StyledButton
           type="submit"
           disabled={isLoading || !!passwordError || passwordsDoNotMatch}
+          onClick={handleClick}
         >
           Update Password
         </StyledButton>
