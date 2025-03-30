@@ -13,6 +13,7 @@ import { ProfileSection } from "./ProfileSection";
 import { AccountSettings } from "./AccountSettings";
 import { updateProfile } from "../../../services/profileService";
 import { DataTab } from "./DataTab";
+import { SupportTab } from "./SupportTab";
 
 export function Profile() {
   const { profile, loading, error, refetch } = useProfile();
@@ -105,8 +106,7 @@ export function Profile() {
             </Tab.Pane>
             <Tab.Pane eventKey="support">
               <TabContent>
-                <h3>Support</h3>
-                {/* Support content will go here */}
+                <SupportTab />
               </TabContent>
             </Tab.Pane>
           </Tab.Content>
