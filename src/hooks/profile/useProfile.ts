@@ -1,41 +1,16 @@
-import { useState, useEffect } from "react";
-import { fetchProfile, ProfileData } from "../../services/profileService";
-import { handleApiError } from "../../services/apiUtils";
+import { useQuery } from "@tanstack/react-query";
+import { getProfile } from "../../services/profileService";
 
-interface UseProfileReturn {
-  profile: ProfileData | null;
-  loading: boolean;
-  error: string | null;
-  refetch: () => Promise<void>;
-}
-
-export const useProfile = (): UseProfileReturn => {
-  const [profile, setProfile] = useState<ProfileData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const getProfile = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await fetchProfile();
-      setProfile(data);
-    } catch (error) {
-      const errorMessage = handleApiError(error, "Profile");
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getProfile();
-  }, []);
-
-  return {
-    profile,
-    loading,
+export function useProfile() {
+  const {
+    data: profile,
+    isLoading: loading,
     error,
-    refetch: getProfile,
-  };
-};
+    refetch,
+  } = useQuery({
+    queryKey: ["profile"],
+    queryFn: getProfile,
+  });
+
+  return { profile, loading, error, refetch };
+}

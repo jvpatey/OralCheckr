@@ -10,6 +10,7 @@ import {
 import { useProfile } from "../../../hooks/profile/useProfile";
 import { AvatarSelectionModal } from "./AvatarSelectionModal";
 import { ProfileSection } from "./ProfileSection";
+import { AccountSettings } from "./AccountSettings";
 import { updateProfile } from "../../../services/profileService";
 
 export function Profile() {
@@ -26,12 +27,16 @@ export function Profile() {
 
   const handleAvatarSelect = async (avatar: string) => {
     try {
-      const updatedProfile = await updateProfile({ avatar });
-      setLocalAvatar(updatedProfile.avatar);
+      await updateProfile({ avatar });
+      setLocalAvatar(avatar);
       setShowAvatarModal(false);
+      // Ensure refetch immediately to update the navbar
       await refetch();
-    } catch (error) {
-      console.error("Error updating avatar:", error);
+    } catch (err) {
+      console.error(
+        "Error updating avatar:",
+        err instanceof Error ? err.message : "Failed to update avatar"
+      );
     }
   };
 
@@ -49,7 +54,11 @@ export function Profile() {
     return (
       <PageContainer>
         <ProfileCard>
-          <div>{error}</div>
+          <div>
+            {error instanceof Error
+              ? error.message
+              : "An error occurred while loading your profile"}
+          </div>
         </ProfileCard>
       </PageContainer>
     );
@@ -82,8 +91,10 @@ export function Profile() {
           <Tab.Content>
             <Tab.Pane eventKey="account">
               <TabContent>
-                <h3>Account Settings</h3>
-                {/* Account settings content will go here */}
+                <AccountSettings
+                  currentEmail={profile?.email || ""}
+                  refetch={refetch}
+                />
               </TabContent>
             </Tab.Pane>
             <Tab.Pane eventKey="data">

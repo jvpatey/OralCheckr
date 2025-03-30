@@ -1,8 +1,8 @@
 import { PROFILE_ENDPOINT } from "../config/authApiConfig";
 import { apiRequest } from "./apiUtils";
 
-export interface ProfileData {
-  userId: string;
+interface ProfileData {
+  userId: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -10,33 +10,23 @@ export interface ProfileData {
   avatar?: string;
 }
 
+interface ProfileUpdateData extends Record<string, unknown> {
+  avatar?: string;
+  email?: string;
+  currentPassword?: string;
+  newPassword?: string;
+}
+
 /* -- Service to fetch user profile -- */
-export const fetchProfile = async (): Promise<ProfileData> => {
-  try {
-    const data = await apiRequest<ProfileData>(PROFILE_ENDPOINT, "GET");
-    console.log("Fetched profile data:", data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching profile:", error);
-    throw error;
-  }
-};
+export async function getProfile(): Promise<ProfileData> {
+  const response = await apiRequest<ProfileData>(PROFILE_ENDPOINT, "GET");
+  return response;
+}
 
 /* -- Service to update user profile -- */
-export const updateProfile = async (data: {
-  avatar?: string;
-}): Promise<ProfileData> => {
-  try {
-    console.log("Sending profile update:", data);
-    const response = await apiRequest<ProfileData>(
-      PROFILE_ENDPOINT,
-      "PUT",
-      data
-    );
-    console.log("Profile update response:", response);
-    return response;
-  } catch (error) {
-    console.error("Error updating profile:", error);
-    throw error;
-  }
-};
+export async function updateProfile(
+  data: ProfileUpdateData
+): Promise<ProfileData> {
+  const response = await apiRequest<ProfileData>(PROFILE_ENDPOINT, "PUT", data);
+  return response;
+}
