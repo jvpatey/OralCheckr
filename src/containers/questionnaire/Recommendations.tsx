@@ -26,8 +26,24 @@ export function Recommendations() {
 
   // When responses change, process them to generate recommendations
   useEffect(() => {
-    if (!storedResponses) return;
-    const recs = generateRecommendations(storedResponses);
+    if (!storedResponses || !storedResponses.responses) return;
+
+    // Convert string responses to number format
+    const convertedResponses: Record<number, number | number[]> = {};
+
+    Object.entries(storedResponses.responses).forEach(([key, value]) => {
+      const questionId = parseInt(key);
+      try {
+        // Try to parse as JSON in case it's an array
+        const parsed = JSON.parse(value);
+        convertedResponses[questionId] = parsed;
+      } catch (e) {
+        // If not JSON, convert to number
+        convertedResponses[questionId] = parseInt(value);
+      }
+    });
+
+    const recs = generateRecommendations(convertedResponses);
     setRecommendations(recs);
   }, [storedResponses]);
 
