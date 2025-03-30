@@ -5,4 +5,5 @@ export enum RoutePaths {
   ANALYTICS = "/habit-tracker/analytics",
   RESULTS = "/questionnaire/results",
   PROFILE = "/profile",
+  ABOUT = "/about",
 }

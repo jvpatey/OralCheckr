@@ -1,3 +1,4 @@
+import React from "react";
 import { Container } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
@@ -80,6 +81,21 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   // Ensure isGuest is always a boolean
   const isGuest = Boolean(user && user.role === "guest");
 
+  // Filter links based on user role
+  const filteredLinks = links.filter((link) => {
+    // Hide links marked as hideForGuest for guest users
+    if (isGuest && link.hideForGuest) {
+      return false;
+    }
+
+    // Show links marked as showOnlyForGuest only for guest users
+    if (link.showOnlyForGuest && !isGuest) {
+      return false;
+    }
+
+    return true;
+  });
+
   return (
     <>
       <CustomNavbar expand="lg" fixed="top">
@@ -87,7 +103,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
           <NavBrand />
 
           <MobileMenu
-            links={links}
+            links={filteredLinks}
             isActive={isActive}
             handleLogout={handleLogout}
             isGuest={isGuest}
@@ -96,7 +112,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
           />
 
           <DesktopMenu
-            links={links}
+            links={filteredLinks}
             isActive={isActive}
             handleLogout={handleLogout}
             isGuest={isGuest}

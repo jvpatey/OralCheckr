@@ -9,6 +9,7 @@ import { Results } from "./components/questionnaire/Results";
 import { Landing } from "./components/landing/Landing";
 import { Welcome } from "./containers/welcome/Welcome";
 import { Profile } from "./containers/profile/components/Profile";
+import { About } from "./containers/about/About";
 import { ThemeType } from "./App";
 
 interface RouterProps {
@@ -90,6 +91,9 @@ export function Router({ themeToggler, currentTheme }: RouterProps) {
           </GuardedRoute>
         }
       />
+
+      {/* About route */}
+      <Route path={RoutePaths.ABOUT} element={<About />} />
 
       {/* Wildcard route */}
       <Route

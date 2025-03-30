@@ -57,6 +57,8 @@ export const WelcomeContainer = styled.div`
   min-height: 100vh;
   padding: 20px;
   box-sizing: border-box;
+  background-color: ${({ theme }) => theme.backgroundColor};
+  width: 100%;
 
   @media (max-width: 768px) {
     padding: 10px;
