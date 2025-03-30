@@ -28,6 +28,7 @@ jobs:
         run: npm run build
         env:
           VITE_API_URL: https://oralcheckr-backend.onrender.com
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
 
       - name: Configure Git
         run: |
