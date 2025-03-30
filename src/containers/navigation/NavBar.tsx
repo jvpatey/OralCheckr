@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { SignUpModal } from "../welcome/SignUpModal";
 import { useLogoutUser } from "../../hooks/auth/useLogoutUser";
@@ -8,6 +8,7 @@ import { NavLink } from "../../common/links";
 import { ThemeType } from "../../App";
 import { CustomNavbar } from "./styles/NavBarStyles";
 import { NavBrand, MobileMenu, DesktopMenu, ThemeToggle } from "./components";
+import { useProfile } from "../../hooks/profile/useProfile";
 
 interface NavBarProps {
   links: NavLink[];
@@ -19,11 +20,19 @@ interface NavBarProps {
 export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const location = useLocation();
   const { isAuthenticated, updateAuth, user } = useContext(AuthContext);
+  const { profile, refetch } = useProfile();
   const isDarkMode = theme === ThemeType.DARK;
   const navigate = useNavigate();
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { mutate: logoutMutate } = useLogoutUser();
+
+  // Refresh profile data when the component mounts or when the location changes
+  useEffect(() => {
+    if (isAuthenticated) {
+      refetch();
+    }
+  }, [isAuthenticated, location.pathname, refetch]);
 
   // Handle the toggle for dark mode
   const toggleDarkMode = () => {
@@ -83,6 +92,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
             handleLogout={handleLogout}
             isGuest={isGuest}
             onCreateAccount={handleCreateAccount}
+            userAvatar={profile?.avatar}
           />
 
           <DesktopMenu
@@ -91,6 +101,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
             handleLogout={handleLogout}
             isGuest={isGuest}
             onCreateAccount={handleCreateAccount}
+            userAvatar={profile?.avatar}
           />
 
           <ThemeToggle

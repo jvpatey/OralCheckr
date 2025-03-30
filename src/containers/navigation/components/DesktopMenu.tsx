@@ -3,6 +3,7 @@ import { Nav, Navbar } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { NavLink } from "../../../common/links";
+import { ProfileNavLink } from "./ProfileNavLink";
 
 interface DesktopMenuProps {
   links: NavLink[];
@@ -10,6 +11,7 @@ interface DesktopMenuProps {
   handleLogout: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   isGuest?: boolean;
   onCreateAccount: () => void;
+  userAvatar?: string;
 }
 
 const CustomCollapse = styled(Navbar.Collapse)`
@@ -88,24 +90,36 @@ export function DesktopMenu({
   handleLogout,
   isGuest = false,
   onCreateAccount,
+  userAvatar,
 }: DesktopMenuProps) {
   return (
     <CustomCollapse id="basic-navbar-nav">
       <Nav className="ms-auto d-none d-lg-flex">
-        {links.map((link) => (
-          <CustomNavLink
-            key={link.path}
-            className={isActive(link.path) ? "active" : ""}
-            as={Link}
-            to={link.path === "/" ? "/" : link.path}
-            onClick={link.name === "Log Out" ? handleLogout : undefined}
-          >
-            <Icon>
-              <FontAwesomeIcon icon={link.icon} />
-            </Icon>
-            {link.name}
-          </CustomNavLink>
-        ))}
+        {links.map((link) => {
+          if (link.name === "Profile") {
+            return (
+              <ProfileNavLink
+                key={link.path}
+                isActive={isActive(link.path)}
+                avatar={userAvatar}
+              />
+            );
+          }
+          return (
+            <CustomNavLink
+              key={link.path}
+              className={isActive(link.path) ? "active" : ""}
+              as={Link}
+              to={link.path === "/" ? "/" : link.path}
+              onClick={link.name === "Log Out" ? handleLogout : undefined}
+            >
+              <Icon>
+                <FontAwesomeIcon icon={link.icon} />
+              </Icon>
+              {link.name}
+            </CustomNavLink>
+          );
+        })}
         {isGuest && (
           <CreateAccountButton onClick={onCreateAccount}>
             Create Account

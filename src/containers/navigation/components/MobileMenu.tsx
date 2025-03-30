@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faPlus, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { NavLink } from "../../../common/links";
 
@@ -11,6 +11,7 @@ interface MobileMenuProps {
   handleLogout: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   isGuest?: boolean;
   onCreateAccount: () => void;
+  userAvatar?: string;
 }
 
 const CustomDropdownToggle = styled(Dropdown.Toggle)`
@@ -49,7 +50,8 @@ const CustomDropdownMenu = styled(Dropdown.Menu)`
 const CustomDropdownItem = styled(Dropdown.Item)`
   color: ${({ theme }) => theme.textGrey};
   padding: 10px 20px;
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
   text-align: left;
 
@@ -66,6 +68,16 @@ const CustomDropdownItem = styled(Dropdown.Item)`
 
 const Icon = styled.span`
   margin-right: 5px;
+  display: flex;
+  align-items: center;
+`;
+
+const AvatarImage = styled.img`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: contain;
+  margin-right: 5px;
 `;
 
 export function MobileMenu({
@@ -74,6 +86,7 @@ export function MobileMenu({
   handleLogout,
   isGuest = false,
   onCreateAccount,
+  userAvatar,
 }: MobileMenuProps) {
   return (
     <Dropdown className="ms-auto d-lg-none">
@@ -98,7 +111,15 @@ export function MobileMenu({
             onClick={link.name === "Log Out" ? handleLogout : undefined}
           >
             <Icon>
-              <FontAwesomeIcon icon={link.icon} />
+              {link.name === "Profile" ? (
+                userAvatar ? (
+                  <AvatarImage src={userAvatar} alt="Profile" />
+                ) : (
+                  <FontAwesomeIcon icon={faUser} />
+                )
+              ) : (
+                <FontAwesomeIcon icon={link.icon} />
+              )}
             </Icon>
             {link.name}
           </CustomDropdownItem>
