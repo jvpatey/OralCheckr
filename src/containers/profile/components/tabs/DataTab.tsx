@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { QuestionnaireSection } from "../data/QuestionnaireSection";
 import { HabitsSection } from "../data/HabitsSection";
 

@@ -34,6 +34,12 @@ export const StyledAccordion = styled(Accordion)`
     padding: 1rem 1.25rem;
     line-height: 1.6;
   }
+
+  .accordion-item {
+    background-color: ${({ theme }) => theme.backgroundColor};
+    border-color: ${({ theme }) =>
+      theme.backgroundColor === "#2c2c2c" ? "#2c2c2c" : "rgba(0,0,0,.125)"};
+  }
 `;
 
 export const ContactSection = styled(Section)`
