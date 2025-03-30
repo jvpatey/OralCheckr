@@ -184,12 +184,15 @@ export const StyledNav = styled(Nav)`
 
   .nav-link {
     color: ${({ theme }) => theme.textGrey};
-    padding: 0.75rem 1.5rem;
+    padding: 0.9rem 1.75rem;
     white-space: nowrap;
     margin-bottom: -1px;
     border: 1px solid transparent;
-    border-radius: 4px 4px 0 0;
+    border-radius: 6px 6px 0 0;
     background: transparent;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
 
     &.active {
       color: ${({ theme }) => theme.blue};
@@ -198,14 +201,17 @@ export const StyledNav = styled(Nav)`
         ${({ theme }) => theme.textGrey}
         ${({ theme }) => theme.accentBackgroundColor}
         ${({ theme }) => theme.textGrey};
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
     }
 
     &:hover:not(.active) {
       color: ${({ theme }) => theme.blue};
+      background-color: rgba(0, 0, 0, 0.02);
     }
 
     @media (max-width: 480px) {
-      padding: 0.75rem 1rem;
+      padding: 0.75rem 1.25rem;
+      font-size: 1rem;
     }
   }
 `;

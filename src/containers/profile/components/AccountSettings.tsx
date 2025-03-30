@@ -8,6 +8,7 @@ import { PasswordField } from "../../../containers/welcome/components";
 import { InputStyle } from "../../../containers/welcome/styles/ModalStyles";
 import { AuthContext } from "../../../containers/authentication/AuthContext";
 import { DeleteAccountModal } from "./DeleteAccountModal";
+import styled from "styled-components";
 import {
   SettingsContainer,
   Section,
@@ -16,13 +17,20 @@ import {
   StyledButton,
   CurrentValue,
   DescriptionText,
-  StyledLabel,
   PasswordFeedback,
   StyledToastContainer,
   DeleteSection,
   DeleteButton,
   WarningText,
 } from "../styles/AccountSettingsStyles";
+
+// Custom label with less spacing
+const FormLabel = styled.div`
+  color: ${({ theme }) => theme.textGrey};
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  margin-bottom: -5px;
+`;
 
 interface AccountSettingsProps {
   currentEmail: string;
@@ -162,7 +170,8 @@ export function AccountSettings({
             Enter the new email address you want to use for your account:
           </DescriptionText>
           <StyledForm onSubmit={handleEmailUpdate}>
-            <Form.Group className="mb-3">
+            <FormLabel>New Email Address</FormLabel>
+            <Form.Group style={{ marginBottom: "1.5rem" }}>
               <InputStyle
                 type="email"
                 value={newEmail}
@@ -185,8 +194,8 @@ export function AccountSettings({
             log in.
           </DescriptionText>
           <StyledForm onSubmit={handlePasswordUpdate}>
-            <Form.Group className="mb-3">
-              <StyledLabel>Current Password</StyledLabel>
+            <FormLabel>Current Password</FormLabel>
+            <Form.Group style={{ marginBottom: "1.25rem" }}>
               <PasswordField
                 value={currentPassword}
                 onChange={setCurrentPassword}
@@ -195,8 +204,9 @@ export function AccountSettings({
                 required
               />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <StyledLabel>New Password</StyledLabel>
+
+            <FormLabel>New Password</FormLabel>
+            <Form.Group style={{ marginBottom: "1.25rem" }}>
               <PasswordField
                 value={newPassword}
                 onChange={handleNewPasswordChange}
@@ -206,8 +216,9 @@ export function AccountSettings({
                 required
               />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <StyledLabel>Confirm New Password</StyledLabel>
+
+            <FormLabel>Confirm New Password</FormLabel>
+            <Form.Group style={{ marginBottom: "1.5rem" }}>
               <PasswordField
                 value={confirmPassword}
                 onChange={setConfirmPassword}
