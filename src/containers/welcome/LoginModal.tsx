@@ -20,6 +20,7 @@ import {
   GoogleButton,
   StyledFormButton,
 } from "./styles/ModalStyles";
+import { CredentialResponse } from "@react-oauth/google";
 
 interface LoginModalProps {
   show: boolean;
@@ -90,24 +91,29 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   };
 
   // Handle Google login success
-  const handleGoogleSuccess = (credentialResponse: any) => {
+  const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
     setError("");
     setIsServerError(false);
 
-    googleLoginMutate(
-      { credential: credentialResponse.credential },
-      {
-        onSuccess: () => {
-          updateAuth(null);
-          navigate(RoutePaths.LANDING);
-          handleClose();
-        },
-        onError: (err: Error) => {
-          setError(err.message);
-          setIsServerError(true);
-        },
-      }
-    );
+    if (credentialResponse.credential) {
+      googleLoginMutate(
+        { credential: credentialResponse.credential },
+        {
+          onSuccess: () => {
+            updateAuth(null);
+            navigate(RoutePaths.LANDING);
+            handleClose();
+          },
+          onError: (err: Error) => {
+            setError(err.message);
+            setIsServerError(true);
+          },
+        }
+      );
+    } else {
+      setError("Google login failed: No credential received");
+      setIsServerError(true);
+    }
   };
 
   // Handle Google login error
