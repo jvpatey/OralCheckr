@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Form, Toast } from "react-bootstrap";
-import { updateProfile } from "../../../services/profileService";
+import { useNavigate } from "react-router-dom";
+import { updateProfile, deleteAccount } from "../../../services/profileService";
+import { logoutUser } from "../../../services/authService";
 import { validatePassword } from "../../../containers/welcome/utils/password-utils";
 import { PasswordField } from "../../../containers/welcome/components";
 import { InputStyle } from "../../../containers/welcome/styles/ModalStyles";
+import { AuthContext } from "../../../containers/authentication/AuthContext";
+import { DeleteAccountModal } from "./DeleteAccountModal";
 import {
   SettingsContainer,
   Section,
@@ -15,6 +19,9 @@ import {
   StyledLabel,
   PasswordFeedback,
   StyledToastContainer,
+  DeleteSection,
+  DeleteButton,
+  WarningText,
 } from "../styles/AccountSettingsStyles";
 
 interface AccountSettingsProps {
@@ -26,6 +33,8 @@ export function AccountSettings({
   currentEmail,
   refetch,
 }: AccountSettingsProps) {
+  const navigate = useNavigate();
+  const { updateAuth } = useContext(AuthContext);
   const [newEmail, setNewEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -38,6 +47,8 @@ export function AccountSettings({
   const [isEmailLoading, setIsEmailLoading] = useState(false);
   const [isPasswordLoading, setIsPasswordLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleEmailUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,6 +110,26 @@ export function AccountSettings({
 
   const passwordsDoNotMatch =
     confirmPassword !== "" && newPassword !== confirmPassword;
+
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    try {
+      await deleteAccount();
+      await logoutUser();
+      updateAuth(null);
+      navigate("/welcome");
+    } catch (error: any) {
+      const errorMessage = error.message || "Failed to delete account";
+      setMessage({
+        type: "error",
+        text: errorMessage,
+      });
+      setShowToast(true);
+      setShowDeleteConfirm(false);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <>
@@ -198,7 +229,30 @@ export function AccountSettings({
             </StyledButton>
           </StyledForm>
         </Section>
+
+        <DeleteSection>
+          <SectionTitle>Delete Account</SectionTitle>
+          <WarningText>Warning: This action cannot be undone.</WarningText>
+          <DescriptionText>
+            Deleting your account will permanently remove all your data,
+            including your profile information, questionnaire responses and
+            habit tracking data.
+          </DescriptionText>
+          <DeleteButton
+            onClick={() => setShowDeleteConfirm(true)}
+            disabled={isDeleting}
+          >
+            Delete Account
+          </DeleteButton>
+        </DeleteSection>
       </SettingsContainer>
+
+      <DeleteAccountModal
+        show={showDeleteConfirm}
+        onHide={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDeleteAccount}
+        isDeleting={isDeleting}
+      />
     </>
   );
 }

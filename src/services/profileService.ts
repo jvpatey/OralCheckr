@@ -30,3 +30,8 @@ export async function updateProfile(
   const response = await apiRequest<ProfileData>(PROFILE_ENDPOINT, "PUT", data);
   return response;
 }
+
+/* -- Service to delete user account -- */
+export async function deleteAccount(): Promise<void> {
+  await apiRequest(PROFILE_ENDPOINT, "DELETE");
+}

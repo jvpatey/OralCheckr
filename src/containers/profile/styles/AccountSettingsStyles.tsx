@@ -112,3 +112,33 @@ export const StyledToastContainer = styled(ToastContainer)`
     color: ${({ theme }) => theme.backgroundColor} !important;
   }
 `;
+
+export const DeleteSection = styled(Section)`
+  margin-top: 2rem;
+  border-top: 1px solid ${({ theme }) => theme.borderGrey};
+  padding-top: 2rem;
+`;
+
+export const DeleteButton = styled(StyledButton)`
+  background-color: ${({ theme }) => theme.red};
+  border-color: ${({ theme }) => theme.red};
+  color: ${({ theme }) => theme.accentBackgroundColor};
+
+  &:hover:not(:disabled) {
+    background-color: ${({ theme }) => theme.accentBackgroundColor};
+    border-color: ${({ theme }) => theme.red};
+    color: ${({ theme }) => theme.red};
+  }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.red};
+    border-color: ${({ theme }) => theme.red};
+    opacity: 0.6;
+  }
+`;
+
+export const WarningText = styled(DescriptionText)`
+  color: ${({ theme }) => theme.red};
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+`;
