@@ -12,8 +12,8 @@ import {
   AboutCard,
   AboutTitle,
   BackButtonContainer,
-  BackButton,
 } from "./styles/AboutStyles";
+import { SimpleBackButton } from "./styles/SimpleBackButton";
 
 export function About() {
   const navigate = useNavigate();
@@ -31,16 +31,16 @@ export function About() {
     <PageContainer>
       <AboutCard>
         <BackButtonContainer>
-          <BackButton onClick={handleBack}>
+          <SimpleBackButton onClick={handleBack}>
             <FontAwesomeIcon
               icon={faArrowLeft}
               style={{ marginRight: "6px" }}
             />
             Back
-          </BackButton>
+          </SimpleBackButton>
         </BackButtonContainer>
 
-        <AboutTitle>Support</AboutTitle>
+        <AboutTitle>About OralCheckr</AboutTitle>
         <AboutSection />
         <FAQSection />
         <ContactSection />

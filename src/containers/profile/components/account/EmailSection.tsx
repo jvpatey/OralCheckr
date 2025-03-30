@@ -6,10 +6,10 @@ import {
   Section,
   SectionTitle,
   StyledForm,
-  StyledButton,
   CurrentValue,
   DescriptionText,
 } from "../../styles/AccountTabStyles";
+import { SimpleButton } from "../../styles/SimpleButton";
 import { FormLabel } from "../../styles/FormLabel";
 
 interface EmailSectionProps {
@@ -42,8 +42,6 @@ export function EmailSection({
     }
   };
 
-  const handleClick = (_: React.MouseEvent<HTMLButtonElement>) => {};
-
   return (
     <Section>
       <SectionTitle>Change Email Address</SectionTitle>
@@ -62,9 +60,9 @@ export function EmailSection({
             required
           />
         </Form.Group>
-        <StyledButton type="submit" disabled={isLoading} onClick={handleClick}>
+        <SimpleButton type="submit" disabled={isLoading}>
           Update Email
-        </StyledButton>
+        </SimpleButton>
       </StyledForm>
     </Section>
   );

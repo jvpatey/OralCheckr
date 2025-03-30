@@ -55,7 +55,7 @@ export function AccountTab({ currentEmail, refetch }: AccountTabProps) {
           showToast={handleShowToast}
         />
 
-        <PasswordSection showToast={handleShowToast} />
+        <PasswordSection refetch={refetch} showToast={handleShowToast} />
 
         <DeleteAccountSection showToast={handleShowToast} />
       </SettingsContainer>

@@ -1,7 +1,6 @@
-import React from "react";
 import { Modal } from "react-bootstrap";
 import styled from "styled-components";
-import { StyledButton, DeleteButton } from "../../styles/AccountTabStyles";
+import { SimpleButton, DeleteButton } from "../../styles/SimpleButton";
 
 const StyledModal = styled(Modal)`
   .modal-content {
@@ -48,11 +47,11 @@ export function DeleteAccountModal({
   onConfirm,
   isDeleting,
 }: DeleteAccountModalProps) {
-  const handleCancel = (_: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCancel = () => {
     onHide();
   };
 
-  const handleDelete = (_: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDelete = () => {
     onConfirm();
   };
 
@@ -72,7 +71,7 @@ export function DeleteAccountModal({
         </WarningText>
       </Modal.Body>
       <Modal.Footer>
-        <StyledButton onClick={handleCancel}>Cancel</StyledButton>
+        <SimpleButton onClick={handleCancel}>Cancel</SimpleButton>
         <DeleteButton onClick={handleDelete} disabled={isDeleting}>
           {isDeleting ? "Deleting..." : "Yes, Delete My Account"}
         </DeleteButton>

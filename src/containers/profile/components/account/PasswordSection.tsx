@@ -1,42 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { updateProfile } from "../../../../services/profileService";
-import { validatePassword } from "../../../../containers/welcome/utils/password-utils";
-import { PasswordField } from "../../../../containers/welcome/components";
 import {
   Section,
   SectionTitle,
   StyledForm,
-  StyledButton,
   DescriptionText,
   PasswordFeedback,
 } from "../../styles/AccountTabStyles";
+import { SimpleButton } from "../../styles/SimpleButton";
 import { FormLabel } from "../../styles/FormLabel";
+import { PasswordField } from "../../../../containers/welcome/components/PasswordField";
 
 interface PasswordSectionProps {
+  refetch: () => Promise<any>;
   showToast: (type: "success" | "error", message: string) => void;
 }
 
-export function PasswordSection({ showToast }: PasswordSectionProps) {
+export function PasswordSection({ refetch, showToast }: PasswordSectionProps) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordMatch, setPasswordMatch] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+
+  // Check if new password and confirm password match
+  useEffect(() => {
+    if (confirmPassword.length === 0) {
+      setPasswordMatch(true);
+      return;
+    }
+
+    setPasswordMatch(newPassword === confirmPassword);
+  }, [newPassword, confirmPassword]);
+
+  // Check password validity
+  useEffect(() => {
+    const hasLength = newPassword.length >= 8;
+    const hasUppercase = /[A-Z]/.test(newPassword);
+    const hasLowercase = /[a-z]/.test(newPassword);
+    const hasNumber = /[0-9]/.test(newPassword);
+    const hasSpecial = /[^A-Za-z0-9]/.test(newPassword);
+
+    // Password must have at least 3 of the 4 requirements
+    const requirements = [hasUppercase, hasLowercase, hasNumber, hasSpecial];
+    const validRequirements = requirements.filter(Boolean).length;
+
+    setIsPasswordValid(hasLength && validRequirements >= 3);
+
+    // Show appropriate error message
+    if (newPassword.length > 0 && !hasLength) {
+      setPasswordError("Password must be at least 8 characters long");
+    } else if (newPassword.length > 0 && validRequirements < 3) {
+      setPasswordError(
+        "Password must include at least 3 of: uppercase, lowercase, numbers, and special characters"
+      );
+    } else {
+      setPasswordError("");
+    }
+  }, [newPassword]);
 
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      showToast("error", "Passwords do not match");
-      return;
-    }
     setIsLoading(true);
     try {
-      await updateProfile({ currentPassword, newPassword });
+      await updateProfile({
+        currentPassword,
+        newPassword,
+      });
       showToast("success", "Password updated successfully!");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      await refetch();
     } catch (error: any) {
       const errorMessage = error.message || "Failed to update password";
       showToast("error", errorMessage);
@@ -45,72 +83,63 @@ export function PasswordSection({ showToast }: PasswordSectionProps) {
     }
   };
 
-  const handleNewPasswordChange = (value: string) => {
-    setNewPassword(value);
-    if (value) {
-      const error = validatePassword(value);
-      setPasswordError(error);
-    } else {
-      setPasswordError(null);
-    }
-  };
-
-  const handleClick = (_: React.MouseEvent<HTMLButtonElement>) => {};
-
-  const passwordsDoNotMatch =
-    confirmPassword !== "" && newPassword !== confirmPassword;
+  const passwordsDoNotMatch = confirmPassword.length > 0 && !passwordMatch;
 
   return (
     <Section>
       <SectionTitle>Change Password</SectionTitle>
       <DescriptionText>
-        Changing your password will immediately update your login credentials.
-        You'll need to use the new password the next time you log in.
+        Update your password by entering your current password and choosing a
+        new one:
       </DescriptionText>
       <StyledForm onSubmit={handlePasswordUpdate}>
         <FormLabel>Current Password</FormLabel>
-        <Form.Group style={{ marginBottom: "1.25rem" }}>
+        <Form.Group style={{ marginBottom: "1.5rem" }}>
           <PasswordField
             value={currentPassword}
             onChange={setCurrentPassword}
-            placeholder="Enter your current password"
-            autoComplete="current-password"
+            placeholder="Enter current password"
             required
           />
         </Form.Group>
 
         <FormLabel>New Password</FormLabel>
-        <Form.Group style={{ marginBottom: "1.25rem" }}>
+        <Form.Group style={{ marginBottom: "1rem" }}>
           <PasswordField
             value={newPassword}
-            onChange={handleNewPasswordChange}
-            placeholder="Enter your new password"
-            autoComplete="new-password"
-            showRequirements={true}
+            onChange={setNewPassword}
+            placeholder="Enter new password"
             required
           />
         </Form.Group>
 
+        {passwordError && <PasswordFeedback>{passwordError}</PasswordFeedback>}
+
         <FormLabel>Confirm New Password</FormLabel>
-        <Form.Group style={{ marginBottom: "1.5rem" }}>
+        <Form.Group style={{ marginBottom: "1rem" }}>
           <PasswordField
             value={confirmPassword}
             onChange={setConfirmPassword}
-            placeholder="Confirm your new password"
-            autoComplete="new-password"
+            placeholder="Confirm new password"
             required
           />
-          {passwordsDoNotMatch && (
-            <PasswordFeedback>Passwords do not match</PasswordFeedback>
-          )}
         </Form.Group>
-        <StyledButton
+
+        {passwordsDoNotMatch && (
+          <PasswordFeedback>Passwords do not match</PasswordFeedback>
+        )}
+
+        <SimpleButton
           type="submit"
-          disabled={isLoading || !!passwordError || passwordsDoNotMatch}
-          onClick={handleClick}
+          disabled={
+            isLoading ||
+            !passwordMatch ||
+            !isPasswordValid ||
+            confirmPassword.length === 0
+          }
         >
           Update Password
-        </StyledButton>
+        </SimpleButton>
       </StyledForm>
     </Section>
   );
