@@ -1,4 +1,4 @@
-import { Section, SectionTitle } from "../../styles/AccountSettingsStyles";
+import { Section, SectionTitle } from "../../styles/AccountTabStyles";
 import { ContentBox, ContentText } from "../../styles/SupportTabStyles";
 
 export function AboutSection() {

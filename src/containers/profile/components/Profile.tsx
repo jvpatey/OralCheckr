@@ -1,5 +1,5 @@
-import { Tab } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import { Tab } from "react-bootstrap";
 import {
   PageContainer,
   ProfileCard,
@@ -8,12 +8,12 @@ import {
   Nav,
 } from "../styles/ProfileStyles";
 import { useProfile } from "../../../hooks/profile/useProfile";
-import { AvatarSelectionModal } from "./AvatarSelectionModal";
 import { ProfileSection } from "./ProfileSection";
-import { AccountSettings } from "./AccountSettings";
+import { AccountTab } from "./tabs/AccountTab";
 import { updateProfile } from "../../../services/profileService";
-import { DataTab } from "./DataTab";
-import { SupportTab } from "./SupportTab";
+import { DataTab } from "./tabs/DataTab";
+import { SupportTab } from "./tabs/SupportTab";
+import { AvatarSelectionModal } from "./modals/AvatarSelectionModal";
 
 export function Profile() {
   const { profile, loading, error, refetch } = useProfile();
@@ -93,7 +93,7 @@ export function Profile() {
           <Tab.Content>
             <Tab.Pane eventKey="account">
               <TabContent>
-                <AccountSettings
+                <AccountTab
                   currentEmail={profile?.email || ""}
                   refetch={refetch}
                 />

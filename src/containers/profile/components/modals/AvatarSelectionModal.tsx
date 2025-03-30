@@ -4,8 +4,8 @@ import {
   StyledModalBody,
   AvatarGrid,
   AvatarOption,
-} from "../styles/AvatarSelectionModalStyles";
-import { AVATAR_OPTIONS } from "../constants/avatarOptions";
+} from "../../styles/AvatarSelectionModalStyles";
+import { AVATAR_OPTIONS } from "../../constants/avatarOptions";
 
 interface AvatarSelectionModalProps {
   show: boolean;
@@ -28,7 +28,7 @@ export function AvatarSelectionModal({
       </StyledModalHeader>
       <StyledModalBody>
         <AvatarGrid>
-          {AVATAR_OPTIONS.map((avatar, index) => (
+          {AVATAR_OPTIONS.map((avatar: string, index: number) => (
             <AvatarOption
               key={index}
               $isSelected={avatar === currentAvatar}

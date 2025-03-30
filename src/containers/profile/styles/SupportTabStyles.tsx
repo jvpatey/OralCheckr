@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Accordion } from "react-bootstrap";
-import { Section } from "./AccountSettingsStyles";
+import { Section } from "./AccountTabStyles";
 
 export const FAQContainer = styled.div`
   margin-bottom: 2rem;

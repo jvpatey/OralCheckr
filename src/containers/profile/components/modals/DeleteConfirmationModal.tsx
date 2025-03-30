@@ -1,6 +1,6 @@
 import { Modal } from "react-bootstrap";
 import styled from "styled-components";
-import { DeleteButton } from "../styles/AccountSettingsStyles";
+import { DeleteButton } from "../../styles/AccountTabStyles";
 
 interface DeleteConfirmationModalProps {
   show: boolean;

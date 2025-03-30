@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { SectionTitle } from "../../styles/AccountSettingsStyles";
+import { SectionTitle } from "../../styles/AccountTabStyles";
 import {
   ContactSection as StyledContactSection,
   ContentBox,

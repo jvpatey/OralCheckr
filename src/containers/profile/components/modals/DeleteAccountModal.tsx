@@ -1,6 +1,6 @@
 import { Modal } from "react-bootstrap";
 import styled from "styled-components";
-import { StyledButton, DeleteButton } from "../styles/AccountSettingsStyles";
+import { StyledButton, DeleteButton } from "../../styles/AccountTabStyles";
 
 const StyledModal = styled(Modal)`
   .modal-content {

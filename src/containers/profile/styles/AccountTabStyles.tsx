@@ -71,8 +71,6 @@ export const DescriptionText = styled.p`
 export const StyledLabel = styled(Form.Label)`
   color: ${({ theme }) => theme.textGrey};
   margin-bottom: 0rem;
-  display: block;
-  font-size: 0.95rem;
 `;
 
 export const PasswordFeedback = styled.div`
@@ -167,8 +165,9 @@ export const DeleteButton = styled(StyledButton)`
   }
 `;
 
-export const WarningText = styled(DescriptionText)`
+export const WarningText = styled.div`
   color: ${({ theme }) => theme.red};
   font-weight: 500;
   margin-bottom: 0.75rem;
+  font-size: 0.9rem;
 `;

@@ -1,5 +1,5 @@
 import { Accordion } from "react-bootstrap";
-import { Section, SectionTitle } from "../../styles/AccountSettingsStyles";
+import { Section, SectionTitle } from "../../styles/AccountTabStyles";
 import { FAQContainer, StyledAccordion } from "../../styles/SupportTabStyles";
 
 export function FAQSection() {
