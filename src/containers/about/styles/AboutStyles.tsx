@@ -53,19 +53,21 @@ export const AboutTitle = styled.h1`
 `;
 
 export const BackButtonContainer = styled.div`
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 `;
 
 export const BackButton = styled(Button)`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  color: ${({ theme }) => theme.blue};
-  border: 1px solid ${({ theme }) => theme.blue};
-  padding: 0.5rem 1rem;
+  background-color: ${({ theme }) => theme.green};
+  color: ${({ theme }) => theme.backgroundColor};
+  border: 1px solid ${({ theme }) => theme.green};
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
 
   &:hover,
   &:focus {
-    background-color: ${({ theme }) => theme.blue};
-    color: ${({ theme }) => theme.accentBackgroundColor};
-    border: 1px solid ${({ theme }) => theme.blue};
+    background-color: ${({ theme }) => theme.backgroundColor};
+    color: ${({ theme }) => theme.green};
+    border: 1px solid ${({ theme }) => theme.green};
   }
 `;

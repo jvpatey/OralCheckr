@@ -34,13 +34,13 @@ export function About() {
           <BackButton onClick={handleBack}>
             <FontAwesomeIcon
               icon={faArrowLeft}
-              style={{ marginRight: "8px" }}
+              style={{ marginRight: "6px" }}
             />
-            {isAuthenticated ? "Back to Dashboard" : "Back to Welcome Page"}
+            Back
           </BackButton>
         </BackButtonContainer>
 
-        <AboutTitle>About OralCheckr</AboutTitle>
+        <AboutTitle>Support</AboutTitle>
         <AboutSection />
         <FAQSection />
         <ContactSection />

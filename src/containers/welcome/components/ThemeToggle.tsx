@@ -1,6 +1,20 @@
 import { useTheme } from "styled-components";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { ThemeType } from "../../../App";
+import styled from "styled-components";
+import { useState } from "react";
+
+const ToggleWrapper = styled.div`
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+`;
 
 interface ThemeToggleProps {
   themeToggler: () => void;
@@ -10,6 +24,7 @@ interface ThemeToggleProps {
 export function ThemeToggle({ themeToggler, theme }: ThemeToggleProps) {
   const themeContext = useTheme();
   const isDarkMode = theme === ThemeType.DARK;
+  const [isHovered, setIsHovered] = useState(false);
 
   const toggleDarkMode = () => {
     themeToggler();
@@ -20,12 +35,17 @@ export function ThemeToggle({ themeToggler, theme }: ThemeToggleProps) {
   };
 
   return (
-    <DarkModeSwitch
-      checked={isDarkMode}
-      onChange={toggleDarkMode}
-      size={20}
-      moonColor={themeContext.blue}
-      sunColor={themeContext.blue}
-    />
+    <ToggleWrapper
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <DarkModeSwitch
+        checked={isDarkMode}
+        onChange={toggleDarkMode}
+        size={24}
+        moonColor={isHovered ? themeContext.green : themeContext.blue}
+        sunColor={isHovered ? themeContext.green : themeContext.blue}
+      />
+    </ToggleWrapper>
   );
 }

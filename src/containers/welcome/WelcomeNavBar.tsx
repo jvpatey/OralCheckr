@@ -3,6 +3,7 @@ import {
   ThemeToggleContainer,
   NavLinksContainer,
   StyledLink,
+  TooltipWrapper,
 } from "./styles/WelcomeNavBarStyles";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,12 +19,15 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
   return (
     <ThemeToggleContainer>
       <NavLinksContainer>
-        <StyledLink to={RoutePaths.ABOUT}>
-          <FontAwesomeIcon icon={faInfoCircle} style={{ marginRight: "6px" }} />
-          About
+        <StyledLink to={RoutePaths.ABOUT} data-tooltip="Support">
+          <FontAwesomeIcon icon={faInfoCircle} size="lg" />
         </StyledLink>
+        <TooltipWrapper
+          data-tooltip={theme === ThemeType.DARK ? "Light Mode" : "Dark Mode"}
+        >
+          <ThemeToggle themeToggler={themeToggler} theme={theme} />
+        </TooltipWrapper>
       </NavLinksContainer>
-      <ThemeToggle themeToggler={themeToggler} theme={theme} />
     </ThemeToggleContainer>
   );
 }
