@@ -12,6 +12,7 @@ import { AvatarSelectionModal } from "./AvatarSelectionModal";
 import { ProfileSection } from "./ProfileSection";
 import { AccountSettings } from "./AccountSettings";
 import { updateProfile } from "../../../services/profileService";
+import { DataTab } from "./DataTab";
 
 export function Profile() {
   const { profile, loading, error, refetch } = useProfile();
@@ -99,8 +100,7 @@ export function Profile() {
             </Tab.Pane>
             <Tab.Pane eventKey="data">
               <TabContent>
-                <h3>Your Data</h3>
-                {/* Data content will go here */}
+                <DataTab />
               </TabContent>
             </Tab.Pane>
             <Tab.Pane eventKey="support">
