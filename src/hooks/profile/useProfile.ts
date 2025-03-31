@@ -10,6 +10,10 @@ export function useProfile() {
   } = useQuery({
     queryKey: ["profile"],
     queryFn: getProfile,
+    // Don't retry on 401 errors
+    retry: (failureCount, error) => {
+      return !error.message?.includes("401") && failureCount < 3;
+    },
   });
 
   return { profile, loading, error, refetch };

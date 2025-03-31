@@ -38,6 +38,14 @@ export const apiRequest = async <T>(
       ...(body && { body: JSON.stringify(body) }),
     });
 
+    // For welcome page, silently handle 401 errors from auth endpoints
+    if (
+      response.status === 401 &&
+      (url.includes("/auth/validate") || url.includes("/auth/profile"))
+    ) {
+      return null as unknown as T;
+    }
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -51,6 +59,15 @@ export const apiRequest = async <T>(
 
     return data;
   } catch (error) {
+    // Silently handle 401 errors for auth endpoints
+    if (
+      error instanceof Error &&
+      error.message.includes("401") &&
+      (url.includes("/auth/validate") || url.includes("/auth/profile"))
+    ) {
+      return null as unknown as T;
+    }
+
     console.error(`Error making ${method} request to ${url}:`, error);
     throw error;
   }

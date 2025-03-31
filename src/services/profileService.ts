@@ -18,9 +18,17 @@ interface ProfileUpdateData extends Record<string, unknown> {
 }
 
 /* -- Service to fetch user profile -- */
-export async function getProfile(): Promise<ProfileData> {
-  const response = await apiRequest<ProfileData>(PROFILE_ENDPOINT, "GET");
-  return response;
+export async function getProfile(): Promise<ProfileData | null> {
+  try {
+    const response = await apiRequest<ProfileData>(PROFILE_ENDPOINT, "GET");
+    return response;
+  } catch (error) {
+    // Silent handling of 401 errors - expected when not authenticated
+    if (error instanceof Error && error.message.includes("401")) {
+      return null;
+    }
+    throw error;
+  }
 }
 
 /* -- Service to update user profile -- */

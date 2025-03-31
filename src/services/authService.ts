@@ -98,6 +98,10 @@ export const validateAuth = async (): Promise<AuthResponse | null> => {
   try {
     return await apiRequest<AuthResponse>(VALIDATION_ENDPOINT, "GET");
   } catch (error) {
+    // Silent handling of 401 errors - expected when not authenticated
+    if (error instanceof Error && error.message.includes("401")) {
+      return null;
+    }
     console.error("Auth validation failed:", error);
     return null;
   }
