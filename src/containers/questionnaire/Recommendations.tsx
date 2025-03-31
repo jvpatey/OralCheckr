@@ -6,6 +6,7 @@ import { useGetQuestionnaireResponse } from "../../hooks/questionnaire/useGetQue
 import type { Recommendation } from "../../common/types/questionnaire/recommendations.types";
 import { generateRecommendations } from "./utils/recommendations-utils";
 import { StyledHeader } from "../../components/questionnaire/styles/SharedQuestionnaireStyles";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import {
   NoRecommendations,
   CarouselContainer,
@@ -52,7 +53,7 @@ export function Recommendations() {
   };
 
   if (isLoading) {
-    return <div>Loading recommendations...</div>;
+    return <LoadingSpinner />;
   }
 
   // Check if the error is a 404 (no data found)

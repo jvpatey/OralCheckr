@@ -17,6 +17,7 @@ import { useSaveQuestionnaireResponse } from "../../hooks/questionnaire/useSaveQ
 import { useHasSavedResponse } from "../../hooks/questionnaire/useHasSavedResponse";
 import { useSaveQuestionnaireProgress } from "../../hooks/questionnaire/useSaveQuestionnaireProgress";
 import { useGetQuestionnaireProgress } from "../../hooks/questionnaire/useGetQuestionnaireProgress";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import {
   Question,
   QuestionType,
@@ -222,7 +223,17 @@ export function Questionnaire() {
   ]);
 
   if (isLoadingResponses || isLoadingProgress) {
-    return <div>Loading...</div>;
+    return (
+      <PageBackground>
+        <LandingContainer>
+          <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
+            <QuestionnaireCard>
+              <LoadingSpinner fullHeight />
+            </QuestionnaireCard>
+          </QuestionnaireCardContainer>
+        </LandingContainer>
+      </PageBackground>
+    );
   }
 
   // Show retake screen if conditions are met

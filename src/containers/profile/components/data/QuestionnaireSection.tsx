@@ -5,6 +5,7 @@ import { DeleteButton } from "../../styles/AccountTabStyles";
 import { DeleteConfirmationModal } from "../modals/DeleteConfirmationModal";
 import { useQuestionnaireData } from "../../../../hooks/questionnaire/useQuestionnaireData";
 import { deleteQuestionnaireData } from "../../../../services/quesService";
+import { LoadingSpinner } from "../../../../components/common/LoadingSpinner";
 import {
   Section,
   SectionTitle,
@@ -83,7 +84,7 @@ export function QuestionnaireSection({
     if (isLoading) {
       return (
         <DataItem style={{ gridColumn: "1 / -1", textAlign: "center" }}>
-          <Value>Loading questionnaire data...</Value>
+          <LoadingSpinner size="sm" />
         </DataItem>
       );
     }

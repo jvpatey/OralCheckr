@@ -3,6 +3,7 @@ import { useTheme } from "styled-components";
 import { useGetTotalScore } from "../../hooks/questionnaire/useGetTotalScore";
 import { getScoreColor } from "../../containers/questionnaire/utils/oral-health-status-utils";
 import { StyledHeader, MessageText } from "./styles/SharedQuestionnaireStyles";
+import { LoadingSpinner } from "../common/LoadingSpinner";
 import {
   StyledText,
   ScoreSpan,
@@ -17,7 +18,7 @@ export function OralHealthStatus() {
   const scoreColor = getScoreColor(score ?? 0, theme);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner size="sm" />;
   }
 
   if (error || score === null) {

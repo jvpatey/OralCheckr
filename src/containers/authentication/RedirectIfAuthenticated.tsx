@@ -2,6 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import { RoutePaths } from "../../common/constants/routes";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 
 export function RedirectIfAuthenticated({
   children,
@@ -11,7 +12,7 @@ export function RedirectIfAuthenticated({
   const { isAuthenticated, loading } = useContext(AuthContext);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner fullHeight />;
   }
 
   return isAuthenticated ? <Navigate to={RoutePaths.LANDING} /> : children;
