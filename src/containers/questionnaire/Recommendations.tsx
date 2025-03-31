@@ -55,7 +55,11 @@ export function Recommendations() {
     return <div>Loading recommendations...</div>;
   }
 
-  if (error) {
+  // Check if the error is a 404 (no data found)
+  const isNoDataError = error && error.message && error.message.includes("404");
+
+  // Show error only if it's not a 404
+  if (error && !isNoDataError) {
     return <div>Error: {error.message}</div>;
   }
 

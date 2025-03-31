@@ -24,17 +24,6 @@ const GOOGLE_CLIENT_ID =
   import.meta.env.VITE_GOOGLE_CLIENT_ID ||
   (window as any).APP_CONFIG?.GOOGLE_CLIENT_ID;
 
-// Log client ID availability for debugging (remove in production)
-console.log("Google Client ID available:", Boolean(GOOGLE_CLIENT_ID));
-console.log(
-  "Client ID source:",
-  GOOGLE_CLIENT_ID
-    ? import.meta.env.VITE_GOOGLE_CLIENT_ID
-      ? "env var"
-      : "config.js"
-    : "not found"
-);
-
 interface LoginModalProps {
   show: boolean;
   handleClose: () => void;
