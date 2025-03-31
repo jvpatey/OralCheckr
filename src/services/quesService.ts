@@ -45,13 +45,17 @@ export const saveQuestionnaireResponse = async (
 
 /* -- Service to retrieve questionnaire data -- */
 export const getQuestionnaireResponse =
-  async (): Promise<QuestionnaireResponse> => {
+  async (): Promise<QuestionnaireResponse | null> => {
     try {
       return await apiRequest<QuestionnaireResponse>(
         QUESTIONNAIRE_RESPONSE_ENDPOINT,
         "GET"
       );
     } catch (error) {
+      // For 404 errors, return null as it means no data exists yet
+      if (error instanceof Error && error.message.includes("404")) {
+        return null;
+      }
       console.error("Error fetching questionnaire response:", error);
       throw error;
     }

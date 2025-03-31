@@ -46,6 +46,11 @@ export const apiRequest = async <T>(
       return null as unknown as T;
     }
 
+    // For profile page, silently handle 404 errors from questionnaire endpoints
+    if (response.status === 404 && url.includes("/questionnaire/response")) {
+      return null as unknown as T;
+    }
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -64,6 +69,16 @@ export const apiRequest = async <T>(
       error instanceof Error &&
       (error.message.includes("401") || error.message.includes("403")) &&
       (url.includes("/auth/validate") || url.includes("/auth/profile"))
+    ) {
+      return null as unknown as T;
+    }
+
+    // Silently handle 404 errors for questionnaire endpoints
+    if (
+      error instanceof Error &&
+      error.message.includes("404") &&
+      typeof url === "string" &&
+      url.includes("/questionnaire/response")
     ) {
       return null as unknown as T;
     }
