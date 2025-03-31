@@ -23,8 +23,11 @@ export async function getProfile(): Promise<ProfileData | null> {
     const response = await apiRequest<ProfileData>(PROFILE_ENDPOINT, "GET");
     return response;
   } catch (error) {
-    // Silent handling of 401 errors - expected when not authenticated
-    if (error instanceof Error && error.message.includes("401")) {
+    // Silent handling of 401/403 errors - expected when not authenticated or forbidden
+    if (
+      error instanceof Error &&
+      (error.message.includes("401") || error.message.includes("403"))
+    ) {
       return null;
     }
     throw error;
