@@ -6,6 +6,7 @@ import { useGetQuestionnaireResponse } from "../../hooks/questionnaire/useGetQue
 import type { Recommendation } from "../../common/types/questionnaire/recommendations.types";
 import { generateRecommendations } from "./utils/recommendations-utils";
 import { StyledHeader } from "../../components/questionnaire/styles/SharedQuestionnaireStyles";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import {
   NoRecommendations,
   CarouselContainer,
@@ -26,8 +27,24 @@ export function Recommendations() {
 
   // When responses change, process them to generate recommendations
   useEffect(() => {
-    if (!storedResponses) return;
-    const recs = generateRecommendations(storedResponses);
+    if (!storedResponses || !storedResponses.responses) return;
+
+    // Convert string responses to number format
+    const convertedResponses: Record<number, number | number[]> = {};
+
+    Object.entries(storedResponses.responses).forEach(([key, value]) => {
+      const questionId = parseInt(key);
+      try {
+        // Try to parse as JSON in case it's an array
+        const parsed = JSON.parse(value);
+        convertedResponses[questionId] = parsed;
+      } catch (e) {
+        // If not JSON, convert to number
+        convertedResponses[questionId] = parseInt(value);
+      }
+    });
+
+    const recs = generateRecommendations(convertedResponses);
     setRecommendations(recs);
   }, [storedResponses]);
 
@@ -36,10 +53,14 @@ export function Recommendations() {
   };
 
   if (isLoading) {
-    return <div>Loading recommendations...</div>;
+    return <LoadingSpinner />;
   }
 
-  if (error) {
+  // Check if the error is a 404 (no data found)
+  const isNoDataError = error && error.message && error.message.includes("404");
+
+  // Show error only if it's not a 404
+  if (error && !isNoDataError) {
     return <div>Error: {error.message}</div>;
   }
 

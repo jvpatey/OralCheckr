@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getQuestionnaireResponse } from "../../services/quesService";
+import {
+  getQuestionnaireResponse,
+  QuestionnaireResponse,
+} from "../../services/quesService";
 
 export const useGetQuestionnaireResponse = () => {
-  return useQuery<Record<number, number | number[]> | null, Error>({
+  return useQuery<QuestionnaireResponse, Error>({
     queryKey: ["questionnaireResponse"],
     queryFn: getQuestionnaireResponse,
     refetchOnWindowFocus: false,

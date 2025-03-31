@@ -5,6 +5,7 @@ import {
   VALIDATION_ENDPOINT,
   LOGOUT_ENDPOINT,
   CONVERT_GUEST_ENDPOINT,
+  GOOGLE_LOGIN_ENDPOINT,
 } from "../config/authApiConfig";
 import { apiRequest, handleApiError } from "./apiUtils";
 
@@ -115,6 +116,27 @@ export const convertGuestToUser = async (
     );
   } catch (error) {
     console.error("Guest conversion failed:", error);
+    throw error;
+  }
+};
+
+/* -- Google Login Service -- */
+export interface GoogleLoginData {
+  credential: string;
+  [key: string]: unknown;
+}
+
+export const googleLogin = async (
+  googleData: GoogleLoginData
+): Promise<LoginResponse> => {
+  try {
+    return await apiRequest<LoginResponse>(
+      GOOGLE_LOGIN_ENDPOINT,
+      "POST",
+      googleData
+    );
+  } catch (error) {
+    console.error("Google login failed:", error);
     throw error;
   }
 };

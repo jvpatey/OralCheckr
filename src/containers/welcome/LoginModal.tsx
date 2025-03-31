@@ -1,12 +1,11 @@
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { RoutePaths } from "../../common/constants/routes";
 import { LoginData } from "../../services/authService";
-import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useLoginUser } from "../../hooks/auth/useLoginUser";
-import { FormButton } from "../../components/questionnaire/styles/FormButton";
+import { useGoogleLogin } from "../../hooks/auth/useGoogleLogin";
 import { PasswordField } from "./components";
 import {
   StyledModal,
@@ -16,7 +15,14 @@ import {
   InputStyle,
   RequiredFormGroup,
   RequiredNote,
+  ButtonContainer,
+  StyledFormButton,
 } from "./styles/ModalStyles";
+
+// Get Google Client ID from environment variable or config.js
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+  (window as any).APP_CONFIG?.GOOGLE_CLIENT_ID;
 
 interface LoginModalProps {
   show: boolean;
@@ -31,8 +37,11 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   const [error, setError] = useState("");
   const [formValid, setFormValid] = useState(false);
   const [isServerError, setIsServerError] = useState(false);
-  // Login mutation
+  const googleButtonRef = useRef<HTMLDivElement>(null);
+
+  // Login mutations
   const { mutate: loginMutate } = useLoginUser();
+  const { mutate: googleLoginMutate } = useGoogleLogin();
 
   // Check if form is valid - just check if fields have content
   useEffect(() => {
@@ -83,6 +92,74 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       setIsServerError(true);
     }
   };
+
+  // Handle Google login success
+  const handleGoogleSuccess = (response: any) => {
+    setError("");
+    setIsServerError(false);
+
+    if (response && response.credential) {
+      googleLoginMutate(
+        { credential: response.credential },
+        {
+          onSuccess: () => {
+            updateAuth(null);
+            navigate(RoutePaths.LANDING);
+            handleClose();
+          },
+          onError: (err: Error) => {
+            setError(err.message);
+            setIsServerError(true);
+          },
+        }
+      );
+    } else {
+      setError("Google login failed: No credential received");
+      setIsServerError(true);
+    }
+  };
+
+  // Initialize Google OAuth Client when modal shows
+  useEffect(() => {
+    if (show) {
+      // Clean up any previous instances
+      const oldScripts = document.querySelectorAll(
+        'script[src="https://accounts.google.com/gsi/client"]'
+      );
+      oldScripts.forEach((script) => script.remove());
+
+      // Add Google's script
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        // @ts-ignore - window.google is provided by the script
+        window.google?.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleSuccess,
+        });
+
+        if (googleButtonRef.current) {
+          // @ts-ignore
+          window.google?.accounts.id.renderButton(googleButtonRef.current, {
+            type: "standard",
+            theme: "outline",
+            size: "large",
+            text: "signin_with",
+            shape: "rectangular",
+            width: 250,
+          });
+        }
+      };
+      document.body.appendChild(script);
+
+      // Cleanup function
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
+  }, [show]);
 
   // Reset form states when modal is closed
   useEffect(() => {
@@ -136,9 +213,13 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
             </Alert>
           )}
           <RequiredNote>Required field</RequiredNote>
-          <FormButton type="submit" disabled={!formValid} variant="login">
-            Login
-          </FormButton>
+
+          <ButtonContainer>
+            <div ref={googleButtonRef}></div>
+            <StyledFormButton type="submit" disabled={!formValid}>
+              Login
+            </StyledFormButton>
+          </ButtonContainer>
         </Form>
       </ModalBody>
     </StyledModal>

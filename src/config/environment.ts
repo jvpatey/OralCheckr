@@ -16,3 +16,6 @@ export const getApiBaseUrl = () => {
 
 // Export the base URL
 export const API_BASE_URL = getApiBaseUrl();
+
+// Add Google client ID
+export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;

@@ -38,11 +38,18 @@ export const apiRequest = async <T>(
       ...(body && { body: JSON.stringify(body) }),
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
+      // If the server returns an error message, use it
+      if (data && typeof data === "object" && "message" in data) {
+        throw new Error(data.message);
+      }
+      // Otherwise, throw a generic error with the status code
+      throw new Error(`Request failed with status ${response.status}`);
     }
 
-    return await response.json();
+    return data;
   } catch (error) {
     console.error(`Error making ${method} request to ${url}:`, error);
     throw error;

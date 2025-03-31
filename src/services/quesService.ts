@@ -11,8 +11,13 @@ export interface SaveResponseData {
 }
 
 export interface QuestionnaireResponse {
-  responses: Record<number, number | number[]>;
+  id: number;
+  userId: number;
+  responses: Record<string, string>;
   totalScore: number;
+  currentQuestion: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface QuestionnaireProgress {
@@ -39,21 +44,18 @@ export const saveQuestionnaireResponse = async (
 };
 
 /* -- Service to retrieve questionnaire data -- */
-export const getQuestionnaireResponse = async (): Promise<Record<
-  number,
-  number | number[]
-> | null> => {
-  try {
-    const data = await apiRequest<QuestionnaireResponse>(
-      QUESTIONNAIRE_RESPONSE_ENDPOINT,
-      "GET"
-    );
-    return data.responses;
-  } catch (error) {
-    console.error("Error fetching questionnaire response:", error);
-    return null;
-  }
-};
+export const getQuestionnaireResponse =
+  async (): Promise<QuestionnaireResponse> => {
+    try {
+      return await apiRequest<QuestionnaireResponse>(
+        QUESTIONNAIRE_RESPONSE_ENDPOINT,
+        "GET"
+      );
+    } catch (error) {
+      console.error("Error fetching questionnaire response:", error);
+      throw error;
+    }
+  };
 
 /* -- Service to check if user has questionnaire data saved -- */
 export const hasSavedResponse = async (): Promise<boolean> => {
@@ -112,6 +114,16 @@ export const getQuestionnaireProgress =
       return null;
     }
   };
+
+/* -- Service to delete questionnaire data -- */
+export const deleteQuestionnaireData = async (): Promise<void> => {
+  try {
+    await apiRequest<void>(QUESTIONNAIRE_RESPONSE_ENDPOINT, "DELETE");
+  } catch (error) {
+    console.error("Error deleting questionnaire data:", error);
+    throw error;
+  }
+};
 
 /* -- Error handler for questionnaire service errors -- */
 export const handleQuesServiceError = (error: any): string => {

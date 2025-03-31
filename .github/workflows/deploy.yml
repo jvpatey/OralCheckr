@@ -24,10 +24,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Create config file in public directory
+        run: |
+          echo "window.APP_CONFIG = { GOOGLE_CLIENT_ID: '${{ secrets.VITE_GOOGLE_CLIENT_ID }}', API_URL: 'https://oralcheckr-backend.onrender.com' };" > public/config.js
+
       - name: Build project
         run: npm run build
         env:
           VITE_API_URL: https://oralcheckr-backend.onrender.com
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
 
       - name: Configure Git
         run: |
