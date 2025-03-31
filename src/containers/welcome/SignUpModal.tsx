@@ -1,3 +1,4 @@
+import React from "react";
 import { Form, Alert } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -147,13 +148,14 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
               required
             />
           </RequiredFormGroup>
-          <RequiredFormGroup controlId="formPassword" className="m-3">
+          <RequiredFormGroup className="m-3">
             <PasswordField
               value={password}
               onChange={setPassword}
               placeholder="Password"
               showRequirements={true}
               autoComplete="new-password"
+              id="signupPassword"
               required
             />
           </RequiredFormGroup>

@@ -189,12 +189,13 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
               required
             />
           </RequiredFormGroup>
-          <RequiredFormGroup controlId="formPassword" className="m-3">
+          <RequiredFormGroup className="m-3">
             <PasswordField
               value={password}
               onChange={setPassword}
               placeholder="Password"
               autoComplete="current-password"
+              id="formPassword"
               required
             />
           </RequiredFormGroup>
