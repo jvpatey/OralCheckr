@@ -233,4 +233,7 @@ export const StyledFormButton = styled(FormButton)`
   margin: 0;
   height: 44px;
   padding: 10px 16px;
+  border: none;
+  box-shadow: none;
+  outline: none;
 `;
