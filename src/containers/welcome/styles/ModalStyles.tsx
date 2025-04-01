@@ -188,11 +188,15 @@ export const OrSeparator = styled.div`
 
 export const ButtonContainer = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   gap: 1rem;
   margin-top: 1rem;
   width: 100%;
+
+  & > div {
+    width: 48%;
+  }
 `;
 
 export const GoogleButton = styled(Button)`
@@ -225,7 +229,7 @@ export const GoogleButton = styled(Button)`
 
 export const StyledFormButton = styled(FormButton)`
   border-radius: 6px;
-  width: 48%;
+  width: 100%;
   margin: 0;
   height: 44px;
   padding: 10px 16px;

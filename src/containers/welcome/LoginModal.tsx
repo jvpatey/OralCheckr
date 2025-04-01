@@ -15,8 +15,9 @@ import {
   InputStyle,
   RequiredFormGroup,
   RequiredNote,
-  ButtonContainer,
   StyledFormButton,
+  OrSeparator,
+  CardText,
 } from "./styles/ModalStyles";
 
 // Get Google Client ID from environment variable or config.js
@@ -148,7 +149,8 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
             size: "large",
             text: "signin_with",
             shape: "rectangular",
-            width: 250,
+            width: "100%",
+            locale: "en",
           });
         }
       };
@@ -178,6 +180,9 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
         <HeaderText>Login</HeaderText>
       </ModalHeader>
       <ModalBody>
+        <CardText>
+          Welcome back! Enter your credentials below to access your account:
+        </CardText>
         <Form onSubmit={handleLoginSubmit}>
           <RequiredFormGroup controlId="formUsername" className="m-3">
             <InputStyle
@@ -215,12 +220,24 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
           )}
           <RequiredNote>Required field</RequiredNote>
 
-          <ButtonContainer>
-            <div ref={googleButtonRef}></div>
-            <StyledFormButton type="submit" disabled={!formValid}>
-              Login
-            </StyledFormButton>
-          </ButtonContainer>
+          <StyledFormButton
+            type="submit"
+            disabled={!formValid}
+            style={{ backgroundColor: "#4CAF50", borderColor: "#4CAF50" }}
+          >
+            Login with Email
+          </StyledFormButton>
+
+          <OrSeparator>OR</OrSeparator>
+
+          <div
+            ref={googleButtonRef}
+            style={{
+              width: "100%",
+              marginTop: "1rem",
+              minHeight: "44px",
+            }}
+          ></div>
         </Form>
       </ModalBody>
     </StyledModal>
