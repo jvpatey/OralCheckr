@@ -134,10 +134,14 @@ export const googleLogin = async (
   googleData: GoogleLoginData
 ): Promise<LoginResponse> => {
   try {
+    const transformedData = {
+      token: googleData.credential,
+    };
+
     return await apiRequest<LoginResponse>(
       GOOGLE_LOGIN_ENDPOINT,
       "POST",
-      googleData
+      transformedData
     );
   } catch (error) {
     console.error("Google login failed:", error);
