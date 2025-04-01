@@ -13,7 +13,7 @@ export interface QuestionnaireData {
 // Custom hook to fetch and format questionnaire data
 export function useQuestionnaireData() {
   const { data, isLoading, isError, error } = useQuery<
-    QuestionnaireResponse,
+    QuestionnaireResponse | null,
     Error
   >({
     queryKey: ["questionnaireResponse"],
@@ -21,15 +21,16 @@ export function useQuestionnaireData() {
     retry: false,
   });
 
-  // Check if the error is a 404 (no data) response and use it
-  const hasNoData = isError && error?.message?.includes("404");
+  // Data not found if we get a null value
+  const hasNoData = data === null;
 
   // Format the raw questionnaire data for display
   const formattedData: QuestionnaireData = {
     // Format the completion date if available, otherwise null
-    lastCompleted: data
-      ? format(new Date(data.updatedAt), "MMMM d, yyyy")
-      : null,
+    lastCompleted:
+      data && data?.updatedAt
+        ? format(new Date(data.updatedAt), "MMMM d, yyyy")
+        : null,
     // Get the total score if available, otherwise null
     score: data?.totalScore ?? null,
   };
@@ -39,6 +40,6 @@ export function useQuestionnaireData() {
     isLoading,
     isError: isError && !hasNoData,
     error: hasNoData ? null : error,
-    hasNoData,
+    hasNoData: hasNoData || (isError && error?.message?.includes("404")),
   };
 }

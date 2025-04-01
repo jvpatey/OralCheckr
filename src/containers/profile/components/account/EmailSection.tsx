@@ -60,7 +60,7 @@ export function EmailSection({
             required
           />
         </Form.Group>
-        <SimpleButton type="submit" disabled={isLoading}>
+        <SimpleButton type="submit" disabled={isLoading || !newEmail.trim()}>
           Update Email
         </SimpleButton>
       </StyledForm>

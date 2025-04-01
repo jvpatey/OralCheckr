@@ -38,6 +38,23 @@ export const apiRequest = async <T>(
       ...(body && { body: JSON.stringify(body) }),
     });
 
+    // For welcome page, silently handle 401/403 errors from auth endpoints
+    if (
+      (response.status === 401 || response.status === 403) &&
+      (url.includes("/auth/validate") || url.includes("/auth/profile"))
+    ) {
+      return null as unknown as T;
+    }
+
+    // For profile page, silently handle 404 errors from questionnaire endpoints
+    if (
+      response.status === 404 &&
+      (url.includes("/questionnaire/response") ||
+        url.includes("/questionnaire/progress"))
+    ) {
+      return null as unknown as T;
+    }
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -51,6 +68,26 @@ export const apiRequest = async <T>(
 
     return data;
   } catch (error) {
+    // Silently handle 401/403 errors for auth endpoints
+    if (
+      error instanceof Error &&
+      (error.message.includes("401") || error.message.includes("403")) &&
+      (url.includes("/auth/validate") || url.includes("/auth/profile"))
+    ) {
+      return null as unknown as T;
+    }
+
+    // Silently handle 404 errors for questionnaire endpoints
+    if (
+      error instanceof Error &&
+      error.message.includes("404") &&
+      typeof url === "string" &&
+      (url.includes("/questionnaire/response") ||
+        url.includes("/questionnaire/progress"))
+    ) {
+      return null as unknown as T;
+    }
+
     console.error(`Error making ${method} request to ${url}:`, error);
     throw error;
   }
@@ -70,6 +107,8 @@ export const handleApiError = (error: unknown, context?: string): string => {
       return `${contextPrefix}Invalid data provided`;
     } else if (error.message.startsWith("Error: 401")) {
       return `${contextPrefix}You must be logged in`;
+    } else if (error.message.startsWith("Error: 403")) {
+      return `${contextPrefix}You don't have permission to access this resource`;
     } else if (error.message.startsWith("Error: 404")) {
       return `${contextPrefix}Resource not found`;
     } else if (error.message.startsWith("Error: ")) {

@@ -1,12 +1,13 @@
+import React from "react";
 import { Form, Alert } from "react-bootstrap";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { RoutePaths } from "../../common/constants/routes";
 import { useContext } from "react";
 import { AuthContext } from "../authentication/AuthContext";
 import { useRegisterUser } from "../../hooks/auth/useRegisterUser";
 import { useConvertGuestToUser } from "../../hooks/auth/useConvertGuestToUser";
-import { FormButton } from "../../components/questionnaire/styles/FormButton";
+import { useGoogleLogin } from "../../hooks/auth/useGoogleLogin";
 import { PasswordField } from "./components";
 import { validatePassword } from "./utils/password-utils";
 import {
@@ -18,7 +19,14 @@ import {
   CardText,
   RequiredFormGroup,
   RequiredNote,
+  OrSeparator,
+  StyledFormButton,
 } from "./styles/ModalStyles";
+
+// Get Google Client ID from environment variable or config.js
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+  (window as any).APP_CONFIG?.GOOGLE_CLIENT_ID;
 
 interface SignUpModalProps {
   show: boolean;
@@ -34,10 +42,14 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   const [error, setError] = useState("");
   const [formValid, setFormValid] = useState(false);
   const { updateAuth, user } = useContext(AuthContext);
+  const googleButtonRef = useRef<HTMLDivElement>(null);
+
   // registration mutation
   const { mutate: registerMutate } = useRegisterUser();
   // mutation for converting guest to a registered user
   const { mutate: convertGuestMutate } = useConvertGuestToUser();
+  // Google login mutation
+  const { mutate: googleLoginMutate } = useGoogleLogin();
 
   // Check if all form fields are valid
   useEffect(() => {
@@ -95,6 +107,72 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
     }
   };
 
+  // Handle Google login success - Using login flow
+  const handleGoogleSuccess = (response: any) => {
+    setError("");
+
+    if (response && response.credential) {
+      googleLoginMutate(
+        { credential: response.credential },
+        {
+          onSuccess: () => {
+            updateAuth(null);
+            navigate(RoutePaths.LANDING);
+            handleClose();
+          },
+          onError: (err: Error) => {
+            setError(err.message);
+          },
+        }
+      );
+    } else {
+      setError("Google login failed: No credential received");
+    }
+  };
+
+  // Initialize Google OAuth Client when modal shows
+  useEffect(() => {
+    if (show) {
+      // Clean up any previous instances
+      const oldScripts = document.querySelectorAll(
+        'script[src="https://accounts.google.com/gsi/client"]'
+      );
+      oldScripts.forEach((script) => script.remove());
+
+      // Add Google's script
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        // @ts-ignore - window.google is provided by the script
+        window.google?.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleSuccess,
+        });
+
+        if (googleButtonRef.current) {
+          // @ts-ignore
+          window.google?.accounts.id.renderButton(googleButtonRef.current, {
+            type: "standard",
+            theme: "outline",
+            size: "large",
+            text: "signup_with",
+            shape: "rectangular",
+            width: 250,
+            locale: "en",
+          });
+        }
+      };
+      document.body.appendChild(script);
+
+      // Cleanup function
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
+  }, [show]);
+
   // Reset form states when modal is closed
   useEffect(() => {
     if (!show) {
@@ -147,13 +225,14 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
               required
             />
           </RequiredFormGroup>
-          <RequiredFormGroup controlId="formPassword" className="m-3">
+          <RequiredFormGroup className="m-3">
             <PasswordField
               value={password}
               onChange={setPassword}
               placeholder="Password"
               showRequirements={true}
               autoComplete="new-password"
+              id="signupPassword"
               required
             />
           </RequiredFormGroup>
@@ -164,9 +243,25 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
             </Alert>
           )}
           <RequiredNote>Required field</RequiredNote>
-          <FormButton type="submit" disabled={!formValid} variant="signup">
-            Sign Up
-          </FormButton>
+
+          <StyledFormButton
+            type="submit"
+            disabled={!formValid}
+            style={{ backgroundColor: "#4CAF50", borderColor: "#4CAF50" }}
+          >
+            Sign Up with Email
+          </StyledFormButton>
+
+          <OrSeparator>OR</OrSeparator>
+
+          <div
+            ref={googleButtonRef}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "1rem",
+            }}
+          ></div>
         </Form>
       </ModalBody>
     </StyledModal>

@@ -94,8 +94,10 @@ export function AddEditHabitModal({
   };
 
   const handleHabitCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setNewHabit({ ...newHabit, count: Number(value) });
+    const value = parseInt(e.target.value);
+    // Ensure count is at least 1
+    const validValue = isNaN(value) ? 1 : Math.max(1, value);
+    setNewHabit({ ...newHabit, count: validValue });
   };
 
   return (
@@ -126,6 +128,7 @@ export function AddEditHabitModal({
               placeholder="Enter habit count"
               value={newHabit.count.toString()}
               onChange={handleHabitCountChange}
+              min="1"
             />
           </Form.Group>
         </Form>

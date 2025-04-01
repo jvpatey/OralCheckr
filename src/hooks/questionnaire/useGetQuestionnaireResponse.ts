@@ -5,7 +5,7 @@ import {
 } from "../../services/quesService";
 
 export const useGetQuestionnaireResponse = () => {
-  return useQuery<QuestionnaireResponse, Error>({
+  return useQuery<QuestionnaireResponse | null, Error>({
     queryKey: ["questionnaireResponse"],
     queryFn: getQuestionnaireResponse,
     refetchOnWindowFocus: false,

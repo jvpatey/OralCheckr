@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Question,
   Responses,
@@ -152,7 +153,9 @@ export const createSubmitHandler = (
     try {
       // Save to completed questionnaire table
       await saveResponseMutate({ responses, totalScore });
-      console.log("Successfully saved questionnaire response.");
+      if (process.env.NODE_ENV === "development") {
+        console.log("Successfully saved questionnaire response.");
+      }
 
       // Update state
       setHasCompletedQuestionnaire(true);

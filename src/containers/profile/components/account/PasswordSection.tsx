@@ -93,12 +93,24 @@ export function PasswordSection({ refetch, showToast }: PasswordSectionProps) {
         new one:
       </DescriptionText>
       <StyledForm onSubmit={handlePasswordUpdate}>
+        {/* Hidden username field for accessibility and password managers */}
+        <input
+          type="text"
+          id="username"
+          name="username"
+          autoComplete="username"
+          style={{ display: "none" }}
+          aria-hidden="true"
+        />
+
         <FormLabel>Current Password</FormLabel>
         <Form.Group style={{ marginBottom: "1.5rem" }}>
           <PasswordField
             value={currentPassword}
             onChange={setCurrentPassword}
             placeholder="Enter current password"
+            id="currentPassword"
+            autoComplete="current-password"
             required
           />
         </Form.Group>
@@ -109,6 +121,8 @@ export function PasswordSection({ refetch, showToast }: PasswordSectionProps) {
             value={newPassword}
             onChange={setNewPassword}
             placeholder="Enter new password"
+            id="newPassword"
+            autoComplete="new-password"
             required
           />
         </Form.Group>
@@ -121,6 +135,8 @@ export function PasswordSection({ refetch, showToast }: PasswordSectionProps) {
             value={confirmPassword}
             onChange={setConfirmPassword}
             placeholder="Confirm new password"
+            id="confirmPassword"
+            autoComplete="new-password"
             required
           />
         </Form.Group>

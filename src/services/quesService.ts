@@ -36,7 +36,9 @@ export const saveQuestionnaireResponse = async (
       "POST",
       responseData
     );
-    console.log("Questionnaire response saved successfully.");
+    if (process.env.NODE_ENV === "development") {
+      console.log("Questionnaire response saved successfully.");
+    }
   } catch (error) {
     console.error("Error saving questionnaire response:", error);
     throw error;
@@ -45,13 +47,17 @@ export const saveQuestionnaireResponse = async (
 
 /* -- Service to retrieve questionnaire data -- */
 export const getQuestionnaireResponse =
-  async (): Promise<QuestionnaireResponse> => {
+  async (): Promise<QuestionnaireResponse | null> => {
     try {
       return await apiRequest<QuestionnaireResponse>(
         QUESTIONNAIRE_RESPONSE_ENDPOINT,
         "GET"
       );
     } catch (error) {
+      // For 404 errors, return null as it means no data exists yet
+      if (error instanceof Error && error.message.includes("404")) {
+        return null;
+      }
       console.error("Error fetching questionnaire response:", error);
       throw error;
     }
@@ -60,11 +66,11 @@ export const getQuestionnaireResponse =
 /* -- Service to check if user has questionnaire data saved -- */
 export const hasSavedResponse = async (): Promise<boolean> => {
   try {
-    const data = await apiRequest<QuestionnaireResponse>(
+    const data = await apiRequest<QuestionnaireResponse | null>(
       QUESTIONNAIRE_RESPONSE_ENDPOINT,
       "GET"
     );
-    return !!data.responses;
+    return !!data?.responses;
   } catch (error) {
     console.error("Error checking for saved responses:", error);
     return false;
@@ -74,11 +80,11 @@ export const hasSavedResponse = async (): Promise<boolean> => {
 /* -- Service to get total score from questionnaire data -- */
 export const getTotalScore = async (): Promise<number> => {
   try {
-    const data = await apiRequest<QuestionnaireResponse>(
+    const data = await apiRequest<QuestionnaireResponse | null>(
       QUESTIONNAIRE_RESPONSE_ENDPOINT,
       "GET"
     );
-    return data.totalScore ?? 0;
+    return data?.totalScore ?? 0;
   } catch (error) {
     console.error("Error fetching total score:", error);
     return 0;

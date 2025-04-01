@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Tab } from "react-bootstrap";
 import {
   PageContainer,
@@ -14,9 +14,12 @@ import { updateProfile } from "../../../services/profileService";
 import { DataTab } from "./tabs/DataTab";
 import { SupportTab } from "./tabs/SupportTab";
 import { AvatarSelectionModal } from "./modals/AvatarSelectionModal";
+import { AuthContext } from "../../../containers/authentication/AuthContext";
 
 export function Profile() {
   const { profile, loading, error, refetch } = useProfile();
+  const { user } = useContext(AuthContext);
+  const isGuest = user?.role === "guest";
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [localAvatar, setLocalAvatar] = useState<string | undefined>();
 
@@ -41,6 +44,20 @@ export function Profile() {
       );
     }
   };
+
+  if (isGuest) {
+    return (
+      <PageContainer>
+        <ProfileCard>
+          <div>
+            <h3>Guest Account</h3>
+            <p>Profile management is not available for guest accounts.</p>
+            <p>Please sign up for a full account to access profile features.</p>
+          </div>
+        </ProfileCard>
+      </PageContainer>
+    );
+  }
 
   if (loading) {
     return (
