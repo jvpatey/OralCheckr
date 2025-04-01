@@ -40,7 +40,7 @@ export function About() {
           </SimpleBackButton>
         </BackButtonContainer>
 
-        <AboutTitle>About OralCheckr</AboutTitle>
+        <AboutTitle>Support</AboutTitle>
         <AboutSection />
         <FAQSection />
         <ContactSection />
