@@ -203,15 +203,17 @@ export function Questionnaire() {
 
   // Debug logging
   useEffect(() => {
-    console.log({
-      hasCompletedQuestionnaire,
-      hasInProgressQuestionnaire,
-      retakeMode,
-      isRetaking,
-      currentQuestion,
-      questionId,
-      initialLoadDone,
-    });
+    if (process.env.NODE_ENV === "development") {
+      console.log({
+        hasCompletedQuestionnaire,
+        hasInProgressQuestionnaire,
+        retakeMode,
+        isRetaking,
+        currentQuestion,
+        questionId,
+        initialLoadDone,
+      });
+    }
   }, [
     hasCompletedQuestionnaire,
     hasInProgressQuestionnaire,

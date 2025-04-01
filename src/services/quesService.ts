@@ -36,7 +36,9 @@ export const saveQuestionnaireResponse = async (
       "POST",
       responseData
     );
-    console.log("Questionnaire response saved successfully.");
+    if (process.env.NODE_ENV === "development") {
+      console.log("Questionnaire response saved successfully.");
+    }
   } catch (error) {
     console.error("Error saving questionnaire response:", error);
     throw error;

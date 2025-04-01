@@ -66,3 +66,28 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Google Button Styling */
+.google-button {
+  width: 100% !important;
+}
+
+.google-button > div,
+.google-button > div > div,
+.google-button iframe {
+  width: 100% !important;
+}
+
+/* Ensure Google buttons take full width */
+.nsm7Bb-HzV7m-LgbsSe {
+  width: 100% !important;
+  max-width: 100% !important;
+  justify-content: center !important;
+}
+
+/* Fix for iframe content inside Google button */
+iframe[src^="https://accounts.google.com"]
+{
+  width: 100% !important;
+  height: 100% !important;
+}

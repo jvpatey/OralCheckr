@@ -22,6 +22,33 @@ import {
   OrSeparator,
   StyledFormButton,
 } from "./styles/ModalStyles";
+import styled from "styled-components";
+
+// Custom styled wrapper for Google button
+const GoogleButtonWrapper = styled.div`
+  width: 100%;
+  margin-top: 1rem;
+  min-height: 44px;
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+
+  /* Target the actual Google button element inside */
+  & > div {
+    width: 100% !important;
+
+    & > div,
+    & > div > div,
+    & > div > div > div {
+      width: 100% !important;
+    }
+
+    & > div > button {
+      width: 100% !important;
+      border-radius: 4px !important;
+    }
+  }
+`;
 
 // Get Google Client ID from environment variable or config.js
 const GOOGLE_CLIENT_ID =
@@ -162,6 +189,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
             width: "100%",
             locale: "en",
             logo_alignment: "center",
+            class_name: "google-button",
           });
         }
       };
@@ -255,18 +283,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
 
           <OrSeparator>OR</OrSeparator>
 
-          <div
-            ref={googleButtonRef}
-            style={{
-              width: "100%",
-              marginTop: "1rem",
-              minHeight: "44px",
-              display: "flex",
-              justifyContent: "center",
-              backgroundColor: "transparent",
-            }}
-            className="google-login-container"
-          ></div>
+          <GoogleButtonWrapper ref={googleButtonRef} />
         </Form>
       </ModalBody>
     </StyledModal>
