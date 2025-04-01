@@ -161,6 +161,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
             shape: "rectangular",
             width: "100%",
             locale: "en",
+            logo_alignment: "center",
           });
         }
       };
@@ -260,7 +261,11 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
               width: "100%",
               marginTop: "1rem",
               minHeight: "44px",
+              display: "flex",
+              justifyContent: "center",
+              backgroundColor: "transparent",
             }}
+            className="google-login-container"
           ></div>
         </Form>
       </ModalBody>
