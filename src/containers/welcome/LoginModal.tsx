@@ -138,6 +138,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
         window.google?.accounts.id.initialize({
           client_id: GOOGLE_CLIENT_ID,
           callback: handleGoogleSuccess,
+          ux_mode: "popup",
         });
 
         if (googleButtonRef.current) {
