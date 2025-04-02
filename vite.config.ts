@@ -20,7 +20,10 @@ export default defineConfig({
       process.env.VITE_GOOGLE_CLIENT_ID
     ),
     "import.meta.env.VITE_API_URL": JSON.stringify(
-      process.env.VITE_API_URL || "http://localhost:3000"
+      process.env.VITE_API_URL ||
+        (process.env.NODE_ENV === "development"
+          ? "http://localhost:3000"
+          : "https://oralcheckr-backend.onrender.com")
     ),
   },
 });
