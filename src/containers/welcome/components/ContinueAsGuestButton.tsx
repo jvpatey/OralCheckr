@@ -19,8 +19,8 @@ export function ContinueAsGuestButton() {
   const handleConfirm = () => {
     setShowConfirmation(false);
     loginAsGuest(undefined, {
-      onSuccess: (data) => {
-        updateAuth({ userId: data.userId, role: data.role });
+      onSuccess: async (data) => {
+        await updateAuth({ userId: data.userId, role: data.role });
         navigate(RoutePaths.LANDING);
       },
       onError: (error) => {

@@ -7,6 +7,12 @@ const LoadingContainer = styled.div`
   align-items: center;
   padding: 2rem;
   width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
 `;
 
 const StyledSpinner = styled(Spinner)`
@@ -14,7 +20,7 @@ const StyledSpinner = styled(Spinner)`
 `;
 
 interface LoadingSpinnerProps {
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   variant?: string;
   fullHeight?: boolean;
 }
@@ -27,11 +33,13 @@ export const LoadingSpinner = ({
   const getSpinnerSize = () => {
     switch (size) {
       case "sm":
-        return { width: "1.5rem", height: "1.5rem" };
-      case "lg":
-        return { width: "3rem", height: "3rem" };
-      default:
         return { width: "2rem", height: "2rem" };
+      case "lg":
+        return { width: "4rem", height: "4rem" };
+      case "xl":
+        return { width: "6rem", height: "6rem" };
+      default:
+        return { width: "3rem", height: "3rem" };
     }
   };
 

@@ -12,7 +12,7 @@ export function RedirectIfAuthenticated({
   const { isAuthenticated, loading } = useContext(AuthContext);
 
   if (loading) {
-    return <LoadingSpinner fullHeight />;
+    return <LoadingSpinner fullHeight size="xl" />;
   }
 
   return isAuthenticated ? <Navigate to={RoutePaths.LANDING} /> : children;
