@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React, { createContext, useState } from "react";
 import { useValidateAuth } from "../../hooks/auth/useValidateAuth";
 
 interface User {
@@ -23,16 +23,19 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
   const { data, isLoading, refetch } = useValidateAuth();
+  const [localUser, setLocalUser] = useState<User | null>(null);
 
-  const updateAuth = (_user: User | null) => {
-    // After login or logout refetch to update auth state.
+  const updateAuth = (user: User | null) => {
+    // Update local state immediately
+    setLocalUser(user);
+    // Then refetch to ensure server state is in sync
     refetch();
   };
 
   const authState = {
-    isAuthenticated: !!data,
+    isAuthenticated: !!data || !!localUser,
     loading: isLoading,
-    authUser: data?.user,
+    authUser: localUser || data?.user,
   };
 
   return (
