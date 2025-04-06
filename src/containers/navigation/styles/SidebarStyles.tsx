@@ -56,21 +56,27 @@ export const SidebarLink = styled(Link)`
   margin-bottom: 17px;
   border-radius: 10px;
   overflow: hidden;
+  position: relative;
 
   &:hover {
     color: ${({ theme }) => theme.backgroundColor};
-    transform: scale(1.05);
-    background-color: ${({ theme }) => theme.green};
   }
 
   &.active {
-    font-weight: 800;
-    font-size: 17px;
-    background-color: ${({ theme }) => theme.green};
     color: ${({ theme }) => theme.backgroundColor};
-    border-radius: 10px;
+    font-size: 17px;
     padding: 10px 20px;
     overflow: hidden;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 5px;
+      left: 20px;
+      width: calc(100% - 40px);
+      height: 2px;
+      background-color: ${({ theme }) => theme.green};
+    }
   }
 
   @media (max-width: 800px) {
@@ -81,16 +87,16 @@ export const SidebarLink = styled(Link)`
     width: auto;
 
     &.active {
-      font-weight: 800;
       color: ${({ theme }) => theme.backgroundColor};
       font-size: 18px;
-      background-color: ${({ theme }) => theme.green};
       padding: 8px;
-      border-radius: 10px;
-    }
-  }
 
-  @media (max-width: 800px) {
+      &:after {
+        left: 2px;
+        width: calc(100% - 4px);
+      }
+    }
+
     &::after {
       content: attr(data-tooltip);
       position: absolute;

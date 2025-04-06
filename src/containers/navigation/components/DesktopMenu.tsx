@@ -48,17 +48,27 @@ const CustomNavLink = styled(Nav.Link)`
   font-size: large;
   display: flex;
   align-items: center;
+  height: 100%;
+  padding: 8px 0;
+  position: relative;
 
   &:hover {
     color: ${({ theme }) => theme.blue};
-    transform: scale(1.05);
   }
 
   &.active {
-    color: ${({ theme }) => theme.blue};
-    font-weight: bold;
-    transform: scale(1.1);
+    color: ${({ theme }) => theme.textGrey};
     background-color: transparent;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: ${({ theme }) => theme.blue};
+    }
   }
 `;
 
