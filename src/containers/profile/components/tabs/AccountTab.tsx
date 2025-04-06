@@ -4,16 +4,14 @@ import {
   StyledToastContainer,
   SettingsContainer,
 } from "../../styles/AccountTabStyles";
-import { EmailSection } from "../account/EmailSection";
 import { PasswordSection } from "../account/PasswordSection";
 import { DeleteAccountSection } from "../account/DeleteAccountSection";
 
 interface AccountTabProps {
-  currentEmail: string;
   refetch: () => Promise<any>;
 }
 
-export function AccountTab({ currentEmail, refetch }: AccountTabProps) {
+export function AccountTab({ refetch }: AccountTabProps) {
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
@@ -49,14 +47,7 @@ export function AccountTab({ currentEmail, refetch }: AccountTabProps) {
       </StyledToastContainer>
 
       <SettingsContainer>
-        <EmailSection
-          currentEmail={currentEmail}
-          refetch={refetch}
-          showToast={handleShowToast}
-        />
-
         <PasswordSection refetch={refetch} showToast={handleShowToast} />
-
         <DeleteAccountSection showToast={handleShowToast} />
       </SettingsContainer>
     </>

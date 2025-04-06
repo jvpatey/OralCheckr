@@ -91,6 +91,7 @@ export function Profile() {
           email={profile?.email}
           avatar={localAvatar}
           onAvatarClick={() => setShowAvatarModal(true)}
+          refetch={refetch}
         />
 
         <Tab.Container defaultActiveKey="account">
@@ -106,10 +107,7 @@ export function Profile() {
           <Tab.Content>
             <Tab.Pane eventKey="account">
               <TabContent>
-                <AccountTab
-                  currentEmail={profile?.email || ""}
-                  refetch={refetch}
-                />
+                <AccountTab refetch={refetch} />
               </TabContent>
             </Tab.Pane>
             <Tab.Pane eventKey="data">
