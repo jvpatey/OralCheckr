@@ -86,6 +86,9 @@ const AvatarImage = styled.img`
   object-fit: contain;
   position: relative;
   top: -1px;
+  border: 2px solid ${({ theme }) => theme.blue};
+  padding: 2px;
+  background: ${({ theme }) => theme.backgroundColor};
 `;
 
 const CreateAccountButton = styled.button`

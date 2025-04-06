@@ -81,6 +81,9 @@ const AvatarImage = styled.img`
   height: 24px;
   border-radius: 50%;
   object-fit: contain;
+  border: 2px solid ${({ theme }) => theme.blue};
+  padding: 2px;
+  background: ${({ theme }) => theme.backgroundColor};
 `;
 
 export function MobileMenu({
