@@ -4,13 +4,17 @@ import { getTotalScore } from "../../services/quesService";
 export const useGetTotalScore = (
   hasCompletedQuestionnaire: boolean = false
 ) => {
-  return useQuery<number>({
+  return useQuery({
     queryKey: ["totalScore"],
-    queryFn: getTotalScore,
+    queryFn: async () => {
+      const result = await getTotalScore();
+      return result ?? null;
+    },
     enabled: hasCompletedQuestionnaire,
     retry: false,
-    staleTime: Infinity,
-    refetchOnMount: false,
+    staleTime: 30 * 60 * 1000, // 30 minutes
+    gcTime: 60 * 60 * 1000, // 1 hour
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
 };

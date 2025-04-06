@@ -209,29 +209,6 @@ export function Questionnaire() {
     progressData,
   ]);
 
-  // Debug logging
-  useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      console.log({
-        hasCompletedQuestionnaire,
-        hasInProgressQuestionnaire,
-        retakeMode,
-        isRetaking,
-        currentQuestion,
-        questionId,
-        initialLoadDone,
-      });
-    }
-  }, [
-    hasCompletedQuestionnaire,
-    hasInProgressQuestionnaire,
-    retakeMode,
-    isRetaking,
-    currentQuestion,
-    questionId,
-    initialLoadDone,
-  ]);
-
   if (isLoadingResponses || isLoadingProgress) {
     return (
       <PageBackground>

@@ -36,9 +36,6 @@ export const saveQuestionnaireResponse = async (
       "POST",
       responseData
     );
-    if (process.env.NODE_ENV === "development") {
-      console.log("Questionnaire response saved successfully.");
-    }
   } catch (error) {
     console.error("Error saving questionnaire response:", error);
     throw error;
@@ -79,16 +76,17 @@ export const hasSavedResponse = async (): Promise<boolean> => {
 };
 
 /* -- Service to get total score from questionnaire data -- */
-export const getTotalScore = async (): Promise<number> => {
+export const getTotalScore = async (): Promise<number | undefined> => {
   try {
     const data = await apiRequest<QuestionnaireResponse | null>(
       QUESTIONNAIRE_RESPONSE_ENDPOINT,
       "GET"
     );
-    return data?.totalScore ?? 0;
+    // Only return a number if we have valid data
+    return data?.totalScore ?? undefined;
   } catch (error) {
     console.error("Error fetching total score:", error);
-    return 0;
+    return undefined;
   }
 };
 
