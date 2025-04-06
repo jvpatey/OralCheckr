@@ -94,7 +94,6 @@ export function ProfileSection({
       setShowConfirmModal(false);
     } catch (error) {
       console.error("Failed to update profile:", error);
-      // You might want to show an error toast here
     }
   };
 

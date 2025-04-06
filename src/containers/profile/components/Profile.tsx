@@ -97,10 +97,10 @@ export function Profile() {
         <Tab.Container defaultActiveKey="account">
           <StyledNav variant="tabs">
             <Nav.Item>
-              <Nav.Link eventKey="account">Account</Nav.Link>
+              <Nav.Link eventKey="account">Account Settings</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="data">Data</Nav.Link>
+              <Nav.Link eventKey="data">Data Management</Nav.Link>
             </Nav.Item>
           </StyledNav>
 
