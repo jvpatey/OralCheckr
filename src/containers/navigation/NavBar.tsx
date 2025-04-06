@@ -11,6 +11,7 @@ import { CustomNavbar } from "./styles/NavBarStyles";
 import { NavBrand, MobileMenu, DesktopMenu, ThemeToggle } from "./components";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { RoutePaths } from "../../common/constants/routes";
+import { ConfirmationModal } from "../../components/shared/ConfirmationModal";
 
 interface NavBarProps {
   links: NavLink[];
@@ -26,6 +27,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const isDarkMode = theme === ThemeType.DARK;
   const navigate = useNavigate();
   const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { mutate: logoutMutate } = useLogoutUser();
 
@@ -45,9 +47,14 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
     );
   };
 
-  const handleLogout = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleLogoutClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     e.preventDefault();
+    setShowLogoutModal(true);
+  };
 
+  const handleLogoutConfirm = () => {
     if (isLoggingOut) return;
     setIsLoggingOut(true);
 
@@ -57,10 +64,12 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
         updateAuth(null);
         navigate("/");
         setIsLoggingOut(false);
+        setShowLogoutModal(false);
       },
       onError: (error: Error) => {
         console.error("Logout error:", error);
         setIsLoggingOut(false);
+        setShowLogoutModal(false);
       },
     });
   };
@@ -115,7 +124,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
           <MobileMenu
             links={filteredLinks}
             isActive={isActive}
-            handleLogout={handleLogout}
+            handleLogout={handleLogoutClick}
             isGuest={isGuest}
             onCreateAccount={handleCreateAccount}
             userAvatar={profile?.avatar}
@@ -124,7 +133,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
           <DesktopMenu
             links={filteredLinks}
             isActive={isActive}
-            handleLogout={handleLogout}
+            handleLogout={handleLogoutClick}
             isGuest={isGuest}
             onCreateAccount={handleCreateAccount}
             userAvatar={profile?.avatar}
@@ -143,6 +152,15 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
           handleClose={() => setShowSignUpModal(false)}
         />
       )}
+
+      <ConfirmationModal
+        show={showLogoutModal}
+        title="Log Out"
+        message="Are you sure you want to log out?"
+        confirmLabel="Log Out"
+        onConfirm={handleLogoutConfirm}
+        onCancel={() => setShowLogoutModal(false)}
+      />
     </>
   );
 }

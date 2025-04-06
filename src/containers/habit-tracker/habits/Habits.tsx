@@ -3,6 +3,7 @@ import { PageBackground } from "../../../components/PageBackground";
 import { IconTextButton } from "../../../components/habit-tracker/habits/IconTextButton";
 import { WeekPicker } from "./WeekPicker";
 import { AddEditHabitModal } from "./AddEditHabitModal";
+import { ConfirmationModal } from "../../../components/shared/ConfirmationModal";
 import {
   HabitListContainer,
   ScrollableHabitList,
@@ -111,6 +112,10 @@ export function Habits() {
   const incrementHabitLogMutation = useIncrementHabitLog();
   const decrementHabitLogMutation = useDecrementHabitLog();
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteAllModal, setShowDeleteAllModal] = useState(false);
+  const [habitToDelete, setHabitToDelete] = useState<Habit | null>(null);
+
   // Handler for showing the add habit modal
   const handleAddHabitClick = () => {
     setShowAddHabitModal(true);
@@ -175,34 +180,45 @@ export function Habits() {
     const habitToDelete = habits[index];
     if (!habitToDelete || !habitToDelete.habitId) return;
 
-    if (window.confirm("Are you sure you want to delete this habit?")) {
-      deleteHabitMutation.mutate(habitToDelete.habitId, {
-        onSuccess: () => {
-          toast.success("Habit deleted successfully", { autoClose: 800 });
-        },
-        onError: (error) => {
-          toast.error(`Failed to delete habit: ${error}`, { autoClose: 800 });
-        },
-      });
-    }
+    setHabitToDelete(habitToDelete);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!habitToDelete?.habitId) return;
+
+    deleteHabitMutation.mutate(habitToDelete.habitId, {
+      onSuccess: () => {
+        toast.success("Habit deleted successfully", { autoClose: 800 });
+        setShowDeleteModal(false);
+        setHabitToDelete(null);
+      },
+      onError: (error) => {
+        toast.error(`Failed to delete habit: ${error}`, { autoClose: 800 });
+        setShowDeleteModal(false);
+        setHabitToDelete(null);
+      },
+    });
   };
 
   // Handler for deleting all habits and logs
   const handleDeleteAllHabits = () => {
-    if (
-      window.confirm("Are you sure you want to delete all habits and logs?")
-    ) {
-      deleteAllHabitsMutation.mutate(undefined, {
-        onSuccess: () => {
-          toast.success("All habits deleted successfully", { autoClose: 800 });
-        },
-        onError: (error) => {
-          toast.error(`Failed to delete all habits: ${error}`, {
-            autoClose: 800,
-          });
-        },
-      });
-    }
+    setShowDeleteAllModal(true);
+  };
+
+  const handleConfirmDeleteAll = () => {
+    deleteAllHabitsMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success("All habits deleted successfully", { autoClose: 800 });
+        setShowDeleteAllModal(false);
+      },
+      onError: (error) => {
+        toast.error(`Failed to delete all habits: ${error}`, {
+          autoClose: 800,
+        });
+        setShowDeleteAllModal(false);
+      },
+    });
   };
 
   // Handler for editing a habit
@@ -435,6 +451,29 @@ export function Habits() {
         originalHabit={originalHabit}
         newHabit={newHabit}
         setNewHabit={setNewHabit}
+      />
+
+      <ConfirmationModal
+        show={showDeleteModal}
+        title="Delete Habit"
+        message={`Are you sure you want to delete "${habitToDelete?.name}"? This will also delete all tracking history for this habit.`}
+        confirmLabel="Delete"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          setShowDeleteModal(false);
+          setHabitToDelete(null);
+        }}
+        isDestructive={true}
+      />
+
+      <ConfirmationModal
+        show={showDeleteAllModal}
+        title="Delete All Habits"
+        message="Are you sure you want to delete all habits and their tracking history? This action cannot be undone."
+        confirmLabel="Delete All"
+        onConfirm={handleConfirmDeleteAll}
+        onCancel={() => setShowDeleteAllModal(false)}
+        isDestructive={true}
       />
     </PageBackground>
   );
