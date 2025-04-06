@@ -21,11 +21,14 @@ export const CardContainer = styled.div`
   padding: 2rem;
   height: calc(100% - 1rem);
   margin: 10px 2rem 0;
-  animation: ${fadeUp} 1s ease-out;
+  animation: ${fadeUp} 0.5s ease-out;
   width: calc(100% - 4rem);
   box-sizing: border-box;
   overflow-y: auto;
   ${scrollbarStyle}
+  will-change: transform, opacity;
+  transform-origin: top center;
+  backface-visibility: hidden;
 
   @media (max-width: 768px) {
     margin: 10px 1rem 0;

@@ -45,7 +45,7 @@ const StyledNav = styled(Nav)`
 const CustomNavLink = styled(Nav.Link)`
   color: ${({ theme }) => theme.textGrey};
   margin-right: 35px;
-  font-size: large;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   height: 100%;
@@ -76,12 +76,12 @@ const Icon = styled.span`
   margin-right: 5px;
   display: inline-flex;
   align-items: center;
-  font-size: 1.2em;
+  font-size: 1em;
 `;
 
 const AvatarImage = styled.img`
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: contain;
   position: relative;
@@ -138,7 +138,7 @@ export function DesktopMenu({
                 userAvatar ? (
                   <AvatarImage src={userAvatar} alt="Profile" />
                 ) : (
-                  <FontAwesomeIcon icon={link.icon} size="xl" />
+                  <FontAwesomeIcon icon={link.icon} />
                 )
               ) : (
                 <FontAwesomeIcon icon={link.icon} />

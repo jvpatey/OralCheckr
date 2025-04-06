@@ -21,7 +21,9 @@ export const CardContainer = styled.div`
   padding: 2rem;
   height: calc(100% - 1rem);
   margin: 10px 2rem 0;
-  animation: ${fadeUp} 1s ease-out;
+  animation: ${fadeUp} 0.5s ease-out;
+  will-change: transform, opacity;
+  transform-origin: top center;
 
   @media (max-width: 768px) {
     margin: 10px 1rem 0;
@@ -40,12 +42,11 @@ export const CardContainer = styled.div`
 export const HabitListContainer = styled.div`
   width: calc(100% - 190px);
   height: calc(100vh - 90px);
-  overflow-y: hidden;
-  overflow-x: hidden;
-  position: absolute;
+  position: fixed;
   top: 80px;
   left: 190px;
-  animation: ${fadeUp} 1s ease-out;
+  will-change: transform;
+  backface-visibility: hidden;
 
   @media (max-width: 768px) {
     width: calc(100% - 70px);
@@ -60,6 +61,8 @@ export const ScrollableHabitList = styled.div`
   overflow-x: hidden;
   padding: 20px 0;
   ${scrollbarStyle}
+  will-change: transform;
+  backface-visibility: hidden;
 `;
 
 // Wrapper for habit content
@@ -69,6 +72,8 @@ export const HabitWrapper = styled.div`
   margin: 0 auto;
   box-sizing: border-box;
   padding: 0 20px;
+  will-change: transform;
+  backface-visibility: hidden;
 
   @media (max-width: 768px) {
     padding: 0 15px;

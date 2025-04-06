@@ -6,7 +6,7 @@ import { RoutePaths } from "../../../common/constants/routes";
 const BrandText = styled(Navbar.Brand)`
   display: flex;
   align-items: center;
-  font-size: 28px;
+  font-size: 24px;
   color: ${({ theme }) => theme.textGrey};
 
   &:hover {
@@ -22,13 +22,13 @@ const BrandText = styled(Navbar.Brand)`
     &::after {
       content: "";
       display: block;
-      height: 45px;
+      height: 40px;
     }
   }
 `;
 
 const LogoImage = styled.img`
-  height: 45px;
+  height: 40px;
 `;
 
 export function NavBrand() {
