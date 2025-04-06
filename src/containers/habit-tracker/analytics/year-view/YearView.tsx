@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { HabitDropdown } from "../HabitDropdown";
 import { Habit } from "../../../../services/habitService";
 import { Logging } from "../Analytics";
@@ -22,6 +22,8 @@ interface YearViewProps {
   onSelectHabit: (habitName: string) => void;
   habitsLog: Logging;
   hideAnalytics: boolean;
+  selectedDate: Date;
+  onDateChange: (date: Date) => void;
 }
 
 // Functional component to display the heatmap view for the year
@@ -30,10 +32,11 @@ export function YearView({
   onSelectHabit,
   habitsLog,
   hideAnalytics,
+  selectedDate,
+  onDateChange,
 }: YearViewProps) {
   const { selectedHabit } = useHabitContext();
-  const [selectedYear, setSelectedYear] = useState<Date>(new Date());
-  const year = selectedYear.getFullYear();
+  const year = selectedDate.getFullYear();
 
   // Generate heatmap data for the selected habit and year
   const heatmapData: HeatmapSeries[] = useMemo(() => {
@@ -46,18 +49,13 @@ export function YearView({
     onSelectHabit(habitName);
   };
 
-  // Function to handle changes to the selected year
-  const handleYearChange = (date: Date) => {
-    setSelectedYear(date);
-  };
-
   return (
     <ViewContainer>
       {!hideAnalytics && (
         <>
           <AnalyticsDateSelector
-            selectedDate={selectedYear}
-            onDateChange={handleYearChange}
+            selectedDate={selectedDate}
+            onDateChange={onDateChange}
             viewType={ViewType.YEAR}
           />
           <HabitDropdown habits={habits} onSelectHabit={handleSelectHabit} />

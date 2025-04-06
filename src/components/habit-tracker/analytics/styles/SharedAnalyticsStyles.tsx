@@ -111,36 +111,31 @@ export const TilesAndCalendarContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: row;
-  width: 90%;
-  margin-top: 10px;
-  gap: 20px;
+  width: 100%;
+  margin-top: 20px;
+  gap: 30px;
   align-items: stretch;
-  min-height: 350px;
+  min-height: 400px;
 
   @media (max-width: 1024px) {
     flex-direction: column;
     align-items: center;
     min-height: auto;
+    gap: 20px;
   }
 `;
 
 export const TilesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
   gap: 20px;
   width: 100%;
   max-width: 400px;
-  height: 100%;
+  height: 400px;
 
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
-    max-width: 400px;
-  }
-
-  @media (max-width: 600px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    height: auto;
+    min-height: 200px;
   }
 `;
 
@@ -148,15 +143,25 @@ export const TilesContainer = styled.div`
 export const TileContainer = styled.div`
   background-color: ${({ theme }) => theme.accentBackgroundColor};
   border-radius: 8px;
-  padding: 12px;
+  padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 180px;
   height: 100%;
+  aspect-ratio: 1;
+
+  @media (max-width: 1024px) {
+    min-height: 150px;
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 120px;
+    padding: 10px;
+  }
 `;
 
 export const TileHeading = styled.h3`

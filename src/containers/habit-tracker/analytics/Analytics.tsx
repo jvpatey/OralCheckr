@@ -105,11 +105,11 @@ const toggleOptions = [
 export function Analytics() {
   const [view, setView] = useState<ViewMode>(ViewMode.MONTH);
   const { selectedHabit, setSelectedHabit } = useHabitContext();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  // Get the current date for fetching logs
-  const currentDate = new Date();
-  const currentMonth = format(currentDate, "MMMM");
-  const currentYear = currentDate.getFullYear();
+  // Get the selected month and year for fetching logs
+  const month = format(selectedDate, "MMMM");
+  const year = selectedDate.getFullYear();
 
   // Fetch habits using React Query
   const {
@@ -129,7 +129,7 @@ export function Analytics() {
     habitLogsMap,
     isLoading: isLoadingLogs,
     isError: isLogsError,
-  } = useHabitLogsForAllHabits(habitIds, currentYear, currentMonth);
+  } = useHabitLogsForAllHabits(habitIds, year, month);
 
   // Transform habitLogsMap
   const habitsLog = useMemo(
@@ -152,6 +152,10 @@ export function Analytics() {
 
   const handleSelectHabit = (habitName: string) => {
     setSelectedHabit(habitName);
+  };
+
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date);
   };
 
   // Show loading state
@@ -195,6 +199,8 @@ export function Analytics() {
               onSelectHabit={handleSelectHabit}
               habitsLog={habitsLog}
               hideAnalytics={!selectedHabit}
+              selectedDate={selectedDate}
+              onDateChange={handleDateChange}
             />
           ) : (
             <YearView
@@ -202,6 +208,8 @@ export function Analytics() {
               onSelectHabit={handleSelectHabit}
               habitsLog={habitsLog}
               hideAnalytics={!selectedHabit}
+              selectedDate={selectedDate}
+              onDateChange={handleDateChange}
             />
           )}
           {!selectedHabit && (

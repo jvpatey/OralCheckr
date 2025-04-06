@@ -123,13 +123,14 @@ const DayName = styled.div`
 `;
 
 // Wrapper for each day's circular progress bar
-const DayWrapper = styled.div`
+const DayWrapper = styled.div<{ $isCurrentDay?: boolean }>`
   position: relative;
-  width: 35px;
-  height: 35px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
 
   @media (max-width: 600px) {
     width: 30px;
@@ -194,16 +195,33 @@ export function HabitCalendar({
     const progress = getDayProgress(day);
     const isComplete = logs >= habitCount;
 
+    // Check if the day is in the future
+    const currentDate = new Date();
+    const dayDate = new Date(
+      year,
+      new Date(`${month} 1, ${year}`).getMonth(),
+      day
+    );
+    const isCurrentDay = dayDate.toDateString() === currentDate.toDateString();
+    const isFutureDate = dayDate > currentDate;
+
     return (
-      <DayWrapper>
+      <DayWrapper $isCurrentDay={isCurrentDay}>
         <CircularProgressbar
-          value={progress}
+          value={isFutureDate ? 0 : progress}
           text={day.toString()}
           styles={buildStyles({
-            textSize: "30px",
+            textSize: isCurrentDay ? "32px" : "30px",
             pathColor: isComplete ? theme.green : theme.blue,
-            textColor: theme.blue,
-            trailColor: theme.backgroundColor,
+            textColor: isCurrentDay
+              ? theme.green
+              : isFutureDate
+              ? theme.textGrey
+              : theme.blue,
+            trailColor: isFutureDate
+              ? theme.disabledBackground
+              : theme.backgroundColor,
+            strokeLinecap: "round",
           })}
         />
       </DayWrapper>

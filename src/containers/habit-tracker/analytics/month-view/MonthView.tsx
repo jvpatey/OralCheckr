@@ -31,6 +31,8 @@ interface ViewProps {
   onSelectHabit: (habitName: string) => void;
   habitsLog: Logging;
   hideAnalytics: boolean;
+  selectedDate: Date;
+  onDateChange: (date: Date) => void;
 }
 
 // The MonthView functional component for displaying monthly analytics
@@ -39,9 +41,10 @@ export function MonthView({
   onSelectHabit,
   habitsLog,
   hideAnalytics,
+  selectedDate,
+  onDateChange,
 }: ViewProps) {
   const { selectedHabit } = useHabitContext();
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [showChart, setShowChart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -53,7 +56,7 @@ export function MonthView({
 
   // Handle month change from the date selector
   const onMonthChange = (date: Date) => {
-    setSelectedDate(date);
+    onDateChange(date);
   };
 
   // Handle toggle between calendar and chart view
