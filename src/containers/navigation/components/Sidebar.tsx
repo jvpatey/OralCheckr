@@ -6,6 +6,7 @@ import { useContext } from "react";
 import {
   SidebarContainer,
   SidebarLink,
+  LinkContent,
   Icon,
   Text,
 } from "../styles/SidebarStyles";
@@ -27,25 +28,25 @@ export function Sidebar({ links }: SidebarProps) {
     <SidebarContainer>
       {links.map((link, index) => {
         const currentPath = location.pathname + location.hash.replace("#", "");
+        const isActive =
+          currentPath === link.path ||
+          (link.path === RoutePaths.QUESTIONNAIRE &&
+            currentPath.startsWith(RoutePaths.QUESTIONNAIRE) &&
+            currentPath !== RoutePaths.RESULTS);
 
         return (
           <SidebarLink
             to={link.path}
             key={index}
-            className={
-              currentPath === link.path ||
-              (link.path === RoutePaths.QUESTIONNAIRE &&
-                currentPath.startsWith(RoutePaths.QUESTIONNAIRE) &&
-                currentPath !== RoutePaths.RESULTS)
-                ? "active"
-                : ""
-            }
+            className={isActive ? "active" : ""}
             data-tooltip={link.name}
           >
-            <Icon>
-              <FontAwesomeIcon icon={link.icon} />
-            </Icon>
-            <Text>{link.name}</Text>
+            <LinkContent>
+              <Icon>
+                <FontAwesomeIcon icon={link.icon} />
+              </Icon>
+              <Text>{link.name}</Text>
+            </LinkContent>
           </SidebarLink>
         );
       })}
