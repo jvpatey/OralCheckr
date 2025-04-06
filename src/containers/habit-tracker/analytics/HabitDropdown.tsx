@@ -16,7 +16,9 @@ const CustomDropdownToggle = styled(Dropdown.Toggle)`
   color: ${({ theme }) => theme.blue};
   border: 2px solid ${({ theme }) => theme.blue};
   font-size: 16px;
-  width: 150px;
+  padding: 10px 20px;
+  width: 100%;
+  text-align: center;
 
   &:hover,
   &:focus {
@@ -31,13 +33,22 @@ const CustomDropdownToggle = styled(Dropdown.Toggle)`
     color: ${({ theme }) => theme.backgroundColor};
     border-color: ${({ theme }) => theme.blue};
   }
+
+  @media (max-width: 600px) {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
 `;
 
 const CustomDropdownMenu = styled(Dropdown.Menu)`
   background-color: ${({ theme }) => theme.backgroundColor};
   border: 1px solid ${({ theme }) => theme.blue};
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 200px;
+  width: 215px;
+
+  @media (max-width: 600px) {
+    width: 145px;
+  }
 `;
 
 const CustomDropdownItem = styled(Dropdown.Item)<{ $isActive: boolean }>`

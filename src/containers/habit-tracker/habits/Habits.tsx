@@ -13,6 +13,7 @@ import {
   HeaderButtons,
   StyledHabitList,
   DatePickerWrapper,
+  CardContainer,
 } from "../../../components/habit-tracker/habits/HabitComponents";
 import { HabitList } from "../../../components/habit-tracker/habits/HabitList";
 import {
@@ -359,11 +360,13 @@ export function Habits() {
     return (
       <PageBackground>
         <HabitListContainer>
-          <HabitWrapper>
-            <Header>
-              <HeaderText>Loading habits...</HeaderText>
-            </Header>
-          </HabitWrapper>
+          <CardContainer>
+            <HabitWrapper>
+              <Header>
+                <HeaderText>Loading habits...</HeaderText>
+              </Header>
+            </HabitWrapper>
+          </CardContainer>
         </HabitListContainer>
       </PageBackground>
     );
@@ -374,11 +377,13 @@ export function Habits() {
     return (
       <PageBackground>
         <HabitListContainer>
-          <HabitWrapper>
-            <Header>
-              <HeaderText>Error loading habits</HeaderText>
-            </Header>
-          </HabitWrapper>
+          <CardContainer>
+            <HabitWrapper>
+              <Header>
+                <HeaderText>Error loading habits</HeaderText>
+              </Header>
+            </HabitWrapper>
+          </CardContainer>
         </HabitListContainer>
       </PageBackground>
     );
@@ -387,61 +392,63 @@ export function Habits() {
   return (
     <PageBackground>
       <HabitListContainer>
-        <HabitWrapper>
-          <DatePickerWrapper>
-            <WeekPicker
-              isEditMode={isEditMode}
-              onDateChange={handleWeekPickerDateChange}
-            />
-          </DatePickerWrapper>
-          <Header>
-            <HeaderText>My Habits:</HeaderText>
-            <HeaderButtons>
-              {!isEditMode && (
-                <IconTextButton
-                  icon={faPlus}
-                  label="Add Habit"
-                  onClick={handleAddHabitClick}
-                  backgroundColor={theme.green}
-                  hoverColor={theme.green}
-                />
-              )}
-              {isEditMode && (
-                <IconTextButton
-                  icon={faTrashAlt}
-                  label="Delete All"
-                  onClick={handleDeleteAllHabits}
-                  backgroundColor={theme.red}
-                  hoverColor={theme.red}
-                  disabled={habits.length === 0}
-                />
-              )}
-              <IconTextButton
-                icon={isEditMode ? faTimes : faPencilAlt}
-                label={isEditMode ? "Exit" : "Edit"}
-                onClick={() => setIsEditMode(!isEditMode)}
-                backgroundColor={isEditMode ? theme.red : theme.yellow}
-                hoverColor={isEditMode ? theme.red : theme.yellow}
-                disabled={!isEditMode && habits.length === 0}
-              />
-            </HeaderButtons>
-          </Header>
-          <ScrollableHabitList>
-            <StyledHabitList>
-              <HabitList
-                habits={habits}
-                selectedDate={selectedDate}
+        <CardContainer>
+          <HabitWrapper>
+            <DatePickerWrapper>
+              <WeekPicker
                 isEditMode={isEditMode}
-                handleEditHabit={handleEditHabit}
-                handleDeleteHabit={handleDeleteHabit}
-                handleLog={handleLog}
-                handleRemoveLog={handleRemoveLog}
-                getLogCount={getLogCount}
-                isFutureDate={isFutureDate}
+                onDateChange={handleWeekPickerDateChange}
               />
-            </StyledHabitList>
-          </ScrollableHabitList>
-        </HabitWrapper>
+            </DatePickerWrapper>
+            <Header>
+              <HeaderText>My Habits:</HeaderText>
+              <HeaderButtons>
+                {!isEditMode && (
+                  <IconTextButton
+                    icon={faPlus}
+                    label="Add Habit"
+                    onClick={handleAddHabitClick}
+                    backgroundColor={theme.green}
+                    hoverColor={theme.green}
+                  />
+                )}
+                {isEditMode && (
+                  <IconTextButton
+                    icon={faTrashAlt}
+                    label="Delete All"
+                    onClick={handleDeleteAllHabits}
+                    backgroundColor={theme.red}
+                    hoverColor={theme.red}
+                    disabled={habits.length === 0}
+                  />
+                )}
+                <IconTextButton
+                  icon={isEditMode ? faTimes : faPencilAlt}
+                  label={isEditMode ? "Exit" : "Edit"}
+                  onClick={() => setIsEditMode(!isEditMode)}
+                  backgroundColor={isEditMode ? theme.red : theme.yellow}
+                  hoverColor={isEditMode ? theme.red : theme.yellow}
+                  disabled={!isEditMode && habits.length === 0}
+                />
+              </HeaderButtons>
+            </Header>
+            <ScrollableHabitList>
+              <StyledHabitList>
+                <HabitList
+                  habits={habits}
+                  selectedDate={selectedDate}
+                  isEditMode={isEditMode}
+                  handleEditHabit={handleEditHabit}
+                  handleDeleteHabit={handleDeleteHabit}
+                  handleLog={handleLog}
+                  handleRemoveLog={handleRemoveLog}
+                  getLogCount={getLogCount}
+                  isFutureDate={isFutureDate}
+                />
+              </StyledHabitList>
+            </ScrollableHabitList>
+          </HabitWrapper>
+        </CardContainer>
       </HabitListContainer>
 
       <AddEditHabitModal

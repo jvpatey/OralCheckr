@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { Card } from "react-bootstrap";
+import { scrollbarStyle } from "../../../styles/SharedStyles";
 
 export const fadeUp = keyframes`
   from {
@@ -24,6 +25,7 @@ export const ResultsCard = styled(Card)`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   overflow-y: auto;
   animation: ${fadeUp} 1s ease-out;
+  ${scrollbarStyle}
 
   @media (max-width: 1024px) {
     max-width: 700px;

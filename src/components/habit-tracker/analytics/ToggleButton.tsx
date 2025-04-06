@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 
 interface ToggleButtonProps {
@@ -10,26 +11,21 @@ const ToggleButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 5px;
-  margin-left: 10px;
-  width: 430px;
+  margin-bottom: 20px;
+  width: 100%;
   box-sizing: border-box;
-
-  @media (max-width: 600px) {
-    width: 295px;
-    padding: 0 10px;
-  }
 `;
 
 const Button = styled.button<{ $active: boolean }>`
   background-color: ${({ $active, theme }) =>
     $active ? theme.blue : theme.backgroundColor};
-  color: ${({ $active, theme }) => ($active ? theme.backgroundColor : theme.textGrey)};
+  color: ${({ $active, theme }) =>
+    $active ? theme.backgroundColor : theme.textGrey};
   border: 2px solid ${({ theme }) => theme.blue};
   padding: 10px 20px;
   cursor: pointer;
   font-size: 16px;
-  width: 50%;
+  width: 215px;
   box-sizing: border-box;
 
   &:first-child {
@@ -47,10 +43,10 @@ const Button = styled.button<{ $active: boolean }>`
   }
 
   @media (max-width: 600px) {
-  width: 290px;
-  padding: 8px 10px;
-  font-size: 10px;
-
+    width: 145px;
+    padding: 8px 10px;
+    font-size: 14px;
+  }
 `;
 
 export function ToggleButton({

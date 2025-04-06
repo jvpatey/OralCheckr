@@ -23,6 +23,24 @@ export const PageContainer = styled.div`
   background: ${({ theme }) => theme.backgroundColor};
   overflow-y: auto;
   padding: calc(56px + 2rem) 0 2rem 0;
+  z-index: 800;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => `${theme.textGrey}40`};
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => `${theme.textGrey}60`};
+  }
 `;
 
 export const ProfileCard = styled.div`

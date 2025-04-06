@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { NavigationButton } from "../../../components/questionnaire/styles/NavigationButton";
+import { scrollbarStyle } from "../../../styles/SharedStyles";
 
 export const QuesContainer = styled.div`
   display: flex;
@@ -10,6 +11,7 @@ export const QuesContainer = styled.div`
   width: 100%;
   padding: 20px;
   overflow-y: auto;
+  ${scrollbarStyle}
 
   @media (max-width: 768px) {
     padding: 15px;

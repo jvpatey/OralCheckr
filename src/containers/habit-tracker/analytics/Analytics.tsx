@@ -15,6 +15,7 @@ import { useHabitContext } from "../../../contexts/HabitContext";
 import {
   AnalyticsContainer,
   NoHabitMessage,
+  CardContainer,
 } from "../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
 
 // Enum for view modes
@@ -158,7 +159,9 @@ export function Analytics() {
     return (
       <PageBackground>
         <AnalyticsContainer>
-          <div>Loading analytics data...</div>
+          <CardContainer>
+            <div>Loading analytics data...</div>
+          </CardContainer>
         </AnalyticsContainer>
       </PageBackground>
     );
@@ -169,7 +172,9 @@ export function Analytics() {
     return (
       <PageBackground>
         <AnalyticsContainer>
-          <div>Error loading analytics data. Please try again later.</div>
+          <CardContainer>
+            <div>Error loading analytics data. Please try again later.</div>
+          </CardContainer>
         </AnalyticsContainer>
       </PageBackground>
     );
@@ -178,31 +183,33 @@ export function Analytics() {
   return (
     <PageBackground>
       <AnalyticsContainer>
-        <ToggleButton
-          options={toggleOptions}
-          activeValue={view}
-          onChange={(newView) => setView(newView as ViewMode)}
-        />
-        {view === ViewMode.MONTH ? (
-          <MonthView
-            habits={habits}
-            onSelectHabit={handleSelectHabit}
-            habitsLog={habitsLog}
-            hideAnalytics={!selectedHabit}
+        <CardContainer>
+          <ToggleButton
+            options={toggleOptions}
+            activeValue={view}
+            onChange={(newView) => setView(newView as ViewMode)}
           />
-        ) : (
-          <YearView
-            habits={habits}
-            onSelectHabit={handleSelectHabit}
-            habitsLog={habitsLog}
-            hideAnalytics={!selectedHabit}
-          />
-        )}
-        {!selectedHabit && (
-          <NoHabitMessage>
-            Please select a habit to display analytics.
-          </NoHabitMessage>
-        )}
+          {view === ViewMode.MONTH ? (
+            <MonthView
+              habits={habits}
+              onSelectHabit={handleSelectHabit}
+              habitsLog={habitsLog}
+              hideAnalytics={!selectedHabit}
+            />
+          ) : (
+            <YearView
+              habits={habits}
+              onSelectHabit={handleSelectHabit}
+              habitsLog={habitsLog}
+              hideAnalytics={!selectedHabit}
+            />
+          )}
+          {!selectedHabit && (
+            <NoHabitMessage>
+              Please select a habit to display analytics.
+            </NoHabitMessage>
+          )}
+        </CardContainer>
       </AnalyticsContainer>
     </PageBackground>
   );

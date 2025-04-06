@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { scrollbarStyle } from "../../../../styles/SharedStyles";
 
 // Animation for fading up elements
 export const fadeUp = keyframes`
@@ -12,14 +13,37 @@ export const fadeUp = keyframes`
   }
 `;
 
+// Card container for the entire habit tracker
+export const CardContainer = styled.div`
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  height: calc(100% - 1rem);
+  margin: 10px 2rem 0;
+  animation: ${fadeUp} 1s ease-out;
+
+  @media (max-width: 768px) {
+    margin: 10px 1rem 0;
+    padding: 1.5rem;
+    height: calc(100% - 1rem);
+  }
+
+  @media (max-width: 480px) {
+    margin: 10px 0.5rem 0;
+    padding: 1rem;
+    height: calc(100% - 1rem);
+  }
+`;
+
 // Main container for the habit list
 export const HabitListContainer = styled.div`
   width: calc(100% - 190px);
-  height: calc(100vh - 56px);
+  height: calc(100vh - 90px);
   overflow-y: hidden;
   overflow-x: hidden;
   position: absolute;
-  top: 56px;
+  top: 80px;
   left: 190px;
   animation: ${fadeUp} 1s ease-out;
 
@@ -35,6 +59,7 @@ export const ScrollableHabitList = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px 0;
+  ${scrollbarStyle}
 `;
 
 // Wrapper for habit content

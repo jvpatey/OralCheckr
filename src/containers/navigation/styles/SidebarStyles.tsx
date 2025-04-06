@@ -15,9 +15,9 @@ const fadeInLeft = keyframes`
 
 export const SidebarContainer = styled.div`
   height: calc(100vh - 56px);
-  width: 200px;
+  width: 190px;
   position: fixed;
-  top: 60px;
+  top: 80px;
   left: 0;
   background-color: ${({ theme }) => theme.blue};
   display: flex;
@@ -27,7 +27,7 @@ export const SidebarContainer = styled.div`
   padding-left: 10px;
   margin-top: 10px;
   border-top-right-radius: 12px;
-  z-index: 5;
+  z-index: 900;
   animation: ${fadeInLeft} 1s ease-in-out;
 
   @media (max-width: 800px) {

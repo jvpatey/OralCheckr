@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { scrollbarStyle } from "../../../../styles/SharedStyles";
 
 // Shared animations
 export const fadeUp = keyframes`
@@ -12,37 +13,78 @@ export const fadeUp = keyframes`
   }
 `;
 
+// Card container for the entire analytics view
+export const CardContainer = styled.div`
+  background-color: ${({ theme }) => theme.accentBackgroundColor};
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  height: calc(100% - 1rem);
+  margin: 10px 2rem 0;
+  animation: ${fadeUp} 1s ease-out;
+  width: calc(100% - 4rem);
+  box-sizing: border-box;
+  overflow-y: auto;
+  ${scrollbarStyle}
+
+  @media (max-width: 768px) {
+    margin: 10px 1rem 0;
+    padding: 1.5rem;
+    height: calc(100% - 1rem);
+    width: calc(100% - 2rem);
+  }
+
+  @media (max-width: 480px) {
+    margin: 10px 0.5rem 0;
+    padding: 1rem;
+    height: calc(100% - 1rem);
+    width: calc(100% - 1rem);
+  }
+`;
+
 // Shared containers
 export const ViewContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin-top: 20px;
   animation: ${fadeUp} 0.5s ease-out;
+  box-sizing: border-box;
 
   > * {
     margin-bottom: 15px;
   }
+
+  .dropdown {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .dropdown-toggle {
+    width: 215px;
+  }
+
+  @media (max-width: 600px) {
+    .dropdown-toggle {
+      width: 145px;
+    }
+  }
 `;
 
 export const AnalyticsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: calc(100% - 190px);
-  height: calc(100vh - 56px);
-  overflow-y: auto;
+  height: calc(100vh - 90px);
+  overflow: hidden;
   position: absolute;
-  top: 56px;
+  top: 80px;
   left: 190px;
-  padding: 20px;
-  box-sizing: border-box;
   animation: ${fadeUp} 1s ease-out;
+  box-sizing: border-box;
 
   @media (max-width: 800px) {
-    width: calc(100% - 35px);
-    left: 40px;
+    width: calc(100% - 70px);
+    left: 70px;
   }
 `;
 

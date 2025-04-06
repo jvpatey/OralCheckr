@@ -22,9 +22,25 @@ export const PageContainer = styled.div`
   justify-content: center;
   background: ${({ theme }) => theme.backgroundColor};
   overflow-y: auto;
-  padding-top: calc(
-    56px + 2rem
-  ); /* Account for navbar height + extra padding */
+  padding: calc(56px + 2rem) 20px 2rem;
+  z-index: 1;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => `${theme.textGrey}40`};
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => `${theme.textGrey}60`};
+  }
 `;
 
 export const AboutCard = styled(Card)`
