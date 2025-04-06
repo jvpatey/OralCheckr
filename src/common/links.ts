@@ -2,7 +2,6 @@ import {
   faArrowRightFromBracket,
   faChartSimple,
   faUser,
-  faInfoCircle,
   faClipboardCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import {
