@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { Modal, Form } from "react-bootstrap";
+import { Modal, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { StyledModal } from "../../../components/questionnaire/styles/Modal";
 import { Habit } from "../../../services/habitService";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 interface AddEditHabitModalProps {
   show: boolean;
@@ -39,17 +41,17 @@ const SaveButton = styled.button<{ disabled: boolean }>`
 // Styled component for the Cancel Button
 const CancelButton = styled.button`
   background-color: ${({ theme }) => theme.accentBackgroundColor};
-  border-color: ${({ theme }) => theme.blue};
-  color: ${({ theme }) => theme.blue};
+  border: 1px solid ${({ theme }) => theme.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   padding: 8px 16px;
   border-radius: 5px;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.backgroundColor};
-    border-color: ${({ theme }) => theme.blue};
-    color: ${({ theme }) => theme.blue};
+    background-color: ${({ theme }) => theme.textGrey};
+    color: ${({ theme }) => theme.accentBackgroundColor};
+    border-color: ${({ theme }) => theme.textGrey};
   }
 `;
 
@@ -60,6 +62,54 @@ const StyledFormControl = styled(Form.Control)`
   &:focus {
     background-color: ${({ theme }) => theme.accentBackgroundColor};
     color: ${({ theme }) => theme.textGrey};
+  }
+`;
+
+// Styled component for the Info Icon
+const InfoIcon = styled(FontAwesomeIcon)`
+  color: ${({ theme }) => theme.blue};
+  margin-left: 5px;
+  font-size: 0.9rem;
+  cursor: help;
+`;
+
+// Styled component for the Form Label Group
+const FormLabelGroup = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+`;
+
+const StyledFormLabel = styled(Form.Label)`
+  margin-bottom: 8px;
+  display: block;
+`;
+
+const StyledTooltip = styled(Tooltip)`
+  &.tooltip {
+    opacity: 1;
+  }
+
+  .tooltip-inner {
+    background-color: ${({ theme }) => theme.backgroundColor};
+    color: ${({ theme }) => theme.textGrey};
+    border: 1px solid ${({ theme }) => theme.blue};
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .tooltip-arrow::before {
+    border-right-color: ${({ theme }) => theme.blue};
+  }
+
+  .tooltip-arrow::after {
+    border-right-color: ${({ theme }) => theme.backgroundColor};
+    position: absolute;
+    left: 1px;
+    border-width: 0.4rem 0.4rem 0.4rem 0;
+    border-right-style: solid;
+    content: "";
   }
 `;
 
@@ -110,7 +160,7 @@ export function AddEditHabitModal({
       <Modal.Body>
         <Form>
           <Form.Group controlId="habitName">
-            <Form.Label>Habit Name</Form.Label>
+            <StyledFormLabel>Habit Name</StyledFormLabel>
             <StyledFormControl
               type="text"
               placeholder="Enter habit name"
@@ -119,13 +169,27 @@ export function AddEditHabitModal({
               ref={habitNameRef}
             />
           </Form.Group>
-          <Form.Group controlId="habitCount">
-            <Form.Label style={{ marginTop: "10px" }}>
-              Habit Count (times per day)
-            </Form.Label>
+          <Form.Group controlId="habitCount" style={{ marginTop: "16px" }}>
+            <FormLabelGroup>
+              <StyledFormLabel style={{ margin: 0 }}>
+                Daily Goal
+              </StyledFormLabel>
+              <OverlayTrigger
+                placement="right"
+                overlay={
+                  <StyledTooltip id="daily-goal-tooltip">
+                    How many times this habit should be completed each day
+                  </StyledTooltip>
+                }
+              >
+                <span>
+                  <InfoIcon icon={faInfoCircle} />
+                </span>
+              </OverlayTrigger>
+            </FormLabelGroup>
             <StyledFormControl
               type="number"
-              placeholder="Enter habit count"
+              placeholder="Enter daily goal"
               value={newHabit.count.toString()}
               onChange={handleHabitCountChange}
               min="1"

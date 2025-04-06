@@ -54,10 +54,10 @@ const HabitTile = memo(({ habit, logCount }: HabitTileProps) => {
         <FlipCardBack $isComplete={isComplete}>
           <BackText>
             <div className="label spaced">
-              Habit: <span className="value">{habit.name}</span>
+              Habit Name: <span className="value">{habit.name}</span>
             </div>
             <div className="label">
-              Count (times/day): <span className="value">{habit.count}</span>
+              Daily Goal: <span className="value">{habit.count}</span>
             </div>
           </BackText>
           <LogCountBubble>{displayedLogCount}</LogCountBubble>
