@@ -10,6 +10,7 @@ import { ThemeType } from "../../App";
 import { CustomNavbar } from "./styles/NavBarStyles";
 import { NavBrand, MobileMenu, DesktopMenu, ThemeToggle } from "./components";
 import { useProfile } from "../../hooks/profile/useProfile";
+import { RoutePaths } from "../../common/constants/routes";
 
 interface NavBarProps {
   links: NavLink[];
@@ -65,7 +66,12 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   };
 
   const isActive = (href: string) => {
-    const currentPath = location.pathname + location.hash.replace("#", "");
+    const currentPath = location.pathname;
+
+    if (href === RoutePaths.HABITS) {
+      return currentPath.startsWith(RoutePaths.HABITS);
+    }
+
     return currentPath === href;
   };
 
