@@ -25,6 +25,9 @@ export function useProfile() {
     },
     // Skip profile fetching for guest users
     enabled: !isGuest,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   return { profile, loading, error, refetch };

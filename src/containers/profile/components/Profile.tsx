@@ -24,17 +24,17 @@ export function Profile() {
 
   // Update localAvatar whenever profile changes
   useEffect(() => {
-    if (profile?.avatar) {
-      setLocalAvatar(profile.avatar);
-    }
+    // Always update localAvatar when profile changes, even if avatar is undefined
+    setLocalAvatar(profile?.avatar);
   }, [profile]);
 
   const handleAvatarSelect = async (avatar: string) => {
     try {
       await updateProfile({ avatar });
+      // Update local state first
       setLocalAvatar(avatar);
       setShowAvatarModal(false);
-      // Ensure refetch immediately to update the navbar
+      // Force an immediate refetch to update the navbar
       await refetch();
     } catch (err) {
       console.error(
