@@ -8,6 +8,7 @@ import {
 import {
   faClipboard,
   faRectangleList,
+  faCircleQuestion,
 } from "@fortawesome/free-regular-svg-icons";
 import { RoutePaths } from "./constants/routes";
 import { IconDefinition } from "@fortawesome/fontawesome-common-types";
@@ -34,9 +35,8 @@ export const navbarLinks: NavLink[] = [
   {
     name: "About",
     path: RoutePaths.ABOUT,
-    icon: faInfoCircle,
+    icon: faCircleQuestion as IconDefinition,
     displayIn: "navbar",
-    showOnlyForGuest: true,
   },
   {
     name: "Questionnaire",

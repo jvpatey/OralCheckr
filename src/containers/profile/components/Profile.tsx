@@ -12,7 +12,6 @@ import { ProfileSection } from "./ProfileSection";
 import { AccountTab } from "./tabs/AccountTab";
 import { updateProfile } from "../../../services/profileService";
 import { DataTab } from "./tabs/DataTab";
-import { SupportTab } from "./tabs/SupportTab";
 import { AvatarSelectionModal } from "./modals/AvatarSelectionModal";
 import { AuthContext } from "../../../containers/authentication/AuthContext";
 
@@ -102,9 +101,6 @@ export function Profile() {
             <Nav.Item>
               <Nav.Link eventKey="data">Data</Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="support">Support</Nav.Link>
-            </Nav.Item>
           </StyledNav>
 
           <Tab.Content>
@@ -119,11 +115,6 @@ export function Profile() {
             <Tab.Pane eventKey="data">
               <TabContent>
                 <DataTab />
-              </TabContent>
-            </Tab.Pane>
-            <Tab.Pane eventKey="support">
-              <TabContent>
-                <SupportTab />
               </TabContent>
             </Tab.Pane>
           </Tab.Content>
