@@ -12,6 +12,32 @@ export const fadeIn = keyframes`
   }
 `;
 
+export const slideDown = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 50px;
+  }
+`;
+
+export const slideUp = keyframes`
+  from {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 50px;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+    max-height: 0;
+  }
+`;
+
 export const PageContainer = styled.div`
   position: fixed;
   top: 0;
@@ -163,6 +189,10 @@ export const ProfileInfo = styled.div`
   align-content: start;
   position: relative;
 
+  * {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   .email-row {
     display: flex;
     flex-direction: column;
@@ -220,6 +250,9 @@ export const ProfileEditButton = styled.button`
 export const InfoGroup = styled.div`
   margin-bottom: 1rem;
   position: relative;
+  transform-origin: top;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    margin 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:last-child {
     margin-bottom: 0;
@@ -390,5 +423,40 @@ export const TabContent = styled.div`
 
   @media (max-width: 768px) {
     padding: 1rem 0;
+  }
+`;
+
+export const EditInstructions = styled.p`
+  color: ${({ theme }) => theme.textGrey};
+  font-size: 0.9rem;
+  grid-column: 1 / -1;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  pointer-events: none;
+
+  &.entering {
+    max-height: 50px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-bottom: 1rem;
+    pointer-events: auto;
+  }
+
+  &.exiting {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-20px);
+    margin: 0;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    text-align: center;
   }
 `;

@@ -15,6 +15,7 @@ import {
   EditActions,
   EditActionButton,
   ProfileEditButton,
+  EditInstructions,
 } from "../styles/ProfileStyles";
 
 interface ProfileSectionProps {
@@ -41,6 +42,8 @@ export function ProfileSection({
   refetch,
 }: ProfileSectionProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
   const [editValues, setEditValues] = useState<ProfileUpdateData>({
     firstName: firstName || "",
     lastName: lastName || "",
@@ -49,7 +52,15 @@ export function ProfileSection({
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const handleEditClick = () => {
-    setIsEditing(true);
+    setShowInstructions(true);
+    // Start the transition first
+    requestAnimationFrame(() => {
+      setIsTransitioning(true);
+      // Then set editing mode after a small delay
+      setTimeout(() => {
+        setIsEditing(true);
+      }, 50);
+    });
     setEditValues({
       firstName: firstName || "",
       lastName: lastName || "",
@@ -58,7 +69,15 @@ export function ProfileSection({
   };
 
   const handleCancel = () => {
-    setIsEditing(false);
+    setIsTransitioning(false);
+    // Wait for the exit animation to start
+    setTimeout(() => {
+      setIsEditing(false);
+      // Remove instructions after the transition completes
+      setTimeout(() => {
+        setShowInstructions(false);
+      }, 500);
+    }, 50);
   };
 
   const handleInputChange = (field: keyof ProfileUpdateData, value: string) => {
@@ -90,8 +109,16 @@ export function ProfileSection({
         email: editValues.email,
       });
       await refetch();
-      setIsEditing(false);
-      setShowConfirmModal(false);
+      setIsTransitioning(false);
+      // Wait for the exit animation to start
+      setTimeout(() => {
+        setIsEditing(false);
+        setShowConfirmModal(false);
+        // Remove instructions after the transition completes
+        setTimeout(() => {
+          setShowInstructions(false);
+        }, 500);
+      }, 50);
     } catch (error) {
       console.error("Failed to update profile:", error);
     }
@@ -136,6 +163,14 @@ export function ProfileSection({
         </ProfilePictureSection>
 
         <ProfileInfo>
+          {showInstructions && (
+            <EditInstructions
+              className={isTransitioning ? "entering" : "exiting"}
+            >
+              Choose the field to edit your information below, then click "Save
+              Changes" to update your profile.
+            </EditInstructions>
+          )}
           {renderField("First Name", firstName, "firstName")}
           {renderField("Last Name", lastName, "lastName")}
           <div className="email-row">
