@@ -3,7 +3,7 @@ import { Nav, Navbar } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { NavLink } from "../../../common/links";
-import { ProfileNavLink } from "./ProfileNavLink";
+import React from "react";
 
 interface DesktopMenuProps {
   links: NavLink[];
@@ -36,10 +36,18 @@ const CustomCollapse = styled(Navbar.Collapse)`
   }
 `;
 
+const StyledNav = styled(Nav)`
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+`;
+
 const CustomNavLink = styled(Nav.Link)`
   color: ${({ theme }) => theme.textGrey};
   margin-right: 35px;
   font-size: large;
+  display: flex;
+  align-items: center;
 
   &:hover {
     color: ${({ theme }) => theme.blue};
@@ -56,6 +64,18 @@ const CustomNavLink = styled(Nav.Link)`
 
 const Icon = styled.span`
   margin-right: 5px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.2em;
+`;
+
+const AvatarImage = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: contain;
+  position: relative;
+  top: -1px;
 `;
 
 const CreateAccountButton = styled.button`
@@ -94,38 +114,35 @@ export function DesktopMenu({
 }: DesktopMenuProps) {
   return (
     <CustomCollapse id="basic-navbar-nav">
-      <Nav className="ms-auto d-none d-lg-flex">
-        {links.map((link) => {
-          if (link.name === "Profile") {
-            return (
-              <ProfileNavLink
-                key={link.path}
-                isActive={isActive(link.path)}
-                avatar={userAvatar}
-              />
-            );
-          }
-          return (
-            <CustomNavLink
-              key={link.path}
-              className={isActive(link.path) ? "active" : ""}
-              as={Link}
-              to={link.path === "/" ? "/" : link.path}
-              onClick={link.name === "Log Out" ? handleLogout : undefined}
-            >
-              <Icon>
+      <StyledNav className="ms-auto d-none d-lg-flex">
+        {links.map((link) => (
+          <CustomNavLink
+            key={link.path}
+            className={isActive(link.path) ? "active" : ""}
+            as={Link}
+            to={link.path === "/" ? "/" : link.path}
+            onClick={link.name === "Log Out" ? handleLogout : undefined}
+          >
+            <Icon>
+              {link.name === "Profile" ? (
+                userAvatar ? (
+                  <AvatarImage src={userAvatar} alt="Profile" />
+                ) : (
+                  <FontAwesomeIcon icon={link.icon} size="xl" />
+                )
+              ) : (
                 <FontAwesomeIcon icon={link.icon} />
-              </Icon>
-              {link.name}
-            </CustomNavLink>
-          );
-        })}
+              )}
+            </Icon>
+            {link.name}
+          </CustomNavLink>
+        ))}
         {isGuest && (
           <CreateAccountButton onClick={onCreateAccount}>
             Create Account
           </CreateAccountButton>
         )}
-      </Nav>
+      </StyledNav>
     </CustomCollapse>
   );
 }

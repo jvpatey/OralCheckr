@@ -72,6 +72,10 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
       return currentPath.startsWith(RoutePaths.HABITS);
     }
 
+    if (href === RoutePaths.QUESTIONNAIRE) {
+      return currentPath.startsWith(RoutePaths.QUESTIONNAIRE);
+    }
+
     return currentPath === href;
   };
 
