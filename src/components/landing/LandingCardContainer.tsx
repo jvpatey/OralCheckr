@@ -9,9 +9,9 @@ export const LandingCardContainer = styled.div`
   gap: 20px;
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: -5vh auto 0;
   padding: 20px;
-  min-height: 100vh;
+  min-height: 90vh;
 
   @media (min-width: 1024px) {
     flex-direction: row;
