@@ -1,5 +1,8 @@
 import { Section, SectionTitle } from "../../styles/AccountTabStyles";
-import { ContentBox, ContentText } from "../../styles/SupportTabStyles";
+import {
+  ContentBox,
+  ContentText,
+} from "../../../../containers/about/styles/AboutContentStyles";
 
 export function AboutSection() {
   return (
