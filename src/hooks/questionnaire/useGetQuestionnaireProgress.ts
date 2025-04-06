@@ -6,9 +6,12 @@ interface QuestionnaireProgress {
   currentQuestion: number;
 }
 
-export const useGetQuestionnaireProgress = () => {
+export const useGetQuestionnaireProgress = (shouldFetch: boolean = false) => {
   return useQuery<QuestionnaireProgress | null>({
     queryKey: ["questionnaireProgress"],
     queryFn: getQuestionnaireProgress,
+    enabled: shouldFetch,
+    retry: false, // Don't retry on failure
+    staleTime: 30 * 60 * 1000, // Cache for 30 minutes
   });
 };

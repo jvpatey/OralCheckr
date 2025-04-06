@@ -81,7 +81,6 @@ export const apiRequest = async <T>(
     if (
       error instanceof Error &&
       error.message.includes("404") &&
-      typeof url === "string" &&
       (url.includes("/questionnaire/response") ||
         url.includes("/questionnaire/progress"))
     ) {

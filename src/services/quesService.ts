@@ -70,9 +70,10 @@ export const hasSavedResponse = async (): Promise<boolean> => {
       QUESTIONNAIRE_RESPONSE_ENDPOINT,
       "GET"
     );
-    return !!data?.responses;
+    // Return false for both null responses and responses without data
+    return data !== null && !!data.responses;
   } catch (error) {
-    console.error("Error checking for saved responses:", error);
+    // Return false for any errors
     return false;
   }
 };

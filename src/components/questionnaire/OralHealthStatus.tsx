@@ -10,10 +10,18 @@ import {
   CustomProgressBar,
 } from "./styles/OralHealthStatusStyles";
 
+interface Props {
+  hasCompletedQuestionnaire: boolean;
+}
+
 // Functional component for the Oral Health Status Card
-export function OralHealthStatus() {
+export function OralHealthStatus({ hasCompletedQuestionnaire }: Props) {
   // Use react query hook to fetch the total score
-  const { data: score, isLoading, error } = useGetTotalScore();
+  const {
+    data: score,
+    isLoading,
+    error,
+  } = useGetTotalScore(hasCompletedQuestionnaire);
   const theme = useTheme();
   const scoreColor = getScoreColor(score ?? 0, theme);
 

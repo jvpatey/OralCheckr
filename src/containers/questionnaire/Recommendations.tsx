@@ -15,24 +15,28 @@ import {
   CustomCarousel,
 } from "./styles/RecommendationsStyles";
 
+interface Props {
+  hasCompletedQuestionnaire: boolean;
+}
+
 // Functional component for the Recommendations card
-export function Recommendations() {
+export function Recommendations({ hasCompletedQuestionnaire }: Props) {
   const {
-    data: storedResponses,
+    data: questionnaireData,
     isLoading,
     error,
-  } = useGetQuestionnaireResponse();
+  } = useGetQuestionnaireResponse(hasCompletedQuestionnaire);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [index, setIndex] = useState(0);
 
   // When responses change, process them to generate recommendations
   useEffect(() => {
-    if (!storedResponses || !storedResponses.responses) return;
+    if (!questionnaireData || !questionnaireData.responses) return;
 
     // Convert string responses to number format
     const convertedResponses: Record<number, number | number[]> = {};
 
-    Object.entries(storedResponses.responses).forEach(([key, value]) => {
+    Object.entries(questionnaireData.responses).forEach(([key, value]) => {
       const questionId = parseInt(key);
       try {
         // Try to parse as JSON in case it's an array
@@ -46,7 +50,7 @@ export function Recommendations() {
 
     const recs = generateRecommendations(convertedResponses);
     setRecommendations(recs);
-  }, [storedResponses]);
+  }, [questionnaireData]);
 
   const handleSelect = (selectedIndex: number) => {
     setIndex(selectedIndex);
