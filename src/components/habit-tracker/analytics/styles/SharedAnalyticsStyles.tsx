@@ -177,12 +177,16 @@ export const TileHeading = styled.h3`
   }
 `;
 
-export const TileMainContent = styled.div<{ $isMissedDays?: boolean }>`
+export const TileMainContent = styled.div<{
+  $isMissedDays?: boolean;
+  $isLoading?: boolean;
+}>`
   font-size: 40px;
   font-weight: bold;
   color: ${({ $isMissedDays, theme }) =>
     $isMissedDays ? theme.red : theme.green};
   margin: 0;
+  opacity: ${({ $isLoading }) => ($isLoading ? 0.5 : 1)};
 
   @media (max-width: 1024px) {
     font-size: 30px;

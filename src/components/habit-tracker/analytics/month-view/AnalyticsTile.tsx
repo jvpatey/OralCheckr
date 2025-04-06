@@ -9,8 +9,9 @@ import {
 interface AnalyticsTileProps {
   heading: string;
   mainContent: string | number;
-  subContent?: string;
+  subContent: string;
   isMissedDays?: boolean;
+  isLoading?: boolean;
 }
 
 // Functional component for the analytics tiles for the month view
@@ -18,12 +19,13 @@ export function AnalyticsTile({
   heading,
   mainContent,
   subContent,
-  isMissedDays,
+  isMissedDays = false,
+  isLoading = false,
 }: AnalyticsTileProps) {
   return (
     <TileContainer>
       <TileHeading>{heading}</TileHeading>
-      <TileMainContent $isMissedDays={isMissedDays}>
+      <TileMainContent $isMissedDays={isMissedDays} $isLoading={isLoading}>
         {mainContent}
       </TileMainContent>
       {subContent && <TileSubContent>{subContent}</TileSubContent>}

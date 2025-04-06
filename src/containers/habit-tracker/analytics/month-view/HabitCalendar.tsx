@@ -17,8 +17,9 @@ interface CalendarProgressProps {
   month: string;
   habitCount: number;
   selectedMonth: Date;
-  showChart?: boolean;
-  onToggleView?: () => void;
+  showChart: boolean;
+  onToggleView: () => void;
+  isLoading?: boolean;
 }
 
 // Container for the entire calendar component
@@ -163,8 +164,9 @@ export function HabitCalendar({
   month,
   habitCount,
   selectedMonth,
-  showChart = false,
+  showChart,
   onToggleView,
+  isLoading = false,
 }: CalendarProgressProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const theme = useTheme();
@@ -191,24 +193,18 @@ export function HabitCalendar({
 
   // Render content for each day in the calendar
   const renderDayContents = (day: number) => {
-    const logs = habitsLog[selectedHabit]?.[year]?.[month]?.[day] || 0;
     const progress = getDayProgress(day);
-    const isComplete = logs >= habitCount;
-
-    // Check if the day is in the future
+    const isComplete = progress >= 100;
+    const dayDate = new Date(year, selectedMonth.getMonth(), day);
     const currentDate = new Date();
-    const dayDate = new Date(
-      year,
-      new Date(`${month} 1, ${year}`).getMonth(),
-      day
-    );
-    const isCurrentDay = dayDate.toDateString() === currentDate.toDateString();
+    currentDate.setHours(0, 0, 0, 0);
+    const isCurrentDay = dayDate.getTime() === currentDate.getTime();
     const isFutureDate = dayDate > currentDate;
 
     return (
       <DayWrapper $isCurrentDay={isCurrentDay}>
         <CircularProgressbar
-          value={isFutureDate ? 0 : progress}
+          value={isLoading ? 0 : isFutureDate ? 0 : progress}
           text={day.toString()}
           styles={buildStyles({
             textSize: isCurrentDay ? "32px" : "30px",
@@ -218,7 +214,9 @@ export function HabitCalendar({
               : isFutureDate
               ? theme.textGrey
               : theme.blue,
-            trailColor: isFutureDate
+            trailColor: isLoading
+              ? theme.disabledBackground
+              : isFutureDate
               ? theme.disabledBackground
               : theme.backgroundColor,
             strokeLinecap: "round",

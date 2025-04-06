@@ -159,12 +159,12 @@ export function Analytics() {
   };
 
   // Show loading state
-  if (isLoadingHabits || isLoadingLogs) {
+  if (isLoadingHabits) {
     return (
       <PageBackground>
         <AnalyticsContainer>
           <CardContainer>
-            <div>Loading analytics data...</div>
+            <div>Loading habits...</div>
           </CardContainer>
         </AnalyticsContainer>
       </PageBackground>
@@ -201,6 +201,7 @@ export function Analytics() {
               hideAnalytics={!selectedHabit}
               selectedDate={selectedDate}
               onDateChange={handleDateChange}
+              isLoading={isLoadingLogs}
             />
           ) : (
             <YearView

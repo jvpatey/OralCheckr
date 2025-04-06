@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { HabitDropdown } from "../HabitDropdown";
 import { Habit } from "../../../../services/habitService";
 import { Logging } from "../Analytics";
@@ -13,7 +13,6 @@ import { AnalyticsTile } from "../../../../components/habit-tracker/analytics/mo
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
 import { formatDateLong } from "../../../../common/utilities/date-utils";
-import { LoadingComponent } from "../../../../components/habit-tracker/analytics/LoadingComponent";
 import { useHabitContext } from "../../../../contexts/HabitContext";
 import {
   ViewContainer,
@@ -33,6 +32,7 @@ interface ViewProps {
   hideAnalytics: boolean;
   selectedDate: Date;
   onDateChange: (date: Date) => void;
+  isLoading?: boolean;
 }
 
 // The MonthView functional component for displaying monthly analytics
@@ -43,16 +43,10 @@ export function MonthView({
   hideAnalytics,
   selectedDate,
   onDateChange,
+  isLoading = false,
 }: ViewProps) {
   const { selectedHabit } = useHabitContext();
   const [showChart, setShowChart] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Set loading state to false after component mounts
-  useEffect(() => {
-    setIsLoading(false);
-    return () => {};
-  }, []);
 
   // Handle month change from the date selector
   const onMonthChange = (date: Date) => {
@@ -63,11 +57,6 @@ export function MonthView({
   const handleToggleView = () => {
     setShowChart(!showChart);
   };
-
-  // If loading, show loading component
-  if (isLoading) {
-    return <LoadingComponent />;
-  }
 
   // Get the current month and year from the selected date
   const currentMonth = selectedDate
@@ -132,24 +121,28 @@ export function MonthView({
             <TilesContainer>
               <AnalyticsTile
                 heading="Total Logs"
-                mainContent={totalCount}
+                mainContent={isLoading ? "..." : totalCount}
                 subContent={`for ${formatDateLong(selectedDate)}`}
+                isLoading={isLoading}
               />
               <AnalyticsTile
                 heading="Completion Rate"
-                mainContent={`${completionRate}%`}
+                mainContent={isLoading ? "..." : `${completionRate}%`}
                 subContent=""
+                isLoading={isLoading}
               />
               <AnalyticsTile
                 heading="Longest Streak"
-                mainContent={longestStreak}
+                mainContent={isLoading ? "..." : longestStreak}
                 subContent="consecutive days"
+                isLoading={isLoading}
               />
               <AnalyticsTile
                 heading="Missed Days"
-                mainContent={missedDays}
+                mainContent={isLoading ? "..." : missedDays}
                 subContent=""
                 isMissedDays={true}
+                isLoading={isLoading}
               />
             </TilesContainer>
             <CalendarContainer>
@@ -162,6 +155,7 @@ export function MonthView({
                   selectedMonth={selectedDate}
                   showChart={showChart}
                   onToggleView={handleToggleView}
+                  isLoading={isLoading}
                 />
               </ToggleContainer>
             </CalendarContainer>
