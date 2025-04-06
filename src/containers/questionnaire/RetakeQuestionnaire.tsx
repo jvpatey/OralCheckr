@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "styled-components";
@@ -34,7 +34,19 @@ export function RetakeQuestionnaire({
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { isAuthenticated } = useContext(AuthContext);
-  const { data: questionnaireData, isLoading } = useQuestionnaireData();
+  const {
+    data: questionnaireData,
+    isLoading,
+    hasNoData,
+  } = useQuestionnaireData();
+
+  // If there's no data, redirect to the start screen
+  useEffect(() => {
+    if (!isLoading && (hasNoData || !questionnaireData)) {
+      navigate(RoutePaths.QUESTIONNAIRE);
+    }
+  }, [hasNoData, questionnaireData, isLoading, navigate]);
+
   const theme = useTheme();
   const scoreColor = questionnaireData?.score
     ? getScoreColor(questionnaireData.score, theme)
@@ -54,27 +66,41 @@ export function RetakeQuestionnaire({
     setShowModal(false);
   };
 
+  // Show loading state while checking data
+  if (isLoading) {
+    return (
+      <PageBackground>
+        <LandingContainer>
+          <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
+            <QuestionnaireCard>
+              <LoadingSpinner />
+            </QuestionnaireCard>
+          </QuestionnaireCardContainer>
+        </LandingContainer>
+      </PageBackground>
+    );
+  }
+
+  // Don't render anything if there's no data (will redirect)
+  if (hasNoData || !questionnaireData) {
+    return null;
+  }
+
   return (
     <PageBackground>
       <LandingContainer>
         <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
           <QuestionnaireCard>
             <TitleText>Oral Health Questionnaire</TitleText>
-            {isLoading ? (
-              <LoadingSpinner />
-            ) : (
-              questionnaireData && (
-                <MiniResultsCard>
-                  <ScoreText $scoreColor={scoreColor}>
-                    Oral Health Score: {questionnaireData.score}
-                  </ScoreText>
-                  <DateText>
-                    <CompletedText>Completed on:</CompletedText>{" "}
-                    {questionnaireData.lastCompleted}
-                  </DateText>
-                </MiniResultsCard>
-              )
-            )}
+            <MiniResultsCard>
+              <ScoreText $scoreColor={scoreColor}>
+                Oral Health Score: {questionnaireData.score}
+              </ScoreText>
+              <DateText>
+                <CompletedText>Completed on:</CompletedText>{" "}
+                {questionnaireData.lastCompleted}
+              </DateText>
+            </MiniResultsCard>
             <CardText>
               It looks like you've already completed the oral health
               questionnaire.

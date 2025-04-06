@@ -86,6 +86,14 @@ export function Questionnaire() {
       if (!questionId && !isRetaking && !hasInProgressQuestionnaire) {
         setRetakeMode(true);
       }
+    } else {
+      // Reset state when there's no saved response
+      setHasCompletedQuestionnaire(false);
+      setRetakeMode(false);
+      setIsRetaking(false);
+      if (!questionId) {
+        setCurrentQuestion(0);
+      }
     }
 
     // Mark initial load complete
