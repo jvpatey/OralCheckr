@@ -45,7 +45,7 @@ export const apiRequest = async <T>(
     // Handle 401/403 for auth validation quietly
     if (
       (response.status === 401 || response.status === 403) &&
-      url.includes("/auth/validate")
+      (url.includes("/auth/validate") || url.includes("/auth/profile"))
     ) {
       return null as unknown as T;
     }
@@ -101,12 +101,12 @@ export const apiRequest = async <T>(
     if (
       error instanceof Error &&
       (error.message.includes("401") || error.message.includes("403")) &&
-      url.includes("/auth/validate")
+      (url.includes("/auth/validate") || url.includes("/auth/profile"))
     ) {
       return null as unknown as T;
     }
 
-    console.error(`Error making ${method} request to ${url}:`, error);
+    // For other errors, just throw without logging
     throw error;
   }
 };

@@ -85,8 +85,6 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
         // convert guest mutation when guest signs up for account
         convertGuestMutate(userData, {
           onSuccess: async (data) => {
-            console.log("Guest conversion successful:", data);
-
             // Create a proper user object from the response
             const userObj = {
               userId: data.userId,
@@ -96,9 +94,11 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
             // Update auth context with the user data
             updateAuth(userObj);
 
-            // Navigate to landing page
-            navigate(RoutePaths.LANDING);
-            handleClose();
+            // Short delay to allow auth state to update
+            setTimeout(() => {
+              navigate(RoutePaths.LANDING);
+              handleClose();
+            }, 100);
           },
           onError: (err: Error) => {
             setError(err.message);
@@ -108,8 +108,6 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
         // For new registrations, use the registration mutation.
         registerMutate(userData, {
           onSuccess: async (data) => {
-            console.log("Registration successful:", data);
-
             // Create a proper user object from the signup response
             const userObj = {
               userId: data.userId,
@@ -119,9 +117,11 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
             // Update auth context with the user data
             updateAuth(userObj);
 
-            // Navigate to landing page
-            navigate(RoutePaths.LANDING);
-            handleClose();
+            // Short delay to allow auth state to update
+            setTimeout(() => {
+              navigate(RoutePaths.LANDING);
+              handleClose();
+            }, 100);
           },
           onError: (err: Error) => {
             setError(err.message);
@@ -142,8 +142,6 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
         { credential: response.credential },
         {
           onSuccess: (data) => {
-            console.log("Google signup successful:", data);
-
             // Create a proper user object from the login response
             const userObj = {
               userId: data.userId,
@@ -153,9 +151,11 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
             // Update auth context with the user data
             updateAuth(userObj);
 
-            // Navigate to landing page
-            navigate(RoutePaths.LANDING);
-            handleClose();
+            // Short delay to allow auth state to update
+            setTimeout(() => {
+              navigate(RoutePaths.LANDING);
+              handleClose();
+            }, 100);
           },
           onError: (err: Error) => {
             setError(err.message);

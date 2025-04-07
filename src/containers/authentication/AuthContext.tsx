@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 import { useValidateAuth } from "../../hooks/auth/useValidateAuth";
 
 interface User {
@@ -26,42 +26,77 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 }) => {
   const { data, isLoading, refetch, isFetching } = useValidateAuth();
   const [localUser, setLocalUser] = useState<User | null>(null);
+  const [validationInProgress, setValidationInProgress] = useState(false);
+  const [initialCheckDone, setInitialCheckDone] = useState(false);
 
-  // Actively check auth state on initial mount for non-welcome pages
+  // Always check authentication on first mount for non-welcome pages
   useEffect(() => {
-    const isWelcomePage = window.location.hash === "#/";
-    if (!isWelcomePage) {
-      refetch();
+    if (!initialCheckDone) {
+      const isWelcomePage = window.location.hash === "#/";
+      if (!isWelcomePage) {
+        setValidationInProgress(true);
+        refetch().finally(() => {
+          setValidationInProgress(false);
+          setInitialCheckDone(true);
+        });
+      } else {
+        setInitialCheckDone(true);
+      }
     }
-  }, [refetch]);
+  }, [initialCheckDone, refetch]);
 
-  // Update local state when server auth data changes
+  // Synchronize server auth state with local state
   useEffect(() => {
-    if (data?.user) {
-      setLocalUser(data.user);
-    } else if (data === null && !isLoading && !isFetching) {
-      setLocalUser(null);
+    if (!isLoading && !isFetching && data !== undefined) {
+      if (data?.user) {
+        // Update local state from server data
+        setLocalUser(data.user);
+      } else if (data === null) {
+        // Server explicitly returned null or undefined
+        setLocalUser(null);
+      }
     }
   }, [data, isLoading, isFetching]);
 
-  // Update auth state and trigger validation with the server
-  const updateAuth = (user: User | null) => {
-    setLocalUser(user);
+  // Update auth - immediately sets local state and also validates with server
+  const updateAuth = useCallback(
+    (user: User | null) => {
+      // Update local state immediately for responsive UI
+      setLocalUser(user);
 
-    // Always refetch regardless of user state to ensure server state is updated
-    refetch();
-  };
+      // If user is provided (login/signup case), force validation with server
+      if (user && !validationInProgress) {
+        setValidationInProgress(true);
+        refetch().finally(() => {
+          setValidationInProgress(false);
+        });
+      }
+    },
+    [refetch, validationInProgress]
+  );
 
-  // Check auth state with server
-  const checkAuth = async (): Promise<void> => {
-    await refetch();
-  };
+  // Explicit check auth - returns a promise for components that need to wait for the check
+  const checkAuth = useCallback(async (): Promise<void> => {
+    if (validationInProgress) return;
+
+    setValidationInProgress(true);
+    try {
+      await refetch();
+    } finally {
+      setValidationInProgress(false);
+    }
+  }, [refetch, validationInProgress]);
+
+  const isWelcomePage = window.location.hash === "#/";
 
   return (
     <AuthContext.Provider
       value={{
+        // Consider authenticated if we have a local user
         isAuthenticated: !!localUser,
-        loading: isLoading && !localUser,
+        // Only show loading if actively fetching and no local user
+        loading: (isLoading || isFetching) && !localUser && !isWelcomePage,
+        // Use local user for immediate UI updates
         user: localUser || undefined,
         updateAuth,
         checkAuth,

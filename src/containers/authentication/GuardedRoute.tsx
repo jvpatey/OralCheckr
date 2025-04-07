@@ -1,16 +1,21 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { Navigate } from "react-router-dom";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 
 export function GuardedRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated, loading, checkAuth } = useContext(AuthContext);
+  const [hasChecked, setHasChecked] = useState(false);
 
-  // Actively check authentication status when a protected route is accessed
+  // Check authentication once when component mounts
   useEffect(() => {
-    // Check auth state immediately
-    checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!isAuthenticated && !hasChecked) {
+      checkAuth().finally(() => {
+        setHasChecked(true);
+      });
+    } else {
+      setHasChecked(true);
+    }
   }, []);
 
   if (loading) {

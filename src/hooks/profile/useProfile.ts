@@ -11,11 +11,12 @@ export function useProfile() {
   } = useContext(AuthContext);
 
   const isGuest = user?.role === "guest" || (isAuthenticated && !user?.role);
+  const isWelcomePage = window.location.hash === "#/";
 
   // custom queryFn that immediately returns null for guest users
   const profileQueryFn = async () => {
-    // If user is a guest, don't attempt the API call
-    if (isGuest) {
+    // Don't attempt API call on welcome page or for guest users
+    if (isGuest || isWelcomePage || !isAuthenticated) {
       return null;
     }
 
@@ -39,8 +40,8 @@ export function useProfile() {
         failureCount < 3
       );
     },
-    // Skip profile fetching entirely until auth is complete
-    enabled: !authLoading,
+    // Only enable fetching when authenticated and not on welcome page
+    enabled: isAuthenticated && !isWelcomePage && !authLoading,
     staleTime: 300000, // 5 minutes
     gcTime: 3600000, // 1 hour
     refetchOnWindowFocus: false,

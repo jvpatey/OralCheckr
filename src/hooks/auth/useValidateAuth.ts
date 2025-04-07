@@ -9,9 +9,11 @@ export const useValidateAuth = () => {
     queryKey: ["auth"],
     queryFn: validateAuth,
     refetchOnWindowFocus: false,
-    refetchOnMount: false, // Don't refetch on mount - we'll control this manually
+    refetchOnMount: false,
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
-    retry: false, // Don't retry on failure
-    enabled: false, // Start disabled and manually trigger
+    gcTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
+    retry: 0, // Don't retry failed requests
+    refetchOnReconnect: false, // Don't refetch on reconnect
+    enabled: false, // Don't fetch automatically
   });
 };

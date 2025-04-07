@@ -75,7 +75,6 @@ export const handleGuestLogin = async (): Promise<GuestLoginResponse> => {
   try {
     return await apiRequest<GuestLoginResponse>(GUEST_LOGIN_ENDPOINT, "POST");
   } catch (error) {
-    console.error("Guest login error:", error);
     throw error;
   }
 };
@@ -85,7 +84,7 @@ export const logoutUser = async (): Promise<void> => {
   try {
     await apiRequest<void>(LOGOUT_ENDPOINT, "POST");
   } catch (error) {
-    console.error("Logout failed:", error);
+    // Silently handle logout errors
   }
 };
 
@@ -115,7 +114,7 @@ export const validateAuth = async (): Promise<AuthResponse | null> => {
     if (error instanceof Error && error.message.includes("401")) {
       return null;
     }
-    console.error("Auth validation failed:", error);
+    // Silent handling for all auth validation errors
     return null;
   }
 };
@@ -132,7 +131,6 @@ export const convertGuestToUser = async (
       userData
     );
   } catch (error) {
-    console.error("Guest conversion failed:", error);
     throw error;
   }
 };
@@ -157,7 +155,6 @@ export const googleLogin = async (
       transformedData
     );
   } catch (error) {
-    console.error("Google login failed:", error);
     throw error;
   }
 };

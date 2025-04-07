@@ -81,25 +81,22 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       // Login mutation
       loginMutate(loginData, {
         onSuccess: async (data) => {
-          console.log("Login successful:", data);
-
           // Create a proper user object from the login response
           const user = {
             userId: data.userId,
-            // Use the role from response or default to "user"
-            role: data.role || "user",
+            // We can assume a regular user role for normal login
+            role: "user",
           };
 
           // Update auth context with the user data
           updateAuth(user);
 
-          // Navigate to landing page after setting auth state
+          // Navigate immediately to avoid auth validation on welcome page
           navigate(RoutePaths.LANDING);
           handleClose();
         },
         onError: (err: Error) => {
           // Display the specific error message from the server
-          console.error("Login error:", err);
           setError(err.message);
           setIsServerError(true);
         },
@@ -121,9 +118,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
         { credential: response.credential },
         {
           onSuccess: (data) => {
-            console.log("Google login successful:", data);
-
-            // Create a proper user object from the login response
+            // Create a user object from the login response
             const user = {
               userId: data.userId,
               // Use the role from response or default to "user"
@@ -138,7 +133,6 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
             handleClose();
           },
           onError: (err: Error) => {
-            console.error("Google login error:", err);
             setError(err.message);
             setIsServerError(true);
           },

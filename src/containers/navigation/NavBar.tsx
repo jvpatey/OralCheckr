@@ -58,16 +58,20 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
     if (isLoggingOut) return;
     setIsLoggingOut(true);
 
-    // Logout mutation
+    // First clear auth state locally to prevent 401 errors
+    updateAuth(null);
+
+    // Then tell the server to log out
     logoutMutate(undefined, {
       onSuccess: () => {
-        updateAuth(null);
+        // Navigate after successful server logout
         navigate("/");
         setIsLoggingOut(false);
         setShowLogoutModal(false);
       },
       onError: (error: Error) => {
-        console.error("Logout error:", error);
+        // Even if server logout fails, still navigate away
+        navigate("/");
         setIsLoggingOut(false);
         setShowLogoutModal(false);
       },
