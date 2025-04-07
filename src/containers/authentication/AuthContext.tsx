@@ -28,14 +28,22 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   const updateAuth = (user: User | null) => {
     // Update local state immediately
     setLocalUser(user);
+
     // Then refetch to ensure server state is in sync
     refetch();
   };
 
+  // Determine if the user is a guest based on data and localUser
+  const isGuest =
+    (localUser && localUser.role === "guest") ||
+    (data && data.user && data.user.role === "guest");
+
+  // Priority: first use localUser (for immediate UI updates), then fall back to data from backend
   const authState = {
     isAuthenticated: !!data || !!localUser,
     loading: isLoading,
     authUser: localUser || data?.user,
+    isGuest,
   };
 
   return (

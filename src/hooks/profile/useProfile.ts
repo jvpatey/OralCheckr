@@ -4,8 +4,24 @@ import { useContext } from "react";
 import { AuthContext } from "../../containers/authentication/AuthContext";
 
 export function useProfile() {
-  const { user } = useContext(AuthContext);
-  const isGuest = user?.role === "guest";
+  const {
+    user,
+    isAuthenticated,
+    loading: authLoading,
+  } = useContext(AuthContext);
+
+  const isGuest = user?.role === "guest" || (isAuthenticated && !user?.role);
+
+  // custom queryFn that immediately returns null for guest users
+  const profileQueryFn = async () => {
+    // If user is a guest, don't attempt the API call
+    if (isGuest) {
+      return null;
+    }
+
+    // Otherwise, proceed with the normal API call
+    return await getProfile();
+  };
 
   const {
     data: profile,
@@ -14,7 +30,7 @@ export function useProfile() {
     refetch,
   } = useQuery({
     queryKey: ["profile"],
-    queryFn: getProfile,
+    queryFn: profileQueryFn,
     // Don't retry on 401/403 errors
     retry: (failureCount, error) => {
       return (
@@ -23,12 +39,12 @@ export function useProfile() {
         failureCount < 3
       );
     },
-    // Skip profile fetching for guest users
-    enabled: !isGuest,
-    staleTime: 0,
-    gcTime: 0,
-    refetchOnWindowFocus: true,
+    // Skip profile fetching entirely until auth is complete
+    enabled: !authLoading,
+    staleTime: 300000, // 5 minutes
+    gcTime: 3600000, // 1 hour
+    refetchOnWindowFocus: false,
   });
 
-  return { profile, loading, error, refetch };
+  return { profile, loading, error, refetch, isGuest };
 }

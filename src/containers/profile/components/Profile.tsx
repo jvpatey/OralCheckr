@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Tab } from "react-bootstrap";
 import {
   PageContainer,
@@ -13,20 +13,22 @@ import { AccountTab } from "./tabs/AccountTab";
 import { updateProfile } from "../../../services/profileService";
 import { DataTab } from "./tabs/DataTab";
 import { AvatarSelectionModal } from "./modals/AvatarSelectionModal";
-import { AuthContext } from "../../../containers/authentication/AuthContext";
 
 export function Profile() {
-  const { profile, loading, error, refetch } = useProfile();
-  const { user } = useContext(AuthContext);
-  const isGuest = user?.role === "guest";
+  const { profile, loading, error, refetch, isGuest } = useProfile();
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [localAvatar, setLocalAvatar] = useState<string | undefined>();
 
   // Update localAvatar whenever profile changes
   useEffect(() => {
+    if (isGuest) {
+      // Skip any profile processing for guest users
+      return;
+    }
+
     // Always update localAvatar when profile changes, even if avatar is undefined
     setLocalAvatar(profile?.avatar);
-  }, [profile]);
+  }, [profile, isGuest]);
 
   const handleAvatarSelect = async (avatar: string) => {
     try {

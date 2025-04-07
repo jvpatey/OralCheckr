@@ -96,7 +96,21 @@ export interface AuthResponse {
 
 export const validateAuth = async (): Promise<AuthResponse | null> => {
   try {
-    return await apiRequest<AuthResponse>(VALIDATION_ENDPOINT, "GET");
+    const response = await apiRequest<AuthResponse>(VALIDATION_ENDPOINT, "GET");
+
+    // If response with no user or no role, handle as a guest
+    if (!response?.user || !response?.user?.role) {
+      // If no user data, return null
+      if (!response?.user) {
+        return null;
+      }
+      // If user but no role, assume it's a guest
+      if (!response.user.role) {
+        response.user.role = "guest";
+      }
+    }
+
+    return response;
   } catch (error) {
     // Silent handling of 401 errors - expected when not authenticated
     if (error instanceof Error && error.message.includes("401")) {

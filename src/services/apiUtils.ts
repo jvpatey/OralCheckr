@@ -55,6 +55,11 @@ export const apiRequest = async <T>(
       return null as unknown as T;
     }
 
+    // Block all profile API calls that aren't successful
+    if (!response.ok && url.includes("/auth/profile")) {
+      return null as unknown as T;
+    }
+
     const data = await response.json();
 
     if (!response.ok) {

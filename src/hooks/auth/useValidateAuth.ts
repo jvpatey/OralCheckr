@@ -6,5 +6,8 @@ export const useValidateAuth = () => {
     queryKey: ["auth"],
     queryFn: validateAuth,
     refetchOnWindowFocus: false,
+    refetchOnMount: true,
+    staleTime: 0, // Don't cache auth state
+    retry: false,
   });
 };
