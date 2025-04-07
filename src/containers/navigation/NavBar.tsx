@@ -31,12 +31,17 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { mutate: logoutMutate } = useLogoutUser();
 
+  // Detect if user is a guest by checking both role and firstName
+  const isGuest =
+    user?.role === "guest" ||
+    (user?.firstName === "Guest" && user?.lastName === "User");
+
   // Refresh profile data when the component mounts or when the location changes
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !isGuest) {
       refetch();
     }
-  }, [isAuthenticated, location.pathname, refetch]);
+  }, [isAuthenticated, isGuest, location.pathname, refetch]);
 
   // Handle the toggle for dark mode
   const toggleDarkMode = () => {
@@ -100,11 +105,6 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   if (!isAuthenticated) {
     return null;
   }
-
-  // Detect if user is a guest by checking both role and firstName
-  const isGuest =
-    user?.role === "guest" ||
-    (user?.firstName === "Guest" && user?.lastName === "User");
 
   // Filter links based on user role
   const filteredLinks = links.filter((link) => {

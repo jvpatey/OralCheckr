@@ -11,7 +11,9 @@ export function useProfile() {
   } = useContext(AuthContext);
 
   // Check specifically for the guest role
-  const isGuest = user?.role === "guest";
+  const isGuest =
+    user?.role === "guest" ||
+    (user?.firstName === "Guest" && user?.lastName === "User");
   const isWelcomePage = window.location.hash === "#/";
 
   // custom queryFn that immediately returns null for guest users
@@ -41,8 +43,8 @@ export function useProfile() {
         failureCount < 3
       );
     },
-    // Only enable fetching when authenticated and not on welcome page
-    enabled: isAuthenticated && !isWelcomePage && !authLoading,
+    // Only enable fetching when authenticated, not a guest, and not on welcome page
+    enabled: isAuthenticated && !isWelcomePage && !authLoading && !isGuest,
     staleTime: 300000, // 5 minutes
     gcTime: 3600000, // 1 hour
     refetchOnWindowFocus: false,
