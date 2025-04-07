@@ -73,7 +73,17 @@ export interface GuestLoginResponse {
 
 export const handleGuestLogin = async (): Promise<GuestLoginResponse> => {
   try {
-    return await apiRequest<GuestLoginResponse>(GUEST_LOGIN_ENDPOINT, "POST");
+    const response = await apiRequest<GuestLoginResponse>(
+      GUEST_LOGIN_ENDPOINT,
+      "POST"
+    );
+
+    // Ensure the role is set to "guest" explicitly
+    if (!response.role) {
+      response.role = "guest";
+    }
+
+    return response;
   } catch (error) {
     throw error;
   }
@@ -91,7 +101,12 @@ export const logoutUser = async (): Promise<void> => {
 /* -- User Authorization Service -- */
 
 export interface AuthResponse {
-  user: { userId: number; role?: string };
+  user: {
+    userId: number;
+    role?: string;
+    firstName?: string;
+    lastName?: string;
+  };
 }
 
 export const validateAuth = async (): Promise<AuthResponse | null> => {
@@ -103,9 +118,14 @@ export const validateAuth = async (): Promise<AuthResponse | null> => {
       return null;
     }
 
-    // Add default role if missing
     if (response.user && response.user.role === undefined) {
       response.user.role = "user";
+    }
+
+    // Add guest user info if needed
+    if (response.user && response.user.role === "guest") {
+      response.user.firstName = "Guest";
+      response.user.lastName = "User";
     }
 
     return response;

@@ -4,6 +4,8 @@ import { useValidateAuth } from "../../hooks/auth/useValidateAuth";
 interface User {
   userId: number;
   role?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 interface AuthContextProps {

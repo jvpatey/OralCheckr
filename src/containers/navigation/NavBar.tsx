@@ -101,8 +101,10 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
     return null;
   }
 
-  // Ensure isGuest is always a boolean
-  const isGuest = Boolean(user && user.role === "guest");
+  // Detect if user is a guest by checking both role and firstName
+  const isGuest =
+    user?.role === "guest" ||
+    (user?.firstName === "Guest" && user?.lastName === "User");
 
   // Filter links based on user role
   const filteredLinks = links.filter((link) => {

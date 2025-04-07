@@ -10,7 +10,8 @@ export function useProfile() {
     loading: authLoading,
   } = useContext(AuthContext);
 
-  const isGuest = user?.role === "guest" || (isAuthenticated && !user?.role);
+  // Check specifically for the guest role
+  const isGuest = user?.role === "guest";
   const isWelcomePage = window.location.hash === "#/";
 
   // custom queryFn that immediately returns null for guest users
