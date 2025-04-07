@@ -50,6 +50,7 @@ export interface LoginData {
 export interface LoginResponse {
   userId: number;
   message: string;
+  role?: string;
 }
 
 export const loginUser = async (
@@ -98,16 +99,14 @@ export const validateAuth = async (): Promise<AuthResponse | null> => {
   try {
     const response = await apiRequest<AuthResponse>(VALIDATION_ENDPOINT, "GET");
 
-    // If response with no user or no role, handle as a guest
-    if (!response?.user || !response?.user?.role) {
-      // If no user data, return null
-      if (!response?.user) {
-        return null;
-      }
-      // If user but no role, assume it's a guest
-      if (!response.user.role) {
-        response.user.role = "guest";
-      }
+    // If no user data, return null (not authenticated)
+    if (!response?.user) {
+      return null;
+    }
+
+    // Add default role if missing
+    if (response.user && response.user.role === undefined) {
+      response.user.role = "user";
     }
 
     return response;

@@ -84,8 +84,19 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       if (user && user.role === "guest") {
         // convert guest mutation when guest signs up for account
         convertGuestMutate(userData, {
-          onSuccess: async () => {
-            updateAuth(null);
+          onSuccess: async (data) => {
+            console.log("Guest conversion successful:", data);
+
+            // Create a proper user object from the response
+            const userObj = {
+              userId: data.userId,
+              role: "user", // Convert from guest to regular user
+            };
+
+            // Update auth context with the user data
+            updateAuth(userObj);
+
+            // Navigate to landing page
             navigate(RoutePaths.LANDING);
             handleClose();
           },
@@ -96,8 +107,19 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       } else {
         // For new registrations, use the registration mutation.
         registerMutate(userData, {
-          onSuccess: async () => {
-            updateAuth(null);
+          onSuccess: async (data) => {
+            console.log("Registration successful:", data);
+
+            // Create a proper user object from the signup response
+            const userObj = {
+              userId: data.userId,
+              role: "user",
+            };
+
+            // Update auth context with the user data
+            updateAuth(userObj);
+
+            // Navigate to landing page
             navigate(RoutePaths.LANDING);
             handleClose();
           },
@@ -119,8 +141,19 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       googleLoginMutate(
         { credential: response.credential },
         {
-          onSuccess: () => {
-            updateAuth(null);
+          onSuccess: (data) => {
+            console.log("Google signup successful:", data);
+
+            // Create a proper user object from the login response
+            const userObj = {
+              userId: data.userId,
+              role: data.role || "user",
+            };
+
+            // Update auth context with the user data
+            updateAuth(userObj);
+
+            // Navigate to landing page
             navigate(RoutePaths.LANDING);
             handleClose();
           },

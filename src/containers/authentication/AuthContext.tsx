@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { useValidateAuth } from "../../hooks/auth/useValidateAuth";
 
 interface User {
@@ -11,45 +11,60 @@ interface AuthContextProps {
   loading: boolean;
   user?: User;
   updateAuth: (user: User | null) => void;
+  checkAuth: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
-  loading: true,
+  loading: false,
   updateAuth: () => {},
+  checkAuth: async () => {},
 });
 
 export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
-  const { data, isLoading } = useValidateAuth();
+  const { data, isLoading, refetch, isFetching } = useValidateAuth();
   const [localUser, setLocalUser] = useState<User | null>(null);
 
+  // Actively check auth state on initial mount for non-welcome pages
+  useEffect(() => {
+    const isWelcomePage = window.location.hash === "#/";
+    if (!isWelcomePage) {
+      refetch();
+    }
+  }, [refetch]);
+
+  // Update local state when server auth data changes
+  useEffect(() => {
+    if (data?.user) {
+      setLocalUser(data.user);
+    } else if (data === null && !isLoading && !isFetching) {
+      setLocalUser(null);
+    }
+  }, [data, isLoading, isFetching]);
+
+  // Update auth state and trigger validation with the server
   const updateAuth = (user: User | null) => {
-    // Update local state immediately
     setLocalUser(user);
+
+    // Always refetch regardless of user state to ensure server state is updated
+    refetch();
   };
 
-  // Determine if the user is a guest based on data and localUser
-  const isGuest =
-    (localUser && localUser.role === "guest") ||
-    (data && data.user && data.user.role === "guest");
-
-  // Priority: first use localUser (for immediate UI updates), then fall back to data from backend
-  const authState = {
-    isAuthenticated: !!data || !!localUser,
-    loading: isLoading,
-    authUser: localUser || data?.user,
-    isGuest,
+  // Check auth state with server
+  const checkAuth = async (): Promise<void> => {
+    await refetch();
   };
 
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated: authState.isAuthenticated,
-        loading: authState.loading,
-        user: authState.authUser,
+        isAuthenticated: !!localUser,
+        loading: isLoading && !localUser,
+        user: localUser || undefined,
         updateAuth,
+        checkAuth,
       }}
     >
       {children}

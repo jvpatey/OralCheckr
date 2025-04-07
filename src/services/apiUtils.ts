@@ -31,36 +31,26 @@ export const apiRequest = async <T>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   body?: Record<string, unknown>
 ): Promise<T> => {
-  // Check for auth-related endpoints that shouldn't run when there's no authentication
-  const isAuthEndpoint =
-    url.includes("/auth/validate") || url.includes("/auth/profile");
-  const hasNoAuthCookie =
-    !document.cookie.includes("session") &&
-    !document.cookie.includes("connect.sid") &&
-    !document.cookie.includes("auth") &&
-    !document.cookie.includes("jwt");
-
-  // Don't attempt auth requests if there's no authentication cookie
-  if (isAuthEndpoint && hasNoAuthCookie && method === "GET") {
-    return null as unknown as T;
-  }
-
   try {
-    const response = await fetch(url, {
+    // Standard fetch options with credentials included
+    const options = {
       ...fetchOptions,
       method,
+      credentials: "include" as RequestCredentials,
       ...(body && { body: JSON.stringify(body) }),
-    });
+    };
 
-    // For welcome page, silently handle 401/403 errors from auth endpoints
+    const response = await fetch(url, options);
+
+    // Handle 401/403 for auth validation quietly
     if (
       (response.status === 401 || response.status === 403) &&
-      (url.includes("/auth/validate") || url.includes("/auth/profile"))
+      url.includes("/auth/validate")
     ) {
       return null as unknown as T;
     }
 
-    // For profile page, silently handle 404 errors from questionnaire endpoints
+    // For questionnaire endpoints, handle 404 errors silently
     if (
       response.status === 404 &&
       (url.includes("/questionnaire/response") ||
@@ -69,39 +59,49 @@ export const apiRequest = async <T>(
       return null as unknown as T;
     }
 
-    // Block all profile API calls that aren't successful
-    if (!response.ok && url.includes("/auth/profile")) {
+    // Parse response based on content type
+    const contentType = response.headers.get("content-type");
+
+    // JSON response
+    if (contentType && contentType.includes("application/json")) {
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Use server error message if available
+        if (data && typeof data === "object" && "message" in data) {
+          throw new Error(data.message);
+        }
+        // Default error with status code
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      return data;
+    }
+    // No content response
+    else if (response.status === 204) {
       return null as unknown as T;
     }
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      // If the server returns an error message, use it
-      if (data && typeof data === "object" && "message" in data) {
-        throw new Error(data.message);
+    // Other response types
+    else {
+      const text = await response.text();
+      if (!response.ok) {
+        throw new Error(
+          text || `Request failed with status ${response.status}`
+        );
       }
-      // Otherwise, throw a generic error with the status code
-      throw new Error(`Request failed with status ${response.status}`);
-    }
 
-    return data;
+      try {
+        return JSON.parse(text) as T;
+      } catch {
+        return text as unknown as T;
+      }
+    }
   } catch (error) {
-    // Silently handle 401/403 errors for auth endpoints
+    // Silent handling for expected auth errors
     if (
       error instanceof Error &&
       (error.message.includes("401") || error.message.includes("403")) &&
-      (url.includes("/auth/validate") || url.includes("/auth/profile"))
-    ) {
-      return null as unknown as T;
-    }
-
-    // Silently handle 404 errors for questionnaire endpoints
-    if (
-      error instanceof Error &&
-      error.message.includes("404") &&
-      (url.includes("/questionnaire/response") ||
-        url.includes("/questionnaire/progress"))
+      url.includes("/auth/validate")
     ) {
       return null as unknown as T;
     }
