@@ -22,15 +22,12 @@ export const AuthContext = createContext<AuthContextProps>({
 export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
-  const { data, isLoading, refetch } = useValidateAuth();
+  const { data, isLoading } = useValidateAuth();
   const [localUser, setLocalUser] = useState<User | null>(null);
 
   const updateAuth = (user: User | null) => {
     // Update local state immediately
     setLocalUser(user);
-
-    // Then refetch to ensure server state is in sync
-    refetch();
   };
 
   // Determine if the user is a guest based on data and localUser

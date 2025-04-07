@@ -31,6 +31,20 @@ export const apiRequest = async <T>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   body?: Record<string, unknown>
 ): Promise<T> => {
+  // Check for auth-related endpoints that shouldn't run when there's no authentication
+  const isAuthEndpoint =
+    url.includes("/auth/validate") || url.includes("/auth/profile");
+  const hasNoAuthCookie =
+    !document.cookie.includes("session") &&
+    !document.cookie.includes("connect.sid") &&
+    !document.cookie.includes("auth") &&
+    !document.cookie.includes("jwt");
+
+  // Don't attempt auth requests if there's no authentication cookie
+  if (isAuthEndpoint && hasNoAuthCookie && method === "GET") {
+    return null as unknown as T;
+  }
+
   try {
     const response = await fetch(url, {
       ...fetchOptions,
