@@ -25,6 +25,10 @@ const GOOGLE_CLIENT_ID =
   import.meta.env.VITE_GOOGLE_CLIENT_ID ||
   (window as any).APP_CONFIG?.GOOGLE_CLIENT_ID;
 
+// Check if we have a valid Google client ID
+const hasValidGoogleClientId =
+  !!GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID.length > 0;
+
 interface LoginModalProps {
   show: boolean;
   handleClose: () => void;
@@ -122,7 +126,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
 
   // Initialize Google OAuth Client when modal shows
   useEffect(() => {
-    if (show) {
+    if (show && hasValidGoogleClientId) {
       // Clean up any previous instances
       const oldScripts = document.querySelectorAll(
         'script[src="https://accounts.google.com/gsi/client"]'
@@ -158,10 +162,12 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
 
       // Cleanup function
       return () => {
-        document.body.removeChild(script);
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
       };
     }
-  }, [show]);
+  }, [show, hasValidGoogleClientId]);
 
   // Reset form states when modal is closed
   useEffect(() => {
@@ -230,14 +236,22 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
 
           <OrSeparator>OR</OrSeparator>
 
-          <div
-            ref={googleButtonRef}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "1rem",
-            }}
-          ></div>
+          {hasValidGoogleClientId ? (
+            <div
+              ref={googleButtonRef}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "1rem",
+              }}
+            ></div>
+          ) : (
+            <div
+              style={{ textAlign: "center", margin: "1rem 0", color: "#666" }}
+            >
+              Google Sign-In temporarily unavailable
+            </div>
+          )}
         </Form>
       </ModalBody>
     </StyledModal>
