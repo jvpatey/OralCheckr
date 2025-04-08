@@ -46,16 +46,16 @@ export const saveQuestionnaireResponse = async (
 export const getQuestionnaireResponse =
   async (): Promise<QuestionnaireResponse | null> => {
     try {
-      return await apiRequest<QuestionnaireResponse>(
+      const data = await apiRequest<QuestionnaireResponse>(
         QUESTIONNAIRE_RESPONSE_ENDPOINT,
         "GET"
       );
+      return data;
     } catch (error) {
       // For 404 errors, return null as it means no data exists yet
       if (error instanceof Error && error.message.includes("404")) {
         return null;
       }
-      console.error("Error fetching questionnaire response:", error);
       throw error;
     }
   };
@@ -67,26 +67,22 @@ export const hasSavedResponse = async (): Promise<boolean> => {
       QUESTIONNAIRE_RESPONSE_ENDPOINT,
       "GET"
     );
-    // Return false for both null responses and responses without data
-    return data !== null && !!data.responses;
+    return data !== null;
   } catch (error) {
-    // Return false for any errors
     return false;
   }
 };
 
 /* -- Service to get total score from questionnaire data -- */
-export const getTotalScore = async (): Promise<number | undefined> => {
+export const getTotalScore = async (): Promise<number | null> => {
   try {
     const data = await apiRequest<QuestionnaireResponse | null>(
       QUESTIONNAIRE_RESPONSE_ENDPOINT,
       "GET"
     );
-    // Only return a number if we have valid data
-    return data?.totalScore ?? undefined;
+    return data?.totalScore ?? null;
   } catch (error) {
-    console.error("Error fetching total score:", error);
-    return undefined;
+    return null;
   }
 };
 

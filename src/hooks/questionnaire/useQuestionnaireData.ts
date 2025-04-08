@@ -4,6 +4,7 @@ import {
   QuestionnaireResponse,
 } from "../../services/quesService";
 import { format } from "date-fns";
+import { useHasSavedResponse } from "./useHasSavedResponse";
 
 export interface QuestionnaireData {
   lastCompleted: string | null; // Formatted date string or null if no completion
@@ -12,34 +13,39 @@ export interface QuestionnaireData {
 
 // Custom hook to fetch and format questionnaire data
 export function useQuestionnaireData() {
+  const { data: hasSavedData } = useHasSavedResponse();
+
   const { data, isLoading, isError, error } = useQuery<
     QuestionnaireResponse | null,
     Error
   >({
     queryKey: ["questionnaireResponse"],
     queryFn: getQuestionnaireResponse,
-    retry: false,
+    // Try to fetch if we're not sure about saved data
+    enabled: hasSavedData !== false,
+    staleTime: 0, // Always consider the data stale
+    gcTime: 0, // Don't keep in cache
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    retry: 2, // Retry failed requests
+    initialData: null,
   });
-
-  // Data not found if we get a null value
-  const hasNoData = data === null;
 
   // Format the raw questionnaire data for display
   const formattedData: QuestionnaireData = {
-    // Format the completion date if available, otherwise null
     lastCompleted:
-      data && data?.updatedAt
+      data && data.updatedAt
         ? format(new Date(data.updatedAt), "MMMM d, yyyy")
         : null,
-    // Get the total score if available, otherwise null
     score: data?.totalScore ?? null,
   };
 
   return {
     data: formattedData,
     isLoading,
-    isError: isError && !hasNoData,
-    error: hasNoData ? null : error,
-    hasNoData: hasNoData || (isError && error?.message?.includes("404")),
+    isError,
+    error,
+    hasNoData: !data,
   };
 }

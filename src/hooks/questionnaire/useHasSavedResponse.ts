@@ -1,25 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { hasSavedResponse } from "../../services/quesService";
-import { useContext } from "react";
-import { AuthContext } from "../../containers/authentication/AuthContext";
 
 export const useHasSavedResponse = () => {
-  const { user } = useContext(AuthContext);
-
-  // Check if the user is a guest
-  const isGuest =
-    user?.role === "guest" ||
-    (user?.firstName === "Guest" && user?.lastName === "User");
-
   return useQuery({
     queryKey: ["hasSavedResponse"],
     queryFn: hasSavedResponse,
-    // Skip API calls for guest users
-    enabled: !isGuest,
-    retry: false,
-    staleTime: 30 * 60 * 1000, // 30 minutes
-    gcTime: 60 * 60 * 1000, // 1 hour
+    // Always try to fetch
+    staleTime: 0, // Always consider the data stale
+    gcTime: 0, // Don't keep in cache
     refetchOnMount: true,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    retry: 2, // Retry failed requests
+    initialData: false,
   });
 };

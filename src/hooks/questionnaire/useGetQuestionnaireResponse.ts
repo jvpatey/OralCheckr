@@ -3,27 +3,19 @@ import {
   getQuestionnaireResponse,
   QuestionnaireResponse,
 } from "../../services/quesService";
-import { useContext } from "react";
-import { AuthContext } from "../../containers/authentication/AuthContext";
+import { useHasSavedResponse } from "./useHasSavedResponse";
 
-export const useGetQuestionnaireResponse = (
-  hasCompletedQuestionnaire: boolean = false
-) => {
-  const { user } = useContext(AuthContext);
-
-  // Check if the user is a guest
-  const isGuest =
-    user?.role === "guest" ||
-    (user?.firstName === "Guest" && user?.lastName === "User");
+export const useGetQuestionnaireResponse = () => {
+  const { data: hasSavedData } = useHasSavedResponse();
 
   return useQuery<QuestionnaireResponse | null, Error>({
     queryKey: ["questionnaireResponse"],
     queryFn: getQuestionnaireResponse,
-    // Don't fetch for guest users or if questionnaire is not completed
-    enabled: hasCompletedQuestionnaire && !isGuest,
-    retry: false,
+    enabled: hasSavedData === true,
     staleTime: Infinity,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    gcTime: Infinity,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    initialData: null,
   });
 };
