@@ -46,10 +46,6 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   // Handle the toggle for dark mode
   const toggleDarkMode = () => {
     themeToggler();
-    localStorage.setItem(
-      "theme",
-      isDarkMode ? ThemeType.LIGHT : ThemeType.DARK
-    );
   };
 
   const handleLogoutClick = (

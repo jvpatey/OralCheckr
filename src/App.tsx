@@ -1,6 +1,6 @@
 import { HashRouter } from "react-router-dom";
 import { RenderNavs } from "./containers/navigation/RenderNavs";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "./common/utilities/color-utils";
 import { Router } from "./Router";
@@ -19,17 +19,29 @@ export enum ThemeType {
 
 export function App() {
   const [theme, setTheme] = useState<ThemeType>(ThemeType.LIGHT);
+  // Create a persisted queryClient reference
+  const queryClientRef = useRef<QueryClient>();
+
+  // Initialize the query client if it doesn't exist
+  if (!queryClientRef.current) {
+    queryClientRef.current = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: 1,
+          refetchOnWindowFocus: false,
+        },
+      },
+    });
+  }
 
   const themeToggler = () => {
     setTheme(theme === ThemeType.LIGHT ? ThemeType.DARK : ThemeType.LIGHT);
   };
 
-  const queryClient = new QueryClient();
-
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <ThemeProvider theme={theme === ThemeType.LIGHT ? lightTheme : darkTheme}>
-        <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClientRef.current}>
           <AuthProvider>
             <HabitProvider>
               <HashRouter>

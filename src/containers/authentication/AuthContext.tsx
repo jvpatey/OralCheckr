@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import { useValidateAuth } from "../../hooks/auth/useValidateAuth";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface User {
   userId: number;
@@ -30,6 +31,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   const [localUser, setLocalUser] = useState<User | null>(null);
   const [validationInProgress, setValidationInProgress] = useState(false);
   const [initialCheckDone, setInitialCheckDone] = useState(false);
+  const queryClient = useQueryClient();
 
   // Always check authentication on first mount for non-welcome pages
   useEffect(() => {
@@ -66,6 +68,18 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       // Update local state immediately for responsive UI
       setLocalUser(user);
 
+      // If user is null (logout case), clear the query cache
+      if (user === null) {
+        // Reset specific query data to null/false first
+        queryClient.setQueryData(["hasSavedResponse"], false);
+        queryClient.setQueryData(["totalScore"], null);
+        queryClient.setQueryData(["questionnaireResponse"], null);
+        queryClient.setQueryData(["questionnaireProgress"], null);
+
+        // Then reset all query cache to ensure no stale data remains
+        queryClient.clear();
+      }
+
       // If user is provided (login/signup case), force validation with server
       if (user && !validationInProgress) {
         setValidationInProgress(true);
@@ -74,7 +88,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         });
       }
     },
-    [refetch, validationInProgress]
+    [refetch, validationInProgress, queryClient]
   );
 
   // Explicit check auth - returns a promise for components that need to wait for the check
