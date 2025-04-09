@@ -12,6 +12,7 @@ import { useHabitLogsForAllHabits } from "../../../hooks/habitLogs";
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { useHabitContext } from "../../../contexts/HabitContext";
+import { LoadingComponent } from "../../../components/habit-tracker/analytics/LoadingComponent";
 import {
   AnalyticsContainer,
   NoHabitMessage,
@@ -124,18 +125,32 @@ export function Analytics() {
     [habits]
   );
 
-  // Fetch logs for all habits
+  // Fetch logs for all habits - for month view
   const {
-    habitLogsMap,
-    isLoading: isLoadingLogs,
-    isError: isLogsError,
+    habitLogsMap: monthLogsMap,
+    isLoading: isLoadingMonthLogs,
+    isError: isMonthLogsError,
   } = useHabitLogsForAllHabits(habitIds, year, month);
 
-  // Transform habitLogsMap
-  const habitsLog = useMemo(
-    () => transformHabitLogsToAnalyticsFormat(habits, habitLogsMap),
-    [habits, habitLogsMap]
-  );
+  // Fetch logs for all habits - for year view
+  const {
+    habitLogsMap: yearLogsMap,
+    isLoading: isLoadingYearLogs,
+    isError: isYearLogsError,
+  } = useHabitLogsForAllHabits(habitIds, year, "");
+
+  // Transform habitLogsMap based on the current view
+  const habitsLog = useMemo(() => {
+    const logsMap = view === ViewMode.MONTH ? monthLogsMap : yearLogsMap;
+    return transformHabitLogsToAnalyticsFormat(habits, logsMap);
+  }, [habits, monthLogsMap, yearLogsMap, view]);
+
+  const isLoading =
+    isLoadingHabits ||
+    (view === ViewMode.MONTH ? isLoadingMonthLogs : isLoadingYearLogs);
+  const isError =
+    habitsError ||
+    (view === ViewMode.MONTH ? isMonthLogsError : isYearLogsError);
 
   useEffect(() => {
     // If no habit is selected or the selected habit doesn't exist, select the first one
@@ -159,12 +174,12 @@ export function Analytics() {
   };
 
   // Show loading state
-  if (isLoadingHabits) {
+  if (isLoading) {
     return (
       <PageBackground>
         <AnalyticsContainer>
           <CardContainer>
-            <div>Loading habits...</div>
+            <LoadingComponent />
           </CardContainer>
         </AnalyticsContainer>
       </PageBackground>
@@ -172,7 +187,7 @@ export function Analytics() {
   }
 
   // Show error state
-  if (habitsError || isLogsError) {
+  if (isError) {
     return (
       <PageBackground>
         <AnalyticsContainer>
@@ -201,7 +216,7 @@ export function Analytics() {
               hideAnalytics={!selectedHabit}
               selectedDate={selectedDate}
               onDateChange={handleDateChange}
-              isLoading={isLoadingLogs}
+              isLoading={isLoadingMonthLogs}
             />
           ) : (
             <YearView
