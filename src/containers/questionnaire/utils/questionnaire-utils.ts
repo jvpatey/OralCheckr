@@ -27,7 +27,7 @@ export const createResponseChangeHandler = (
     try {
       await saveProgressMutate({ responses: updated, currentQuestion });
     } catch (err) {
-      console.error("Error saving progress:", err);
+      // Error handled silently to not disrupt user experience
     }
   };
 };
@@ -55,10 +55,10 @@ export const createNextHandler = (
       try {
         await saveProgressMutate({ responses, currentQuestion: newQuestion });
       } catch (err) {
-        console.error("Error saving progress:", err);
+        // Error handled silently to not disrupt user experience
       }
 
-      navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
+      navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`, { replace: true });
     }
   };
 };
@@ -83,10 +83,10 @@ export const createPreviousHandler = (
       try {
         await saveProgressMutate({ responses, currentQuestion: newQuestion });
       } catch (err) {
-        console.error("Error saving progress:", err);
+        // Error handled silently to not disrupt user experience
       }
 
-      navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`);
+      navigate(`${RoutePaths.QUESTIONNAIRE}/${newQuestion}`, { replace: true });
     }
   };
 };
@@ -118,7 +118,6 @@ export const createQuitHandler = (
         // Navigate to results page
         navigate(RoutePaths.RESULTS);
       } catch (err) {
-        console.error("Error clearing progress:", err);
         // Navigate anyway in case of error
         navigate(RoutePaths.RESULTS);
       }
@@ -153,9 +152,6 @@ export const createSubmitHandler = (
     try {
       // Save to completed questionnaire table
       await saveResponseMutate({ responses, totalScore });
-      if (process.env.NODE_ENV === "development") {
-        console.log("Successfully saved questionnaire response.");
-      }
 
       // Update state
       setHasCompletedQuestionnaire(true);
@@ -166,13 +162,13 @@ export const createSubmitHandler = (
       try {
         await saveProgressMutate({ responses, currentQuestion: 0 });
       } catch (err) {
-        console.error("Error updating progress:", err);
+        // Error handled silently
       }
 
       // Navigate to results page
       navigate(RoutePaths.RESULTS);
     } catch (err) {
-      console.error("Error submitting questionnaire:", err);
+      // Error is displayed to the user via the UI
     }
   };
 };

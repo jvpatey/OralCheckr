@@ -14,6 +14,7 @@ export const useSaveQuestionnaireResponse = () => {
       queryClient.invalidateQueries({ queryKey: ["hasSavedResponse"] });
       queryClient.invalidateQueries({ queryKey: ["totalScore"] });
       queryClient.invalidateQueries({ queryKey: ["questionnaireResponse"] });
+      queryClient.invalidateQueries({ queryKey: ["questionnaireProgress"] });
 
       // Also set hasSavedResponse to true immediately
       queryClient.setQueryData(["hasSavedResponse"], true);

@@ -1,27 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { getQuestionnaireProgress } from "../../services/quesService";
-import { useContext } from "react";
-import { AuthContext } from "../../containers/authentication/AuthContext";
 
 interface QuestionnaireProgress {
   responses: Record<number, number | number[]>;
   currentQuestion: number;
 }
 
-export const useGetQuestionnaireProgress = (shouldFetch: boolean = false) => {
-  const { user } = useContext(AuthContext);
-
-  // Check if the user is a guest
-  const isGuest =
-    user?.role === "guest" ||
-    (user?.firstName === "Guest" && user?.lastName === "User");
-
+export const useGetQuestionnaireProgress = (shouldFetch: boolean = true) => {
   return useQuery<QuestionnaireProgress | null>({
     queryKey: ["questionnaireProgress"],
     queryFn: getQuestionnaireProgress,
-    // Skip API calls for guest users
-    enabled: shouldFetch && !isGuest,
-    retry: false, // Don't retry on failure
-    staleTime: 30 * 60 * 1000, // Cache for 30 minutes
+    enabled: shouldFetch,
+    retry: 1, // Retry once on failure
+    staleTime: 0, // Consider data always stale to ensure fresh data
+    refetchOnMount: true, // Always refetch when component mounts
+    refetchOnWindowFocus: true, // Refetch when window gets focus
+    refetchOnReconnect: true, // Refetch when reconnecting
   });
 };
