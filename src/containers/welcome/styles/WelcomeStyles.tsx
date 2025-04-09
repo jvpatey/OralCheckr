@@ -22,6 +22,9 @@ export const WelcomeCard = styled(Card)`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   animation: ${fadeUp} 1s ease-out;
   height: auto;
+  margin: auto;
+  position: relative;
+  top: -10vh;
 
   @media (min-width: 1200px) {
     max-width: 900px;
@@ -59,6 +62,7 @@ export const WelcomeContainer = styled.div`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.backgroundColor};
   width: 100%;
+  position: relative;
 
   @media (max-width: 768px) {
     padding: 10px;

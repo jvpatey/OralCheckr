@@ -65,18 +65,6 @@ export const SidebarLink = styled(Link)`
     color: ${({ theme }) => theme.backgroundColor};
     font-size: 17px;
     padding: 10px 15px;
-
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: 5px;
-      left: 15px;
-      height: 2px;
-      background-color: ${({ theme }) => theme.green};
-      width: fit-content;
-      width: -moz-fit-content;
-      width: -webkit-fit-content;
-    }
   }
 
   @media (max-width: 800px) {
@@ -90,11 +78,6 @@ export const SidebarLink = styled(Link)`
       color: ${({ theme }) => theme.backgroundColor};
       font-size: 18px;
       padding: 8px;
-
-      &:after {
-        left: 2px;
-        width: calc(100% - 4px);
-      }
     }
 
     &::after {
