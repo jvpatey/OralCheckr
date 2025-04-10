@@ -108,6 +108,25 @@ export const LinkContent = styled.div`
   align-items: center;
   position: relative;
 
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: ${({ theme }) => theme.green};
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease-out;
+  }
+
+  ${SidebarLink}:hover & {
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+
   .active & {
     &:after {
       content: "";
@@ -117,6 +136,7 @@ export const LinkContent = styled.div`
       width: 100%;
       height: 2px;
       background-color: ${({ theme }) => theme.green};
+      transform: scaleX(1);
     }
   }
 `;

@@ -18,6 +18,8 @@ const StyledCard = styled(Card)`
   text-decoration: none;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: center center;
 
   @keyframes fadeInUp {
     from {
@@ -39,7 +41,8 @@ const StyledCard = styled(Card)`
   &:hover {
     background-color: ${({ theme }) => theme.green};
     border: 4px solid ${({ theme }) => theme.green};
-    transform: scale(1.05);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
   }
 `;
 

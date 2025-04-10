@@ -51,14 +51,32 @@ const CustomNavLink = styled(Nav.Link)`
   height: 100%;
   padding: 8px 0;
   position: relative;
+  transition: color 0.4s ease-out;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease-out;
+    background-color: ${({ theme }) => theme.green};
+  }
 
   &:hover {
-    color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.green};
+    text-decoration: none;
+
+    &::after {
+      transform: scaleX(1);
+    }
   }
 
   &.active {
-    color: ${({ theme }) => theme.textGrey};
-    background-color: transparent;
+    color: ${({ theme }) => theme.blue};
 
     &:after {
       content: "";
@@ -68,6 +86,7 @@ const CustomNavLink = styled(Nav.Link)`
       width: 100%;
       height: 2px;
       background-color: ${({ theme }) => theme.blue};
+      transform: scaleX(1);
     }
   }
 `;
@@ -100,6 +119,9 @@ const CreateAccountButton = styled.button`
   cursor: pointer;
   font-weight: bold;
   margin-right: 20px;
+  transition: all 0.4s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 
   @media (min-width: 768px) {
     align-self: center;
@@ -111,9 +133,46 @@ const CreateAccountButton = styled.button`
     padding: 10px 20px;
   }
 
+  &::after {
+    content: "If you create a new account, your questionnaire and habit tracking data will be moved to your new account";
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: ${({ theme }) => theme.backgroundColor};
+    color: ${({ theme }) => theme.textGrey};
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: normal;
+    width: max-content;
+    max-width: 250px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid ${({ theme }) => `${theme.textGrey}25`};
+    z-index: 1000;
+
+    @media (max-width: 768px) {
+      left: auto;
+      right: 0;
+      transform: none;
+      top: 100%;
+      margin-top: 5px;
+    }
+  }
+
   &:hover {
-    background-color: ${({ theme }) => theme.blue};
+    background-color: ${({ theme }) => theme.green};
     color: ${({ theme }) => theme.backgroundColor};
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+
+    &::after {
+      opacity: 1;
+      visibility: visible;
+    }
   }
 `;
 
