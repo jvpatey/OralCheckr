@@ -20,7 +20,8 @@ const ButtonContainer = styled.div<{
 }>`
   background-color: ${({ $backgroundColor, $disabled, theme }) =>
     $disabled ? theme.disabledBackground : $backgroundColor};
-  color: ${({ theme, $disabled }) => ($disabled ? theme.textGrey : theme.backgroundColor )};
+  color: ${({ theme, $disabled }) =>
+    $disabled ? theme.textGrey : theme.backgroundColor};
   width: auto;
   height: 35px;
   display: flex;
@@ -30,21 +31,23 @@ const ButtonContainer = styled.div<{
   border-radius: 25px;
   padding: 0 20px;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  transition: all 0.4s ease-out;
   white-space: nowrap;
   border: 2px solid
     ${({ $backgroundColor, $disabled, theme }) =>
       $disabled ? theme.disabledBackground : $backgroundColor};
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 
   &:hover {
     background-color: ${({ theme, $disabled }) =>
       $disabled ? theme.disabledBackground : theme.backgroundColor};
-    border-color: ${({ theme, $disabled }) =>
-      $disabled ? theme.disabledBackground : theme.backgroundColor};
+    border-color: ${({ $hoverColor, $disabled, theme }) =>
+      $disabled ? theme.disabledBackground : $hoverColor};
     color: ${({ $hoverColor, $disabled, theme }) =>
       $disabled ? theme.textGrey : $hoverColor};
-    box-shadow: ${({ $disabled }) =>
-      $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
   }
 
   @media (max-width: 768px) {

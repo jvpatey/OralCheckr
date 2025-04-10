@@ -74,6 +74,9 @@ export const PrimaryButton = styled(NavigationButton)`
   border-color: ${({ theme }) => theme.green};
   background-color: ${({ theme }) => theme.green};
   color: ${({ theme }) => theme.accentBackgroundColor};
+  transition: all 0.4s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 
   @media (max-width: 768px) {
     padding: 10px 20px;
@@ -81,6 +84,8 @@ export const PrimaryButton = styled(NavigationButton)`
   }
 
   &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
     background-color: ${({ theme }) => theme.accentBackgroundColor};
     color: ${({ theme }) => theme.green};
     border: solid 2px;

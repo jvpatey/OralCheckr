@@ -125,10 +125,13 @@ export const ProfilePicture = styled.div<{ $hasAvatar?: boolean }>`
   text-align: center;
   padding: 1rem;
   position: relative;
+  transition: all 0.3s ease-out;
 
   &:hover {
-    border-color: ${({ theme }) => theme.blue};
-    color: ${({ theme }) => theme.blue};
+    border-color: ${({ theme }) => theme.green};
+    color: ${({ theme }) => theme.green};
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   img {
@@ -159,16 +162,19 @@ export const UploadButton = styled.button`
   border-radius: 25px;
   padding: 0 20px;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  transition: all 0.4s ease-out;
   white-space: nowrap;
   border: 2px solid ${({ theme }) => theme.blue};
   font-size: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 
   &:hover {
     background-color: ${({ theme }) => theme.backgroundColor};
     border-color: ${({ theme }) => theme.blue};
     color: ${({ theme }) => theme.blue};
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
   }
 
   @media (max-width: 768px) {
@@ -212,18 +218,20 @@ export const ProfileEditButton = styled.button`
   right: -2rem;
   background: none;
   border: none;
-  color: ${({ theme }) => theme.textGrey};
+  color: ${({ theme }) => theme.yellow};
   cursor: pointer;
   padding: 8px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
-  transition: color 0.2s ease;
+  transition: all 0.4s ease-out;
   z-index: 1;
 
   &:hover {
-    color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.yellow};
+    transform: translateY(-5px);
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 
   svg {
@@ -300,7 +308,7 @@ export const EditActions = styled.div`
 export const EditButton = styled.button`
   background: none;
   border: none;
-  color: ${({ theme }) => theme.textGrey};
+  color: ${({ theme }) => theme.yellow};
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -333,11 +341,13 @@ export const EditActionButton = styled.button<{ $isCancel?: boolean }>`
   border-radius: 4px;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.4s ease-out;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 
   @media (max-width: 480px) {
     padding: 0.25rem 0.75rem;
@@ -356,6 +366,8 @@ export const EditActionButton = styled.button<{ $isCancel?: boolean }>`
       background: ${theme.textGrey};
       color: ${theme.backgroundColor};
       border: 1px solid ${theme.textGrey};
+      transform: translateY(-5px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
     }
   `
       : `
@@ -367,6 +379,8 @@ export const EditActionButton = styled.button<{ $isCancel?: boolean }>`
       background: ${theme.backgroundColor};
       color: ${theme.green};
       border: 1px solid ${theme.green};
+      transform: translateY(-5px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
     }
   `}
 `;

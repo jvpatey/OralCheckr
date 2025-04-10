@@ -20,7 +20,9 @@ const ButtonContainer = styled.button<{ $variant?: string }>`
   cursor: pointer;
   font-size: 16px;
   border-radius: 10px;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.4s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 
   &:hover:not(:disabled) {
     background-color: ${({ theme }) => theme.backgroundColor};
@@ -29,11 +31,15 @@ const ButtonContainer = styled.button<{ $variant?: string }>`
     border: 2px solid
       ${({ theme, $variant }) =>
         $variant === "danger" ? theme.red : theme.green};
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
   }
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 `;
 

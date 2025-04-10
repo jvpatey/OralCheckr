@@ -42,17 +42,23 @@ export const StyledButton = styled(Button)`
   cursor: pointer;
   font-size: 16px;
   border-radius: 10px;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.4s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 
   &:hover {
     background-color: ${({ theme }) => theme.backgroundColor};
     color: ${({ theme }) => theme.green};
     border: 2px solid ${({ theme }) => theme.green};
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
   }
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 `;
 
@@ -156,12 +162,16 @@ export const DeleteButton = styled(StyledButton)`
     background-color: ${({ theme }) => theme.accentBackgroundColor};
     border-color: ${({ theme }) => theme.red};
     color: ${({ theme }) => theme.red};
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
   }
 
   &:disabled {
     background-color: ${({ theme }) => theme.red};
     border-color: ${({ theme }) => theme.red};
     opacity: 0.6;
+    transform: none;
+    box-shadow: none;
   }
 `;
 

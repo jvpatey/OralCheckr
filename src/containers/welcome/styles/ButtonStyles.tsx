@@ -53,9 +53,13 @@ export const BaseButton = styled.button<BaseButtonProps>`
   cursor: pointer;
   display: block;
   font-size: 1.2rem;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 
   &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
     background-color: ${({ theme }) => theme.accentBackgroundColor};
     color: ${({ theme, $variant }) => {
       switch ($variant) {

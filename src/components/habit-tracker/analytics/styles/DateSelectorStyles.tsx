@@ -60,6 +60,9 @@ export const TodayButtonContainer = styled.button`
   justify-content: center;
   margin-left: 10px;
   white-space: nowrap;
+  transition: all 0.4s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 
   @media (max-width: 600px) {
     font-size: 10px;
@@ -70,5 +73,7 @@ export const TodayButtonContainer = styled.button`
   &:hover {
     background-color: ${({ theme }) => theme.blue};
     color: ${({ theme }) => theme.backgroundColor};
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
   }
 `;
