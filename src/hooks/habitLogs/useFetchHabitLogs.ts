@@ -6,7 +6,7 @@ import {
 } from "../../services/habitLogService";
 import { addMonths, format } from "date-fns";
 
-/* -- Hook for fetching logs for a specific habit -- */
+// Hook for fetching and caching habit logs
 export const useFetchHabitLogs = (
   habitId: number,
   year?: number,
@@ -14,7 +14,7 @@ export const useFetchHabitLogs = (
 ) => {
   const queryClient = useQueryClient();
 
-  // Prefetch adjacent months' data
+  // Prefetch next and previous months' data
   const prefetchAdjacentMonths = () => {
     if (!year || !month || !habitId) return;
 
@@ -43,7 +43,7 @@ export const useFetchHabitLogs = (
     });
   };
 
-  // Main query
+  // Fetch current month's logs
   const query = useQuery<HabitLogResponse>({
     queryKey: ["habitLogs", habitId, year, month],
     queryFn: () => fetchHabitLogs(habitId, year, month),
@@ -52,7 +52,7 @@ export const useFetchHabitLogs = (
     retry: 1,
   });
 
-  // Trigger prefetch when data is available
+  // Prefetch when data is loaded
   if (query.data) {
     prefetchAdjacentMonths();
   }
@@ -60,7 +60,7 @@ export const useFetchHabitLogs = (
   return query;
 };
 
-/* -- Error handler for habit logs fetch errors -- */
+// Hook for handling habit logs error messages
 export const useHabitLogsFetchErrorMessage = (error: unknown): string => {
   if (!error) return "";
   return handleHabitLogServiceError(error);

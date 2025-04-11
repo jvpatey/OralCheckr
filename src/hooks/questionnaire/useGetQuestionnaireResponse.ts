@@ -5,7 +5,9 @@ import {
 } from "../../services/quesService";
 import { useHasSavedResponse } from "./useHasSavedResponse";
 
+// Hook for fetching saved questionnaire responses
 export const useGetQuestionnaireResponse = () => {
+  // Check if user has any saved responses
   const { data: hasSavedData } = useHasSavedResponse();
 
   return useQuery<QuestionnaireResponse | null, Error>({

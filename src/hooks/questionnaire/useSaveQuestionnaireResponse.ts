@@ -4,6 +4,7 @@ import {
   SaveResponseData,
 } from "../../services/quesService";
 
+// Hook for saving questionnaire response
 export const useSaveQuestionnaireResponse = () => {
   const queryClient = useQueryClient();
 
@@ -15,8 +16,6 @@ export const useSaveQuestionnaireResponse = () => {
       queryClient.invalidateQueries({ queryKey: ["totalScore"] });
       queryClient.invalidateQueries({ queryKey: ["questionnaireResponse"] });
       queryClient.invalidateQueries({ queryKey: ["questionnaireProgress"] });
-
-      // Also set hasSavedResponse to true immediately
       queryClient.setQueryData(["hasSavedResponse"], true);
     },
   });

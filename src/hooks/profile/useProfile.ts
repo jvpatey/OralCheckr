@@ -3,6 +3,7 @@ import { getProfile } from "../../services/profileService";
 import { useContext } from "react";
 import { AuthContext } from "../../containers/authentication/AuthContext";
 
+// Hook for managing user profile data
 export function useProfile() {
   const {
     user,
@@ -10,20 +11,20 @@ export function useProfile() {
     loading: authLoading,
   } = useContext(AuthContext);
 
-  // Check specifically for the guest role
+  // Check if user is a guest
   const isGuest =
     user?.role === "guest" ||
     (user?.firstName === "Guest" && user?.lastName === "User");
   const isWelcomePage = window.location.hash === "#/";
 
-  // custom queryFn that immediately returns null for guest users
+  // Custom query function that handles guest users and welcome page
   const profileQueryFn = async () => {
-    // Don't attempt API call on welcome page or for guest users
+    // Skip API call for guests or on welcome page
     if (isGuest || isWelcomePage || !isAuthenticated) {
       return null;
     }
 
-    // Otherwise, proceed with the normal API call
+    // Fetch profile data for authenticated users
     return await getProfile();
   };
 
@@ -35,7 +36,7 @@ export function useProfile() {
   } = useQuery({
     queryKey: ["profile"],
     queryFn: profileQueryFn,
-    // Don't retry on 401/403 errors
+    // Retry logic for non-auth errors
     retry: (failureCount, error) => {
       return (
         !error.message?.includes("401") &&
@@ -43,7 +44,7 @@ export function useProfile() {
         failureCount < 3
       );
     },
-    // Only enable fetching when authenticated, not a guest, and not on welcome page
+    // Only fetch when conditions are met
     enabled: isAuthenticated && !isWelcomePage && !authLoading && !isGuest,
     staleTime: 300000, // 5 minutes
     gcTime: 3600000, // 1 hour

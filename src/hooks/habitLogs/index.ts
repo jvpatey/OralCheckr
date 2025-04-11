@@ -1,3 +1,5 @@
+// Habit logs hooks index
+
 export {
   useFetchHabitLogs,
   useHabitLogsFetchErrorMessage,
