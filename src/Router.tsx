@@ -12,15 +12,17 @@ import { Profile } from "./containers/profile/components/Profile";
 import { About } from "./containers/about/About";
 import { ThemeType } from "./App";
 
+// Props for the router component
 interface RouterProps {
-  themeToggler: () => void;
-  currentTheme: ThemeType;
+  themeToggler: () => void; // Function to toggle between light and dark themes
+  currentTheme: ThemeType; // Current theme state
 }
 
+// Main router component that defines all application routes
 export function Router({ themeToggler, currentTheme }: RouterProps) {
   return (
     <Routes>
-      {/* Welcome page as root */}
+      {/* Root route - Welcome page for unauthenticated users */}
       <Route
         path="/"
         element={
@@ -30,7 +32,7 @@ export function Router({ themeToggler, currentTheme }: RouterProps) {
         }
       />
 
-      {/* Authenticated routes (Landing, Habits, Analytics, Results) */}
+      {/* Protected routes - Only accessible to authenticated users */}
       <Route
         path={RoutePaths.LANDING}
         element={
@@ -64,7 +66,7 @@ export function Router({ themeToggler, currentTheme }: RouterProps) {
         }
       />
 
-      {/* Questionnaire routes */}
+      {/* Questionnaire routes - Protected and dynamic */}
       <Route
         path={RoutePaths.QUESTIONNAIRE}
         element={
@@ -82,7 +84,7 @@ export function Router({ themeToggler, currentTheme }: RouterProps) {
         }
       />
 
-      {/* Profile route */}
+      {/* User profile route - Protected */}
       <Route
         path={RoutePaths.PROFILE}
         element={
@@ -92,10 +94,10 @@ export function Router({ themeToggler, currentTheme }: RouterProps) {
         }
       />
 
-      {/* About route */}
+      {/* Public about page - No authentication required */}
       <Route path={RoutePaths.ABOUT} element={<About />} />
 
-      {/* Wildcard route */}
+      {/* Catch-all route - Redirects to landing page */}
       <Route
         path="*"
         element={<Navigate to={RoutePaths.LANDING} replace={true} />}

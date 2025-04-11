@@ -98,7 +98,6 @@ export const saveQuestionnaireProgress = async (
     );
   } catch (error) {
     console.error("Error saving progress:", error);
-    // Not rethrowing to prevent disrupting the user experience
   }
 };
 

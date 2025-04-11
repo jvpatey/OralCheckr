@@ -2,10 +2,10 @@
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 
-// Local timezone
+// Get user's local timezone
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-// Common fetch options
+// Default fetch options for API requests
 export const fetchOptions = {
   credentials: "include" as RequestCredentials,
   headers: {
@@ -13,9 +13,9 @@ export const fetchOptions = {
   },
 };
 
-// Format date for API requests
+// Convert date to API-friendly format
 export const formatDateForApi = (date: Date) => {
-  // Convert to zoned time for consistent timezone handling
+  // Convert to user's timezone
   const zonedDate = toZonedTime(date, TIMEZONE);
 
   return {
@@ -25,14 +25,14 @@ export const formatDateForApi = (date: Date) => {
   };
 };
 
-// Make API requests with proper error handling
+// Make API requests with error handling
 export const apiRequest = async <T>(
   url: string,
   method: "GET" | "POST" | "PUT" | "DELETE",
   body?: Record<string, unknown>
 ): Promise<T> => {
   try {
-    // Standard fetch options with credentials included
+    // Set up request options
     const options = {
       ...fetchOptions,
       method,
@@ -42,7 +42,7 @@ export const apiRequest = async <T>(
 
     const response = await fetch(url, options);
 
-    // Handle 401/403 for auth validation quietly
+    // Handle auth errors silently
     if (
       (response.status === 401 || response.status === 403) &&
       (url.includes("/auth/validate") || url.includes("/auth/profile"))
@@ -50,7 +50,7 @@ export const apiRequest = async <T>(
       return null as unknown as T;
     }
 
-    // For questionnaire endpoints, handle 404 errors silently
+    // Handle missing questionnaire data silently
     if (
       response.status === 404 &&
       (url.includes("/questionnaire/response") ||
@@ -59,10 +59,10 @@ export const apiRequest = async <T>(
       return null as unknown as T;
     }
 
-    // Parse response based on content type
+    // Check response content type
     const contentType = response.headers.get("content-type");
 
-    // JSON response
+    // Handle JSON responses
     if (contentType && contentType.includes("application/json")) {
       const data = await response.json();
 
@@ -77,11 +77,11 @@ export const apiRequest = async <T>(
 
       return data;
     }
-    // No content response
+    // Handle empty responses
     else if (response.status === 204) {
       return null as unknown as T;
     }
-    // Other response types
+    // Handle other response types
     else {
       const text = await response.text();
       if (!response.ok) {
@@ -97,7 +97,7 @@ export const apiRequest = async <T>(
       }
     }
   } catch (error) {
-    // Silent handling for expected auth errors
+    // Handle auth errors silently
     if (
       error instanceof Error &&
       (error.message.includes("401") || error.message.includes("403")) &&
@@ -106,7 +106,7 @@ export const apiRequest = async <T>(
       return null as unknown as T;
     }
 
-    // For other errors, just throw without logging
+    // Throw other errors
     throw error;
   }
 };

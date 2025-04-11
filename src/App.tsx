@@ -12,17 +12,21 @@ import { HabitProvider } from "./contexts/HabitContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GOOGLE_CLIENT_ID } from "./config/environment";
 
+// Theme options for the application
 export enum ThemeType {
   LIGHT = "light",
   DARK = "dark",
 }
 
+// Main application component that sets up providers and routing
 export function App() {
+  // State for managing the current theme
   const [theme, setTheme] = useState<ThemeType>(ThemeType.LIGHT);
-  // Create a persisted queryClient reference
+
+  // Persist query client across renders
   const queryClientRef = useRef<QueryClient>();
 
-  // Initialize the query client if it doesn't exist
+  // Initialize query client with default options
   if (!queryClientRef.current) {
     queryClientRef.current = new QueryClient({
       defaultOptions: {
@@ -34,19 +38,29 @@ export function App() {
     });
   }
 
+  // Toggle between light and dark themes
   const themeToggler = () => {
     setTheme(theme === ThemeType.LIGHT ? ThemeType.DARK : ThemeType.LIGHT);
   };
 
   return (
+    // Google OAuth provider for authentication
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      {/* Theme provider for styled components */}
       <ThemeProvider theme={theme === ThemeType.LIGHT ? lightTheme : darkTheme}>
+        {/* React Query provider for data fetching */}
         <QueryClientProvider client={queryClientRef.current}>
+          {/* Authentication context provider */}
           <AuthProvider>
+            {/* Habit tracking context provider */}
             <HabitProvider>
+              {/* Hash-based routing */}
               <HashRouter>
+                {/* Navigation components */}
                 <RenderNavs themeToggler={themeToggler} currentTheme={theme} />
+                {/* Main application routes */}
                 <Router themeToggler={themeToggler} currentTheme={theme} />
+                {/* Toast notifications */}
                 <ToastContainer
                   position="top-right"
                   autoClose={800}
