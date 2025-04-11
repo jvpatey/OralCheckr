@@ -1,5 +1,6 @@
-// Props for the RetakeQuestionnaire component
+/* -- Retake questionnaire types -- */
 
+// Props for the RetakeQuestionnaire component
 export interface RetakeQuestionnaireProps {
   resetResponses: () => void;
 }

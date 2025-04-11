@@ -12,6 +12,8 @@ import {
 import { RoutePaths } from "./constants/routes";
 import { IconDefinition } from "@fortawesome/fontawesome-common-types";
 
+/* -- Links for the navbar and sidebar -- */
+
 // Interface for links
 export interface NavLink {
   name: string;
@@ -22,7 +24,7 @@ export interface NavLink {
   showOnlyForGuest?: boolean;
 }
 
-// Navbar links
+// Links for the navbar
 export const navbarLinks: NavLink[] = [
   {
     name: "Profile",
@@ -57,7 +59,7 @@ export const navbarLinks: NavLink[] = [
   },
 ];
 
-// Sidebar links
+// Links for the sidebar
 export const sidebarLinks: NavLink[] = [
   {
     name: "Questionnaire",
