@@ -64,8 +64,7 @@ const ConfirmButton = styled(Button)<ConfirmButtonProps>`
     $isDestructive ? theme.red : theme.blue};
   border: 2px solid
     ${({ theme, $isDestructive }) => ($isDestructive ? theme.red : theme.blue)};
-  color: ${({ theme, $isDestructive }) =>
-    $isDestructive ? theme.backgroundColor : theme.backgroundColor};
+  color: ${({ theme }) => theme.backgroundColor};
   padding: 0.5rem 1rem;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -73,10 +72,7 @@ const ConfirmButton = styled(Button)<ConfirmButtonProps>`
   &:hover,
   &:focus,
   &:active {
-    background-color: ${({ theme, $isDestructive }) =>
-      $isDestructive
-        ? theme.backgroundColor
-        : theme.backgroundColor} !important;
+    background-color: ${({ theme }) => theme.backgroundColor} !important;
     transform: translateY(-1px);
     box-shadow: 0 2px 4px ${({ theme }) => `${theme.textGrey}15`};
     color: ${({ theme, $isDestructive }) =>
@@ -102,7 +98,7 @@ const CancelButton = styled(Button)`
   &:hover,
   &:focus,
   &:active {
-    background-color: ${({ theme }) => `${theme.textGrey}`} !important;
+    background-color: ${({ theme }) => theme.textGrey} !important;
     border: 1px solid ${({ theme }) => theme.textGrey} !important;
     color: ${({ theme }) => theme.backgroundColor} !important;
     transform: translateY(-1px);
