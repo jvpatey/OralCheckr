@@ -4,7 +4,6 @@ import { Recommendations } from "../../containers/questionnaire/Recommendations"
 import { PageBackground } from "../PageBackground";
 import { AuthContext } from "../../containers/authentication/AuthContext";
 import { SignUpModal } from "../../containers/welcome/SignUpModal";
-import { useHasSavedResponse } from "../../hooks/questionnaire/useHasSavedResponse";
 import {
   ResultsCard,
   ResultsCardContainer,
@@ -16,7 +15,6 @@ import {
 export function Results() {
   const { user } = useContext(AuthContext);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
-  const { data: hasSavedResponse } = useHasSavedResponse();
 
   return (
     <PageBackground>
@@ -24,12 +22,10 @@ export function Results() {
         <ResultsCard>
           <TilesContainer>
             <TileWrapper>
-              <OralHealthStatus
-                hasCompletedQuestionnaire={!!hasSavedResponse}
-              />
+              <OralHealthStatus />
             </TileWrapper>
             <TileWrapper>
-              <Recommendations hasCompletedQuestionnaire={!!hasSavedResponse} />
+              <Recommendations />
             </TileWrapper>
           </TilesContainer>
           {/* If the user is a guest, display a sign up button*/}

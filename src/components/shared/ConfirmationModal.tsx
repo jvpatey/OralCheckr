@@ -55,7 +55,11 @@ const StyledModal = styled(Modal)`
   }
 `;
 
-const ConfirmButton = styled(Button)<{ $isDestructive?: boolean }>`
+interface ConfirmButtonProps {
+  $isDestructive?: boolean;
+}
+
+const ConfirmButton = styled(Button)<ConfirmButtonProps>`
   background-color: ${({ theme, $isDestructive }) =>
     $isDestructive ? theme.red : theme.blue};
   border: 2px solid
@@ -89,7 +93,7 @@ const ConfirmButton = styled(Button)<{ $isDestructive?: boolean }>`
 
 const CancelButton = styled(Button)`
   background-color: transparent;
-  border: px solid ${({ theme }) => theme.textGrey};
+  border: 1px solid ${({ theme }) => theme.textGrey};
   color: ${({ theme }) => theme.textGrey};
   padding: 0.5rem 1rem;
   font-weight: 500;
