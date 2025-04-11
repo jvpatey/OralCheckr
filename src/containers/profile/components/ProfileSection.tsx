@@ -18,6 +18,7 @@ import {
   EditInstructions,
 } from "../styles/ProfileStyles";
 
+// Props for profile section
 interface ProfileSectionProps {
   firstName?: string;
   lastName?: string;
@@ -27,12 +28,14 @@ interface ProfileSectionProps {
   refetch: () => Promise<any>;
 }
 
+// Data structure for profile updates
 interface ProfileUpdateData {
   firstName: string;
   lastName: string;
   email: string;
 }
 
+// Profile section with edit functionality
 export function ProfileSection({
   firstName,
   lastName,
@@ -51,12 +54,11 @@ export function ProfileSection({
   });
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
+  // Start edit mode with animation
   const handleEditClick = () => {
     setShowInstructions(true);
-    // Start the transition first
     requestAnimationFrame(() => {
       setIsTransitioning(true);
-      // Then set editing mode after a small delay
       setTimeout(() => {
         setIsEditing(true);
       }, 50);
@@ -68,18 +70,18 @@ export function ProfileSection({
     });
   };
 
+  // Cancel edit mode with animation
   const handleCancel = () => {
     setIsTransitioning(false);
-    // Wait for the exit animation to start
     setTimeout(() => {
       setIsEditing(false);
-      // Remove instructions after the transition completes
       setTimeout(() => {
         setShowInstructions(false);
       }, 500);
     }, 50);
   };
 
+  // Update input field values
   const handleInputChange = (field: keyof ProfileUpdateData, value: string) => {
     setEditValues((prev) => ({
       ...prev,
@@ -87,6 +89,7 @@ export function ProfileSection({
     }));
   };
 
+  // Check for changes and show confirmation
   const handleSave = () => {
     const hasChanges =
       editValues.firstName !== firstName ||
@@ -101,6 +104,7 @@ export function ProfileSection({
     setShowConfirmModal(true);
   };
 
+  // Save profile changes
   const handleConfirmEdit = async () => {
     try {
       await updateProfile({
@@ -110,11 +114,9 @@ export function ProfileSection({
       });
       await refetch();
       setIsTransitioning(false);
-      // Wait for the exit animation to start
       setTimeout(() => {
         setIsEditing(false);
         setShowConfirmModal(false);
-        // Remove instructions after the transition completes
         setTimeout(() => {
           setShowInstructions(false);
         }, 500);
@@ -124,6 +126,7 @@ export function ProfileSection({
     }
   };
 
+  // Render field with edit/view mode
   const renderField = (
     label: string,
     value: string | undefined,

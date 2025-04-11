@@ -11,6 +11,7 @@ interface AccountTabProps {
   refetch: () => Promise<any>;
 }
 
+// Account tab component
 export function AccountTab({ refetch }: AccountTabProps) {
   const [message, setMessage] = useState<{
     type: "success" | "error";

@@ -12,6 +12,7 @@ import {
   SocialLink,
 } from "../../../../containers/about/styles/AboutContentStyles";
 
+// Contact section component
 export function ContactSection() {
   return (
     <ContentSection>

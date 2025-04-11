@@ -3,6 +3,7 @@ import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { RoutePaths } from "../../../common/constants/routes";
 
+// Styled brand text with hover effects
 const BrandText = styled(Navbar.Brand)`
   display: flex;
   align-items: center;
@@ -28,6 +29,7 @@ const BrandText = styled(Navbar.Brand)`
   }
 `;
 
+// Logo image with hover animation
 const LogoImage = styled.img`
   height: 40px;
   margin-right: 8px;
@@ -38,6 +40,7 @@ const LogoImage = styled.img`
   }
 `;
 
+// Brand name with underline animation
 const BrandName = styled.span`
   position: relative;
   display: inline-block;
@@ -60,6 +63,7 @@ const BrandName = styled.span`
   }
 `;
 
+// Navigation brand component with logo and name
 export function NavBrand() {
   return (
     <BrandText as={Link} to={RoutePaths.LANDING}>

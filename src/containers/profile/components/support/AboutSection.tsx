@@ -4,6 +4,7 @@ import {
   ContentText,
 } from "../../../../containers/about/styles/AboutContentStyles";
 
+// About section component
 export function AboutSection() {
   return (
     <Section>

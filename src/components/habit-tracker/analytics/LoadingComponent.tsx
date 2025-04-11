@@ -16,11 +16,11 @@ const GreenSpinner = styled(Spinner)`
   }
 `;
 
+// Loading component
 export const LoadingComponent = () => (
-    <LoadingContainer>
-      <GreenSpinner animation="border" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </GreenSpinner>
-    </LoadingContainer>
-  );
-  
+  <LoadingContainer>
+    <GreenSpinner animation="border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </GreenSpinner>
+  </LoadingContainer>
+);

@@ -2,11 +2,13 @@ import styled from "styled-components";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { useTheme } from "styled-components";
 
+// Props for theme toggle component
 interface ThemeToggleProps {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
 }
 
+// Container for theme toggle with responsive positioning
 const ThemeToggleContainer = styled.div`
   display: flex;
   align-items: center;
@@ -19,6 +21,7 @@ const ThemeToggleContainer = styled.div`
   }
 `;
 
+// Theme toggle switch component
 export function ThemeToggle({ isDarkMode, toggleDarkMode }: ThemeToggleProps) {
   const theme = useTheme();
 

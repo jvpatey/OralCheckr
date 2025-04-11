@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { NavLink } from "../../../common/links";
 import React from "react";
 
+// Props for desktop menu component
 interface DesktopMenuProps {
   links: NavLink[];
   isActive: (href: string) => boolean;
@@ -14,6 +15,7 @@ interface DesktopMenuProps {
   userAvatar?: string;
 }
 
+// Styled navbar collapse for responsive design
 const CustomCollapse = styled(Navbar.Collapse)`
   background-color: ${({ theme }) => theme.backgroundColor};
 
@@ -36,12 +38,14 @@ const CustomCollapse = styled(Navbar.Collapse)`
   }
 `;
 
+// Styled nav container
 const StyledNav = styled(Nav)`
   display: flex;
   align-items: center;
   font-weight: 500;
 `;
 
+// Styled nav link with hover and active states
 const CustomNavLink = styled(Nav.Link)`
   color: ${({ theme }) => theme.textGrey};
   margin-right: 35px;
@@ -91,6 +95,7 @@ const CustomNavLink = styled(Nav.Link)`
   }
 `;
 
+// Icon container for nav items
 const Icon = styled.span`
   margin-right: 5px;
   display: inline-flex;
@@ -98,6 +103,7 @@ const Icon = styled.span`
   font-size: 1em;
 `;
 
+// User avatar image styling
 const AvatarImage = styled.img`
   width: 28px;
   height: 28px;
@@ -110,6 +116,7 @@ const AvatarImage = styled.img`
   background: ${({ theme }) => theme.backgroundColor};
 `;
 
+// Create account button with tooltip
 const CreateAccountButton = styled.button`
   background-color: ${({ theme }) => theme.green};
   color: ${({ theme }) => theme.backgroundColor};
@@ -176,6 +183,7 @@ const CreateAccountButton = styled.button`
   }
 `;
 
+// Navbar links component for desktop view (non-mobile)
 export function DesktopMenu({
   links,
   isActive,

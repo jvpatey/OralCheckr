@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useCallback } from "react";
 import { useValidateAuth } from "../../hooks/auth/useValidateAuth";
 import { useQueryClient } from "@tanstack/react-query";
 
+// User data structure
 interface User {
   userId: number;
   role?: string;
@@ -9,6 +10,7 @@ interface User {
   lastName?: string;
 }
 
+// Auth context interface - manages user authentication state
 interface AuthContextProps {
   isAuthenticated: boolean;
   loading: boolean;
@@ -17,6 +19,7 @@ interface AuthContextProps {
   checkAuth: () => Promise<void>;
 }
 
+// Create auth context with default values
 export const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
   loading: false,
@@ -24,6 +27,7 @@ export const AuthContext = createContext<AuthContextProps>({
   checkAuth: async () => {},
 });
 
+// Provider component to manage auth state across the app
 export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
@@ -33,7 +37,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   const [initialCheckDone, setInitialCheckDone] = useState(false);
   const queryClient = useQueryClient();
 
-  // Always check authentication on first mount for non-welcome pages
+  // Check auth on first mount for non-welcome pages
   useEffect(() => {
     if (!initialCheckDone) {
       const isWelcomePage = window.location.hash === "#/";
@@ -49,38 +53,32 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     }
   }, [initialCheckDone, refetch]);
 
-  // Synchronize server auth state with local state
+  // Sync server auth state with local state
   useEffect(() => {
     if (!isLoading && !isFetching && data !== undefined) {
       if (data?.user) {
-        // Update local state from server data
         setLocalUser(data.user);
       } else if (data === null) {
-        // Server explicitly returned null or undefined
         setLocalUser(null);
       }
     }
   }, [data, isLoading, isFetching]);
 
-  // Update auth - immediately sets local state and also validates with server
+  // Update auth state and validate with server
   const updateAuth = useCallback(
     (user: User | null) => {
-      // Update local state immediately for responsive UI
       setLocalUser(user);
 
-      // If user is null (logout case), clear the query cache
+      // Clear cache on logout
       if (user === null) {
-        // Reset specific query data to null/false first
         queryClient.setQueryData(["hasSavedResponse"], false);
         queryClient.setQueryData(["totalScore"], null);
         queryClient.setQueryData(["questionnaireResponse"], null);
         queryClient.setQueryData(["questionnaireProgress"], null);
-
-        // Then reset all query cache to ensure no stale data remains
         queryClient.clear();
       }
 
-      // If user is provided (login/signup case), force validation with server
+      // Validate with server on login/signup
       if (user && !validationInProgress) {
         setValidationInProgress(true);
         refetch().finally(() => {
@@ -91,7 +89,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     [refetch, validationInProgress, queryClient]
   );
 
-  // Explicit check auth - returns a promise for components that need to wait for the check
+  // Force auth check when needed
   const checkAuth = useCallback(async (): Promise<void> => {
     if (validationInProgress) return;
 
@@ -108,11 +106,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   return (
     <AuthContext.Provider
       value={{
-        // Consider authenticated if we have a local user
         isAuthenticated: !!localUser,
-        // Only show loading if actively fetching and no local user
         loading: (isLoading || isFetching) && !localUser && !isWelcomePage,
-        // Use local user for immediate UI updates
         user: localUser || undefined,
         updateAuth,
         checkAuth,

@@ -5,6 +5,7 @@ import {
   StyledAccordion,
 } from "../../../../containers/about/styles/AboutContentStyles";
 
+// FAQ section component
 export function FAQSection() {
   return (
     <Section>

@@ -6,6 +6,7 @@ import { faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { NavLink } from "../../../common/links";
 
+// Props for mobile menu component
 interface MobileMenuProps {
   links: NavLink[];
   isActive: (href: string) => boolean;
@@ -15,6 +16,7 @@ interface MobileMenuProps {
   userAvatar?: string;
 }
 
+// Styled dropdown toggle button
 const CustomDropdownToggle = styled(Dropdown.Toggle)`
   color: ${({ theme }) => theme.textGrey};
   background: none;
@@ -41,6 +43,7 @@ const CustomDropdownToggle = styled(Dropdown.Toggle)`
   }
 `;
 
+// Styled dropdown menu container
 const CustomDropdownMenu = styled(Dropdown.Menu)`
   background-color: ${({ theme }) => theme.backgroundColor};
   border: none;
@@ -48,6 +51,7 @@ const CustomDropdownMenu = styled(Dropdown.Menu)`
   width: 200px;
 `;
 
+// Styled dropdown menu items
 const CustomDropdownItem = styled(Dropdown.Item)`
   color: ${({ theme }) => theme.textGrey};
   padding: 12px 20px;
@@ -68,6 +72,7 @@ const CustomDropdownItem = styled(Dropdown.Item)`
   }
 `;
 
+// Icon container for menu items
 const Icon = styled.span`
   width: 24px;
   margin-right: 12px;
@@ -76,6 +81,7 @@ const Icon = styled.span`
   justify-content: center;
 `;
 
+// User avatar image styling
 const AvatarImage = styled.img`
   width: 24px;
   height: 24px;
@@ -86,6 +92,7 @@ const AvatarImage = styled.img`
   background: ${({ theme }) => theme.backgroundColor};
 `;
 
+// Navbar links component for mobile view (dropdown menu)
 export function MobileMenu({
   links,
   isActive,

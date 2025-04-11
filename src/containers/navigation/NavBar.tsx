@@ -13,13 +13,14 @@ import { useProfile } from "../../hooks/profile/useProfile";
 import { RoutePaths } from "../../common/constants/routes";
 import { ConfirmationModal } from "../../components/shared/ConfirmationModal";
 
+// Props for navigation bar
 interface NavBarProps {
   links: NavLink[];
   themeToggler: () => void;
   theme: ThemeType;
 }
 
-// Functional component to render the Navbar
+// Main navigation bar component
 export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const location = useLocation();
   const { isAuthenticated, updateAuth, user } = useContext(AuthContext);
@@ -31,23 +32,24 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { mutate: logoutMutate } = useLogoutUser();
 
-  // Detect if user is a guest by checking both role and firstName
+  // Check if current user is a guest
   const isGuest =
     user?.role === "guest" ||
     (user?.firstName === "Guest" && user?.lastName === "User");
 
-  // Refresh profile data when the component mounts or when the location changes
+  // Refresh profile data on mount and location change
   useEffect(() => {
     if (isAuthenticated && !isGuest) {
       refetch();
     }
   }, [isAuthenticated, isGuest, location.pathname, refetch]);
 
-  // Handle the toggle for dark mode
+  // Toggle between light and dark theme
   const toggleDarkMode = () => {
     themeToggler();
   };
 
+  // Show logout confirmation modal
   const handleLogoutClick = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
@@ -55,23 +57,22 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
     setShowLogoutModal(true);
   };
 
+  // Handle user logout
   const handleLogoutConfirm = () => {
     if (isLoggingOut) return;
     setIsLoggingOut(true);
 
-    // First clear auth state locally to prevent 401 errors
+    // Clear local auth state first
     updateAuth(null);
 
-    // Then tell the server to log out
+    // Logout from server
     logoutMutate(undefined, {
       onSuccess: () => {
-        // Navigate after successful server logout
         navigate("/");
         setIsLoggingOut(false);
         setShowLogoutModal(false);
       },
-      onError: (error: Error) => {
-        // Even if server logout fails, still navigate away
+      onError: () => {
         navigate("/");
         setIsLoggingOut(false);
         setShowLogoutModal(false);
@@ -79,6 +80,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
     });
   };
 
+  // Check if a link is currently active
   const isActive = (href: string) => {
     const currentPath = location.pathname;
 
@@ -93,23 +95,22 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
     return currentPath === href;
   };
 
+  // Show sign up modal
   const handleCreateAccount = () => {
     setShowSignUpModal(true);
   };
 
-  // Return null if the user is not authenticated
+  // Hide navbar for unauthenticated users
   if (!isAuthenticated) {
     return null;
   }
 
-  // Filter links based on user role
+  // Filter navigation links based on user role
   const filteredLinks = links.filter((link) => {
-    // Hide links marked as hideForGuest for guest users
     if (isGuest && link.hideForGuest) {
       return false;
     }
 
-    // Show links marked as showOnlyForGuest only for guest users
     if (link.showOnlyForGuest && !isGuest) {
       return false;
     }

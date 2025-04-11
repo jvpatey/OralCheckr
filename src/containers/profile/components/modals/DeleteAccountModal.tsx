@@ -41,6 +41,7 @@ interface DeleteAccountModalProps {
   isDeleting: boolean;
 }
 
+// Delete account modal component
 export function DeleteAccountModal({
   show,
   onHide,

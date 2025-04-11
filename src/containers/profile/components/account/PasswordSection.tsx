@@ -93,7 +93,6 @@ export function PasswordSection({ refetch, showToast }: PasswordSectionProps) {
         new one:
       </DescriptionText>
       <StyledForm onSubmit={handlePasswordUpdate}>
-        {/* Hidden username field for accessibility and password managers */}
         <input
           type="text"
           id="username"

@@ -19,17 +19,20 @@ const StyledSpinner = styled(Spinner)`
   color: ${({ theme }) => theme.green};
 `;
 
+// Props for the LoadingSpinner component
 interface LoadingSpinnerProps {
   size?: "sm" | "md" | "lg" | "xl";
   variant?: string;
   fullHeight?: boolean;
 }
 
+// LoadingSpinner component
 export const LoadingSpinner = ({
   size = "md",
   variant = "border",
   fullHeight = false,
 }: LoadingSpinnerProps) => {
+  // Get the spinner size
   const getSpinnerSize = () => {
     switch (size) {
       case "sm":

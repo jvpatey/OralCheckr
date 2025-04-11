@@ -1,6 +1,7 @@
 import { Modal, Button } from "react-bootstrap";
 import styled from "styled-components";
 
+// Props for the ConfirmationModal component
 interface ConfirmationModalProps {
   show: boolean;
   title: string;
@@ -109,6 +110,7 @@ const CancelButton = styled(Button)`
   }
 `;
 
+// Confirmation modal component used for deleting habits and other destructive actions
 export function ConfirmationModal({
   show,
   title,
