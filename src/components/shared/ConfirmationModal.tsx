@@ -60,14 +60,22 @@ interface ConfirmButtonProps {
 }
 
 const ConfirmButton = styled(Button)<ConfirmButtonProps>`
-  background-color: ${({ theme, $isDestructive }) =>
-    $isDestructive ? theme.red : theme.blue};
-  border: 2px solid
-    ${({ theme, $isDestructive }) => ($isDestructive ? theme.red : theme.blue)};
-  color: ${({ theme }) => theme.backgroundColor};
   padding: 0.5rem 1rem;
   font-weight: 500;
   transition: all 0.2s ease;
+
+  ${({ $isDestructive, theme }) =>
+    $isDestructive
+      ? `
+    background-color: ${theme.red};
+    border-color: ${theme.red};
+    color: ${theme.backgroundColor};
+  `
+      : `
+    background-color: ${theme.blue};
+    border-color: ${theme.blue};
+    color: ${theme.backgroundColor};
+  `}
 
   &:hover {
     opacity: 0.9;
