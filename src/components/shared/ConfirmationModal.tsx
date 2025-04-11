@@ -1,15 +1,6 @@
 import { Modal, Button } from "react-bootstrap";
 import styled from "styled-components";
 
-// Define theme interface
-interface Theme {
-  backgroundColor: string;
-  textGrey: string;
-  darkGrey: string;
-  red: string;
-  blue: string;
-}
-
 // Props for the ConfirmationModal component
 interface ConfirmationModalProps {
   show: boolean;
@@ -24,11 +15,10 @@ interface ConfirmationModalProps {
 
 const StyledModal = styled(Modal)`
   .modal-content {
-    background-color: ${({ theme }: { theme: Theme }) => theme.backgroundColor};
+    background-color: ${({ theme }) => theme.backgroundColor};
     border: none;
     border-radius: 12px;
-    box-shadow: 0 4px 6px
-      ${({ theme }: { theme: Theme }) => `${theme.textGrey}15`};
+    box-shadow: 0 4px 6px ${({ theme }) => `${theme.textGrey}15`};
   }
 
   .modal-header {
@@ -36,12 +26,12 @@ const StyledModal = styled(Modal)`
     padding: 1.5rem 1.5rem 0.75rem;
 
     .modal-title {
-      color: ${({ theme }: { theme: Theme }) => theme.darkGrey};
+      color: ${({ theme }) => theme.darkGrey};
       font-weight: 500;
     }
 
     .btn-close {
-      color: ${({ theme }: { theme: Theme }) => theme.textGrey};
+      color: ${({ theme }) => theme.textGrey};
       opacity: 0.75;
       transition: opacity 0.2s ease;
 
@@ -52,7 +42,7 @@ const StyledModal = styled(Modal)`
   }
 
   .modal-body {
-    color: ${({ theme }: { theme: Theme }) => theme.textGrey};
+    color: ${({ theme }) => theme.textGrey};
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
     line-height: 1.5;
@@ -69,77 +59,39 @@ interface ConfirmButtonProps {
   $isDestructive?: boolean;
 }
 
-const getConfirmButtonStyles = (theme: Theme, isDestructive?: boolean) => ({
-  backgroundColor: isDestructive ? theme.red : theme.blue,
-  borderColor: isDestructive ? theme.red : theme.blue,
-  color: theme.backgroundColor,
-});
-
 const ConfirmButton = styled(Button)<ConfirmButtonProps>`
-  ${({ theme, $isDestructive }) => {
-    const styles = getConfirmButtonStyles(theme as Theme, $isDestructive);
-    return `
-      background-color: ${styles.backgroundColor};
-      border: 2px solid ${styles.borderColor};
-      color: ${styles.color};
-    `;
-  }}
+  background-color: ${({ theme, $isDestructive }) =>
+    $isDestructive ? theme.red : theme.blue};
+  border: 2px solid
+    ${({ theme, $isDestructive }) => ($isDestructive ? theme.red : theme.blue)};
+  color: ${({ theme }) => theme.backgroundColor};
   padding: 0.5rem 1rem;
   font-weight: 500;
   transition: all 0.2s ease;
 
-  &:hover,
-  &:focus,
-  &:active {
-    background-color: ${({ theme }: { theme: Theme }) =>
-      theme.backgroundColor} !important;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px
-      ${({ theme }: { theme: Theme }) => `${theme.textGrey}15`};
-    color: ${({
-      theme,
-      $isDestructive,
-    }: {
-      theme: Theme;
-      $isDestructive?: boolean;
-    }) => ($isDestructive ? theme.red : theme.blue)};
-    border: 2px solid
-      ${({
-        theme,
-        $isDestructive,
-      }: {
-        theme: Theme;
-        $isDestructive?: boolean;
-      }) => ($isDestructive ? theme.red : theme.blue)};
+  &:hover {
+    opacity: 0.9;
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(1px);
   }
 `;
 
 const CancelButton = styled(Button)`
   background-color: transparent;
-  border: 1px solid ${({ theme }: { theme: Theme }) => theme.textGrey};
-  color: ${({ theme }: { theme: Theme }) => theme.textGrey};
+  border: 1px solid ${({ theme }) => theme.textGrey};
+  color: ${({ theme }) => theme.textGrey};
   padding: 0.5rem 1rem;
   font-weight: 500;
   transition: all 0.2s ease;
 
-  &:hover,
-  &:focus,
-  &:active {
-    background-color: ${({ theme }: { theme: Theme }) =>
-      theme.textGrey} !important;
-    border: 1px solid ${({ theme }: { theme: Theme }) => theme.textGrey} !important;
-    color: ${({ theme }: { theme: Theme }) => theme.backgroundColor} !important;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px
-      ${({ theme }: { theme: Theme }) => `${theme.textGrey}15`};
+  &:hover {
+    opacity: 0.9;
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(1px);
   }
 `;
 
