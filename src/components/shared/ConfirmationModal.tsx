@@ -55,27 +55,30 @@ const StyledModal = styled(Modal)`
   }
 `;
 
-interface ConfirmButtonProps {
-  $isDestructive?: boolean;
-}
-
-const ConfirmButton = styled(Button)<ConfirmButtonProps>`
+const RegularConfirmButton = styled(Button)`
+  background-color: ${({ theme }) => theme.blue};
+  border-color: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.backgroundColor};
   padding: 0.5rem 1rem;
   font-weight: 500;
   transition: all 0.2s ease;
 
-  ${({ $isDestructive, theme }) =>
-    $isDestructive
-      ? `
-    background-color: ${theme.red};
-    border-color: ${theme.red};
-    color: ${theme.backgroundColor};
-  `
-      : `
-    background-color: ${theme.blue};
-    border-color: ${theme.blue};
-    color: ${theme.backgroundColor};
-  `}
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+`;
+
+const DestructiveConfirmButton = styled(Button)`
+  background-color: ${({ theme }) => theme.red};
+  border-color: ${({ theme }) => theme.red};
+  color: ${({ theme }) => theme.backgroundColor};
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
 
   &:hover {
     opacity: 0.9;
@@ -114,6 +117,10 @@ export function ConfirmationModal({
   onCancel,
   isDestructive = false,
 }: ConfirmationModalProps) {
+  const ConfirmButton = isDestructive
+    ? DestructiveConfirmButton
+    : RegularConfirmButton;
+
   return (
     <StyledModal show={show} onHide={onCancel} centered>
       <Modal.Header closeButton>
@@ -124,9 +131,7 @@ export function ConfirmationModal({
         <CancelButton variant="secondary" onClick={onCancel}>
           {cancelLabel}
         </CancelButton>
-        <ConfirmButton $isDestructive={isDestructive} onClick={onConfirm}>
-          {confirmLabel}
-        </ConfirmButton>
+        <ConfirmButton onClick={onConfirm}>{confirmLabel}</ConfirmButton>
       </Modal.Footer>
     </StyledModal>
   );
