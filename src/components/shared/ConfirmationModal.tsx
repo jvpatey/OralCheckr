@@ -53,55 +53,36 @@ const StyledModal = styled(Modal)`
     padding: 0.75rem 1.5rem 1.5rem;
     gap: 0.75rem;
   }
-`;
 
-const RegularConfirmButton = styled(Button)`
-  background-color: ${({ theme }) => theme.blue};
-  border-color: ${({ theme }) => theme.blue};
-  color: ${({ theme }) => theme.backgroundColor};
-  padding: 0.5rem 1rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  .confirm-button {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 2px solid;
+  }
 
-  &:hover {
+  .confirm-button:hover {
     opacity: 0.9;
   }
 
-  &:active {
+  .confirm-button:active {
     transform: translateY(1px);
   }
-`;
 
-const DestructiveConfirmButton = styled(Button)`
-  background-color: ${({ theme }) => theme.red};
-  border-color: ${({ theme }) => theme.red};
-  color: ${({ theme }) => theme.backgroundColor};
-  padding: 0.5rem 1rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  .cancel-button {
+    background-color: transparent;
+    border: 1px solid ${({ theme }) => theme.textGrey};
+    color: ${({ theme }) => theme.textGrey};
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
 
-  &:hover {
+  .cancel-button:hover {
     opacity: 0.9;
   }
 
-  &:active {
-    transform: translateY(1px);
-  }
-`;
-
-const CancelButton = styled(Button)`
-  background-color: transparent;
-  border: 1px solid ${({ theme }) => theme.textGrey};
-  color: ${({ theme }) => theme.textGrey};
-  padding: 0.5rem 1rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-
-  &:hover {
-    opacity: 0.9;
-  }
-
-  &:active {
+  .cancel-button:active {
     transform: translateY(1px);
   }
 `;
@@ -117,10 +98,6 @@ export function ConfirmationModal({
   onCancel,
   isDestructive = false,
 }: ConfirmationModalProps) {
-  const ConfirmButton = isDestructive
-    ? DestructiveConfirmButton
-    : RegularConfirmButton;
-
   return (
     <StyledModal show={show} onHide={onCancel} centered>
       <Modal.Header closeButton>
@@ -128,10 +105,25 @@ export function ConfirmationModal({
       </Modal.Header>
       <Modal.Body>{message}</Modal.Body>
       <Modal.Footer>
-        <CancelButton variant="secondary" onClick={onCancel}>
+        <Button
+          variant="secondary"
+          className="cancel-button"
+          onClick={onCancel}
+        >
           {cancelLabel}
-        </CancelButton>
-        <ConfirmButton onClick={onConfirm}>{confirmLabel}</ConfirmButton>
+        </Button>
+        <Button
+          variant="primary"
+          className="confirm-button"
+          style={{
+            backgroundColor: isDestructive ? "#ff6961" : "#3f93b2",
+            borderColor: isDestructive ? "#ff6961" : "#3f93b2",
+            color: "#f5f5f5",
+          }}
+          onClick={onConfirm}
+        >
+          {confirmLabel}
+        </Button>
       </Modal.Footer>
     </StyledModal>
   );
