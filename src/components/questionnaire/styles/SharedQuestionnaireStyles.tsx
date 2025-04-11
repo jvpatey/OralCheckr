@@ -7,7 +7,7 @@ import { NavigationButton } from "./NavigationButton";
 export const TitleText = styled.h1`
   color: ${({ theme }) => theme.blue};
   margin-top: 20px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   text-align: center;
   font-size: 2.5rem;
 
@@ -18,19 +18,12 @@ export const TitleText = styled.h1`
   }
 `;
 
-export const CardText = styled.h5`
+export const CardText = styled.p`
   color: ${({ theme }) => theme.textGrey};
-  margin-bottom: 20px;
-  margin-right: 40px;
-  margin-left: 40px;
   text-align: center;
-  font-size: 1.5rem;
-
-  @media (max-width: 768px) {
-    font-size: 1.25rem;
-    margin-right: 20px;
-    margin-left: 20px;
-  }
+  font-size: 1.1rem;
+  margin: 10px 0;
+  width: 80%;
 `;
 
 // Shared header components
@@ -81,6 +74,9 @@ export const PrimaryButton = styled(NavigationButton)`
   border-color: ${({ theme }) => theme.green};
   background-color: ${({ theme }) => theme.green};
   color: ${({ theme }) => theme.accentBackgroundColor};
+  transition: all 0.4s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 
   @media (max-width: 768px) {
     padding: 10px 20px;
@@ -88,6 +84,8 @@ export const PrimaryButton = styled(NavigationButton)`
   }
 
   &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
     background-color: ${({ theme }) => theme.accentBackgroundColor};
     color: ${({ theme }) => theme.green};
     border: solid 2px;

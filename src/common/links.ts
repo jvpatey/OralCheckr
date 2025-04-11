@@ -1,15 +1,18 @@
 import {
-  faClipboardList,
-  faTasksAlt,
   faArrowRightFromBracket,
   faChartSimple,
-  faList,
-  faSquarePollVertical,
   faUser,
-  faInfoCircle,
+  faClipboardCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClipboard,
+  faRectangleList,
+  faCircleQuestion,
+} from "@fortawesome/free-regular-svg-icons";
 import { RoutePaths } from "./constants/routes";
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from "@fortawesome/fontawesome-common-types";
+
+/* -- Links for the navbar and sidebar -- */
 
 // Interface for links
 export interface NavLink {
@@ -21,7 +24,7 @@ export interface NavLink {
   showOnlyForGuest?: boolean;
 }
 
-// Navbar links
+// Links for the navbar
 export const navbarLinks: NavLink[] = [
   {
     name: "Profile",
@@ -33,20 +36,19 @@ export const navbarLinks: NavLink[] = [
   {
     name: "About",
     path: RoutePaths.ABOUT,
-    icon: faInfoCircle,
+    icon: faCircleQuestion as IconDefinition,
     displayIn: "navbar",
-    showOnlyForGuest: true,
   },
   {
     name: "Questionnaire",
     path: RoutePaths.QUESTIONNAIRE,
-    icon: faClipboardList,
+    icon: faClipboard as IconDefinition,
     displayIn: "navbar",
   },
   {
     name: "Habit Tracker",
     path: RoutePaths.HABITS,
-    icon: faTasksAlt,
+    icon: faRectangleList as IconDefinition,
     displayIn: "navbar",
   },
   {
@@ -57,18 +59,18 @@ export const navbarLinks: NavLink[] = [
   },
 ];
 
-// Sidebar links
+// Links for the sidebar
 export const sidebarLinks: NavLink[] = [
   {
     name: "Questionnaire",
     path: RoutePaths.QUESTIONNAIRE,
-    icon: faClipboardList,
+    icon: faClipboard as IconDefinition,
     displayIn: "sidebar",
   },
   {
     name: "Habits",
     path: RoutePaths.HABITS,
-    icon: faList,
+    icon: faRectangleList as IconDefinition,
     displayIn: "sidebar",
   },
   {
@@ -80,7 +82,7 @@ export const sidebarLinks: NavLink[] = [
   {
     name: "Results",
     path: RoutePaths.RESULTS,
-    icon: faSquarePollVertical,
+    icon: faClipboardCheck as IconDefinition,
     displayIn: "sidebar",
   },
 ];

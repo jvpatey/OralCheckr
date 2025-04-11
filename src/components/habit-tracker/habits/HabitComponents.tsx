@@ -10,6 +10,7 @@ import {
   HabitRow,
   PlaceholderText,
   DatePickerWrapper,
+  CardContainer,
 } from "./styles/HabitComponentsStyles";
 
 // Export all components for use in other files
@@ -25,4 +26,5 @@ export {
   HabitRow,
   PlaceholderText,
   DatePickerWrapper,
+  CardContainer,
 };

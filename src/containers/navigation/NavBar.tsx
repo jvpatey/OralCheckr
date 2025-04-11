@@ -10,14 +10,17 @@ import { ThemeType } from "../../App";
 import { CustomNavbar } from "./styles/NavBarStyles";
 import { NavBrand, MobileMenu, DesktopMenu, ThemeToggle } from "./components";
 import { useProfile } from "../../hooks/profile/useProfile";
+import { RoutePaths } from "../../common/constants/routes";
+import { ConfirmationModal } from "../../components/shared/ConfirmationModal";
 
+// Props for navigation bar
 interface NavBarProps {
   links: NavLink[];
   themeToggler: () => void;
   theme: ThemeType;
 }
 
-// Functional component to render the Navbar
+// Main navigation bar component
 export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const location = useLocation();
   const { isAuthenticated, updateAuth, user } = useContext(AuthContext);
@@ -25,70 +28,89 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
   const isDarkMode = theme === ThemeType.DARK;
   const navigate = useNavigate();
   const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { mutate: logoutMutate } = useLogoutUser();
 
-  // Refresh profile data when the component mounts or when the location changes
+  // Check if current user is a guest
+  const isGuest =
+    user?.role === "guest" ||
+    (user?.firstName === "Guest" && user?.lastName === "User");
+
+  // Refresh profile data on mount and location change
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !isGuest) {
       refetch();
     }
-  }, [isAuthenticated, location.pathname, refetch]);
+  }, [isAuthenticated, isGuest, location.pathname, refetch]);
 
-  // Handle the toggle for dark mode
+  // Toggle between light and dark theme
   const toggleDarkMode = () => {
     themeToggler();
-    localStorage.setItem(
-      "theme",
-      isDarkMode ? ThemeType.LIGHT : ThemeType.DARK
-    );
   };
 
-  const handleLogout = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  // Show logout confirmation modal
+  const handleLogoutClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     e.preventDefault();
+    setShowLogoutModal(true);
+  };
 
+  // Handle user logout
+  const handleLogoutConfirm = () => {
     if (isLoggingOut) return;
     setIsLoggingOut(true);
 
-    // Logout mutation
+    // Clear local auth state first
+    updateAuth(null);
+
+    // Logout from server
     logoutMutate(undefined, {
       onSuccess: () => {
-        updateAuth(null);
         navigate("/");
         setIsLoggingOut(false);
+        setShowLogoutModal(false);
       },
-      onError: (error: Error) => {
-        console.error("Logout error:", error);
+      onError: () => {
+        navigate("/");
         setIsLoggingOut(false);
+        setShowLogoutModal(false);
       },
     });
   };
 
+  // Check if a link is currently active
   const isActive = (href: string) => {
-    const currentPath = location.pathname + location.hash.replace("#", "");
+    const currentPath = location.pathname;
+
+    if (href === RoutePaths.HABITS) {
+      return currentPath.startsWith(RoutePaths.HABITS);
+    }
+
+    if (href === RoutePaths.QUESTIONNAIRE) {
+      return currentPath.startsWith(RoutePaths.QUESTIONNAIRE);
+    }
+
     return currentPath === href;
   };
 
+  // Show sign up modal
   const handleCreateAccount = () => {
     setShowSignUpModal(true);
   };
 
-  // Return null if the user is not authenticated
+  // Hide navbar for unauthenticated users
   if (!isAuthenticated) {
     return null;
   }
 
-  // Ensure isGuest is always a boolean
-  const isGuest = Boolean(user && user.role === "guest");
-
-  // Filter links based on user role
+  // Filter navigation links based on user role
   const filteredLinks = links.filter((link) => {
-    // Hide links marked as hideForGuest for guest users
     if (isGuest && link.hideForGuest) {
       return false;
     }
 
-    // Show links marked as showOnlyForGuest only for guest users
     if (link.showOnlyForGuest && !isGuest) {
       return false;
     }
@@ -105,7 +127,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
           <MobileMenu
             links={filteredLinks}
             isActive={isActive}
-            handleLogout={handleLogout}
+            handleLogout={handleLogoutClick}
             isGuest={isGuest}
             onCreateAccount={handleCreateAccount}
             userAvatar={profile?.avatar}
@@ -114,7 +136,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
           <DesktopMenu
             links={filteredLinks}
             isActive={isActive}
-            handleLogout={handleLogout}
+            handleLogout={handleLogoutClick}
             isGuest={isGuest}
             onCreateAccount={handleCreateAccount}
             userAvatar={profile?.avatar}
@@ -133,6 +155,15 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
           handleClose={() => setShowSignUpModal(false)}
         />
       )}
+
+      <ConfirmationModal
+        show={showLogoutModal}
+        title="Log Out"
+        message="Are you sure you want to log out?"
+        confirmLabel="Log Out"
+        onConfirm={handleLogoutConfirm}
+        onCancel={() => setShowLogoutModal(false)}
+      />
     </>
   );
 }

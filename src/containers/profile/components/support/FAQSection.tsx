@@ -1,7 +1,11 @@
 import { Accordion } from "react-bootstrap";
 import { Section, SectionTitle } from "../../styles/AccountTabStyles";
-import { FAQContainer, StyledAccordion } from "../../styles/SupportTabStyles";
+import {
+  FAQContainer,
+  StyledAccordion,
+} from "../../../../containers/about/styles/AboutContentStyles";
 
+// FAQ section component
 export function FAQSection() {
   return (
     <Section>

@@ -15,55 +15,55 @@ import {
   CustomCarousel,
 } from "./styles/RecommendationsStyles";
 
-// Functional component for the Recommendations card
+// Recommendations component with carousel display
 export function Recommendations() {
   const {
-    data: storedResponses,
+    data: questionnaireData,
     isLoading,
     error,
   } = useGetQuestionnaireResponse();
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [index, setIndex] = useState(0);
 
-  // When responses change, process them to generate recommendations
+  // Generate recommendations from questionnaire responses
   useEffect(() => {
-    if (!storedResponses || !storedResponses.responses) return;
+    if (!questionnaireData || !questionnaireData.responses) return;
 
-    // Convert string responses to number format
     const convertedResponses: Record<number, number | number[]> = {};
 
-    Object.entries(storedResponses.responses).forEach(([key, value]) => {
+    Object.entries(questionnaireData.responses).forEach(([key, value]) => {
       const questionId = parseInt(key);
       try {
-        // Try to parse as JSON in case it's an array
         const parsed = JSON.parse(value);
         convertedResponses[questionId] = parsed;
       } catch (e) {
-        // If not JSON, convert to number
         convertedResponses[questionId] = parseInt(value);
       }
     });
 
     const recs = generateRecommendations(convertedResponses);
     setRecommendations(recs);
-  }, [storedResponses]);
+  }, [questionnaireData]);
 
+  // Handle carousel navigation
   const handleSelect = (selectedIndex: number) => {
     setIndex(selectedIndex);
   };
 
+  // Show loading state
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
-  // Check if the error is a 404 (no data found)
+  // Handle 404 error (no data)
   const isNoDataError = error && error.message && error.message.includes("404");
 
-  // Show error only if it's not a 404
+  // Show error message
   if (error && !isNoDataError) {
     return <div>Error: {error.message}</div>;
   }
 
+  // Main recommendations view
   return (
     <>
       <StyledHeader>Recommendations</StyledHeader>

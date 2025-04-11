@@ -2,22 +2,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { SectionTitle } from "../../styles/AccountTabStyles";
 import {
-  ContactSection as StyledContactSection,
+  ContentSection,
   ContentBox,
-  ContactItem,
+  ContentItem,
   SubHeading,
   ContentText,
   StyledLink,
   SocialLinks,
   SocialLink,
-} from "../../styles/SupportTabStyles";
+} from "../../../../containers/about/styles/AboutContentStyles";
 
+// Contact section component
 export function ContactSection() {
   return (
-    <StyledContactSection>
+    <ContentSection>
       <SectionTitle>Get in Touch</SectionTitle>
       <ContentBox>
-        <ContactItem>
+        <ContentItem>
           <SubHeading>Contact</SubHeading>
           <ContentText>
             For any feedback, bug reports, or issues, please send an email to{" "}
@@ -25,9 +26,9 @@ export function ContactSection() {
               jeffreyvpatey@gmail.com
             </StyledLink>
           </ContentText>
-        </ContactItem>
+        </ContentItem>
 
-        <ContactItem>
+        <ContentItem>
           <SubHeading>Connect</SubHeading>
           <ContentText>
             Thanks for checking out my app! To see my other projects or connect
@@ -51,8 +52,8 @@ export function ContactSection() {
               <FontAwesomeIcon icon={faLinkedin as any} /> LinkedIn
             </SocialLink>
           </SocialLinks>
-        </ContactItem>
+        </ContentItem>
       </ContentBox>
-    </StyledContactSection>
+    </ContentSection>
   );
 }

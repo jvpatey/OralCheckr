@@ -16,6 +16,9 @@ export const CustomNavbar = styled(Navbar)`
   background-color: ${({ theme }) => theme.backgroundColor};
   width: 100%;
   animation: ${fadeInDown} 1s ease-out;
+  border-bottom: 1px solid ${({ theme }) => `${theme.textGrey}25`};
+  box-shadow: 0 2px 4px ${({ theme }) => `${theme.textGrey}10`};
+  z-index: 1100;
 
   @media (max-width: 768px) {
     .d-lg-none {

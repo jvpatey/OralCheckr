@@ -30,6 +30,9 @@ export const QuestionnaireCard = styled(Card)`
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   animation: ${fadeUp} 1s ease-out;
+  margin: auto;
+  position: relative;
+  top: -5vh;
 
   @media (min-width: 1200px) {
     max-width: 900px;

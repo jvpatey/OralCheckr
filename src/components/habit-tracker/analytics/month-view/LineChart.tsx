@@ -11,6 +11,9 @@ const ChartContainer = styled.div`
   width: 100%;
   height: 100%;
   padding: 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 // Type definition for the theme
@@ -35,6 +38,7 @@ const generateChartOptions = (
       toolbar: {
         show: false,
       },
+      parentHeightOffset: 0,
     },
     stroke: {
       curve: "smooth",
@@ -176,6 +180,7 @@ export function LineChart({ habitsLog, year, month }: LineChartProps) {
         series={series}
         type="line"
         height="100%"
+        width="100%"
       />
     </ChartContainer>
   );

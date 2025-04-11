@@ -2,10 +2,10 @@
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 
-// Local timezone
+// Get user's local timezone
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-// Common fetch options
+// Default fetch options for API requests
 export const fetchOptions = {
   credentials: "include" as RequestCredentials,
   headers: {
@@ -13,9 +13,9 @@ export const fetchOptions = {
   },
 };
 
-// Format date for API requests
+// Convert date to API-friendly format
 export const formatDateForApi = (date: Date) => {
-  // Convert to zoned time for consistent timezone handling
+  // Convert to user's timezone
   const zonedDate = toZonedTime(date, TIMEZONE);
 
   return {
@@ -25,20 +25,24 @@ export const formatDateForApi = (date: Date) => {
   };
 };
 
-// Make API requests with proper error handling
+// Make API requests with error handling
 export const apiRequest = async <T>(
   url: string,
   method: "GET" | "POST" | "PUT" | "DELETE",
   body?: Record<string, unknown>
 ): Promise<T> => {
   try {
-    const response = await fetch(url, {
+    // Set up request options
+    const options = {
       ...fetchOptions,
       method,
+      credentials: "include" as RequestCredentials,
       ...(body && { body: JSON.stringify(body) }),
-    });
+    };
 
-    // For welcome page, silently handle 401/403 errors from auth endpoints
+    const response = await fetch(url, options);
+
+    // Handle auth errors silently
     if (
       (response.status === 401 || response.status === 403) &&
       (url.includes("/auth/validate") || url.includes("/auth/profile"))
@@ -46,7 +50,7 @@ export const apiRequest = async <T>(
       return null as unknown as T;
     }
 
-    // For profile page, silently handle 404 errors from questionnaire endpoints
+    // Handle missing questionnaire data silently
     if (
       response.status === 404 &&
       (url.includes("/questionnaire/response") ||
@@ -55,20 +59,45 @@ export const apiRequest = async <T>(
       return null as unknown as T;
     }
 
-    const data = await response.json();
+    // Check response content type
+    const contentType = response.headers.get("content-type");
 
-    if (!response.ok) {
-      // If the server returns an error message, use it
-      if (data && typeof data === "object" && "message" in data) {
-        throw new Error(data.message);
+    // Handle JSON responses
+    if (contentType && contentType.includes("application/json")) {
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Use server error message if available
+        if (data && typeof data === "object" && "message" in data) {
+          throw new Error(data.message);
+        }
+        // Default error with status code
+        throw new Error(`Request failed with status ${response.status}`);
       }
-      // Otherwise, throw a generic error with the status code
-      throw new Error(`Request failed with status ${response.status}`);
-    }
 
-    return data;
+      return data;
+    }
+    // Handle empty responses
+    else if (response.status === 204) {
+      return null as unknown as T;
+    }
+    // Handle other response types
+    else {
+      const text = await response.text();
+      if (!response.ok) {
+        throw new Error(
+          text || `Request failed with status ${response.status}`
+        );
+      }
+
+      try {
+        return JSON.parse(text) as T;
+      } catch {
+        return text as unknown as T;
+      }
+    }
   } catch (error) {
-    // Silently handle 401/403 errors for auth endpoints
+    // Handle auth errors silently
     if (
       error instanceof Error &&
       (error.message.includes("401") || error.message.includes("403")) &&
@@ -77,18 +106,7 @@ export const apiRequest = async <T>(
       return null as unknown as T;
     }
 
-    // Silently handle 404 errors for questionnaire endpoints
-    if (
-      error instanceof Error &&
-      error.message.includes("404") &&
-      typeof url === "string" &&
-      (url.includes("/questionnaire/response") ||
-        url.includes("/questionnaire/progress"))
-    ) {
-      return null as unknown as T;
-    }
-
-    console.error(`Error making ${method} request to ${url}:`, error);
+    // Throw other errors
     throw error;
   }
 };

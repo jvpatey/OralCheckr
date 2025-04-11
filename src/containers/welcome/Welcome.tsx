@@ -7,20 +7,25 @@ import { LoginModal } from "./LoginModal";
 import { WelcomeContent, WelcomeButtons } from "./components";
 import { WelcomeCard, WelcomeContainer } from "./styles/WelcomeStyles";
 
+// Props for welcome page
 interface WelcomeProps {
   themeToggler: () => void;
   theme: ThemeType;
 }
 
+// Welcome page with sign up and login options
 export function Welcome({ themeToggler, theme }: WelcomeProps) {
+  // Modal state management
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
+  // Modal handlers
   const handleShowSignUpModal = () => setShowSignUpModal(true);
   const handleCloseSignUpModal = () => setShowSignUpModal(false);
   const handleShowLoginModal = () => setShowLoginModal(true);
   const handleCloseLoginModal = () => setShowLoginModal(false);
 
+  // Welcome page view
   return (
     <PageBackground>
       <WelcomeContainer>

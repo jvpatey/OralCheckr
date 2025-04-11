@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Tab } from "react-bootstrap";
 import {
   PageContainer,
@@ -12,30 +12,28 @@ import { ProfileSection } from "./ProfileSection";
 import { AccountTab } from "./tabs/AccountTab";
 import { updateProfile } from "../../../services/profileService";
 import { DataTab } from "./tabs/DataTab";
-import { SupportTab } from "./tabs/SupportTab";
 import { AvatarSelectionModal } from "./modals/AvatarSelectionModal";
-import { AuthContext } from "../../../containers/authentication/AuthContext";
 
+// Main profile page component with tabs and avatar management
 export function Profile() {
-  const { profile, loading, error, refetch } = useProfile();
-  const { user } = useContext(AuthContext);
-  const isGuest = user?.role === "guest";
+  const { profile, loading, error, refetch, isGuest } = useProfile();
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [localAvatar, setLocalAvatar] = useState<string | undefined>();
 
-  // Update localAvatar whenever profile changes
+  // Keep local avatar in sync with profile changes
   useEffect(() => {
-    if (profile?.avatar) {
-      setLocalAvatar(profile.avatar);
+    if (isGuest) {
+      return;
     }
-  }, [profile]);
+    setLocalAvatar(profile?.avatar);
+  }, [profile, isGuest]);
 
+  // Handle avatar selection and update
   const handleAvatarSelect = async (avatar: string) => {
     try {
       await updateProfile({ avatar });
       setLocalAvatar(avatar);
       setShowAvatarModal(false);
-      // Ensure refetch immediately to update the navbar
       await refetch();
     } catch (err) {
       console.error(
@@ -45,6 +43,7 @@ export function Profile() {
     }
   };
 
+  // Show guest account message
   if (isGuest) {
     return (
       <PageContainer>
@@ -59,6 +58,7 @@ export function Profile() {
     );
   }
 
+  // Show loading state
   if (loading) {
     return (
       <PageContainer>
@@ -69,6 +69,7 @@ export function Profile() {
     );
   }
 
+  // Show error state
   if (error) {
     return (
       <PageContainer>
@@ -83,6 +84,7 @@ export function Profile() {
     );
   }
 
+  // Main profile view with tabs
   return (
     <PageContainer>
       <ProfileCard>
@@ -92,38 +94,28 @@ export function Profile() {
           email={profile?.email}
           avatar={localAvatar}
           onAvatarClick={() => setShowAvatarModal(true)}
+          refetch={refetch}
         />
 
         <Tab.Container defaultActiveKey="account">
           <StyledNav variant="tabs">
             <Nav.Item>
-              <Nav.Link eventKey="account">Account</Nav.Link>
+              <Nav.Link eventKey="account">Account Settings</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="data">Data</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="support">Support</Nav.Link>
+              <Nav.Link eventKey="data">Data Management</Nav.Link>
             </Nav.Item>
           </StyledNav>
 
           <Tab.Content>
             <Tab.Pane eventKey="account">
               <TabContent>
-                <AccountTab
-                  currentEmail={profile?.email || ""}
-                  refetch={refetch}
-                />
+                <AccountTab refetch={refetch} />
               </TabContent>
             </Tab.Pane>
             <Tab.Pane eventKey="data">
               <TabContent>
                 <DataTab />
-              </TabContent>
-            </Tab.Pane>
-            <Tab.Pane eventKey="support">
-              <TabContent>
-                <SupportTab />
               </TabContent>
             </Tab.Pane>
           </Tab.Content>

@@ -3,8 +3,9 @@ import { Nav, Navbar } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { NavLink } from "../../../common/links";
-import { ProfileNavLink } from "./ProfileNavLink";
+import React from "react";
 
+// Props for desktop menu component
 interface DesktopMenuProps {
   links: NavLink[];
   isActive: (href: string) => boolean;
@@ -14,6 +15,7 @@ interface DesktopMenuProps {
   userAvatar?: string;
 }
 
+// Styled navbar collapse for responsive design
 const CustomCollapse = styled(Navbar.Collapse)`
   background-color: ${({ theme }) => theme.backgroundColor};
 
@@ -36,28 +38,85 @@ const CustomCollapse = styled(Navbar.Collapse)`
   }
 `;
 
+// Styled nav container
+const StyledNav = styled(Nav)`
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+`;
+
+// Styled nav link with hover and active states
 const CustomNavLink = styled(Nav.Link)`
   color: ${({ theme }) => theme.textGrey};
   margin-right: 35px;
-  font-size: large;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 8px 0;
+  position: relative;
+  transition: color 0.4s ease-out;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease-out;
+    background-color: ${({ theme }) => theme.green};
+  }
 
   &:hover {
-    color: ${({ theme }) => theme.blue};
-    transform: scale(1.05);
+    color: ${({ theme }) => theme.green};
+    text-decoration: none;
+
+    &::after {
+      transform: scaleX(1);
+    }
   }
 
   &.active {
     color: ${({ theme }) => theme.blue};
-    font-weight: bold;
-    transform: scale(1.1);
-    background-color: transparent;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: ${({ theme }) => theme.blue};
+      transform: scaleX(1);
+    }
   }
 `;
 
+// Icon container for nav items
 const Icon = styled.span`
   margin-right: 5px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1em;
 `;
 
+// User avatar image styling
+const AvatarImage = styled.img`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: contain;
+  position: relative;
+  top: -1px;
+  border: 2px solid ${({ theme }) => theme.blue};
+  padding: 2px;
+  background: ${({ theme }) => theme.backgroundColor};
+`;
+
+// Create account button with tooltip
 const CreateAccountButton = styled.button`
   background-color: ${({ theme }) => theme.green};
   color: ${({ theme }) => theme.backgroundColor};
@@ -67,6 +126,9 @@ const CreateAccountButton = styled.button`
   cursor: pointer;
   font-weight: bold;
   margin-right: 20px;
+  transition: all 0.4s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
 
   @media (min-width: 768px) {
     align-self: center;
@@ -78,12 +140,50 @@ const CreateAccountButton = styled.button`
     padding: 10px 20px;
   }
 
+  &::after {
+    content: "If you create a new account, your questionnaire and habit tracking data will be moved to your new account";
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: ${({ theme }) => theme.backgroundColor};
+    color: ${({ theme }) => theme.textGrey};
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: normal;
+    width: max-content;
+    max-width: 250px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid ${({ theme }) => `${theme.textGrey}25`};
+    z-index: 1000;
+
+    @media (max-width: 768px) {
+      left: auto;
+      right: 0;
+      transform: none;
+      top: 100%;
+      margin-top: 5px;
+    }
+  }
+
   &:hover {
-    background-color: ${({ theme }) => theme.blue};
+    background-color: ${({ theme }) => theme.green};
     color: ${({ theme }) => theme.backgroundColor};
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+
+    &::after {
+      opacity: 1;
+      visibility: visible;
+    }
   }
 `;
 
+// Navbar links component for desktop view (non-mobile)
 export function DesktopMenu({
   links,
   isActive,
@@ -94,38 +194,35 @@ export function DesktopMenu({
 }: DesktopMenuProps) {
   return (
     <CustomCollapse id="basic-navbar-nav">
-      <Nav className="ms-auto d-none d-lg-flex">
-        {links.map((link) => {
-          if (link.name === "Profile") {
-            return (
-              <ProfileNavLink
-                key={link.path}
-                isActive={isActive(link.path)}
-                avatar={userAvatar}
-              />
-            );
-          }
-          return (
-            <CustomNavLink
-              key={link.path}
-              className={isActive(link.path) ? "active" : ""}
-              as={Link}
-              to={link.path === "/" ? "/" : link.path}
-              onClick={link.name === "Log Out" ? handleLogout : undefined}
-            >
-              <Icon>
+      <StyledNav className="ms-auto d-none d-lg-flex">
+        {links.map((link) => (
+          <CustomNavLink
+            key={link.path}
+            className={isActive(link.path) ? "active" : ""}
+            as={Link}
+            to={link.path === "/" ? "/" : link.path}
+            onClick={link.name === "Log Out" ? handleLogout : undefined}
+          >
+            <Icon>
+              {link.name === "Profile" ? (
+                userAvatar ? (
+                  <AvatarImage src={userAvatar} alt="Profile" />
+                ) : (
+                  <FontAwesomeIcon icon={link.icon} />
+                )
+              ) : (
                 <FontAwesomeIcon icon={link.icon} />
-              </Icon>
-              {link.name}
-            </CustomNavLink>
-          );
-        })}
+              )}
+            </Icon>
+            {link.name}
+          </CustomNavLink>
+        ))}
         {isGuest && (
           <CreateAccountButton onClick={onCreateAccount}>
             Create Account
           </CreateAccountButton>
         )}
-      </Nav>
+      </StyledNav>
     </CustomCollapse>
   );
 }

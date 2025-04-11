@@ -25,6 +25,10 @@ const GOOGLE_CLIENT_ID =
   import.meta.env.VITE_GOOGLE_CLIENT_ID ||
   (window as any).APP_CONFIG?.GOOGLE_CLIENT_ID;
 
+// Check if we have a valid Google client ID
+const hasValidGoogleClientId =
+  !!GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID.length > 0;
+
 interface LoginModalProps {
   show: boolean;
   handleClose: () => void;
@@ -76,8 +80,18 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
     try {
       // Login mutation
       loginMutate(loginData, {
-        onSuccess: async () => {
-          updateAuth(null);
+        onSuccess: async (data) => {
+          // Create a proper user object from the login response
+          const user = {
+            userId: data.userId,
+            // We can assume a regular user role for normal login
+            role: "user",
+          };
+
+          // Update auth context with the user data
+          updateAuth(user);
+
+          // Navigate immediately to avoid auth validation on welcome page
           navigate(RoutePaths.LANDING);
           handleClose();
         },
@@ -103,8 +117,18 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       googleLoginMutate(
         { credential: response.credential },
         {
-          onSuccess: () => {
-            updateAuth(null);
+          onSuccess: (data) => {
+            // Create a user object from the login response
+            const user = {
+              userId: data.userId,
+              // Use the role from response or default to "user"
+              role: data.role || "user",
+            };
+
+            // Update auth context with the user data
+            updateAuth(user);
+
+            // Navigate to landing page after setting auth state
             navigate(RoutePaths.LANDING);
             handleClose();
           },
@@ -122,7 +146,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
 
   // Initialize Google OAuth Client when modal shows
   useEffect(() => {
-    if (show) {
+    if (show && hasValidGoogleClientId) {
       // Clean up any previous instances
       const oldScripts = document.querySelectorAll(
         'script[src="https://accounts.google.com/gsi/client"]'
@@ -158,10 +182,12 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
 
       // Cleanup function
       return () => {
-        document.body.removeChild(script);
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
       };
     }
-  }, [show]);
+  }, [show, hasValidGoogleClientId]);
 
   // Reset form states when modal is closed
   useEffect(() => {
@@ -230,14 +256,22 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
 
           <OrSeparator>OR</OrSeparator>
 
-          <div
-            ref={googleButtonRef}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "1rem",
-            }}
-          ></div>
+          {hasValidGoogleClientId ? (
+            <div
+              ref={googleButtonRef}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "1rem",
+              }}
+            ></div>
+          ) : (
+            <div
+              style={{ textAlign: "center", margin: "1rem 0", color: "#666" }}
+            >
+              Google Sign-In temporarily unavailable
+            </div>
+          )}
         </Form>
       </ModalBody>
     </StyledModal>

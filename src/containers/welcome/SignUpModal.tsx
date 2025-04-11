@@ -28,6 +28,10 @@ const GOOGLE_CLIENT_ID =
   import.meta.env.VITE_GOOGLE_CLIENT_ID ||
   (window as any).APP_CONFIG?.GOOGLE_CLIENT_ID;
 
+// Check if we have a valid Google client ID
+const hasValidGoogleClientId =
+  !!GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID.length > 0;
+
 interface SignUpModalProps {
   show: boolean;
   handleClose: () => void;
@@ -80,10 +84,21 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       if (user && user.role === "guest") {
         // convert guest mutation when guest signs up for account
         convertGuestMutate(userData, {
-          onSuccess: async () => {
-            updateAuth(null);
-            navigate(RoutePaths.LANDING);
-            handleClose();
+          onSuccess: async (data) => {
+            // Create a proper user object from the response
+            const userObj = {
+              userId: data.userId,
+              role: "user", // Convert from guest to regular user
+            };
+
+            // Update auth context with the user data
+            updateAuth(userObj);
+
+            // Short delay to allow auth state to update
+            setTimeout(() => {
+              navigate(RoutePaths.LANDING);
+              handleClose();
+            }, 100);
           },
           onError: (err: Error) => {
             setError(err.message);
@@ -92,10 +107,21 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       } else {
         // For new registrations, use the registration mutation.
         registerMutate(userData, {
-          onSuccess: async () => {
-            updateAuth(null);
-            navigate(RoutePaths.LANDING);
-            handleClose();
+          onSuccess: async (data) => {
+            // Create a proper user object from the signup response
+            const userObj = {
+              userId: data.userId,
+              role: "user",
+            };
+
+            // Update auth context with the user data
+            updateAuth(userObj);
+
+            // Short delay to allow auth state to update
+            setTimeout(() => {
+              navigate(RoutePaths.LANDING);
+              handleClose();
+            }, 100);
           },
           onError: (err: Error) => {
             setError(err.message);
@@ -115,10 +141,21 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
       googleLoginMutate(
         { credential: response.credential },
         {
-          onSuccess: () => {
-            updateAuth(null);
-            navigate(RoutePaths.LANDING);
-            handleClose();
+          onSuccess: (data) => {
+            // Create a proper user object from the login response
+            const userObj = {
+              userId: data.userId,
+              role: data.role || "user",
+            };
+
+            // Update auth context with the user data
+            updateAuth(userObj);
+
+            // Short delay to allow auth state to update
+            setTimeout(() => {
+              navigate(RoutePaths.LANDING);
+              handleClose();
+            }, 100);
           },
           onError: (err: Error) => {
             setError(err.message);
@@ -132,7 +169,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
 
   // Initialize Google OAuth Client when modal shows
   useEffect(() => {
-    if (show) {
+    if (show && hasValidGoogleClientId) {
       // Clean up any previous instances
       const oldScripts = document.querySelectorAll(
         'script[src="https://accounts.google.com/gsi/client"]'
@@ -168,10 +205,12 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
 
       // Cleanup function
       return () => {
-        document.body.removeChild(script);
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
       };
     }
-  }, [show]);
+  }, [show, hasValidGoogleClientId]);
 
   // Reset form states when modal is closed
   useEffect(() => {
@@ -254,14 +293,22 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
 
           <OrSeparator>OR</OrSeparator>
 
-          <div
-            ref={googleButtonRef}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "1rem",
-            }}
-          ></div>
+          {hasValidGoogleClientId ? (
+            <div
+              ref={googleButtonRef}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "1rem",
+              }}
+            ></div>
+          ) : (
+            <div
+              style={{ textAlign: "center", margin: "1rem 0", color: "#666" }}
+            >
+              Google Sign-In temporarily unavailable
+            </div>
+          )}
         </Form>
       </ModalBody>
     </StyledModal>

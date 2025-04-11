@@ -6,19 +6,22 @@ import { useContext } from "react";
 import {
   SidebarContainer,
   SidebarLink,
+  LinkContent,
   Icon,
   Text,
 } from "../styles/SidebarStyles";
 
+// Props for sidebar navigation
 interface SidebarProps {
   links: { name: string; path: string; icon: any }[];
 }
 
+// Sidebar navigation component
 export function Sidebar({ links }: SidebarProps) {
   const location = useLocation();
   const { isAuthenticated } = useContext(AuthContext);
 
-  // Don't render sidebar if not authenticated
+  // Hide sidebar for unauthenticated users
   if (!isAuthenticated) {
     return null;
   }
@@ -26,26 +29,27 @@ export function Sidebar({ links }: SidebarProps) {
   return (
     <SidebarContainer>
       {links.map((link, index) => {
+        // Check if current path matches link path
         const currentPath = location.pathname + location.hash.replace("#", "");
+        const isActive =
+          currentPath === link.path ||
+          (link.path === RoutePaths.QUESTIONNAIRE &&
+            currentPath.startsWith(RoutePaths.QUESTIONNAIRE) &&
+            currentPath !== RoutePaths.RESULTS);
 
         return (
           <SidebarLink
             to={link.path}
             key={index}
-            className={
-              currentPath === link.path ||
-              (link.path === RoutePaths.QUESTIONNAIRE &&
-                currentPath.startsWith(RoutePaths.QUESTIONNAIRE) &&
-                currentPath !== RoutePaths.RESULTS)
-                ? "active"
-                : ""
-            }
+            className={isActive ? "active" : ""}
             data-tooltip={link.name}
           >
-            <Icon>
-              <FontAwesomeIcon icon={link.icon} />
-            </Icon>
-            <Text>{link.name}</Text>
+            <LinkContent>
+              <Icon>
+                <FontAwesomeIcon icon={link.icon} />
+              </Icon>
+              <Text>{link.name}</Text>
+            </LinkContent>
           </SidebarLink>
         );
       })}

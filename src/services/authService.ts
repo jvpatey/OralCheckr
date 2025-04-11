@@ -50,6 +50,7 @@ export interface LoginData {
 export interface LoginResponse {
   userId: number;
   message: string;
+  role?: string;
 }
 
 export const loginUser = async (
@@ -72,9 +73,18 @@ export interface GuestLoginResponse {
 
 export const handleGuestLogin = async (): Promise<GuestLoginResponse> => {
   try {
-    return await apiRequest<GuestLoginResponse>(GUEST_LOGIN_ENDPOINT, "POST");
+    const response = await apiRequest<GuestLoginResponse>(
+      GUEST_LOGIN_ENDPOINT,
+      "POST"
+    );
+
+    // Ensure the role is set to "guest" explicitly
+    if (!response.role) {
+      response.role = "guest";
+    }
+
+    return response;
   } catch (error) {
-    console.error("Guest login error:", error);
     throw error;
   }
 };
@@ -84,25 +94,47 @@ export const logoutUser = async (): Promise<void> => {
   try {
     await apiRequest<void>(LOGOUT_ENDPOINT, "POST");
   } catch (error) {
-    console.error("Logout failed:", error);
+    // Silently handle logout errors
   }
 };
 
 /* -- User Authorization Service -- */
 
 export interface AuthResponse {
-  user: { userId: number; role?: string };
+  user: {
+    userId: number;
+    role?: string;
+    firstName?: string;
+    lastName?: string;
+  };
 }
 
 export const validateAuth = async (): Promise<AuthResponse | null> => {
   try {
-    return await apiRequest<AuthResponse>(VALIDATION_ENDPOINT, "GET");
+    const response = await apiRequest<AuthResponse>(VALIDATION_ENDPOINT, "GET");
+
+    // If no user data, return null (not authenticated)
+    if (!response?.user) {
+      return null;
+    }
+
+    if (response.user && response.user.role === undefined) {
+      response.user.role = "user";
+    }
+
+    // Add guest user info if needed
+    if (response.user && response.user.role === "guest") {
+      response.user.firstName = "Guest";
+      response.user.lastName = "User";
+    }
+
+    return response;
   } catch (error) {
     // Silent handling of 401 errors - expected when not authenticated
     if (error instanceof Error && error.message.includes("401")) {
       return null;
     }
-    console.error("Auth validation failed:", error);
+    // Silent handling for all auth validation errors
     return null;
   }
 };
@@ -119,7 +151,6 @@ export const convertGuestToUser = async (
       userData
     );
   } catch (error) {
-    console.error("Guest conversion failed:", error);
     throw error;
   }
 };
@@ -144,7 +175,6 @@ export const googleLogin = async (
       transformedData
     );
   } catch (error) {
-    console.error("Google login failed:", error);
     throw error;
   }
 };

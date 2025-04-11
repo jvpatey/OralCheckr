@@ -17,8 +17,9 @@ interface CalendarProgressProps {
   month: string;
   habitCount: number;
   selectedMonth: Date;
-  showChart?: boolean;
-  onToggleView?: () => void;
+  showChart: boolean;
+  onToggleView: () => void;
+  isLoading?: boolean;
 }
 
 // Container for the entire calendar component
@@ -123,13 +124,14 @@ const DayName = styled.div`
 `;
 
 // Wrapper for each day's circular progress bar
-const DayWrapper = styled.div`
+const DayWrapper = styled.div<{ $isCurrentDay?: boolean }>`
   position: relative;
-  width: 35px;
-  height: 35px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
 
   @media (max-width: 600px) {
     width: 30px;
@@ -162,8 +164,9 @@ export function HabitCalendar({
   month,
   habitCount,
   selectedMonth,
-  showChart = false,
+  showChart,
   onToggleView,
+  isLoading = false,
 }: CalendarProgressProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const theme = useTheme();
@@ -190,20 +193,33 @@ export function HabitCalendar({
 
   // Render content for each day in the calendar
   const renderDayContents = (day: number) => {
-    const logs = habitsLog[selectedHabit]?.[year]?.[month]?.[day] || 0;
     const progress = getDayProgress(day);
-    const isComplete = logs >= habitCount;
+    const isComplete = progress >= 100;
+    const dayDate = new Date(year, selectedMonth.getMonth(), day);
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const isCurrentDay = dayDate.getTime() === currentDate.getTime();
+    const isFutureDate = dayDate > currentDate;
 
     return (
-      <DayWrapper>
+      <DayWrapper $isCurrentDay={isCurrentDay}>
         <CircularProgressbar
-          value={progress}
+          value={isLoading ? 0 : isFutureDate ? 0 : progress}
           text={day.toString()}
           styles={buildStyles({
-            textSize: "30px",
+            textSize: isCurrentDay ? "32px" : "30px",
             pathColor: isComplete ? theme.green : theme.blue,
-            textColor: theme.blue,
-            trailColor: theme.backgroundColor,
+            textColor: isCurrentDay
+              ? theme.green
+              : isFutureDate
+              ? theme.textGrey
+              : theme.blue,
+            trailColor: isLoading
+              ? theme.disabledBackground
+              : isFutureDate
+              ? theme.disabledBackground
+              : theme.backgroundColor,
+            strokeLinecap: "round",
           })}
         />
       </DayWrapper>

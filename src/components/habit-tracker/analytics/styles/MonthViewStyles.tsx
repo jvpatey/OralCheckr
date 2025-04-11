@@ -11,19 +11,19 @@ export const CalendarContainer = styled.div`
   position: relative;
   background-color: ${({ theme }) => theme.accentBackgroundColor};
   border-radius: 8px;
-  padding: 15px;
+  padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 100%;
-  min-height: 350px;
+  height: 400px;
 
   @media (max-width: 1024px) {
     margin-top: 10px;
     padding: 15px;
-    min-height: auto;
+    height: 350px;
   }
 
   @media (max-width: 600px) {
     padding: 10px;
+    height: 300px;
   }
 `;
 
@@ -32,6 +32,8 @@ export const ToggleContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 // Calendar styles
@@ -110,15 +112,15 @@ export const LogIndicator = styled.div<{ $count: number }>`
 // Line chart styles
 export const ChartContainer = styled.div`
   width: 100%;
-  height: 300px;
-  margin-top: 20px;
+  height: 100%;
   background-color: ${({ theme }) => theme.accentBackgroundColor};
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 600px) {
-    height: 250px;
     padding: 10px;
   }
 `;

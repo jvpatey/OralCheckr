@@ -1,5 +1,6 @@
-// Types for the StartQuestionnaire component
+/* -- Start questionnaire types -- */
 
+// Props for the StartQuestionnaire component
 export interface StartQuestionnaireProps {
   isAuthenticated: boolean;
 }

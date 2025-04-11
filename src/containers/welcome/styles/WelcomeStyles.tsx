@@ -22,6 +22,9 @@ export const WelcomeCard = styled(Card)`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   animation: ${fadeUp} 1s ease-out;
   height: auto;
+  margin: auto;
+  position: relative;
+  top: -10vh;
 
   @media (min-width: 1200px) {
     max-width: 900px;
@@ -59,6 +62,7 @@ export const WelcomeContainer = styled.div`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.backgroundColor};
   width: 100%;
+  position: relative;
 
   @media (max-width: 768px) {
     padding: 10px;
@@ -128,11 +132,27 @@ export const CardText = styled.h5`
 
 export const LogoStyle = styled.div`
   text-align: center;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.4s ease-out;
+  cursor: default;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 25px;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 export const LogoImgStyle = styled.img`
   height: 60px;
-  margin-bottom: 25px;
+  transition: transform 0.4s ease-out;
+
+  ${LogoStyle}:hover & {
+    transform: scale(1.05);
+  }
 
   @media (max-width: 480px) {
     height: 50px;
@@ -143,6 +163,14 @@ export const LogoText = styled.span`
   font-size: 3rem;
   font-weight: 500;
   color: ${({ theme }) => theme.blue};
+  display: inline-block;
+  position: relative;
+  transition: all 0.4s ease-out;
+  margin-left: 10px;
+
+  ${LogoStyle}:hover & {
+    text-shadow: 0 8px 16px ${({ theme }) => `${theme.blue}40`};
+  }
 
   @media (max-width: 768px) {
     font-size: 2.5rem;

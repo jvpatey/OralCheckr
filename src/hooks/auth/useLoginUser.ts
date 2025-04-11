@@ -5,6 +5,7 @@ import {
   LoginResponse,
 } from "../../services/authService";
 
+// Hook for user login
 export const useLoginUser = () => {
   return useMutation<LoginResponse, Error, LoginData>({
     mutationFn: loginUser,

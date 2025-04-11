@@ -62,6 +62,7 @@ const ButtonContainer = styled.div`
   justify-content: flex-end;
 `;
 
+// Delete confirmation modal component
 export function DeleteConfirmationModal({
   show,
   onHide,

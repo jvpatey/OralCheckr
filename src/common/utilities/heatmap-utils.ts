@@ -1,6 +1,5 @@
-import { eachDayOfInterval } from "date-fns";
+import { format } from "date-fns";
 import { Logging } from "../../containers/habit-tracker/analytics/Analytics";
-import { formatDateLong } from "./date-utils";
 
 // Interface for the structure of a single heatmap data point
 interface HeatmapDataPoint {
@@ -24,32 +23,35 @@ export function generateHeatmapData(
   const logsForHabit = habitLog[habitName]; // Logs specific to the selected habit
   const logsGroupedByWeekday = new Map<string, HeatmapDataPoint[]>(); // Map to group logs by the day of the week
 
-  // Dynamically get the number of days of the selected year
-  const daysInYear = eachDayOfInterval({
-    start: new Date(selectedYear, 0, 1),
-    end: new Date(selectedYear, 11, 31),
-  });
+  // Initialize the map with empty arrays for each day of the week
+  for (let i = 0; i < 7; i++) {
+    logsGroupedByWeekday.set(i.toString(), []);
+  }
 
-  // Iterate over each day of the year
-  daysInYear.forEach((currentDate: Date) => {
-    const logCountForDay =
-      logsForHabit?.[selectedYear]?.[formatDateLong(currentDate)]?.[
-        currentDate.getDate()
-      ] || 0;
+  // Get all months in the year
+  for (let month = 0; month < 12; month++) {
+    const monthName = format(
+      new Date(selectedYear, month, 1),
+      "MMMM"
+    ).toLowerCase();
+    const daysInMonth = new Date(selectedYear, month + 1, 0).getDate();
 
-    const dayOfWeek = currentDate.getDay();
-    const month = currentDate.getMonth() + 1;
-    const dayOfMonth = currentDate.getDate();
+    // Check each day in the month
+    for (let day = 1; day <= daysInMonth; day++) {
+      const currentDate = new Date(selectedYear, month, day);
+      const dayOfWeek = currentDate.getDay();
 
-    // Retrieve the logs for the current day of the week
-    const logsForWeekday = logsGroupedByWeekday.get(dayOfWeek.toString()) || [];
+      // Get the log count for this day
+      const logCountForDay =
+        logsForHabit?.[selectedYear]?.[monthName]?.[day] || 0;
 
-    // Add the log entry for the current day
-    logsForWeekday.push({ x: month, y: logCountForDay, day: dayOfMonth });
-
-    // Update the map with the new log entry for this day of the week
-    logsGroupedByWeekday.set(dayOfWeek.toString(), logsForWeekday);
-  });
+      // Add the log entry for the current day
+      const logsForWeekday =
+        logsGroupedByWeekday.get(dayOfWeek.toString()) || [];
+      logsForWeekday.push({ x: month + 1, y: logCountForDay, day: day });
+      logsGroupedByWeekday.set(dayOfWeek.toString(), logsForWeekday);
+    }
+  }
 
   // Convert the map to an array of series, suitable for ApexCharts
   return Array.from(logsGroupedByWeekday.entries()).map(([weekday, logs]) => ({

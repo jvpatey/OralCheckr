@@ -1,3 +1,4 @@
+// Routes paths
 export enum RoutePaths {
   LANDING = "/dashboard",
   QUESTIONNAIRE = "/questionnaire",

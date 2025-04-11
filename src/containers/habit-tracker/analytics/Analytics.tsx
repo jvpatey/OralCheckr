@@ -12,9 +12,11 @@ import { useHabitLogsForAllHabits } from "../../../hooks/habitLogs";
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { useHabitContext } from "../../../contexts/HabitContext";
+import { LoadingComponent } from "../../../components/habit-tracker/analytics/LoadingComponent";
 import {
   AnalyticsContainer,
   NoHabitMessage,
+  CardContainer,
 } from "../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
 
 // Enum for view modes
@@ -104,11 +106,11 @@ const toggleOptions = [
 export function Analytics() {
   const [view, setView] = useState<ViewMode>(ViewMode.MONTH);
   const { selectedHabit, setSelectedHabit } = useHabitContext();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  // Get the current date for fetching logs
-  const currentDate = new Date();
-  const currentMonth = format(currentDate, "MMMM");
-  const currentYear = currentDate.getFullYear();
+  // Get the selected month and year for fetching logs
+  const month = format(selectedDate, "MMMM");
+  const year = selectedDate.getFullYear();
 
   // Fetch habits using React Query
   const {
@@ -123,18 +125,32 @@ export function Analytics() {
     [habits]
   );
 
-  // Fetch logs for all habits
+  // Fetch logs for all habits - for month view
   const {
-    habitLogsMap,
-    isLoading: isLoadingLogs,
-    isError: isLogsError,
-  } = useHabitLogsForAllHabits(habitIds, currentYear, currentMonth);
+    habitLogsMap: monthLogsMap,
+    isLoading: isLoadingMonthLogs,
+    isError: isMonthLogsError,
+  } = useHabitLogsForAllHabits(habitIds, year, month);
 
-  // Transform habitLogsMap
-  const habitsLog = useMemo(
-    () => transformHabitLogsToAnalyticsFormat(habits, habitLogsMap),
-    [habits, habitLogsMap]
-  );
+  // Fetch logs for all habits - for year view
+  const {
+    habitLogsMap: yearLogsMap,
+    isLoading: isLoadingYearLogs,
+    isError: isYearLogsError,
+  } = useHabitLogsForAllHabits(habitIds, year, "");
+
+  // Transform habitLogsMap based on the current view
+  const habitsLog = useMemo(() => {
+    const logsMap = view === ViewMode.MONTH ? monthLogsMap : yearLogsMap;
+    return transformHabitLogsToAnalyticsFormat(habits, logsMap);
+  }, [habits, monthLogsMap, yearLogsMap, view]);
+
+  const isLoading =
+    isLoadingHabits ||
+    (view === ViewMode.MONTH ? isLoadingMonthLogs : isLoadingYearLogs);
+  const isError =
+    habitsError ||
+    (view === ViewMode.MONTH ? isMonthLogsError : isYearLogsError);
 
   useEffect(() => {
     // If no habit is selected or the selected habit doesn't exist, select the first one
@@ -153,23 +169,31 @@ export function Analytics() {
     setSelectedHabit(habitName);
   };
 
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date);
+  };
+
   // Show loading state
-  if (isLoadingHabits || isLoadingLogs) {
+  if (isLoading) {
     return (
       <PageBackground>
         <AnalyticsContainer>
-          <div>Loading analytics data...</div>
+          <CardContainer>
+            <LoadingComponent />
+          </CardContainer>
         </AnalyticsContainer>
       </PageBackground>
     );
   }
 
   // Show error state
-  if (habitsError || isLogsError) {
+  if (isError) {
     return (
       <PageBackground>
         <AnalyticsContainer>
-          <div>Error loading analytics data. Please try again later.</div>
+          <CardContainer>
+            <div>Error loading analytics data. Please try again later.</div>
+          </CardContainer>
         </AnalyticsContainer>
       </PageBackground>
     );
@@ -178,31 +202,38 @@ export function Analytics() {
   return (
     <PageBackground>
       <AnalyticsContainer>
-        <ToggleButton
-          options={toggleOptions}
-          activeValue={view}
-          onChange={(newView) => setView(newView as ViewMode)}
-        />
-        {view === ViewMode.MONTH ? (
-          <MonthView
-            habits={habits}
-            onSelectHabit={handleSelectHabit}
-            habitsLog={habitsLog}
-            hideAnalytics={!selectedHabit}
+        <CardContainer>
+          <ToggleButton
+            options={toggleOptions}
+            activeValue={view}
+            onChange={(newView) => setView(newView as ViewMode)}
           />
-        ) : (
-          <YearView
-            habits={habits}
-            onSelectHabit={handleSelectHabit}
-            habitsLog={habitsLog}
-            hideAnalytics={!selectedHabit}
-          />
-        )}
-        {!selectedHabit && (
-          <NoHabitMessage>
-            Please select a habit to display analytics.
-          </NoHabitMessage>
-        )}
+          {view === ViewMode.MONTH ? (
+            <MonthView
+              habits={habits}
+              onSelectHabit={handleSelectHabit}
+              habitsLog={habitsLog}
+              hideAnalytics={!selectedHabit}
+              selectedDate={selectedDate}
+              onDateChange={handleDateChange}
+              isLoading={isLoadingMonthLogs}
+            />
+          ) : (
+            <YearView
+              habits={habits}
+              onSelectHabit={handleSelectHabit}
+              habitsLog={habitsLog}
+              hideAnalytics={!selectedHabit}
+              selectedDate={selectedDate}
+              onDateChange={handleDateChange}
+            />
+          )}
+          {!selectedHabit && (
+            <NoHabitMessage>
+              Please select a habit to display analytics.
+            </NoHabitMessage>
+          )}
+        </CardContainer>
       </AnalyticsContainer>
     </PageBackground>
   );

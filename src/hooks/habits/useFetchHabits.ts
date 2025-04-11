@@ -9,7 +9,8 @@ export const useFetchHabits = () => {
   return useQuery({
     queryKey: ["habits"],
     queryFn: fetchHabits,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
+    refetchOnMount: true,
     retry: 1,
   });
 };

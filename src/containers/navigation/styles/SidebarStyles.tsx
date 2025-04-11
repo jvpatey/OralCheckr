@@ -15,9 +15,9 @@ const fadeInLeft = keyframes`
 
 export const SidebarContainer = styled.div`
   height: calc(100vh - 56px);
-  width: 200px;
+  width: 190px;
   position: fixed;
-  top: 60px;
+  top: 80px;
   left: 0;
   background-color: ${({ theme }) => theme.blue};
   display: flex;
@@ -27,7 +27,7 @@ export const SidebarContainer = styled.div`
   padding-left: 10px;
   margin-top: 10px;
   border-top-right-radius: 12px;
-  z-index: 5;
+  z-index: 900;
   animation: ${fadeInLeft} 1s ease-in-out;
 
   @media (max-width: 800px) {
@@ -46,7 +46,7 @@ export const SidebarContainer = styled.div`
 export const SidebarLink = styled(Link)`
   width: calc(100% - 20px);
   font-size: 17px;
-  padding: 10px 20px;
+  padding: 10px 15px;
   text-align: left;
   text-decoration: none;
   color: ${({ theme }) => theme.backgroundColor};
@@ -55,22 +55,16 @@ export const SidebarLink = styled(Link)`
   justify-content: flex-start;
   margin-bottom: 17px;
   border-radius: 10px;
-  overflow: hidden;
+  position: relative;
 
   &:hover {
     color: ${({ theme }) => theme.backgroundColor};
-    transform: scale(1.05);
-    background-color: ${({ theme }) => theme.green};
   }
 
   &.active {
-    font-weight: 800;
-    font-size: 17px;
-    background-color: ${({ theme }) => theme.green};
     color: ${({ theme }) => theme.backgroundColor};
-    border-radius: 10px;
-    padding: 10px 20px;
-    overflow: hidden;
+    font-size: 17px;
+    padding: 10px 15px;
   }
 
   @media (max-width: 800px) {
@@ -81,16 +75,11 @@ export const SidebarLink = styled(Link)`
     width: auto;
 
     &.active {
-      font-weight: 800;
       color: ${({ theme }) => theme.backgroundColor};
       font-size: 18px;
-      background-color: ${({ theme }) => theme.green};
       padding: 8px;
-      border-radius: 10px;
     }
-  }
 
-  @media (max-width: 800px) {
     &::after {
       content: attr(data-tooltip);
       position: absolute;
@@ -114,8 +103,48 @@ export const SidebarLink = styled(Link)`
   }
 `;
 
+export const LinkContent = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: ${({ theme }) => theme.green};
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease-out;
+  }
+
+  ${SidebarLink}:hover & {
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+
+  .active & {
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: ${({ theme }) => theme.green};
+      transform: scaleX(1);
+    }
+  }
+`;
+
 export const Icon = styled.span`
   margin-right: 10px;
+  display: flex;
+  align-items: center;
 
   @media (max-width: 800px) {
     margin-right: 0;
@@ -123,6 +152,9 @@ export const Icon = styled.span`
 `;
 
 export const Text = styled.span`
+  display: flex;
+  align-items: center;
+
   @media (max-width: 800px) {
     display: none;
   }

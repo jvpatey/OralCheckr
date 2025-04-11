@@ -11,9 +11,11 @@ export function RedirectIfAuthenticated({
 }) {
   const { isAuthenticated, loading } = useContext(AuthContext);
 
+  // Show loading spinner only when actively loading
   if (loading) {
     return <LoadingSpinner fullHeight size="xl" />;
   }
 
+  // Redirect to landing page if authenticated, otherwise show children
   return isAuthenticated ? <Navigate to={RoutePaths.LANDING} /> : children;
 }

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Accordion } from "react-bootstrap";
-import { Section } from "./AccountTabStyles";
+import { Section } from "../../../containers/profile/styles/AccountTabStyles";
 
 export const FAQContainer = styled.div`
   margin-bottom: 2rem;
@@ -42,7 +42,7 @@ export const StyledAccordion = styled(Accordion)`
   }
 `;
 
-export const ContactSection = styled(Section)`
+export const ContentSection = styled(Section)`
   margin-top: 2rem;
 `;
 
@@ -54,7 +54,7 @@ export const ContentBox = styled.div`
   line-height: 1.6;
 `;
 
-export const ContactItem = styled.div`
+export const ContentItem = styled.div`
   margin-bottom: 1.5rem;
 
   &:last-child {

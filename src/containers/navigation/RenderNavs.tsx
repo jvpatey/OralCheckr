@@ -11,17 +11,19 @@ import { RoutePaths } from "../../common/constants/routes";
 import { ThemeType } from "../../App";
 import { AuthContext } from "../authentication/AuthContext";
 
+// Props for navigation renderer
 interface RenderNavsProps {
   themeToggler: () => void;
   currentTheme: ThemeType;
 }
 
-// Function to render the navigation components of the app
+// Component to render navigation based on current route
 export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
   const location = useLocation();
   const [sidebarLinks, setSidebarLinks] = useState<NavLink[]>([]);
   const { isAuthenticated } = useContext(AuthContext);
 
+  // Update sidebar links based on current route
   useEffect(() => {
     const currentPath = location.pathname;
     const isHabitTrackerRoute = currentPath.startsWith(RoutePaths.HABITS);

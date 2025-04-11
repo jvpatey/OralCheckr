@@ -3,6 +3,7 @@ import { PageBackground } from "../../../components/PageBackground";
 import { IconTextButton } from "../../../components/habit-tracker/habits/IconTextButton";
 import { WeekPicker } from "./WeekPicker";
 import { AddEditHabitModal } from "./AddEditHabitModal";
+import { ConfirmationModal } from "../../../components/shared/ConfirmationModal";
 import {
   HabitListContainer,
   ScrollableHabitList,
@@ -12,6 +13,7 @@ import {
   HeaderButtons,
   StyledHabitList,
   DatePickerWrapper,
+  CardContainer,
 } from "../../../components/habit-tracker/habits/HabitComponents";
 import { HabitList } from "../../../components/habit-tracker/habits/HabitList";
 import {
@@ -111,6 +113,10 @@ export function Habits() {
   const incrementHabitLogMutation = useIncrementHabitLog();
   const decrementHabitLogMutation = useDecrementHabitLog();
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteAllModal, setShowDeleteAllModal] = useState(false);
+  const [habitToDelete, setHabitToDelete] = useState<Habit | null>(null);
+
   // Handler for showing the add habit modal
   const handleAddHabitClick = () => {
     setShowAddHabitModal(true);
@@ -175,34 +181,45 @@ export function Habits() {
     const habitToDelete = habits[index];
     if (!habitToDelete || !habitToDelete.habitId) return;
 
-    if (window.confirm("Are you sure you want to delete this habit?")) {
-      deleteHabitMutation.mutate(habitToDelete.habitId, {
-        onSuccess: () => {
-          toast.success("Habit deleted successfully", { autoClose: 800 });
-        },
-        onError: (error) => {
-          toast.error(`Failed to delete habit: ${error}`, { autoClose: 800 });
-        },
-      });
-    }
+    setHabitToDelete(habitToDelete);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!habitToDelete?.habitId) return;
+
+    deleteHabitMutation.mutate(habitToDelete.habitId, {
+      onSuccess: () => {
+        toast.success("Habit deleted successfully", { autoClose: 800 });
+        setShowDeleteModal(false);
+        setHabitToDelete(null);
+      },
+      onError: (error) => {
+        toast.error(`Failed to delete habit: ${error}`, { autoClose: 800 });
+        setShowDeleteModal(false);
+        setHabitToDelete(null);
+      },
+    });
   };
 
   // Handler for deleting all habits and logs
   const handleDeleteAllHabits = () => {
-    if (
-      window.confirm("Are you sure you want to delete all habits and logs?")
-    ) {
-      deleteAllHabitsMutation.mutate(undefined, {
-        onSuccess: () => {
-          toast.success("All habits deleted successfully", { autoClose: 800 });
-        },
-        onError: (error) => {
-          toast.error(`Failed to delete all habits: ${error}`, {
-            autoClose: 800,
-          });
-        },
-      });
-    }
+    setShowDeleteAllModal(true);
+  };
+
+  const handleConfirmDeleteAll = () => {
+    deleteAllHabitsMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success("All habits deleted successfully", { autoClose: 800 });
+        setShowDeleteAllModal(false);
+      },
+      onError: (error) => {
+        toast.error(`Failed to delete all habits: ${error}`, {
+          autoClose: 800,
+        });
+        setShowDeleteAllModal(false);
+      },
+    });
   };
 
   // Handler for editing a habit
@@ -343,11 +360,13 @@ export function Habits() {
     return (
       <PageBackground>
         <HabitListContainer>
-          <HabitWrapper>
-            <Header>
-              <HeaderText>Loading habits...</HeaderText>
-            </Header>
-          </HabitWrapper>
+          <CardContainer>
+            <HabitWrapper>
+              <Header>
+                <HeaderText>Loading habits...</HeaderText>
+              </Header>
+            </HabitWrapper>
+          </CardContainer>
         </HabitListContainer>
       </PageBackground>
     );
@@ -358,11 +377,13 @@ export function Habits() {
     return (
       <PageBackground>
         <HabitListContainer>
-          <HabitWrapper>
-            <Header>
-              <HeaderText>Error loading habits</HeaderText>
-            </Header>
-          </HabitWrapper>
+          <CardContainer>
+            <HabitWrapper>
+              <Header>
+                <HeaderText>Error loading habits</HeaderText>
+              </Header>
+            </HabitWrapper>
+          </CardContainer>
         </HabitListContainer>
       </PageBackground>
     );
@@ -371,61 +392,63 @@ export function Habits() {
   return (
     <PageBackground>
       <HabitListContainer>
-        <HabitWrapper>
-          <DatePickerWrapper>
-            <WeekPicker
-              isEditMode={isEditMode}
-              onDateChange={handleWeekPickerDateChange}
-            />
-          </DatePickerWrapper>
-          <Header>
-            <HeaderText>My Habits:</HeaderText>
-            <HeaderButtons>
-              {!isEditMode && (
-                <IconTextButton
-                  icon={faPlus}
-                  label="Add Habit"
-                  onClick={handleAddHabitClick}
-                  backgroundColor={theme.green}
-                  hoverColor={theme.green}
-                />
-              )}
-              {isEditMode && (
-                <IconTextButton
-                  icon={faTrashAlt}
-                  label="Delete All"
-                  onClick={handleDeleteAllHabits}
-                  backgroundColor={theme.red}
-                  hoverColor={theme.red}
-                  disabled={habits.length === 0}
-                />
-              )}
-              <IconTextButton
-                icon={isEditMode ? faTimes : faPencilAlt}
-                label={isEditMode ? "Exit" : "Edit"}
-                onClick={() => setIsEditMode(!isEditMode)}
-                backgroundColor={isEditMode ? theme.red : theme.yellow}
-                hoverColor={isEditMode ? theme.red : theme.yellow}
-                disabled={!isEditMode && habits.length === 0}
-              />
-            </HeaderButtons>
-          </Header>
-          <ScrollableHabitList>
-            <StyledHabitList>
-              <HabitList
-                habits={habits}
-                selectedDate={selectedDate}
+        <CardContainer>
+          <HabitWrapper>
+            <DatePickerWrapper>
+              <WeekPicker
                 isEditMode={isEditMode}
-                handleEditHabit={handleEditHabit}
-                handleDeleteHabit={handleDeleteHabit}
-                handleLog={handleLog}
-                handleRemoveLog={handleRemoveLog}
-                getLogCount={getLogCount}
-                isFutureDate={isFutureDate}
+                onDateChange={handleWeekPickerDateChange}
               />
-            </StyledHabitList>
-          </ScrollableHabitList>
-        </HabitWrapper>
+            </DatePickerWrapper>
+            <Header>
+              <HeaderText>My Habits:</HeaderText>
+              <HeaderButtons>
+                {!isEditMode && (
+                  <IconTextButton
+                    icon={faPlus}
+                    label="Add Habit"
+                    onClick={handleAddHabitClick}
+                    backgroundColor={theme.green}
+                    hoverColor={theme.green}
+                  />
+                )}
+                {isEditMode && (
+                  <IconTextButton
+                    icon={faTrashAlt}
+                    label="Delete All"
+                    onClick={handleDeleteAllHabits}
+                    backgroundColor={theme.red}
+                    hoverColor={theme.red}
+                    disabled={habits.length === 0}
+                  />
+                )}
+                <IconTextButton
+                  icon={isEditMode ? faTimes : faPencilAlt}
+                  label={isEditMode ? "Exit" : "Edit"}
+                  onClick={() => setIsEditMode(!isEditMode)}
+                  backgroundColor={isEditMode ? theme.red : theme.yellow}
+                  hoverColor={isEditMode ? theme.red : theme.yellow}
+                  disabled={!isEditMode && habits.length === 0}
+                />
+              </HeaderButtons>
+            </Header>
+            <ScrollableHabitList>
+              <StyledHabitList>
+                <HabitList
+                  habits={habits}
+                  selectedDate={selectedDate}
+                  isEditMode={isEditMode}
+                  handleEditHabit={handleEditHabit}
+                  handleDeleteHabit={handleDeleteHabit}
+                  handleLog={handleLog}
+                  handleRemoveLog={handleRemoveLog}
+                  getLogCount={getLogCount}
+                  isFutureDate={isFutureDate}
+                />
+              </StyledHabitList>
+            </ScrollableHabitList>
+          </HabitWrapper>
+        </CardContainer>
       </HabitListContainer>
 
       <AddEditHabitModal
@@ -435,6 +458,29 @@ export function Habits() {
         originalHabit={originalHabit}
         newHabit={newHabit}
         setNewHabit={setNewHabit}
+      />
+
+      <ConfirmationModal
+        show={showDeleteModal}
+        title="Delete Habit"
+        message={`Are you sure you want to delete "${habitToDelete?.name}"? This will also delete all tracking history for this habit.`}
+        confirmLabel="Delete"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          setShowDeleteModal(false);
+          setHabitToDelete(null);
+        }}
+        isDestructive={true}
+      />
+
+      <ConfirmationModal
+        show={showDeleteAllModal}
+        title="Delete All Habits"
+        message="Are you sure you want to delete all habits and their tracking history? This action cannot be undone."
+        confirmLabel="Delete All"
+        onConfirm={handleConfirmDeleteAll}
+        onCancel={() => setShowDeleteAllModal(false)}
+        isDestructive={true}
       />
     </PageBackground>
   );

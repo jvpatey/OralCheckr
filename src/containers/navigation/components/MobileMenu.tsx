@@ -1,10 +1,12 @@
+import React from "react";
 import styled from "styled-components";
 import { Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faPlus, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { NavLink } from "../../../common/links";
 
+// Props for mobile menu component
 interface MobileMenuProps {
   links: NavLink[];
   isActive: (href: string) => boolean;
@@ -14,6 +16,7 @@ interface MobileMenuProps {
   userAvatar?: string;
 }
 
+// Styled dropdown toggle button
 const CustomDropdownToggle = styled(Dropdown.Toggle)`
   color: ${({ theme }) => theme.textGrey};
   background: none;
@@ -40,6 +43,7 @@ const CustomDropdownToggle = styled(Dropdown.Toggle)`
   }
 `;
 
+// Styled dropdown menu container
 const CustomDropdownMenu = styled(Dropdown.Menu)`
   background-color: ${({ theme }) => theme.backgroundColor};
   border: none;
@@ -47,39 +51,48 @@ const CustomDropdownMenu = styled(Dropdown.Menu)`
   width: 200px;
 `;
 
+// Styled dropdown menu items
 const CustomDropdownItem = styled(Dropdown.Item)`
   color: ${({ theme }) => theme.textGrey};
-  padding: 10px 20px;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
   width: 100%;
   text-align: left;
+  border-radius: 0;
 
   &:hover {
-    color: ${({ theme }) => theme.blue};
-    background-color: transparent;
+    color: ${({ theme }) => theme.textGrey};
+    background-color: ${({ theme }) => `${theme.blue}10`};
   }
 
   &.active {
-    color: ${({ theme }) => theme.blue};
-    font-weight: bold;
+    color: ${({ theme }) => theme.textGrey};
+    background-color: ${({ theme }) => `${theme.blue}15`};
   }
 `;
 
+// Icon container for menu items
 const Icon = styled.span`
-  margin-right: 5px;
-  display: flex;
+  width: 24px;
+  margin-right: 12px;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
 `;
 
+// User avatar image styling
 const AvatarImage = styled.img`
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   object-fit: contain;
-  margin-right: 5px;
+  border: 2px solid ${({ theme }) => theme.blue};
+  padding: 2px;
+  background: ${({ theme }) => theme.backgroundColor};
 `;
 
+// Navbar links component for mobile view (dropdown menu)
 export function MobileMenu({
   links,
   isActive,
@@ -115,7 +128,7 @@ export function MobileMenu({
                 userAvatar ? (
                   <AvatarImage src={userAvatar} alt="Profile" />
                 ) : (
-                  <FontAwesomeIcon icon={faUser} />
+                  <FontAwesomeIcon icon={link.icon} />
                 )
               ) : (
                 <FontAwesomeIcon icon={link.icon} />

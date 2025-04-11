@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Carousel from "react-bootstrap/Carousel";
+import { scrollbarStyle } from "../../../styles/SharedStyles";
 
 export const NoRecommendations = styled.div`
   display: flex;
@@ -29,6 +30,7 @@ export const CarouselContent = styled.div`
   color: ${({ theme }) => theme.textGrey};
   padding: 20px 40px;
   overflow-y: auto;
+  ${scrollbarStyle}
 
   @media (max-width: 950px) {
     font-size: 12px;

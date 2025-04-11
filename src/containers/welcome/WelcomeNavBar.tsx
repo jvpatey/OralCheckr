@@ -10,11 +10,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { RoutePaths } from "../../common/constants/routes";
 
+// Props for welcome navigation bar
 interface WelcomeNavBarProps {
   themeToggler: () => void;
   theme: ThemeType;
 }
 
+// Navigation bar with theme toggle and support link
 export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
   return (
     <ThemeToggleContainer>

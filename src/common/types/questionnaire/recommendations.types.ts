@@ -1,4 +1,6 @@
-// Represents a recommendation based on questionnaire responses
+/* -- Recommendations types -- */
+
+// Recommendation interface
 export interface Recommendation {
   category: string;
   feedback: string;

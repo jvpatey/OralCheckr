@@ -23,14 +23,17 @@ export async function getProfile(): Promise<ProfileData | null> {
     const response = await apiRequest<ProfileData>(PROFILE_ENDPOINT, "GET");
     return response;
   } catch (error) {
-    // Silent handling of 401/403 errors - expected when not authenticated or forbidden
+    // Silent handling of 401/403 errors - expected when not authenticated or guest user
     if (
       error instanceof Error &&
-      (error.message.includes("401") || error.message.includes("403"))
+      (error.message.includes("401") ||
+        error.message.includes("403") ||
+        error.message.includes("not authenticated"))
     ) {
       return null;
     }
-    throw error;
+    console.error("Error fetching profile:", error);
+    return null;
   }
 }
 
