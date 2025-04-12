@@ -389,7 +389,18 @@ export const StyledNav = styled(Nav)`
   margin-bottom: 1.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.textGrey};
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  width: 100%;
+
+  @media (max-width: 480px) {
+    gap: 0;
+    justify-content: stretch;
+
+    .nav-item {
+      flex: 1;
+      text-align: center;
+    }
+  }
 
   .nav-link {
     color: ${({ theme }) => theme.textGrey};
@@ -419,8 +430,10 @@ export const StyledNav = styled(Nav)`
     }
 
     @media (max-width: 480px) {
-      padding: 0.75rem 1.25rem;
-      font-size: 1rem;
+      padding: 0.75rem 0.5rem;
+      font-size: 0.9rem;
+      width: 100%;
+      text-align: center;
     }
   }
 `;
