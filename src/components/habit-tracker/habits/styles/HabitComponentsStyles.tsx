@@ -20,29 +20,30 @@ export const CardContainer = styled.div`
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   border: 1px solid ${({ theme }) => `${theme.textGrey}15`};
   padding: 2rem;
-  height: calc(100% - 1rem);
+  height: calc(100vh - 120px);
   margin: 10px 2rem 0;
   animation: ${fadeUp} 0.5s ease-out;
   will-change: transform, opacity;
   transform-origin: top center;
+  overflow: hidden;
 
   @media (max-width: 768px) {
     margin: 10px 1rem 0;
     padding: 1.5rem;
-    height: calc(100% - 1rem);
+    height: calc(100vh - 100px);
   }
 
   @media (max-width: 480px) {
     margin: 10px 0.5rem 0;
     padding: 1rem;
-    height: calc(100% - 1rem);
+    height: calc(100vh - 90px);
   }
 `;
 
 // Main container for the habit list
 export const HabitListContainer = styled.div`
   width: calc(100% - 190px);
-  height: calc(100vh - 90px);
+  height: 100%;
   position: fixed;
   top: 80px;
   left: 190px;
@@ -55,33 +56,25 @@ export const HabitListContainer = styled.div`
   }
 `;
 
-// Scrollable container for habits
-export const ScrollableHabitList = styled.div`
-  height: calc(100vh - 300px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 20px 0;
-  ${scrollbarStyle}
-  will-change: transform;
-  backface-visibility: hidden;
-`;
-
 // Wrapper for habit content
 export const HabitWrapper = styled.div`
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
-  padding: 0 20px;
+  padding: 0;
   will-change: transform;
   backface-visibility: hidden;
 
   @media (max-width: 768px) {
-    padding: 0 15px;
+    padding: 0 10px;
   }
 
   @media (max-width: 480px) {
-    padding: 0 10px;
+    padding: 0 5px;
   }
 `;
 
@@ -120,6 +113,17 @@ export const HeaderButtons = styled.div`
   }
 `;
 
+// Scrollable container for habits
+export const ScrollableHabitList = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 16px 20px 0;
+  ${scrollbarStyle}
+  will-change: transform;
+  backface-visibility: hidden;
+`;
+
 // Styled container for the habit list
 export const StyledHabitList = styled.div`
   display: flex;
@@ -128,15 +132,22 @@ export const StyledHabitList = styled.div`
   gap: 10px;
   width: 100%;
   box-sizing: border-box;
-  overflow-x: hidden;
+  padding-right: 4px;
 `;
 
 // Row for individual habits
 export const HabitRow = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
+  min-width: 0;
+  gap: 0;
+
+  > div:last-child {
+    display: flex;
+    gap: 4px;
+    margin-left: 10px;
+  }
 `;
 
 // Text for empty state
