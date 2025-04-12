@@ -163,6 +163,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
         window.google?.accounts.id.initialize({
           client_id: GOOGLE_CLIENT_ID,
           callback: handleGoogleSuccess,
+          use_fedcm_for_prompt: true, // Use the new Identity Services API
         });
 
         if (googleButtonRef.current) {
@@ -175,6 +176,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
             shape: "rectangular",
             width: 250,
             locale: "en",
+            use_fedcm_for_prompt: true, // Use the new Identity Services API
           });
         }
       };
