@@ -110,6 +110,13 @@ export interface AuthResponse {
 }
 
 export const validateAuth = async (): Promise<AuthResponse | null> => {
+  // Don't validate on welcome page
+  const isWelcomePage =
+    window.location.pathname === "/" || window.location.hash === "#/";
+  if (isWelcomePage) {
+    return null;
+  }
+
   try {
     const response = await apiRequest<AuthResponse>(VALIDATION_ENDPOINT, "GET");
 
