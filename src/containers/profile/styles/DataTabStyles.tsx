@@ -12,20 +12,20 @@ export const Section = styled.div`
     position: absolute;
     top: 2rem;
     left: 0;
-    width: 400px; // Wider default width for larger screens
+    width: 400px;
     height: 2px;
     background-color: ${({ theme }) => theme.blue};
 
     @media (max-width: 992px) {
-      width: 350px; // Slightly smaller for medium-large screens
+      width: 350px;
     }
 
     @media (max-width: 768px) {
-      width: 75%; // Proportional width on medium screens
+      width: 75%;
     }
 
     @media (max-width: 480px) {
-      width: 85%; // Slightly wider on very small screens
+      width: 85%;
     }
   }
 `;

@@ -40,9 +40,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   // Check auth on first mount for non-welcome pages
   useEffect(() => {
     if (!initialCheckDone) {
-      const isWelcomePage =
-        window.location.pathname === "/" || window.location.hash === "#/";
-      if (!isWelcomePage && !validationInProgress) {
+      const isWelcomePage = window.location.hash === "#/";
+      if (!isWelcomePage) {
         setValidationInProgress(true);
         refetch().finally(() => {
           setValidationInProgress(false);
@@ -52,7 +51,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         setInitialCheckDone(true);
       }
     }
-  }, [initialCheckDone, refetch, validationInProgress]);
+  }, [initialCheckDone, refetch]);
 
   // Sync server auth state with local state
   useEffect(() => {
@@ -102,17 +101,13 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     }
   }, [refetch, validationInProgress]);
 
-  const isWelcomePage =
-    window.location.pathname === "/" || window.location.hash === "#/";
+  const isWelcomePage = window.location.hash === "#/";
 
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated: !!localUser,
-        loading:
-          (isLoading || isFetching || validationInProgress) &&
-          !localUser &&
-          !isWelcomePage,
+        loading: (isLoading || isFetching) && !localUser && !isWelcomePage,
         user: localUser || undefined,
         updateAuth,
         checkAuth,
