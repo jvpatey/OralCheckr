@@ -3,15 +3,30 @@ import styled from "styled-components";
 export const Section = styled.div`
   margin-bottom: 2.5rem;
   position: relative;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
 
   &:after {
     content: "";
     position: absolute;
     top: 2rem;
     left: 0;
-    width: 50%;
+    width: 400px;
     height: 2px;
     background-color: ${({ theme }) => theme.blue};
+
+    @media (max-width: 992px) {
+      width: 350px;
+    }
+
+    @media (max-width: 768px) {
+      width: 75%;
+    }
+
+    @media (max-width: 480px) {
+      width: 85%;
+    }
   }
 `;
 
@@ -66,6 +81,33 @@ export const HabitList = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 15px;
   margin-bottom: 2rem;
+  overflow-y: auto;
+  max-height: calc(70vh - 100px);
+  padding-right: 10px;
+
+  /* Scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => `${theme.textGrey}40`};
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => `${theme.textGrey}60`};
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    max-height: calc(65vh - 100px);
+  }
 `;
 
 export const HabitItem = styled.div`
