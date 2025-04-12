@@ -163,35 +163,25 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
         window.google?.accounts.id.initialize({
           client_id: GOOGLE_CLIENT_ID,
           callback: handleGoogleSuccess,
-          auto_select: false,
-          cancel_on_tap_outside: true,
         });
 
-        // @ts-ignore
-        window.google?.accounts.id.prompt((notification: any) => {
-          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // If One Tap is not displayed or skipped, render the normal button
-            if (googleButtonRef.current) {
-              // @ts-ignore
-              window.google?.accounts.id.renderButton(googleButtonRef.current, {
-                type: "standard",
-                theme: "outline",
-                size: "large",
-                text: "signin_with",
-                shape: "rectangular",
-                width: 250,
-                locale: "en",
-              });
-            }
-          }
-        });
+        if (googleButtonRef.current) {
+          // @ts-ignore
+          window.google?.accounts.id.renderButton(googleButtonRef.current, {
+            type: "standard",
+            theme: "outline",
+            size: "large",
+            text: "signin_with",
+            shape: "rectangular",
+            width: 250,
+            locale: "en",
+          });
+        }
       };
       document.body.appendChild(script);
 
       // Cleanup function
       return () => {
-        // @ts-ignore
-        window.google?.accounts.id.cancel();
         if (document.body.contains(script)) {
           document.body.removeChild(script);
         }
