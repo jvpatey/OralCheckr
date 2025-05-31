@@ -14,6 +14,10 @@ Try the live application here:
 
 [https://jvpatey.github.io/OralCheckr/](https://jvpatey.github.io/OralCheckr/)
 
+<img width="974" alt="Screenshot 2025-05-30 at 11 11 08 PM" src="https://github.com/user-attachments/assets/613c682a-3b5f-4135-b79f-45058ac3e6c9" />
+
+<img width="1113" alt="Screenshot 2025-05-30 at 11 12 45 PM" src="https://github.com/user-attachments/assets/916f1cb0-54f3-40a9-a7f1-804ad67eeaf0" />
+
 ## 🛠️ Built with
 
 [![My Skills](https://skillicons.dev/icons?i=react,vite,ts,styledcomponents,bootstrap,)](https://skillicons.dev)
