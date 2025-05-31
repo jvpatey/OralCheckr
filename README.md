@@ -8,15 +8,15 @@ OralCheckr is a comprehensive application designed to assess and improve your or
 
 As a dental hygienist, I wanted to create a tool that helps patients take control of their oral health. OralCheckr combines my background in oral health with technology to provide users with personalized insights and tips. It's designed to help patients track their habits and improve their oral hygiene, making it a valuable tool for education and self-care.
 
+## 🚀 Demo
+
+Try the live application here:
+
+[https://jvpatey.github.io/OralCheckr/](https://jvpatey.github.io/OralCheckr/)
+
 ## 🛠️ Built with
 
 [![My Skills](https://skillicons.dev/icons?i=react,vite,ts,styledcomponents,bootstrap,)](https://skillicons.dev)
-
-## 🚀 How to run
-
-This project is hosted and deployed through Github Pages. To access the application, use the link below:
-
-https://jvpatey.github.io/OralCheckr/
 
 ## 🛠️ Custom Installation
 
