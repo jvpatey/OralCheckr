@@ -8,25 +8,18 @@ export const SettingsContainer = styled.div`
 export const Section = styled.div`
   margin-bottom: 3rem;
   position: relative;
-  padding: 2rem 2rem 3rem 2rem;
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 16px;
-  box-shadow: ${({ theme }) => theme.shadowMd};
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    box-shadow: ${({ theme }) => theme.shadowLg};
-    border-color: ${({ theme }) => theme.borderMedium};
-  }
 
   &:last-child {
     margin-bottom: 0;
   }
 
   @media (max-width: 768px) {
-    padding: 1.5rem 1.5rem 2.5rem 1.5rem;
     margin-bottom: 2rem;
   }
 `;
@@ -202,15 +195,25 @@ export const DeleteSection = styled.div`
   padding: 0;
 `;
 
-export const DeleteButton = styled(StyledButton)`
+export const DeleteButton = styled.button`
   background: linear-gradient(135deg, #ff6961 0%, #ff4757 100%);
-  border-color: #ff6961;
   color: white;
+  border: 1px solid #ff6961;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${({ theme }) => theme.shadowMd};
+  cursor: pointer;
+  width: auto;
+  max-width: 300px;
 
   &:hover:not(:disabled) {
     opacity: 0.9;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 105, 97, 0.3);
+    box-shadow: 0 8px 25px rgba(255, 105, 97, 0.3),
+      ${({ theme }) => theme.shadowLg};
   }
 
   &:active {
@@ -221,6 +224,13 @@ export const DeleteButton = styled(StyledButton)`
     opacity: 0.6;
     transform: none;
     box-shadow: ${({ theme }) => theme.shadowSm};
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    max-width: 100%;
   }
 `;
 

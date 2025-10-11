@@ -532,8 +532,8 @@ export const StyledNav = styled(Nav)`
     border-bottom: 2px solid transparent;
     border-radius: 0;
     background: transparent;
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 700;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
 
@@ -562,7 +562,7 @@ export const StyledNav = styled(Nav)`
 
     @media (max-width: 480px) {
       padding: 0.875rem 0.5rem;
-      font-size: 0.875rem;
+      font-size: 1rem;
       width: 100%;
       text-align: center;
     }

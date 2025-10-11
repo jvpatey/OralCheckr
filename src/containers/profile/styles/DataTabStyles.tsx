@@ -6,25 +6,18 @@ export const Section = styled.div`
   max-height: none;
   display: flex;
   flex-direction: column;
-  padding: 2rem 2rem 3rem 2rem;
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 16px;
-  box-shadow: ${({ theme }) => theme.shadowMd};
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    box-shadow: ${({ theme }) => theme.shadowLg};
-    border-color: ${({ theme }) => theme.borderMedium};
-  }
 
   &:last-child {
     margin-bottom: 0;
   }
 
   @media (max-width: 768px) {
-    padding: 1.5rem 1.5rem 2.5rem 1.5rem;
     margin-bottom: 2rem;
   }
 `;
@@ -71,9 +64,9 @@ export const DataItem = styled.div`
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: ${({ theme }) => theme.shadowMd};
+    box-shadow: ${({ theme }) => theme.shadowLg};
     border-color: ${({ theme }) => theme.primary}40;
+    background: ${({ theme }) => theme.surfaceElevated};
   }
 `;
 
@@ -137,9 +130,9 @@ export const HabitItem = styled.div`
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: ${({ theme }) => theme.shadowMd};
+    box-shadow: ${({ theme }) => theme.shadowLg};
     border-color: ${({ theme }) => theme.secondary}40;
+    background: ${({ theme }) => theme.surfaceElevated};
   }
 `;
 
