@@ -1,10 +1,4 @@
-import {
-  LoginSection,
-  LoginTitle,
-  LoginSubtitle,
-  ButtonContainer,
-} from "../styles/WelcomeStyles";
-import { ContinueAsGuestButton } from "./ContinueAsGuestButton";
+import { HeroButtonsContainer } from "../styles/WelcomeStyles";
 import { CreateAnAccountButton } from "./CreateAnAccountButton";
 import { WelcomeLoginButton } from "./WelcomeLoginButton";
 
@@ -18,16 +12,9 @@ export function WelcomeButtons({
   onLoginClick,
 }: WelcomeButtonsProps) {
   return (
-    <LoginSection>
-      <LoginTitle>Get Started</LoginTitle>
-      <LoginSubtitle>
-        Choose how you'd like to begin your oral health journey
-      </LoginSubtitle>
-      <ButtonContainer>
-        <ContinueAsGuestButton />
-        <CreateAnAccountButton onClick={onSignUpClick} />
-        <WelcomeLoginButton onClick={onLoginClick} />
-      </ButtonContainer>
-    </LoginSection>
+    <HeroButtonsContainer>
+      <CreateAnAccountButton onClick={onSignUpClick} />
+      <WelcomeLoginButton onClick={onLoginClick} />
+    </HeroButtonsContainer>
   );
 }

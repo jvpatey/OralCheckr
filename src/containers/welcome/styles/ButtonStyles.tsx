@@ -21,7 +21,7 @@ export const BaseButton = styled.button<BaseButtonProps>`
       case "login":
         return theme.secondaryGradient;
       case "guest":
-        return theme.glassBg;
+        return theme.primaryGradient;
       default:
         return theme.primaryGradient;
     }
@@ -30,7 +30,7 @@ export const BaseButton = styled.button<BaseButtonProps>`
   color: ${({ theme, $variant }) => {
     switch ($variant) {
       case "guest":
-        return theme.textPrimary;
+        return "white";
       default:
         return "white";
     }
@@ -44,7 +44,7 @@ export const BaseButton = styled.button<BaseButtonProps>`
         case "login":
           return theme.secondary;
         case "guest":
-          return theme.borderMedium;
+          return theme.primary;
         default:
           return theme.primary;
       }
@@ -53,7 +53,9 @@ export const BaseButton = styled.button<BaseButtonProps>`
   /* Modern sizing and spacing */
   margin: 0;
   border-radius: 16px;
-  padding: 14px 16px;
+  padding: 16px 20px;
+  width: 100%;
+  height: 52px;
 
   /* Full width in horizontal layout */
   flex: 1;
@@ -72,14 +74,6 @@ export const BaseButton = styled.button<BaseButtonProps>`
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-
-  /* Glassmorphism for guest button */
-  ${({ $variant }) =>
-    $variant === "guest" &&
-    `
-    backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-    -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  `}
 
   /* Subtle shine effect */
   &::before {
@@ -102,15 +96,6 @@ export const BaseButton = styled.button<BaseButtonProps>`
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
       0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-
-    /* Guest button special hover */
-    ${({ $variant }) =>
-      $variant === "guest" &&
-      `
-      background: ${({ theme }) => theme.surfaceElevated};
-      color: ${({ theme }) => theme.textPrimary};
-      border-color: ${({ theme }) => theme.primary};
-    `}
 
     &::before {
       left: 100%;

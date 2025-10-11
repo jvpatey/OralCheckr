@@ -8,7 +8,7 @@ import { AuthContext } from "../authentication/AuthContext";
 import { useRegisterUser } from "../../hooks/auth/useRegisterUser";
 import { useConvertGuestToUser } from "../../hooks/auth/useConvertGuestToUser";
 import { useGoogleLogin } from "../../hooks/auth/useGoogleLogin";
-import { PasswordField } from "./components";
+import { PasswordField, ContinueAsGuestButton } from "./components";
 import { validatePassword } from "./utils/password-utils";
 import {
   StyledModal,
@@ -309,6 +309,12 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
                 Google Sign-In temporarily unavailable
               </div>
             )}
+
+            <OrSeparator>OR</OrSeparator>
+
+            <div style={{ textAlign: "center", marginTop: "1rem" }}>
+              <ContinueAsGuestButton onClose={handleClose} />
+            </div>
           </Form>
         </ModalBody>
       </StyledModal>
