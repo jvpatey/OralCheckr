@@ -1,80 +1,248 @@
-import { Card } from "react-bootstrap";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const StyledCard = styled(Card)`
-  width: 100%;
-  max-width: 500px;
-  margin: 20px auto;
-  height: auto;
-  min-height: 40vh;
-  background-color: ${({ theme }) => theme.blue};
-  border: 4px solid ${({ theme }) => theme.blue};
-  border-radius: 20px;
-  animation: fadeInUp 1s ease-out;
-  display: flex;
-  flex-direction: column;
-  text-decoration: none;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-  transform-origin: center center;
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translate3d(0, 40px, 0);
-    }
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
+const fadeUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-
-  @media (max-width: 768px) {
-    width: 90%;
-    margin: 10px auto;
-    min-height: 250px;
-  }
-
-  &:hover {
-    background-color: ${({ theme }) => theme.green};
-    border: 4px solid ${({ theme }) => theme.green};
-    transform: translateY(-8px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 `;
 
-const StyledCardBody = styled(Card.Body)`
-  width: 100%;
-  height: 100%;
+// Define styled components first
+const CardContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  overflow-y: auto;
+  height: 100%;
+  position: relative;
+  z-index: 1;
 `;
 
 const CardTitle = styled.h2`
-  margin-bottom: 10px;
-  font-size: 30px;
-  color: ${({ theme }) => theme.backgroundColor};
-  transition: color 0.3s ease;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: ${({ theme }) => theme.textPrimary};
+  margin-bottom: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.5px;
+
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+    margin-bottom: 14px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+  }
+`;
+
+const CardIconContainer = styled.div`
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: ${({ theme }) => theme.primaryGradient};
+  border-radius: 20px;
+  color: white;
+  font-size: 24px;
+  box-shadow: ${({ theme }) => theme.shadowLg},
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+
+  /* Subtle inner glow */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 50%
+    );
+    border-radius: 18px;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
+    margin-bottom: 16px;
+    border-radius: 18px;
+  }
+
+  @media (max-width: 480px) {
+    width: 52px;
+    height: 52px;
+    font-size: 20px;
+    margin-bottom: 14px;
+    border-radius: 16px;
+  }
 `;
 
 const CardIcon = styled(FontAwesomeIcon)`
-  font-size: 36px;
-  color: ${({ theme }) => theme.backgroundColor};
-  margin-bottom: 15px;
-  transition: color 0.3s ease;
+  position: relative;
+  z-index: 1;
 `;
 
 const CardText = styled.p`
-  font-size: 16px;
-  color: ${({ theme }) => theme.backgroundColor};
-  margin: 10px;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.textTertiary};
+  line-height: 1.6;
+  margin: 0;
+  max-width: 300px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+    max-width: 280px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    max-width: 100%;
+  }
+`;
+
+// Now define the ModernCard that references the above components
+const ModernCard = styled(Link)`
+  display: block;
+  width: 100%;
+  min-height: 300px;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 24px;
+  padding: 32px;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: ${fadeUp} 1s ease-out both;
+  box-shadow: ${({ theme }) => theme.shadowLg};
+
+  /* Gradient overlay for depth */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: ${({ theme }) => theme.primaryGradient};
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Subtle background pattern */
+  &::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at 30% 20%,
+      ${({ theme }) => theme.primary}08 0%,
+      transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  &:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: ${({ theme }) => theme.primary}60;
+    box-shadow: ${({ theme }) => theme.shadowXl};
+
+    &::before {
+      opacity: 1;
+    }
+
+    &::after {
+      opacity: 1;
+    }
+
+    ${CardIconContainer} {
+      transform: scale(1.05);
+      box-shadow: ${({ theme }) => theme.shadowXl},
+        0 0 15px ${({ theme }) => theme.primary + "30"},
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    }
+
+    ${CardTitle} {
+      color: ${({ theme }) => theme.primary};
+    }
+
+    ${CardText} {
+      color: ${({ theme }) => theme.textSecondary};
+    }
+  }
+
+  @media (max-width: 768px) {
+    min-height: 280px;
+    padding: 28px 24px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 260px;
+    padding: 24px 20px;
+  }
+`;
+
+// Optional feature badge for cards
+const FeatureBadge = styled.div`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: ${({ theme }) => theme.accentGradient};
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  ${ModernCard}:hover & {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    top: 12px;
+    right: 12px;
+  }
 `;
 
 type DashboardCardProps = {
@@ -82,24 +250,27 @@ type DashboardCardProps = {
   description: string;
   buttonLink: string;
   icon: any;
+  badge?: string; // Optional badge text
 };
 
-// functionalcomponent for Landing card buttons
+// Modern functional component for Landing card buttons
 export function LandingCard({
   title,
   description,
   buttonLink,
   icon,
+  badge,
 }: DashboardCardProps) {
   return (
-    <Link to={buttonLink} style={{ textDecoration: "none" }}>
-      <StyledCard>
-        <StyledCardBody>
-          <CardTitle>{title}</CardTitle>
+    <ModernCard to={buttonLink}>
+      {badge && <FeatureBadge>{badge}</FeatureBadge>}
+      <CardContent>
+        <CardIconContainer>
           <CardIcon icon={icon} />
-          <CardText>{description}</CardText>
-        </StyledCardBody>
-      </StyledCard>
-    </Link>
+        </CardIconContainer>
+        <CardTitle>{title}</CardTitle>
+        <CardText>{description}</CardText>
+      </CardContent>
+    </ModernCard>
   );
 }
