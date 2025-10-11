@@ -8,20 +8,30 @@ interface ThemeToggleProps {
   toggleDarkMode: () => void;
 }
 
-// Container for theme toggle with responsive positioning
+// Compact theme toggle with subtle styling
 const ThemeToggleContainer = styled.div`
   display: flex;
   align-items: center;
+  padding: 6px;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.textSecondary}05;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: ${({ theme }) => theme.textSecondary}10;
+    transform: scale(1.05);
+  }
 
   @media (max-width: 768px) {
     position: absolute;
-    right: 10px;
-    top: 20px;
+    right: 16px;
+    top: 16px;
     z-index: 10;
+    padding: 4px;
   }
 `;
 
-// Theme toggle switch component
+// Compact theme toggle switch component
 export function ThemeToggle({ isDarkMode, toggleDarkMode }: ThemeToggleProps) {
   const theme = useTheme();
 
@@ -30,9 +40,9 @@ export function ThemeToggle({ isDarkMode, toggleDarkMode }: ThemeToggleProps) {
       <DarkModeSwitch
         checked={isDarkMode}
         onChange={toggleDarkMode}
-        size={20}
-        moonColor={theme.blue}
-        sunColor={theme.blue}
+        size={18}
+        moonColor={theme.textSecondary}
+        sunColor={theme.textSecondary}
       />
     </ThemeToggleContainer>
   );

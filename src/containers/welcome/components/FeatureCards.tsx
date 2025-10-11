@@ -13,7 +13,7 @@ export function FeatureCards() {
   const features = [
     {
       id: "assessment",
-      icon: <FontAwesomeIcon icon={faClipboardList} size="md" />,
+      icon: <FontAwesomeIcon icon={faClipboardList} size="lg" />,
       title: "Oral Health Assessment",
       description:
         "Comprehensive questionnaire to evaluate your oral health status and receive personalized recommendations.",
@@ -23,7 +23,7 @@ export function FeatureCards() {
     },
     {
       id: "tracking",
-      icon: <FontAwesomeIcon icon={faTasksAlt} size="md" />,
+      icon: <FontAwesomeIcon icon={faTasksAlt} size="lg" />,
       title: "Habit Tracking",
       description:
         "Monitor daily oral hygiene routines with streak tracking and progress insights.",

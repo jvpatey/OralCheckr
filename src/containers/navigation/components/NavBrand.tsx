@@ -3,72 +3,43 @@ import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { RoutePaths } from "../../../common/constants/routes";
 
-// Styled brand text with hover effects
+// Modern brand text matching welcome screen styling
 const BrandText = styled(Navbar.Brand)`
   display: flex;
   align-items: center;
-  font-size: 24px;
-  color: ${({ theme }) => theme.textGrey};
-  transition: color 0.4s ease-out;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -1px;
   text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Enhanced gradient text effect matching welcome screen */
+  background: ${({ theme }) => theme.primaryGradient};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 
   &:hover {
-    color: ${({ theme }) => theme.blue};
+    transform: translateY(-2px);
+    filter: brightness(1.1);
   }
 
   @media (max-width: 768px) {
-    font-size: 0;
+    font-size: 1.75rem;
+    letter-spacing: -0.75px;
   }
 
-  @media (max-width: 768px) {
-    &::after {
-      content: "";
-      display: block;
-      height: 40px;
-    }
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
   }
 `;
 
-// Logo image with hover animation
-const LogoImage = styled.img`
-  height: 40px;
-  margin-right: 8px;
-  transition: transform 0.4s ease-out;
-
-  ${BrandText}:hover & {
-    transform: scale(1.05);
-  }
-`;
-
-// Brand name with underline animation
-const BrandName = styled.span`
-  position: relative;
-  display: inline-block;
-
-  &::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: -2px;
-    left: 0;
-    background-color: ${({ theme }) => theme.blue};
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s ease-out;
-  }
-
-  ${BrandText}:hover &::after {
-    transform: scaleX(1);
-  }
-`;
-
-// Navigation brand component with logo and name
+// Navigation brand component with modern styling
 export function NavBrand() {
   return (
     <BrandText as={Link} to={RoutePaths.LANDING}>
-      <LogoImage src="images/logo-blue.png" alt="Logo" />
-      <BrandName>OralCheckr</BrandName>
+      OralCheckr
     </BrandText>
   );
 }

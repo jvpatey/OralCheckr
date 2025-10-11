@@ -12,15 +12,21 @@ const fadeInDown = keyframes`
   }
 `;
 
+// Modern glassmorphism navbar for 2025
 export const CustomNavbar = styled(Navbar)`
-  background-color: ${({ theme }) => theme.backgroundColor};
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   width: 100%;
   animation: ${fadeInDown} 1s ease-out;
-  border-bottom: 1px solid ${({ theme }) => `${theme.textGrey}25`};
-  box-shadow: 0 2px 4px ${({ theme }) => `${theme.textGrey}10`};
+  border-bottom: 1px solid ${({ theme }) => theme.borderLight};
+  box-shadow: ${({ theme }) => theme.shadowMd};
   z-index: 1100;
+  padding: 16px 0;
 
   @media (max-width: 768px) {
+    padding: 12px 0;
+
     .d-lg-none {
       display: block;
     }

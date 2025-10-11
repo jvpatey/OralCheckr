@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Nav, Navbar } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { NavLink } from "../../../common/links";
 import React from "react";
@@ -15,9 +14,9 @@ interface DesktopMenuProps {
   userAvatar?: string;
 }
 
-// Styled navbar collapse for responsive design
+// Modern navbar collapse with glassmorphism
 const CustomCollapse = styled(Navbar.Collapse)`
-  background-color: ${({ theme }) => theme.backgroundColor};
+  background: transparent;
 
   @media (max-width: 768px) {
     position: absolute;
@@ -29,6 +28,12 @@ const CustomCollapse = styled(Navbar.Collapse)`
     flex-direction: column;
     align-items: flex-end;
     padding-right: 1rem;
+    background: ${({ theme }) => theme.glassBg};
+    backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+    border-radius: 16px;
+    margin-top: 8px;
+    border: 1px solid ${({ theme }) => theme.borderLight};
+    box-shadow: ${({ theme }) => theme.shadowLg};
   }
 
   @media (min-width: 768px) {
@@ -45,62 +50,34 @@ const StyledNav = styled(Nav)`
   font-weight: 500;
 `;
 
-// Styled nav link with hover and active states
+// Modern 2025-style nav links with pill backgrounds
 const CustomNavLink = styled(Nav.Link)`
-  color: ${({ theme }) => theme.textGrey};
-  margin-right: 35px;
+  color: ${({ theme }) => theme.textSecondary};
+  margin-right: 8px;
   font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.25px;
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 8px 0;
+  padding: 10px 16px;
+  border-radius: 20px;
   position: relative;
-  transition: color 0.4s ease-out;
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s ease-out;
-    background-color: ${({ theme }) => theme.green};
-  }
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
 
   &:hover {
-    color: ${({ theme }) => theme.green};
+    color: ${({ theme }) => theme.textPrimary};
+    background: ${({ theme }) => theme.textSecondary}08;
     text-decoration: none;
-
-    &::after {
-      transform: scaleX(1);
-    }
+    transform: scale(1.02);
   }
 
   &.active {
-    color: ${({ theme }) => theme.blue};
-
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: ${({ theme }) => theme.blue};
-      transform: scaleX(1);
-    }
+    color: ${({ theme }) => theme.primary};
+    background: ${({ theme }) => theme.primary}12;
+    transform: scale(1.02);
   }
-`;
-
-// Icon container for nav items
-const Icon = styled.span`
-  margin-right: 5px;
-  display: inline-flex;
-  align-items: center;
-  font-size: 1em;
 `;
 
 // User avatar image styling
@@ -203,17 +180,6 @@ export function DesktopMenu({
             to={link.path === "/" ? "/" : link.path}
             onClick={link.name === "Log Out" ? handleLogout : undefined}
           >
-            <Icon>
-              {link.name === "Profile" ? (
-                userAvatar ? (
-                  <AvatarImage src={userAvatar} alt="Profile" />
-                ) : (
-                  <FontAwesomeIcon icon={link.icon} />
-                )
-              ) : (
-                <FontAwesomeIcon icon={link.icon} />
-              )}
-            </Icon>
             {link.name}
           </CustomNavLink>
         ))}
