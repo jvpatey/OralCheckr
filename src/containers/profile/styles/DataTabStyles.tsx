@@ -1,91 +1,107 @@
 import styled from "styled-components";
 
 export const Section = styled.div`
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
   position: relative;
-  max-height: 80vh;
+  max-height: none;
   display: flex;
   flex-direction: column;
+  padding: 2rem 2rem 3rem 2rem;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 16px;
+  box-shadow: ${({ theme }) => theme.shadowMd};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  &:after {
-    content: "";
-    position: absolute;
-    top: 2rem;
-    left: 0;
-    width: 400px;
-    height: 2px;
-    background-color: ${({ theme }) => theme.blue};
+  &:hover {
+    box-shadow: ${({ theme }) => theme.shadowLg};
+    border-color: ${({ theme }) => theme.borderMedium};
+  }
 
-    @media (max-width: 992px) {
-      width: 350px;
-    }
+  &:last-child {
+    margin-bottom: 0;
+  }
 
-    @media (max-width: 768px) {
-      width: 75%;
-    }
-
-    @media (max-width: 480px) {
-      width: 85%;
-    }
+  @media (max-width: 768px) {
+    padding: 1.5rem 1.5rem 2.5rem 1.5rem;
+    margin-bottom: 2rem;
   }
 `;
 
 export const SectionTitle = styled.h3`
   && {
-    color: ${({ theme }) => theme.blue};
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-bottom: 2rem;
-    padding-bottom: 0.25rem;
+    color: ${({ theme }) => theme.textPrimary};
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid ${({ theme }) => theme.borderLight};
+    background: ${({ theme }) => theme.primaryGradient};
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    @media (max-width: 768px) {
+      font-size: 1.125rem;
+      margin-bottom: 1.25rem;
+    }
   }
 `;
 
 export const DataGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  gap: 20px;
   margin-bottom: 2rem;
 
   @media (max-width: 576px) {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 `;
 
 export const DataItem = styled.div`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  border-radius: 8px;
+  background: ${({ theme }) => theme.surfaceElevated};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border-radius: 12px;
   padding: 1.25rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: ${({ theme }) => theme.shadowMd};
+    border-color: ${({ theme }) => theme.primary}40;
   }
 `;
 
 export const Label = styled.div`
-  color: ${({ theme }) => theme.blue};
-  font-weight: 500;
-  font-size: 1.05rem;
+  color: ${({ theme }) => theme.primary};
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-bottom: 0.5rem;
 `;
 
 export const Value = styled.div`
-  color: ${({ theme }) => theme.textGrey};
-  font-size: 1rem;
+  color: ${({ theme }) => theme.textPrimary};
+  font-size: 1.125rem;
+  font-weight: 600;
 `;
 
 export const HabitList = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
   margin-bottom: 2rem;
   overflow-y: auto;
-  max-height: calc(70vh - 100px);
+  max-height: 500px;
   padding-right: 10px;
 
-  /* Scrollbar styling */
+  /* Modern scrollbar styling */
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -95,71 +111,85 @@ export const HabitList = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => `${theme.textGrey}40`};
-    border-radius: 4px;
+    background: ${({ theme }) => theme.primary}40;
+    border-radius: 8px;
+    transition: background 0.3s ease;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => `${theme.textGrey}60`};
+    background: ${({ theme }) => theme.primary}60;
   }
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-    max-height: calc(65vh - 100px);
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    max-height: 400px;
   }
 `;
 
 export const HabitItem = styled.div`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  border-radius: 8px;
+  background: ${({ theme }) => theme.surfaceElevated};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border-radius: 12px;
   padding: 1.25rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: ${({ theme }) => theme.shadowMd};
+    border-color: ${({ theme }) => theme.secondary}40;
   }
 `;
 
 export const HabitName = styled.div`
-  font-weight: 500;
-  color: ${({ theme }) => theme.darkGrey};
+  font-weight: 600;
+  color: ${({ theme }) => theme.textPrimary};
   margin-bottom: 0.5rem;
-  font-size: 1.05rem;
+  font-size: 1rem;
 `;
 
 export const HabitDate = styled.div`
-  color: ${({ theme }) => theme.textGrey};
-  font-size: 0.9rem;
+  color: ${({ theme }) => theme.textSecondary};
+  font-size: 0.875rem;
+  font-weight: 500;
 `;
 
 export const EmptyHabit = styled.div`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  border-radius: 8px;
-  padding: 1.5rem;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border: 1px dashed ${({ theme }) => theme.borderMedium};
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
   text-align: center;
-  color: ${({ theme }) => theme.textGrey};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  color: ${({ theme }) => theme.textSecondary};
+  box-shadow: ${({ theme }) => theme.shadowSm};
   margin-bottom: 2rem;
 `;
 
 export const WarningText = styled.div`
-  color: ${({ theme }) => theme.red};
-  font-weight: 500;
-  margin-bottom: 0.75rem;
-  font-size: 0.9rem;
+  color: #ff6961;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  padding: 0.875rem 1rem;
+  background: rgba(255, 105, 97, 0.1);
+  border: 1px solid rgba(255, 105, 97, 0.3);
+  border-radius: 12px;
+  line-height: 1.5;
 `;
 
 export const DescriptionText = styled.p`
-  color: ${({ theme }) => theme.textGrey};
-  font-size: 0.9rem;
+  color: ${({ theme }) => theme.textSecondary};
+  font-size: 0.875rem;
   margin-bottom: 1.5rem;
+  line-height: 1.6;
 `;
 
 export const GreenLabel = styled.span`
-  color: ${({ theme }) => theme.green};
+  color: ${({ theme }) => theme.secondary};
+  font-weight: 600;
 `;
 
 export const Spacing = styled.div`
