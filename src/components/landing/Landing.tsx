@@ -104,7 +104,9 @@ export function Landing() {
             description="Complete our comprehensive oral health questionnaire to get personalized recommendations and track your progress over time."
             buttonLink={RoutePaths.QUESTIONNAIRE}
             icon={faClipboardList}
-            badge={questionnaireData?.lastCompleted ? "Completed" : "Incomplete"}
+            badge={
+              questionnaireData?.lastCompleted ? "Completed" : "Incomplete"
+            }
           />
           <LandingCard
             title="Habit Tracker"
