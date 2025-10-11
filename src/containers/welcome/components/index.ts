@@ -10,4 +10,5 @@ export { ThemeToggle } from "./ThemeToggle";
 export { GuestConfirmationModal } from "./GuestConfirmationModal";
 export { FeatureCard } from "./FeatureCard";
 export { FeatureCards } from "./FeatureCards";
+export { BentoFeatureCard } from "./BentoFeatureCard";
 export { CustomPasswordTooltip } from "./CustomPasswordTooltip";
