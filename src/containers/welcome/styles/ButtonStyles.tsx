@@ -61,7 +61,9 @@ export const BaseButton = styled.button<BaseButtonProps>`
   flex: 1;
   min-width: 0;
   cursor: pointer;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.25px;
