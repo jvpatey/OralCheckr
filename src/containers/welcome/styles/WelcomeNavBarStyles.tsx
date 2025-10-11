@@ -39,7 +39,7 @@ export const StyledLink = styled(Link)`
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  
+
   color: ${({ theme }) => theme.textPrimary};
   text-decoration: none;
   font-weight: 500;
@@ -51,7 +51,7 @@ export const StyledLink = styled(Link)`
   padding: 12px;
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.borderLight};
-  
+
   /* Enhanced shadow */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
@@ -112,20 +112,20 @@ export const TooltipWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   /* Modern glassmorphism button styling */
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  
+
   padding: 12px;
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.borderLight};
-  
+
   /* Enhanced shadow */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-  
+
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   @media (max-width: 768px) {
