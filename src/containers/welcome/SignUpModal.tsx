@@ -230,9 +230,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
         <HeaderText>Sign Up</HeaderText>
       </ModalHeader>
       <ModalBody>
-        <CardText>
-          To get started, enter your details below to create an account:
-        </CardText>
+        <CardText>Let's get you started! Create your account below:</CardText>
         <Form onSubmit={handleSignUpSubmit}>
           <RequiredFormGroup controlId="formFirstName" className="m-3">
             <InputStyle

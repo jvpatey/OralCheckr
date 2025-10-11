@@ -5,108 +5,200 @@ import { FormButton } from "../../../components/questionnaire/styles/FormButton"
 // Modal structure styles
 export const StyledModal = styled(Modal)`
   .modal-content {
-    border-radius: 15px;
-    border: transparent;
+    background: ${({ theme }) => theme.glassBg};
+    backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+    -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+    border-radius: 24px;
+    border: 1px solid ${({ theme }) => theme.borderLight};
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+
+  .modal-dialog {
+    max-width: 480px;
   }
 `;
 
 export const ModalHeader = styled(Modal.Header)`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  color: ${({ theme }) => theme.blue};
-  border: transparent;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  background: transparent;
+  color: ${({ theme }) => theme.textPrimary};
+  border: none;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
   display: flex;
   justify-content: center;
   position: relative;
+  padding: 24px 24px 0 24px;
 
   .btn-close {
     position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 20px;
+    top: 20px;
+    background: ${({ theme }) => theme.glassBg};
+    backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+    border: 1px solid ${({ theme }) => theme.borderLight};
+    border-radius: 12px;
+    width: 36px;
+    height: 36px;
+    opacity: 0.8;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: ${({ theme }) => theme.textPrimary};
+
+    &::before {
+      content: "×";
+      font-size: 20px;
+      font-weight: bold;
+      color: ${({ theme }) => theme.textPrimary};
+    }
+
+    &:hover {
+      opacity: 1;
+      transform: scale(1.05);
+      border-color: ${({ theme }) => theme.primary};
+      background: ${({ theme }) => theme.surfaceElevated};
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}20;
+    }
   }
 `;
 
 export const HeaderText = styled(Modal.Title)`
-  font-size: 30px;
+  font-size: 2rem;
+  font-weight: 700;
   text-align: center;
   margin: 0 auto;
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.primary} 0%,
+    ${({ theme }) => theme.secondary} 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
 `;
 
 export const ModalBody = styled(Modal.Body)`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
+  background: transparent;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  padding: 20px 24px 24px 24px;
 `;
 
 // Form input styles
 export const InputStyle = styled(Form.Control)`
-  background-color: ${({ theme }) => theme.disabledBackground};
-  border-style: solid;
-  border-width: 2px;
-  border-color: ${({ theme }) => theme.blue};
-  margin-top: 15px;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 16px;
+  padding: 16px 20px;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.textPrimary};
+  margin-top: 0;
+  margin-bottom: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  &::placeholder {
+    color: ${({ theme }) => theme.textSecondary};
+    opacity: 0.8;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.primary};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}20,
+      0 8px 25px rgba(0, 0, 0, 0.15);
+    background: ${({ theme }) => theme.surfaceElevated};
+  }
+
+  &:hover {
+    border-color: ${({ theme }) => theme.borderMedium};
+  }
 `;
 
 // Required form group with asterisk
 export const RequiredFormGroup = styled(Form.Group)`
   position: relative;
+  margin-bottom: 0;
 
   &::before {
     content: "*";
-    color: ${({ theme }) => theme.red || "#dc3545"};
+    color: ${({ theme }) => theme.error || "#dc3545"};
     position: absolute;
-    left: 5px;
+    left: 20px;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 1;
-    font-size: 1.2rem;
+    z-index: 10;
+    font-size: 1rem;
+    font-weight: 600;
   }
 
   ${InputStyle} {
-    padding-left: 20px;
+    padding-left: 32px;
   }
 `;
 
 // Password field styles
 export const PasswordContainer = styled.div`
   position: relative;
-  margin-top: 15px;
+  margin-top: 0;
 
   ${RequiredFormGroup} & {
     ${InputStyle} {
-      padding-left: 20px;
+      padding-left: 32px;
+      padding-right: 80px;
     }
   }
 `;
 
 export const PasswordToggle = styled.span`
   position: absolute;
-  right: 10px;
+  right: 20px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.textSecondary};
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  z-index: 10;
+
+  &:hover {
+    color: ${({ theme }) => theme.primary};
+    background: ${({ theme }) => theme.surfaceElevated};
+  }
 `;
 
 export const InfoIcon = styled.span`
   position: absolute;
-  right: 40px;
+  right: 50px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.textSecondary};
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  z-index: 10;
+
+  &:hover {
+    color: ${({ theme }) => theme.primary};
+    background: ${({ theme }) => theme.surfaceElevated};
+  }
 `;
 
 // Text styles
-export const CardText = styled.h5`
-  color: ${({ theme }) => theme.textGrey};
-  margin-bottom: 20px;
-  margin-right: 50px;
-  margin-left: 50px;
+export const CardText = styled.p`
+  color: ${({ theme }) => theme.textSecondary};
+  margin-bottom: 24px;
   text-align: center;
-  font-size: 1.25rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  opacity: 0.9;
 `;
 
 // Required fields note
@@ -138,16 +230,17 @@ export const RequiredLabel = styled.label`
 
 // Small note for required fields
 export const RequiredNote = styled.div`
-  color: ${({ theme }) => theme.textGrey};
-  font-size: 0.7rem;
+  color: ${({ theme }) => theme.textSecondary};
+  font-size: 0.75rem;
   text-align: right;
-  margin-top: 5px;
-  margin-right: 15px;
+  margin-top: -12px;
+  margin-bottom: 16px;
   font-style: italic;
+  opacity: 0.7;
 
   &::before {
     content: "* ";
-    color: ${({ theme }) => theme.red || "#dc3545"};
+    color: ${({ theme }) => theme.error || "#dc3545"};
   }
 `;
 
@@ -167,22 +260,25 @@ export const OrSeparator = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 1rem 0;
-  color: ${({ theme }) => theme.textGrey};
+  margin: 24px 0;
+  color: ${({ theme }) => theme.textSecondary};
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.8;
 
   &::before,
   &::after {
     content: "";
     flex: 1;
-    border-bottom: 1px solid ${({ theme }) => theme.textGrey};
+    border-bottom: 1px solid ${({ theme }) => theme.borderLight};
   }
 
   &::before {
-    margin-right: 0.5rem;
+    margin-right: 16px;
   }
 
   &::after {
-    margin-left: 0.5rem;
+    margin-left: 16px;
   }
 `;
 
@@ -203,37 +299,64 @@ export const GoogleButton = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 16px;
-  height: 44px;
-  background-color: white;
-  color: #757575;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-weight: 500;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s;
-  width: 48%;
-  font-size: 0.9rem;
+  padding: 16px 20px;
+  height: 52px;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  color: ${({ theme }) => theme.textPrimary};
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  margin-bottom: 16px;
 
   &:hover {
-    background-color: #f8f8f8;
-    color: #757575;
-    border-color: #ccc;
+    background: ${({ theme }) => theme.surfaceElevated};
+    color: ${({ theme }) => theme.textPrimary};
+    border-color: ${({ theme }) => theme.borderMedium};
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   img {
-    height: 18px;
-    margin-right: 8px;
+    height: 20px;
+    margin-right: 12px;
   }
 `;
 
 export const StyledFormButton = styled(FormButton)`
-  border-radius: 6px;
+  background: ${({ theme }) => theme.primaryGradient};
+  border: 1px solid ${({ theme }) => theme.primary};
+  border-radius: 16px;
   width: 100%;
   margin: 0;
-  height: 44px;
-  padding: 10px 16px;
-  border: none;
-  box-shadow: none;
-  outline: none;
+  height: 52px;
+  padding: 16px 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
 `;

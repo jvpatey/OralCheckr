@@ -207,7 +207,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
       </ModalHeader>
       <ModalBody>
         <CardText>
-          Welcome back! Enter your credentials below to access your account:
+          Hey there! Sign in to continue your oral health journey:
         </CardText>
         <Form onSubmit={handleLoginSubmit}>
           <RequiredFormGroup controlId="formUsername" className="m-3">
