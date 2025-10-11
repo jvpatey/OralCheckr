@@ -4,7 +4,12 @@ import { WelcomeNavBar } from "./WelcomeNavBar";
 import { ThemeType } from "../../App";
 import { SignUpModal } from "./SignUpModal";
 import { LoginModal } from "./LoginModal";
-import { WelcomeContent, WelcomeButtons, FeatureCards } from "./components";
+import {
+  WelcomeContent,
+  WelcomeButtons,
+  FeatureCards,
+  Footer,
+} from "./components";
 import {
   ModernWelcomeContainer,
   HeroSection,
@@ -48,13 +53,15 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
         <FeatureSection>
           <FeatureCards />
         </FeatureSection>
-
-        <SignUpModal
-          show={showSignUpModal}
-          handleClose={handleCloseSignUpModal}
-        />
-        <LoginModal show={showLoginModal} handleClose={handleCloseLoginModal} />
       </ModernWelcomeContainer>
+
+      <Footer />
+
+      <SignUpModal
+        show={showSignUpModal}
+        handleClose={handleCloseSignUpModal}
+      />
+      <LoginModal show={showLoginModal} handleClose={handleCloseLoginModal} />
     </PageBackground>
   );
 }

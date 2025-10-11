@@ -11,4 +11,5 @@ export { GuestConfirmationModal } from "./GuestConfirmationModal";
 export { FeatureCard } from "./FeatureCard";
 export { FeatureCards } from "./FeatureCards";
 export { BentoFeatureCard } from "./BentoFeatureCard";
+export { Footer } from "./Footer";
 export { CustomPasswordTooltip } from "./CustomPasswordTooltip";

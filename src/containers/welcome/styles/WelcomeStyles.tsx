@@ -87,7 +87,6 @@ export const ModernWelcomeContainer = styled.div`
   padding: 0 20px;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 
   @media (max-width: 768px) {
     padding: 0 16px;
