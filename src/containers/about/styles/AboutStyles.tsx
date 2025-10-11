@@ -12,7 +12,11 @@ export const fadeUp = keyframes`
   }
 `;
 
-export const PageContainer = styled.div`
+interface PageContainerProps {
+  $isAuthenticated: boolean;
+}
+
+export const PageContainer = styled.div<PageContainerProps>`
   position: fixed;
   top: 0;
   left: 0;
@@ -20,17 +24,29 @@ export const PageContainer = styled.div`
   bottom: 0;
   display: flex;
   justify-content: center;
-  background: ${({ theme }) => theme.backgroundColor};
+  align-items: flex-start;
+  background: ${({ theme }) => theme.backgroundGradient};
   overflow-y: auto;
-  padding: 60px 20px 40px;
+  padding: ${({ $isAuthenticated }) => 
+    $isAuthenticated ? 'calc(80px + 2rem) 20px 2rem 20px' : '2rem 20px 2rem 20px'};
   z-index: 1;
 
+  /* Add bottom spacing by using a pseudo-element */
+  &::after {
+    content: "";
+    display: block;
+    height: 2rem;
+    flex-shrink: 0;
+  }
+
   @media (max-width: 768px) {
-    padding: 50px 15px 30px;
+    padding: ${({ $isAuthenticated }) => 
+      $isAuthenticated ? 'calc(80px + 1.5rem) 15px 1.5rem 15px' : '1.5rem 15px 1.5rem 15px'};
   }
 
   @media (max-width: 480px) {
-    padding: 40px 10px 20px;
+    padding: ${({ $isAuthenticated }) => 
+      $isAuthenticated ? 'calc(80px + 1rem) 10px 1rem 10px' : '1rem 10px 1rem 10px'};
   }
 
   &::-webkit-scrollbar {
@@ -42,44 +58,32 @@ export const PageContainer = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => `${theme.textSecondary}40`};
-    border-radius: 4px;
+    background: ${({ theme }) => `${theme.primary}40`};
+    border-radius: 8px;
+    transition: background 0.3s ease;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => `${theme.textSecondary}60`};
+    background: ${({ theme }) => `${theme.primary}60`};
   }
 `;
 
-export const AboutCard = styled(Card)`
-  /* Modern glassmorphism card */
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 24px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  padding: 2.5rem;
-  width: 900px;
-  max-width: 100%;
-  height: fit-content;
+export const AboutContainer = styled.div`
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 0;
   animation: ${fadeUp} 0.6s ease-out;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
 
-  @media (max-width: 900px) {
-    width: 100%;
-    padding: 2rem;
-    border-radius: 20px;
+  @media (max-width: 1200px) {
+    padding: 0 1rem;
   }
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
-    border-radius: 18px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 1.25rem;
-    border-radius: 16px;
+    padding: 0 0.5rem;
   }
 `;
 
@@ -93,7 +97,7 @@ export const AboutTitle = styled.h1`
   font-weight: 700;
   text-align: center;
   letter-spacing: -0.5px;
-  text-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+  animation: ${fadeUp} 0.8s ease-out;
 
   @media (max-width: 768px) {
     font-size: 2.25rem;

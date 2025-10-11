@@ -9,7 +9,7 @@ import { AuthContext } from "../authentication/AuthContext";
 import { RoutePaths } from "../../common/constants/routes";
 import {
   PageContainer,
-  AboutCard,
+  AboutContainer,
   AboutTitle,
   BackButtonContainer,
 } from "./styles/AboutStyles";
@@ -27,9 +27,11 @@ export function About() {
     }
   };
 
+  const pageTitle = isAuthenticated ? "About" : "Support Hub";
+
   return (
-    <PageContainer>
-      <AboutCard>
+    <PageContainer $isAuthenticated={isAuthenticated}>
+      <AboutContainer>
         <BackButtonContainer>
           <SimpleBackButton onClick={handleBack}>
             <FontAwesomeIcon
@@ -40,11 +42,11 @@ export function About() {
           </SimpleBackButton>
         </BackButtonContainer>
 
-        <AboutTitle>Support Hub</AboutTitle>
+        <AboutTitle>{pageTitle}</AboutTitle>
         <AboutSection />
         <FAQSection />
         <ContactSection />
-      </AboutCard>
+      </AboutContainer>
     </PageContainer>
   );
 }
