@@ -22,8 +22,16 @@ export const PageContainer = styled.div`
   justify-content: center;
   background: ${({ theme }) => theme.backgroundColor};
   overflow-y: auto;
-  padding: calc(56px + 2rem) 20px 2rem;
+  padding: 60px 20px 40px;
   z-index: 1;
+
+  @media (max-width: 768px) {
+    padding: 50px 15px 30px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 40px 10px 20px;
+  }
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -34,38 +42,66 @@ export const PageContainer = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => `${theme.textGrey}40`};
+    background: ${({ theme }) => `${theme.textSecondary}40`};
     border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => `${theme.textGrey}60`};
+    background: ${({ theme }) => `${theme.textSecondary}60`};
   }
 `;
 
 export const AboutCard = styled(Card)`
-  background: ${({ theme }) => theme.accentBackgroundColor};
-  border-radius: 15px;
-  border: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  width: 800px;
+  /* Modern glassmorphism card */
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  padding: 2.5rem;
+  width: 900px;
+  max-width: 100%;
   height: fit-content;
-  margin-bottom: 2rem;
+  margin: 0 auto;
   animation: ${fadeUp} 0.6s ease-out;
 
   @media (max-width: 900px) {
-    margin: 0 2rem 2rem;
-    width: calc(100% - 4rem);
+    width: 100%;
+    padding: 2rem;
+    border-radius: 20px;
+  }
+
+  @media (max-width: 768px) {
     padding: 1.5rem;
+    border-radius: 18px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.25rem;
+    border-radius: 16px;
   }
 `;
 
 export const AboutTitle = styled.h1`
-  color: ${({ theme }) => theme.blue};
+  background: ${({ theme }) => theme.primaryGradient};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 2rem;
-  font-size: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
   text-align: center;
+  letter-spacing: -0.5px;
+  text-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+
+  @media (max-width: 768px) {
+    font-size: 2.25rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 2rem;
+  }
 `;
 
 export const BackButtonContainer = styled.div`
@@ -73,17 +109,58 @@ export const BackButtonContainer = styled.div`
 `;
 
 export const BackButton = styled(Button)`
-  background-color: ${({ theme }) => theme.green};
-  color: ${({ theme }) => theme.backgroundColor};
-  border: 1px solid ${({ theme }) => theme.green};
-  padding: 0.4rem 0.8rem;
-  font-size: 0.9rem;
-  border-radius: 6px;
+  background: ${({ theme }) => theme.primaryGradient};
+  color: white;
+  border: 1px solid ${({ theme }) => theme.primary};
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 
-  &:hover,
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(0) scale(1.01);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+
   &:focus {
-    background-color: ${({ theme }) => theme.backgroundColor};
-    color: ${({ theme }) => theme.green};
-    border: 1px solid ${({ theme }) => theme.green};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}33;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    border-radius: 12px;
   }
 `;
