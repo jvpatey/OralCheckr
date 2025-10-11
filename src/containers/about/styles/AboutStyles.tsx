@@ -27,8 +27,10 @@ export const PageContainer = styled.div<PageContainerProps>`
   align-items: flex-start;
   background: ${({ theme }) => theme.backgroundGradient};
   overflow-y: auto;
-  padding: ${({ $isAuthenticated }) => 
-    $isAuthenticated ? 'calc(80px + 2rem) 20px 2rem 20px' : '2rem 20px 2rem 20px'};
+  padding: ${({ $isAuthenticated }) =>
+    $isAuthenticated
+      ? "calc(80px + 2rem) 20px 2rem 20px"
+      : "2rem 20px 2rem 20px"};
   z-index: 1;
 
   /* Add bottom spacing by using a pseudo-element */
@@ -40,13 +42,17 @@ export const PageContainer = styled.div<PageContainerProps>`
   }
 
   @media (max-width: 768px) {
-    padding: ${({ $isAuthenticated }) => 
-      $isAuthenticated ? 'calc(80px + 1.5rem) 15px 1.5rem 15px' : '1.5rem 15px 1.5rem 15px'};
+    padding: ${({ $isAuthenticated }) =>
+      $isAuthenticated
+        ? "calc(80px + 1.5rem) 15px 1.5rem 15px"
+        : "1.5rem 15px 1.5rem 15px"};
   }
 
   @media (max-width: 480px) {
-    padding: ${({ $isAuthenticated }) => 
-      $isAuthenticated ? 'calc(80px + 1rem) 10px 1rem 10px' : '1rem 10px 1rem 10px'};
+    padding: ${({ $isAuthenticated }) =>
+      $isAuthenticated
+        ? "calc(80px + 1rem) 10px 1rem 10px"
+        : "1rem 10px 1rem 10px"};
   }
 
   &::-webkit-scrollbar {
