@@ -82,12 +82,12 @@ export function GuestConfirmationModal({
       </ModalHeader>
       <ModalBody>
         <CardText>
-          Continuing as guest will let you explore the app and its functionality
-          without creating an account.
+          Hey there! You can explore all of OralCheckr's features without
+          creating an account. Take your time to see what we're all about!
         </CardText>
         <CardText>
-          If you later choose to create an account, any questionnaire responses
-          and habit tracking data will be transferred to your new account.
+          No worries if you want to create an account later - we'll save all
+          your progress and transfer everything to your new account seamlessly.
         </CardText>
         <ButtonContainer>
           <ButtonWrapper>

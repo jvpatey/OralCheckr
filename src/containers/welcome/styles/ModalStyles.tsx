@@ -246,14 +246,41 @@ export const RequiredNote = styled.div`
 
 // Password requirement styles
 export const RequirementList = styled.ul`
-  padding-left: 20px;
-  margin-bottom: 0;
+  padding: 16px 20px;
+  margin: 12px 0 0 0;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 16px;
+  list-style: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
 export const RequirementItem = styled.li<{ $isMet: boolean }>`
   color: ${(props) =>
-    props.$isMet ? props.theme.green : props.theme.textGrey};
-  font-size: 0.9rem;
+    props.$isMet ? props.theme.success : props.theme.textSecondary};
+  font-size: 0.875rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  transition: all 0.3s ease;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &::before {
+    content: "${(props) => (props.$isMet ? "✓" : "○")}";
+    margin-right: 12px;
+    font-weight: bold;
+    color: ${(props) =>
+      props.$isMet ? props.theme.success : props.theme.textSecondary};
+    width: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
 `;
 
 export const OrSeparator = styled.div`
@@ -358,5 +385,56 @@ export const StyledFormButton = styled(FormButton)`
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
+  }
+`;
+
+// Global popover styles for password requirements
+export const GlobalPopoverStyles = styled.div`
+  /* Target all popovers globally with more aggressive selectors */
+  .popover,
+  .popover.show,
+  .popover.bs-popover-top,
+  .popover.bs-popover-bottom,
+  .popover.bs-popover-left,
+  .popover.bs-popover-right {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    max-width: 280px;
+    z-index: 9999 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    backdrop-filter: none !important;
+  }
+
+  .popover-body,
+  .popover-body * {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+
+  .popover-arrow,
+  .popover-arrow::before,
+  .popover-arrow::after {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Hide any default Bootstrap popover styling */
+  .popover-content,
+  .popover-content * {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  /* Target the specific popover ID */
+  #password-requirements-popover {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
   }
 `;

@@ -10,3 +10,4 @@ export { ThemeToggle } from "./ThemeToggle";
 export { GuestConfirmationModal } from "./GuestConfirmationModal";
 export { FeatureCard } from "./FeatureCard";
 export { FeatureCards } from "./FeatureCards";
+export { CustomPasswordTooltip } from "./CustomPasswordTooltip";

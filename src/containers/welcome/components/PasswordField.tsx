@@ -5,16 +5,13 @@ import {
   faEyeSlash,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { OverlayTrigger, Popover } from "react-bootstrap";
 import {
   InputStyle,
   PasswordContainer,
   PasswordToggle,
   InfoIcon,
-  RequirementList,
-  RequirementItem,
 } from "../styles/ModalStyles";
-import { passwordRequirements } from "../utils/password-utils";
+import { CustomPasswordTooltip } from "./CustomPasswordTooltip";
 
 interface PasswordFieldProps {
   value: string;
@@ -36,33 +33,15 @@ export function PasswordField({
   required = false,
 }: PasswordFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const checkPasswordRequirements = (password: string) => {
-    return passwordRequirements.map((req) => ({
-      message: req.message,
-      isMet: req.regex.test(password),
-    }));
+  const handleInfoHover = (isHovering: boolean) => {
+    setShowTooltip(isHovering);
   };
-
-  // Password requirements popover
-  const passwordRequirementsPopover = (
-    <Popover id="password-requirements-popover">
-      <Popover.Header as="h3">Password Requirements</Popover.Header>
-      <Popover.Body>
-        <RequirementList>
-          {checkPasswordRequirements(value).map((req, index) => (
-            <RequirementItem key={index} $isMet={req.isMet}>
-              {req.message}
-            </RequirementItem>
-          ))}
-        </RequirementList>
-      </Popover.Body>
-    </Popover>
-  );
 
   return (
     <PasswordContainer>
@@ -81,15 +60,13 @@ export function PasswordField({
         }
       />
       {showRequirements && (
-        <OverlayTrigger
-          trigger={["hover", "focus"]}
-          placement="left"
-          overlay={passwordRequirementsPopover}
+        <InfoIcon
+          onMouseEnter={() => handleInfoHover(true)}
+          onMouseLeave={() => handleInfoHover(false)}
         >
-          <InfoIcon>
-            <FontAwesomeIcon icon={faInfoCircle} />
-          </InfoIcon>
-        </OverlayTrigger>
+          <FontAwesomeIcon icon={faInfoCircle} />
+          <CustomPasswordTooltip show={showTooltip} password={value} />
+        </InfoIcon>
       )}
       <PasswordToggle onClick={togglePasswordVisibility}>
         <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
