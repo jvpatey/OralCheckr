@@ -10,7 +10,7 @@ export const PageBackground = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: calc(56px + 20px) 20px 20px;
+  padding: 20px 20px 60px;
   overflow-y: auto;
   position: fixed;
   top: 0;
@@ -19,4 +19,12 @@ export const PageBackground = styled.div`
   bottom: 0;
   z-index: 1;
   ${scrollbarStyle}
+
+  @media (max-width: 768px) {
+    padding: 15px 15px 50px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 10px 40px;
+  }
 `;

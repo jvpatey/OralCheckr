@@ -8,3 +8,5 @@ export { WelcomeContent } from "./WelcomeContent";
 export { WelcomeButtons } from "./WelcomeButtons";
 export { ThemeToggle } from "./ThemeToggle";
 export { GuestConfirmationModal } from "./GuestConfirmationModal";
+export { FeatureCard } from "./FeatureCard";
+export { FeatureCards } from "./FeatureCards";

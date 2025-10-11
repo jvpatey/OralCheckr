@@ -4,7 +4,7 @@ import { WelcomeNavBar } from "./WelcomeNavBar";
 import { ThemeType } from "../../App";
 import { SignUpModal } from "./SignUpModal";
 import { LoginModal } from "./LoginModal";
-import { WelcomeContent, WelcomeButtons } from "./components";
+import { WelcomeContent, WelcomeButtons, FeatureCards } from "./components";
 import { WelcomeCard, WelcomeContainer } from "./styles/WelcomeStyles";
 
 // Props for welcome page
@@ -32,6 +32,7 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
         <WelcomeCard>
           <WelcomeNavBar themeToggler={themeToggler} theme={theme} />
           <WelcomeContent />
+          <FeatureCards />
           <WelcomeButtons
             onSignUpClick={handleShowSignUpModal}
             onLoginClick={handleShowLoginModal}
