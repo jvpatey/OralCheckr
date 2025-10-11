@@ -28,10 +28,10 @@ import { AuthContext } from "../../containers/authentication/AuthContext";
 // Modern functional component for the Landing Dashboard
 export function Landing() {
   const { user } = useContext(AuthContext);
-  
+
   // Get user's first name, fallback to "there" if not available
   const userName = user?.firstName || "there";
-  
+
   return (
     <PageBackground>
       <BackgroundEffects />
