@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import { QuestionType } from "../../common/types/questionnaire/questionnaire.types";
 import { RenderQuestionsProps } from "../../common/types/questionnaire/render-questions.types";
 import {
-  QuesTitle,
-  FormContainer,
-  FormGroup,
+  QuestionContainer,
+  QuestionTitle,
+  OptionsContainer,
+  OptionItem,
+  OptionLabel,
   RadioInput,
   CheckboxInput,
+  RangeContainer,
   RangeInput,
   RangeLabels,
+  RangeLabel,
 } from "./styles/RenderQuestionsStyles";
 import {
   createRangeChangeHandler,
@@ -76,15 +80,18 @@ export function RenderQuestions(props: RenderQuestionsProps) {
   );
 
   return (
-    <FormContainer>
-      <QuesTitle>{title}</QuesTitle>
-      <form style={{ width: "100%" }}>
+    <QuestionContainer>
+      <QuestionTitle>{title}</QuestionTitle>
+      <OptionsContainer>
         {(() => {
           // Render inputs based on question type
           switch (type) {
             case QuestionType.RADIO:
               return options.map((option) => (
-                <FormGroup key={option.optionId} isRange={false}>
+                <OptionItem
+                  key={option.optionId}
+                  data-selected={rangeValue === option.optionId}
+                >
                   <RadioInput
                     type="radio"
                     id={`${id}-${option.optionId}`}
@@ -93,14 +100,17 @@ export function RenderQuestions(props: RenderQuestionsProps) {
                     onChange={handleRadioChange}
                     checked={rangeValue === option.optionId}
                   />
-                  <label htmlFor={`${id}-${option.optionId}`}>
+                  <OptionLabel htmlFor={`${id}-${option.optionId}`}>
                     {option.optionLabel}
-                  </label>
-                </FormGroup>
+                  </OptionLabel>
+                </OptionItem>
               ));
             case QuestionType.CHECKBOX:
               return options.map((option) => (
-                <FormGroup key={option.optionId} isRange={false}>
+                <OptionItem
+                  key={option.optionId}
+                  data-selected={selectedOptions.includes(option.optionId)}
+                >
                   <CheckboxInput
                     type="checkbox"
                     id={`${id}-${option.optionId}`}
@@ -109,14 +119,14 @@ export function RenderQuestions(props: RenderQuestionsProps) {
                     onChange={handleCheckboxChange}
                     checked={selectedOptions.includes(option.optionId)}
                   />
-                  <label htmlFor={`${id}-${option.optionId}`}>
+                  <OptionLabel htmlFor={`${id}-${option.optionId}`}>
                     {option.optionLabel}
-                  </label>
-                </FormGroup>
+                  </OptionLabel>
+                </OptionItem>
               ));
             case QuestionType.RANGE:
               return (
-                <FormGroup isRange={true}>
+                <RangeContainer>
                   <RangeInput
                     type="range"
                     id={`question-${id}`}
@@ -128,16 +138,18 @@ export function RenderQuestions(props: RenderQuestionsProps) {
                   />
                   <RangeLabels>
                     {options.map((option) => (
-                      <span key={option.optionId}>{option.optionLabel}</span>
+                      <RangeLabel key={option.optionId}>
+                        {option.optionLabel}
+                      </RangeLabel>
                     ))}
                   </RangeLabels>
-                </FormGroup>
+                </RangeContainer>
               );
             default:
               return null;
           }
         })()}
-      </form>
-    </FormContainer>
+      </OptionsContainer>
+    </QuestionContainer>
   );
 }

@@ -25,11 +25,15 @@ import {
 } from "../../common/types/questionnaire/questionnaire.types";
 import { ButtonContainer } from "../../components/questionnaire/styles/SharedQuestionnaireStyles";
 import {
-  QuesContainer,
+  ModernAssessmentContainer,
+  AssessmentHeader,
+  QuestionContent,
+  ActionSection,
   ProgressBar,
   ProgressIndicator,
   SubmitButton,
   QuitButton,
+  ErrorMessage,
 } from "./styles/QuestionnaireStyles";
 import {
   createResponseChangeHandler,
@@ -307,68 +311,61 @@ export function Questionnaire() {
   return (
     <PageBackground>
       <LandingContainer>
-        <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
-          <QuestionnaireCard>
-            <QuesContainer>
-              <ProgressBar>
-                {questions.map((_, idx: number) => (
-                  <div
-                    key={idx}
-                    className={`progress-segment ${
-                      idx < currentQuestion ? "filled" : ""
-                    }`}
-                  />
-                ))}
-              </ProgressBar>
+        <ModernAssessmentContainer $isAuthenticated={isAuthenticated}>
+          <AssessmentHeader>
+            <ProgressBar>
+              {questions.map((_, idx: number) => (
+                <div
+                  key={idx}
+                  className={`progress-segment ${
+                    idx < currentQuestion ? "filled" : ""
+                  }`}
+                />
+              ))}
+            </ProgressBar>
 
-              <ProgressIndicator>
-                Question {currentQuestion} / {questions.length}
-              </ProgressIndicator>
+            <ProgressIndicator>
+              Question {currentQuestion} / {questions.length}
+            </ProgressIndicator>
+          </AssessmentHeader>
 
-              <RenderQuestions
-                {...questions[currentQuestion - 1]}
-                onResponseChange={handleResponseChange}
-                initialResponse={responses[currentQuestion]}
-              />
+          <QuestionContent>
+            <RenderQuestions
+              {...questions[currentQuestion - 1]}
+              onResponseChange={handleResponseChange}
+              initialResponse={responses[currentQuestion]}
+            />
+          </QuestionContent>
 
-              <ButtonContainer>
-                <QuitButton onClick={handleQuit}>
-                  <FontAwesomeIcon icon={faArrowLeft} />{" "}
-                  {hasCompletedQuestionnaire ? "Exit to Results" : "Quit"}
-                </QuitButton>
+          <ActionSection>
+            <QuitButton onClick={handleQuit}>
+              <FontAwesomeIcon icon={faArrowLeft} />{" "}
+              {hasCompletedQuestionnaire ? "Exit to Results" : "Quit"}
+            </QuitButton>
 
-                <NavigationButton
-                  onClick={handlePrevious}
-                  disabled={currentQuestion === 1}
-                >
-                  Previous
-                </NavigationButton>
+            <NavigationButton
+              onClick={handlePrevious}
+              disabled={currentQuestion === 1}
+            >
+              Previous
+            </NavigationButton>
 
-                {currentQuestion === questions.length ? (
-                  <SubmitButton
-                    onClick={handleSubmit}
-                    disabled={isSubmitDisabled || isSaving}
-                  >
-                    {isSaving ? "Submitting..." : "Submit"}
-                  </SubmitButton>
-                ) : (
-                  <NavigationButton
-                    onClick={handleNext}
-                    disabled={isNextDisabled}
-                  >
-                    Next
-                  </NavigationButton>
-                )}
-              </ButtonContainer>
+            {currentQuestion === questions.length ? (
+              <SubmitButton
+                onClick={handleSubmit}
+                disabled={isSubmitDisabled || isSaving}
+              >
+                {isSaving ? "Submitting..." : "Submit"}
+              </SubmitButton>
+            ) : (
+              <NavigationButton onClick={handleNext} disabled={isNextDisabled}>
+                Next
+              </NavigationButton>
+            )}
+          </ActionSection>
 
-              {saveError && (
-                <div style={{ color: "red", marginTop: "10px" }}>
-                  Error: {saveError.message}
-                </div>
-              )}
-            </QuesContainer>
-          </QuestionnaireCard>
-        </QuestionnaireCardContainer>
+          {saveError && <ErrorMessage>Error: {saveError.message}</ErrorMessage>}
+        </ModernAssessmentContainer>
       </LandingContainer>
     </PageBackground>
   );

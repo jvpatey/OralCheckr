@@ -13,7 +13,7 @@ export function AboutSection() {
         <ContentText>
           OralCheckr is a dental health tracking application designed to help
           you maintain good oral hygiene habits and monitor your oral health
-          over time. The app features a comprehensive questionnaire to assess
+          over time. The app features a comprehensive assessment to evaluate
           your oral health status and provides a habit tracking system to help
           you build consistent dental care routines.
         </ContentText>

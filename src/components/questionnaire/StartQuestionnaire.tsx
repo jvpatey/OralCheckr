@@ -1,48 +1,42 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { RoutePaths } from "../../common/constants/routes";
 import { PageBackground } from "../PageBackground";
 import { LandingContainer } from "../landing/LandingContainer";
-import { QuestionnaireCardContainer } from "./styles/QuestionnaireCardContainer";
-import { QuestionnaireCard } from "./styles/QuestionnaireCard";
 import { StartQuestionnaireProps } from "../../common/types/questionnaire/start-questionnaire.types";
 import {
-  TitleText,
-  CardText,
-  ButtonContainer,
-  PrimaryButton,
-} from "./styles/SharedQuestionnaireStyles";
+  ModernContainer,
+  HeroTitle,
+  DescriptionText,
+  ActionSection,
+  GradientButton,
+} from "./styles/StartQuestionnaireStyles";
 
-// Functional component for the page to start the questionnaire if not completed previously
+// Modern fluid start questionnaire component
 export function StartQuestionnaire({
   isAuthenticated,
 }: StartQuestionnaireProps) {
   return (
     <PageBackground>
       <LandingContainer>
-        <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
-          <QuestionnaireCard>
-            <TitleText>Oral Health Questionnaire</TitleText>
-            <CardText>
-              Take our oral health questionnaire to evaluate your dental
-              well-being.
-            </CardText>
-            <CardText>
-              Receive a personalized score and tailored recommendations based on
-              your answers to gain valuable insights and improve your oral
-              health.
-            </CardText>
-            <ButtonContainer>
-              <PrimaryButton
-                as={Link}
-                to={`${RoutePaths.QUESTIONNAIRE}/1`}
-                style={{ width: "80%" }}
-              >
-                Begin
-              </PrimaryButton>
-            </ButtonContainer>
-          </QuestionnaireCard>
-        </QuestionnaireCardContainer>
+        <ModernContainer $isAuthenticated={isAuthenticated}>
+          <HeroTitle>Oral Health Assessment</HeroTitle>
+
+          <DescriptionText>
+            Take our comprehensive oral health assessment to evaluate your
+            dental well-being and get personalized insights.
+          </DescriptionText>
+
+          <DescriptionText>
+            Receive a detailed score and tailored recommendations based on your
+            answers to improve your oral health journey.
+          </DescriptionText>
+
+          <ActionSection>
+            <GradientButton as={Link} to={`${RoutePaths.QUESTIONNAIRE}/1`}>
+              Begin Assessment
+            </GradientButton>
+          </ActionSection>
+        </ModernContainer>
       </LandingContainer>
     </PageBackground>
   );
