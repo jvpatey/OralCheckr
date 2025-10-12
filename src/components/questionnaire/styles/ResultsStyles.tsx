@@ -151,7 +151,7 @@ export const LargeBentoCard = styled(BentoCard)<{ $scoreColor: string }>`
   background: ${({ $scoreColor }) => $scoreColor};
   border: none;
   color: white;
-  
+
   &:hover {
     transform: translateY(-4px) scale(1.02);
   }
