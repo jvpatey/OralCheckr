@@ -82,10 +82,11 @@ export const ResultsHeroTitle = styled.h1`
   }
 `;
 
-// Modern bento grid container
+// Modern bento grid container with 3 cards
 export const BentoGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
   gap: 24px;
   width: 100%;
   max-width: 1200px;
@@ -93,6 +94,7 @@ export const BentoGrid = styled.div`
 
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
     gap: 20px;
   }
 
@@ -113,8 +115,8 @@ export const BentoCard = styled.div`
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.shadowLg};
 
-  padding: 32px;
-  min-height: 400px;
+  padding: 24px;
+  min-height: 300px;
   display: flex;
   flex-direction: column;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -127,58 +129,86 @@ export const BentoCard = styled.div`
   }
 
   @media (max-width: 1024px) {
-    min-height: 350px;
-    padding: 24px;
-  }
-
-  @media (max-width: 768px) {
-    min-height: 300px;
+    min-height: 260px;
     padding: 20px;
   }
 
-  @media (max-width: 480px) {
-    min-height: 280px;
+  @media (max-width: 768px) {
+    min-height: 220px;
     padding: 16px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 180px;
+    padding: 12px;
   }
 `;
 
 // Large bento card (for score) with dynamic background
 export const LargeBentoCard = styled(BentoCard)<{ $scoreColor: string }>`
-  grid-column: span 1;
+  grid-column: 1;
+  grid-row: 1;
   background: ${({ $scoreColor }) => $scoreColor};
   border: none;
   color: white;
-
+  
   &:hover {
     transform: translateY(-4px) scale(1.02);
   }
 
   @media (max-width: 1024px) {
-    grid-column: span 1;
+    grid-column: 1;
+    grid-row: 1;
+  }
+`;
+
+// Small bento card for completion date and retake button
+export const SmallBentoCard = styled(BentoCard)`
+  grid-column: 1;
+  grid-row: 2;
+  min-height: 160px;
+
+  @media (max-width: 1024px) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  @media (max-width: 768px) {
+    min-height: 140px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 120px;
   }
 `;
 
 // Regular bento card (for recommendations)
 export const RegularBentoCard = styled(BentoCard)`
-  grid-column: span 1;
+  grid-column: 2;
+  grid-row: 1 / 3;
+
+  @media (max-width: 1024px) {
+    grid-column: 1;
+    grid-row: 3;
+  }
 `;
 
 // Modern card header
 export const BentoCardHeader = styled.h2`
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin: 0 0 24px 0;
+  margin: 0 0 16px 0;
   text-align: center;
   line-height: 1.3;
 
   @media (max-width: 768px) {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
+    font-size: 1.25rem;
+    margin-bottom: 12px;
   }
 
   @media (max-width: 480px) {
-    font-size: 1.25rem;
-    margin-bottom: 16px;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
   }
 `;
 
@@ -190,6 +220,15 @@ export const BentoCardContent = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+  gap: 12px;
+
+  @media (max-width: 768px) {
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 8px;
+  }
 `;
 
 // Modern score display
@@ -197,50 +236,58 @@ export const ModernScoreDisplay = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
+
+  @media (max-width: 768px) {
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 8px;
+  }
 `;
 
 // Modern score number
 export const ModernScoreNumber = styled.div`
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 800;
   line-height: 1;
   margin: 0;
 
   @media (max-width: 768px) {
-    font-size: 3rem;
+    font-size: 2.8rem;
   }
 
   @media (max-width: 480px) {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
 `;
 
 // Modern score label
 export const ModernScoreLabel = styled.div`
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 500;
   opacity: 0.9;
   margin: 0;
 
   @media (max-width: 768px) {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   @media (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 `;
 
 // Modern progress bar for score
 export const ModernProgressBar = styled.div<{ $scoreColor: string }>`
   width: 100%;
-  height: 12px;
+  height: 10px;
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
-  margin-top: 20px;
+  margin-top: 12px;
   position: relative;
 
   &::after {
@@ -349,6 +396,104 @@ export const ModernSignUpButton = styled.button`
   @media (max-width: 480px) {
     font-size: 0.85rem;
     padding: 10px 20px;
+  }
+`;
+
+// Modern retake button for the completion date card
+export const ModernRetakeButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Modern gradient background */
+  background: ${({ theme }) => theme.secondaryGradient};
+  color: white;
+
+  /* Typography */
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+
+  /* Spacing */
+  padding: 10px 20px;
+  border-radius: 10px;
+
+  /* Modern shadow */
+  box-shadow: ${({ theme }) => theme.shadowMd};
+
+  /* Smooth transitions */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Border */
+  border: none;
+  position: relative;
+  overflow: hidden;
+
+  /* Subtle glow effect */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: ${({ theme }) => theme.primaryGradient};
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 10px;
+  }
+
+  /* Hover effects */
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: ${({ theme }) => theme.shadowLg};
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+
+    &::before {
+      opacity: 0.3;
+    }
+  }
+
+  /* Active state */
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    transition-duration: 0.1s;
+  }
+
+  /* Focus state for accessibility */
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+    padding: 8px 16px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+`;
+
+// Date display text
+export const DateDisplayText = styled.div`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.textSecondary};
+  text-align: center;
+  margin-bottom: 12px;
+  line-height: 1.4;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
   }
 `;
 
