@@ -60,3 +60,64 @@ export const CustomProgressBar = styled(ProgressBar)<{ $scoreColor: string }>`
     margin-bottom: 10px;
   }
 `;
+
+// Modern score display components
+export const ModernScoreDisplay = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+`;
+
+export const ModernScoreNumber = styled.div`
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 3rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 2.5rem;
+  }
+`;
+
+export const ModernScoreLabel = styled.div`
+  font-size: 1.25rem;
+  font-weight: 500;
+  opacity: 0.9;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+`;
+
+export const ModernProgressBar = styled.div<{ $scoreColor: string }>`
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 20px;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--progress-width, 0%);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+`;

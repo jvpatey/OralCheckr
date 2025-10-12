@@ -149,15 +149,15 @@ export const DescriptionText = styled.p`
   }
 `;
 
-// Modern glassmorphic score card
-export const ModernScoreCard = styled.div`
-  /* Glassmorphism effect */
-  background: ${({ theme }) => theme.glassBg};
+// Modern glassmorphic score card with dynamic background
+export const ModernScoreCard = styled.div<{ $scoreColor: string }>`
+  /* Dynamic background based on score */
+  background: ${({ $scoreColor }) => $scoreColor};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
 
   /* Modern borders and shadows */
-  border: 1px solid ${({ theme }) => theme.borderLight};
+  border: none;
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.shadowLg};
 
@@ -169,6 +169,7 @@ export const ModernScoreCard = styled.div`
   gap: 16px;
   max-width: 400px;
   width: 100%;
+  color: white;
 
   @media (max-width: 768px) {
     padding: 20px 24px;
@@ -181,7 +182,7 @@ export const ModernScoreCard = styled.div`
 export const ModernScoreText = styled.div<{ $scoreColor: string }>`
   font-size: 2rem;
   font-weight: 700;
-  color: ${(props) => props.$scoreColor};
+  color: white;
   margin: 0;
   text-align: center;
 
@@ -193,7 +194,7 @@ export const ModernScoreText = styled.div<{ $scoreColor: string }>`
 // Modern completion text
 export const ModernCompletionText = styled.div`
   font-size: 1rem;
-  color: ${({ theme }) => theme.textSecondary};
+  color: rgba(255, 255, 255, 0.9);
   text-align: center;
   line-height: 1.4;
 

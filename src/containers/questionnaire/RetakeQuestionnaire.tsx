@@ -86,7 +86,7 @@ export function RetakeQuestionnaire({
         <ModernRetakeContainer $isAuthenticated={isAuthenticated}>
           <HeroTitle>Oral Health Assessment</HeroTitle>
 
-          <ModernScoreCard>
+          <ModernScoreCard $scoreColor={scoreColor}>
             <ModernScoreText $scoreColor={scoreColor}>
               Oral Health Score: {questionnaireData.score}
             </ModernScoreText>
