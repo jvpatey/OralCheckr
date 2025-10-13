@@ -84,7 +84,7 @@ export const CardContainer = styled.div`
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 40px 32px;
   height: calc(100vh - 120px);
   animation: ${fadeUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
@@ -93,13 +93,25 @@ export const CardContainer = styled.div`
   z-index: 1;
 
   @media (max-width: 768px) {
-    padding: 30px 16px;
+    padding: 30px 24px;
     height: calc(100vh - 100px);
+    max-width: calc(100vw - 48px);
+  }
+
+  @media (max-width: 640px) {
+    padding: 25px 20px;
+    max-width: calc(100vw - 40px);
   }
 
   @media (max-width: 480px) {
-    padding: 20px 12px;
+    padding: 20px 16px;
     height: calc(100vh - 90px);
+    max-width: calc(100vw - 32px);
+  }
+
+  @media (max-width: 360px) {
+    padding: 16px 12px;
+    max-width: calc(100vw - 24px);
   }
 `;
 

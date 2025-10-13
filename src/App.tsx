@@ -8,6 +8,7 @@ import { AuthProvider } from "./containers/authentication/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { GlobalToastStyles } from "./styles/ToastStyles";
 import { HabitProvider } from "./contexts/HabitContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GOOGLE_CLIENT_ID } from "./config/environment";
@@ -48,6 +49,8 @@ export function App() {
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       {/* Theme provider for styled components */}
       <ThemeProvider theme={theme === ThemeType.LIGHT ? lightTheme : darkTheme}>
+        {/* Global toast styles */}
+        <GlobalToastStyles />
         {/* React Query provider for data fetching */}
         <QueryClientProvider client={queryClientRef.current}>
           {/* Authentication context provider */}
@@ -63,13 +66,19 @@ export function App() {
                 {/* Toast notifications */}
                 <ToastContainer
                   position="top-right"
-                  autoClose={800}
+                  autoClose={3000}
                   hideProgressBar={false}
-                  closeOnClick
-                  pauseOnHover={false}
-                  draggable={false}
+                  closeOnClick={true}
+                  pauseOnHover={true}
+                  draggable={true}
                   limit={3}
                   theme={theme === ThemeType.LIGHT ? "light" : "dark"}
+                  toastClassName="modern-toast"
+                  bodyClassName="toast-body"
+                  progressClassName="toast-progress"
+                  closeButton={true}
+                  newestOnTop={true}
+                  rtl={false}
                 />
               </HashRouter>
             </HabitProvider>

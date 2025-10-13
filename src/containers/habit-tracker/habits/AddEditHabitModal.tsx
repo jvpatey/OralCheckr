@@ -93,12 +93,34 @@ const CancelButton = styled.button`
 `;
 
 const StyledFormControl = styled(Form.Control)`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  color: ${({ theme }) => theme.textGrey};
+  /* Glassmorphism input styling */
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 2px solid ${({ theme }) => theme.borderLight};
+  border-radius: 14px;
+  color: ${({ theme }) => theme.textPrimary};
+  font-weight: 500;
+  padding: 12px 16px;
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &::placeholder {
+    color: ${({ theme }) => theme.textTertiary};
+  }
 
   &:focus {
-    background-color: ${({ theme }) => theme.accentBackgroundColor};
-    color: ${({ theme }) => theme.textGrey};
+    background: ${({ theme }) => theme.glassBg};
+    color: ${({ theme }) => theme.textPrimary};
+    border-color: ${({ theme }) => theme.primary};
+    box-shadow: ${({ theme }) => theme.shadowMd},
+      0 0 0 3px ${({ theme }) => theme.primary}20;
+    outline: none;
+  }
+
+  &:hover {
+    border-color: ${({ theme }) => theme.primary}60;
+    box-shadow: ${({ theme }) => theme.shadowMd};
   }
 `;
 
@@ -124,8 +146,12 @@ const FormLabelGroup = styled.div`
 `;
 
 const StyledFormLabel = styled(Form.Label)`
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   display: block;
+  color: ${({ theme }) => theme.textPrimary};
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: -0.25px;
 `;
 
 const StyledTooltip = styled(Tooltip)`

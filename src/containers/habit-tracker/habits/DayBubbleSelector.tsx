@@ -45,6 +45,17 @@ const SegmentedControlContainer = styled.div`
   @media (max-width: 768px) {
     max-width: 100%;
     padding: 4px;
+    border-radius: 14px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 3px;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 2px;
+    border-radius: 10px;
   }
 `;
 

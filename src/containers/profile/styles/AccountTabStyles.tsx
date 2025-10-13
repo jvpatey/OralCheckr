@@ -129,64 +129,8 @@ export const EyeButton = styled(Button)`
   }
 `;
 
-export const StyledToastContainer = styled(ToastContainer)`
-  position: fixed;
-  top: 100px;
-  right: 20px;
-  z-index: 9999;
-
-  .toast {
-    background: ${({ theme }) => theme.glassBg};
-    backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-    border: 1px solid ${({ theme }) => theme.borderLight};
-    border-radius: 16px;
-    min-width: 320px;
-    box-shadow: ${({ theme }) => theme.shadowXl};
-  }
-
-  .toast-header {
-    background: transparent;
-    color: ${({ theme }) => theme.textPrimary};
-    border-bottom: 1px solid ${({ theme }) => theme.borderLight};
-    font-weight: 600;
-  }
-
-  .toast-body {
-    color: ${({ theme }) => theme.textSecondary};
-  }
-
-  .bg-success {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    color: white !important;
-    border: none !important;
-
-    .toast-header {
-      background: transparent;
-      color: white !important;
-      border-bottom-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .toast-body {
-      color: white !important;
-    }
-  }
-
-  .bg-danger {
-    background: linear-gradient(135deg, #ff6961 0%, #ff4757 100%) !important;
-    color: white !important;
-    border: none !important;
-
-    .toast-header {
-      background: transparent;
-      color: white !important;
-      border-bottom-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .toast-body {
-      color: white !important;
-    }
-  }
-`;
+// Note: Toast styling is now handled globally in ToastStyles.tsx
+// This component can be removed if no longer needed
 
 export const DeleteSection = styled.div`
   margin-top: 0;

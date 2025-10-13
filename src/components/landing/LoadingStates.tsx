@@ -202,49 +202,5 @@ export const QuickActionButton = styled.button`
   }
 `;
 
-// Notification toast for feedback
-export const NotificationToast = styled.div`
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 12px;
-  padding: 16px 20px;
-  color: ${({ theme }) => theme.textPrimary};
-  font-size: 0.875rem;
-  font-weight: 500;
-  box-shadow: ${({ theme }) => theme.shadowLg};
-  z-index: 1000;
-  transform: translateX(400px);
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &.visible {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  &.success {
-    border-left: 4px solid ${({ theme }) => theme.success};
-  }
-
-  &.error {
-    border-left: 4px solid ${({ theme }) => theme.error};
-  }
-
-  &.warning {
-    border-left: 4px solid ${({ theme }) => theme.warning};
-  }
-
-  @media (max-width: 768px) {
-    right: 16px;
-    left: 16px;
-    transform: translateY(-100px);
-    
-    &.visible {
-      transform: translateY(0);
-    }
-  }
-`;
+// Note: Toast styling is now handled globally in ToastStyles.tsx
+// This component can be removed if no longer needed
