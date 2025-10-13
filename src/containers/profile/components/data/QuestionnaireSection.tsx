@@ -58,7 +58,7 @@ export function QuestionnaireSection({
       queryClient.invalidateQueries({ queryKey: ["questionnaireResponse"] });
       queryClient.invalidateQueries({ queryKey: ["hasSavedResponse"] });
       queryClient.invalidateQueries({ queryKey: ["questionnaireProgress"] });
-      toast.success("Assessment data deleted successfully", {
+      toast.success("Questionnaire data deleted successfully", {
         position: "top-right",
         autoClose: 3000,
       });
@@ -130,13 +130,13 @@ export function QuestionnaireSection({
   return (
     <>
       <Section>
-        <SectionTitle>Assessment Data</SectionTitle>
+        <SectionTitle>Questionnaire Data</SectionTitle>
         <DataGrid>{renderContent()}</DataGrid>
 
         <WarningText>Warning: This action cannot be undone.</WarningText>
         <DescriptionText>
-          Deleting your assessment data will permanently remove all your oral
-          health assessments and scores. Your habit tracking data will not be
+          Deleting your questionnaire data will permanently remove all your oral
+          health questionnaire responses and scores. Your habit tracking data will not be
           affected.
         </DescriptionText>
 
@@ -149,7 +149,7 @@ export function QuestionnaireSection({
             (!questionnaireData?.lastCompleted && !questionnaireData?.score)
           }
         >
-          Delete Assessment Data
+          Delete Questionnaire Data
         </DeleteButton>
       </Section>
 
@@ -157,8 +157,8 @@ export function QuestionnaireSection({
         show={showDeleteModal}
         onHide={() => setShowDeleteModal(false)}
         onConfirm={handleDelete}
-        title="Delete Assessment Data"
-        message="Are you sure you want to delete your assessment data? This action cannot be undone."
+        title="Delete Questionnaire Data"
+        message="Are you sure you want to delete your questionnaire data? This action cannot be undone."
         isDeleting={isDeleting}
       />
     </>

@@ -43,7 +43,7 @@ export function Results() {
   return (
     <PageBackground>
       <ModernResultsContainer $isAuthenticated={isAuthenticated}>
-        <ResultsHeroTitle>Assessment Results</ResultsHeroTitle>
+        <ResultsHeroTitle>Questionnaire Results</ResultsHeroTitle>
 
         <BentoGrid>
           <LargeBentoCard $scoreColor={scoreColor}>
@@ -57,9 +57,9 @@ export function Results() {
               <DateDisplayText>
                 {questionnaireData?.lastCompleted || "Not available"}
               </DateDisplayText>
-              <AssessmentLabel>Last Assessment</AssessmentLabel>
+              <AssessmentLabel>Last Questionnaire</AssessmentLabel>
               <ModernRetakeButton onClick={handleRetakeAssessment}>
-                Retake Assessment
+                Retake Questionnaire
               </ModernRetakeButton>
             </BentoCardContent>
           </SmallBentoCard>

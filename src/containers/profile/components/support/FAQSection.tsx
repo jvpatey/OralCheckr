@@ -84,16 +84,16 @@ export function FAQSection() {
 
           <Accordion.Item eventKey="5">
             <Accordion.Header>
-              How do I complete the oral health assessment and what happens
+              How do I complete the oral health questionnaire and what happens
               after?
             </Accordion.Header>
             <Accordion.Body>
-              To complete the assessment, navigate to the Assessment tab on the
-              main dashboard and click "Begin Assessment." You'll be presented
+              To complete the questionnaire, navigate to the Questionnaire tab on the
+              main dashboard and click "Begin Questionnaire." You'll be presented
               with a series of questions about your oral health habits,
               symptoms, and concerns. Answer each question honestly, and you can
-              always go back to previous questions if needed. Once you submit
-              the assessment, our system will calculate your oral health score
+              always go back to previous questions if needed.               Once you submit
+              the questionnaire, our system will calculate your oral health score
               (0-100). You'll then receive personalized feedback based on your
               responses, highlighting areas of strength and suggesting
               improvements for areas of concern. This information helps you

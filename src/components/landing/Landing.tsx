@@ -100,8 +100,8 @@ export function Landing() {
 
         <LandingCardContainer>
           <LandingCard
-            title="Oral Health Assessment"
-            description="Complete our comprehensive oral health assessment to get personalized recommendations and track your progress over time."
+            title="Oral Health Questionnaire"
+            description="Complete our comprehensive oral health questionnaire to get personalized recommendations and track your progress over time."
             buttonLink={RoutePaths.QUESTIONNAIRE}
             icon={faClipboardList}
             badge={

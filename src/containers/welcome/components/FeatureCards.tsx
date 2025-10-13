@@ -14,9 +14,9 @@ export function FeatureCards() {
     {
       id: "assessment",
       icon: <FontAwesomeIcon icon={faClipboardList} size="lg" />,
-      title: "Oral Health Assessment",
+      title: "Oral Health Questionnaire",
       description:
-        "Comprehensive assessment to evaluate your oral health status and receive personalized recommendations.",
+        "Comprehensive questionnaire to evaluate your oral health status and receive personalized recommendations.",
       size: "medium",
       color: "primary",
       gradient: "primaryGradient",

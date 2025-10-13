@@ -19,10 +19,10 @@ export function StartQuestionnaire({
     <PageBackground>
       <LandingContainer>
         <ModernContainer $isAuthenticated={isAuthenticated}>
-          <HeroTitle>Oral Health Assessment</HeroTitle>
+          <HeroTitle>Oral Health Questionnaire</HeroTitle>
 
           <DescriptionText>
-            Take our comprehensive oral health assessment to evaluate your
+            Take our comprehensive oral health questionnaire to evaluate your
             dental well-being and get personalized insights.
           </DescriptionText>
 
@@ -33,7 +33,7 @@ export function StartQuestionnaire({
 
           <ActionSection>
             <GradientButton as={Link} to={`${RoutePaths.QUESTIONNAIRE}/1`}>
-              Begin Assessment
+              Begin Questionnaire
             </GradientButton>
           </ActionSection>
         </ModernContainer>

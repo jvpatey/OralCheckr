@@ -40,7 +40,7 @@ export const navbarLinks: NavLink[] = [
     displayIn: "navbar",
   },
   {
-    name: "Assessment",
+    name: "Questionnaire",
     path: RoutePaths.QUESTIONNAIRE,
     icon: faClipboard as IconDefinition,
     displayIn: "navbar",
@@ -62,7 +62,7 @@ export const navbarLinks: NavLink[] = [
 // Links for the sidebar
 export const sidebarLinks: NavLink[] = [
   {
-    name: "Assessment",
+    name: "Questionnaire",
     path: RoutePaths.QUESTIONNAIRE,
     icon: faClipboard as IconDefinition,
     displayIn: "sidebar",

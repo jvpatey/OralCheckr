@@ -85,7 +85,7 @@ export function RetakeQuestionnaire({
     <PageBackground>
       <LandingContainer>
         <ModernRetakeContainer $isAuthenticated={isAuthenticated}>
-          <HeroTitle>Oral Health Assessment</HeroTitle>
+          <HeroTitle>Oral Health Questionnaire</HeroTitle>
 
           <ModernScoreCard>
             <ModernScoreNumber $scoreColor={scoreColor}>
@@ -98,7 +98,7 @@ export function RetakeQuestionnaire({
           </ModernScoreCard>
 
           <DescriptionText>
-            It looks like you've already completed the oral health assessment.
+            It looks like you've already completed the oral health questionnaire.
           </DescriptionText>
 
           <DescriptionText>
@@ -108,7 +108,7 @@ export function RetakeQuestionnaire({
 
           <ModernActionSection>
             <ModernGradientButton onClick={handleRetakeClick}>
-              Retake Assessment
+              Retake Questionnaire
             </ModernGradientButton>
           </ModernActionSection>
         </ModernRetakeContainer>
