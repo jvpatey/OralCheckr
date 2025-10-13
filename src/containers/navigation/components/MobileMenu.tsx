@@ -14,6 +14,7 @@ interface MobileMenuProps {
   isGuest?: boolean;
   onCreateAccount: () => void;
   userAvatar?: string;
+  userFirstName?: string;
 }
 
 // Styled dropdown toggle button
@@ -52,8 +53,9 @@ const CustomDropdownMenu = styled(Dropdown.Menu)`
 `;
 
 // Styled dropdown menu items
-const CustomDropdownItem = styled(Dropdown.Item)`
-  color: ${({ theme }) => theme.textGrey};
+const CustomDropdownItem = styled(Dropdown.Item)<{ $isProfileWithName?: boolean }>`
+  color: ${({ theme, $isProfileWithName }) => 
+    $isProfileWithName ? theme.primary : theme.textGrey};
   padding: 12px 20px;
   display: flex;
   align-items: center;
@@ -62,13 +64,17 @@ const CustomDropdownItem = styled(Dropdown.Item)`
   border-radius: 0;
 
   &:hover {
-    color: ${({ theme }) => theme.textGrey};
-    background-color: ${({ theme }) => `${theme.blue}10`};
+    color: ${({ theme, $isProfileWithName }) => 
+      $isProfileWithName ? theme.primaryDark : theme.textGrey};
+    background-color: ${({ theme, $isProfileWithName }) => 
+      $isProfileWithName ? `${theme.primary}15` : `${theme.blue}10`};
   }
 
   &.active {
-    color: ${({ theme }) => theme.textGrey};
-    background-color: ${({ theme }) => `${theme.blue}15`};
+    color: ${({ theme, $isProfileWithName }) => 
+      $isProfileWithName ? theme.primary : theme.textGrey};
+    background-color: ${({ theme, $isProfileWithName }) => 
+      $isProfileWithName ? `${theme.primary}20` : `${theme.blue}15`};
   }
 `;
 
@@ -100,6 +106,7 @@ export function MobileMenu({
   isGuest = false,
   onCreateAccount,
   userAvatar,
+  userFirstName,
 }: MobileMenuProps) {
   return (
     <Dropdown className="ms-auto d-lg-none">
@@ -134,7 +141,9 @@ export function MobileMenu({
                 <FontAwesomeIcon icon={link.icon} />
               )}
             </Icon>
-            {link.name}
+            {link.name === "Profile" && userFirstName
+              ? userFirstName
+              : link.name}
           </CustomDropdownItem>
         ))}
       </CustomDropdownMenu>

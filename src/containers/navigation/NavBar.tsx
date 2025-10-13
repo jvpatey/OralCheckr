@@ -131,6 +131,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
             isGuest={isGuest}
             onCreateAccount={handleCreateAccount}
             userAvatar={profile?.avatar}
+            userFirstName={user?.firstName}
           />
 
           <DesktopMenu
@@ -140,6 +141,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
             isGuest={isGuest}
             onCreateAccount={handleCreateAccount}
             userAvatar={profile?.avatar}
+            userFirstName={user?.firstName}
           />
 
           <ThemeToggle

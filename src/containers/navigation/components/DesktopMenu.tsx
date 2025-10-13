@@ -12,6 +12,7 @@ interface DesktopMenuProps {
   isGuest?: boolean;
   onCreateAccount: () => void;
   userAvatar?: string;
+  userFirstName?: string;
 }
 
 // Modern navbar collapse with glassmorphism
@@ -51,8 +52,9 @@ const StyledNav = styled(Nav)`
 `;
 
 // Modern 2025-style nav links with pill backgrounds
-const CustomNavLink = styled(Nav.Link)`
-  color: ${({ theme }) => theme.textSecondary};
+const CustomNavLink = styled(Nav.Link)<{ $isProfileWithName?: boolean }>`
+  color: ${({ theme, $isProfileWithName }) => 
+    $isProfileWithName ? theme.primary : theme.textSecondary};
   margin-right: 8px;
   font-size: 1rem;
   font-weight: 600;
@@ -67,8 +69,10 @@ const CustomNavLink = styled(Nav.Link)`
   text-decoration: none;
 
   &:hover {
-    color: ${({ theme }) => theme.textPrimary};
-    background: ${({ theme }) => theme.textSecondary}08;
+    color: ${({ theme, $isProfileWithName }) => 
+      $isProfileWithName ? theme.primaryDark : theme.textPrimary};
+    background: ${({ theme, $isProfileWithName }) => 
+      $isProfileWithName ? `${theme.primary}12` : `${theme.textSecondary}08`};
     text-decoration: none;
     transform: scale(1.02);
   }
@@ -168,6 +172,7 @@ export function DesktopMenu({
   isGuest = false,
   onCreateAccount,
   userAvatar,
+  userFirstName,
 }: DesktopMenuProps) {
   return (
     <CustomCollapse id="basic-navbar-nav">
@@ -179,8 +184,11 @@ export function DesktopMenu({
             as={Link}
             to={link.path === "/" ? "/" : link.path}
             onClick={link.name === "Log Out" ? handleLogout : undefined}
+            $isProfileWithName={link.name === "Profile" && !!userFirstName}
           >
-            {link.name}
+            {link.name === "Profile" && userFirstName
+              ? userFirstName
+              : link.name}
           </CustomNavLink>
         ))}
         {isGuest && (
