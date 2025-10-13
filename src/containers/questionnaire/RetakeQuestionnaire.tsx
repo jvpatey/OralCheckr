@@ -98,7 +98,8 @@ export function RetakeQuestionnaire({
           </ModernScoreCard>
 
           <DescriptionText>
-            It looks like you've already completed the oral health questionnaire.
+            It looks like you've already completed the oral health
+            questionnaire.
           </DescriptionText>
 
           <DescriptionText>

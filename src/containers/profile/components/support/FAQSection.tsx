@@ -88,17 +88,17 @@ export function FAQSection() {
               after?
             </Accordion.Header>
             <Accordion.Body>
-              To complete the questionnaire, navigate to the Questionnaire tab on the
-              main dashboard and click "Begin Questionnaire." You'll be presented
-              with a series of questions about your oral health habits,
-              symptoms, and concerns. Answer each question honestly, and you can
-              always go back to previous questions if needed.               Once you submit
-              the questionnaire, our system will calculate your oral health score
-              (0-100). You'll then receive personalized feedback based on your
-              responses, highlighting areas of strength and suggesting
-              improvements for areas of concern. This information helps you
-              track your oral health progress over time and make informed
-              decisions about your daily oral care routine.
+              To complete the questionnaire, navigate to the Questionnaire tab
+              on the main dashboard and click "Begin Questionnaire." You'll be
+              presented with a series of questions about your oral health
+              habits, symptoms, and concerns. Answer each question honestly, and
+              you can always go back to previous questions if needed. Once you
+              submit the questionnaire, our system will calculate your oral
+              health score (0-100). You'll then receive personalized feedback
+              based on your responses, highlighting areas of strength and
+              suggesting improvements for areas of concern. This information
+              helps you track your oral health progress over time and make
+              informed decisions about your daily oral care routine.
             </Accordion.Body>
           </Accordion.Item>
         </StyledAccordion>

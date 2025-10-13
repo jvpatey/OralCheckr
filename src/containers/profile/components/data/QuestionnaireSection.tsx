@@ -136,8 +136,8 @@ export function QuestionnaireSection({
         <WarningText>Warning: This action cannot be undone.</WarningText>
         <DescriptionText>
           Deleting your questionnaire data will permanently remove all your oral
-          health questionnaire responses and scores. Your habit tracking data will not be
-          affected.
+          health questionnaire responses and scores. Your habit tracking data
+          will not be affected.
         </DescriptionText>
 
         <DeleteButton
