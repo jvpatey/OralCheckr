@@ -129,6 +129,7 @@ export function MobileMenu({
             as={Link}
             to={link.path === "/" ? "/" : link.path}
             onClick={link.name === "Log Out" ? handleLogout : undefined}
+            $isProfileWithName={link.name === "Profile" && !!userFirstName}
           >
             <Icon>
               {link.name === "Profile" ? (
