@@ -7,10 +7,10 @@ import {
   ContentItem,
   SubHeading,
   ContentText,
-  StyledLink,
   SocialLinks,
   SocialLink,
 } from "../../../../containers/about/styles/AboutContentStyles";
+import { ContactForm } from "../../../../components/shared/ContactForm";
 
 // Contact section component
 export function ContactSection() {
@@ -20,12 +20,11 @@ export function ContactSection() {
       <ContentBox>
         <ContentItem>
           <SubHeading>Contact</SubHeading>
-          <ContentText>
-            For any feedback, bug reports, or issues, please send an email to{" "}
-            <StyledLink href="mailto:jeffreyvpatey@gmail.com">
-              jeffreyvpatey@gmail.com
-            </StyledLink>
+          <ContentText style={{ marginBottom: "1.5rem" }}>
+            For any feedback, bug reports, or issues, please fill out the form
+            below and I'll get back to you as soon as possible.
           </ContentText>
+          <ContactForm />
         </ContentItem>
 
         <ContentItem>
