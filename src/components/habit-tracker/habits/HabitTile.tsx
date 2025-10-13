@@ -52,6 +52,7 @@ const HabitTile = memo(({ habit, logCount }: HabitTileProps) => {
           </ArrowIconWrapper>
         </FlipCardFront>
         <FlipCardBack $isComplete={isComplete}>
+          <ProgressBar $progress={progress} $isComplete={isComplete} />
           <BackText>
             <div className="label spaced">
               Habit Name: <span className="value">{habit.name}</span>
