@@ -13,7 +13,8 @@ import { useHabitContext } from "../../../../contexts/HabitContext";
 import { ViewContainer } from "../../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
 import {
   HeatmapContainer,
-  HeatmapTitle,
+  HeatmapHeader,
+  YearPickerContainer,
 } from "../../../../components/habit-tracker/analytics/styles/YearViewStyles";
 
 // Interface for the props that YearView accepts
@@ -53,18 +54,19 @@ export function YearView({
     <ViewContainer>
       {!hideAnalytics && (
         <>
-          <AnalyticsDateSelector
-            selectedDate={selectedDate}
-            onDateChange={onDateChange}
-            viewType={ViewType.YEAR}
-          />
           <HabitDropdown habits={habits} onSelectHabit={handleSelectHabit} />
           <HeatmapContainer>
-            <HeatmapTitle>
-              {selectedHabit
-                ? `${selectedHabit} Activity in ${year}`
-                : "Select a habit to view activity"}
-            </HeatmapTitle>
+            <HeatmapHeader>
+              <div></div>
+              <YearPickerContainer>
+                <AnalyticsDateSelector
+                  selectedDate={selectedDate}
+                  onDateChange={onDateChange}
+                  viewType={ViewType.YEAR}
+                />
+              </YearPickerContainer>
+              <div></div>
+            </HeatmapHeader>
             <Heatmap data={heatmapData} />
           </HeatmapContainer>
         </>

@@ -1,33 +1,85 @@
 import styled from "styled-components";
 
-// Styled component for the Navigation buttons inside the Questionnaire
+// Modern navigation button with gradient styling matching app
 export const NavigationButton = styled.button`
-  background-color: ${({ theme }) => theme.blue};
-  color: ${({ theme }) => theme.accentBackgroundColor};
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 1rem;
-  margin: 10px;
-  width: 150px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  &:hover {
-    background-color: ${({ theme }) => theme.accentBackgroundColor};
-    color: ${({ theme }) => theme.blue};
-    border: solid 2px ${({ theme }) => theme.blue};
+  /* Modern gradient background */
+  background: ${({ theme }) => theme.primaryGradient};
+  color: white;
+
+  /* Typography */
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+
+  /* Spacing */
+  padding: 14px 28px;
+  border-radius: 16px;
+
+  /* Modern shadow */
+  box-shadow: ${({ theme }) => theme.shadowMd};
+
+  /* Smooth transitions */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Border */
+  border: none;
+  position: relative;
+  overflow: hidden;
+  min-width: 120px;
+
+  /* Subtle glow effect */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: ${({ theme }) => theme.secondaryGradient};
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 16px;
   }
 
+  /* Hover effects */
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: ${({ theme }) => theme.shadowLg};
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+
+    &::before {
+      opacity: 0.3;
+    }
+  }
+
+  /* Active state */
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    transition-duration: 0.1s;
+  }
+
+  /* Disabled state */
   &:disabled {
-    background-color: ${({ theme }) => theme.disabledBackground};
-    border: solid 2px ${({ theme }) => theme.disabledText};
-    color: ${({ theme }) => theme.disabledText};
+    opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Focus state for accessibility */
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 2px;
   }
 
   @media (max-width: 768px) {
-    padding: 8px 16px;
-    width: 90px;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+    padding: 12px 20px;
+    min-width: 100px;
   }
 `;

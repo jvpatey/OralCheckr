@@ -49,7 +49,7 @@ export function QuestionnaireSection({
         ["questionnaireResponse"],
         context?.previousData
       );
-      toast.error("Failed to delete questionnaire data", {
+      toast.error("Failed to delete assessment data", {
         position: "top-right",
         autoClose: 3000,
       });
@@ -75,7 +75,7 @@ export function QuestionnaireSection({
       setIsDeleting(true);
       await deleteQuestionnaireMutation.mutateAsync();
     } catch (error) {
-      console.error("Error deleting questionnaire data:", error);
+      console.error("Error deleting assessment data:", error);
     } finally {
       setIsDeleting(false);
       setShowDeleteModal(false);
@@ -94,7 +94,7 @@ export function QuestionnaireSection({
     if (isError) {
       return (
         <DataItem style={{ gridColumn: "1 / -1", textAlign: "center" }}>
-          <Value>Error loading questionnaire data</Value>
+          <Value>Error loading assessment data</Value>
         </DataItem>
       );
     }
@@ -102,7 +102,7 @@ export function QuestionnaireSection({
     if (hasNoData) {
       return (
         <DataItem style={{ gridColumn: "1 / -1", textAlign: "center" }}>
-          <Value>No questionnaire data available</Value>
+          <Value>No assessment data available</Value>
         </DataItem>
       );
     }
@@ -136,8 +136,8 @@ export function QuestionnaireSection({
         <WarningText>Warning: This action cannot be undone.</WarningText>
         <DescriptionText>
           Deleting your questionnaire data will permanently remove all your oral
-          health assessments and scores. Your habit tracking data will not be
-          affected.
+          health questionnaire responses and scores. Your habit tracking data
+          will not be affected.
         </DescriptionText>
 
         <DeleteButton

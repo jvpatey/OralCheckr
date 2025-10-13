@@ -11,6 +11,7 @@ import {
   PlaceholderText,
   DatePickerWrapper,
   CardContainer,
+  BackgroundEffects,
 } from "./styles/HabitComponentsStyles";
 
 // Export all components for use in other files
@@ -27,4 +28,5 @@ export {
   PlaceholderText,
   DatePickerWrapper,
   CardContainer,
+  BackgroundEffects,
 };

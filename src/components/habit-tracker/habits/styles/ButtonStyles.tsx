@@ -10,40 +10,73 @@ export const BaseButton = styled.div<{ $disabled?: boolean }>`
   opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
 `;
 
-// Icon button container
+// Icon button container with modern gradient styling
 export const IconButtonContainer = styled(BaseButton)<{
   $disabled?: boolean;
   $borderColor: string;
   $color: string;
   $hoverBackgroundColor: string;
 }>`
-  background-color: ${({ $disabled, theme }) =>
-    $disabled ? theme.disabledBackground : theme.backgroundColor};
+  /* Glassmorphism background */
+  background: ${({ $disabled, theme }) =>
+    $disabled ? theme.disabledBackground : `${theme.glassBg}`};
+  backdrop-filter: ${({ $disabled }) => ($disabled ? "none" : "blur(8px)")};
+  -webkit-backdrop-filter: ${({ $disabled }) =>
+    $disabled ? "none" : "blur(8px)"};
+
+  /* Modern border with gradient color */
   border: 2px solid
     ${({ $borderColor, $disabled, theme }) =>
       $disabled ? theme.disabledBackground : $borderColor};
   color: ${({ $color, $disabled, theme }) =>
     $disabled ? theme.disabledText : $color};
-  width: 50px;
-  height: 45px;
-  border-radius: 5px;
+
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   margin-left: 10px;
   margin-bottom: 10px;
+  box-shadow: ${({ theme, $disabled }) =>
+    $disabled ? "none" : theme.shadowSm};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 
-  &:hover {
-    background-color: ${({ $hoverBackgroundColor, $disabled, theme }) =>
-      $disabled ? theme.disabledBackground : $hoverBackgroundColor};
-    border: 2px solid
-      ${({ $borderColor, $disabled, theme }) =>
-        $disabled ? theme.disabledBackground : $borderColor};
-    color: ${({ theme, $disabled }) =>
-      $disabled ? theme.disabledText : theme.backgroundColor};
-    box-shadow: ${({ $disabled }) =>
-      $disabled ? "none" : "0 4px 8px rgba(0, 0, 0, 0.2)"};
+  /* Gradient overlay for hover effect */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: ${({ $hoverBackgroundColor }) =>
+      `linear-gradient(135deg, ${$hoverBackgroundColor} 0%, ${$hoverBackgroundColor}90 100%)`};
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 10px;
+  }
+
+  &:hover:not([aria-disabled="true"]) {
+    background: ${({ $hoverBackgroundColor }) => $hoverBackgroundColor};
+    border: 2px solid ${({ $borderColor }) => $borderColor};
+    color: white;
+    box-shadow: ${({ theme }) => theme.shadowMd};
+    transform: translateY(-2px);
+
+    &::before {
+      opacity: 0.2;
+    }
+  }
+
+  &:active:not([aria-disabled="true"]) {
+    transform: translateY(0);
+    transition-duration: 0.1s;
   }
 
   @media (max-width: 768px) {
-    width: 45px;
+    width: 44px;
+    height: 44px;
   }
 `;
 

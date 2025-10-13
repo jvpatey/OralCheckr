@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
-import { greenHeatMapShades } from "../../../../common/utilities/color-utils";
+import { blueHeatMapShades } from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
 import { LoadingComponent } from "../../../../components/habit-tracker/analytics/LoadingComponent";
 import { useTheme } from "styled-components";
@@ -24,53 +24,49 @@ const MONTH_NAMES = [
   "December",
 ];
 
-// Heatmap card styles with media queries for responsiveness
-const HeatmapCard = styled.div`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  border-radius: 10px;
-  padding: 10px;
+// Modern heatmap chart container with glassmorphism
+const HeatmapChartContainer = styled.div`
   width: 100%;
-  max-width: 1100px;
-  margin-top: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: transparent;
   position: relative;
+  z-index: 1;
 
   .apexcharts-heatmap-rect {
-    stroke: ${({ theme }) => theme.accentBackgroundColor};
-    stroke-width: 3px;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 2px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      stroke: rgba(255, 255, 255, 0.3);
+      stroke-width: 3px;
+    }
   }
 
   .apexcharts-legend-marker {
     stroke: transparent;
+    border-radius: 4px;
   }
 
-  @media (min-width: 1280px) {
-    max-width: 1100px;
-    padding: 10px;
+  .apexcharts-legend-series {
+    margin-right: 1rem;
   }
 
-  @media (min-width: 1024px) and (max-width: 1279px) {
-    max-width: 1100px;
+  .apexcharts-legend-text {
+    color: ${({ theme }) => theme.textSecondary} !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
   }
 
-  @media (max-width: 1024px) {
-    max-width: 750px;
-    padding: 5px;
+  .apexcharts-xaxis-label,
+  .apexcharts-yaxis-label {
+    color: ${({ theme }) => theme.textSecondary} !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
   }
 
-  @media (max-width: 820px) {
-    max-width: 600px;
-    padding: 5px;
-  }
-
-  @media (max-width: 768px) {
-    max-width: 550px;
-    padding: 5px;
-  }
-
-  @media (max-width: 480px) {
-    width: 100%;
-    padding: 5px;
+  .apexcharts-gridline {
+    stroke: ${({ theme }) => theme.glassBorder || "rgba(255, 255, 255, 0.1)"};
+    stroke-dasharray: 3px;
   }
 `;
 
@@ -78,10 +74,12 @@ const HeatmapCard = styled.div`
 const useHeatmapOptions = (theme: ThemeType): ApexOptions => {
   return {
     chart: {
-      height: 350,
+      height: 200,
       type: "heatmap",
-      toolbar: { show: false }, // Disable toolbar on the heatmap
-      zoom: { enabled: false }, // Disable zooming
+      toolbar: { show: false },
+      zoom: { enabled: false },
+      background: "transparent",
+      fontFamily: "inherit",
       animations: {
         enabled: true,
         speed: 800,
@@ -89,41 +87,44 @@ const useHeatmapOptions = (theme: ThemeType): ApexOptions => {
         dynamicAnimation: { enabled: true },
       },
     },
+    theme: {
+      mode: theme.mode,
+    },
     plotOptions: {
       heatmap: {
         shadeIntensity: 0.8,
         colorScale: {
           ranges: [
             { from: 0, to: 0, color: theme.backgroundColor, name: "0 logs" },
-            { from: 1, to: 1, color: greenHeatMapShades.Light, name: "1 log" },
+            { from: 1, to: 1, color: blueHeatMapShades.Light, name: "1 log" },
             {
               from: 2,
               to: 5,
-              color: greenHeatMapShades.MediumLight,
+              color: blueHeatMapShades.MediumLight,
               name: "2-5 logs",
             },
             {
               from: 6,
               to: 7,
-              color: greenHeatMapShades.Medium,
+              color: blueHeatMapShades.Medium,
               name: "6-7 logs",
             },
             {
               from: 8,
               to: 9,
-              color: greenHeatMapShades.MediumDark,
+              color: blueHeatMapShades.MediumDark,
               name: "8-9 logs",
             },
             {
               from: 10,
               to: 11,
-              color: greenHeatMapShades.Dark,
+              color: blueHeatMapShades.Dark,
               name: "10-11 logs",
             },
             {
               from: 12,
               to: Infinity,
-              color: greenHeatMapShades.Darkest,
+              color: blueHeatMapShades.Darkest,
               name: "12+ logs",
             },
           ],
@@ -205,14 +206,14 @@ export function Heatmap({ data }: HeatmapProps) {
   };
 
   return (
-    <HeatmapCard>
+    <HeatmapChartContainer>
       <HeatmapChart
         options={options}
         data={data}
         loading={loading}
         isHeatmapChartMounted={isHeatmapChartMounted}
       />
-    </HeatmapCard>
+    </HeatmapChartContainer>
   );
 }
 

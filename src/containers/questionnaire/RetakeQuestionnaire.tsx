@@ -6,23 +6,20 @@ import { useTheme } from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
 import { PageBackground } from "../../components/PageBackground";
 import { LandingContainer } from "../../components/landing/LandingContainer";
-import { QuestionnaireCardContainer } from "../../components/questionnaire/styles/QuestionnaireCardContainer";
-import { QuestionnaireCard } from "../../components/questionnaire/styles/QuestionnaireCard";
 import { StyledModal } from "../../components/questionnaire/styles/Modal";
 import { AuthContext } from "../authentication/AuthContext";
 import { RetakeQuestionnaireProps } from "../../common/types/questionnaire/retake-questionnaire.types";
 import {
-  TitleText,
-  CardText,
-  ButtonContainer,
-  PrimaryButton,
-} from "../../components/questionnaire/styles/SharedQuestionnaireStyles";
-import {
   ModalButton,
-  MiniResultsCard,
-  ScoreText,
-  CompletedText,
-  DateText,
+  ModernRetakeContainer,
+  HeroTitle,
+  DescriptionText,
+  ModernActionSection,
+  ModernGradientButton,
+  ModernScoreCard,
+  ModernScoreNumber,
+  ModernScoreLabel,
+  ModernCompletionText,
 } from "./styles/RetakeQuestionnaireStyles";
 import { useQuestionnaireData } from "../../hooks/questionnaire/useQuestionnaireData";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
@@ -71,11 +68,9 @@ export function RetakeQuestionnaire({
     return (
       <PageBackground>
         <LandingContainer>
-          <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
-            <QuestionnaireCard>
-              <LoadingSpinner />
-            </QuestionnaireCard>
-          </QuestionnaireCardContainer>
+          <ModernRetakeContainer $isAuthenticated={isAuthenticated}>
+            <LoadingSpinner />
+          </ModernRetakeContainer>
         </LandingContainer>
       </PageBackground>
     );
@@ -89,36 +84,35 @@ export function RetakeQuestionnaire({
   return (
     <PageBackground>
       <LandingContainer>
-        <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
-          <QuestionnaireCard>
-            <TitleText>Oral Health Questionnaire</TitleText>
-            <MiniResultsCard>
-              <ScoreText $scoreColor={scoreColor}>
-                Oral Health Score: {questionnaireData.score}
-              </ScoreText>
-              <DateText>
-                <CompletedText>Completed on:</CompletedText>{" "}
-                {questionnaireData.lastCompleted}
-              </DateText>
-            </MiniResultsCard>
-            <CardText>
-              It looks like you've already completed the oral health
-              questionnaire.
-            </CardText>
-            <CardText>
-              If you wish to retake it to update your score and oral health
-              status, please click the button below.
-            </CardText>
-            <ButtonContainer>
-              <PrimaryButton
-                onClick={handleRetakeClick}
-                style={{ width: "80%" }}
-              >
-                Retake Questionnaire
-              </PrimaryButton>
-            </ButtonContainer>
-          </QuestionnaireCard>
-        </QuestionnaireCardContainer>
+        <ModernRetakeContainer $isAuthenticated={isAuthenticated}>
+          <HeroTitle>Oral Health Questionnaire</HeroTitle>
+
+          <ModernScoreCard>
+            <ModernScoreNumber $scoreColor={scoreColor}>
+              {questionnaireData.score}
+            </ModernScoreNumber>
+            <ModernScoreLabel>ORAL HEALTH SCORE</ModernScoreLabel>
+            <ModernCompletionText>
+              Completed on: {questionnaireData.lastCompleted}
+            </ModernCompletionText>
+          </ModernScoreCard>
+
+          <DescriptionText>
+            It looks like you've already completed the oral health
+            questionnaire.
+          </DescriptionText>
+
+          <DescriptionText>
+            If you wish to retake it to update your score and oral health
+            status, please click the button below.
+          </DescriptionText>
+
+          <ModernActionSection>
+            <ModernGradientButton onClick={handleRetakeClick}>
+              Retake Questionnaire
+            </ModernGradientButton>
+          </ModernActionSection>
+        </ModernRetakeContainer>
       </LandingContainer>
 
       <StyledModal show={showModal} onHide={handleCloseModal}>

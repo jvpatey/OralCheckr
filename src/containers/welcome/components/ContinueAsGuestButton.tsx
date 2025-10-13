@@ -6,7 +6,11 @@ import { AuthContext } from "../../../containers/authentication/AuthContext";
 import { Button } from "./Button";
 import { GuestConfirmationModal } from "./GuestConfirmationModal";
 
-export function ContinueAsGuestButton() {
+interface ContinueAsGuestButtonProps {
+  onClose?: () => void;
+}
+
+export function ContinueAsGuestButton({ onClose }: ContinueAsGuestButtonProps) {
   const navigate = useNavigate();
   const { updateAuth } = useContext(AuthContext);
   const { mutate: loginAsGuest, isPending } = useHandleGuestLogin();
@@ -29,6 +33,8 @@ export function ContinueAsGuestButton() {
 
         updateAuth(guestUser);
         navigate(RoutePaths.LANDING);
+        // Close the signup modal if onClose is provided
+        onClose?.();
       },
       onError: (error) => {
         console.error("Failed to log in as guest:", error);

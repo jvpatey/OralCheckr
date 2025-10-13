@@ -4,8 +4,18 @@ import { WelcomeNavBar } from "./WelcomeNavBar";
 import { ThemeType } from "../../App";
 import { SignUpModal } from "./SignUpModal";
 import { LoginModal } from "./LoginModal";
-import { WelcomeContent, WelcomeButtons } from "./components";
-import { WelcomeCard, WelcomeContainer } from "./styles/WelcomeStyles";
+import {
+  WelcomeContent,
+  WelcomeButtons,
+  FeatureCards,
+  Footer,
+} from "./components";
+import {
+  ModernWelcomeContainer,
+  HeroSection,
+  FeatureSection,
+  BackgroundEffects,
+} from "./styles/WelcomeStyles";
 
 // Props for welcome page
 interface WelcomeProps {
@@ -28,24 +38,30 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
   // Welcome page view
   return (
     <PageBackground>
-      <WelcomeContainer>
-        <WelcomeCard>
-          <WelcomeNavBar themeToggler={themeToggler} theme={theme} />
+      <BackgroundEffects />
+      <ModernWelcomeContainer>
+        <WelcomeNavBar themeToggler={themeToggler} theme={theme} />
+
+        <HeroSection>
           <WelcomeContent />
           <WelcomeButtons
             onSignUpClick={handleShowSignUpModal}
             onLoginClick={handleShowLoginModal}
           />
-          <SignUpModal
-            show={showSignUpModal}
-            handleClose={handleCloseSignUpModal}
-          />
-          <LoginModal
-            show={showLoginModal}
-            handleClose={handleCloseLoginModal}
-          />
-        </WelcomeCard>
-      </WelcomeContainer>
+        </HeroSection>
+
+        <FeatureSection>
+          <FeatureCards />
+        </FeatureSection>
+      </ModernWelcomeContainer>
+
+      <Footer />
+
+      <SignUpModal
+        show={showSignUpModal}
+        handleClose={handleCloseSignUpModal}
+      />
+      <LoginModal show={showLoginModal} handleClose={handleCloseLoginModal} />
     </PageBackground>
   );
 }

@@ -10,36 +10,41 @@ interface SimpleButtonProps {
 }
 
 const ButtonContainer = styled.button<{ $variant?: string }>`
-  background-color: ${({ theme, $variant }) =>
-    $variant === "danger" ? theme.red : theme.green};
-  color: ${({ theme }) => theme.backgroundColor};
-  border: 2px solid
+  background: ${({ theme, $variant }) =>
+    $variant === "danger"
+      ? "linear-gradient(135deg, #ff6961 0%, #ff4757 100%)"
+      : theme.primaryGradient};
+  color: white;
+  border: 1px solid
     ${({ theme, $variant }) =>
-      $variant === "danger" ? theme.red : theme.green};
-  padding: 5px 20px;
+      $variant === "danger" ? "#ff6961" : theme.primary};
+  padding: 12px 24px;
   cursor: pointer;
-  font-size: 16px;
-  border-radius: 10px;
-  transition: all 0.4s ease-out;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${({ theme }) => theme.shadowMd};
   position: relative;
 
   &:hover:not(:disabled) {
-    background-color: ${({ theme }) => theme.backgroundColor};
-    color: ${({ theme, $variant }) =>
-      $variant === "danger" ? theme.red : theme.green};
-    border: 2px solid
-      ${({ theme, $variant }) =>
-        $variant === "danger" ? theme.red : theme.green};
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: ${({ theme, $variant }) =>
+      $variant === "danger"
+        ? "0 8px 25px rgba(255, 105, 97, 0.3)"
+        : theme.shadowLg};
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
-    box-shadow: none;
+    box-shadow: ${({ theme }) => theme.shadowSm};
   }
 `;
 

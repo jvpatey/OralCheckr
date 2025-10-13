@@ -12,97 +12,127 @@ interface BaseButtonProps {
 }
 
 export const BaseButton = styled.button<BaseButtonProps>`
-  background-color: ${({ theme, $variant }) => {
+  /* Modern glassmorphism button styling */
+  background: ${({ theme, $variant }) => {
     switch ($variant) {
       case "primary":
-        return theme.blue;
-      case "secondary":
-        return theme.darkGrey;
-      case "guest":
-        return theme.darkGrey;
-      case "login":
-        return theme.green;
       case "signup":
-        return theme.blue;
+        return theme.primaryGradient;
+      case "login":
+        return theme.secondaryGradient;
+      case "guest":
+        return theme.primaryGradient;
       default:
-        return theme.blue;
+        return theme.primaryGradient;
     }
   }};
-  color: ${({ theme }) => theme.accentBackgroundColor};
-  border: 2px solid
+
+  color: ${({ $variant }) => {
+    switch ($variant) {
+      case "guest":
+        return "white";
+      default:
+        return "white";
+    }
+  }};
+  border: 1px solid
     ${({ theme, $variant }) => {
       switch ($variant) {
         case "primary":
-          return theme.blue;
-        case "secondary":
-          return theme.darkGrey;
-        case "guest":
-          return theme.darkGrey;
-        case "login":
-          return theme.green;
         case "signup":
-          return theme.blue;
+          return theme.primary;
+        case "login":
+          return theme.secondary;
+        case "guest":
+          return theme.primary;
         default:
-          return theme.blue;
+          return theme.primary;
       }
     }};
-  width: 45%;
-  margin: 10px;
-  border-radius: 10px;
-  padding: 0.5em 1em;
+
+  /* Modern sizing and spacing */
+  margin: 0;
+  border-radius: 16px;
+  padding: 16px 20px;
+  width: 100%;
+  height: 52px;
+
+  /* Full width in horizontal layout */
+  flex: 1;
+  min-width: 0;
   cursor: pointer;
-  display: block;
-  font-size: 1.2rem;
-  transition: all 0.4s ease-out;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.25px;
+
+  /* Enhanced shadows and effects */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+
+  /* Smooth transitions */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  overflow: hidden;
+
+  /* Subtle shine effect */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
-    background-color: ${({ theme }) => theme.accentBackgroundColor};
-    color: ${({ theme, $variant }) => {
-      switch ($variant) {
-        case "primary":
-          return theme.blue;
-        case "secondary":
-          return theme.darkGrey;
-        case "guest":
-          return theme.darkGrey;
-        case "login":
-          return theme.green;
-        case "signup":
-          return theme.blue;
-        default:
-          return theme.blue;
-      }
-    }};
-    border-color: ${({ theme, $variant }) => {
-      switch ($variant) {
-        case "primary":
-          return theme.blue;
-        case "secondary":
-          return theme.darkGrey;
-        case "guest":
-          return theme.darkGrey;
-        case "login":
-          return theme.green;
-        case "signup":
-          return theme.blue;
-        default:
-          return theme.blue;
-      }
-    }};
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(0) scale(1.01);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   }
 
   &:disabled {
-    opacity: 0.7;
+    opacity: 0.6;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &:disabled:hover {
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   @media (max-width: 768px) {
-    width: 80%;
-    font-size: 1rem;
-    padding: 0.4em 0.8em;
+    padding: 16px 24px;
+    font-size: 0.95rem;
+    border-radius: 14px;
+    flex: none;
+    width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    padding: 14px 20px;
+    font-size: 0.9rem;
+    border-radius: 12px;
   }
 `;

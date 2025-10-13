@@ -24,10 +24,10 @@ export function AnalyticsTile({
 }: AnalyticsTileProps) {
   return (
     <TileContainer>
-      <TileHeading>{heading}</TileHeading>
       <TileMainContent $isMissedDays={isMissedDays} $isLoading={isLoading}>
         {mainContent}
       </TileMainContent>
+      <TileHeading>{heading}</TileHeading>
       {subContent && <TileSubContent>{subContent}</TileSubContent>}
     </TileContainer>
   );

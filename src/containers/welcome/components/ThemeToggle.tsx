@@ -5,14 +5,15 @@ import styled from "styled-components";
 import { useState } from "react";
 
 const ToggleWrapper = styled.div`
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 0;
+  cursor: pointer;
 
   &:hover {
-    transform: translateY(-2px);
+    transform: scale(1.1);
   }
 `;
 
@@ -42,9 +43,11 @@ export function ThemeToggle({ themeToggler, theme }: ThemeToggleProps) {
       <DarkModeSwitch
         checked={isDarkMode}
         onChange={toggleDarkMode}
-        size={24}
-        moonColor={isHovered ? themeContext.green : themeContext.blue}
-        sunColor={isHovered ? themeContext.green : themeContext.blue}
+        size={18}
+        moonColor={
+          isHovered ? themeContext.primary : themeContext.textSecondary
+        }
+        sunColor={isHovered ? themeContext.primary : themeContext.textSecondary}
       />
     </ToggleWrapper>
   );

@@ -8,7 +8,7 @@ import { AuthContext } from "../authentication/AuthContext";
 import { useRegisterUser } from "../../hooks/auth/useRegisterUser";
 import { useConvertGuestToUser } from "../../hooks/auth/useConvertGuestToUser";
 import { useGoogleLogin } from "../../hooks/auth/useGoogleLogin";
-import { PasswordField } from "./components";
+import { PasswordField, ContinueAsGuestButton } from "./components";
 import { validatePassword } from "./utils/password-utils";
 import {
   StyledModal,
@@ -21,6 +21,7 @@ import {
   RequiredNote,
   OrSeparator,
   StyledFormButton,
+  GlobalPopoverStyles,
 } from "./styles/ModalStyles";
 
 // Get Google Client ID from environment variable or config.js
@@ -225,92 +226,98 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
   }, [show]);
 
   return (
-    <StyledModal show={show} onHide={handleClose} centered>
-      <ModalHeader closeButton>
-        <HeaderText>Sign Up</HeaderText>
-      </ModalHeader>
-      <ModalBody>
-        <CardText>
-          To get started, enter your details below to create an account:
-        </CardText>
-        <Form onSubmit={handleSignUpSubmit}>
-          <RequiredFormGroup controlId="formFirstName" className="m-3">
-            <InputStyle
-              type="text"
-              placeholder="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              autoComplete="given-name"
-              required
-            />
-          </RequiredFormGroup>
-          <RequiredFormGroup controlId="formLastName" className="m-3">
-            <InputStyle
-              type="text"
-              placeholder="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              autoComplete="family-name"
-              required
-            />
-          </RequiredFormGroup>
-          <RequiredFormGroup controlId="formEmail" className="m-3">
-            <InputStyle
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              required
-            />
-          </RequiredFormGroup>
-          <RequiredFormGroup className="m-3">
-            <PasswordField
-              value={password}
-              onChange={setPassword}
-              placeholder="Password"
-              showRequirements={true}
-              autoComplete="new-password"
-              id="signupPassword"
-              required
-            />
-          </RequiredFormGroup>
+    <GlobalPopoverStyles>
+      <StyledModal show={show} onHide={handleClose} centered>
+        <ModalHeader closeButton>
+          <HeaderText>Sign Up</HeaderText>
+        </ModalHeader>
+        <ModalBody>
+          <CardText>Let's get you started! Create your account below:</CardText>
+          <Form onSubmit={handleSignUpSubmit}>
+            <RequiredFormGroup controlId="formFirstName" className="m-3">
+              <InputStyle
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                autoComplete="given-name"
+                required
+              />
+            </RequiredFormGroup>
+            <RequiredFormGroup controlId="formLastName" className="m-3">
+              <InputStyle
+                type="text"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                autoComplete="family-name"
+                required
+              />
+            </RequiredFormGroup>
+            <RequiredFormGroup controlId="formEmail" className="m-3">
+              <InputStyle
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                required
+              />
+            </RequiredFormGroup>
+            <RequiredFormGroup className="m-3">
+              <PasswordField
+                value={password}
+                onChange={setPassword}
+                placeholder="Password"
+                showRequirements={true}
+                autoComplete="new-password"
+                id="signupPassword"
+                required
+              />
+            </RequiredFormGroup>
 
-          {error && (
-            <Alert variant="danger" dismissible onClose={() => setError("")}>
-              {error}
-            </Alert>
-          )}
-          <RequiredNote>Required field</RequiredNote>
+            {error && (
+              <Alert variant="danger" dismissible onClose={() => setError("")}>
+                {error}
+              </Alert>
+            )}
+            <RequiredNote>Required field</RequiredNote>
 
-          <StyledFormButton
-            type="submit"
-            disabled={!formValid}
-            style={{ backgroundColor: "#4CAF50", borderColor: "#4CAF50" }}
-          >
-            Sign Up with Email
-          </StyledFormButton>
-
-          <OrSeparator>OR</OrSeparator>
-
-          {hasValidGoogleClientId ? (
-            <div
-              ref={googleButtonRef}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "1rem",
-              }}
-            ></div>
-          ) : (
-            <div
-              style={{ textAlign: "center", margin: "1rem 0", color: "#666" }}
+            <StyledFormButton
+              type="submit"
+              disabled={!formValid}
+              style={{ backgroundColor: "#4CAF50", borderColor: "#4CAF50" }}
             >
-              Google Sign-In temporarily unavailable
+              Sign Up with Email
+            </StyledFormButton>
+
+            <OrSeparator>OR</OrSeparator>
+
+            {hasValidGoogleClientId ? (
+              <div
+                ref={googleButtonRef}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "1rem",
+                }}
+              ></div>
+            ) : (
+              <div
+                style={{ textAlign: "center", margin: "1rem 0", color: "#666" }}
+              >
+                Google Sign-In temporarily unavailable
+              </div>
+            )}
+
+            <OrSeparator>OR</OrSeparator>
+
+            <div style={{ textAlign: "center", marginTop: "1rem" }}>
+              <ContinueAsGuestButton onClose={handleClose} />
             </div>
-          )}
-        </Form>
-      </ModalBody>
-    </StyledModal>
+          </Form>
+        </ModalBody>
+      </StyledModal>
+    </GlobalPopoverStyles>
   );
 }

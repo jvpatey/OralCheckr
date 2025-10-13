@@ -1,21 +1,28 @@
 import { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Carousel from "react-bootstrap/Carousel";
-import { Card } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+  faLightbulb,
+} from "@fortawesome/free-solid-svg-icons";
 import { useGetQuestionnaireResponse } from "../../hooks/questionnaire/useGetQuestionnaireResponse";
 import type { Recommendation } from "../../common/types/questionnaire/recommendations.types";
 import { generateRecommendations } from "./utils/recommendations-utils";
-import { StyledHeader } from "../../components/questionnaire/styles/SharedQuestionnaireStyles";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import {
+  CardStackContainer,
+  ContentArea,
+  EdgeHoverZone,
+  EdgeArrow,
+  SlideContainer,
+  CategoryHeader,
+  ImprovementLabel,
+  RecommendationText,
   NoRecommendations,
-  CarouselContainer,
-  CarouselContent,
-  CategoryText,
-  CustomCarousel,
+  KeyboardHint,
 } from "./styles/RecommendationsStyles";
 
-// Recommendations component with carousel display
+// Recommendations component with card stack display
 export function Recommendations() {
   const {
     data: questionnaireData,
@@ -23,7 +30,10 @@ export function Recommendations() {
     error,
   } = useGetQuestionnaireResponse();
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
-  const [index, setIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [animationDirection, setAnimationDirection] = useState<
+    "slideInLeft" | "slideInRight" | "slideOutLeft" | "slideOutRight" | "none"
+  >("none");
 
   // Generate recommendations from questionnaire responses
   useEffect(() => {
@@ -45,10 +55,40 @@ export function Recommendations() {
     setRecommendations(recs);
   }, [questionnaireData]);
 
-  // Handle carousel navigation
-  const handleSelect = (selectedIndex: number) => {
-    setIndex(selectedIndex);
+  // Handle navigation with animations
+  const handleNext = () => {
+    if (currentIndex < recommendations.length - 1) {
+      setAnimationDirection("slideOutLeft");
+      setTimeout(() => {
+        setCurrentIndex(currentIndex + 1);
+        setAnimationDirection("slideInRight");
+      }, 200);
+    }
   };
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      setAnimationDirection("slideOutRight");
+      setTimeout(() => {
+        setCurrentIndex(currentIndex - 1);
+        setAnimationDirection("slideInLeft");
+      }, 200);
+    }
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        handlePrevious();
+      } else if (e.key === "ArrowRight") {
+        handleNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [currentIndex, recommendations.length]);
 
   // Show loading state
   if (isLoading) {
@@ -65,36 +105,58 @@ export function Recommendations() {
 
   // Main recommendations view
   return (
-    <>
-      <StyledHeader>Recommendations</StyledHeader>
-      <Card.Body
-        style={{
-          padding: 0,
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-        }}
-      >
+    <CardStackContainer>
+      <ContentArea>
         {recommendations.length > 0 ? (
-          <CarouselContainer>
-            <CustomCarousel activeIndex={index} onSelect={handleSelect}>
-              {recommendations.map((rec, idx) => (
-                <Carousel.Item
-                  key={idx}
-                  style={{ marginBottom: "10px", height: "100%" }}
-                >
-                  <CarouselContent>
-                    <CategoryText>{rec.category}</CategoryText>
-                    {rec.feedback}
-                  </CarouselContent>
-                </Carousel.Item>
-              ))}
-            </CustomCarousel>
-          </CarouselContainer>
+          <>
+            {/* Left edge hover zone */}
+            <EdgeHoverZone
+              $side="left"
+              onClick={handlePrevious}
+              style={{ opacity: currentIndex === 0 ? 0 : undefined }}
+            >
+              <EdgeArrow $side="left">
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </EdgeArrow>
+            </EdgeHoverZone>
+
+            {/* Right edge hover zone */}
+            <EdgeHoverZone
+              $side="right"
+              onClick={handleNext}
+              style={{
+                opacity:
+                  currentIndex === recommendations.length - 1 ? 0 : undefined,
+              }}
+            >
+              <EdgeArrow $side="right">
+                <FontAwesomeIcon icon={faChevronRight} />
+              </EdgeArrow>
+            </EdgeHoverZone>
+
+            {/* Content with slide animation */}
+            <SlideContainer $animationDirection={animationDirection}>
+              <CategoryHeader>
+                {recommendations[currentIndex]?.category}
+              </CategoryHeader>
+              <ImprovementLabel>IMPROVEMENT AREA</ImprovementLabel>
+              <RecommendationText>
+                {recommendations[currentIndex]?.feedback}
+              </RecommendationText>
+            </SlideContainer>
+
+            {/* Keyboard hint */}
+            <KeyboardHint>Use ← → keys to navigate</KeyboardHint>
+          </>
         ) : (
-          <NoRecommendations>No recommendations available</NoRecommendations>
+          <NoRecommendations>
+            <div className="icon">
+              <FontAwesomeIcon icon={faLightbulb} />
+            </div>
+            <div className="message">No recommendations available</div>
+          </NoRecommendations>
         )}
-      </Card.Body>
-    </>
+      </ContentArea>
+    </CardStackContainer>
   );
 }

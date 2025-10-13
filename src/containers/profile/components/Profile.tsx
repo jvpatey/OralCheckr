@@ -3,8 +3,10 @@ import { Tab } from "react-bootstrap";
 import {
   PageContainer,
   ProfileCard,
+  ProfileHeader,
   StyledNav,
   TabContent,
+  TabsContainer,
   Nav,
 } from "../styles/ProfileStyles";
 import { useProfile } from "../../../hooks/profile/useProfile";
@@ -48,11 +50,15 @@ export function Profile() {
     return (
       <PageContainer>
         <ProfileCard>
-          <div>
-            <h3>Guest Account</h3>
-            <p>Profile management is not available for guest accounts.</p>
-            <p>Please sign up for a full account to access profile features.</p>
-          </div>
+          <ProfileHeader>
+            <div>
+              <h3>Guest Account</h3>
+              <p>Profile management is not available for guest accounts.</p>
+              <p>
+                Please sign up for a full account to access profile features.
+              </p>
+            </div>
+          </ProfileHeader>
         </ProfileCard>
       </PageContainer>
     );
@@ -63,7 +69,12 @@ export function Profile() {
     return (
       <PageContainer>
         <ProfileCard>
-          <div>Loading...</div>
+          <ProfileHeader>
+            <div>
+              <h3>Loading...</h3>
+              <p>Please wait while we load your profile information.</p>
+            </div>
+          </ProfileHeader>
         </ProfileCard>
       </PageContainer>
     );
@@ -74,11 +85,16 @@ export function Profile() {
     return (
       <PageContainer>
         <ProfileCard>
-          <div>
-            {error instanceof Error
-              ? error.message
-              : "An error occurred while loading your profile"}
-          </div>
+          <ProfileHeader>
+            <div>
+              <h3>Error</h3>
+              <p>
+                {error instanceof Error
+                  ? error.message
+                  : "An error occurred while loading your profile"}
+              </p>
+            </div>
+          </ProfileHeader>
         </ProfileCard>
       </PageContainer>
     );
@@ -97,29 +113,31 @@ export function Profile() {
           refetch={refetch}
         />
 
-        <Tab.Container defaultActiveKey="account">
-          <StyledNav variant="tabs">
-            <Nav.Item>
-              <Nav.Link eventKey="account">Account Settings</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="data">Data Management</Nav.Link>
-            </Nav.Item>
-          </StyledNav>
+        <TabsContainer>
+          <Tab.Container defaultActiveKey="account">
+            <StyledNav variant="tabs">
+              <Nav.Item>
+                <Nav.Link eventKey="account">Account Settings</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="data">Data Management</Nav.Link>
+              </Nav.Item>
+            </StyledNav>
 
-          <Tab.Content>
-            <Tab.Pane eventKey="account">
-              <TabContent>
-                <AccountTab refetch={refetch} />
-              </TabContent>
-            </Tab.Pane>
-            <Tab.Pane eventKey="data">
-              <TabContent>
-                <DataTab />
-              </TabContent>
-            </Tab.Pane>
-          </Tab.Content>
-        </Tab.Container>
+            <Tab.Content>
+              <Tab.Pane eventKey="account">
+                <TabContent>
+                  <AccountTab refetch={refetch} />
+                </TabContent>
+              </Tab.Pane>
+              <Tab.Pane eventKey="data">
+                <TabContent>
+                  <DataTab />
+                </TabContent>
+              </Tab.Pane>
+            </Tab.Content>
+          </Tab.Container>
+        </TabsContainer>
 
         <AvatarSelectionModal
           show={showAvatarModal}

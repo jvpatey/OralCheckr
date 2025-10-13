@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { Nav, Navbar } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "../../../common/links";
+import { ThemeToggle } from "./ThemeToggle";
 import React from "react";
 
 // Props for desktop menu component
@@ -13,11 +14,14 @@ interface DesktopMenuProps {
   isGuest?: boolean;
   onCreateAccount: () => void;
   userAvatar?: string;
+  userFirstName?: string;
+  isDarkMode?: boolean;
+  toggleDarkMode?: () => void;
 }
 
-// Styled navbar collapse for responsive design
+// Modern navbar collapse with glassmorphism
 const CustomCollapse = styled(Navbar.Collapse)`
-  background-color: ${({ theme }) => theme.backgroundColor};
+  background: transparent;
 
   @media (max-width: 768px) {
     position: absolute;
@@ -29,6 +33,12 @@ const CustomCollapse = styled(Navbar.Collapse)`
     flex-direction: column;
     align-items: flex-end;
     padding-right: 1rem;
+    background: ${({ theme }) => theme.glassBg};
+    backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+    border-radius: 16px;
+    margin-top: 8px;
+    border: 1px solid ${({ theme }) => theme.borderLight};
+    box-shadow: ${({ theme }) => theme.shadowLg};
   }
 
   @media (min-width: 768px) {
@@ -45,75 +55,98 @@ const StyledNav = styled(Nav)`
   font-weight: 500;
 `;
 
-// Styled nav link with hover and active states
-const CustomNavLink = styled(Nav.Link)`
-  color: ${({ theme }) => theme.textGrey};
-  margin-right: 35px;
+// Modern 2025-style nav links with clean styling
+const CustomNavLink = styled(Nav.Link)<{ $isProfileWithName?: boolean }>`
+  color: ${({ theme, $isProfileWithName }) =>
+    $isProfileWithName ? theme.primary : theme.textSecondary};
+  margin-right: 8px;
   font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.25px;
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 8px 0;
+  padding: 12px 20px;
+  border-radius: 16px;
   position: relative;
-  transition: color 0.4s ease-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  border: 1px solid transparent;
+  background: transparent;
 
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s ease-out;
-    background-color: ${({ theme }) => theme.green};
-  }
-
+  /* Simple hover effect - no background */
   &:hover {
-    color: ${({ theme }) => theme.green};
+    color: ${({ theme, $isProfileWithName }) =>
+      $isProfileWithName ? theme.primaryDark : theme.textPrimary};
     text-decoration: none;
-
-    &::after {
-      transform: scaleX(1);
-    }
+    transform: translateY(-1px);
   }
 
+  /* Active state - minimal styling */
   &.active {
-    color: ${({ theme }) => theme.blue};
-
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: ${({ theme }) => theme.blue};
-      transform: scaleX(1);
-    }
+    color: ${({ theme }) => theme.primary};
+    transform: translateY(-1px);
   }
+
+  /* Special styling for profile with name - no default background */
+  ${({ $isProfileWithName }) =>
+    $isProfileWithName &&
+    `
+    &:hover {
+      color: ${({ theme }: { theme: any }) => theme.primaryDark};
+    }
+  `}
 `;
 
-// Icon container for nav items
-const Icon = styled.span`
-  margin-right: 5px;
-  display: inline-flex;
-  align-items: center;
-  font-size: 1em;
-`;
-
-// User avatar image styling
+// User avatar image styling with glassmorphism
 const AvatarImage = styled.img`
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  object-fit: contain;
+  object-fit: cover;
   position: relative;
   top: -1px;
-  border: 2px solid ${({ theme }) => theme.blue};
-  padding: 2px;
-  background: ${({ theme }) => theme.backgroundColor};
+  border: 2px solid ${({ theme }) => theme.primary};
+  padding: 1px;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  margin-right: 10px;
+  box-shadow: ${({ theme }) => theme.shadowSm},
+    0 0 0 1px ${({ theme }) => theme.borderLight} inset;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: ${({ theme }) => theme.shadowMd},
+      0 0 15px ${({ theme }) => theme.glowColor},
+      0 0 0 1px ${({ theme }) => theme.primary}40 inset;
+  }
+`;
+
+// Icon container for desktop nav items with glassmorphism
+const IconContainer = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  color: ${({ theme }) => theme.primary};
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: ${({ theme }) => theme.shadowMd},
+      0 0 15px ${({ theme }) => theme.glowColor};
+    border-color: ${({ theme }) => theme.primary}40;
+  }
 `;
 
 // Create account button with tooltip
@@ -191,6 +224,9 @@ export function DesktopMenu({
   isGuest = false,
   onCreateAccount,
   userAvatar,
+  userFirstName,
+  isDarkMode,
+  toggleDarkMode,
 }: DesktopMenuProps) {
   return (
     <CustomCollapse id="basic-navbar-nav">
@@ -202,25 +238,35 @@ export function DesktopMenu({
             as={Link}
             to={link.path === "/" ? "/" : link.path}
             onClick={link.name === "Log Out" ? handleLogout : undefined}
+            $isProfileWithName={link.name === "Profile" && !!userFirstName}
           >
-            <Icon>
-              {link.name === "Profile" ? (
-                userAvatar ? (
+            {link.name === "Profile" && userFirstName ? (
+              <>
+                {userAvatar ? (
                   <AvatarImage src={userAvatar} alt="Profile" />
                 ) : (
-                  <FontAwesomeIcon icon={link.icon} />
-                )
-              ) : (
-                <FontAwesomeIcon icon={link.icon} />
-              )}
-            </Icon>
-            {link.name}
+                  <IconContainer>
+                    <FontAwesomeIcon icon={link.icon} />
+                  </IconContainer>
+                )}
+                {userFirstName}
+              </>
+            ) : (
+              link.name
+            )}
           </CustomNavLink>
         ))}
         {isGuest && (
           <CreateAccountButton onClick={onCreateAccount}>
             Create Account
           </CreateAccountButton>
+        )}
+
+        {isDarkMode !== undefined && toggleDarkMode && (
+          <ThemeToggle
+            isDarkMode={isDarkMode}
+            toggleDarkMode={toggleDarkMode}
+          />
         )}
       </StyledNav>
     </CustomCollapse>

@@ -124,14 +124,25 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
         <Container fluid>
           <NavBrand />
 
-          <MobileMenu
-            links={filteredLinks}
-            isActive={isActive}
-            handleLogout={handleLogoutClick}
-            isGuest={isGuest}
-            onCreateAccount={handleCreateAccount}
-            userAvatar={profile?.avatar}
-          />
+          <div
+            className="d-flex align-items-center ms-auto d-lg-none"
+            style={{ gap: "12px" }}
+          >
+            <ThemeToggle
+              isDarkMode={isDarkMode}
+              toggleDarkMode={toggleDarkMode}
+            />
+
+            <MobileMenu
+              links={filteredLinks}
+              isActive={isActive}
+              handleLogout={handleLogoutClick}
+              isGuest={isGuest}
+              onCreateAccount={handleCreateAccount}
+              userAvatar={profile?.avatar}
+              userFirstName={user?.firstName}
+            />
+          </div>
 
           <DesktopMenu
             links={filteredLinks}
@@ -140,9 +151,7 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
             isGuest={isGuest}
             onCreateAccount={handleCreateAccount}
             userAvatar={profile?.avatar}
-          />
-
-          <ThemeToggle
+            userFirstName={user?.firstName}
             isDarkMode={isDarkMode}
             toggleDarkMode={toggleDarkMode}
           />

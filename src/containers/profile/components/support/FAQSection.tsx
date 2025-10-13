@@ -14,10 +14,10 @@ export function FAQSection() {
         <StyledAccordion defaultActiveKey="0">
           <Accordion.Item eventKey="0">
             <Accordion.Header>
-              How often should I complete the oral health questionnaire?
+              How often should I complete the oral health assessment?
             </Accordion.Header>
             <Accordion.Body>
-              We recommend completing the oral health questionnaire once every 3
+              We recommend completing the oral health assessment once every 3
               months to track changes in your oral health status. However, if
               you experience significant changes in your oral health or start a
               new oral care routine, you may want to complete it more
@@ -31,11 +31,11 @@ export function FAQSection() {
             </Accordion.Header>
             <Accordion.Body>
               Your oral health score is calculated based on several factors from
-              your questionnaire responses, including brushing frequency,
-              flossing habits, sensitivity levels, and any symptoms you report.
-              The score ranges from 0-100, with higher scores indicating better
-              oral health. This is not a clinical diagnosis but a general
-              indicator of your oral health status.
+              your assessment responses, including brushing frequency, flossing
+              habits, sensitivity levels, and any symptoms you report. The score
+              ranges from 0-100, with higher scores indicating better oral
+              health. This is not a clinical diagnosis but a general indicator
+              of your oral health status.
             </Accordion.Body>
           </Accordion.Item>
 
@@ -61,9 +61,9 @@ export function FAQSection() {
               Yes, you can use the app as a guest to explore its features. The
               guest mode is designed to let you try out the app before
               committing to creating an account. If you choose to create an
-              account later, all your guest data (including questionnaire
-              results and habit tracking) will be automatically migrated to your
-              new account. This ensures you don't lose any progress when
+              account later, all your guest data (including assessment results
+              and habit tracking) will be automatically migrated to your new
+              account. This ensures you don't lose any progress when
               transitioning from guest to a registered user.
             </Accordion.Body>
           </Accordion.Item>
@@ -89,7 +89,7 @@ export function FAQSection() {
             </Accordion.Header>
             <Accordion.Body>
               To complete the questionnaire, navigate to the Questionnaire tab
-              on the main dashboard and click "Start Questionnaire." You'll be
+              on the main dashboard and click "Begin Questionnaire." You'll be
               presented with a series of questions about your oral health
               habits, symptoms, and concerns. Answer each question honestly, and
               you can always go back to previous questions if needed. Once you

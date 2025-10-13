@@ -1,11 +1,11 @@
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 
-// Fade-in from left animation
-const fadeInLeft = keyframes`
+// Smooth fade-in and slide animation
+const fadeInSlide = keyframes`
   0% {
     opacity: 0;
-    transform: translateX(-100%);
+    transform: translateX(-30px);
   }
   100% {
     opacity: 1;
@@ -13,147 +13,199 @@ const fadeInLeft = keyframes`
   }
 `;
 
+// Modern glassmorphism sidebar for 2025
 export const SidebarContainer = styled.div`
-  height: calc(100vh - 56px);
-  width: 190px;
+  height: calc(100vh - 120px);
+  width: 220px;
   position: fixed;
-  top: 80px;
-  left: 0;
-  background-color: ${({ theme }) => theme.blue};
+  top: 96px;
+  left: 16px;
+
+  /* Modern glassmorphism effect */
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+
+  /* Modern borders and shadows */
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 20px;
+  box-shadow: ${({ theme }) => theme.shadowLg};
+
+  /* Layout */
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding-top: 20px;
-  padding-left: 10px;
-  margin-top: 10px;
-  border-top-right-radius: 12px;
-  z-index: 900;
-  animation: ${fadeInLeft} 1s ease-in-out;
+  gap: 8px;
+  padding: 24px 16px;
 
-  @media (max-width: 800px) {
-    width: 50px;
-    align-items: center;
-    padding-left: 0;
+  /* Animation */
+  animation: ${fadeInSlide} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Z-index */
+  z-index: 900;
+
+  /* Subtle gradient overlay */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: ${({ theme }) => theme.primaryGradient};
+    opacity: 0.03;
+    border-radius: 20px;
+    pointer-events: none;
   }
 
   @media (max-width: 800px) {
-    padding-left: 0;
-    padding-top: 10px;
-    margin-top: 10px;
+    width: 70px;
+    padding: 20px 8px;
+    align-items: center;
+    left: 8px;
+  }
+
+  @media (max-height: 700px) {
+    top: 88px;
+    height: calc(100vh - 110px);
   }
 `;
 
+// Modern sidebar link with smooth interactions
 export const SidebarLink = styled(Link)`
-  width: calc(100% - 20px);
-  font-size: 17px;
-  padding: 10px 15px;
-  text-align: left;
-  text-decoration: none;
-  color: ${({ theme }) => theme.backgroundColor};
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: 17px;
-  border-radius: 10px;
-  position: relative;
+  gap: 12px;
 
+  /* Typography */
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  color: ${({ theme }) => theme.textSecondary};
+
+  /* Spacing */
+  padding: 14px 16px;
+  border-radius: 12px;
+
+  /* Smooth transitions */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Default state */
+  background: transparent;
+
+  /* Hover state - modern glass effect */
   &:hover {
-    color: ${({ theme }) => theme.backgroundColor};
+    color: ${({ theme }) => theme.primary};
+    background: ${({ theme }) => theme.surfaceElevated};
+    transform: translateX(4px);
+    box-shadow: ${({ theme }) => theme.shadowSm};
   }
 
+  /* Active state - gradient highlight */
   &.active {
-    color: ${({ theme }) => theme.backgroundColor};
-    font-size: 17px;
-    padding: 10px 15px;
+    color: ${({ theme }) => theme.primary};
+    font-weight: 600;
+    background: ${({ theme }) => theme.surfaceElevated};
+    box-shadow: ${({ theme }) => theme.shadowMd};
+
+    /* Gradient accent bar */
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 60%;
+      background: ${({ theme }) => theme.primaryGradient};
+      border-radius: 0 4px 4px 0;
+      box-shadow: 0 0 12px ${({ theme }) => theme.glowColor};
+    }
   }
 
   @media (max-width: 800px) {
     justify-content: center;
-    padding: 10px;
-    margin-right: 0;
-    margin-left: 0;
-    width: auto;
+    padding: 12px;
+    font-size: 18px;
 
-    &.active {
-      color: ${({ theme }) => theme.backgroundColor};
-      font-size: 18px;
-      padding: 8px;
-    }
-
+    /* Tooltip for mobile */
     &::after {
       content: attr(data-tooltip);
       position: absolute;
-      left: 60px;
+      left: calc(100% + 12px);
       top: 50%;
       transform: translateY(-50%);
-      background: ${({ theme }) => theme.darkGrey};
-      color: ${({ theme }) => theme.backgroundColor};
-      padding: 2px 5px;
-      border-radius: 4px;
+
+      /* Glassmorphic tooltip */
+      background: ${({ theme }) => theme.glassBg};
+      backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+      -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+
+      color: ${({ theme }) => theme.textPrimary};
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid ${({ theme }) => theme.borderLight};
+      box-shadow: ${({ theme }) => theme.shadowMd};
+
       white-space: nowrap;
+      font-size: 13px;
+      font-weight: 500;
+
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s;
-      font-size: 10px;
+      transition: opacity 0.2s ease;
+      z-index: 1000;
     }
 
     &:hover::after {
       opacity: 1;
     }
+
+    &.active::before {
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60%;
+      height: 4px;
+      top: 0;
+      border-radius: 0 0 4px 4px;
+    }
   }
 `;
 
+// Link content wrapper - no longer needs underline effect
 export const LinkContent = styled.div`
   display: flex;
   align-items: center;
+  gap: 12px;
   position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: ${({ theme }) => theme.green};
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s ease-out;
-  }
-
-  ${SidebarLink}:hover & {
-    &::after {
-      transform: scaleX(1);
-    }
-  }
-
-  .active & {
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: ${({ theme }) => theme.green};
-      transform: scaleX(1);
-    }
-  }
+  z-index: 1;
 `;
 
+// Icon with modern styling
 export const Icon = styled.span`
-  margin-right: 10px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  width: 20px;
+  transition: transform 0.3s ease;
+
+  ${SidebarLink}:hover & {
+    transform: scale(1.1);
+  }
 
   @media (max-width: 800px) {
-    margin-right: 0;
+    font-size: 20px;
+    width: 24px;
   }
 `;
 
+// Text with smooth transitions
 export const Text = styled.span`
   display: flex;
   align-items: center;
+  white-space: nowrap;
 
   @media (max-width: 800px) {
     display: none;

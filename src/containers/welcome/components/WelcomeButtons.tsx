@@ -1,5 +1,4 @@
-import { ButtonContainer } from "../styles/WelcomeStyles";
-import { ContinueAsGuestButton } from "./ContinueAsGuestButton";
+import { HeroButtonsContainer } from "../styles/WelcomeStyles";
 import { CreateAnAccountButton } from "./CreateAnAccountButton";
 import { WelcomeLoginButton } from "./WelcomeLoginButton";
 
@@ -13,10 +12,9 @@ export function WelcomeButtons({
   onLoginClick,
 }: WelcomeButtonsProps) {
   return (
-    <ButtonContainer>
-      <ContinueAsGuestButton />
+    <HeroButtonsContainer>
       <CreateAnAccountButton onClick={onSignUpClick} />
       <WelcomeLoginButton onClick={onLoginClick} />
-    </ButtonContainer>
+    </HeroButtonsContainer>
   );
 }

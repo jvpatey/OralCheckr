@@ -124,7 +124,7 @@ export function HabitsSection({
         <WarningText>Warning: This action cannot be undone.</WarningText>
         <DescriptionText>
           Deleting your habit tracking data will permanently remove all your
-          tracked habits and their history. Your questionnaire data will not be
+          tracked habits and their history. Your assessment data will not be
           affected.
         </DescriptionText>
 

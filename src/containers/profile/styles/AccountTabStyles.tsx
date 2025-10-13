@@ -1,32 +1,46 @@
 import styled from "styled-components";
-import { Form, Button, ToastContainer } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 
 export const SettingsContainer = styled.div`
-  padding: 1.5rem;
+  padding: 0;
 `;
 
 export const Section = styled.div`
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
   position: relative;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  &:after {
-    content: "";
-    position: absolute;
-    top: 2rem;
-    left: 0;
-    width: 50%;
-    height: 2px;
-    background-color: ${({ theme }) => theme.blue};
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 2rem;
   }
 `;
 
 export const SectionTitle = styled.h3`
   && {
-    color: ${({ theme }) => theme.blue};
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-bottom: 2rem;
-    padding-bottom: 0.25rem;
+    color: ${({ theme }) => theme.textPrimary};
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid ${({ theme }) => theme.borderLight};
+    background: ${({ theme }) => theme.primaryGradient};
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    @media (max-width: 768px) {
+      font-size: 1.125rem;
+      margin-bottom: 1.25rem;
+    }
   }
 `;
 
@@ -35,48 +49,55 @@ export const StyledForm = styled(Form)`
 `;
 
 export const StyledButton = styled(Button)`
-  background-color: ${({ theme }) => theme.green};
-  color: ${({ theme }) => theme.backgroundColor};
-  border: 2px solid ${({ theme }) => theme.green};
-  padding: 5px 20px;
+  background: ${({ theme }) => theme.primaryGradient};
+  color: white;
+  border: 1px solid ${({ theme }) => theme.primary};
+  padding: 12px 24px;
   cursor: pointer;
-  font-size: 16px;
-  border-radius: 10px;
-  transition: all 0.4s ease-out;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${({ theme }) => theme.shadowMd};
   position: relative;
 
   &:hover {
-    background-color: ${({ theme }) => theme.backgroundColor};
-    color: ${({ theme }) => theme.green};
-    border: 2px solid ${({ theme }) => theme.green};
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: ${({ theme }) => theme.shadowLg};
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
-    box-shadow: none;
+    box-shadow: ${({ theme }) => theme.shadowSm};
   }
 `;
 
 export const CurrentValue = styled.div`
-  color: ${({ theme }) => theme.textGrey};
+  color: ${({ theme }) => theme.textSecondary};
   margin-bottom: 1rem;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  font-weight: 500;
 `;
 
 export const DescriptionText = styled.p`
-  color: ${({ theme }) => theme.textGrey};
-  font-size: 0.9rem;
+  color: ${({ theme }) => theme.textSecondary};
+  font-size: 0.875rem;
   margin-bottom: 1.5rem;
+  line-height: 1.6;
 `;
 
 export const StyledLabel = styled(Form.Label)`
-  color: ${({ theme }) => theme.textGrey};
-  margin-bottom: 0rem;
+  color: ${({ theme }) => theme.textPrimary};
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
 `;
 
 export const PasswordFeedback = styled.div`
@@ -86,98 +107,85 @@ export const PasswordFeedback = styled.div`
 `;
 
 export const EyeButton = styled(Button)`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  border: 1px solid ${({ theme }) => theme.borderGrey};
-  color: ${({ theme }) => theme.textGrey};
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  color: ${({ theme }) => theme.textSecondary};
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover,
   &:focus {
-    background-color: ${({ theme }) => theme.accentBackgroundColor};
-    color: ${({ theme }) => theme.blue};
-    border: 1px solid ${({ theme }) => theme.borderGrey};
+    background: ${({ theme }) => theme.surfaceElevated};
+    color: ${({ theme }) => theme.primary};
+    border: 1px solid ${({ theme }) => theme.primary};
+    box-shadow: ${({ theme }) => theme.shadowSm};
   }
 
   &:active {
-    background-color: ${({ theme }) => theme.accentBackgroundColor} !important;
-    color: ${({ theme }) => theme.blue} !important;
-    border: 1px solid ${({ theme }) => theme.borderGrey} !important;
+    background: ${({ theme }) => theme.surfaceElevated} !important;
+    color: ${({ theme }) => theme.primary} !important;
+    border: 1px solid ${({ theme }) => theme.primary} !important;
   }
 `;
 
-export const StyledToastContainer = styled(ToastContainer)`
-  position: fixed;
-  top: 80px; // Adjust this value based on your navbar height
-  right: 20px;
-  z-index: 9999;
-
-  .toast {
-    background-color: ${({ theme }) => theme.backgroundColor};
-    border: 1px solid ${({ theme }) => theme.borderGrey};
-    min-width: 300px;
-  }
-
-  .toast-header {
-    background-color: ${({ theme }) => theme.backgroundColor};
-    color: ${({ theme }) => theme.textColor};
-  }
-
-  .toast-body {
-    color: ${({ theme }) => theme.textColor};
-  }
-
-  .bg-success {
-    background-color: ${({ theme }) => theme.green} !important;
-    color: ${({ theme }) => theme.backgroundColor} !important;
-  }
-
-  .bg-danger {
-    background-color: ${({ theme }) => theme.red} !important;
-    color: ${({ theme }) => theme.backgroundColor} !important;
-  }
-`;
+// Note: Toast styling is now handled globally in ToastStyles.tsx
+// This component can be removed if no longer needed
 
 export const DeleteSection = styled.div`
-  margin-top: 2rem;
-  margin-bottom: 2.5rem;
+  margin-top: 0;
+  margin-bottom: 0;
   position: relative;
-  padding-top: 1rem;
-
-  &:after {
-    content: "";
-    position: absolute;
-    top: 3rem;
-    left: 0;
-    width: 50%;
-    height: 2px;
-    background-color: ${({ theme }) => theme.blue};
-  }
+  padding: 0;
 `;
 
-export const DeleteButton = styled(StyledButton)`
-  background-color: ${({ theme }) => theme.red};
-  border-color: ${({ theme }) => theme.red};
-  color: ${({ theme }) => theme.accentBackgroundColor};
+export const DeleteButton = styled.button`
+  background: linear-gradient(135deg, #ff6961 0%, #ff4757 100%);
+  color: white;
+  border: 1px solid #ff6961;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${({ theme }) => theme.shadowMd};
+  cursor: pointer;
+  width: auto;
+  max-width: 300px;
 
   &:hover:not(:disabled) {
-    background-color: ${({ theme }) => theme.accentBackgroundColor};
-    border-color: ${({ theme }) => theme.red};
-    color: ${({ theme }) => theme.red};
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 105, 97, 0.3),
+      ${({ theme }) => theme.shadowLg};
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   &:disabled {
-    background-color: ${({ theme }) => theme.red};
-    border-color: ${({ theme }) => theme.red};
     opacity: 0.6;
     transform: none;
-    box-shadow: none;
+    box-shadow: ${({ theme }) => theme.shadowSm};
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    max-width: 100%;
   }
 `;
 
 export const WarningText = styled.div`
-  color: ${({ theme }) => theme.red};
-  font-weight: 500;
-  margin-bottom: 0.75rem;
-  font-size: 0.9rem;
+  color: #ff6961;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  padding: 0.875rem 1rem;
+  background: rgba(255, 105, 97, 0.1);
+  border: 1px solid rgba(255, 105, 97, 0.3);
+  border-radius: 12px;
+  line-height: 1.5;
 `;

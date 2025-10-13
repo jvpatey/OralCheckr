@@ -8,3 +8,8 @@ export { WelcomeContent } from "./WelcomeContent";
 export { WelcomeButtons } from "./WelcomeButtons";
 export { ThemeToggle } from "./ThemeToggle";
 export { GuestConfirmationModal } from "./GuestConfirmationModal";
+export { FeatureCard } from "./FeatureCard";
+export { FeatureCards } from "./FeatureCards";
+export { BentoFeatureCard } from "./BentoFeatureCard";
+export { Footer } from "./Footer";
+export { CustomPasswordTooltip } from "./CustomPasswordTooltip";
