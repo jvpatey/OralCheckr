@@ -1,29 +1,71 @@
 import styled from "styled-components";
+import { slideInFromRight } from "./SharedAnalyticsStyles";
 
-// Calendar container styles
+// Modern glassmorphism calendar container styles
 export const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   max-width: 600px;
+  min-width: 400px;
   margin-top: 0;
   position: relative;
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 400px;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 2rem;
+  box-shadow: ${({ theme }) => theme.shadowLg};
+  height: 450px;
+  overflow: hidden;
+  flex-shrink: 1;
+
+  /* Subtle gradient overlay */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: ${({ theme }) => theme.secondaryGradient};
+    opacity: 0.03;
+    border-radius: 20px;
+    pointer-events: none;
+  }
+
+  /* Slide in animation */
+  animation: ${slideInFromRight} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+
+  @media (max-width: 1200px) {
+    max-width: 500px;
+    min-width: 350px;
+    height: 400px;
+  }
 
   @media (max-width: 1024px) {
-    margin-top: 10px;
-    padding: 15px;
-    height: 350px;
+    margin-top: 0;
+    padding: 1.5rem;
+    height: 400px;
+    border-radius: 16px;
+    max-width: 100%;
+    min-width: 300px;
+
+    &::before {
+      border-radius: 16px;
+    }
   }
 
   @media (max-width: 600px) {
-    padding: 10px;
-    height: 300px;
+    padding: 1.25rem;
+    height: 350px;
+    border-radius: 12px;
+    min-width: 280px;
+
+    &::before {
+      border-radius: 12px;
+    }
   }
 `;
 

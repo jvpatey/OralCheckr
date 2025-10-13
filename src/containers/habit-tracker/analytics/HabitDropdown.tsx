@@ -10,41 +10,78 @@ interface HabitDropdownProps {
   onSelectHabit: (habitName: string) => void;
 }
 
-// Custom styled components for the dropdown
+// Modern gradient blue dropdown toggle
 const CustomDropdownToggle = styled(Dropdown.Toggle)`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  color: ${({ theme }) => theme.blue};
-  border: 2px solid ${({ theme }) => theme.blue};
+  background: ${({ theme }) => theme.primaryGradient};
+  color: ${({ theme }) => theme.white};
+  border: none;
   font-size: 16px;
-  padding: 10px 20px;
+  font-weight: 600;
+  padding: 12px 24px;
   width: 100%;
   text-align: center;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: ${({ theme }) => theme.shadowMd},
+    ${({ theme }) => theme.glowColor} 0 0 15px;
+
+  /* Subtle gradient overlay */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 12px;
+  }
 
   &:hover,
   &:focus {
-    background-color: ${({ theme }) => theme.blue};
-    color: ${({ theme }) => theme.backgroundColor};
-    border-color: ${({ theme }) => theme.blue};
-    box-shadow: none;
+    background: ${({ theme }) => theme.primaryGradient};
+    color: ${({ theme }) => theme.white};
+    border: none;
+    box-shadow: ${({ theme }) =>
+      `${theme.shadowLg}, ${theme.glowColor} 0 0 25px`};
+    transform: translateY(-2px);
+
+    &::before {
+      opacity: 1;
+    }
   }
 
   &:active {
-    background-color: ${({ theme }) => theme.blue};
-    color: ${({ theme }) => theme.backgroundColor};
-    border-color: ${({ theme }) => theme.blue};
+    background: ${({ theme }) => theme.primaryGradient};
+    color: ${({ theme }) => theme.white};
+    border: none;
+    transform: translateY(0);
+    transition-duration: 0.1s;
   }
 
   @media (max-width: 600px) {
     font-size: 14px;
-    padding: 8px 10px;
+    padding: 10px 16px;
   }
 `;
 
 const CustomDropdownMenu = styled(Dropdown.Menu)`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  border: 1px solid ${({ theme }) => theme.blue};
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: ${({ theme }) => theme.shadowLg};
   width: 215px;
+  padding: 8px;
+  margin-top: 8px;
 
   @media (max-width: 600px) {
     width: 145px;
@@ -52,15 +89,19 @@ const CustomDropdownMenu = styled(Dropdown.Menu)`
 `;
 
 const CustomDropdownItem = styled(Dropdown.Item)<{ $isActive: boolean }>`
-  color: ${({ $isActive, theme }) => ($isActive ? theme.blue : theme.textGrey)};
-  font-weight: ${({ $isActive }) => ($isActive ? "bold" : "normal")};
+  color: ${({ $isActive, theme }) =>
+    $isActive ? theme.primary : theme.textSecondary};
+  font-weight: ${({ $isActive }) => ($isActive ? "600" : "400")};
   background-color: transparent;
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
 
   &:hover,
   &:focus {
-    background-color: transparent;
-    color: ${({ theme }) => theme.blue};
-    font-weight: bold;
+    background-color: rgba(6, 182, 212, 0.1);
+    color: ${({ theme }) => theme.primary};
+    font-weight: 600;
   }
 `;
 

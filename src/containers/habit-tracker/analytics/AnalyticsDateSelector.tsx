@@ -9,10 +9,133 @@ import {
 import "react-datepicker/dist/react-datepicker.css";
 import { formatMonthYear } from "../../../common/utilities/date-utils";
 import { useTheme } from "styled-components";
+import styled from "styled-components";
 import {
   DatePickerContainer,
   DatePickerButton,
 } from "../../../components/habit-tracker/analytics/styles/DateSelectorStyles";
+
+// Modern styled wrapper for the date picker dropdown
+const StyledDatePickerWrapper = styled.div`
+  .react-datepicker {
+    background: ${({ theme }) => theme.glassBg} !important;
+    backdrop-filter: blur(${({ theme }) => theme.glassBlur}) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 16px !important;
+    box-shadow: ${({ theme }) => theme.shadowXl} !important;
+    padding: 16px !important;
+    font-family: inherit !important;
+  }
+
+  .react-datepicker__header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 0 0 12px 0 !important;
+    margin-bottom: 12px !important;
+  }
+
+  .react-datepicker__current-month {
+    color: ${({ theme }) => theme.primary} !important;
+    font-weight: 700 !important;
+    font-size: 18px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .react-datepicker__navigation {
+    background: ${({ theme }) => theme.primaryGradient} !important;
+    border: none !important;
+    border-radius: 8px !important;
+    width: 32px !important;
+    height: 32px !important;
+    top: 8px !important;
+    transition: all 0.3s ease !important;
+
+    &:hover {
+      transform: scale(1.1) !important;
+      box-shadow: ${({ theme }) => theme.shadowMd} !important;
+    }
+
+    &::before {
+      border-color: white !important;
+      border-width: 2px 2px 0 0 !important;
+    }
+  }
+
+  .react-datepicker__navigation--previous {
+    left: 8px !important;
+  }
+
+  .react-datepicker__navigation--next {
+    right: 8px !important;
+  }
+
+  .react-datepicker__month {
+    margin: 0 !important;
+  }
+
+  .react-datepicker__month-text {
+    color: ${({ theme }) => theme.textSecondary} !important;
+    font-weight: 500 !important;
+    padding: 8px 12px !important;
+    margin: 2px !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    border: 1px solid transparent !important;
+
+    &:hover {
+      background: rgba(6, 182, 212, 0.1) !important;
+      color: ${({ theme }) => theme.primary} !important;
+      transform: translateY(-1px) !important;
+    }
+  }
+
+  .react-datepicker__month-text--selected {
+    background: ${({ theme }) => theme.primaryGradient} !important;
+    color: white !important;
+    font-weight: 600 !important;
+    box-shadow: ${({ theme }) => theme.shadowMd} !important;
+    border: none !important;
+
+    &:hover {
+      background: ${({ theme }) => theme.primaryGradient} !important;
+      transform: translateY(-1px) scale(1.02) !important;
+    }
+  }
+
+  .react-datepicker__year-text {
+    color: ${({ theme }) => theme.textSecondary} !important;
+    font-weight: 500 !important;
+    padding: 8px 16px !important;
+    margin: 2px !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    border: 1px solid transparent !important;
+
+    &:hover {
+      background: rgba(6, 182, 212, 0.1) !important;
+      color: ${({ theme }) => theme.primary} !important;
+      transform: translateY(-1px) !important;
+    }
+  }
+
+  .react-datepicker__year-text--selected {
+    background: ${({ theme }) => theme.primaryGradient} !important;
+    color: white !important;
+    font-weight: 600 !important;
+    box-shadow: ${({ theme }) => theme.shadowMd} !important;
+    border: none !important;
+
+    &:hover {
+      background: ${({ theme }) => theme.primaryGradient} !important;
+      transform: translateY(-1px) scale(1.02) !important;
+    }
+  }
+
+  /* Hide the default arrow */
+  .react-datepicker__triangle {
+    display: none !important;
+  }
+`;
 
 // Define the ViewType enum for selecting month or year selector
 export enum ViewType {
@@ -92,38 +215,40 @@ export function AnalyticsDateSelector({
       <IconButton
         icon={faChevronLeft}
         onClick={decreaseDate}
-        borderColor={theme.blue}
-        color={theme.blue}
-        hoverBackgroundColor={theme.blue}
+        borderColor={theme.primary}
+        color={theme.primary}
+        hoverBackgroundColor={theme.primary}
       />
-      <DatePicker
-        selected={selectedDate}
-        onChange={handleDateChange}
-        dateFormat={viewType === ViewType.MONTH ? "MMMM yyyy" : "yyyy"}
-        showYearPicker={viewType === ViewType.YEAR}
-        showMonthYearPicker={viewType === ViewType.MONTH}
-        showPopperArrow={false}
-        ref={datePickerRef}
-        maxDate={today}
-        onClickOutside={() => {
-          if (datePickerRef.current) {
-            datePickerRef.current.setOpen(false);
+      <StyledDatePickerWrapper>
+        <DatePicker
+          selected={selectedDate}
+          onChange={handleDateChange}
+          dateFormat={viewType === ViewType.MONTH ? "MMMM yyyy" : "yyyy"}
+          showYearPicker={viewType === ViewType.YEAR}
+          showMonthYearPicker={viewType === ViewType.MONTH}
+          showPopperArrow={false}
+          ref={datePickerRef}
+          maxDate={today}
+          onClickOutside={() => {
+            if (datePickerRef.current) {
+              datePickerRef.current.setOpen(false);
+            }
+          }}
+          customInput={
+            <DatePickerButton onClick={handleButtonClick}>
+              {viewType === ViewType.MONTH
+                ? formatMonthYear(selectedDate)
+                : selectedDate.getFullYear()}
+            </DatePickerButton>
           }
-        }}
-        customInput={
-          <DatePickerButton onClick={handleButtonClick}>
-            {viewType === ViewType.MONTH
-              ? formatMonthYear(selectedDate)
-              : selectedDate.getFullYear()}
-          </DatePickerButton>
-        }
-      />
+        />
+      </StyledDatePickerWrapper>
       <IconButton
         icon={faChevronRight}
         onClick={increaseDate}
-        borderColor={theme.blue}
-        color={theme.blue}
-        hoverBackgroundColor={theme.blue}
+        borderColor={theme.primary}
+        color={theme.primary}
+        hoverBackgroundColor={theme.primary}
         disabled={isNextDisabled}
       />
       <TodayButton onClick={handleTodayClick} />

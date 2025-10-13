@@ -100,17 +100,20 @@ const CalendarContainer = styled.div`
   }
 `;
 
-// Custom header container
+// Modern custom header container
 const DaysHeader = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: ${({ theme }) => theme.blue};
+  margin: 1rem 0 0.5rem 0;
+  font-weight: 600;
+  color: ${({ theme }) => theme.primary};
   text-transform: uppercase;
-  padding: 0 5px;
+  padding: 0 0.5rem;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
 `;
 
 const DayName = styled.div`
@@ -139,19 +142,20 @@ const DayWrapper = styled.div<{ $isCurrentDay?: boolean }>`
   }
 `;
 
-// Styled component to display the current month and year
+// Modern styled component to display the current month and year
 const MonthYearDisplay = styled.div`
-  color: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.primary};
   text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  margin: 5px 0px 20px 0px;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
   position: relative;
   z-index: 1;
+  letter-spacing: 0.5px;
 
   @media (max-width: 768px) {
-    font-size: 16px;
-    margin-bottom: 15px;
+    font-size: 18px;
+    margin-bottom: 1.25rem;
   }
 `;
 
@@ -208,12 +212,12 @@ export function HabitCalendar({
           text={day.toString()}
           styles={buildStyles({
             textSize: isCurrentDay ? "32px" : "30px",
-            pathColor: isComplete ? theme.green : theme.blue,
+            pathColor: isComplete ? theme.secondary : theme.primary,
             textColor: isCurrentDay
-              ? theme.green
+              ? theme.secondary
               : isFutureDate
-              ? theme.textGrey
-              : theme.blue,
+              ? theme.textTertiary
+              : theme.primary,
             trailColor: isLoading
               ? theme.disabledBackground
               : isFutureDate

@@ -22,19 +22,39 @@ const ToggleButtonContainer = styled.div`
   }
 `;
 
-// Styled component for each toggle button
+// Modern styled component for each toggle button
 const ToggleButton = styled.button<{ $active: boolean }>`
-  background-color: ${({ $active, theme }) =>
-    $active ? theme.green : theme.disabledBackground};
-  border: none;
-  border-radius: 4px;
-  padding: 5px 10px;
+  background: ${({ $active, theme }) =>
+    $active ? theme.secondaryGradient : theme.glassBg};
+  backdrop-filter: ${({ $active }) => ($active ? "none" : "blur(8px)")};
+  border: ${({ $active, theme }) =>
+    $active ? "none" : `1px solid ${theme.primary}`};
+  border-radius: 8px;
+  padding: 8px 12px;
   cursor: pointer;
-  color: ${({ theme }) => theme.white};
+  color: ${({ $active, theme }) => ($active ? theme.white : theme.primary)};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 14px;
+  position: relative;
+  overflow: hidden;
+
+  /* Subtle glow effect for active state */
+  box-shadow: ${({ $active, theme }) =>
+    $active ? `${theme.shadowSm}, ${theme.glowColor} 0 0 15px` : "none"};
 
   &:hover {
-    color: ${({ theme }) => theme.green};
-    background-color: ${({ theme }) => theme.backgroundColor};
+    background: ${({ $active, theme }) =>
+      $active ? theme.secondaryGradient : theme.primaryGradient};
+    color: ${({ theme }) => theme.white};
+    border-color: transparent;
+    transform: translateY(-1px);
+    box-shadow: ${({ theme }) =>
+      `${theme.shadowMd}, ${theme.glowColor} 0 0 20px`};
+  }
+
+  &:active {
+    transform: translateY(0);
+    transition-duration: 0.1s;
   }
 `;
 

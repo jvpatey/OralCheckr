@@ -122,7 +122,7 @@ export function MonthView({
               <AnalyticsTile
                 heading="Total Logs"
                 mainContent={isLoading ? "..." : totalCount}
-                subContent={`for ${formatDateLong(selectedDate)}`}
+                subContent=""
                 isLoading={isLoading}
               />
               <AnalyticsTile
@@ -134,7 +134,7 @@ export function MonthView({
               <AnalyticsTile
                 heading="Longest Streak"
                 mainContent={isLoading ? "..." : longestStreak}
-                subContent="consecutive days"
+                subContent=""
                 isLoading={isLoading}
               />
               <AnalyticsTile
