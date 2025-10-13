@@ -15,8 +15,8 @@ const fadeUp = keyframes`
 export const BentoGridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 20px;
-  max-width: 1000px;
+  gap: 24px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0;
   width: 100%;
@@ -41,7 +41,7 @@ export const BentoGridContainer = styled.div`
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(8, 1fr);
-    gap: 20px;
+    gap: 22px;
   }
 
   @media (max-width: 768px) {
@@ -102,7 +102,7 @@ export const BentoCardContainer = styled.div<{
     0 0 0 1px ${({ theme }) => theme.borderLight} inset,
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 
-  padding: 20px 16px;
+  padding: 32px 24px;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -115,13 +115,13 @@ export const BentoCardContainer = styled.div<{
   min-height: ${({ $size }) => {
     switch ($size) {
       case "large":
-        return "200px";
+        return "280px";
       case "medium":
-        return "180px";
+        return "240px";
       case "small":
-        return "140px";
+        return "200px";
       default:
-        return "140px";
+        return "200px";
     }
   }};
 
@@ -282,9 +282,9 @@ export const BentoCardContainer = styled.div<{
 export const BentoIcon = styled.div<{
   $color: "primary" | "secondary" | "accent";
 }>`
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 12px;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -294,9 +294,9 @@ export const BentoIcon = styled.div<{
       : $color === "secondary"
       ? theme.secondaryGradient
       : theme.accentGradient};
-  border-radius: 12px;
+  border-radius: 16px;
   color: white;
-  font-size: 20px;
+  font-size: 28px;
   box-shadow: ${({ theme }) => theme.shadowLg},
     0 0 0 1px rgba(255, 255, 255, 0.2) inset;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -352,9 +352,9 @@ export const BentoIcon = styled.div<{
 // Bento title styling
 export const BentoTitle = styled.h3`
   color: ${({ theme }) => theme.textPrimary};
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   letter-spacing: -0.25px;
   line-height: 1.2;
 
@@ -372,8 +372,8 @@ export const BentoTitle = styled.h3`
 // Bento description styling
 export const BentoDescription = styled.p`
   color: ${({ theme }) => theme.textSecondary};
-  font-size: 0.875rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.6;
   margin: 0;
   font-weight: 400;
   opacity: 0.9;

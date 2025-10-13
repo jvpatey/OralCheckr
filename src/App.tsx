@@ -1,6 +1,6 @@
 import { HashRouter } from "react-router-dom";
 import { RenderNavs } from "./containers/navigation/RenderNavs";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "./common/utilities/color-utils";
 import { Router } from "./Router";
@@ -21,8 +21,19 @@ export enum ThemeType {
 
 // Main application component that sets up providers and routing
 export function App() {
-  // State for managing the current theme
-  const [theme, setTheme] = useState<ThemeType>(ThemeType.LIGHT);
+  // State for managing the current theme - default to dark mode
+  const [theme, setTheme] = useState<ThemeType>(ThemeType.DARK);
+
+  // Check localStorage for saved theme preference on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") as ThemeType;
+    if (
+      savedTheme &&
+      (savedTheme === ThemeType.LIGHT || savedTheme === ThemeType.DARK)
+    ) {
+      setTheme(savedTheme);
+    }
+  }, []);
 
   // Persist query client across renders
   const queryClientRef = useRef<QueryClient>();

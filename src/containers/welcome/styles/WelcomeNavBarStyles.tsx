@@ -2,21 +2,22 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 export const ThemeToggleContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 100%;
-  padding: 8px 20px;
-  margin-bottom: 20px;
 
   @media (max-width: 768px) {
-    padding: 6px 15px;
-    margin-bottom: 15px;
+    top: 15px;
+    right: 15px;
   }
 
   @media (max-width: 480px) {
-    padding: 4px 10px;
-    margin-bottom: 12px;
+    top: 12px;
+    right: 12px;
   }
 `;
 

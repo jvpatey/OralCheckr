@@ -84,16 +84,16 @@ export const ModernWelcomeContainer = styled.div`
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 60px 20px 0 20px;
   display: flex;
   flex-direction: column;
 
   @media (max-width: 768px) {
-    padding: 0 16px;
+    padding: 50px 16px 0 16px;
   }
 
   @media (max-width: 480px) {
-    padding: 0 12px;
+    padding: 45px 12px 0 12px;
   }
 `;
 
@@ -103,9 +103,9 @@ export const HeroSection = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 70vh;
+  min-height: 85vh;
   text-align: center;
-  padding: 80px 0 120px 0;
+  padding: 100px 0 140px 0;
   position: relative;
 
   @media (max-width: 768px) {
@@ -121,7 +121,7 @@ export const HeroSection = styled.section`
 
 // Feature section with better spacing
 export const FeatureSection = styled.section`
-  padding: 120px 0;
+  padding: 140px 0;
   width: 100%;
   position: relative;
 
