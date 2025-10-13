@@ -144,13 +144,14 @@ export const BentoCard = styled.div`
   }
 `;
 
-// Large bento card (for score) with dynamic background
+// Large bento card (for score) with theme background - takes half the left side
 export const LargeBentoCard = styled(BentoCard)<{ $scoreColor: string }>`
   grid-column: 1;
   grid-row: 1;
-  background: ${({ $scoreColor }) => $scoreColor};
-  border: none;
-  color: white;
+  /* Removed dynamic background - now uses theme background */
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  color: ${({ theme }) => theme.textPrimary};
+  min-height: 200px;
 
   &:hover {
     transform: translateY(-4px) scale(1.02);
@@ -159,37 +160,53 @@ export const LargeBentoCard = styled(BentoCard)<{ $scoreColor: string }>`
   @media (max-width: 1024px) {
     grid-column: 1;
     grid-row: 1;
+    min-height: 180px;
+  }
+
+  @media (max-width: 768px) {
+    min-height: 160px;
   }
 `;
 
-// Small bento card for completion date and retake button
+// Small bento card for completion date and retake button - takes half the left side
 export const SmallBentoCard = styled(BentoCard)`
   grid-column: 1;
   grid-row: 2;
-  min-height: 160px;
+  min-height: 200px;
 
   @media (max-width: 1024px) {
     grid-column: 1;
     grid-row: 2;
+    min-height: 180px;
   }
 
   @media (max-width: 768px) {
-    min-height: 140px;
+    min-height: 160px;
   }
 
   @media (max-width: 480px) {
-    min-height: 120px;
+    min-height: 140px;
   }
 `;
 
-// Regular bento card (for recommendations)
+// Regular bento card (for recommendations) - spans full height on right side
 export const RegularBentoCard = styled(BentoCard)`
   grid-column: 2;
   grid-row: 1 / 3;
+  min-height: 440px;
 
   @media (max-width: 1024px) {
     grid-column: 1;
     grid-row: 3;
+    min-height: 200px;
+  }
+
+  @media (max-width: 768px) {
+    min-height: 180px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 160px;
   }
 `;
 
@@ -399,14 +416,14 @@ export const ModernSignUpButton = styled.button`
   }
 `;
 
-// Modern retake button for the completion date card
+// Modern retake button with blue gradient like other buttons
 export const ModernRetakeButton = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  /* Modern gradient background */
-  background: ${({ theme }) => theme.secondaryGradient};
+  /* Blue gradient background */
+  background: ${({ theme }) => theme.primaryGradient};
   color: white;
 
   /* Typography */
@@ -438,7 +455,7 @@ export const ModernRetakeButton = styled.button`
     left: 0;
     right: 0;
     bottom: 0;
-    background: ${({ theme }) => theme.primaryGradient};
+    background: ${({ theme }) => theme.secondaryGradient};
     opacity: 0;
     transition: opacity 0.3s ease;
     border-radius: 10px;
@@ -479,21 +496,44 @@ export const ModernRetakeButton = styled.button`
   }
 `;
 
-// Date display text
+// Date display text - sized to match the Oral Health Score for cohesion
 export const DateDisplayText = styled.div`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.textSecondary};
+  font-size: 2.8rem;
+  color: ${({ theme }) => theme.primary};
   text-align: center;
-  margin-bottom: 12px;
-  line-height: 1.4;
+  margin-bottom: 8px;
+  line-height: 1.2;
+  font-weight: 700;
 
   @media (max-width: 768px) {
-    font-size: 0.9rem;
-    margin-bottom: 10px;
+    font-size: 2.4rem;
+    margin-bottom: 6px;
   }
 
   @media (max-width: 480px) {
-    font-size: 0.85rem;
+    font-size: 2rem;
+    margin-bottom: 6px;
+  }
+`;
+
+// Assessment label - styled like dashboard
+export const AssessmentLabel = styled.div`
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.textSecondary};
+  text-align: center;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+    margin-bottom: 10px;
   }
 `;
 

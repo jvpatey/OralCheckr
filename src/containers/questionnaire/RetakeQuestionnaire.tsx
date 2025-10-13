@@ -17,7 +17,8 @@ import {
   ModernActionSection,
   ModernGradientButton,
   ModernScoreCard,
-  ModernScoreText,
+  ModernScoreNumber,
+  ModernScoreLabel,
   ModernCompletionText,
 } from "./styles/RetakeQuestionnaireStyles";
 import { useQuestionnaireData } from "../../hooks/questionnaire/useQuestionnaireData";
@@ -86,10 +87,11 @@ export function RetakeQuestionnaire({
         <ModernRetakeContainer $isAuthenticated={isAuthenticated}>
           <HeroTitle>Oral Health Assessment</HeroTitle>
 
-          <ModernScoreCard $scoreColor={scoreColor}>
-            <ModernScoreText $scoreColor={scoreColor}>
-              Oral Health Score: {questionnaireData.score}
-            </ModernScoreText>
+          <ModernScoreCard>
+            <ModernScoreNumber $scoreColor={scoreColor}>
+              {questionnaireData.score}
+            </ModernScoreNumber>
+            <ModernScoreLabel>ORAL HEALTH SCORE</ModernScoreLabel>
             <ModernCompletionText>
               Completed on: {questionnaireData.lastCompleted}
             </ModernCompletionText>

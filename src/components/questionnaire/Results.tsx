@@ -23,6 +23,7 @@ import {
   ModernSignUpButton,
   ModernRetakeButton,
   DateDisplayText,
+  AssessmentLabel,
 } from "./styles/ResultsStyles";
 
 export function Results() {
@@ -32,7 +33,7 @@ export function Results() {
   const theme = useTheme();
   const { data: score } = useGetTotalScore();
   const { data: questionnaireData } = useQuestionnaireData();
-  
+
   const scoreColor = score ? getScoreColor(score as number, theme) : theme.blue;
 
   const handleRetakeAssessment = () => {
@@ -46,30 +47,24 @@ export function Results() {
 
         <BentoGrid>
           <LargeBentoCard $scoreColor={scoreColor}>
-            <BentoCardHeader>Your Oral Health Score</BentoCardHeader>
             <BentoCardContent>
               <OralHealthStatus />
             </BentoCardContent>
           </LargeBentoCard>
-          
+
           <SmallBentoCard>
-            <BentoCardHeader>Assessment Details</BentoCardHeader>
             <BentoCardContent>
               <DateDisplayText>
-                Last completed: {questionnaireData?.lastCompleted || "Not available"}
+                {questionnaireData?.lastCompleted || "Not available"}
               </DateDisplayText>
+              <AssessmentLabel>Last Assessment</AssessmentLabel>
               <ModernRetakeButton onClick={handleRetakeAssessment}>
                 Retake Assessment
               </ModernRetakeButton>
             </BentoCardContent>
           </SmallBentoCard>
-          
-          <RegularBentoCard>
-            <BentoCardHeader>Personalized Recommendations</BentoCardHeader>
-            <BentoCardContent>
-              <Recommendations />
-            </BentoCardContent>
-          </RegularBentoCard>
+
+          <Recommendations />
         </BentoGrid>
 
         {/* If the user is a guest, display a sign up button*/}

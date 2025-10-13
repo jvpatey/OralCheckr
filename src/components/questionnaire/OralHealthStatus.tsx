@@ -32,9 +32,8 @@ export function OralHealthStatus() {
   if (!score) {
     return (
       <ModernScoreDisplay>
-        <ModernScoreLabel>
-          Please complete the oral health assessment to get your score.
-        </ModernScoreLabel>
+        <ModernScoreNumber>--</ModernScoreNumber>
+        <ModernScoreLabel>Oral Health Score</ModernScoreLabel>
       </ModernScoreDisplay>
     );
   }
@@ -45,8 +44,10 @@ export function OralHealthStatus() {
 
   return (
     <ModernScoreDisplay>
-      <ModernScoreNumber>{numericScore}</ModernScoreNumber>
-      <ModernScoreLabel>out of 100</ModernScoreLabel>
+      <ModernScoreNumber $scoreColor={scoreColor}>
+        {numericScore}
+      </ModernScoreNumber>
+      <ModernScoreLabel>Oral Health Score</ModernScoreLabel>
       <ModernProgressBar
         $scoreColor={scoreColor}
         style={

@@ -149,15 +149,15 @@ export const DescriptionText = styled.p`
   }
 `;
 
-// Modern glassmorphic score card with dynamic background
-export const ModernScoreCard = styled.div<{ $scoreColor: string }>`
-  /* Dynamic background based on score */
-  background: ${({ $scoreColor }) => $scoreColor};
+// Modern glassmorphic score card with theme background
+export const ModernScoreCard = styled.div`
+  /* Theme background like results page */
+  background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
 
   /* Modern borders and shadows */
-  border: none;
+  border: 1px solid ${({ theme }) => theme.borderLight};
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.shadowLg};
 
@@ -169,7 +169,7 @@ export const ModernScoreCard = styled.div<{ $scoreColor: string }>`
   gap: 16px;
   max-width: 400px;
   width: 100%;
-  color: white;
+  color: ${({ theme }) => theme.textPrimary};
 
   @media (max-width: 768px) {
     padding: 20px 24px;
@@ -178,25 +178,48 @@ export const ModernScoreCard = styled.div<{ $scoreColor: string }>`
   }
 `;
 
-// Modern score text
-export const ModernScoreText = styled.div<{ $scoreColor: string }>`
-  font-size: 2rem;
+// Modern score number - matches results page
+export const ModernScoreNumber = styled.div<{ $scoreColor: string }>`
+  font-size: 2.8rem;
   font-weight: 700;
-  color: white;
+  line-height: 1;
   margin: 0;
-  text-align: center;
+  color: ${({ $scoreColor }) => $scoreColor};
 
   @media (max-width: 768px) {
-    font-size: 1.75rem;
+    font-size: 2.4rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 2rem;
+  }
+`;
+
+// Modern score label - matches results page
+export const ModernScoreLabel = styled.div`
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.textSecondary};
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
   }
 `;
 
 // Modern completion text
 export const ModernCompletionText = styled.div`
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: ${({ theme }) => theme.textSecondary};
   text-align: center;
   line-height: 1.4;
+  margin-top: 8px;
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
@@ -221,8 +244,8 @@ export const ModernGradientButton = styled.button`
   align-items: center;
   justify-content: center;
 
-  /* Modern gradient background */
-  background: ${({ theme }) => theme.secondaryGradient};
+  /* Modern gradient background - blue gradient */
+  background: ${({ theme }) => theme.primaryGradient};
   color: white;
 
   /* Typography */
@@ -254,7 +277,7 @@ export const ModernGradientButton = styled.button`
     left: 0;
     right: 0;
     bottom: 0;
-    background: ${({ theme }) => theme.primaryGradient};
+    background: ${({ theme }) => theme.secondaryGradient};
     opacity: 0;
     transition: opacity 0.3s ease;
     border-radius: 16px;
