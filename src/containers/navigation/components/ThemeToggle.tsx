@@ -36,6 +36,10 @@ const ThemeToggleContainer = styled.div`
     margin-right: 0;
     flex-shrink: 0;
   }
+
+  @media (min-width: 992px) {
+    margin-left: 8px;
+  }
 `;
 
 // Compact theme toggle switch component

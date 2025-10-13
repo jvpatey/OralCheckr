@@ -118,15 +118,10 @@ const CustomDropdownItem = styled(Dropdown.Item)<{
       0 0 0 1px ${({ theme }) => theme.primary}20 inset;
   }
 
-  /* Special styling for profile with name */
+  /* Special styling for profile with name - only background on hover/active */
   ${({ $isProfileWithName }) =>
     $isProfileWithName &&
     `
-    background: ${({ theme }) => theme.glassBg};
-    border-color: ${({ theme }) => theme.primary}30;
-    box-shadow: ${({ theme }) => theme.shadowSm},
-      0 0 0 1px ${({ theme }) => theme.primary}15 inset;
-    
     &:hover {
       border-color: ${({ theme }) => theme.primary}60;
       box-shadow: ${({ theme }) => theme.shadowLg},

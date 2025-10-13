@@ -152,6 +152,8 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
             onCreateAccount={handleCreateAccount}
             userAvatar={profile?.avatar}
             userFirstName={user?.firstName}
+            isDarkMode={isDarkMode}
+            toggleDarkMode={toggleDarkMode}
           />
         </Container>
       </CustomNavbar>

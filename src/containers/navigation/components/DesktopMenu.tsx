@@ -3,6 +3,7 @@ import { Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "../../../common/links";
+import { ThemeToggle } from "./ThemeToggle";
 import React from "react";
 
 // Props for desktop menu component
@@ -14,6 +15,8 @@ interface DesktopMenuProps {
   onCreateAccount: () => void;
   userAvatar?: string;
   userFirstName?: string;
+  isDarkMode?: boolean;
+  toggleDarkMode?: () => void;
 }
 
 // Modern navbar collapse with glassmorphism
@@ -52,7 +55,7 @@ const StyledNav = styled(Nav)`
   font-weight: 500;
 `;
 
-// Modern 2025-style nav links with glassmorphism
+// Modern 2025-style nav links with clean styling
 const CustomNavLink = styled(Nav.Link)<{ $isProfileWithName?: boolean }>`
   color: ${({ theme, $isProfileWithName }) =>
     $isProfileWithName ? theme.primary : theme.textSecondary};
@@ -66,50 +69,31 @@ const CustomNavLink = styled(Nav.Link)<{ $isProfileWithName?: boolean }>`
   padding: 12px 20px;
   border-radius: 16px;
   position: relative;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   border: 1px solid transparent;
   background: transparent;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 
-  /* Glassmorphism hover effect */
+  /* Simple hover effect - no background */
   &:hover {
     color: ${({ theme, $isProfileWithName }) =>
       $isProfileWithName ? theme.primaryDark : theme.textPrimary};
-    background: ${({ theme }) => theme.glassBg};
-    border-color: ${({ theme }) => theme.borderLight};
-    box-shadow: ${({ theme }) => theme.shadowMd},
-      0 0 0 1px ${({ theme }) => theme.borderLight} inset;
     text-decoration: none;
-    transform: translateY(-2px) scale(1.02);
+    transform: translateY(-1px);
   }
 
-  /* Active state with enhanced glassmorphism */
+  /* Active state - minimal styling */
   &.active {
     color: ${({ theme }) => theme.primary};
-    background: ${({ theme }) => theme.glassBg};
-    border-color: ${({ theme }) => theme.primary}40;
-    box-shadow: ${({ theme }) => theme.shadowLg},
-      0 0 20px ${({ theme }) => theme.glowColor},
-      0 0 0 1px ${({ theme }) => theme.primary}20 inset;
-    transform: translateY(-1px) scale(1.01);
+    transform: translateY(-1px);
   }
 
-  /* Special styling for profile with name */
+  /* Special styling for profile with name - no default background */
   ${({ $isProfileWithName }) =>
     $isProfileWithName &&
     `
-    background: ${({ theme }) => theme.glassBg};
-    border-color: ${({ theme }) => theme.primary}30;
-    box-shadow: ${({ theme }) => theme.shadowSm},
-      0 0 0 1px ${({ theme }) => theme.primary}15 inset;
-    
     &:hover {
-      border-color: ${({ theme }) => theme.primary}60;
-      box-shadow: ${({ theme }) => theme.shadowLg},
-        0 0 30px ${({ theme }) => theme.glowColor},
-        0 0 0 1px ${({ theme }) => theme.primary}30 inset;
+      color: ${({ theme }) => theme.primaryDark};
     }
   `}
 `;
@@ -241,6 +225,8 @@ export function DesktopMenu({
   onCreateAccount,
   userAvatar,
   userFirstName,
+  isDarkMode,
+  toggleDarkMode,
 }: DesktopMenuProps) {
   return (
     <CustomCollapse id="basic-navbar-nav">
@@ -274,6 +260,13 @@ export function DesktopMenu({
           <CreateAccountButton onClick={onCreateAccount}>
             Create Account
           </CreateAccountButton>
+        )}
+
+        {isDarkMode !== undefined && toggleDarkMode && (
+          <ThemeToggle
+            isDarkMode={isDarkMode}
+            toggleDarkMode={toggleDarkMode}
+          />
         )}
       </StyledNav>
     </CustomCollapse>
