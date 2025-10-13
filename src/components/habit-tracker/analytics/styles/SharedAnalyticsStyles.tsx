@@ -108,7 +108,7 @@ export const ViewContainer = styled.div`
   box-sizing: border-box;
 
   > * {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
   }
 
   .dropdown {
@@ -134,16 +134,16 @@ export const AnalyticsTitle = styled.h1`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.75rem;
   font-weight: 700;
   text-align: center;
   letter-spacing: -0.5px;
   animation: ${fadeUp} 0.8s ease-out;
 
   @media (max-width: 768px) {
-    font-size: 1.75rem;
-    margin-bottom: 1.25rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
   }
 
   @media (max-width: 480px) {

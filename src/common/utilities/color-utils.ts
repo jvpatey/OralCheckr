@@ -192,3 +192,13 @@ export const greenHeatMapShades = {
   Dark: "#1e7f39",
   Darkest: "#005600",
 };
+
+// blue heatmap shades for modern styling
+export const blueHeatMapShades = {
+  Light: "#93C5FD", // Blue 300
+  MediumLight: "#60A5FA", // Blue 400
+  Medium: "#3B82F6", // Blue 500
+  MediumDark: "#2563EB", // Blue 600
+  Dark: "#1D4ED8", // Blue 700
+  Darkest: "#1E40AF", // Blue 800
+};

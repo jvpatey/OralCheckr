@@ -17,7 +17,7 @@ const CustomDropdownToggle = styled(Dropdown.Toggle)`
   border: none;
   font-size: 16px;
   font-weight: 600;
-  padding: 12px 24px;
+  padding: 10px 20px;
   width: 100%;
   text-align: center;
   border-radius: 12px;
@@ -69,7 +69,7 @@ const CustomDropdownToggle = styled(Dropdown.Toggle)`
 
   @media (max-width: 600px) {
     font-size: 14px;
-    padding: 10px 16px;
+    padding: 8px 14px;
   }
 `;
 
