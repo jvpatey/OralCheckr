@@ -392,7 +392,6 @@ export function Habits() {
 
   return (
     <PageBackground>
-      <BackgroundEffects />
       <HabitListContainer>
         <CardContainer>
           <HabitWrapper>
@@ -403,7 +402,7 @@ export function Habits() {
               />
             </DatePickerWrapper>
             <Header>
-              <HeaderText>My Habits</HeaderText>
+              <HeaderText>Habit Tracker</HeaderText>
               <HeaderButtons>
                 {!isEditMode && (
                   <IconTextButton

@@ -27,7 +27,7 @@ export const ModernAssessmentContainer = styled.div<{
   padding: 40px 20px;
 
   /* Animation */
-  animation: ${fadeInUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: ${fadeInUp} 1s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
 
   @media (max-width: 800px) {
     width: ${({ $isAuthenticated }) =>
@@ -54,6 +54,7 @@ export const AssessmentHeader = styled.div`
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  animation: ${fadeInUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
 
   @media (max-width: 768px) {
     margin-bottom: 18px;
@@ -72,6 +73,7 @@ export const QuestionContent = styled.div`
   max-width: 800px;
   margin: 0 auto;
   margin-bottom: 20px;
+  animation: ${fadeInUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
   overflow-y: auto;
   ${scrollbarStyle}
 
@@ -91,6 +93,7 @@ export const ActionSection = styled.div`
   margin: 0 auto;
   margin-top: 16px;
   flex-wrap: wrap;
+  animation: ${fadeInUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
 
   @media (max-width: 768px) {
     gap: 12px;

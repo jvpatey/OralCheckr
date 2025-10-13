@@ -39,7 +39,7 @@ export const ModernResultsContainer = styled.div<{
   margin-top: 80px; /* Account for navbar height */
 
   /* Animation */
-  animation: ${fadeInUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: ${fadeInUp} 1s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
 
   @media (max-width: 800px) {
     width: ${({ $isAuthenticated }) =>

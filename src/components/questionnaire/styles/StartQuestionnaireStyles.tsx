@@ -26,7 +26,7 @@ export const ModernContainer = styled.div<{ $isAuthenticated: boolean }>`
   padding: 40px 20px;
 
   /* Animation */
-  animation: ${fadeInUp} 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: ${fadeInUp} 1s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
 
   @media (max-width: 800px) {
     width: ${({ $isAuthenticated }) =>
@@ -55,6 +55,7 @@ export const HeroTitle = styled.h1`
   margin-bottom: 32px;
   line-height: 1.2;
   letter-spacing: -0.02em;
+  animation: ${fadeInUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
 
   @media (max-width: 768px) {
     font-size: 2.5rem;

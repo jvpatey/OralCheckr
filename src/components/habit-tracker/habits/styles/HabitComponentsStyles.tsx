@@ -86,7 +86,7 @@ export const CardContainer = styled.div`
   margin: 0 auto;
   padding: 40px 32px;
   height: calc(100vh - 120px);
-  animation: ${fadeUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: ${fadeUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
   will-change: transform, opacity;
   overflow: hidden;
   position: relative;
@@ -124,6 +124,7 @@ export const HabitListContainer = styled.div`
   left: 190px;
   will-change: transform;
   backface-visibility: hidden;
+  animation: ${fadeUp} 1s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
 
   @media (max-width: 768px) {
     width: calc(100% - 70px);
@@ -153,6 +154,7 @@ export const Header = styled.div`
   white-space: nowrap;
   margin-bottom: 24px;
   position: relative;
+  animation: ${fadeUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
 
   /* Subtle bottom accent line */
   &::after {
@@ -215,6 +217,7 @@ export const ScrollableHabitList = styled.div`
   ${scrollbarStyle}
   will-change: transform;
   backface-visibility: hidden;
+  animation: ${fadeUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
 `;
 
 // Styled container for the habit list
@@ -225,6 +228,7 @@ export const StyledHabitList = styled.div`
   gap: 14px;
   width: 100%;
   box-sizing: border-box;
+  animation: ${fadeUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
   padding-right: 4px;
 `;
 

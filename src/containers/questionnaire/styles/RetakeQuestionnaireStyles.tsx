@@ -84,10 +84,8 @@ export const ModernRetakeContainer = styled.div<{
   width: ${({ $isAuthenticated }) =>
     $isAuthenticated ? "calc(100% - 240px)" : "100%"};
   margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
+  animation: ${fadeInUp} 1s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
   padding: 40px 20px;
-
-  /* Animation */
-  animation: ${fadeInUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 
   @media (max-width: 800px) {
     width: ${({ $isAuthenticated }) =>

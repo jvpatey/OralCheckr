@@ -68,7 +68,7 @@ export const sidebarLinks: NavLink[] = [
     displayIn: "sidebar",
   },
   {
-    name: "Habits",
+    name: "Habit Tracker",
     path: RoutePaths.HABITS,
     icon: faRectangleList as IconDefinition,
     displayIn: "sidebar",
