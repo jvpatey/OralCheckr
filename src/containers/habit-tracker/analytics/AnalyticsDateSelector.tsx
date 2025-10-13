@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import DatePicker from "react-datepicker";
 import { IconButton } from "../../../components/habit-tracker/habits/IconButton";
-import { TodayButton } from "../../../components/habit-tracker/analytics/TodayButton";
 import {
   faChevronLeft,
   faChevronRight,
@@ -20,16 +19,20 @@ const StyledDatePickerWrapper = styled.div`
   .react-datepicker {
     background: ${({ theme }) => theme.glassBg} !important;
     backdrop-filter: blur(${({ theme }) => theme.glassBlur}) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid
+      ${({ theme }) => theme.glassBorder || "rgba(255, 255, 255, 0.2)"} !important;
     border-radius: 16px !important;
     box-shadow: ${({ theme }) => theme.shadowXl} !important;
-    padding: 16px !important;
+    padding: 12px !important;
     font-family: inherit !important;
+    min-width: 200px !important;
+    max-width: 250px !important;
   }
 
   .react-datepicker__header {
     background: transparent !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-bottom: 1px solid
+      ${({ theme }) => theme.glassBorder || "rgba(255, 255, 255, 0.1)"} !important;
     padding: 0 0 12px 0 !important;
     margin-bottom: 12px !important;
   }
@@ -56,7 +59,7 @@ const StyledDatePickerWrapper = styled.div`
     }
 
     &::before {
-      border-color: white !important;
+      border-color: ${({ theme }) => theme.textPrimary} !important;
       border-width: 2px 2px 0 0 !important;
     }
   }
@@ -76,11 +79,13 @@ const StyledDatePickerWrapper = styled.div`
   .react-datepicker__month-text {
     color: ${({ theme }) => theme.textSecondary} !important;
     font-weight: 500 !important;
-    padding: 8px 12px !important;
-    margin: 2px !important;
+    padding: 8px 10px !important;
+    margin: 1px !important;
     border-radius: 8px !important;
     transition: all 0.3s ease !important;
     border: 1px solid transparent !important;
+    min-width: 60px !important;
+    text-align: center !important;
 
     &:hover {
       background: rgba(6, 182, 212, 0.1) !important;
@@ -105,11 +110,13 @@ const StyledDatePickerWrapper = styled.div`
   .react-datepicker__year-text {
     color: ${({ theme }) => theme.textSecondary} !important;
     font-weight: 500 !important;
-    padding: 8px 16px !important;
-    margin: 2px !important;
+    padding: 8px 12px !important;
+    margin: 1px !important;
     border-radius: 8px !important;
     transition: all 0.3s ease !important;
     border: 1px solid transparent !important;
+    min-width: 60px !important;
+    text-align: center !important;
 
     &:hover {
       background: rgba(6, 182, 212, 0.1) !important;
@@ -251,7 +258,6 @@ export function AnalyticsDateSelector({
         hoverBackgroundColor={theme.primary}
         disabled={isNextDisabled}
       />
-      <TodayButton onClick={handleTodayClick} />
     </DatePickerContainer>
   );
 }

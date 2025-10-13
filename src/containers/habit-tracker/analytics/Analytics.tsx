@@ -15,6 +15,7 @@ import { useHabitContext } from "../../../contexts/HabitContext";
 import { LoadingComponent } from "../../../components/habit-tracker/analytics/LoadingComponent";
 import {
   AnalyticsContainer,
+  AnalyticsTitle,
   NoHabitMessage,
 } from "../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
 
@@ -197,6 +198,11 @@ export function Analytics() {
   return (
     <PageBackground>
       <AnalyticsContainer>
+        <AnalyticsTitle>
+          {view === ViewMode.MONTH
+            ? "Monthly Habit Analytics"
+            : "Yearly Habit Analytics"}
+        </AnalyticsTitle>
         <ToggleButton
           options={toggleOptions}
           activeValue={view}

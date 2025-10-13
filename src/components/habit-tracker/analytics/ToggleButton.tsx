@@ -11,7 +11,7 @@ const ToggleButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   width: 100%;
   box-sizing: border-box;
 `;

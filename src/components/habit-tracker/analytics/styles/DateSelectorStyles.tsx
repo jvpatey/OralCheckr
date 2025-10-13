@@ -18,13 +18,13 @@ export const DatePickerButton = styled.button`
   background: ${({ theme }) => theme.primaryGradient};
   color: ${({ theme }) => theme.white};
   border: none;
-  padding: 0 30px;
+  padding: 0 20px;
   border-radius: 12px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
   height: 48px;
-  min-width: 200px;
+  min-width: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,9 +56,9 @@ export const DatePickerButton = styled.button`
   }
 
   @media (max-width: 600px) {
-    min-width: 50px;
-    padding: 0 10px;
-    font-size: 10px;
+    min-width: 120px;
+    padding: 0 15px;
+    font-size: 12px;
     font-weight: bold;
   }
 

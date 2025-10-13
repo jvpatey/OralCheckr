@@ -10,6 +10,7 @@ import { LineChart } from "../../../../components/habit-tracker/analytics/month-
 import { formatMonthYear } from "../../../../common/utilities/date-utils";
 import { useTheme } from "styled-components";
 import { useHabitContext } from "../../../../contexts/HabitContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface CalendarProgressProps {
   habitsLog: Logging;
@@ -20,18 +21,19 @@ interface CalendarProgressProps {
   showChart: boolean;
   onToggleView: () => void;
   isLoading?: boolean;
+  dateSelector?: React.ReactNode;
+  onTodayClick?: () => void;
 }
 
-// Container for the entire calendar component
+// Container for the entire calendar component - improved spacing
 const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100%;
   width: 100%;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 0;
   max-height: none;
   overflow: hidden;
 
@@ -72,11 +74,12 @@ const CalendarContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 45px;
+    height: 44px;
     margin: 0;
     text-align: center;
     border: none;
     pointer-events: none;
+    padding: 3px;
   }
 
   .react-datepicker__day--selected,
@@ -100,33 +103,44 @@ const CalendarContainer = styled.div`
   }
 `;
 
-// Modern custom header container
+// Clean calendar days header - simplified for better hierarchy
 const DaysHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
   width: 100%;
-  margin: 1rem 0 0.5rem 0;
-  font-weight: 600;
-  color: ${({ theme }) => theme.primary};
-  text-transform: uppercase;
-  padding: 0 0.5rem;
-  font-size: 14px;
-  letter-spacing: 0.5px;
+  margin: 0 0 0.75rem 0;
+  gap: 0.375rem;
   position: relative;
   z-index: 1;
 `;
 
-const DayName = styled.div`
-  flex: 1;
+const DayName = styled.div<{ $isToday?: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem;
+  font-weight: 600;
+  color: ${({ $isToday, theme }) =>
+    $isToday ? theme.secondary : theme.textTertiary};
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
   text-align: center;
-  font-size: 12px;
+  background: ${({ $isToday, theme }) =>
+    $isToday ? "rgba(16, 185, 129, 0.1)" : "transparent"};
+  border-radius: 6px;
+  border: 1px solid
+    ${({ $isToday, theme }) =>
+      $isToday ? "rgba(16, 185, 129, 0.3)" : "transparent"};
+  transition: all 0.3s ease;
 
   @media (max-width: 600px) {
     font-size: 10px;
+    padding: 0.25rem;
   }
 `;
 
-// Wrapper for each day's circular progress bar
+// Clean wrapper for each day's circular progress bar - no weird borders
 const DayWrapper = styled.div<{ $isCurrentDay?: boolean }>`
   position: relative;
   width: 42px;
@@ -135,27 +149,74 @@ const DayWrapper = styled.div<{ $isCurrentDay?: boolean }>`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Subtle hover effect without borders */
+  &:hover {
+    transform: translateY(-1px) scale(1.05);
+    filter: brightness(1.1);
+  }
+
+  /* Remove any default borders or backgrounds */
+  background: transparent;
+  border: none;
 
   @media (max-width: 600px) {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
   }
 `;
 
-// Modern styled component to display the current month and year
-const MonthYearDisplay = styled.div`
-  color: ${({ theme }) => theme.primary};
-  text-align: center;
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0 0 1.5rem 0;
+// Centered controls header - selector and toggle with proper centering
+const CalendarControlsHeader = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 1rem 0 1.25rem 0;
   position: relative;
   z-index: 1;
-  letter-spacing: 0.5px;
+  min-height: 48px;
 
   @media (max-width: 768px) {
-    font-size: 18px;
-    margin-bottom: 1.25rem;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem 0 1.25rem 0;
+    align-items: center;
+  }
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1rem 0 1rem 0;
+    align-items: center;
+  }
+`;
+
+// Centered date selector container - truly centered
+const DateSelectorContainer = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 800px) {
+    position: static;
+    transform: none;
+  }
+`;
+
+// Toggle container - positioned on the right
+const ToggleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+
+  @media (max-width: 800px) {
+    margin-left: 0;
+    justify-content: center;
   }
 `;
 
@@ -171,10 +232,15 @@ export function HabitCalendar({
   showChart,
   onToggleView,
   isLoading = false,
+  dateSelector,
+  onTodayClick,
 }: CalendarProgressProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const theme = useTheme();
   const { selectedHabit } = useHabitContext();
+
+  // Get current day of week for highlighting
+  const currentDayOfWeek = new Date().getDay();
 
   // Update the selected date whenever the selected month changes
   useEffect(() => {
@@ -211,7 +277,7 @@ export function HabitCalendar({
           value={isLoading ? 0 : isFutureDate ? 0 : progress}
           text={day.toString()}
           styles={buildStyles({
-            textSize: isCurrentDay ? "32px" : "30px",
+            textSize: isCurrentDay ? "26px" : "24px",
             pathColor: isComplete ? theme.secondary : theme.primary,
             textColor: isCurrentDay
               ? theme.secondary
@@ -242,16 +308,23 @@ export function HabitCalendar({
 
   return (
     <CalendarContainer>
-      <MonthYearDisplay>{currentMonthYear}</MonthYearDisplay>
-      <CalendarChartToggle
-        isCalendarView={!showChart}
-        onToggleView={handleToggleView}
-      />
+      <CalendarControlsHeader>
+        <DateSelectorContainer>{dateSelector}</DateSelectorContainer>
+        <ToggleContainer>
+          <CalendarChartToggle
+            isCalendarView={!showChart}
+            onToggleView={handleToggleView}
+          />
+        </ToggleContainer>
+      </CalendarControlsHeader>
+
       {!showChart ? (
         <>
           <DaysHeader>
             {daysOfWeek.map((day, index) => (
-              <DayName key={index}>{day}</DayName>
+              <DayName key={index} $isToday={index === currentDayOfWeek}>
+                {day}
+              </DayName>
             ))}
           </DaysHeader>
           <DatePicker

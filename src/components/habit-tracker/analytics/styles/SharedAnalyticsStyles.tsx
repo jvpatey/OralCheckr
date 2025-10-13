@@ -128,6 +128,30 @@ export const ViewContainer = styled.div`
   }
 `;
 
+// Page title styling
+export const AnalyticsTitle = styled.h1`
+  background: ${({ theme }) => theme.primaryGradient};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.5px;
+  animation: ${fadeUp} 0.8s ease-out;
+
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+`;
+
 export const AnalyticsContainer = styled.div`
   /* Account for sidebar width (220px) + margin (16px) + padding (16px) */
   width: calc(100% - 252px);
@@ -182,6 +206,43 @@ export const HabitsTitle = styled.h3`
 `;
 
 // Modern bento-style layout components
+// New layout containers
+export const ControlsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+`;
+
+export const AnalyticsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    max-width: 100%;
+  }
+`;
+
+export const TilesSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+export const CalendarSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
 export const TilesAndCalendarContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -211,10 +272,9 @@ export const TilesAndCalendarContainer = styled.div`
 export const TilesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: 1rem;
   width: 100%;
-  max-width: 480px;
-  height: 450px;
+  height: 400px;
   flex-shrink: 0;
 
   /* Staggered animation for tiles */
@@ -235,19 +295,19 @@ export const TilesContainer = styled.div`
   }
 
   @media (max-width: 1200px) {
-    max-width: 420px;
-    height: 400px;
+    height: 360px;
+    gap: 0.875rem;
   }
 
   @media (max-width: 1024px) {
     height: auto;
-    min-height: 300px;
-    gap: 1rem;
-    max-width: 100%;
+    min-height: 320px;
+    gap: 0.75rem;
   }
 
   @media (max-width: 480px) {
-    gap: 0.75rem;
+    gap: 0.5rem;
+    height: 280px;
   }
 `;
 
@@ -255,9 +315,9 @@ export const TilesContainer = styled.div`
 export const TileContainer = styled.div`
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border-radius: 20px;
+  border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 2rem;
+  padding: 1rem;
   box-shadow: ${({ theme }) => theme.shadowLg};
   display: flex;
   flex-direction: column;
@@ -324,10 +384,10 @@ export const TileContainer = styled.div`
 `;
 
 export const TileHeading = styled.h3`
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   color: ${({ theme }) => theme.textSecondary};
-  margin: 0.5rem 0 0 0;
+  margin: 0.25rem 0 0 0;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -335,12 +395,12 @@ export const TileHeading = styled.h3`
   z-index: 1;
 
   @media (max-width: 1024px) {
-    font-size: 12px;
-    margin-top: 0.25rem;
+    font-size: 11px;
+    margin-top: 0.2rem;
   }
 
   @media (max-width: 480px) {
-    font-size: 11px;
+    font-size: 10px;
   }
 `;
 
@@ -348,7 +408,7 @@ export const TileMainContent = styled.div<{
   $isMissedDays?: boolean;
   $isLoading?: boolean;
 }>`
-  font-size: 56px;
+  font-size: 42px;
   font-weight: 700;
   color: ${({ $isMissedDays, theme }) =>
     $isMissedDays ? theme.error : theme.primary};
@@ -360,11 +420,11 @@ export const TileMainContent = styled.div<{
   text-align: center;
 
   @media (max-width: 1024px) {
-    font-size: 42px;
+    font-size: 36px;
   }
 
   @media (max-width: 480px) {
-    font-size: 36px;
+    font-size: 28px;
   }
 `;
 
