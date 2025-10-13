@@ -24,14 +24,48 @@ export const CustomNavbar = styled(Navbar)`
   z-index: 1100;
   padding: 16px 0;
 
-  @media (max-width: 768px) {
+  @media (max-width: 991px) {
     padding: 12px 0;
+    /* Ensure navbar stays fixed at top on mobile and tablet */
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
 
     .d-lg-none {
       display: block;
     }
     .d-lg-flex {
       display: none;
+    }
+
+    /* Ensure proper container positioning for mobile icons */
+    .container-fluid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      padding: 0 16px;
+    }
+
+    /* Hide desktop menu on mobile and tablet */
+    .d-none.d-lg-flex {
+      display: none !important;
+    }
+  }
+
+  @media (min-width: 992px) {
+    padding: 16px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    .d-lg-none {
+      display: none;
+    }
+    .d-lg-flex {
+      display: flex;
     }
   }
 `;

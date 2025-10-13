@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "../../../common/links";
 import React from "react";
 
@@ -51,9 +52,9 @@ const StyledNav = styled(Nav)`
   font-weight: 500;
 `;
 
-// Modern 2025-style nav links with pill backgrounds
+// Modern 2025-style nav links with glassmorphism
 const CustomNavLink = styled(Nav.Link)<{ $isProfileWithName?: boolean }>`
-  color: ${({ theme, $isProfileWithName }) => 
+  color: ${({ theme, $isProfileWithName }) =>
     $isProfileWithName ? theme.primary : theme.textSecondary};
   margin-right: 8px;
   font-size: 1rem;
@@ -62,39 +63,106 @@ const CustomNavLink = styled(Nav.Link)<{ $isProfileWithName?: boolean }>`
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 10px 16px;
-  border-radius: 20px;
+  padding: 12px 20px;
+  border-radius: 16px;
   position: relative;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
+  border: 1px solid transparent;
+  background: transparent;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
+  /* Glassmorphism hover effect */
   &:hover {
-    color: ${({ theme, $isProfileWithName }) => 
+    color: ${({ theme, $isProfileWithName }) =>
       $isProfileWithName ? theme.primaryDark : theme.textPrimary};
-    background: ${({ theme, $isProfileWithName }) => 
-      $isProfileWithName ? `${theme.primary}12` : `${theme.textSecondary}08`};
+    background: ${({ theme }) => theme.glassBg};
+    border-color: ${({ theme }) => theme.borderLight};
+    box-shadow: ${({ theme }) => theme.shadowMd},
+      0 0 0 1px ${({ theme }) => theme.borderLight} inset;
     text-decoration: none;
-    transform: scale(1.02);
+    transform: translateY(-2px) scale(1.02);
   }
 
+  /* Active state with enhanced glassmorphism */
   &.active {
     color: ${({ theme }) => theme.primary};
-    background: ${({ theme }) => theme.primary}12;
-    transform: scale(1.02);
+    background: ${({ theme }) => theme.glassBg};
+    border-color: ${({ theme }) => theme.primary}40;
+    box-shadow: ${({ theme }) => theme.shadowLg},
+      0 0 20px ${({ theme }) => theme.glowColor},
+      0 0 0 1px ${({ theme }) => theme.primary}20 inset;
+    transform: translateY(-1px) scale(1.01);
+  }
+
+  /* Special styling for profile with name */
+  ${({ $isProfileWithName }) =>
+    $isProfileWithName &&
+    `
+    background: ${({ theme }) => theme.glassBg};
+    border-color: ${({ theme }) => theme.primary}30;
+    box-shadow: ${({ theme }) => theme.shadowSm},
+      0 0 0 1px ${({ theme }) => theme.primary}15 inset;
+    
+    &:hover {
+      border-color: ${({ theme }) => theme.primary}60;
+      box-shadow: ${({ theme }) => theme.shadowLg},
+        0 0 30px ${({ theme }) => theme.glowColor},
+        0 0 0 1px ${({ theme }) => theme.primary}30 inset;
+    }
+  `}
+`;
+
+// User avatar image styling with glassmorphism
+const AvatarImage = styled.img`
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  position: relative;
+  top: -1px;
+  border: 2px solid ${({ theme }) => theme.primary};
+  padding: 1px;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  margin-right: 10px;
+  box-shadow: ${({ theme }) => theme.shadowSm},
+    0 0 0 1px ${({ theme }) => theme.borderLight} inset;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: ${({ theme }) => theme.shadowMd},
+      0 0 15px ${({ theme }) => theme.glowColor},
+      0 0 0 1px ${({ theme }) => theme.primary}40 inset;
   }
 `;
 
-// User avatar image styling
-const AvatarImage = styled.img`
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  object-fit: contain;
-  position: relative;
-  top: -1px;
-  border: 2px solid ${({ theme }) => theme.blue};
-  padding: 2px;
-  background: ${({ theme }) => theme.backgroundColor};
+// Icon container for desktop nav items with glassmorphism
+const IconContainer = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  color: ${({ theme }) => theme.primary};
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: ${({ theme }) => theme.shadowMd},
+      0 0 15px ${({ theme }) => theme.glowColor};
+    border-color: ${({ theme }) => theme.primary}40;
+  }
 `;
 
 // Create account button with tooltip
@@ -186,9 +254,20 @@ export function DesktopMenu({
             onClick={link.name === "Log Out" ? handleLogout : undefined}
             $isProfileWithName={link.name === "Profile" && !!userFirstName}
           >
-            {link.name === "Profile" && userFirstName
-              ? userFirstName
-              : link.name}
+            {link.name === "Profile" && userFirstName ? (
+              <>
+                {userAvatar ? (
+                  <AvatarImage src={userAvatar} alt="Profile" />
+                ) : (
+                  <IconContainer>
+                    <FontAwesomeIcon icon={link.icon} />
+                  </IconContainer>
+                )}
+                {userFirstName}
+              </>
+            ) : (
+              link.name
+            )}
           </CustomNavLink>
         ))}
         {isGuest && (

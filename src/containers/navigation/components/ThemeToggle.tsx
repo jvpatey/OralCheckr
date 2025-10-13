@@ -8,26 +8,33 @@ interface ThemeToggleProps {
   toggleDarkMode: () => void;
 }
 
-// Compact theme toggle with subtle styling
+// Compact theme toggle with glassmorphism styling
 const ThemeToggleContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: 6px;
-  border-radius: 8px;
-  background: ${({ theme }) => theme.textSecondary}05;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid ${({ theme }) => theme.borderLight};
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${({ theme }) => theme.shadowSm};
 
   &:hover {
-    background: ${({ theme }) => theme.textSecondary}10;
+    background: ${({ theme }) => theme.surfaceElevated};
+    border-color: ${({ theme }) => theme.primary}40;
     transform: scale(1.05);
+    box-shadow: ${({ theme }) => theme.shadowMd},
+      0 0 15px ${({ theme }) => theme.glowColor};
   }
 
-  @media (max-width: 768px) {
-    position: absolute;
-    right: 16px;
-    top: 16px;
-    z-index: 10;
-    padding: 4px;
+  @media (max-width: 991px) {
+    position: relative;
+    margin-right: 0;
+    flex-shrink: 0;
   }
 `;
 
