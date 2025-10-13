@@ -3,7 +3,10 @@ import styled, { useTheme } from "styled-components";
 import { Logging } from "../../../../containers/habit-tracker/analytics/Analytics";
 import { getDaysInMonth } from "date-fns";
 import { upperFirst } from "lodash";
-import { lightTheme } from "../../../../common/utilities/color-utils";
+import {
+  lightTheme,
+  darkTheme,
+} from "../../../../common/utilities/color-utils";
 import { useHabitContext } from "../../../../contexts/HabitContext";
 
 // Styled component for the chart container
@@ -14,6 +17,17 @@ const ChartContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 300px;
+
+  @media (max-width: 768px) {
+    min-height: 350px;
+    padding: 8px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 400px;
+    padding: 6px;
+  }
 `;
 
 // Type definition for the theme
@@ -29,8 +43,10 @@ interface LineChartProps {
 const generateChartOptions = (
   daysInMonth: number,
   month: string,
-  theme: ThemeType
+  theme: any,
+  seriesData: number[]
 ): ApexCharts.ApexOptions => {
+  const maxValue = Math.max(...seriesData, 0);
   return {
     chart: {
       type: "line",
@@ -39,62 +55,110 @@ const generateChartOptions = (
         show: false,
       },
       parentHeightOffset: 0,
+      background: "transparent",
+    },
+    theme: {
+      mode: theme.mode,
     },
     stroke: {
       curve: "smooth",
-      width: 2,
+      width: 3,
+      lineCap: "round",
     },
     xaxis: {
       categories: Array.from({ length: daysInMonth }, (_, i) => i + 1),
       title: {
         text: "Day of the Month",
         style: {
-          color: theme.green,
+          color: theme.textPrimary,
+          fontSize: "12px",
+          fontWeight: "600",
         },
       },
       labels: {
         style: {
-          colors: theme.blue,
-          fontSize: "10px",
+          colors: theme.textSecondary,
+          fontSize: "11px",
+          fontWeight: "500",
         },
         rotate: -45,
         hideOverlappingLabels: true,
       },
+      axisBorder: {
+        color: theme.glassBorder || "rgba(255, 255, 255, 0.1)",
+      },
+      axisTicks: {
+        color: theme.glassBorder || "rgba(255, 255, 255, 0.1)",
+      },
     },
     yaxis: {
-      title: {
-        text: "Logs",
-        style: {
-          color: theme.green,
-        },
-      },
       labels: {
         style: {
-          colors: theme.blue,
+          colors: theme.textSecondary,
+          fontSize: "11px",
+          fontWeight: "500",
         },
         formatter: (value: number) => Math.floor(value).toString(),
       },
       min: 0,
-      tickAmount: 5,
+      max: Math.max(1, Math.ceil(maxValue || 1)),
+      forceNiceScale: false,
+      decimalsInFloat: 0,
+      tickAmount: Math.max(1, Math.ceil(maxValue || 1)),
+      floating: false,
     },
-    colors: [theme.blue],
+    colors: [theme.primary],
     markers: {
-      size: 4,
-      colors: [theme.blue],
-      strokeColors: "transparent",
-      strokeWidth: 2,
+      size: 6,
+      colors: [theme.primary],
+      strokeColors: theme.backgroundColor,
+      strokeWidth: 3,
+      hover: {
+        size: 8,
+      },
     },
     tooltip: {
       enabled: true,
+      theme: theme.mode,
+      style: {
+        fontSize: "12px",
+        fontFamily: "inherit",
+      },
+      background: theme.glassBg,
+      border: `1px solid ${theme.glassBorder || "rgba(255, 255, 255, 0.2)"}`,
+      borderRadius: "12px",
       x: {
         formatter: (dayOfMonth: number) => `${upperFirst(month)} ${dayOfMonth}`,
+        title: {
+          color: theme.textSecondary,
+        },
       },
       y: {
         formatter: (val: number) => `${val} logs`,
+        title: {
+          color: theme.textSecondary,
+        },
       },
     },
     grid: {
-      borderColor: theme.textGrey,
+      borderColor: theme.glassBorder || "rgba(255, 255, 255, 0.1)",
+      strokeDashArray: 3,
+      xaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      yaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      padding: {
+        left: 10,
+        right: 10,
+        top: 20,
+        bottom: 40,
+      },
     },
     dataLabels: {
       enabled: false,
@@ -109,8 +173,22 @@ const generateChartOptions = (
               rotate: -45,
               style: {
                 fontSize: "10px",
+                colors: theme.textSecondary,
               },
             },
+          },
+          yaxis: {
+            labels: {
+              style: {
+                colors: theme.textSecondary,
+                fontSize: "10px",
+              },
+              formatter: (value: number) => Math.floor(value).toString(),
+            },
+            max: Math.max(1, Math.ceil(maxValue)),
+            forceNiceScale: false,
+            decimalsInFloat: 0,
+            tickAmount: Math.max(1, Math.ceil(maxValue)),
           },
         },
       },
@@ -121,9 +199,23 @@ const generateChartOptions = (
             labels: {
               rotate: -45,
               style: {
-                fontSize: "10px",
+                fontSize: "9px",
+                colors: theme.textSecondary,
               },
             },
+          },
+          yaxis: {
+            labels: {
+              style: {
+                colors: theme.textSecondary,
+                fontSize: "9px",
+              },
+              formatter: (value: number) => Math.floor(value).toString(),
+            },
+            max: Math.max(1, Math.ceil(maxValue)),
+            forceNiceScale: false,
+            decimalsInFloat: 0,
+            tickAmount: Math.max(1, Math.ceil(maxValue)),
           },
         },
       },
@@ -134,6 +226,15 @@ const generateChartOptions = (
             labels: {
               rotate: -90,
               style: {
+                fontSize: "8px",
+                colors: theme.textSecondary,
+              },
+            },
+          },
+          yaxis: {
+            labels: {
+              style: {
+                colors: theme.textSecondary,
                 fontSize: "8px",
               },
             },
@@ -164,7 +265,7 @@ export function LineChart({ habitsLog, year, month }: LineChartProps) {
   });
 
   // Get the options object for ApexCharts
-  const options = generateChartOptions(daysInMonth, month, theme);
+  const options = generateChartOptions(daysInMonth, month, theme, seriesData);
 
   const series = [
     {
