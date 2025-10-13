@@ -1,44 +1,55 @@
 import styled, { css } from "styled-components";
 
-// Common styles for both sides of the flip card
+// Common styles for both sides of the flip card with glassmorphism
 export const flipCardCommonStyles = css<{ $isComplete: boolean }>`
-  background-color: ${({ theme }) => theme.backgroundColor};
+  /* Glassmorphism background */
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+
+  /* Gradient text color */
   color: ${({ $isComplete, theme }) =>
-    $isComplete ? theme.green : theme.blue};
+    $isComplete ? theme.secondary : theme.primary};
   font-weight: 600;
+
+  /* Modern gradient border */
   border: 2px solid
-    ${({ $isComplete, theme }) => ($isComplete ? theme.green : theme.blue)};
-  border-radius: 10px;
+    ${({ $isComplete, theme }) =>
+      $isComplete ? theme.secondary : theme.primary};
+  border-radius: 14px;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  box-shadow: ${({ theme }) => theme.shadowMd};
+  padding: 14px;
   position: absolute;
   backface-visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 `;
 
-// Styled component for the tile container
+// Styled component for the tile container with modern effects
 export const TileContainer = styled.div`
   perspective: 1000px;
-  border-radius: 10px;
+  border-radius: 14px;
   width: 100%;
-  height: 50px;
+  height: 56px;
   margin-bottom: 10px;
   margin-left: auto;
   margin-right: auto;
-  transition: box-shadow 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 
   &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: ${({ theme }) => theme.shadowLg};
+    transform: translateY(-2px);
   }
 
   @media (max-width: 768px) {
-    width: 85%;
+    width: 100%;
+    height: 54px;
   }
 
   &:hover .arrow-icon {
@@ -46,7 +57,7 @@ export const TileContainer = styled.div`
   }
 `;
 
-// Styled component for the progress bar
+// Styled component for the progress bar with gradient
 export const ProgressBar = styled.div<{
   $progress: number;
   $isComplete: boolean;
@@ -56,10 +67,13 @@ export const ProgressBar = styled.div<{
   left: 0;
   height: 100%;
   width: ${({ $progress }) => $progress}%;
-  background-color: ${({ $isComplete }) =>
-    $isComplete ? "rgba(65, 188, 122, 0.2)" : "rgba(63, 147, 178, 0.2)"};
+  background: ${({ $isComplete, theme }) =>
+    $isComplete
+      ? `linear-gradient(90deg, ${theme.secondary}30, ${theme.secondary}20)`
+      : `linear-gradient(90deg, ${theme.primary}30, ${theme.primary}20)`};
   z-index: 1;
-  transition: width 0.3s ease;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 14px 0 0 14px;
 `;
 
 // Styled component for the flip card with conditional flipping
@@ -86,32 +100,40 @@ export const FlipCardBack = styled.div<{ $isComplete: boolean }>`
   z-index: 2;
 `;
 
-// Styled component for displaying the habit name
+// Styled component for displaying the habit name with gradient text
 export const HabitName = styled.div`
-  font-size: 18px;
+  font-size: 1.125rem;
+  font-weight: 600;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   flex: 1;
   text-align: center;
   z-index: 2;
+  letter-spacing: -0.25px;
 `;
 
-// Styled component for the arrow icon
+// Styled component for the arrow icon with gradient
 export const ArrowIconWrapper = styled.div`
   position: absolute;
-  bottom: 0px;
-  left: 5px;
-  font-size: 12px;
+  bottom: 4px;
+  left: 8px;
+  font-size: 0.75rem;
   cursor: pointer;
-  color: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.primary};
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 3;
+
+  &:hover {
+    transform: scale(1.1);
+    color: ${({ theme }) => theme.primaryLight};
+  }
 `;
 
-// Styled component for the text on the back side
+// Styled component for the text on the back side with modern typography
 export const BackText = styled.div`
-  font-size: 12px;
+  font-size: 0.8rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -119,19 +141,24 @@ export const BackText = styled.div`
   text-align: center;
   width: 100%;
   padding: 10px;
+  z-index: 2;
 
   .label {
-    color: ${({ theme }) => theme.textGrey};
-    font-weight: bold;
+    color: ${({ theme }) => theme.textSecondary};
+    font-weight: 600;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 100%;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
 
   .value {
-    color: ${({ theme }) => theme.green};
+    background: ${({ theme }) => theme.secondaryGradient};
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -139,24 +166,26 @@ export const BackText = styled.div`
   }
 
   .spaced {
-    margin-top: 5px;
+    margin-top: 6px;
   }
 `;
 
-// Styled component for displaying the log count in a bubble
+// Styled component for displaying the log count in a bubble with gradient
 export const LogCountBubble = styled.div`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  color: ${({ theme }) => theme.green};
-  border: 2px solid ${({ theme }) => theme.green};
-  font-weight: bold;
-  font-size: 14px;
-  border-radius: 10px;
-  width: 30px;
-  height: 30px;
+  /* Gradient background */
+  background: ${({ theme }) => theme.secondaryGradient};
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: 12px;
+  min-width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-left: 10px;
+  margin-left: 12px;
   z-index: 2;
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  padding: 0 8px;
 `;

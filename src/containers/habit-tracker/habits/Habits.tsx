@@ -14,6 +14,7 @@ import {
   StyledHabitList,
   DatePickerWrapper,
   CardContainer,
+  BackgroundEffects,
 } from "../../../components/habit-tracker/habits/HabitComponents";
 import { HabitList } from "../../../components/habit-tracker/habits/HabitList";
 import {
@@ -391,6 +392,7 @@ export function Habits() {
 
   return (
     <PageBackground>
+      <BackgroundEffects />
       <HabitListContainer>
         <CardContainer>
           <HabitWrapper>
@@ -401,7 +403,7 @@ export function Habits() {
               />
             </DatePickerWrapper>
             <Header>
-              <HeaderText>My Habits:</HeaderText>
+              <HeaderText>My Habits</HeaderText>
               <HeaderButtons>
                 {!isEditMode && (
                   <IconTextButton

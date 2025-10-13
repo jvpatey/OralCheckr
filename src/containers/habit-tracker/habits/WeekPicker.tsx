@@ -6,58 +6,94 @@ import { TodayButton } from "../../../components/habit-tracker/analytics/TodayBu
 import { formatDateShort } from "../../../common/utilities/date-utils";
 import { DayBubbleSelector } from "./DayBubbleSelector";
 
-// Styled component for the container that holds the DatePicker and controls
+// Fluid container for date picker controls
 const DateControlsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
 
-// Styled component to wrap the DatePicker and its controls
-const DatePickerWrapper = styled.div`
+// Wrapper for the date picker and today button
+const DatePickerControls = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 8px;
 
-  @media (max-width: 400px) {
-    margin-left: 30px;
+  @media (max-width: 768px) {
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 8px;
+    margin-bottom: 4px;
   }
 `;
 
-// Custom-styled button to be used as the input field for the DatePicker
+// Custom-styled button to be used as the input field for the DatePicker with gradient
 const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
-  background-color: ${({ $disabled, theme }) =>
-    $disabled ? theme.disabledBackground : theme.backgroundColor};
-  color: ${({ $disabled, theme }) => ($disabled ? theme.textGrey : theme.blue)};
-  border: ${({ $disabled, theme }) =>
-    $disabled
-      ? `2px solid ${theme.disabledBackground}`
-      : `2px solid ${theme.blue}`};
-  padding: 8px 12px;
-  border-radius: 5px;
+  /* Gradient background */
+  background: ${({ $disabled, theme }) =>
+    $disabled ? theme.disabledBackground : theme.primaryGradient};
+  color: ${({ $disabled, theme }) => ($disabled ? theme.textGrey : "white")};
+  border: none;
+  padding: 12px 20px;
+  border-radius: 14px;
   text-align: center;
-  min-width: 150px;
+  min-width: 180px;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: ${({ theme, $disabled }) =>
+    $disabled ? "none" : theme.shadowMd};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 
-  &:hover {
-    background-color: ${({ $disabled, theme }) =>
-      $disabled ? theme.disabledBackground : theme.blue};
-    color: ${({ $disabled, theme }) => ($disabled ? theme.textGrey : theme.backgroundColor)};
-    border: ${({ $disabled, theme }) =>
-      $disabled
-        ? `2px solid ${theme.disabledBackground}`
-        : `2px solid ${theme.blue}`};
+  /* Subtle glow effect overlay */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 14px;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: ${({ theme }) => theme.shadowLg};
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    transition-duration: 0.1s;
   }
 
   &:focus {
-    outline: none;
-    box-shadow: 0 0 3px 2px rgba(53, 122, 150, 0.5);
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 2px;
   }
 `;
 
@@ -105,7 +141,7 @@ export function WeekPicker({ isEditMode, onDateChange }: WeekPickerProps) {
 
   return (
     <DateControlsContainer>
-      <DatePickerWrapper>
+      <DatePickerControls>
         <DatePicker
           selected={selectedFullDate}
           onChange={handleDateChange}
@@ -116,7 +152,7 @@ export function WeekPicker({ isEditMode, onDateChange }: WeekPickerProps) {
           maxDate={today} // Prevent selecting dates in the future
         />
         <TodayButton onClick={handleTodayClick} disabled={isEditMode} />
-      </DatePickerWrapper>
+      </DatePickerControls>
 
       <DayBubbleSelector
         daysInWeek={daysInWeek}

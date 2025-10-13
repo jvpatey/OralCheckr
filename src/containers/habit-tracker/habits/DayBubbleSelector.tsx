@@ -8,41 +8,88 @@ import { DayBubble } from "../../../components/habit-tracker/habits/DayBubble";
 import { formatDateShort } from "../../../common/utilities/date-utils";
 import { addWeeks, isSameWeek, subWeeks } from "date-fns";
 
-// Container for day bubbles and arrow navigation
+// Main container for the entire day selector
 const DayBubbleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 12px;
   margin-bottom: 20px;
-  margin-top: 30px;
+  margin-top: 0px;
+  width: 100%;
 
   @media (max-width: 768px) {
-    flex-wrap: nowrap;
+    gap: 8px;
+    margin-top: 0px;
   }
 `;
 
-// Styled component for the arrow buttons that navigate between weeks
+// iOS-style segmented control container with glassmorphism
+const SegmentedControlContainer = styled.div`
+  /* Glassmorphism background */
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 16px;
+  padding: 6px;
+  box-shadow: ${({ theme }) => theme.shadowMd};
+
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  max-width: 650px;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 4px;
+  }
+`;
+
+// Styled component for the arrow buttons integrated with segmented design
 const ArrowButton = styled.button<{ $disabled: boolean }>`
-  background: none;
-  border: none;
-  color: ${({ $disabled, theme }) => ($disabled ? theme.textGrey : theme.blue)};
-  font-size: 20px;
+  /* Glassmorphism background */
+  background: ${({ $disabled, theme }) =>
+    $disabled ? "transparent" : theme.glassBg};
+  backdrop-filter: ${({ $disabled }) => ($disabled ? "none" : "blur(8px)")};
+  -webkit-backdrop-filter: ${({ $disabled }) =>
+    $disabled ? "none" : "blur(8px)"};
+  border: 1px solid
+    ${({ $disabled, theme }) =>
+      $disabled ? theme.borderLight : theme.borderLight};
+  color: ${({ $disabled, theme }) =>
+    $disabled ? theme.textGrey : theme.primary};
+  font-size: 1.125rem;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-  border-radius: 50%;
-  width: 30px;
-  height: 45px;
+  border-radius: 12px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${({ theme, $disabled }) =>
+    $disabled ? "none" : theme.shadowSm};
+  flex-shrink: 0;
 
-  &:hover {
-    background-color: ${({ $disabled, theme }) =>
-      $disabled ? "none" : theme.disabledBackground};
-    cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
+  &:hover:not(:disabled) {
+    background: ${({ theme }) => theme.primary};
+    color: white;
+    border-color: ${({ theme }) => theme.primary};
+    transform: scale(1.05);
+    box-shadow: ${({ theme }) => theme.shadowMd};
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+    transition-duration: 0.1s;
   }
 
   &:focus {
-    outline: none;
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 2px;
   }
 
   &:disabled {
@@ -51,15 +98,15 @@ const ArrowButton = styled.button<{ $disabled: boolean }>`
   }
 
   @media (max-width: 768px) {
-    width: 25px;
-    height: 25px;
-    font-size: 16px;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
   }
 
   @media (max-width: 480px) {
-    width: 20px;
-    height: 20px;
-    font-size: 14px;
+    width: 36px;
+    height: 36px;
+    font-size: 0.875rem;
   }
 `;
 
@@ -83,8 +130,11 @@ export function DayBubbleSelector({
 
   // Function to handle week navigation (previous or next) based on direction
   const handleWeekChange = (direction: number) => {
-    const newDate = direction === -1 ? subWeeks(selectedFullDate, 1) : addWeeks(selectedFullDate, 1);
-    
+    const newDate =
+      direction === -1
+        ? subWeeks(selectedFullDate, 1)
+        : addWeeks(selectedFullDate, 1);
+
     // If the new date is in the future when navigating, set it to today
     if (newDate > today) {
       setSelectedFullDate(today);
@@ -116,19 +166,22 @@ export function DayBubbleSelector({
         <FontAwesomeIcon icon={faChevronLeft} />
       </ArrowButton>
 
-      {/* Render day bubbles for each day in the current week */}
-      {daysInWeek.map((day, index) => (
-        <DayBubble
-          key={index}
-          selected={
-            formatDateShort(selectedFullDate) === formatDateShort(day) &&
-            !isEditMode
-          }
-          onClick={() => handleDayClick(day)}
-          date={day}
-          isEditMode={isEditMode || day > today}
-        />
-      ))}
+      <SegmentedControlContainer>
+        {/* Render day segments for each day in the current week */}
+        {daysInWeek.map((day, index) => (
+          <DayBubble
+            key={index}
+            selected={
+              formatDateShort(selectedFullDate) === formatDateShort(day) &&
+              !isEditMode
+            }
+            onClick={() => handleDayClick(day)}
+            date={day}
+            isEditMode={isEditMode || day > today}
+            isSegmented={true}
+          />
+        ))}
+      </SegmentedControlContainer>
 
       <ArrowButton
         onClick={() => handleWeekChange(1)}

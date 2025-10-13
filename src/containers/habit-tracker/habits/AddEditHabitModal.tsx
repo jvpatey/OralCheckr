@@ -15,43 +15,80 @@ interface AddEditHabitModalProps {
   setNewHabit: (habit: Habit) => void;
 }
 
-// Styled component for the Save Button
+// Styled component for the Save Button with gradient
 const SaveButton = styled.button<{ disabled: boolean }>`
-  background-color: ${({ disabled, theme }) =>
-    disabled ? theme.disabledBackground : theme.accentBackgroundColor};
-  border-color: ${({ disabled, theme }) =>
-    disabled ? theme.disabledBackground : theme.blue};
-  color: ${({ disabled, theme }) =>
-    disabled ? theme.accentBackgroundColor : theme.blue};
-  padding: 8px 16px;
-  border-radius: 5px;
+  /* Gradient background */
+  background: ${({ disabled, theme }) =>
+    disabled ? theme.disabledBackground : theme.secondaryGradient};
+  color: ${({ disabled, theme }) => (disabled ? theme.textGrey : "white")};
+  padding: 12px 24px;
+  border-radius: 14px;
+  border: none;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  font-weight: 600;
+  box-shadow: ${({ theme, disabled }) => (disabled ? "none" : theme.shadowMd)};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 
-  &:hover {
-    background-color: ${({ disabled, theme }) =>
-      disabled ? theme.disabledBackgroundColor : theme.backgroundColor};
-    border-color: ${({ disabled, theme }) =>
-      disabled ? theme.disabledBackground : theme.blue};
-    color: ${({ disabled, theme }) =>
-      disabled ? theme.accentBackgroundColor : theme.blue};
+  /* Subtle glow effect overlay */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 14px;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: ${({ theme }) => theme.shadowLg};
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    transition-duration: 0.1s;
   }
 `;
 
-// Styled component for the Cancel Button
+// Styled component for the Cancel Button with modern styling
 const CancelButton = styled.button`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  border: 1px solid ${({ theme }) => theme.textGrey};
-  color: ${({ theme }) => theme.textGrey};
-  padding: 8px 16px;
-  border-radius: 5px;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 2px solid ${({ theme }) => theme.borderMedium};
+  color: ${({ theme }) => theme.textSecondary};
+  padding: 12px 24px;
+  border-radius: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  font-weight: 600;
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    background-color: ${({ theme }) => theme.textGrey};
-    color: ${({ theme }) => theme.accentBackgroundColor};
-    border-color: ${({ theme }) => theme.textGrey};
+    background: ${({ theme }) => theme.textSecondary};
+    color: white;
+    border-color: ${({ theme }) => theme.textSecondary};
+    transform: translateY(-2px);
+    box-shadow: ${({ theme }) => theme.shadowMd};
+  }
+
+  &:active {
+    transform: translateY(0);
+    transition-duration: 0.1s;
   }
 `;
 
@@ -65,12 +102,18 @@ const StyledFormControl = styled(Form.Control)`
   }
 `;
 
-// Styled component for the Info Icon
+// Styled component for the Info Icon with gradient color
 const InfoIcon = styled(FontAwesomeIcon)`
-  color: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.primary};
   margin-left: 5px;
   font-size: 0.9rem;
   cursor: help;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.primaryLight};
+    transform: scale(1.1);
+  }
 `;
 
 // Styled component for the Form Label Group

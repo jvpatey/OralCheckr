@@ -13,29 +13,92 @@ export const fadeUp = keyframes`
   }
 `;
 
-// Card container for the entire habit tracker
-export const CardContainer = styled.div`
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  border-radius: 15px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  border: 1px solid ${({ theme }) => `${theme.textGrey}15`};
-  padding: 2rem;
-  height: calc(100vh - 120px);
-  margin: 10px 2rem 0;
-  animation: ${fadeUp} 0.5s ease-out;
-  will-change: transform, opacity;
-  transform-origin: top center;
+const float = keyframes`
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+`;
+
+const pulse = keyframes`
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+`;
+
+// Background floating elements for modern effect
+export const BackgroundEffects = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
   overflow: hidden;
 
+  &::before {
+    content: "";
+    position: absolute;
+    top: 15%;
+    right: 10%;
+    width: 250px;
+    height: 250px;
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.secondary}20,
+      ${({ theme }) => theme.primary}20
+    );
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: ${float} 6s ease-in-out infinite;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 15%;
+    left: 10%;
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.accent}20,
+      ${({ theme }) => theme.secondary}20
+    );
+    border-radius: 50%;
+    filter: blur(40px);
+    animation: ${pulse} 4s ease-in-out infinite;
+  }
+`;
+
+// Modern fluid container - no card styling
+export const CardContainer = styled.div`
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  height: calc(100vh - 120px);
+  animation: ${fadeUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+
   @media (max-width: 768px) {
-    margin: 10px 1rem 0;
-    padding: 1.5rem;
+    padding: 30px 16px;
     height: calc(100vh - 100px);
   }
 
   @media (max-width: 480px) {
-    margin: 10px 0.5rem 0;
-    padding: 1rem;
+    padding: 20px 12px;
     height: calc(100vh - 90px);
   }
 `;
@@ -59,8 +122,6 @@ export const HabitListContainer = styled.div`
 // Wrapper for habit content
 export const HabitWrapper = styled.div`
   width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -68,36 +129,52 @@ export const HabitWrapper = styled.div`
   padding: 0;
   will-change: transform;
   backface-visibility: hidden;
-
-  @media (max-width: 768px) {
-    padding: 0 10px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0 5px;
-  }
 `;
 
-// Header for the habits section
+// Header for the habits section with gradient text
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid ${({ theme }) => theme.disabledText};
+  padding: 16px 0;
   width: 100%;
   white-space: nowrap;
+  margin-bottom: 24px;
+  position: relative;
+
+  /* Subtle bottom accent line */
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: ${({ theme }) => theme.primaryGradient};
+    opacity: 0.3;
+  }
 `;
 
-// Header text styling
-export const HeaderText = styled.div`
-  font-size: 25px;
-  font-weight: bold;
-  color: ${({ theme }) => theme.textGrey};
+// Header text styling with gradient
+export const HeaderText = styled.h2`
+  font-size: 2rem;
+  font-weight: 700;
   white-space: nowrap;
+  letter-spacing: -0.5px;
+  margin: 0;
+
+  /* Gradient text effect */
+  background: ${({ theme }) => theme.primaryGradient};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 
   @media (max-width: 768px) {
-    font-size: 20px;
+    font-size: 1.75rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
   }
 `;
 
@@ -105,10 +182,14 @@ export const HeaderText = styled.div`
 export const HeaderButtons = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   white-space: nowrap;
 
   @media (max-width: 768px) {
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
     gap: 8px;
   }
 `;
@@ -118,7 +199,7 @@ export const ScrollableHabitList = styled.div`
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 20px 16px 20px 0;
+  padding: 8px 16px 20px 0;
   ${scrollbarStyle}
   will-change: transform;
   backface-visibility: hidden;
@@ -129,7 +210,7 @@ export const StyledHabitList = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   width: 100%;
   box-sizing: border-box;
   padding-right: 4px;
@@ -145,21 +226,38 @@ export const HabitRow = styled.div`
 
   > div:last-child {
     display: flex;
-    gap: 4px;
-    margin-left: 10px;
+    gap: 6px;
+    margin-left: 12px;
   }
 `;
 
-// Text for empty state
+// Text for empty state with gradient
 export const PlaceholderText = styled.div`
-  font-size: 18px;
-  color: ${({ theme }) => theme.textGrey};
-  margin-top: 20px;
+  font-size: 1.25rem;
+  background: ${({ theme }) => theme.primaryGradient};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-top: 40px;
   text-align: center;
+  font-weight: 500;
+  opacity: 0.8;
 `;
 
-// Wrapper for date picker
+// Fluid wrapper for date picker - no card styling
 export const DatePickerWrapper = styled.div`
-  margin-top: 20px;
+  margin-bottom: 32px;
   width: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 20px;
+  }
 `;

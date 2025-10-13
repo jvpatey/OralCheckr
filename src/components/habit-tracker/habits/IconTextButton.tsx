@@ -18,46 +18,88 @@ const ButtonContainer = styled.div<{
   $isEditMode?: boolean;
   $disabled?: boolean;
 }>`
-  background-color: ${({ $backgroundColor, $disabled, theme }) =>
-    $disabled ? theme.disabledBackground : $backgroundColor};
-  color: ${({ theme, $disabled }) =>
-    $disabled ? theme.textGrey : theme.backgroundColor};
+  /* Modern gradient background */
+  background: ${({ $backgroundColor, $disabled, theme }) => {
+    if ($disabled) return theme.disabledBackground;
+    // Create gradient based on color
+    if (
+      $backgroundColor === theme.green ||
+      $backgroundColor === theme.secondary
+    ) {
+      return theme.secondaryGradient;
+    }
+    if ($backgroundColor === theme.red || $backgroundColor === theme.error) {
+      return `linear-gradient(135deg, ${theme.error} 0%, ${theme.errorLight} 100%)`;
+    }
+    if (
+      $backgroundColor === theme.yellow ||
+      $backgroundColor === theme.warning
+    ) {
+      return `linear-gradient(135deg, ${theme.warning} 0%, ${theme.warningLight} 100%)`;
+    }
+    return theme.primaryGradient;
+  }};
+  color: ${({ theme, $disabled }) => ($disabled ? theme.textGrey : "white")};
   width: auto;
-  height: 35px;
+  height: 38px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  border-radius: 25px;
-  padding: 0 20px;
+  border-radius: 16px;
+  padding: 0 24px;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-  transition: all 0.4s ease-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
-  border: 2px solid
-    ${({ $backgroundColor, $disabled, theme }) =>
-      $disabled ? theme.disabledBackground : $backgroundColor};
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: none;
+  box-shadow: ${({ theme, $disabled }) =>
+    $disabled ? "none" : theme.shadowMd};
   position: relative;
+  overflow: hidden;
+  font-weight: 600;
 
-  &:hover {
-    background-color: ${({ theme, $disabled }) =>
-      $disabled ? theme.disabledBackground : theme.backgroundColor};
-    border-color: ${({ $hoverColor, $disabled, theme }) =>
-      $disabled ? theme.disabledBackground : $hoverColor};
-    color: ${({ $hoverColor, $disabled, theme }) =>
-      $disabled ? theme.textGrey : $hoverColor};
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+  /* Subtle glow effect overlay */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 16px;
+  }
+
+  &:hover:not([disabled]) {
+    transform: translateY(-2px);
+    box-shadow: ${({ theme }) => theme.shadowLg};
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active:not([disabled]) {
+    transform: translateY(0);
+    transition-duration: 0.1s;
   }
 
   @media (max-width: 768px) {
-    padding: 0 15px;
+    padding: 0 20px;
     font-size: 14px;
+    height: 36px;
   }
 
   @media (max-width: 480px) {
-    padding: 0 10px;
-    font-size: 12px;
+    padding: 0 16px;
+    font-size: 13px;
+    height: 34px;
   }
 `;
 
