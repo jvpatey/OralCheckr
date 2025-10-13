@@ -85,7 +85,6 @@ export function App() {
                   limit={3}
                   theme={theme === ThemeType.LIGHT ? "light" : "dark"}
                   toastClassName="modern-toast"
-                  bodyClassName="toast-body"
                   progressClassName="toast-progress"
                   closeButton={true}
                   newestOnTop={true}

@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import { Card, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 export const fadeUp = keyframes`
   from {

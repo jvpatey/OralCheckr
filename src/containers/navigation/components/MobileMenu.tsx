@@ -123,10 +123,10 @@ const CustomDropdownItem = styled(Dropdown.Item)<{
     $isProfileWithName &&
     `
     &:hover {
-      border-color: ${({ theme }) => theme.primary}60;
-      box-shadow: ${({ theme }) => theme.shadowLg},
-        0 0 20px ${({ theme }) => theme.glowColor},
-        0 0 0 1px ${({ theme }) => theme.primary}30 inset;
+      border-color: ${({ theme }: { theme: any }) => theme.primary}60;
+      box-shadow: ${({ theme }: { theme: any }) => theme.shadowLg},
+        0 0 20px ${({ theme }: { theme: any }) => theme.glowColor},
+        0 0 0 1px ${({ theme }: { theme: any }) => theme.primary}30 inset;
     }
   `}
 `;

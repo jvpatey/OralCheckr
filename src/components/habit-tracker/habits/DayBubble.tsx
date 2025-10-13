@@ -122,7 +122,6 @@ export function DayBubble({
   onClick,
   date,
   isEditMode,
-  isSegmented = false,
 }: DayBubbleProps) {
   // For segmented control, we need to determine if this is the first or last segment
   // This will be handled by the parent, but we can infer from the day of week

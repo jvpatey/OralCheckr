@@ -16,8 +16,6 @@ import {
   BentoGrid,
   LargeBentoCard,
   SmallBentoCard,
-  RegularBentoCard,
-  BentoCardHeader,
   BentoCardContent,
   ModernActionSection,
   ModernSignUpButton,

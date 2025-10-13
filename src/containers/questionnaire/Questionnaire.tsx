@@ -23,7 +23,6 @@ import {
   QuestionType,
   Responses,
 } from "../../common/types/questionnaire/questionnaire.types";
-import { ButtonContainer } from "../../components/questionnaire/styles/SharedQuestionnaireStyles";
 import {
   ModernAssessmentContainer,
   AssessmentHeader,

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Form, Button, ToastContainer } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 
 export const SettingsContainer = styled.div`
   padding: 0;

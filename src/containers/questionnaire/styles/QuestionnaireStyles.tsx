@@ -1,5 +1,4 @@
 import styled, { keyframes } from "styled-components";
-import { NavigationButton } from "../../../components/questionnaire/styles/NavigationButton";
 import { scrollbarStyle } from "../../../styles/SharedStyles";
 
 // Smooth fade-in animation

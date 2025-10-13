@@ -1,13 +1,8 @@
-import { Card } from "react-bootstrap";
 import { useTheme } from "styled-components";
 import { useGetTotalScore } from "../../hooks/questionnaire/useGetTotalScore";
 import { getScoreColor } from "../../containers/questionnaire/utils/oral-health-status-utils";
-import { StyledHeader, MessageText } from "./styles/SharedQuestionnaireStyles";
 import { LoadingSpinner } from "../common/LoadingSpinner";
 import {
-  StyledText,
-  ScoreSpan,
-  CustomProgressBar,
   ModernScoreDisplay,
   ModernScoreNumber,
   ModernScoreLabel,

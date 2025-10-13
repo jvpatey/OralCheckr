@@ -27,7 +27,7 @@ export const BaseButton = styled.button<BaseButtonProps>`
     }
   }};
 
-  color: ${({ theme, $variant }) => {
+  color: ${({ $variant }) => {
     switch ($variant) {
       case "guest":
         return "white";

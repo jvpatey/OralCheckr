@@ -13,7 +13,6 @@ import { useHabitContext } from "../../../../contexts/HabitContext";
 import { ViewContainer } from "../../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
 import {
   HeatmapContainer,
-  HeatmapTitle,
   HeatmapHeader,
   YearPickerContainer,
 } from "../../../../components/habit-tracker/analytics/styles/YearViewStyles";

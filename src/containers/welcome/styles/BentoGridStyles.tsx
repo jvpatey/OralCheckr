@@ -63,7 +63,7 @@ export const BentoCardContainer = styled.div<{
   $index: number;
 }>`
   /* Dynamic grid sizing based on card size */
-  grid-column: ${({ $size, $index }) => {
+  grid-column: ${({ $size }) => {
     switch ($size) {
       case "large":
         return "span 8"; // Takes up 8/12 columns (2/3 width)

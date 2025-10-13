@@ -12,7 +12,6 @@ import {
 import { AnalyticsTile } from "../../../../components/habit-tracker/analytics/month-view/AnalyticsTile";
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
-import { formatDateLong } from "../../../../common/utilities/date-utils";
 import { useHabitContext } from "../../../../contexts/HabitContext";
 import {
   ViewContainer,
@@ -22,10 +21,7 @@ import {
   CalendarSection,
   TilesContainer,
 } from "../../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
-import {
-  CalendarContainer,
-  ToggleContainer,
-} from "../../../../components/habit-tracker/analytics/styles/MonthViewStyles";
+import { CalendarContainer } from "../../../../components/habit-tracker/analytics/styles/MonthViewStyles";
 
 // Interface for the MonthView component props
 interface ViewProps {

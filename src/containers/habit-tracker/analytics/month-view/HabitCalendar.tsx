@@ -7,10 +7,8 @@ import "react-circular-progressbar/dist/styles.css";
 import { Logging } from "../Analytics";
 import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
 import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
-import { formatMonthYear } from "../../../../common/utilities/date-utils";
 import { useTheme } from "styled-components";
 import { useHabitContext } from "../../../../contexts/HabitContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface CalendarProgressProps {
   habitsLog: Logging;
@@ -126,12 +124,11 @@ const DayName = styled.div<{ $isToday?: boolean }>`
   font-size: 11px;
   letter-spacing: 0.5px;
   text-align: center;
-  background: ${({ $isToday, theme }) =>
+  background: ${({ $isToday }) =>
     $isToday ? "rgba(16, 185, 129, 0.1)" : "transparent"};
   border-radius: 6px;
   border: 1px solid
-    ${({ $isToday, theme }) =>
-      $isToday ? "rgba(16, 185, 129, 0.3)" : "transparent"};
+    ${({ $isToday }) => ($isToday ? "rgba(16, 185, 129, 0.3)" : "transparent")};
   transition: all 0.3s ease;
 
   @media (max-width: 600px) {
@@ -233,7 +230,6 @@ export function HabitCalendar({
   onToggleView,
   isLoading = false,
   dateSelector,
-  onTodayClick,
 }: CalendarProgressProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const theme = useTheme();
@@ -295,9 +291,6 @@ export function HabitCalendar({
       </DayWrapper>
     );
   };
-
-  // Display the current month and year based on the selected date
-  const currentMonthYear = formatMonthYear(selectedDate ?? new Date());
 
   // Handle toggle view with a default implementation if not provided
   const handleToggleView = () => {

@@ -93,7 +93,7 @@ const CustomNavLink = styled(Nav.Link)<{ $isProfileWithName?: boolean }>`
     $isProfileWithName &&
     `
     &:hover {
-      color: ${({ theme }) => theme.primaryDark};
+      color: ${({ theme }: { theme: any }) => theme.primaryDark};
     }
   `}
 `;

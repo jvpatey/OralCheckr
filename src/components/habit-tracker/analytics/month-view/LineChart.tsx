@@ -3,10 +3,7 @@ import styled, { useTheme } from "styled-components";
 import { Logging } from "../../../../containers/habit-tracker/analytics/Analytics";
 import { getDaysInMonth } from "date-fns";
 import { upperFirst } from "lodash";
-import {
-  lightTheme,
-  darkTheme,
-} from "../../../../common/utilities/color-utils";
+import { lightTheme } from "../../../../common/utilities/color-utils";
 import { useHabitContext } from "../../../../contexts/HabitContext";
 
 // Styled component for the chart container
@@ -124,20 +121,11 @@ const generateChartOptions = (
         fontSize: "12px",
         fontFamily: "inherit",
       },
-      background: theme.glassBg,
-      border: `1px solid ${theme.glassBorder || "rgba(255, 255, 255, 0.2)"}`,
-      borderRadius: "12px",
       x: {
         formatter: (dayOfMonth: number) => `${upperFirst(month)} ${dayOfMonth}`,
-        title: {
-          color: theme.textSecondary,
-        },
       },
       y: {
         formatter: (val: number) => `${val} logs`,
-        title: {
-          color: theme.textSecondary,
-        },
       },
     },
     grid: {

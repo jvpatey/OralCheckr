@@ -16,12 +16,7 @@ import {
   StatLabel,
 } from "./LandingCardContainer";
 import { LandingCard } from "./LandingCard";
-import {
-  faClipboardList,
-  faTasksAlt,
-  faChartLine,
-  faAward,
-} from "@fortawesome/free-solid-svg-icons";
+import { faClipboardList, faTasksAlt } from "@fortawesome/free-solid-svg-icons";
 import { RoutePaths } from "../../common/constants/routes";
 import { AuthContext } from "../../containers/authentication/AuthContext";
 import { useGetTotalScore } from "../../hooks/questionnaire/useGetTotalScore";

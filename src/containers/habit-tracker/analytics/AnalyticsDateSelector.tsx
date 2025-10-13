@@ -197,11 +197,6 @@ export function AnalyticsDateSelector({
     onDateChange(newDate);
   };
 
-  // Set the selected date to the current month or year
-  const handleTodayClick = () => {
-    onDateChange(new Date());
-  };
-
   // Handle the click on the date button to open the date picker
   const handleButtonClick = () => {
     if (datePickerRef.current) {

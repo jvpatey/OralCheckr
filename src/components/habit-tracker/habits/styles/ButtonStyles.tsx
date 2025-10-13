@@ -50,7 +50,7 @@ export const IconButtonContainer = styled(BaseButton)<{
     left: 0;
     right: 0;
     bottom: 0;
-    background: ${({ $hoverBackgroundColor, theme }) =>
+    background: ${({ $hoverBackgroundColor }) =>
       `linear-gradient(135deg, ${$hoverBackgroundColor} 0%, ${$hoverBackgroundColor}90 100%)`};
     opacity: 0;
     transition: opacity 0.3s ease;

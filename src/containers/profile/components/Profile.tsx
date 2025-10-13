@@ -3,6 +3,7 @@ import { Tab } from "react-bootstrap";
 import {
   PageContainer,
   ProfileCard,
+  ProfileHeader,
   StyledNav,
   TabContent,
   TabsContainer,
