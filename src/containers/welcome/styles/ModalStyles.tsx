@@ -359,8 +359,8 @@ export const GoogleButton = styled(Button)`
 `;
 
 export const StyledFormButton = styled(FormButton)`
-  background: ${({ theme }) => theme.primaryGradient};
-  border: 1px solid ${({ theme }) => theme.primary};
+  background: ${({ theme }) => theme.secondaryGradient} !important;
+  border: 1px solid ${({ theme }) => theme.secondary} !important;
   border-radius: 16px;
   width: 100%;
   margin: 0;
@@ -368,17 +368,51 @@ export const StyledFormButton = styled(FormButton)`
   padding: 16px 20px;
   font-weight: 600;
   font-size: 1rem;
-  color: white;
+  color: white !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  /* Subtle shine sweep effect */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.6s ease;
+    z-index: 1;
+  }
+
+  /* Keep text above the sweep effect */
+  & > * {
+    position: relative;
+    z-index: 2;
+  }
 
   &:hover:not(:disabled) {
-    transform: translateY(-2px);
+    background: ${({ theme }) => theme.secondaryGradient} !important;
+    color: white !important;
+    transform: translateY(-2px) scale(1.02);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+
+    &::before {
+      left: 100%;
+    }
   }
 
   &:active {
-    transform: translateY(0);
+    background: ${({ theme }) => theme.secondaryGradient} !important;
+    color: white !important;
+    transform: translateY(0) scale(1.01);
   }
 
   &:disabled {

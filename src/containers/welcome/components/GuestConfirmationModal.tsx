@@ -52,14 +52,41 @@ const CancelButton = styled(BaseButton)`
 
 // Custom button for the continue action
 const ContinueButton = styled(BaseButton)`
-  background-color: ${({ theme }) => theme.green};
-  color: ${({ theme }) => theme.backgroundColor};
-  border: 2px solid ${({ theme }) => theme.green};
+  background: ${({ theme }) => theme.secondaryGradient};
+  color: white;
+  border: 2px solid ${({ theme }) => theme.secondary};
+  position: relative;
+  overflow: hidden;
+
+  /* Subtle shine sweep effect */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
 
   &:hover {
-    background-color: ${({ theme }) => theme.accentBackgroundColor};
-    color: ${({ theme }) => theme.green};
-    border-color: ${({ theme }) => theme.green};
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    color: white;
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(0) scale(1.01);
   }
 `;
 

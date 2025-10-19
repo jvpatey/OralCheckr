@@ -265,29 +265,32 @@ export const ModernGradientButton = styled.button`
   position: relative;
   overflow: hidden;
 
-  /* Subtle glow effect */
+  /* Subtle shine sweep effect */
   &::before {
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: ${({ theme }) => theme.secondaryGradient};
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 16px;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.6s ease;
   }
 
   /* Hover effects */
   &:hover:not(:disabled) {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.02);
     box-shadow: ${({ theme }) => theme.shadowXl};
     color: white;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 
     &::before {
-      opacity: 0.3;
+      left: 100%;
     }
   }
 

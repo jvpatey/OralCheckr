@@ -26,14 +26,35 @@ const ButtonContainer = styled.button<{ $variant?: string }>`
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: ${({ theme }) => theme.shadowMd};
   position: relative;
+  overflow: hidden;
+
+  /* Subtle shine sweep effect */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
 
   &:hover:not(:disabled) {
-    opacity: 0.9;
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.02);
     box-shadow: ${({ theme, $variant }) =>
       $variant === "danger"
         ? "0 8px 25px rgba(255, 105, 97, 0.3)"
         : theme.shadowLg};
+
+    &::before {
+      left: 100%;
+    }
   }
 
   &:active {
