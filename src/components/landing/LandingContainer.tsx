@@ -87,7 +87,7 @@ export const LandingContainer = styled.div`
   width: 100%;
   min-height: 100vh;
   padding: 120px 20px 40px 20px; /* Top padding to account for navbar */
-  background: ${({ theme }) => theme.backgroundGradient};
+  /* Removed duplicate background - PageBackground handles this */
   overflow-x: hidden;
 
   @media (max-width: 768px) {

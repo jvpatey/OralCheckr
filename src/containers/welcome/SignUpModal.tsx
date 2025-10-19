@@ -283,11 +283,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
             )}
             <RequiredNote>Required field</RequiredNote>
 
-            <StyledFormButton
-              type="submit"
-              disabled={!formValid}
-              style={{ backgroundColor: "#4CAF50", borderColor: "#4CAF50" }}
-            >
+            <StyledFormButton type="submit" disabled={!formValid}>
               Sign Up with Email
             </StyledFormButton>
 

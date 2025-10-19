@@ -1,15 +1,4 @@
-import styled, { keyframes } from "styled-components";
-
-const fadeUp = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
+import styled from "styled-components";
 
 // Bento grid container with modern CSS Grid layout
 export const BentoGridContainer = styled.div`
@@ -21,23 +10,6 @@ export const BentoGridContainer = styled.div`
   padding: 0;
   width: 100%;
   box-sizing: border-box;
-
-  /* Staggered entrance animation */
-  & > *:nth-child(1) {
-    animation: ${fadeUp} 0.8s ease-out 0.1s both;
-  }
-  & > *:nth-child(2) {
-    animation: ${fadeUp} 0.8s ease-out 0.2s both;
-  }
-  & > *:nth-child(3) {
-    animation: ${fadeUp} 0.8s ease-out 0.3s both;
-  }
-  & > *:nth-child(4) {
-    animation: ${fadeUp} 0.8s ease-out 0.4s both;
-  }
-  & > *:nth-child(5) {
-    animation: ${fadeUp} 0.8s ease-out 0.5s both;
-  }
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(8, 1fr);
@@ -55,12 +27,13 @@ export const BentoGridContainer = styled.div`
   }
 `;
 
-// Bento card container with dynamic sizing
+// Bento card container with dynamic sizing and scroll animations
 export const BentoCardContainer = styled.div<{
   $size: "small" | "medium" | "large";
   $color: "primary" | "secondary" | "accent";
   $gradient: string;
   $index: number;
+  $isVisible?: boolean;
 }>`
   /* Dynamic grid sizing based on card size */
   grid-column: ${({ $size }) => {
@@ -88,6 +61,23 @@ export const BentoCardContainer = styled.div<{
     }
   }};
 
+  /* Apple-style scroll animation - smooth fade in and slide up */
+  opacity: ${({ $isVisible = false }) => ($isVisible ? 1 : 0)};
+  transform: ${({ $isVisible = false }) =>
+    $isVisible ? "translateY(0) scale(1)" : "translateY(60px) scale(0.95)"};
+  filter: ${({ $isVisible = false }) => ($isVisible ? "blur(0px)" : "blur(8px)")};
+  
+  /* Smooth transitions with easing */
+  transition: 
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Staggered delay for cascading effect */
+  transition-delay: ${({ $index }) => $index * 0.12}s;
+
   /* Enhanced Glassmorphism Effect */
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
@@ -104,7 +94,6 @@ export const BentoCardContainer = styled.div<{
 
   padding: 32px 24px;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -125,35 +114,38 @@ export const BentoCardContainer = styled.div<{
     }
   }};
 
-  /* Enhanced hover effects */
+  /* Enhanced hover effects - only when visible */
   &:hover {
-    transform: translateY(-2px) scale(1.01);
+    transform: ${({ $isVisible = false }) => 
+      $isVisible ? "translateY(-6px) scale(1.02)" : "translateY(60px) scale(0.95)"};
+    filter: blur(0px);
     box-shadow: ${({ theme }) => theme.shadowXl},
-      0 0 20px
+      0 0 24px
         ${({ theme, $color }) =>
           $color === "primary"
-            ? theme.primary + "20"
+            ? theme.primary + "25"
             : $color === "secondary"
-            ? theme.secondary + "20"
-            : theme.accent + "20"},
+            ? theme.secondary + "25"
+            : theme.accent + "25"},
       0 0 0 1px
         ${({ theme, $color }) =>
           $color === "primary"
-            ? theme.primary + "30"
+            ? theme.primary + "40"
             : $color === "secondary"
-            ? theme.secondary + "30"
-            : theme.accent + "30"}
+            ? theme.secondary + "40"
+            : theme.accent + "40"}
         inset;
     border-color: ${({ theme, $color }) =>
       $color === "primary"
-        ? theme.primary + "40"
+        ? theme.primary + "50"
         : $color === "secondary"
-        ? theme.secondary + "40"
-        : theme.accent + "40"};
+        ? theme.secondary + "50"
+        : theme.accent + "50"};
   }
 
   &:active {
-    transform: translateY(-4px) scale(1.01);
+    transform: ${({ $isVisible = false }) => 
+      $isVisible ? "translateY(-3px) scale(1.01)" : "translateY(60px) scale(0.95)"};
   }
 
   /* Dynamic gradient overlay */

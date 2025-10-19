@@ -1,13 +1,13 @@
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 
-// Smooth fade-in animation
-const fadeInUp = keyframes`
-  0% {
+// Smooth fade-up animation matching landing page
+const fadeUp = keyframes`
+  from {
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(30px);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
@@ -25,8 +25,8 @@ export const ModernContainer = styled.div<{ $isAuthenticated: boolean }>`
   margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
   padding: 40px 20px;
 
-  /* Animation */
-  animation: ${fadeInUp} 1s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+  /* Smooth fade-up animation matching landing page */
+  animation: ${fadeUp} 0.8s ease-out 0.1s both;
 
   @media (max-width: 800px) {
     width: ${({ $isAuthenticated }) =>
@@ -55,7 +55,6 @@ export const HeroTitle = styled.h1`
   margin-bottom: 32px;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  animation: ${fadeInUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
 
   @media (max-width: 768px) {
     font-size: 2.5rem;
@@ -133,28 +132,31 @@ export const GradientButton = styled(Link)`
   position: relative;
   overflow: hidden;
 
-  /* Subtle glow effect */
+  /* Subtle shine sweep effect */
   &::before {
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: ${({ theme }) => theme.primaryGradient};
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 16px;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.6s ease;
   }
 
   /* Hover effects */
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.02);
     box-shadow: ${({ theme }) => theme.shadowXl};
     color: white;
 
     &::before {
-      opacity: 1;
+      left: 100%;
     }
   }
 

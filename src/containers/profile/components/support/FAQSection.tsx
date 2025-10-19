@@ -44,12 +44,12 @@ export function FAQSection() {
               How do I add or remove habits from tracking?
             </Accordion.Header>
             <Accordion.Body>
-              To add a new habit, go to the Habits tab on the main dashboard and
-              click on "Add New Habit." You can then name your habit and set
-              your tracking preferences. To remove a habit, visit the same
-              Habits tab, find the habit you want to remove, and click on the
-              delete icon. Note that deleting a habit will also remove all its
-              tracking history.
+              To add a new habit, click on the "Habit Tracker" card on the main
+              dashboard, then click the "Add Habit" button. You can then name
+              your habit and set your daily goal. To remove a habit, navigate to
+              the Habit Tracker, find the habit you want to remove, and click on
+              the delete icon. Note that deleting a habit will also remove all
+              its tracking history.
             </Accordion.Body>
           </Accordion.Item>
 
@@ -88,17 +88,17 @@ export function FAQSection() {
               after?
             </Accordion.Header>
             <Accordion.Body>
-              To complete the questionnaire, navigate to the Questionnaire tab
-              on the main dashboard and click "Begin Questionnaire." You'll be
-              presented with a series of questions about your oral health
-              habits, symptoms, and concerns. Answer each question honestly, and
-              you can always go back to previous questions if needed. Once you
-              submit the questionnaire, our system will calculate your oral
-              health score (0-100). You'll then receive personalized feedback
-              based on your responses, highlighting areas of strength and
-              suggesting improvements for areas of concern. This information
-              helps you track your oral health progress over time and make
-              informed decisions about your daily oral care routine.
+              To complete the questionnaire, click on the "Oral Health
+              Questionnaire" card on the main dashboard. You'll be presented
+              with a series of questions about your oral health habits,
+              symptoms, and concerns. Answer each question honestly, and you can
+              always go back to previous questions if needed. Once you submit
+              the questionnaire, our system will calculate your oral health
+              score (0-100). You'll then receive personalized feedback based on
+              your responses, highlighting areas of strength and suggesting
+              improvements for areas of concern. This information helps you
+              track your oral health progress over time and make informed
+              decisions about your daily oral care routine.
             </Accordion.Body>
           </Accordion.Item>
         </StyledAccordion>

@@ -13,23 +13,24 @@ const fadeInSlide = keyframes`
   }
 `;
 
-// Modern glassmorphism sidebar for 2025
+// Modern glassmorphism sidebar for 2025 - Enhanced transparency
 export const SidebarContainer = styled.div`
   height: calc(100vh - 120px);
   width: 220px;
   position: fixed;
-  top: 96px;
+  top: 104px;
   left: 16px;
 
-  /* Modern glassmorphism effect */
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  /* Enhanced glassmorphism effect - more transparent */
+  background: ${({ theme }) => theme.glassBg}99;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 
   /* Modern borders and shadows */
-  border: 1px solid ${({ theme }) => theme.borderLight};
+  border: 1px solid ${({ theme }) => theme.borderLight}80;
   border-radius: 20px;
-  box-shadow: ${({ theme }) => theme.shadowLg};
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
 
   /* Layout */
   display: flex;
@@ -40,7 +41,7 @@ export const SidebarContainer = styled.div`
   /* Animation */
   animation: ${fadeInSlide} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Z-index */
+  /* Z-index - below navbar */
   z-index: 900;
 
   /* Subtle gradient overlay */
@@ -52,7 +53,7 @@ export const SidebarContainer = styled.div`
     right: 0;
     bottom: 0;
     background: ${({ theme }) => theme.primaryGradient};
-    opacity: 0.03;
+    opacity: 0.02;
     border-radius: 20px;
     pointer-events: none;
   }
@@ -65,8 +66,8 @@ export const SidebarContainer = styled.div`
   }
 
   @media (max-height: 700px) {
-    top: 88px;
-    height: calc(100vh - 110px);
+    top: 96px;
+    height: calc(100vh - 118px);
   }
 `;
 

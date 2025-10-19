@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { NavBar } from "./NavBar";
+import { ModernNavBar } from "./ModernNavBar";
 import { Sidebar } from "./components/Sidebar";
 import {
   navbarLinks,
@@ -54,7 +54,7 @@ export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
 
   return (
     <>
-      <NavBar
+      <ModernNavBar
         links={navbarLinks}
         themeToggler={themeToggler}
         theme={currentTheme}

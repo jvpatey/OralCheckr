@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, memo } from "react";
 import { QuestionType } from "../../common/types/questionnaire/questionnaire.types";
 import { RenderQuestionsProps } from "../../common/types/questionnaire/render-questions.types";
 import {
@@ -21,12 +21,28 @@ import {
 } from "./utils/render-questions-utils";
 
 // RenderQuestions functional component for rendering the questions inside the Questionnaire
-export function RenderQuestions(props: RenderQuestionsProps) {
-  const { id, title, type, options, onResponseChange, initialResponse } = props;
+function RenderQuestionsComponent(
+  props: RenderQuestionsProps & { questionId: number }
+) {
+  const {
+    id,
+    title,
+    type,
+    options,
+    onResponseChange,
+    initialResponse,
+    questionId,
+  } = props;
   const [rangeValue, setRangeValue] = useState<number | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
+  const onResponseChangeRef = useRef(onResponseChange);
 
-  // useEffect to set initial values for all question types
+  // Keep ref updated
+  useEffect(() => {
+    onResponseChangeRef.current = onResponseChange;
+  }, [onResponseChange]);
+
+  // Single useEffect to set initial values for all question types
   useEffect(() => {
     if (initialResponse !== undefined) {
       switch (type) {
@@ -43,23 +59,20 @@ export function RenderQuestions(props: RenderQuestionsProps) {
           break;
       }
     } else {
-      setRangeValue(null);
-      setSelectedOptions([]);
-    }
-  }, [id, initialResponse, type]);
-
-  // Initialize range value when the component mounts if it's a range question
-  useEffect(() => {
-    if (type === QuestionType.RANGE) {
-      if (initialResponse === undefined) {
+      // Reset state when no initial response
+      if (type === QuestionType.RANGE) {
+        // Initialize range with default value
         const initialValue = 1;
         setRangeValue(initialValue);
-        onResponseChange(id, initialValue);
+        onResponseChangeRef.current(id, initialValue);
+      } else if (type === QuestionType.CHECKBOX) {
+        setSelectedOptions([]);
       } else {
-        setRangeValue(initialResponse as number);
+        setRangeValue(null);
       }
     }
-  }, [id, type]);
+    // Removed onResponseChange from dependencies to prevent double render
+  }, [questionId, initialResponse, type, id]);
 
   // Create handlers using the factory functions
   const handleRangeChange = createRangeChangeHandler(
@@ -153,3 +166,15 @@ export function RenderQuestions(props: RenderQuestionsProps) {
     </QuestionContainer>
   );
 }
+
+// Memoize to prevent unnecessary rerenders
+export const RenderQuestions = memo(
+  RenderQuestionsComponent,
+  (prevProps, nextProps) => {
+    // Only re-render if questionId or initialResponse changes
+    return (
+      prevProps.questionId === nextProps.questionId &&
+      prevProps.initialResponse === nextProps.initialResponse
+    );
+  }
+);

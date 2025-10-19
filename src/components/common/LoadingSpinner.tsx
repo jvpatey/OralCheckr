@@ -1,5 +1,14 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Spinner } from "react-bootstrap";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 const LoadingContainer = styled.div`
   display: flex;
@@ -13,6 +22,7 @@ const LoadingContainer = styled.div`
   right: 0;
   bottom: 0;
   z-index: 1000;
+  animation: ${fadeIn} 0.2s ease-in-out;
 `;
 
 const StyledSpinner = styled(Spinner)`
