@@ -65,8 +65,6 @@ export const AssessmentHeader = styled.div`
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  opacity: 1;
-  /* No animation - header is static */
 
   @media (max-width: 768px) {
     margin-bottom: 18px;
@@ -124,8 +122,6 @@ export const ActionSection = styled.div`
   margin: 0 auto;
   margin-top: 16px;
   flex-wrap: wrap;
-  opacity: 1;
-  /* No animation - buttons are static */
 
   @media (max-width: 768px) {
     gap: 12px;
