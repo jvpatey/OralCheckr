@@ -1,13 +1,15 @@
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 
-// Smooth fade-in animation - faster with no delay
-const fadeIn = keyframes`
-  0% {
+// Smooth fade-up animation matching landing page
+const fadeUp = keyframes`
+  from {
     opacity: 0;
+    transform: translateY(30px);
   }
-  100% {
+  to {
     opacity: 1;
+    transform: translateY(0);
   }
 `;
 
@@ -23,8 +25,8 @@ export const ModernContainer = styled.div<{ $isAuthenticated: boolean }>`
   margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
   padding: 40px 20px;
 
-  /* Faster animation with no delay */
-  animation: ${fadeIn} 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+  /* Smooth fade-up animation matching landing page */
+  animation: ${fadeUp} 0.8s ease-out 0.1s both;
 
   @media (max-width: 800px) {
     width: ${({ $isAuthenticated }) =>
@@ -53,8 +55,6 @@ export const HeroTitle = styled.h1`
   margin-bottom: 32px;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  opacity: 1;
-  /* No separate animation - inherits from container */
 
   @media (max-width: 768px) {
     font-size: 2.5rem;

@@ -23,11 +23,6 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const activeSection = useScrollSpy(["hero", "features"]);
 
-  // Debug: log active section changes
-  useEffect(() => {
-    console.log("Active section changed to:", activeSection);
-  }, [activeSection]);
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -38,17 +33,10 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
   }, []);
 
   const handleNavClick = (sectionId: string) => {
-    console.log("=== Nav Click ===", sectionId);
-
     const element = document.getElementById(sectionId);
-    if (!element) {
-      console.error(`❌ Section with id "${sectionId}" not found`);
-      return;
-    }
+    if (!element) return;
 
-    console.log("✅ Element found:", element);
-
-    // Use scrollIntoView for more reliable scrolling
+    // Use scrollIntoView for reliable scrolling
     element.scrollIntoView({
       behavior: "smooth",
       block: "start",
