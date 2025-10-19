@@ -39,7 +39,7 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
 
   const handleNavClick = (sectionId: string) => {
     console.log("=== Nav Click ===", sectionId);
-    
+
     const element = document.getElementById(sectionId);
     if (!element) {
       console.error(`❌ Section with id "${sectionId}" not found`);
@@ -57,7 +57,8 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
     // Adjust for fixed navbar after scrolling starts
     setTimeout(() => {
       const yOffset = -100; // Navbar height
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }, 100);
   };
