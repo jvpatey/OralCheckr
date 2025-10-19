@@ -13,18 +13,6 @@ const fadeUp = keyframes`
   }
 `;
 
-// Question transition animation
-const questionTransition = keyframes`
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
 // Truly fluid assessment container - no card styling at all
 export const ModernAssessmentContainer = styled.div<{
   $isAuthenticated: boolean;
