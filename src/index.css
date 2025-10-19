@@ -12,6 +12,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Smooth scrolling for modern browsers */
+html {
+  scroll-behavior: smooth;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

@@ -107,6 +107,7 @@ export const HeroSection = styled.section`
   text-align: center;
   padding: 100px 0 140px 0;
   position: relative;
+  scroll-margin-top: 80px; /* Offset for fixed navbar */
 
   @media (max-width: 768px) {
     min-height: 60vh;
@@ -124,6 +125,7 @@ export const FeatureSection = styled.section`
   padding: 140px 0;
   width: 100%;
   position: relative;
+  scroll-margin-top: 80px; /* Offset for fixed navbar */
 
   @media (max-width: 768px) {
     padding: 80px 0;

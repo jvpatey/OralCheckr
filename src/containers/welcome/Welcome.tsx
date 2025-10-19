@@ -42,7 +42,7 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
       <ModernWelcomeContainer>
         <WelcomeNavBar themeToggler={themeToggler} theme={theme} />
 
-        <HeroSection>
+        <HeroSection id="hero">
           <WelcomeContent />
           <WelcomeButtons
             onSignUpClick={handleShowSignUpModal}
@@ -50,7 +50,7 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
           />
         </HeroSection>
 
-        <FeatureSection>
+        <FeatureSection id="features">
           <FeatureCards />
         </FeatureSection>
       </ModernWelcomeContainer>

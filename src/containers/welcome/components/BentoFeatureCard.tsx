@@ -1,3 +1,4 @@
+import { useScrollAnimation } from "../../../hooks/useScrollAnimation";
 import {
   BentoCardContainer,
   BentoIcon,
@@ -24,12 +25,16 @@ export function BentoFeatureCard({
   gradient,
   index,
 }: BentoFeatureCardProps) {
+  const { ref, isVisible } = useScrollAnimation();
+
   return (
     <BentoCardContainer
+      ref={ref}
       $size={size}
       $color={color}
       $gradient={gradient}
       $index={index}
+      $isVisible={isVisible}
     >
       <BentoIcon $color={color}>{icon}</BentoIcon>
       <BentoTitle>{title}</BentoTitle>
