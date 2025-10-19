@@ -60,15 +60,13 @@ export const DateText = styled.div`
   margin: 0;
 `;
 
-// Modern retake questionnaire styles
-const fadeInUp = keyframes`
+// Modern retake questionnaire styles - faster animation
+const fadeIn = keyframes`
   from {
     opacity: 0;
-    transform: translateY(30px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 `;
 
@@ -84,7 +82,7 @@ export const ModernRetakeContainer = styled.div<{
   width: ${({ $isAuthenticated }) =>
     $isAuthenticated ? "calc(100% - 240px)" : "100%"};
   margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
-  animation: ${fadeInUp} 1s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+  animation: ${fadeIn} 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
   padding: 40px 20px;
 
   @media (max-width: 800px) {

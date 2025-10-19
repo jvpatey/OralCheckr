@@ -1,11 +1,21 @@
 import styled, { keyframes } from "styled-components";
 import { scrollbarStyle } from "../../../styles/SharedStyles";
 
-// Smooth fade-in animation
-const fadeInUp = keyframes`
+// Smooth fade-in animation - faster and smoother
+const fadeIn = keyframes`
   0% {
     opacity: 0;
-    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+// Question transition animation
+const questionTransition = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
   }
   100% {
     opacity: 1;
@@ -25,8 +35,8 @@ export const ModernAssessmentContainer = styled.div<{
   margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
   padding: 40px 20px;
 
-  /* Animation */
-  animation: ${fadeInUp} 1s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+  /* Faster initial animation with no delay */
+  animation: ${fadeIn} 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
 
   @media (max-width: 800px) {
     width: ${({ $isAuthenticated }) =>
@@ -53,7 +63,8 @@ export const AssessmentHeader = styled.div`
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  animation: ${fadeInUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+  opacity: 1;
+  /* No animation - header is static */
 
   @media (max-width: 768px) {
     margin-bottom: 18px;
@@ -72,12 +83,31 @@ export const QuestionContent = styled.div`
   max-width: 800px;
   margin: 0 auto;
   margin-bottom: 20px;
-  animation: ${fadeInUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
   overflow-y: auto;
+  position: relative;
   ${scrollbarStyle}
+
+  /* Prevent layout shift during transitions */
+  min-height: 300px;
 
   @media (max-width: 768px) {
     margin-bottom: 18px;
+    min-height: 250px;
+  }
+`;
+
+// Fade wrapper for smooth question transitions without remounting
+export const QuestionFadeWrapper = styled.div`
+  width: 100%;
+  opacity: 1;
+  transition: opacity 0.12s ease-in-out;
+
+  &.fade-out {
+    opacity: 0;
+  }
+
+  &.fade-in {
+    opacity: 1;
   }
 `;
 
@@ -92,7 +122,8 @@ export const ActionSection = styled.div`
   margin: 0 auto;
   margin-top: 16px;
   flex-wrap: wrap;
-  animation: ${fadeInUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
+  opacity: 1;
+  /* No animation - buttons are static */
 
   @media (max-width: 768px) {
     gap: 12px;

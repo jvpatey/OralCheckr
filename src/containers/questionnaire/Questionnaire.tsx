@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import questionData from "../../common/questionnaire.json";
 import { PageBackground } from "../../components/PageBackground";
@@ -27,6 +27,7 @@ import {
   ModernAssessmentContainer,
   AssessmentHeader,
   QuestionContent,
+  QuestionFadeWrapper,
   ActionSection,
   ProgressBar,
   ProgressIndicator,
@@ -62,6 +63,10 @@ export function Questionnaire() {
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [hasInProgressQuestionnaire, setHasInProgressQuestionnaire] =
     useState(false);
+  const [isInitialMount, setIsInitialMount] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [displayedQuestion, setDisplayedQuestion] = useState(currentQuestion);
+  const prevQuestionRef = useRef(currentQuestion);
 
   // Check for existing completed questionnaire
   const { data: hasSavedResponseData, isLoading: isLoadingResponses } =
@@ -170,6 +175,33 @@ export function Questionnaire() {
     }
   }, [questionId, currentQuestion, hasCompletedQuestionnaire, isRetaking]);
 
+  // Handle smooth transitions between questions
+  useEffect(() => {
+    if (prevQuestionRef.current !== currentQuestion && currentQuestion > 0) {
+      // Start fade-out
+      setIsTransitioning(true);
+
+      // Update content after fade-out completes
+      const updateTimer = setTimeout(() => {
+        setDisplayedQuestion(currentQuestion);
+      }, 75); // Half of transition time
+
+      // Start fade-in
+      const fadeInTimer = setTimeout(() => {
+        setIsTransitioning(false);
+        prevQuestionRef.current = currentQuestion;
+      }, 150); // Match animation duration
+
+      return () => {
+        clearTimeout(updateTimer);
+        clearTimeout(fadeInTimer);
+      };
+    } else if (currentQuestion > 0 && displayedQuestion !== currentQuestion) {
+      // Initial load - set without transition
+      setDisplayedQuestion(currentQuestion);
+    }
+  }, [currentQuestion, displayedQuestion]);
+
   // Determine retake screen visibility
   useEffect(() => {
     if (!initialLoadDone) return;
@@ -212,8 +244,8 @@ export function Questionnaire() {
     progressData,
   ]);
 
-  // Show loading state
-  if (isLoadingResponses || isLoadingProgress) {
+  // Only show loading state on initial mount to prevent flashing
+  if ((isLoadingResponses || isLoadingProgress) && isInitialMount) {
     return (
       <PageBackground>
         <LandingContainer>
@@ -225,6 +257,11 @@ export function Questionnaire() {
         </LandingContainer>
       </PageBackground>
     );
+  }
+
+  // Mark initial mount as complete after loading
+  if (!isLoadingResponses && !isLoadingProgress && isInitialMount) {
+    setTimeout(() => setIsInitialMount(false), 0);
   }
 
   // Show retake screen
@@ -329,11 +366,16 @@ export function Questionnaire() {
           </AssessmentHeader>
 
           <QuestionContent>
-            <RenderQuestions
-              {...questions[currentQuestion - 1]}
-              onResponseChange={handleResponseChange}
-              initialResponse={responses[currentQuestion]}
-            />
+            <QuestionFadeWrapper
+              className={isTransitioning ? "fade-out" : "fade-in"}
+            >
+              <RenderQuestions
+                {...questions[displayedQuestion - 1]}
+                onResponseChange={handleResponseChange}
+                initialResponse={responses[displayedQuestion]}
+                questionId={displayedQuestion}
+              />
+            </QuestionFadeWrapper>
           </QuestionContent>
 
           <ActionSection>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { scrollbarStyle } from "../styles/SharedStyles";
 
-// Modern page background with enhanced gradient
+// Modern page background with enhanced gradient - no animation to prevent flash
 export const PageBackground = styled.div`
   min-height: 100vh;
   width: 100%;
@@ -18,6 +18,8 @@ export const PageBackground = styled.div`
   right: 0;
   bottom: 0;
   z-index: 1;
+  opacity: 1;
+  /* Instant render - no transition to prevent flash */
   ${scrollbarStyle}
 
   /* Additional gradient overlay for depth */

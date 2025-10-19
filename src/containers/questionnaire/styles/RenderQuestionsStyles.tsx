@@ -8,6 +8,8 @@ export const QuestionContainer = styled.div`
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+
+  /* No animation here - handled by parent wrapper */
 `;
 
 // Compact question title with minimal spacing
@@ -54,7 +56,7 @@ export const OptionItem = styled.div`
   gap: 12px;
   padding: 12px 0;
   border-bottom: 1px solid ${({ theme }) => theme.borderLight};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
   color: ${({ theme }) => theme.textPrimary};
@@ -137,7 +139,7 @@ export const RadioInput = styled.input`
   background: ${({ theme }) => theme.surfaceColor};
   cursor: pointer;
   position: relative;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 
   /* Remove default browser styling */
   appearance: none;
@@ -175,7 +177,7 @@ export const CheckboxInput = styled.input`
   background: ${({ theme }) => theme.surfaceColor};
   cursor: pointer;
   position: relative;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 
   /* Remove default browser styling */
   appearance: none;
