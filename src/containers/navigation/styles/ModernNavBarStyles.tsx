@@ -17,12 +17,14 @@ export const ModernNavBar = styled.nav`
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  z-index: 1100;
+  /* Use right to prevent covering scrollbar */
+  right: 12px;
+  z-index: 1000;
   padding: 20px 32px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   animation: ${slideDown} 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
+  box-sizing: border-box;
 
   /* Enhanced glassmorphism effect - more transparent and fluid */
   background: ${({ theme }) => theme.glassBg}aa;

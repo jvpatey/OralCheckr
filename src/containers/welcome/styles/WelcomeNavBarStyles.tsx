@@ -17,12 +17,14 @@ export const GlassNavBar = styled.nav<{ $isScrolled: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
+  /* Use right to prevent covering scrollbar */
+  right: 12px;
   z-index: 1000;
   padding: ${({ $isScrolled }) => ($isScrolled ? "16px 32px" : "24px 32px")};
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   animation: ${slideDown} 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none; /* Allow clicks to pass through except on interactive elements */
+  box-sizing: border-box;
 
   /* Enhanced glassmorphism effect */
   background: ${({ theme, $isScrolled }) =>

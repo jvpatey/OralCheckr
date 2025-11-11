@@ -11,6 +11,8 @@ export const PageBackground = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 0;
+  /* Add padding to the right to make space for scrollbar */
+  padding-right: 0;
   overflow-y: auto;
   position: fixed;
   top: 0;
@@ -21,6 +23,9 @@ export const PageBackground = styled.div`
   opacity: 1;
   /* Instant render - no transition to prevent flash */
   ${scrollbarStyle}
+  
+  /* Ensure scrollbar is always visible and accessible */
+  scrollbar-gutter: stable;
 
   /* Additional gradient overlay for depth */
   &::before {
