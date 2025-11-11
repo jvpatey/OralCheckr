@@ -18,11 +18,14 @@ export const CustomNavbar = styled(Navbar)`
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   width: 100%;
+  box-sizing: border-box;
   animation: ${fadeInDown} 1s ease-out;
   border-bottom: 1px solid ${({ theme }) => theme.borderLight};
   box-shadow: ${({ theme }) => theme.shadowMd};
-  z-index: 1100;
+  z-index: 1000;
   padding: 16px 0;
+  /* Prevent navbar from covering scrollbar */
+  padding-right: 12px;
 
   @media (max-width: 991px) {
     padding: 12px 0;

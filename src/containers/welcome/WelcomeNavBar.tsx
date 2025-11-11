@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ThemeType } from "../../App";
+import { RoutePaths } from "../../common/constants/routes";
 import {
   GlassNavBar,
   NavContainer,
   NavLinksWrapper,
   NavLinksContainer,
+  NavIndicator,
   NavLink,
   NavRightSection,
   TooltipWrapper,
@@ -22,6 +25,7 @@ interface WelcomeNavBarProps {
 export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const activeSection = useScrollSpy(["hero", "features"]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,11 +55,22 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
     }, 100);
   };
 
+  const handleSupportClick = () => {
+    navigate(RoutePaths.ABOUT);
+  };
+
+  const sections = ["hero", "features"];
+  const activeIndex = sections.indexOf(activeSection);
+  const totalLinks = 3; // Home, Features, Support
+
   return (
     <GlassNavBar $isScrolled={isScrolled}>
       <NavContainer>
         <NavLinksWrapper>
           <NavLinksContainer>
+            {activeIndex >= 0 && (
+              <NavIndicator $activeIndex={activeIndex} $linkCount={totalLinks} />
+            )}
             <NavLink
               $isActive={activeSection === "hero"}
               onClick={() => handleNavClick("hero")}
@@ -69,6 +84,13 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
               type="button"
             >
               Features
+            </NavLink>
+            <NavLink
+              $isActive={false}
+              onClick={handleSupportClick}
+              type="button"
+            >
+              Support
             </NavLink>
           </NavLinksContainer>
         </NavLinksWrapper>

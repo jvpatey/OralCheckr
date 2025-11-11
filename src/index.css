@@ -15,6 +15,155 @@
 /* Smooth scrolling for modern browsers */
 html {
   scroll-behavior: smooth;
+  /* Ensure scrollbar is always accessible */
+  overflow-y: scroll;
+  /* Reserve space for scrollbar to prevent layout shift */
+  scrollbar-gutter: stable;
+}
+
+/* Custom scrollbar styling - auto-hide when not scrolling */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.3);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.6);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Auto-hide scrollbar - only show when scrolling or hovering */
+@media (hover: hover) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 0.3s ease;
+  }
+
+  *:hover,
+  *:focus,
+  *:active {
+    scrollbar-color: rgba(128, 128, 128, 0.3) transparent;
+  }
+
+  /* For webkit browsers */
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+
+  *:hover::-webkit-scrollbar-thumb,
+  *:focus::-webkit-scrollbar-thumb,
+  *:active::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.3);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  *:hover::-webkit-scrollbar-thumb:hover {
+    background: rgba(128, 128, 128, 0.6);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  /* Show scrollbar when actively scrolling */
+  body.is-scrolling ::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.3);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  body.is-scrolling * {
+    scrollbar-color: rgba(128, 128, 128, 0.3) transparent;
+  }
+}
+
+/* Dark mode scrollbar */
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  @media (hover: hover) {
+    *:hover::-webkit-scrollbar-thumb,
+    *:focus::-webkit-scrollbar-thumb,
+    *:active::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    *:hover::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.4);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    /* Show scrollbar when actively scrolling in dark mode */
+    body.is-scrolling ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    body.is-scrolling * {
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    }
+  }
+}
+
+/* Light mode scrollbar */
+@media (prefers-color-scheme: light) {
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  @media (hover: hover) {
+    *:hover::-webkit-scrollbar-thumb,
+    *:focus::-webkit-scrollbar-thumb,
+    *:active::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    *:hover::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    /* Show scrollbar when actively scrolling in light mode */
+    body.is-scrolling ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    body.is-scrolling * {
+      scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+  }
 }
 
 a {

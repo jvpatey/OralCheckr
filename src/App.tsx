@@ -35,6 +35,33 @@ export function App() {
     }
   }, []);
 
+  // Show scrollbar when scrolling
+  useEffect(() => {
+    let scrollTimer: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      // Add is-scrolling class when scrolling
+      document.body.classList.add('is-scrolling');
+
+      // Clear previous timer
+      clearTimeout(scrollTimer);
+
+      // Remove is-scrolling class after scrolling stops
+      scrollTimer = setTimeout(() => {
+        document.body.classList.remove('is-scrolling');
+      }, 1000);
+    };
+
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimer);
+    };
+  }, []);
+
   // Persist query client across renders
   const queryClientRef = useRef<QueryClient>();
 

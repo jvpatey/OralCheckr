@@ -27,6 +27,7 @@ export const FooterContent = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
+  position: relative;
 
   @media (max-width: 768px) {
     padding: 0 16px;
@@ -79,5 +80,33 @@ export const FooterLink = styled(Link)`
   @media (max-width: 480px) {
     font-size: 0.9rem;
     padding: 8px 14px;
+  }
+`;
+
+export const FooterCredits = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: ${({ theme }) => theme.textSecondary};
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.8;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+
+  @media (max-width: 968px) {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    position: static;
+    transform: none;
+    white-space: normal;
+    font-size: 0.75rem;
   }
 `;

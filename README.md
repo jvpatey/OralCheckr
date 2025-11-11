@@ -2,7 +2,20 @@
 
 ## 📝 Description
 
-OralCheckr is a comprehensive application designed to assess and improve your oral health. Through an in-depth questionnaire that covers all aspects of your oral hygiene, the app generates a personalized oral health score and provides tailored recommendations based on your responses. Additionally, OralCheckr includes a habit tracker to help you monitor and maintain your daily oral health habits. With detailed analytics, you can also track your progress through monthly and yearly insights.
+OralCheckr is a comprehensive web application designed to assess and improve your oral health. Through an in-depth questionnaire that covers all aspects of your oral hygiene, the app generates a personalized oral health score and provides tailored recommendations based on your responses. Additionally, OralCheckr includes a powerful habit tracker to help you monitor and maintain your daily oral health habits. With detailed analytics including heatmaps, charts, and statistics, you can track your progress through monthly and yearly insights.
+
+## ✨ Key Features
+
+- **🔐 Flexible Authentication**: Sign up with email/password, Google OAuth, or continue as a guest
+- **👤 Guest Mode**: Explore all features without creating an account
+- **🔄 Seamless Data Migration**: Guest data automatically transfers when you create an account
+- **📊 Oral Health Assessment**: Comprehensive questionnaire with personalized scoring
+- **💡 Custom Recommendations**: Tailored oral health tips based on your responses
+- **✅ Habit Tracking**: Create and monitor daily oral health habits
+- **📈 Advanced Analytics**: Monthly and yearly insights with heatmaps and trend charts
+- **👤 User Profile**: Manage your account and track your progress
+- **🌓 Theme Toggle**: Switch between light and dark modes
+- **📱 Responsive Design**: Beautiful, modern UI that works on all devices
 
 ## ✨ Motivation
 
@@ -14,13 +27,78 @@ Try the live application here:
 
 [https://jvpatey.github.io/OralCheckr/](https://jvpatey.github.io/OralCheckr/)
 
-<img width="974" alt="Screenshot 2025-05-30 at 11 11 08 PM" src="https://github.com/user-attachments/assets/613c682a-3b5f-4135-b79f-45058ac3e6c9" />
+## 📸 Screenshots
 
-<img width="1113" alt="Screenshot 2025-05-30 at 11 12 45 PM" src="https://github.com/user-attachments/assets/916f1cb0-54f3-40a9-a7f1-804ad67eeaf0" />
+### Welcome Page
+
+_Modern landing page with flexible authentication options_
+
+![Welcome Page](docs/screenshots/oralcheckr1.png)
+
+### Dashboard
+
+_Main hub for accessing all features_
+
+![Dashboard](docs/screenshots/oralcheckr2.png)
+
+### Oral Health Questionnaire
+
+_Comprehensive assessment interface_
+
+![Questionnaire](docs/screenshots/oralcheckr3.png)
+
+### Results & Recommendations
+
+_Personalized oral health score with tailored advice_
+
+![Results](docs/screenshots/oralcheckr4.png)
+
+### Habit Tracker
+
+_Track daily oral health habits with ease_
+
+![Habit Tracker](docs/screenshots/oralcheckr5.png)
+
+### Analytics - Month View
+
+_Detailed monthly statistics and trends_
+
+![Analytics Month View](docs/screenshots/oralcheckr6.png)
+
+### Analytics - Year View
+
+_Heatmap visualization of yearly progress_
+
+![Analytics Year View](docs/screenshots/oralcheckr7.png)
+
+### User Profile
+
+_Manage your account and preferences_
+
+![Profile Page](docs/screenshots/oralcheckr8.png)
+
+### About Page
+
+_Learn more about OralCheckr_
+
+![About Page](docs/screenshots/oralcheckr9.png)
 
 ## 🛠️ Built with
 
 [![My Skills](https://skillicons.dev/icons?i=react,vite,ts,styledcomponents,bootstrap,)](https://skillicons.dev)
+
+**Frontend Technologies:**
+
+- **React 18** with TypeScript for type-safe component development
+- **Vite** for lightning-fast development and optimized builds
+- **Styled Components** for modern, themeable CSS-in-JS styling
+- **React Router** for seamless navigation
+- **React Query** (@tanstack/react-query) for efficient data fetching and caching
+- **Bootstrap & React Bootstrap** for responsive UI components
+- **Google OAuth** (@react-oauth/google) for secure authentication
+- **ApexCharts** for beautiful data visualizations
+- **React Toastify** for elegant notifications
+- **FontAwesome** for comprehensive icon support
 
 ## 🛠️ Custom Installation
 
@@ -32,6 +110,15 @@ On MacOS or Windows:
 ```
 npm install
 npm run dev
+```
+
+### Environment Configuration
+
+Create a `.env` file in the frontend root directory with the following variables:
+
+```
+VITE_API_URL=http://localhost:3000
+VITE_GOOGLE_CLIENT_ID=your_google_client_id  # Optional, for Google OAuth
 ```
 
 ### Backend Configuration
@@ -82,35 +169,93 @@ OralCheckr requires a backend server to function. To run the application locally
 
 Note: The backend provides:
 
-- User authentication (both traditional and Google OAuth)
-- Database storage for questionnaires, habits, and habit logs
+- User authentication (traditional email/password, Google OAuth, and guest mode)
+- Database storage for user profiles, questionnaires, habits, and habit logs
 - RESTful API endpoints for all core functionality
 - CORS configuration for secure frontend-backend communication
+- Guest-to-user conversion with data migration
 
 ## 📋 How to use
 
-Login Page:
+### Getting Started:
 
-- The login page requires the user to enter a username and password to access the application.
+**Welcome Page:**
 
-Landing Page:
+- When you first visit OralCheckr, you'll land on the welcome page
+- You have three options to get started:
+  - **Sign Up**: Create a new account with email and password
+  - **Log In**: Access your existing account
+  - **Continue as Guest**: Explore all features without creating an account
+  - **Sign in with Google**: Quick authentication using your Google account
 
-- After logging in, you will be taken to the dashboard, which provides links to the questionnaire and habit tracker
-- These options are also accessible via the navbar.
+**Guest Mode:**
 
-Questionnaire:
+- Try out all features without any commitment
+- Your progress is saved temporarily
+- When you're ready to create an account, all your guest data (questionnaire results, habits, and tracking history) will be automatically transferred to your new account
 
-- On the questionnaire page, click Begin to start the questionnaire.
-- Navigate through the questions, and upon completion, you'll be directed to the results page. Here, you'll receive an oral health score along with personalized recommendations based on your responses.
-- If you wish to retake the questionnaire, navigate back to the questionnaire page to retake. Your score and responses will be updated.
+### Main Features:
 
-Habit Tracker:
+**Dashboard:**
 
-- The habit tracker begins with a Habits page, where you can add habits to track. You'll need to provide a habit name and how many times per day it should be completed.
-- Once added, habits will appear as tiles showing the habit details and providing buttons to add or remove logs.
-- You can also enter Edit Mode to modify or delete habits.
-- Use the date navigation to view your habit log history and track your progress over time.
+- After logging in or continuing as guest, you'll be taken to the dashboard
+- The dashboard provides quick access to all main features:
+  - Oral Health Questionnaire
+  - Habit Tracker
+  - Analytics
+  - Your Results
+- These options are also accessible via the navigation bar
 
-- The analytics section of the habit tracker gives detailed insights into your habit progress.
-  - In the Month View, you can see various statistics for the selected month, including a calendar view of your progress and a line chart displaying trends.
-  - In the Year View, a heatmap is provided to visually represent your habit tracking progress over the year for each habit.
+**Questionnaire:**
+
+- On the questionnaire page, click "Begin" to start the assessment
+- Navigate through questions covering all aspects of your oral health
+- Upon completion, you'll be directed to the results page
+- Receive a comprehensive oral health score with personalized recommendations based on your responses
+- You can retake the questionnaire at any time to update your score and recommendations
+
+**Habit Tracker:**
+
+- The habit tracker begins with the Habits page, where you can add habits to track
+- For each habit, provide:
+  - A descriptive habit name
+  - Daily goal (how many times per day it should be completed)
+- Once added, habits appear as tiles showing:
+  - Habit name and daily goal
+  - Current progress for the selected date
+  - Increment/decrement buttons to log completions
+- Features:
+  - **Edit Mode**: Modify habit details or delete habits
+  - **Date Navigation**: View and manage your habit log history for any date
+  - **Quick Actions**: Easily add or remove log entries
+
+**Analytics:**
+
+- Access detailed insights into your habit tracking progress
+- **Month View**:
+  - Statistics for the selected month
+  - Calendar view showing your daily progress
+  - Line chart displaying trends over time
+  - Streak tracking and completion rates
+- **Year View**:
+  - Heatmap visualization of your progress throughout the year
+  - Compare performance across different habits
+  - Identify patterns and areas for improvement
+
+**Profile:**
+
+- Manage your account information
+- View your oral health assessment history
+- Update personal details
+- Access support and FAQs
+- Convert from guest to registered user (if applicable)
+
+**Theme Toggle:**
+
+- Switch between light and dark modes using the theme toggle in the navigation bar
+- Your preference is saved automatically
+
+**About Page:**
+
+- Learn more about OralCheckr and its mission
+- Accessible from the navigation menu or welcome page

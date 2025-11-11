@@ -17,12 +17,14 @@ export const GlassNavBar = styled.nav<{ $isScrolled: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
+  /* Use right to prevent covering scrollbar */
+  right: 12px;
   z-index: 1000;
   padding: ${({ $isScrolled }) => ($isScrolled ? "16px 32px" : "24px 32px")};
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   animation: ${slideDown} 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none; /* Allow clicks to pass through except on interactive elements */
+  box-sizing: border-box;
 
   /* Enhanced glassmorphism effect */
   background: ${({ theme, $isScrolled }) =>
@@ -89,6 +91,7 @@ export const NavLinksWrapper = styled.div`
 
 // Pill-shaped container for navigation links (inspired by reference)
 export const NavLinksContainer = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -110,18 +113,60 @@ export const NavLinksContainer = styled.div`
   }
 `;
 
+// Sliding indicator for active link - liquid glass effect
+export const NavIndicator = styled.div<{ $activeIndex: number; $linkCount: number }>`
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: calc((100% - 16px - ${({ $linkCount }) => ($linkCount - 1) * 4}px) / ${({ $linkCount }) => $linkCount});
+  height: calc(100% - 16px);
+  background: ${({ theme }) => `${theme.primary}20`};
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 50px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(calc(${({ $activeIndex }) => $activeIndex} * (100% + 4px)));
+  box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}30`} inset,
+    0 2px 8px ${({ theme }) => `${theme.primary}15`};
+  z-index: 1;
+  pointer-events: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    border-radius: 50px;
+  }
+
+  @media (max-width: 968px) {
+    top: 6px;
+    left: 6px;
+    width: calc((100% - 12px - ${({ $linkCount }) => ($linkCount - 1) * 2}px) / ${({ $linkCount }) => $linkCount});
+    height: calc(100% - 12px);
+    transform: translateX(calc(${({ $activeIndex }) => $activeIndex} * (100% + 2px)));
+  }
+`;
+
 // Individual navigation link with modern styling
 export const NavLink = styled.button<{ $isActive: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ theme, $isActive }) =>
-    $isActive ? `${theme.primary}20` : "transparent"};
+  flex: 1;
+  background: transparent;
   color: ${({ theme, $isActive }) =>
     $isActive ? theme.primary : theme.textSecondary};
   border: none;
-  padding: 10px 24px;
+  padding: 12px 24px;
   border-radius: 50px;
   font-size: 0.95rem;
   font-weight: ${({ $isActive }) => ($isActive ? 600 : 500)};
@@ -132,11 +177,12 @@ export const NavLink = styled.button<{ $isActive: boolean }>`
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   letter-spacing: 0.3px;
   white-space: nowrap;
+  line-height: 1;
+  text-align: center;
+  min-width: 0;
 
   /* Hover effect */
   &:hover {
-    background: ${({ theme, $isActive }) =>
-      $isActive ? `${theme.primary}25` : `${theme.glassBg}aa`};
     color: ${({ theme }) => theme.primary};
     transform: translateY(-1px);
   }
@@ -146,7 +192,7 @@ export const NavLink = styled.button<{ $isActive: boolean }>`
   }
 
   @media (max-width: 968px) {
-    padding: 8px 20px;
+    padding: 10px 20px;
     font-size: 0.9rem;
   }
 
