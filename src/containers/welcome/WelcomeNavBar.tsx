@@ -5,6 +5,7 @@ import {
   NavContainer,
   NavLinksWrapper,
   NavLinksContainer,
+  NavIndicator,
   NavLink,
   NavRightSection,
   TooltipWrapper,
@@ -51,11 +52,15 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
     }, 100);
   };
 
+  const sections = ["hero", "features"];
+  const activeIndex = sections.indexOf(activeSection);
+
   return (
     <GlassNavBar $isScrolled={isScrolled}>
       <NavContainer>
         <NavLinksWrapper>
           <NavLinksContainer>
+            <NavIndicator $activeIndex={activeIndex} $linkCount={sections.length} />
             <NavLink
               $isActive={activeSection === "hero"}
               onClick={() => handleNavClick("hero")}

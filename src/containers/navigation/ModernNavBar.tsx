@@ -12,6 +12,7 @@ import {
   BrandText,
   NavCenterSection,
   NavLinksContainer,
+  NavIndicator,
   NavLink as StyledNavLink,
   NavAvatar,
   NavRightSection,
@@ -131,6 +132,9 @@ export function ModernNavBar({
     ...filteredLinks,
   ];
 
+  // Calculate active index for sliding indicator
+  const activeIndex = navLinks.findIndex((link) => isActive(link.path));
+
   // Find Profile and About links for right section
   const profileLink = links.find((link) => link.name === "Profile");
   const aboutLink = links.find((link) => link.name === "About");
@@ -149,6 +153,12 @@ export function ModernNavBar({
           {/* Centered pill-shaped navigation */}
           <NavCenterSection>
             <NavLinksContainer>
+              {activeIndex >= 0 && (
+                <NavIndicator 
+                  $activeIndex={activeIndex} 
+                  $linkCount={navLinks.length} 
+                />
+              )}
               {navLinks.map((link) => (
                 <StyledNavLink
                   key={link.path}
@@ -166,34 +176,54 @@ export function ModernNavBar({
           <NavRightSection>
             {/* Desktop Profile, About and Logout */}
             <NavLinksContainer className="d-none d-xl-flex">
-              {!isGuest && profileLink && (
-                <StyledNavLink
-                  $isActive={isActive(profileLink.path)}
-                  onClick={() => navigate(profileLink.path)}
-                  type="button"
-                >
-                  {profile?.avatar && (
-                    <NavAvatar src={profile.avatar} alt="Profile" />
-                  )}
-                  {user?.firstName || "Profile"}
-                </StyledNavLink>
-              )}
-              {aboutLink && (
-                <StyledNavLink
-                  $isActive={isActive(aboutLink.path)}
-                  onClick={() => navigate(aboutLink.path)}
-                  type="button"
-                >
-                  About
-                </StyledNavLink>
-              )}
-              <StyledNavLink
-                $isActive={false}
-                onClick={handleLogoutClick}
-                type="button"
-              >
-                Log Out
-              </StyledNavLink>
+              {(() => {
+                const rightLinks = [
+                  !isGuest && profileLink ? { name: user?.firstName || "Profile", path: profileLink.path } : null,
+                  aboutLink ? { name: "About", path: aboutLink.path } : null,
+                  { name: "Log Out", path: "" },
+                ].filter(Boolean) as { name: string; path: string }[];
+                
+                const rightActiveIndex = rightLinks.findIndex(link => link.path && isActive(link.path));
+                
+                return (
+                  <>
+                    {rightActiveIndex >= 0 && (
+                      <NavIndicator 
+                        $activeIndex={rightActiveIndex} 
+                        $linkCount={rightLinks.length} 
+                      />
+                    )}
+                    {!isGuest && profileLink && (
+                      <StyledNavLink
+                        $isActive={isActive(profileLink.path)}
+                        onClick={() => navigate(profileLink.path)}
+                        type="button"
+                      >
+                        {profile?.avatar && (
+                          <NavAvatar src={profile.avatar} alt="Profile" />
+                        )}
+                        {user?.firstName || "Profile"}
+                      </StyledNavLink>
+                    )}
+                    {aboutLink && (
+                      <StyledNavLink
+                        $isActive={isActive(aboutLink.path)}
+                        onClick={() => navigate(aboutLink.path)}
+                        type="button"
+                      >
+                        About
+                      </StyledNavLink>
+                    )}
+                    <StyledNavLink
+                      $isActive={false}
+                      onClick={handleLogoutClick}
+                      type="button"
+                    >
+                      Log Out
+                    </StyledNavLink>
+                  </>
+                );
+              })()}
             </NavLinksContainer>
 
             <ThemeToggleWrapper>
