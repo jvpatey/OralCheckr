@@ -16,18 +16,17 @@ const DaySegment = styled.div<{
   padding: 10px 8px;
   position: relative;
   cursor: ${({ $isEditMode }) => ($isEditMode ? "not-allowed" : "pointer")};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Smoother, more fluid transition with spring-like easing */
+  transition: all 0.4s cubic-bezier(0.34, 1.15, 0.64, 1);
   min-width: 0;
-  z-index: ${({ selected }) => (selected ? "2" : "1")};
-
-  /* Gradient background when selected */
-  ${({ selected, theme }) =>
-    selected &&
-    `
-    background: ${theme.primaryGradient};
-    border-radius: 12px;
-    box-shadow: ${theme.shadowMd};
-  `}
+  /* Keep content above the sliding indicator */
+  z-index: 1;
+  /* Performance optimization */
+  will-change: ${({ selected }) => (selected ? "transform" : "auto")};
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  /* Transparent background - the sliding indicator handles the visual selection */
+  background: transparent;
 
   /* Subtle divider between segments (except for selected and last segment) */
   &::after {
@@ -40,22 +39,22 @@ const DaySegment = styled.div<{
     background: ${({ theme, selected, $isLast }) =>
       selected || $isLast ? "transparent" : theme.borderLight};
     opacity: ${({ selected }) => (selected ? 0 : 0.5)};
-    transition: opacity 0.3s ease;
+    /* Smoother opacity transition */
+    transition: opacity 0.4s cubic-bezier(0.34, 1.15, 0.64, 1);
   }
 
   /* Hide divider on hover */
   &:hover::after {
     opacity: 0;
+    transition-duration: 0.2s;
   }
 
-  /* Hover effect - subtle background for unselected */
+  /* Hover effect - subtle scale for all */
   &:hover {
-    ${({ selected, $isEditMode, theme }) =>
-      !selected &&
+    ${({ $isEditMode }) =>
       !$isEditMode &&
       `
-      background: ${theme.primary}15;
-      border-radius: 12px;
+      transform: scale(1.03) translateZ(0);
     `}
   }
 
@@ -65,6 +64,12 @@ const DaySegment = styled.div<{
 
   @media (max-width: 480px) {
     padding: 6px 4px;
+  }
+  
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0.01ms;
+    transform: none !important;
   }
 `;
 
@@ -76,7 +81,9 @@ const DateNumber = styled.div<{ selected: boolean; $isEditMode: boolean }>`
     selected ? "white" : $isEditMode ? theme.textGrey : theme.textPrimary};
   line-height: 1.2;
   margin-bottom: 2px;
-  transition: color 0.3s ease;
+  /* Smoother color transition */
+  transition: color 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: color;
 
   @media (max-width: 768px) {
     font-size: 1.125rem;
@@ -84,6 +91,11 @@ const DateNumber = styled.div<{ selected: boolean; $isEditMode: boolean }>`
 
   @media (max-width: 480px) {
     font-size: 1rem;
+  }
+  
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0.01ms;
   }
 `;
 
@@ -96,7 +108,9 @@ const DayName = styled.div<{ selected: boolean; $isEditMode: boolean }>`
   text-transform: uppercase;
   letter-spacing: 0.5px;
   line-height: 1;
-  transition: color 0.3s ease;
+  /* Smoother color transition */
+  transition: color 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: color;
 
   @media (max-width: 768px) {
     font-size: 0.7rem;
@@ -104,7 +118,11 @@ const DayName = styled.div<{ selected: boolean; $isEditMode: boolean }>`
 
   @media (max-width: 480px) {
     font-size: 0.65rem;
-    letter-spacing: 0.3px;
+  }
+  
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0.01ms;
   }
 `;
 
