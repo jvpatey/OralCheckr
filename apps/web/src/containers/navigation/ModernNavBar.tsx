@@ -10,6 +10,7 @@ import {
   NavContainer,
   NavBrandSection,
   BrandText,
+  NavBrandAccent,
   NavCenterSection,
   NavLinksContainer,
   NavIndicator,
@@ -118,11 +119,11 @@ export function ModernNavBar({
       return false;
     }
 
-    // Exclude Log Out, Profile, and About from center nav
+    // Exclude Log Out, Profile, and Support from center nav
     return (
       link.name !== "Log Out" &&
       link.name !== "Profile" &&
-      link.name !== "About"
+      link.name !== "Support"
     );
   });
 
@@ -135,9 +136,9 @@ export function ModernNavBar({
   // Calculate active index for sliding indicator
   const activeIndex = navLinks.findIndex((link) => isActive(link.path));
 
-  // Find Profile and About links for right section
+  // Find Profile and Support links for right section
   const profileLink = links.find((link) => link.name === "Profile");
-  const aboutLink = links.find((link) => link.name === "About");
+  const supportLink = links.find((link) => link.name === "Support");
 
   return (
     <>
@@ -146,7 +147,9 @@ export function ModernNavBar({
           {/* Logo on the left */}
           <NavBrandSection>
             <Link to={RoutePaths.LANDING} style={{ textDecoration: "none" }}>
-              <BrandText>OralCheckr</BrandText>
+              <BrandText>
+                <NavBrandBase>Oral</NavBrandBase><NavBrandAccent>Checkr</NavBrandAccent>
+              </BrandText>
             </Link>
           </NavBrandSection>
 
@@ -174,12 +177,14 @@ export function ModernNavBar({
 
           {/* Right section with profile, about, logout, theme toggle and mobile menu */}
           <NavRightSection>
-            {/* Desktop Profile, About and Logout */}
+            {/* Desktop Profile, Support, and Logout */}
             <NavLinksContainer className="d-none d-xl-flex">
               {(() => {
                 const rightLinks = [
                   !isGuest && profileLink ? { name: user?.firstName || "Profile", path: profileLink.path } : null,
-                  aboutLink ? { name: "About", path: aboutLink.path } : null,
+                  supportLink
+                    ? { name: supportLink.name, path: supportLink.path }
+                    : null,
                   { name: "Log Out", path: "" },
                 ].filter(Boolean) as { name: string; path: string }[];
                 
@@ -205,13 +210,13 @@ export function ModernNavBar({
                         {user?.firstName || "Profile"}
                       </StyledNavLink>
                     )}
-                    {aboutLink && (
+                    {supportLink && (
                       <StyledNavLink
-                        $isActive={isActive(aboutLink.path)}
-                        onClick={() => navigate(aboutLink.path)}
+                        $isActive={isActive(supportLink.path)}
+                        onClick={() => navigate(supportLink.path)}
                         type="button"
                       >
-                        About
+                        {supportLink.name}
                       </StyledNavLink>
                     )}
                     <StyledNavLink

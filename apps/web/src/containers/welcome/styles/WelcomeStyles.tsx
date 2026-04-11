@@ -330,16 +330,14 @@ export const LogoImgStyle = styled.img`
   }
 `;
 
+// Wordmark base — matches HeroTitle color/weight; pair with HeroTitleAccent for "Checkr"
 export const LogoText = styled.span`
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 3rem;
-  font-weight: 700;
-  letter-spacing: -1px;
-
-  /* Enhanced gradient text effect */
-  background: ${({ theme }) => theme.primaryGradient};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  color: ${({ theme }) => theme.textPrimary};
 
   display: inline-block;
   position: relative;
@@ -347,7 +345,7 @@ export const LogoText = styled.span`
   margin-left: 12px;
 
   ${LogoStyle}:hover & {
-    filter: brightness(1.1);
+    filter: brightness(1.05);
     transform: scale(1.02);
   }
 

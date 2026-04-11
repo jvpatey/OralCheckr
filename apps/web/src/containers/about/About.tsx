@@ -45,13 +45,9 @@ export function About() {
             </SimpleBackButton>
           </BackButtonContainer>
 
-          {isAuthenticated ? (
-            <AboutTitle>About</AboutTitle>
-          ) : (
-            <AboutTitle>
-              Support <AboutTitleAccent>Hub</AboutTitleAccent>
-            </AboutTitle>
-          )}
+          <AboutTitle>
+            Support <AboutTitleAccent>Hub</AboutTitleAccent>
+          </AboutTitle>
           <AboutSection />
           <FAQSection />
           <ContactSection />

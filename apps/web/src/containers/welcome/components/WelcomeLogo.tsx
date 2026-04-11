@@ -1,10 +1,17 @@
-import { LogoStyle, LogoImgStyle, LogoText } from "../styles/WelcomeStyles";
+import {
+  LogoStyle,
+  LogoImgStyle,
+  LogoText,
+  HeroTitleAccent,
+} from "../styles/WelcomeStyles";
 
 export function WelcomeLogo() {
   return (
     <LogoStyle>
       <LogoImgStyle src="images/logo-blue.png" alt="Logo" />
-      <LogoText>OralCheckr</LogoText>
+      <LogoText>
+        Oral<HeroTitleAccent>Checkr</HeroTitleAccent>
+      </LogoText>
     </LogoStyle>
   );
 }

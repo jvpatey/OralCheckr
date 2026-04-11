@@ -34,7 +34,7 @@ export const navbarLinks: NavLink[] = [
     hideForGuest: true,
   },
   {
-    name: "About",
+    name: "Support",
     path: RoutePaths.ABOUT,
     icon: faCircleQuestion as IconDefinition,
     displayIn: "navbar",

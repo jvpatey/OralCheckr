@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { HeroTitleAccent } from "../../welcome/styles/WelcomeStyles";
 
 // Smooth slide-in animation for navbar
 const slideDown = keyframes`
@@ -76,34 +77,47 @@ export const NavBrandSection = styled.div`
   flex-shrink: 0;
 `;
 
-// Brand text with gradient matching welcome page
-export const BrandText = styled.div`
+// Brand wordmark — Oral stays put; Checkr slides on hover
+export const BrandText = styled.span`
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: -1px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  color: ${({ theme }) => theme.textPrimary};
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Enhanced gradient text effect */
-  background: ${({ theme }) => theme.primaryGradient};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-
-  &:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-  }
+  display: inline-block;
 
   @media (max-width: 768px) {
     font-size: 1.75rem;
-    letter-spacing: -0.75px;
   }
 
   @media (max-width: 480px) {
     font-size: 1.5rem;
-    letter-spacing: -0.5px;
+  }
+`;
+
+/** "Checkr" — slides right on hover, no scale or rotation */
+export const NavBrandAccent = styled(HeroTitleAccent)`
+  display: inline-block;
+  transition:
+    transform 0.45s cubic-bezier(0.33, 1, 0.68, 1),
+    color 0.35s ease,
+    filter 0.35s ease;
+
+  @media (prefers-reduced-motion: no-preference) {
+    ${BrandText}:hover & {
+      transform: translateX(0.32em);
+      color: ${({ theme }) => theme.primaryDark};
+      filter: brightness(1.08);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ${BrandText}:hover & {
+      color: ${({ theme }) => theme.primaryDark};
+    }
   }
 `;
 
