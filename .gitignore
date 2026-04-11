@@ -6,17 +6,76 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+.pnpm-debug.log*
 
-# Environment Variables
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage
+*.lcov
+.nyc_output
+lib-cov
+
+# Environment variables
 .env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
 
-# Dependency directories
-node_modules
+# Dependencies
+node_modules/
+jspm_packages/
+web_modules/
+bower_components/
+
+# Build output
 dist
 dist-ssr
-*.local
+out
+.next
+.nuxt
+.serverless/
+.fusebox/
+.dynamodb/
 
-# Editor directories and files
+# TypeScript
+*.tsbuildinfo
+
+# Caches
+*.local
+.cache
+.parcel-cache
+.eslintcache
+.stylelintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.grunt
+.temp
+.docusaurus
+.vuepress/dist
+
+# Optional npm / yarn
+.npm
+.yarn-integrity
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+*.tgz
+.node_repl_history
+
+# Editor / OS
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -26,3 +85,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.vscode-test
+
+# Vercel (if present locally)
+.vercel

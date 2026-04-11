@@ -1,261 +1,75 @@
-# 🦷 OralCheckr
+# OralCheckr (monorepo)
 
-## 📝 Description
+Full-stack oral health assessment and habit tracking: **React + Vite** frontend and **Express + Sequelize** API in one repository.
 
-OralCheckr is a comprehensive web application designed to assess and improve your oral health. Through an in-depth questionnaire that covers all aspects of your oral hygiene, the app generates a personalized oral health score and provides tailored recommendations based on your responses. Additionally, OralCheckr includes a powerful habit tracker to help you monitor and maintain your daily oral health habits. With detailed analytics including heatmaps, charts, and statistics, you can track your progress through monthly and yearly insights.
+| App | Path | Stack |
+|-----|------|--------|
+| Web | [`apps/web`](apps/web) | React 18, TypeScript, Vite |
+| API | [`apps/api`](apps/api) | Node.js, Express, TypeScript, Sequelize |
 
-## ✨ Key Features
+**Live demo:** [jvpatey.github.io/OralCheckr](https://jvpatey.github.io/OralCheckr/)
 
-- **🔐 Flexible Authentication**: Sign up with email/password, Google OAuth, or continue as a guest
-- **👤 Guest Mode**: Explore all features without creating an account
-- **🔄 Seamless Data Migration**: Guest data automatically transfers when you create an account
-- **📊 Oral Health Assessment**: Comprehensive questionnaire with personalized scoring
-- **💡 Custom Recommendations**: Tailored oral health tips based on your responses
-- **✅ Habit Tracking**: Create and monitor daily oral health habits
-- **📈 Advanced Analytics**: Monthly and yearly insights with heatmaps and trend charts
-- **👤 User Profile**: Manage your account and track your progress
-- **🌓 Theme Toggle**: Switch between light and dark modes
-- **📱 Responsive Design**: Beautiful, modern UI that works on all devices
+Product details, screenshots, and feature list: [apps/web/README.md](apps/web/README.md).  
+API endpoints and server env vars: [apps/api/README.md](apps/api/README.md).
 
-## ✨ Motivation
+## Prerequisites
 
-As a dental hygienist, I wanted to create a tool that helps patients take control of their oral health. OralCheckr combines my background in oral health with technology to provide users with personalized insights and tips. It's designed to help patients track their habits and improve their oral hygiene, making it a valuable tool for education and self-care.
+- Node.js (v18+ recommended)
+- MySQL (local dev) or PostgreSQL (production-style)
+- npm
 
-## 🚀 Demo
+## Run locally
 
-Try the live application here:
+**1. API** (from repo root):
 
-[https://jvpatey.github.io/OralCheckr/](https://jvpatey.github.io/OralCheckr/)
-
-## 📸 Screenshots
-
-### Welcome Page
-
-_Modern landing page with flexible authentication options_
-
-![Welcome Page](docs/screenshots/oralcheckr1.png)
-
-### Dashboard
-
-_Main hub for accessing all features_
-
-![Dashboard](docs/screenshots/oralcheckr2.png)
-
-### Oral Health Questionnaire
-
-_Comprehensive assessment interface_
-
-![Questionnaire](docs/screenshots/oralcheckr3.png)
-
-### Results & Recommendations
-
-_Personalized oral health score with tailored advice_
-
-![Results](docs/screenshots/oralcheckr4.png)
-
-### Habit Tracker
-
-_Track daily oral health habits with ease_
-
-![Habit Tracker](docs/screenshots/oralcheckr5.png)
-
-### Analytics - Month View
-
-_Detailed monthly statistics and trends_
-
-![Analytics Month View](docs/screenshots/oralcheckr6.png)
-
-### Analytics - Year View
-
-_Heatmap visualization of yearly progress_
-
-![Analytics Year View](docs/screenshots/oralcheckr7.png)
-
-### User Profile
-
-_Manage your account and preferences_
-
-![Profile Page](docs/screenshots/oralcheckr8.png)
-
-### About Page
-
-_Learn more about OralCheckr_
-
-![About Page](docs/screenshots/oralcheckr9.png)
-
-## 🛠️ Built with
-
-[![My Skills](https://skillicons.dev/icons?i=react,vite,ts,styledcomponents,bootstrap,)](https://skillicons.dev)
-
-**Frontend Technologies:**
-
-- **React 18** with TypeScript for type-safe component development
-- **Vite** for lightning-fast development and optimized builds
-- **Styled Components** for modern, themeable CSS-in-JS styling
-- **React Router** for seamless navigation
-- **React Query** (@tanstack/react-query) for efficient data fetching and caching
-- **Bootstrap & React Bootstrap** for responsive UI components
-- **Google OAuth** (@react-oauth/google) for secure authentication
-- **ApexCharts** for beautiful data visualizations
-- **React Toastify** for elegant notifications
-- **FontAwesome** for comprehensive icon support
-
-## 🛠️ Custom Installation
-
-To run the OralCheckr frontend locally, you'll need to serve the files with a server.
-Since it's a React app built with Vite, you can easily start a development server using the following commands:
-
-On MacOS or Windows:
-
-```
+```bash
+cd apps/api
 npm install
+# Create .env — see variables listed in apps/api/README.md
 npm run dev
 ```
 
-### Environment Configuration
+Default API URL: `http://localhost:3000`. Health check: `GET http://localhost:3000/health`.
 
-Create a `.env` file in the frontend root directory with the following variables:
+**2. Web** (second terminal):
+
+```bash
+cd apps/web
+npm install
+```
+
+Create `apps/web/.env`:
 
 ```
 VITE_API_URL=http://localhost:3000
-VITE_GOOGLE_CLIENT_ID=your_google_client_id  # Optional, for Google OAuth
+VITE_GOOGLE_CLIENT_ID=your_google_client_id
 ```
 
-### Backend Configuration
+```bash
+npm run dev
+```
 
-OralCheckr requires a backend server to function. To run the application locally:
+The API must allow your web origin in CORS (see `apps/api/src/config/corsConfig.ts`). Local Vite typically uses `http://localhost:5173`.
 
-1. Clone the backend repository:
+## Deployments
 
-   ```
-   git clone https://github.com/jvpatey/OralCheckr-Backend.git
-   ```
+- **Frontend (GitHub Pages):** workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) builds and deploys from `apps/web`.
+- **Backend (Render):** connect this repository and set **Root Directory** to `apps/api`. Build: `npm install && npm run build:prod`. Start: `npm start`.
 
-2. Set up environment variables:
-   Create a `.env` file in the backend root directory with the following variables:
+## Repository layout
 
-   ```
-   NODE_ENV=development
-   DB_HOST=localhost
-   DB_NAME=your_database_name
-   DB_USER=your_database_user
-   DB_PASS=your_database_password
-   JWT_SECRET=your_jwt_secret
-   GOOGLE_CLIENT_ID=your_google_client_id  # Optional, for Google OAuth
-   ```
+```
+apps/
+  web/     # Vite React app (GitHub Pages)
+  api/     # Express API (e.g. Render)
+.github/
+  workflows/
+```
 
-3. Database Setup:
+## Render (API)
 
-   - The backend uses Sequelize ORM and supports both MySQL (development) and PostgreSQL (production)
-   - For local development, ensure you have MySQL installed and running
-   - The tables will be automatically created when you start the server
-
-4. Start the backend server:
-
-   ```
-   cd OralCheckr-Backend
-   npm install
-   npm run dev
-   ```
-
-   The server will start on port 3000 by default
-
-5. Configure the frontend:
-   - Update the frontend's `.env` file with:
-     ```
-     VITE_API_URL=http://localhost:3000
-     ```
-   - This connects your frontend to the local backend server
-
-Note: The backend provides:
-
-- User authentication (traditional email/password, Google OAuth, and guest mode)
-- Database storage for user profiles, questionnaires, habits, and habit logs
-- RESTful API endpoints for all core functionality
-- CORS configuration for secure frontend-backend communication
-- Guest-to-user conversion with data migration
-
-## 📋 How to use
-
-### Getting Started:
-
-**Welcome Page:**
-
-- When you first visit OralCheckr, you'll land on the welcome page
-- You have three options to get started:
-  - **Sign Up**: Create a new account with email and password
-  - **Log In**: Access your existing account
-  - **Continue as Guest**: Explore all features without creating an account
-  - **Sign in with Google**: Quick authentication using your Google account
-
-**Guest Mode:**
-
-- Try out all features without any commitment
-- Your progress is saved temporarily
-- When you're ready to create an account, all your guest data (questionnaire results, habits, and tracking history) will be automatically transferred to your new account
-
-### Main Features:
-
-**Dashboard:**
-
-- After logging in or continuing as guest, you'll be taken to the dashboard
-- The dashboard provides quick access to all main features:
-  - Oral Health Questionnaire
-  - Habit Tracker
-  - Analytics
-  - Your Results
-- These options are also accessible via the navigation bar
-
-**Questionnaire:**
-
-- On the questionnaire page, click "Begin" to start the assessment
-- Navigate through questions covering all aspects of your oral health
-- Upon completion, you'll be directed to the results page
-- Receive a comprehensive oral health score with personalized recommendations based on your responses
-- You can retake the questionnaire at any time to update your score and recommendations
-
-**Habit Tracker:**
-
-- The habit tracker begins with the Habits page, where you can add habits to track
-- For each habit, provide:
-  - A descriptive habit name
-  - Daily goal (how many times per day it should be completed)
-- Once added, habits appear as tiles showing:
-  - Habit name and daily goal
-  - Current progress for the selected date
-  - Increment/decrement buttons to log completions
-- Features:
-  - **Edit Mode**: Modify habit details or delete habits
-  - **Date Navigation**: View and manage your habit log history for any date
-  - **Quick Actions**: Easily add or remove log entries
-
-**Analytics:**
-
-- Access detailed insights into your habit tracking progress
-- **Month View**:
-  - Statistics for the selected month
-  - Calendar view showing your daily progress
-  - Line chart displaying trends over time
-  - Streak tracking and completion rates
-- **Year View**:
-  - Heatmap visualization of your progress throughout the year
-  - Compare performance across different habits
-  - Identify patterns and areas for improvement
-
-**Profile:**
-
-- Manage your account information
-- View your oral health assessment history
-- Update personal details
-- Access support and FAQs
-- Convert from guest to registered user (if applicable)
-
-**Theme Toggle:**
-
-- Switch between light and dark modes using the theme toggle in the navigation bar
-- Your preference is saved automatically
-
-**About Page:**
-
-- Learn more about OralCheckr and its mission
-- Accessible from the navigation menu or welcome page
+1. Open your Render web service for the API.
+2. Connect it to this GitHub repository and branch you deploy from (e.g. `master`).
+3. Set **Root Directory** to `apps/api`.
+4. **Build command:** `npm install && npm run build:prod` — **Start command:** `npm start`.
+5. Deploy and verify `GET /health` and that the live site can reach the API.
