@@ -148,7 +148,7 @@ export function ModernNavBar({
           <NavBrandSection>
             <Link to={RoutePaths.LANDING} style={{ textDecoration: "none" }}>
               <BrandText>
-                <NavBrandBase>Oral</NavBrandBase><NavBrandAccent>Checkr</NavBrandAccent>
+                Oral<NavBrandAccent>Checkr</NavBrandAccent>
               </BrandText>
             </Link>
           </NavBrandSection>
