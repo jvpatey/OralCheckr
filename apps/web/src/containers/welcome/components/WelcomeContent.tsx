@@ -1,23 +1,27 @@
 import {
+  HeroEyebrow,
   HeroTitle,
+  HeroTitleAccent,
   HeroSubtitle,
   HeroDescription,
-  ColoredText,
+  HeroTrustRow,
 } from "../styles/WelcomeStyles";
 
 export function WelcomeContent() {
   return (
     <>
+      <HeroEyebrow>Oral health, simplified</HeroEyebrow>
       <HeroTitle>
-        <ColoredText>OralCheckr</ColoredText>
+        Oral<HeroTitleAccent>Checkr</HeroTitleAccent>
       </HeroTitle>
       <HeroSubtitle>
-        Your personal oral health companion
+        Assess your habits, see what matters, and build a routine that sticks.
       </HeroSubtitle>
       <HeroDescription>
-        Take control of your oral health with personalized assessments and habit tracking. 
-        Start your journey to a healthier smile today.
+        Guided questionnaire, habit tracking, and clear insights—so you can
+        focus on a healthier smile without the noise.
       </HeroDescription>
+      <HeroTrustRow>Built for daily use · Free to start</HeroTrustRow>
     </>
   );
 }

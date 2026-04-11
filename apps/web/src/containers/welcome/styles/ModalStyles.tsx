@@ -10,7 +10,8 @@ export const StyledModal = styled(Modal)`
     -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
     border-radius: 24px;
     border: 1px solid ${({ theme }) => theme.borderLight};
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    box-shadow:
+      0 25px 50px -12px rgba(0, 0, 0, 0.25),
       0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   }
 
@@ -110,7 +111,8 @@ export const InputStyle = styled(Form.Control)`
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}20,
+    box-shadow:
+      0 0 0 3px ${({ theme }) => theme.primary}20,
       0 8px 25px rgba(0, 0, 0, 0.15);
     background: ${({ theme }) => theme.surfaceElevated};
   }

@@ -5,6 +5,7 @@ export { CreateAnAccountButton } from "./CreateAnAccountButton";
 export { WelcomeLoginButton } from "./WelcomeLoginButton";
 export { WelcomeLogo } from "./WelcomeLogo";
 export { WelcomeContent } from "./WelcomeContent";
+export { HeroAppPreview } from "./HeroAppPreview";
 export { WelcomeButtons } from "./WelcomeButtons";
 export { ThemeToggle } from "./ThemeToggle";
 export { GuestConfirmationModal } from "./GuestConfirmationModal";

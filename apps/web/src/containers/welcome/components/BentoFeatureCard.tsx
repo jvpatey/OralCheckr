@@ -11,8 +11,6 @@ interface BentoFeatureCardProps {
   title: string;
   description: string;
   size: "small" | "medium" | "large";
-  color: "primary" | "secondary" | "accent";
-  gradient: string;
   index: number;
 }
 
@@ -21,8 +19,6 @@ export function BentoFeatureCard({
   title,
   description,
   size,
-  color,
-  gradient,
   index,
 }: BentoFeatureCardProps) {
   const { ref, isVisible } = useScrollAnimation();
@@ -31,12 +27,10 @@ export function BentoFeatureCard({
     <BentoCardContainer
       ref={ref}
       $size={size}
-      $color={color}
-      $gradient={gradient}
       $index={index}
       $isVisible={isVisible}
     >
-      <BentoIcon $color={color}>{icon}</BentoIcon>
+      <BentoIcon>{icon}</BentoIcon>
       <BentoTitle>{title}</BentoTitle>
       <BentoDescription>{description}</BentoDescription>
     </BentoCardContainer>

@@ -3,110 +3,174 @@ import { Link } from "react-router-dom";
 
 export const FooterContainer = styled.footer`
   width: 100%;
-  margin-top: 40px;
-  padding: 8px 0;
+  margin-top: clamp(32px, 4vw, 48px);
+  padding: 16px 0 18px;
+  position: relative;
+  z-index: 1;
   border-top: 1px solid ${({ theme }) => theme.borderLight};
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-
-  @media (max-width: 768px) {
-    margin-top: 32px;
-    padding: 6px 0;
-  }
+  background: ${({ theme }) => theme.surfaceColor};
+  box-shadow:
+    0 -1px 0 ${({ theme }) => theme.borderLight} inset,
+    0 -8px 28px rgba(0, 0, 0, 0.05);
 
   @media (max-width: 480px) {
     margin-top: 28px;
-    padding: 6px 0;
+    padding: 14px 0 16px;
   }
 `;
 
-export const FooterContent = styled.div`
+export const FooterInner = styled.div`
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px);
+  box-sizing: border-box;
+`;
+
+/* Desktop: brand | Support (center) | legal — three-column grid */
+export const FooterMain = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  position: relative;
+  gap: 16px;
+  text-align: center;
 
-  @media (max-width: 768px) {
-    padding: 0 16px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0 12px;
-    flex-direction: column;
-    gap: 12px;
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 16px 20px;
+    text-align: left;
   }
 `;
 
-export const FooterCopyright = styled.div`
-  color: ${({ theme }) => theme.textSecondary};
-  font-size: 0.95rem;
-  font-weight: 500;
-  opacity: 0.9;
-  letter-spacing: -0.01em;
+export const FooterBrand = styled.div`
+  flex-shrink: 0;
 
-  @media (max-width: 480px) {
-    font-size: 0.9rem;
-    text-align: center;
+  @media (min-width: 768px) {
+    justify-self: start;
+  }
+`;
+
+export const FooterCenter = styled.div`
+  display: flex;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    justify-self: center;
+  }
+`;
+
+export const FooterEyebrow = styled.p`
+  margin: 0 0 4px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.primary};
+  opacity: 0.95;
+`;
+
+export const FooterTitle = styled.h2`
+  margin: 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  color: ${({ theme }) => theme.textPrimary};
+`;
+
+export const FooterTitleAccent = styled.span`
+  color: ${({ theme }) => theme.primary};
+  font-weight: 800;
+  letter-spacing: -0.04em;
+`;
+
+export const FooterRight = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+
+  @media (min-width: 768px) {
+    justify-self: end;
+    align-items: flex-end;
+    text-align: right;
+    max-width: min(100%, 380px);
+  }
+`;
+
+export const FooterMeta = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+
+  @media (min-width: 768px) {
+    align-items: flex-end;
+  }
+`;
+
+export const FooterCopyright = styled.span`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.textPrimary};
+  letter-spacing: -0.02em;
+`;
+
+export const FooterCredits = styled.span`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.textTertiary};
+  line-height: 1.4;
+
+  @media (min-width: 768px) {
+    max-width: 340px;
   }
 `;
 
 export const FooterLink = styled(Link)`
-  display: flex;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  display: inline-flex;
   align-items: center;
-  color: ${({ theme }) => theme.textSecondary};
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 16px;
+  border-radius: 9999px;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 10px 16px;
-  border-radius: 12px;
-  position: relative;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.textPrimary};
+  background: transparent;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease;
 
   &:hover {
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    background: ${({ theme }) => `${theme.primary}0d`};
     color: ${({ theme }) => theme.primary};
-    background: ${({ theme }) => theme.primary}15;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px ${({ theme }) => theme.primary}20;
   }
 
-  &:active {
-    transform: translateY(0);
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
   }
 
-  @media (max-width: 480px) {
-    font-size: 0.9rem;
-    padding: 8px 14px;
-  }
-`;
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-1px);
+    }
 
-export const FooterCredits = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  color: ${({ theme }) => theme.textSecondary};
-  font-size: 0.875rem;
-  font-weight: 500;
-  opacity: 0.8;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-
-  @media (max-width: 968px) {
-    font-size: 0.8rem;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.75rem;
-  }
-
-  @media (max-width: 480px) {
-    position: static;
-    transform: none;
-    white-space: normal;
-    font-size: 0.75rem;
+    &:active {
+      transform: translateY(0);
+    }
   }
 `;

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ThemeType } from "../../App";
 import { RoutePaths } from "../../common/constants/routes";
 import {
@@ -10,6 +9,7 @@ import {
   NavIndicator,
   NavLink,
   NavRightSection,
+  NavSupportLink,
   TooltipWrapper,
 } from "./styles/WelcomeNavBarStyles";
 import { ThemeToggle } from "./components/ThemeToggle";
@@ -25,7 +25,6 @@ interface WelcomeNavBarProps {
 export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const activeSection = useScrollSpy(["hero", "features"]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,28 +39,22 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
     const element = document.getElementById(sectionId);
     if (!element) return;
 
-    // Use scrollIntoView for reliable scrolling
     element.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
 
-    // Adjust for fixed navbar after scrolling starts
     setTimeout(() => {
-      const yOffset = -100; // Navbar height
+      const yOffset = -100;
       const y =
         element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }, 100);
   };
 
-  const handleSupportClick = () => {
-    navigate(RoutePaths.ABOUT);
-  };
-
   const sections = ["hero", "features"];
   const activeIndex = sections.indexOf(activeSection);
-  const totalLinks = 3; // Home, Features, Support
+  const pillLinkCount = 2;
 
   return (
     <GlassNavBar $isScrolled={isScrolled}>
@@ -69,7 +62,10 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
         <NavLinksWrapper>
           <NavLinksContainer>
             {activeIndex >= 0 && (
-              <NavIndicator $activeIndex={activeIndex} $linkCount={totalLinks} />
+              <NavIndicator
+                $activeIndex={activeIndex}
+                $linkCount={pillLinkCount}
+              />
             )}
             <NavLink
               $isActive={activeSection === "hero"}
@@ -85,17 +81,11 @@ export function WelcomeNavBar({ themeToggler, theme }: WelcomeNavBarProps) {
             >
               Features
             </NavLink>
-            <NavLink
-              $isActive={false}
-              onClick={handleSupportClick}
-              type="button"
-            >
-              Support
-            </NavLink>
           </NavLinksContainer>
         </NavLinksWrapper>
 
         <NavRightSection>
+          <NavSupportLink to={RoutePaths.ABOUT}>Support</NavSupportLink>
           <TooltipWrapper
             data-tooltip={theme === ThemeType.DARK ? "Light Mode" : "Dark Mode"}
           >

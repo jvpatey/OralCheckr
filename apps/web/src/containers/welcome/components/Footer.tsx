@@ -1,22 +1,47 @@
 import { RoutePaths } from "../../../common/constants/routes";
 import {
   FooterContainer,
-  FooterContent,
+  FooterInner,
+  FooterMain,
+  FooterBrand,
+  FooterEyebrow,
+  FooterTitle,
+  FooterTitleAccent,
+  FooterCenter,
+  FooterRight,
+  FooterMeta,
   FooterCopyright,
-  FooterLink,
   FooterCredits,
+  FooterLink,
 } from "../styles/FooterStyles";
 
 export function Footer() {
   return (
     <FooterContainer>
-      <FooterContent>
-        <FooterCopyright>© 2025 OralCheckr</FooterCopyright>
-        <FooterCredits>
-          Built with React & TypeScript • Designed & Built by Jeffrey Patey
-        </FooterCredits>
-        <FooterLink to={RoutePaths.ABOUT}>Support</FooterLink>
-      </FooterContent>
+      <FooterInner>
+        <FooterMain>
+          <FooterBrand>
+            <FooterEyebrow>Oral health, simplified</FooterEyebrow>
+            <FooterTitle>
+              Oral<FooterTitleAccent>Checkr</FooterTitleAccent>
+            </FooterTitle>
+          </FooterBrand>
+
+          <FooterCenter>
+            <FooterLink to={RoutePaths.ABOUT}>Support</FooterLink>
+          </FooterCenter>
+
+          <FooterRight>
+            <FooterMeta>
+              <FooterCopyright>© 2026 OralCheckr</FooterCopyright>
+              <FooterCredits>
+                Built with React and TypeScript. Designed and built by Jeffrey
+                Patey.
+              </FooterCredits>
+            </FooterMeta>
+          </FooterRight>
+        </FooterMain>
+      </FooterInner>
     </FooterContainer>
   );
 }
