@@ -1,6 +1,7 @@
 import { Accordion } from "react-bootstrap";
-import { Section, SectionTitle } from "../../styles/AccountTabStyles";
 import {
+  SupportSection,
+  SupportSectionTitle,
   FAQContainer,
   StyledAccordion,
 } from "../../../../containers/about/styles/AboutContentStyles";
@@ -8,8 +9,8 @@ import {
 // FAQ section component
 export function FAQSection() {
   return (
-    <Section>
-      <SectionTitle>Frequently Asked Questions</SectionTitle>
+    <SupportSection>
+      <SupportSectionTitle>Frequently Asked Questions</SupportSectionTitle>
       <FAQContainer>
         <StyledAccordion defaultActiveKey="0">
           <Accordion.Item eventKey="0">
@@ -103,6 +104,6 @@ export function FAQSection() {
           </Accordion.Item>
         </StyledAccordion>
       </FAQContainer>
-    </Section>
+    </SupportSection>
   );
 }

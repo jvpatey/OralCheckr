@@ -9,21 +9,37 @@ interface ContactFormProps {
 }
 
 const FormContainer = styled.form`
+  font-family: var(--font-sans), system-ui, sans-serif;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.875rem;
 `;
 
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.35rem;
+`;
+
+/** Name + email side by side; stacks on narrow viewports */
+const NameEmailRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  align-items: flex-start;
+
+  & > * {
+    flex: 1 1 200px;
+    min-width: 0;
+  }
 `;
 
 const Label = styled.label`
+  font-family: var(--font-sans), system-ui, sans-serif;
   color: ${({ theme }) => theme.textPrimary};
-  font-weight: 500;
-  font-size: 0.95rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: -0.02em;
 `;
 
 const RequiredAsterisk = styled.span`
@@ -32,18 +48,23 @@ const RequiredAsterisk = styled.span`
 `;
 
 const Input = styled.input`
-  padding: 0.875rem 1rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  padding: 0.625rem 0.875rem;
+  min-height: 44px;
+  box-sizing: border-box;
   border: 1px solid ${({ theme }) => theme.borderLight};
   border-radius: 12px;
   background: ${({ theme }) => theme.surfaceColor};
   color: ${({ theme }) => theme.textPrimary};
-  font-size: 0.95rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.875rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}33;
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}22;
   }
 
   &::placeholder {
@@ -59,21 +80,25 @@ const Input = styled.input`
 `;
 
 const TextArea = styled.textarea`
-  padding: 0.875rem 1rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  padding: 0.625rem 0.875rem;
+  line-height: 1.5;
   border: 1px solid ${({ theme }) => theme.borderLight};
   border-radius: 12px;
   background: ${({ theme }) => theme.surfaceColor};
   color: ${({ theme }) => theme.textPrimary};
-  font-size: 0.95rem;
-  font-family: inherit;
+  font-size: 0.875rem;
   resize: vertical;
-  min-height: 150px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 120px;
+  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}33;
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}22;
   }
 
   &::placeholder {
@@ -89,51 +114,66 @@ const TextArea = styled.textarea`
 `;
 
 const SubmitButton = styled.button<{ $isSubmitting: boolean }>`
-  padding: 0.875rem 2rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  padding: 10px 20px;
+  min-height: 44px;
   background: ${({ theme, $isSubmitting }) =>
     $isSubmitting ? theme.borderLight : theme.primaryGradient};
   color: white;
   border: 1px solid
     ${({ theme, $isSubmitting }) =>
       $isSubmitting ? theme.borderMedium : theme.primary};
-  border-radius: 12px;
-  font-size: 0.95rem;
+  border-radius: 9999px;
+  font-size: 0.9375rem;
   font-weight: 600;
+  letter-spacing: -0.02em;
   cursor: ${({ $isSubmitting }) => ($isSubmitting ? "not-allowed" : "pointer")};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    filter 0.25s ease,
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  box-shadow: ${({ theme }) => theme.shadowMd};
+  box-sizing: border-box;
 
   &:hover:not(:disabled) {
-    opacity: 0.9;
-    transform: translateY(-2px);
-    box-shadow: ${({ theme }) => theme.shadowLg};
+    filter: brightness(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
   }
 
   &:active:not(:disabled) {
-    transform: translateY(0);
+    filter: brightness(0.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
   }
 
   &:disabled {
-    opacity: 0.6;
-    transform: none;
-    box-shadow: ${({ theme }) => theme.shadowSm};
+    opacity: 0.55;
+    filter: none;
+    box-shadow: none;
     cursor: not-allowed;
   }
 `;
 
 const ErrorMessage = styled.div`
+  font-family: var(--font-sans), system-ui, sans-serif;
   color: ${({ theme }) => theme.error};
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
+  font-size: 0.8125rem;
+  margin-top: 0.15rem;
   font-weight: 500;
+  line-height: 1.4;
 `;
 
 const SuccessMessage = styled.div`
-  padding: 1rem 1.25rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
   background: ${({ theme }) => theme.successLight}22;
   border: 1px solid ${({ theme }) => theme.success};
   border-radius: 12px;
@@ -141,8 +181,8 @@ const SuccessMessage = styled.div`
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+  margin-bottom: 0.875rem;
   box-shadow: ${({ theme }) => theme.shadowSm};
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 `;
@@ -264,39 +304,41 @@ export function ContactForm({ onSubmitSuccess }: ContactFormProps) {
       )}
 
       <FormContainer onSubmit={handleSubmit}>
-        <FormGroup>
-          <Label htmlFor="name">
-            Name
-            <RequiredAsterisk>*</RequiredAsterisk>
-          </Label>
-          <Input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Your name"
-            disabled={isSubmitting}
-          />
-          {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
-        </FormGroup>
+        <NameEmailRow>
+          <FormGroup>
+            <Label htmlFor="name">
+              Name
+              <RequiredAsterisk>*</RequiredAsterisk>
+            </Label>
+            <Input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Your name"
+              disabled={isSubmitting}
+            />
+            {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
+          </FormGroup>
 
-        <FormGroup>
-          <Label htmlFor="email">
-            Email
-            <RequiredAsterisk>*</RequiredAsterisk>
-          </Label>
-          <Input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="your.email@example.com"
-            disabled={isSubmitting}
-          />
-          {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
-        </FormGroup>
+          <FormGroup>
+            <Label htmlFor="email">
+              Email
+              <RequiredAsterisk>*</RequiredAsterisk>
+            </Label>
+            <Input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="your.email@example.com"
+              disabled={isSubmitting}
+            />
+            {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
+          </FormGroup>
+        </NameEmailRow>
 
         <FormGroup>
           <Label htmlFor="subject">
