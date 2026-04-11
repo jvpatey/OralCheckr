@@ -44,11 +44,17 @@ interface ContinueAsGuestButtonProps {
   onClose?: () => void;
   /** Default pill button; inline text link for hero and compact UI */
   appearance?: "button" | "inline";
+  /**
+   * Pill style when appearance is "button".
+   * Use "login" for outline pill (same as welcome Login); default "guest" is gradient.
+   */
+  buttonVariant?: "guest" | "login";
 }
 
 export function ContinueAsGuestButton({
   onClose,
   appearance = "button",
+  buttonVariant = "guest",
 }: ContinueAsGuestButtonProps) {
   const navigate = useNavigate();
   const { updateAuth } = useContext(AuthContext);
@@ -96,7 +102,11 @@ export function ContinueAsGuestButton({
           {isPending ? "Starting…" : "Continue as guest"}
         </InlineGuestTrigger>
       ) : (
-        <Button variant="guest" onClick={handleButtonClick} disabled={isPending}>
+        <Button
+          variant={buttonVariant === "login" ? "login" : "guest"}
+          onClick={handleButtonClick}
+          disabled={isPending}
+        >
           {isPending ? "Logging in..." : "Continue as Guest"}
         </Button>
       )}

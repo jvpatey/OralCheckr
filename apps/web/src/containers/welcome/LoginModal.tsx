@@ -10,7 +10,10 @@ import { PasswordField } from "./components";
 import {
   StyledModal,
   ModalHeader,
-  HeaderText,
+  ModalTitleStack,
+  ModalWordmark,
+  ModalWordmarkAccent,
+  ModalHeading,
   ModalBody,
   InputStyle,
   RequiredFormGroup,
@@ -18,6 +21,7 @@ import {
   StyledFormButton,
   OrSeparator,
   CardText,
+  ModalMutedMessage,
 } from "./styles/ModalStyles";
 
 // Get Google Client ID from environment variable or config.js
@@ -203,14 +207,19 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
   return (
     <StyledModal show={show} onHide={handleClose} centered>
       <ModalHeader closeButton>
-        <HeaderText>Login</HeaderText>
+        <ModalTitleStack>
+          <ModalWordmark>
+            Oral<ModalWordmarkAccent>Checkr</ModalWordmarkAccent>
+          </ModalWordmark>
+          <ModalHeading>Log in</ModalHeading>
+        </ModalTitleStack>
       </ModalHeader>
       <ModalBody>
         <CardText>
           Hey there! Sign in to continue your oral health journey:
         </CardText>
         <Form onSubmit={handleLoginSubmit}>
-          <RequiredFormGroup controlId="formUsername" className="m-3">
+          <RequiredFormGroup controlId="formUsername">
             <InputStyle
               type="text"
               placeholder="Email"
@@ -220,7 +229,7 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
               required
             />
           </RequiredFormGroup>
-          <RequiredFormGroup className="m-3">
+          <RequiredFormGroup>
             <PasswordField
               value={password}
               onChange={setPassword}
@@ -246,12 +255,8 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
           )}
           <RequiredNote>Required field</RequiredNote>
 
-          <StyledFormButton
-            type="submit"
-            disabled={!formValid}
-            style={{ backgroundColor: "#4CAF50", borderColor: "#4CAF50" }}
-          >
-            Login with Email
+          <StyledFormButton type="submit" disabled={!formValid}>
+            Log in with email
           </StyledFormButton>
 
           <OrSeparator>OR</OrSeparator>
@@ -266,11 +271,9 @@ export function LoginModal({ show, handleClose }: LoginModalProps) {
               }}
             ></div>
           ) : (
-            <div
-              style={{ textAlign: "center", margin: "1rem 0", color: "#666" }}
-            >
+            <ModalMutedMessage>
               Google Sign-In temporarily unavailable
-            </div>
+            </ModalMutedMessage>
           )}
         </Form>
       </ModalBody>
