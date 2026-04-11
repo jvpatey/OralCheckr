@@ -54,7 +54,7 @@ The API must allow your web origin in CORS (see `apps/api/src/config/corsConfig.
 ## Deployments
 
 - **Frontend (GitHub Pages):** workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) builds and deploys from `apps/web`.
-- **Backend (Render):** connect this repository and set **Root Directory** to `apps/api`. Use build command `npm install && npm run build:prod` and start command `npm start`. After the monorepo migration, update the Render service to use this repo and `apps/api` if it still points at the old backend-only repository.
+- **Backend (Render):** connect this repository and set **Root Directory** to `apps/api`. Build: `npm install && npm run build:prod`. Start: `npm start`.
 
 ## Repository layout
 
@@ -66,14 +66,10 @@ apps/
   workflows/
 ```
 
-## Render checklist (after merging this branch)
+## Render (API)
 
-1. Open your Render web service that runs the API.
-2. Point the service at this GitHub repository (if it still uses the old `OralCheckr-Backend` repo).
+1. Open your Render web service for the API.
+2. Connect it to this GitHub repository and branch you deploy from (e.g. `master`).
 3. Set **Root Directory** to `apps/api`.
 4. **Build command:** `npm install && npm run build:prod` — **Start command:** `npm start`.
-5. Trigger a deploy and verify `GET /health` and the live site still load.
-
-## Retiring the old backend repo
-
-After production is stable on the monorepo, add a short notice to [OralCheckr-Backend](https://github.com/jvpatey/OralCheckr-Backend) pointing to `apps/api` here, then archive that repository on GitHub.
+5. Deploy and verify `GET /health` and that the live site can reach the API.
