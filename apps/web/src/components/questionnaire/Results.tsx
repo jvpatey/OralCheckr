@@ -1,79 +1,95 @@
 import { useState, useContext } from "react";
-import { useTheme } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { OralHealthStatus } from "./OralHealthStatus";
 import { Recommendations } from "../../containers/questionnaire/Recommendations";
 import { PageBackground } from "../PageBackground";
+import { LandingContainer } from "../landing/LandingContainer";
+import { BackgroundEffects } from "../../containers/welcome/styles/WelcomeStyles";
+import {
+  HeroEyebrow,
+  HeroTitleAccent,
+} from "../../containers/welcome/styles/WelcomeStyles";
+import {
+  QuestionnairePageShell,
+  QuestionnaireHeroCopy,
+  QuestionnairePageTitle,
+  QuestionnaireGuestSignupCta,
+} from "./styles/QuestionnaireFlowLayout";
 import { AuthContext } from "../../containers/authentication/AuthContext";
 import { SignUpModal } from "../../containers/welcome/SignUpModal";
-import { useGetTotalScore } from "../../hooks/questionnaire/useGetTotalScore";
 import { useQuestionnaireData } from "../../hooks/questionnaire/useQuestionnaireData";
-import { getScoreColor } from "../../containers/questionnaire/utils/oral-health-status-utils";
 import { RoutePaths } from "../../common/constants/routes";
 import {
-  ModernResultsContainer,
-  ResultsHeroTitle,
   BentoGrid,
   LargeBentoCard,
   SmallBentoCard,
   BentoCardContent,
   ModernActionSection,
-  ModernSignUpButton,
-  ModernRetakeButton,
   DateDisplayText,
-  AssessmentLabel,
+  AssessLabel,
+  ResultsQuestionnaireCta,
 } from "./styles/ResultsStyles";
 
 export function Results() {
   const { user, isAuthenticated } = useContext(AuthContext);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const navigate = useNavigate();
-  const theme = useTheme();
-  const { data: score } = useGetTotalScore();
-  const { data: questionnaireData } = useQuestionnaireData();
+  const { data: questionnaireData, hasNoData } = useQuestionnaireData();
 
-  const scoreColor = score ? getScoreColor(score as number, theme) : theme.blue;
+  const hasCompletedQuestionnaire =
+    !hasNoData && Boolean(questionnaireData?.lastCompleted);
 
-  const handleRetakeAssessment = () => {
+  const handleQuestionnaireCta = () => {
     navigate(RoutePaths.QUESTIONNAIRE);
   };
 
   return (
     <PageBackground>
-      <ModernResultsContainer $isAuthenticated={isAuthenticated}>
-        <ResultsHeroTitle>Questionnaire Results</ResultsHeroTitle>
+      <BackgroundEffects />
+      <LandingContainer>
+        <QuestionnairePageShell $isAuthenticated={isAuthenticated}>
+          <QuestionnaireHeroCopy>
+            <HeroEyebrow>Improve</HeroEyebrow>
+            <QuestionnairePageTitle>
+              Questionnaire <HeroTitleAccent>Results</HeroTitleAccent>
+            </QuestionnairePageTitle>
+          </QuestionnaireHeroCopy>
 
-        <BentoGrid>
-          <LargeBentoCard $scoreColor={scoreColor}>
-            <BentoCardContent>
-              <OralHealthStatus />
-            </BentoCardContent>
-          </LargeBentoCard>
+          <BentoGrid>
+            <LargeBentoCard>
+              <BentoCardContent>
+                <OralHealthStatus />
+              </BentoCardContent>
+            </LargeBentoCard>
 
-          <SmallBentoCard>
-            <BentoCardContent>
-              <DateDisplayText>
-                {questionnaireData?.lastCompleted || "Not available"}
-              </DateDisplayText>
-              <AssessmentLabel>Last Questionnaire</AssessmentLabel>
-              <ModernRetakeButton onClick={handleRetakeAssessment}>
-                Retake Questionnaire
-              </ModernRetakeButton>
-            </BentoCardContent>
-          </SmallBentoCard>
+            <SmallBentoCard>
+              <BentoCardContent>
+                <DateDisplayText>
+                  {questionnaireData?.lastCompleted ?? "--"}
+                </DateDisplayText>
+                <AssessLabel>Last assess</AssessLabel>
+                <ResultsQuestionnaireCta onClick={handleQuestionnaireCta}>
+                  {hasCompletedQuestionnaire
+                    ? "Retake questionnaire"
+                    : "Take questionnaire"}
+                </ResultsQuestionnaireCta>
+              </BentoCardContent>
+            </SmallBentoCard>
 
-          <Recommendations />
-        </BentoGrid>
+            <Recommendations />
+          </BentoGrid>
 
-        {/* If the user is a guest, display a sign up button*/}
-        {user && user.role === "guest" && (
-          <ModernActionSection>
-            <ModernSignUpButton onClick={() => setShowSignUpModal(true)}>
-              Want a more personalized experience? Create an account today.
-            </ModernSignUpButton>
-          </ModernActionSection>
-        )}
-      </ModernResultsContainer>
+          {user && user.role === "guest" && (
+            <ModernActionSection>
+              <QuestionnaireGuestSignupCta
+                onClick={() => setShowSignUpModal(true)}
+              >
+                Want a more personalized experience? Create an account today.
+              </QuestionnaireGuestSignupCta>
+            </ModernActionSection>
+          )}
+        </QuestionnairePageShell>
+      </LandingContainer>
 
       {showSignUpModal && (
         <SignUpModal

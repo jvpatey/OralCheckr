@@ -71,8 +71,10 @@ export const ModernScoreDisplay = styled.div`
 `;
 
 export const ModernScoreNumber = styled.div<{ $scoreColor?: string }>`
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 2.8rem;
   font-weight: 700;
+  letter-spacing: -0.03em;
   line-height: 1;
   margin: 0;
   color: ${({ $scoreColor, theme }) => $scoreColor || theme.primary};
@@ -87,18 +89,15 @@ export const ModernScoreNumber = styled.div<{ $scoreColor?: string }>`
 `;
 
 export const ModernScoreLabel = styled.div`
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: ${({ theme }) => theme.textSecondary};
   margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 
   @media (max-width: 768px) {
-    font-size: 0.8rem;
-  }
-
-  @media (max-width: 480px) {
     font-size: 0.75rem;
   }
 `;

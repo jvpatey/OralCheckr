@@ -46,50 +46,69 @@ const slideOutToRight = keyframes`
   }
 `;
 
-// Main container with edge hover zones - styled like dashboard cards
+// Main container — solid bento tile (matches results / dashboard)
 export const CardStackContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 440px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 
-  /* Dashboard card styling */
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  background: ${({ theme }) => theme.surfaceColor};
   border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 16px;
-  box-shadow: ${({ theme }) => theme.shadowSm};
+  border-radius: 20px;
+  box-shadow:
+    ${({ theme }) => theme.shadowLg},
+    0 0 0 1px ${({ theme }) => theme.borderLight} inset;
 
-  /* Grid positioning for bento layout */
   grid-column: 2;
   grid-row: 1 / 3;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.primary}07 0%,
+      transparent 52%
+    );
+    opacity: 0.85;
+    pointer-events: none;
+    border-radius: 20px;
+  }
 
   @media (max-width: 1024px) {
     grid-column: 1;
     grid-row: 3;
+    min-height: 320px;
+  }
+
+  @media (max-width: 768px) {
+    min-height: 280px;
   }
 `;
 
-// Label for improvement area - styled like dashboard cards
+/** Eyebrow-style label — matches questionnaire “Assess” / results “Improve” */
 export const ImprovementLabel = styled.div`
-  font-size: 0.85rem;
-  color: ${({ theme }) => theme.textSecondary};
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.primary};
+  opacity: 0.95;
   text-align: center;
   margin-bottom: 16px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
 
   @media (max-width: 768px) {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     margin-bottom: 12px;
   }
 
   @media (max-width: 480px) {
-    font-size: 0.75rem;
     margin-bottom: 10px;
   }
 `;
@@ -97,6 +116,7 @@ export const ImprovementLabel = styled.div`
 // Content area that fills the card - styled like dashboard
 export const ContentArea = styled.div`
   position: relative;
+  z-index: 1;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -188,8 +208,10 @@ export const SlideContainer = styled.div<{
 
 // Category header - styled like dashboard cards with prominent data display
 export const CategoryHeader = styled.div`
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 2.8rem;
   font-weight: 700;
+  letter-spacing: -0.03em;
   color: ${({ theme }) => theme.primary};
   margin-bottom: 8px;
   line-height: 1.2;
@@ -206,9 +228,10 @@ export const CategoryHeader = styled.div`
 
 // Recommendation text - styled like dashboard cards
 export const RecommendationText = styled.div`
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 1rem;
-  color: ${({ theme }) => theme.textPrimary};
-  line-height: 1.5;
+  color: ${({ theme }) => theme.textSecondary};
+  line-height: 1.6;
   text-align: center;
   overflow-y: auto;
   ${scrollbarStyle}
@@ -283,6 +306,7 @@ export const KeyboardHint = styled.div`
   position: absolute;
   bottom: 8px;
   right: 8px;
+  z-index: 2;
   font-size: 0.7rem;
   color: ${({ theme }) => theme.textTertiary};
   opacity: 0;

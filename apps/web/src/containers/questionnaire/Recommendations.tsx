@@ -136,10 +136,10 @@ export function Recommendations() {
 
             {/* Content with slide animation */}
             <SlideContainer $animationDirection={animationDirection}>
+              <ImprovementLabel>Improve</ImprovementLabel>
               <CategoryHeader>
                 {recommendations[currentIndex]?.category}
               </CategoryHeader>
-              <ImprovementLabel>IMPROVEMENT AREA</ImprovementLabel>
               <RecommendationText>
                 {recommendations[currentIndex]?.feedback}
               </RecommendationText>

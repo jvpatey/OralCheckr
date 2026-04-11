@@ -40,7 +40,7 @@ export function Landing() {
     useQuestionnaireData();
 
   const totalHabits = habits?.length || 0;
-  const lastCompletedDate = questionnaireData?.lastCompleted || "Not completed";
+  const lastCompletedDate = questionnaireData?.lastCompleted ?? "--";
 
   if (isLoadingScore || isLoadingHabits || isLoadingQuestionnaire) {
     return (
