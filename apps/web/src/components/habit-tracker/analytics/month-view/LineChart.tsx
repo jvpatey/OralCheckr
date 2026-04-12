@@ -14,15 +14,13 @@ const ChartContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 300px;
+  min-height: 0;
 
   @media (max-width: 768px) {
-    min-height: 350px;
     padding: 8px;
   }
 
   @media (max-width: 480px) {
-    min-height: 400px;
     padding: 6px;
   }
 `;

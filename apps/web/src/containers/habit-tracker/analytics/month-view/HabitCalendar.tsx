@@ -27,23 +27,23 @@ interface CalendarProgressProps {
 const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
-  height: 100%;
   width: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
   padding: 0;
-  max-height: none;
   overflow: hidden;
+  gap: 0;
 
   .react-datepicker {
     width: 100%;
     max-width: 100%;
     border: none;
     background-color: transparent;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-sans), system-ui, sans-serif;
     border-radius: 8px;
-    padding: 0px;
-    max-height: 100%;
+    padding: 0;
   }
 
   .react-datepicker__header {
@@ -59,11 +59,14 @@ const CalendarContainer = styled.div`
     flex-wrap: wrap;
     margin: 0;
     padding: 0;
+    gap: 12px 0;
   }
 
   .react-datepicker__week {
     display: flex;
     width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   .react-datepicker__day-name,
@@ -72,18 +75,19 @@ const CalendarContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 44px;
+    height: 52px;
     margin: 0;
     text-align: center;
     border: none;
     pointer-events: none;
-    padding: 3px;
+    padding: 1px;
+    box-sizing: border-box;
   }
 
   .react-datepicker__day--selected,
   .react-datepicker__day--keyboard-selected {
     background-color: transparent;
-    color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.primary};
   }
 
   .react-datepicker__day--outside-month {
@@ -92,7 +96,7 @@ const CalendarContainer = styled.div`
 
   .react-datepicker__day--today {
     background-color: transparent;
-    color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.primary};
   }
 
   /* Hide the navigation buttons */
@@ -101,119 +105,176 @@ const CalendarContainer = styled.div`
   }
 `;
 
-// Clean calendar days header - simplified for better hierarchy
 const DaysHeader = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   width: 100%;
-  margin: 0 0 0.75rem 0;
-  gap: 0.375rem;
-  position: relative;
-  z-index: 1;
+  margin: 0 0 10px 0;
+  gap: 4px;
+  flex-shrink: 0;
 `;
 
 const DayName = styled.div<{ $isToday?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.375rem;
+  padding: 8px 10px;
+  min-height: 36px;
   font-weight: 600;
   color: ${({ $isToday, theme }) =>
-    $isToday ? theme.secondary : theme.textTertiary};
+    $isToday ? theme.primary : theme.textSecondary};
   text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 0.5px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
   text-align: center;
-  background: ${({ $isToday }) =>
-    $isToday ? "rgba(16, 185, 129, 0.1)" : "transparent"};
-  border-radius: 6px;
+  background: ${({ $isToday, theme }) =>
+    $isToday ? `${theme.primary}14` : "transparent"};
+  border-radius: 9999px;
   border: 1px solid
-    ${({ $isToday }) => ($isToday ? "rgba(16, 185, 129, 0.3)" : "transparent")};
-  transition: all 0.3s ease;
+    ${({ $isToday, theme }) =>
+      $isToday ? `${theme.primary}45` : `${theme.primary}30`};
+  transition: all 0.2s ease;
 
   @media (max-width: 600px) {
-    font-size: 10px;
-    padding: 0.25rem;
+    font-size: 0.625rem;
+    padding: 6px 6px;
+    min-height: 30px;
   }
 `;
 
-// Clean wrapper for each day's circular progress bar - no weird borders
 const DayWrapper = styled.div<{ $isCurrentDay?: boolean }>`
   position: relative;
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
+  max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Subtle hover effect without borders */
   &:hover {
-    transform: translateY(-1px) scale(1.05);
-    filter: brightness(1.1);
+    transform: translateY(-1px) scale(1.04);
+    filter: brightness(1.08);
   }
 
-  /* Remove any default borders or backgrounds */
   background: transparent;
   border: none;
 
-  @media (max-width: 600px) {
-    width: 40px;
-    height: 40px;
+  @media (min-width: 1024px) {
+    width: 42px;
+    height: 42px;
   }
 `;
 
-// Centered controls header - selector and toggle with proper centering
+const HeaderSideSpacer = styled.div`
+  flex: 1 1 0;
+  min-width: 0;
+`;
+
 const CalendarControlsHeader = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  margin: 1rem 0 1.25rem 0;
-  position: relative;
-  z-index: 1;
+  gap: 8px;
+  margin: 0 0 12px 0;
+  flex-shrink: 0;
   min-height: 48px;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 1rem;
-    margin: 1rem 0 1.25rem 0;
-    align-items: center;
-  }
-
   @media (max-width: 800px) {
-    flex-direction: column;
-    gap: 0.75rem;
-    margin: 1rem 0 1rem 0;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 10px;
+    margin-bottom: 8px;
   }
 `;
 
-// Centered date selector container - truly centered
 const DateSelectorContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @media (max-width: 800px) {
-    position: static;
-    transform: none;
-  }
+  min-width: 0;
 `;
 
-// Toggle container - positioned on the right
 const ToggleContainer = styled.div`
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin-left: auto;
 
   @media (max-width: 800px) {
-    margin-left: 0;
+    flex: 1 1 100%;
     justify-content: center;
+  }
+`;
+
+/** Holds calendar height in layout while chart is overlaid — keeps analytics tiles from resizing */
+const CalendarChartSwap = styled.div`
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+`;
+
+const swapEase = "cubic-bezier(0.4, 0, 0.2, 1)";
+const swapMs = "0.4s";
+
+const ChartOverlay = styled.div<{ $visible: boolean }>`
+  position: absolute;
+  inset: 0;
+  z-index: ${({ $visible }) => ($visible ? 1 : 0)};
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  transform: ${({ $visible }) =>
+    $visible
+      ? "translate3d(0, 0, 0) scale(1)"
+      : "translate3d(0, 14px, 0) scale(0.98)"};
+  pointer-events: ${({ $visible }) => ($visible ? "auto" : "none")};
+  transition: opacity ${swapMs} ${swapEase};
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      opacity ${swapMs} ${swapEase},
+      transform ${swapMs} ${swapEase};
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition-duration: 0.15s;
+  }
+`;
+
+const CalendarMonthArea = styled.div<{ $obscured?: boolean }>`
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  opacity: ${({ $obscured }) => ($obscured ? 0 : 1)};
+  transform: ${({ $obscured }) =>
+    $obscured
+      ? "translate3d(0, -12px, 0) scale(0.98)"
+      : "translate3d(0, 0, 0) scale(1)"};
+  pointer-events: ${({ $obscured }) => ($obscured ? "none" : "auto")};
+  transition: opacity ${swapMs} ${swapEase};
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      opacity ${swapMs} ${swapEase},
+      transform ${swapMs} ${swapEase};
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition-duration: 0.15s;
   }
 `;
 
@@ -272,14 +333,15 @@ export function HabitCalendar({
         <CircularProgressbar
           value={isLoading ? 0 : isFutureDate ? 0 : progress}
           text={day.toString()}
+          strokeWidth={9}
           styles={buildStyles({
-            textSize: isCurrentDay ? "26px" : "24px",
+            textSize: isCurrentDay ? "22px" : "20px",
             pathColor: isComplete ? theme.secondary : theme.primary,
             textColor: isCurrentDay
-              ? theme.secondary
+              ? theme.primary
               : isFutureDate
                 ? theme.textTertiary
-                : theme.primary,
+                : theme.textPrimary,
             trailColor: isLoading
               ? theme.disabledBackground
               : isFutureDate
@@ -302,6 +364,7 @@ export function HabitCalendar({
   return (
     <CalendarContainer>
       <CalendarControlsHeader>
+        <HeaderSideSpacer aria-hidden />
         <DateSelectorContainer>{dateSelector}</DateSelectorContainer>
         <ToggleContainer>
           <CalendarChartToggle
@@ -311,8 +374,11 @@ export function HabitCalendar({
         </ToggleContainer>
       </CalendarControlsHeader>
 
-      {!showChart ? (
-        <>
+      <CalendarChartSwap>
+        <CalendarMonthArea
+          $obscured={showChart}
+          aria-hidden={showChart}
+        >
           <DaysHeader>
             {daysOfWeek.map((day, index) => (
               <DayName key={index} $isToday={index === currentDayOfWeek}>
@@ -327,10 +393,16 @@ export function HabitCalendar({
             calendarClassName="custom-calendar"
             showPopperArrow={false}
           />
-        </>
-      ) : (
-        <LineChart habitsLog={habitsLog} year={year} month={month} />
-      )}
+        </CalendarMonthArea>
+        <ChartOverlay
+          $visible={showChart}
+          role="region"
+          aria-hidden={!showChart}
+          aria-label="Daily habit logs for this month"
+        >
+          <LineChart habitsLog={habitsLog} year={year} month={month} />
+        </ChartOverlay>
+      </CalendarChartSwap>
     </CalendarContainer>
   );
 }

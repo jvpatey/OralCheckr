@@ -30,9 +30,11 @@ export const HeatmapContainer = styled.div`
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 1rem;
-  box-shadow: ${({ theme }) => theme.shadowLg};
+  border: 1px solid ${({ theme }) => `${theme.borderLight}60`};
+  padding: 0.75rem 0.75rem 0.65rem;
+  box-shadow:
+    ${({ theme }) => theme.shadowLg},
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
   position: relative;
   overflow: hidden;
   animation: ${fadeInUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;

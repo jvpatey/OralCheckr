@@ -1,12 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
+import styled from "styled-components";
 import { PageBackground } from "../../../components/PageBackground";
 import { ToggleButton } from "../../../components/habit-tracker/analytics/ToggleButton";
 import { MonthView } from "./month-view/MonthView";
 import { YearView } from "./year-view/YearView";
 import { Habit } from "../../../services/habitService";
-import { faCalendarAlt, faCalendar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { useFetchHabits } from "../../../hooks/habits";
 import { useHabitLogsForAllHabits } from "../../../hooks/habitLogs";
 import { format } from "date-fns";
@@ -14,10 +12,22 @@ import { toZonedTime } from "date-fns-tz";
 import { useHabitContext } from "../../../contexts/HabitContext";
 import { LoadingComponent } from "../../../components/habit-tracker/analytics/LoadingComponent";
 import {
-  AnalyticsContainer,
-  AnalyticsTitle,
+  AnalyticsContentScroll,
   NoHabitMessage,
 } from "../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
+import { HabitDropdown } from "./HabitDropdown";
+import {
+  CardContainer,
+  HabitHeroEyebrow,
+  HabitListContainer,
+  HabitWrapper,
+  Header,
+  HeaderMainRow,
+  HeaderSubtitle,
+  HeaderText,
+  HeaderTitleColumn,
+} from "../../../components/habit-tracker/habits/HabitComponents";
+import { HeroTitleAccent } from "../../welcome/styles/WelcomeStyles";
 
 // Enum for view modes
 enum ViewMode {
@@ -51,29 +61,26 @@ const transformHabitLogsToAnalyticsFormat = (
       result[habitName] = {};
     }
 
-    // Get all logs for this habit
     const logs = habitLogsMap[habitId] || {};
 
-    // Group logs by year and month
     Object.entries(logs).forEach(([dateStr, count]) => {
       try {
-        // Parse the date string and apply timezone
         const date = new Date(dateStr + "T00:00:00");
         const zonedDate = toZonedTime(date, TIMEZONE);
 
-        const year = zonedDate.getFullYear();
+        const y = zonedDate.getFullYear();
         const month = format(zonedDate, "MMMM").toLowerCase();
         const day = zonedDate.getDate();
 
-        if (!result[habitName][year]) {
-          result[habitName][year] = {};
+        if (!result[habitName][y]) {
+          result[habitName][y] = {};
         }
 
-        if (!result[habitName][year][month]) {
-          result[habitName][year][month] = {};
+        if (!result[habitName][y][month]) {
+          result[habitName][y][month] = {};
         }
 
-        result[habitName][year][month][day] = count;
+        result[habitName][y][month][day] = count;
       } catch (error) {
         console.error(`Error processing date: ${dateStr}`, error);
       }
@@ -83,24 +90,56 @@ const transformHabitLogsToAnalyticsFormat = (
   return result;
 };
 
-// Helper function to create toggle options
-const createToggleOption = (
-  icon: IconDefinition,
-  label: string,
-  value: ViewMode,
-) => ({
-  label: (
-    <>
-      <FontAwesomeIcon icon={icon} /> {label}
-    </>
-  ),
-  value,
-});
-
 const toggleOptions = [
-  createToggleOption(faCalendarAlt, "Monthly Overview", ViewMode.MONTH),
-  createToggleOption(faCalendar, "Yearly Overview", ViewMode.YEAR),
+  { label: "Monthly", value: ViewMode.MONTH },
+  { label: "Yearly", value: ViewMode.YEAR },
 ];
+
+/* Top-align toggle with title stack — HeaderMainRow defaults to flex-end (baseline with subtitle). */
+const AnalyticsHeaderMainRow = styled(HeaderMainRow)`
+  flex-wrap: wrap;
+  row-gap: 0.75rem;
+  align-items: flex-start;
+`;
+
+/** Toggle + habit selector: same width (min/max as outline dropdown), stacked. */
+const AnalyticsHeaderControlsColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.625rem;
+  width: max-content;
+  min-width: 180px;
+  max-width: min(280px, 100%);
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-left: auto;
+  box-sizing: border-box;
+
+  .dropdown {
+    display: block;
+    width: 100%;
+  }
+
+  @media (max-width: 720px) {
+    flex-basis: 100%;
+    max-width: 100%;
+    width: 100%;
+    margin-left: 0;
+  }
+`;
+
+const SubtitleForWord = styled.span`
+  color: ${({ theme }) => theme.textPrimary};
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+`;
+
+const SubtitleHabitName = styled.span`
+  color: ${({ theme }) => theme.blue};
+  font-weight: 600;
+`;
 
 // The main functional component for the Analytics page of the habit tracker
 export function Analytics() {
@@ -108,38 +147,32 @@ export function Analytics() {
   const { selectedHabit, setSelectedHabit } = useHabitContext();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  // Get the selected month and year for fetching logs
   const month = format(selectedDate, "MMMM");
   const year = selectedDate.getFullYear();
 
-  // Fetch habits using React Query
   const {
     data: habits = [],
     isLoading: isLoadingHabits,
     error: habitsError,
   } = useFetchHabits();
 
-  // Get a list of habit IDs
   const habitIds = useMemo(
     () => habits.map((h) => h.habitId).filter(Boolean) as number[],
     [habits],
   );
 
-  // Fetch logs for all habits - for month view
   const {
     habitLogsMap: monthLogsMap,
     isLoading: isLoadingMonthLogs,
     isError: isMonthLogsError,
   } = useHabitLogsForAllHabits(habitIds, year, month);
 
-  // Fetch logs for all habits - for year view
   const {
     habitLogsMap: yearLogsMap,
     isLoading: isLoadingYearLogs,
     isError: isYearLogsError,
   } = useHabitLogsForAllHabits(habitIds, year, "");
 
-  // Transform habitLogsMap based on the current view
   const habitsLog = useMemo(() => {
     const logsMap = view === ViewMode.MONTH ? monthLogsMap : yearLogsMap;
     return transformHabitLogsToAnalyticsFormat(habits, logsMap);
@@ -153,7 +186,6 @@ export function Analytics() {
     (view === ViewMode.MONTH ? isMonthLogsError : isYearLogsError);
 
   useEffect(() => {
-    // If no habit is selected or the selected habit doesn't exist, select the first one
     if (!selectedHabit && habits.length > 0) {
       setSelectedHabit(habits[0].name);
     } else if (
@@ -173,67 +205,149 @@ export function Analytics() {
     setSelectedDate(date);
   };
 
-  // Show loading state
+  const headerSubtitleYear = `${year} · Year-at-a-glance heatmap`;
+
   if (isLoading) {
     return (
       <PageBackground>
-        <AnalyticsContainer>
-          <LoadingComponent />
-        </AnalyticsContainer>
+        <HabitListContainer>
+          <CardContainer>
+            <HabitWrapper>
+              <Header>
+                <HeaderMainRow>
+                  <HeaderTitleColumn>
+                    <HabitHeroEyebrow>Analyze</HabitHeroEyebrow>
+                    <HeaderText>
+                      Habit{" "}
+                      <HeroTitleAccent as="span">Analytics</HeroTitleAccent>
+                    </HeaderText>
+                    <HeaderSubtitle>Loading your data…</HeaderSubtitle>
+                  </HeaderTitleColumn>
+                </HeaderMainRow>
+              </Header>
+              <LoadingComponent />
+            </HabitWrapper>
+          </CardContainer>
+        </HabitListContainer>
       </PageBackground>
     );
   }
 
-  // Show error state
   if (isError) {
     return (
       <PageBackground>
-        <AnalyticsContainer>
-          <div>Error loading analytics data. Please try again later.</div>
-        </AnalyticsContainer>
+        <HabitListContainer>
+          <CardContainer>
+            <HabitWrapper>
+              <Header>
+                <HeaderMainRow>
+                  <HeaderTitleColumn>
+                    <HabitHeroEyebrow>Analyze</HabitHeroEyebrow>
+                    <HeaderText>
+                      Habit{" "}
+                      <HeroTitleAccent as="span">Analytics</HeroTitleAccent>
+                    </HeaderText>
+                    <HeaderSubtitle>
+                      Something went wrong while loading this page.
+                    </HeaderSubtitle>
+                  </HeaderTitleColumn>
+                </HeaderMainRow>
+              </Header>
+              <NoHabitMessage style={{ marginTop: 0 }}>
+                Error loading analytics data. Please try again later.
+              </NoHabitMessage>
+            </HabitWrapper>
+          </CardContainer>
+        </HabitListContainer>
       </PageBackground>
     );
   }
 
   return (
     <PageBackground>
-      <AnalyticsContainer>
-        <AnalyticsTitle>
-          {view === ViewMode.MONTH
-            ? "Monthly Habit Analytics"
-            : "Yearly Habit Analytics"}
-        </AnalyticsTitle>
-        <ToggleButton
-          options={toggleOptions}
-          activeValue={view}
-          onChange={(newView) => setView(newView as ViewMode)}
-        />
-        {view === ViewMode.MONTH ? (
-          <MonthView
-            habits={habits}
-            onSelectHabit={handleSelectHabit}
-            habitsLog={habitsLog}
-            hideAnalytics={!selectedHabit}
-            selectedDate={selectedDate}
-            onDateChange={handleDateChange}
-            isLoading={isLoadingMonthLogs}
-          />
-        ) : (
-          <YearView
-            habits={habits}
-            onSelectHabit={handleSelectHabit}
-            habitsLog={habitsLog}
-            hideAnalytics={!selectedHabit}
-            selectedDate={selectedDate}
-            onDateChange={handleDateChange}
-          />
-        )}
-        {!selectedHabit && (
-          <NoHabitMessage>
-            Please select a habit to display analytics.
-          </NoHabitMessage>
-        )}
-      </AnalyticsContainer>
+      <HabitListContainer>
+        <CardContainer>
+          <HabitWrapper>
+            <Header>
+              <AnalyticsHeaderMainRow>
+                <HeaderTitleColumn>
+                  <HabitHeroEyebrow>Analyze</HabitHeroEyebrow>
+                  <HeaderText>
+                    {view === ViewMode.MONTH ? (
+                      <>
+                        Monthly Habit{" "}
+                        <HeroTitleAccent as="span">Analytics</HeroTitleAccent>
+                      </>
+                    ) : (
+                      <>
+                        Yearly Habit{" "}
+                        <HeroTitleAccent as="span">Analytics</HeroTitleAccent>
+                      </>
+                    )}
+                  </HeaderText>
+                  <HeaderSubtitle>
+                    {view === ViewMode.MONTH ? (
+                      <>
+                        {format(selectedDate, "MMMM yyyy")} · Daily completion
+                        and trends
+                        {selectedHabit ? (
+                          <>
+                            {" "}
+                            <SubtitleForWord>for </SubtitleForWord>
+                            <SubtitleHabitName>{selectedHabit}</SubtitleHabitName>
+                          </>
+                        ) : null}
+                      </>
+                    ) : (
+                      headerSubtitleYear
+                    )}
+                  </HeaderSubtitle>
+                </HeaderTitleColumn>
+                <AnalyticsHeaderControlsColumn>
+                  <ToggleButton
+                    embedded
+                    align="end"
+                    options={toggleOptions}
+                    activeValue={view}
+                    onChange={(newView) => setView(newView as ViewMode)}
+                  />
+                  <HabitDropdown
+                    habits={habits}
+                    onSelectHabit={handleSelectHabit}
+                    variant="outline"
+                    fullWidth
+                  />
+                </AnalyticsHeaderControlsColumn>
+              </AnalyticsHeaderMainRow>
+            </Header>
+
+            <AnalyticsContentScroll>
+              {view === ViewMode.MONTH ? (
+                <MonthView
+                  habits={habits}
+                  habitsLog={habitsLog}
+                  hideAnalytics={!selectedHabit}
+                  selectedDate={selectedDate}
+                  onDateChange={handleDateChange}
+                  isLoading={isLoadingMonthLogs}
+                />
+              ) : (
+                <YearView
+                  habitsLog={habitsLog}
+                  hideAnalytics={!selectedHabit}
+                  selectedDate={selectedDate}
+                  onDateChange={handleDateChange}
+                />
+              )}
+              {!selectedHabit && (
+                <NoHabitMessage>
+                  Please select a habit to display analytics.
+                </NoHabitMessage>
+              )}
+            </AnalyticsContentScroll>
+          </HabitWrapper>
+        </CardContainer>
+      </HabitListContainer>
     </PageBackground>
   );
 }

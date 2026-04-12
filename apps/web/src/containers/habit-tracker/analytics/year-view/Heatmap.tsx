@@ -74,7 +74,7 @@ const HeatmapChartContainer = styled.div`
 const useHeatmapOptions = (theme: ThemeType): ApexOptions => {
   return {
     chart: {
-      height: 200,
+      height: 320,
       type: "heatmap",
       toolbar: { show: false },
       zoom: { enabled: false },
@@ -235,7 +235,7 @@ function HeatmapChart({
       options={options}
       series={data}
       type="heatmap"
-      height={350}
+      height={320}
     />
   );
 }

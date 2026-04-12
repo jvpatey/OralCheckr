@@ -5,7 +5,7 @@ import { slideInFromRight } from "./SharedAnalyticsStyles";
 export const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
   max-width: 100%;
   min-width: 600px;
@@ -14,16 +14,16 @@ export const CalendarContainer = styled.div`
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 2rem 1rem 1rem 1rem;
-  box-shadow: ${({ theme }) => theme.shadowLg};
-  height: 400px;
-  min-height: 400px;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  padding: 10px 12px 12px;
+  box-shadow: none;
+  min-height: 0;
+  height: 100%;
+  flex: 1 1 auto;
   overflow: hidden;
   flex-shrink: 1;
-  gap: 0.75rem;
+  gap: 0;
 
-  /* Subtle gradient overlay */
   &::before {
     content: "";
     position: absolute;
@@ -32,7 +32,7 @@ export const CalendarContainer = styled.div`
     right: 0;
     bottom: 0;
     background: ${({ theme }) => theme.primaryGradient};
-    opacity: 0.05;
+    opacity: 0.03;
     border-radius: 16px;
     pointer-events: none;
   }
@@ -43,19 +43,14 @@ export const CalendarContainer = styled.div`
   @media (max-width: 1200px) {
     max-width: 100%;
     min-width: 550px;
-    height: 360px;
-    min-height: 360px;
   }
 
   @media (max-width: 1024px) {
     margin-top: 0;
-    padding: 2.25rem 1.25rem 1.25rem 1.25rem;
-    height: auto;
-    min-height: 320px;
+    padding: 10px 12px 12px;
     border-radius: 16px;
     max-width: 100%;
     min-width: 450px;
-    gap: 1rem;
 
     &::before {
       border-radius: 16px;
@@ -63,9 +58,7 @@ export const CalendarContainer = styled.div`
   }
 
   @media (max-width: 600px) {
-    padding: 2rem 1rem 1rem 1rem;
-    height: auto;
-    min-height: 280px;
+    padding: 8px 10px 10px;
     border-radius: 12px;
     min-width: 300px;
 
