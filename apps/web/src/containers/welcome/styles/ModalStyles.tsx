@@ -134,6 +134,12 @@ export const ModalBody = styled(Modal.Body)`
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   padding: 16px 22px 22px 22px;
+  /* Override Bootstrap body color so copy reads on dark surfaces */
+  color: ${({ theme }) => theme.textSecondary};
+
+  p {
+    color: inherit;
+  }
 `;
 
 // Form inputs — slightly smaller than CTAs so buttons read as primary actions (best practice)

@@ -1,7 +1,4 @@
 import styled, { keyframes } from "styled-components";
-import { Card } from "react-bootstrap";
-
-// Styled component for the QuestionnaireCard
 
 const fadeUp = keyframes`
   from {
@@ -14,46 +11,40 @@ const fadeUp = keyframes`
   }
 `;
 
-export const QuestionnaireCard = styled(Card)`
+/** Loading shell — same surface language as in-flow QuestionPanel */
+export const QuestionnaireCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 70vw;
+  width: min(70vw, 800px);
   max-width: 800px;
-  height: auto;
-  max-height: calc(100vh - 100px);
-  min-height: 60vh;
-  background-color: ${({ theme }) => theme.accentBackgroundColor};
-  border: transparent;
+  min-height: min(60vh, 420px);
+  max-height: calc(100vh - 120px);
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 40px);
+  background: ${({ theme }) => theme.surfaceColor};
+  border: 1px solid ${({ theme }) => theme.borderLight};
   border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  animation: ${fadeUp} 1s ease-out;
-  margin: auto;
-  position: relative;
-  top: -5vh;
+  box-shadow:
+    ${({ theme }) => theme.shadowLg},
+    0 0 0 1px ${({ theme }) => theme.borderLight} inset;
+  animation: ${fadeUp} 0.8s ease-out both;
 
   @media (min-width: 1200px) {
     max-width: 900px;
   }
 
-  @media (min-width: 768px) and (max-width: 1024px) {
-    width: 80vw;
-    max-width: 750px;
-    max-height: calc(100vh - 80px);
-    padding: 20px;
-  }
-
   @media (max-width: 768px) {
-    width: 85vw;
-    max-width: 700px;
-    padding: 10px;
-    max-height: calc(100vh - 100px);
+    width: min(88vw, 700px);
+    min-height: 50vh;
+    padding: 24px 18px;
+    border-radius: 18px;
   }
 
-  @media (max-width: 375px) {
-    width: 70vw;
-    padding: 8px;
+  @media (max-width: 480px) {
+    width: 100%;
+    border-radius: 16px;
+    padding: 20px 16px;
   }
 `;

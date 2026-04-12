@@ -7,11 +7,11 @@ export const LandingContainer = styled.div`
   z-index: 1;
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 auto;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  min-height: 100vh;
+  min-height: 0;
   padding: clamp(88px, 11vw, 120px) clamp(16px, 4vw, 32px)
     clamp(40px, 5vw, 56px);
   overflow-x: hidden;

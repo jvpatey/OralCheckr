@@ -9,7 +9,7 @@ import { RenderQuestions } from "./RenderQuestions";
 import { RoutePaths } from "../../common/constants/routes";
 import { StartQuestionnaire } from "../../components/questionnaire/StartQuestionnaire";
 import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
-import { NavigationButton } from "../../components/questionnaire/styles/NavigationButton";
+import { BackgroundEffects } from "../welcome/styles/WelcomeStyles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../authentication/AuthContext";
@@ -28,13 +28,21 @@ import {
   AssessmentHeader,
   QuestionContent,
   QuestionFadeWrapper,
+  QuestionPanel,
   ActionSection,
-  ProgressBar,
+  ProgressRoot,
+  ProgressTrack,
+  ProgressFill,
+  ProgressPercentInside,
+  ProgressLabelsRow,
   ProgressIndicator,
-  SubmitButton,
-  QuitButton,
   ErrorMessage,
 } from "./styles/QuestionnaireStyles";
+import {
+  QuestionnaireFlowPrimaryButton,
+  QuestionnaireFlowSecondaryButton,
+  QuestionnaireFlowDangerButton,
+} from "../../components/questionnaire/styles/QuestionnaireFlowLayout";
 import {
   createResponseChangeHandler,
   createNextHandler,
@@ -248,6 +256,7 @@ export function Questionnaire() {
   if ((isLoadingResponses || isLoadingProgress) && isInitialMount) {
     return (
       <PageBackground>
+        <BackgroundEffects />
         <LandingContainer>
           <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
             <QuestionnaireCard>
@@ -343,65 +352,84 @@ export function Questionnaire() {
     (responses[questions.length] === undefined ||
       responses[questions.length] === null);
 
+  const progressPercent = Math.round(
+    (currentQuestion / questions.length) * 100
+  );
+
   // Main questionnaire view
   return (
     <PageBackground>
+      <BackgroundEffects />
       <LandingContainer>
         <ModernAssessmentContainer $isAuthenticated={isAuthenticated}>
           <AssessmentHeader>
-            <ProgressBar>
-              {questions.map((_, idx: number) => (
-                <div
-                  key={idx}
-                  className={`progress-segment ${
-                    idx < currentQuestion ? "filled" : ""
-                  }`}
+            <ProgressRoot
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={questions.length}
+              aria-valuenow={currentQuestion}
+              aria-valuetext={`${progressPercent}% complete, question ${currentQuestion} of ${questions.length}`}
+              aria-label="Questionnaire progress"
+            >
+              <ProgressTrack>
+                <ProgressFill
+                  $percent={(currentQuestion / questions.length) * 100}
                 />
-              ))}
-            </ProgressBar>
+                <ProgressPercentInside aria-hidden="true">
+                  {progressPercent}%
+                </ProgressPercentInside>
+              </ProgressTrack>
+            </ProgressRoot>
 
-            <ProgressIndicator>
-              Question {currentQuestion} / {questions.length}
-            </ProgressIndicator>
+            <ProgressLabelsRow>
+              <ProgressIndicator>
+                Question {currentQuestion} of {questions.length}
+              </ProgressIndicator>
+            </ProgressLabelsRow>
           </AssessmentHeader>
 
           <QuestionContent>
             <QuestionFadeWrapper
               className={isTransitioning ? "fade-out" : "fade-in"}
             >
-              <RenderQuestions
-                {...questions[displayedQuestion - 1]}
-                onResponseChange={handleResponseChange}
-                initialResponse={responses[displayedQuestion]}
-                questionId={displayedQuestion}
-              />
+              <QuestionPanel>
+                <RenderQuestions
+                  {...questions[displayedQuestion - 1]}
+                  onResponseChange={handleResponseChange}
+                  initialResponse={responses[displayedQuestion]}
+                  questionId={displayedQuestion}
+                />
+              </QuestionPanel>
             </QuestionFadeWrapper>
           </QuestionContent>
 
           <ActionSection>
-            <QuitButton onClick={handleQuit}>
-              <FontAwesomeIcon icon={faArrowLeft} />{" "}
+            <QuestionnaireFlowDangerButton onClick={handleQuit}>
+              <FontAwesomeIcon icon={faArrowLeft} aria-hidden />
               {hasCompletedQuestionnaire ? "Exit to Results" : "Quit"}
-            </QuitButton>
+            </QuestionnaireFlowDangerButton>
 
-            <NavigationButton
+            <QuestionnaireFlowSecondaryButton
               onClick={handlePrevious}
               disabled={currentQuestion === 1}
             >
               Previous
-            </NavigationButton>
+            </QuestionnaireFlowSecondaryButton>
 
             {currentQuestion === questions.length ? (
-              <SubmitButton
+              <QuestionnaireFlowPrimaryButton
                 onClick={handleSubmit}
                 disabled={isSubmitDisabled || isSaving}
               >
                 {isSaving ? "Submitting..." : "Submit"}
-              </SubmitButton>
+              </QuestionnaireFlowPrimaryButton>
             ) : (
-              <NavigationButton onClick={handleNext} disabled={isNextDisabled}>
+              <QuestionnaireFlowPrimaryButton
+                onClick={handleNext}
+                disabled={isNextDisabled}
+              >
                 Next
-              </NavigationButton>
+              </QuestionnaireFlowPrimaryButton>
             )}
           </ActionSection>
 

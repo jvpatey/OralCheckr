@@ -28,12 +28,18 @@ export const QuestionnaireHeroCopy = styled(HeroCopy)`
   }
 `;
 
-/** Page title — hero scale with room for “Oral Health Questionnaire” */
+/** Page title — hero scale; full phrase stays on one line on large viewports */
 export const QuestionnairePageTitle = styled(HeroTitle)`
   max-width: min(100%, 30ch);
 
+  @media (min-width: 1024px) {
+    max-width: none;
+    white-space: nowrap;
+  }
+
   @media (max-width: 480px) {
     max-width: none;
+    white-space: normal;
   }
 `;
 
@@ -95,6 +101,44 @@ export const QuestionnairePrimaryCta = styled(BaseButton).attrs(() => ({
   min-width: min(100%, 260px);
   padding: 14px 28px;
   font-size: 1.0625rem;
+`;
+
+/** In-flow questionnaire: Next / Submit */
+export const QuestionnaireFlowPrimaryButton = styled(BaseButton).attrs(() => ({
+  $variant: "primary" as const,
+  type: "button" as const,
+}))`
+  flex: none !important;
+  width: auto !important;
+  min-width: min(100%, 132px);
+  padding: 14px 28px;
+  font-size: 1.0625rem;
+`;
+
+/** In-flow questionnaire: Previous */
+export const QuestionnaireFlowSecondaryButton = styled(BaseButton).attrs(() => ({
+  $variant: "secondary" as const,
+  type: "button" as const,
+}))`
+  flex: none !important;
+  width: auto !important;
+  min-width: min(100%, 132px);
+  padding: 14px 28px;
+  font-size: 1.0625rem;
+`;
+
+/** In-flow questionnaire: Quit / Exit to results */
+export const QuestionnaireFlowDangerButton = styled(BaseButton).attrs(() => ({
+  $variant: "danger" as const,
+  type: "button" as const,
+}))`
+  flex: none !important;
+  width: auto !important;
+  min-width: min(100%, max-content);
+  padding: 14px 22px;
+  font-size: 1.0625rem;
+  white-space: nowrap;
+  gap: 8px;
 `;
 
 /** Results / long-form questionnaire pages — top-aligned, full-width content */

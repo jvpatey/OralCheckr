@@ -35,12 +35,19 @@ export function useQuestionnaireData() {
     initialData: null,
   });
 
-  // Format the raw questionnaire data for display
+  const formatCompletedDate = (iso: string | undefined): string | null => {
+    if (!iso) return null;
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return null;
+    return format(d, "MMMM d, yyyy");
+  };
+
+  // Prefer updatedAt; fall back to createdAt if the API omits completion time
   const formattedData: QuestionnaireData = {
-    lastCompleted:
-      data && data.updatedAt
-        ? format(new Date(data.updatedAt), "MMMM d, yyyy")
-        : null,
+    lastCompleted: data
+      ? formatCompletedDate(data.updatedAt) ??
+        formatCompletedDate(data.createdAt)
+      : null,
     score: data?.totalScore ?? null,
   };
 

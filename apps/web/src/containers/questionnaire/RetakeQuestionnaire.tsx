@@ -8,7 +8,6 @@ import {
   BackgroundEffects,
   HeroEyebrow,
   HeroTitleAccent,
-  HeroDescription,
 } from "../welcome/styles/WelcomeStyles";
 import {
   StyledModal,
@@ -21,16 +20,21 @@ import {
   QuestionnaireFlowContainer,
   QuestionnaireHeroCopy,
   QuestionnairePageTitle,
-  QuestionnaireCtaSection,
   QuestionnairePrimaryCta,
 } from "../../components/questionnaire/styles/QuestionnaireFlowLayout";
 import { AuthContext } from "../authentication/AuthContext";
 import { RetakeQuestionnaireProps } from "../../common/types/questionnaire/retake-questionnaire.types";
 import {
+  RetakePageStack,
+  RetakeBelowCard,
+  RetakeHeroDescription,
+  RetakeCtaSection,
   RetakeScoreCard,
   RetakeScoreNumber,
   RetakeScoreLabel,
   RetakeCompletionLine,
+  RetakeCompletionMuted,
+  RetakeModalMessage,
   RetakeModalActions,
   RetakeModalCancel,
   RetakeModalConfirm,
@@ -98,38 +102,41 @@ export function RetakeQuestionnaire({
       <BackgroundEffects />
       <LandingContainer>
         <QuestionnaireFlowContainer $isAuthenticated={isAuthenticated}>
-          <QuestionnaireHeroCopy>
-            <HeroEyebrow>Assess</HeroEyebrow>
-            <QuestionnairePageTitle>
-              Oral Health <HeroTitleAccent>Questionnaire</HeroTitleAccent>
-            </QuestionnairePageTitle>
-          </QuestionnaireHeroCopy>
+          <RetakePageStack>
+            <QuestionnaireHeroCopy>
+              <HeroEyebrow>Assess</HeroEyebrow>
+              <QuestionnairePageTitle>
+                Oral Health <HeroTitleAccent>Questionnaire</HeroTitleAccent>
+              </QuestionnairePageTitle>
+            </QuestionnaireHeroCopy>
 
-          <RetakeScoreCard>
-            <RetakeScoreNumber $scoreColor={scoreColor}>
-              {questionnaireData.score}
-            </RetakeScoreNumber>
-            <RetakeScoreLabel>Oral health score</RetakeScoreLabel>
-            <RetakeCompletionLine>
-              Completed on: {questionnaireData.lastCompleted}
-            </RetakeCompletionLine>
-          </RetakeScoreCard>
+            <RetakeScoreCard>
+              <RetakeScoreNumber $scoreColor={scoreColor}>
+                {questionnaireData.score}
+              </RetakeScoreNumber>
+              <RetakeScoreLabel>Oral health score</RetakeScoreLabel>
+              <RetakeCompletionLine>
+                <RetakeCompletionMuted>Completed on: </RetakeCompletionMuted>
+                {questionnaireData.lastCompleted ?? "—"}
+              </RetakeCompletionLine>
+            </RetakeScoreCard>
 
-          <QuestionnaireHeroCopy>
-            <HeroDescription>
-              It looks like you&apos;ve already completed the oral health
-              questionnaire.
-            </HeroDescription>
-            <HeroDescription>
-              If you wish to retake it to update your score and oral health
-              status, use the button below.
-            </HeroDescription>
-            <QuestionnaireCtaSection>
-              <QuestionnairePrimaryCta onClick={handleRetakeClick}>
-                Retake questionnaire
-              </QuestionnairePrimaryCta>
-            </QuestionnaireCtaSection>
-          </QuestionnaireHeroCopy>
+            <RetakeBelowCard>
+              <RetakeHeroDescription>
+                It looks like you&apos;ve already completed the oral health
+                questionnaire.
+              </RetakeHeroDescription>
+              <RetakeHeroDescription>
+                If you wish to retake it to update your score and oral health
+                status, use the button below.
+              </RetakeHeroDescription>
+              <RetakeCtaSection>
+                <QuestionnairePrimaryCta onClick={handleRetakeClick}>
+                  Retake questionnaire
+                </QuestionnairePrimaryCta>
+              </RetakeCtaSection>
+            </RetakeBelowCard>
+          </RetakePageStack>
         </QuestionnaireFlowContainer>
       </LandingContainer>
 
@@ -140,18 +147,10 @@ export function RetakeQuestionnaire({
           </ModalTitleStack>
         </ModalHeader>
         <ModalBody>
-          <p
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-sans), system-ui, sans-serif",
-              fontSize: "1rem",
-              lineHeight: 1.65,
-              color: "inherit",
-            }}
-          >
+          <RetakeModalMessage>
             <strong>Are you sure you want to retake the questionnaire?</strong>{" "}
             This will clear your previous responses and oral health score.
-          </p>
+          </RetakeModalMessage>
           <RetakeModalActions>
             <RetakeModalCancel type="button" onClick={handleCloseModal}>
               Cancel

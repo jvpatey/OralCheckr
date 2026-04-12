@@ -3,6 +3,7 @@ import styled from "styled-components";
 export type ButtonVariant =
   | "primary"
   | "secondary"
+  | "danger"
   | "guest"
   | "login"
   | "signup";
@@ -39,7 +40,10 @@ export const BaseButton = styled.button<BaseButtonProps>`
   background: ${({ theme, $variant }) => {
     switch ($variant) {
       case "login":
+      case "secondary":
         return "transparent";
+      case "danger":
+        return `linear-gradient(135deg, ${theme.error} 0%, ${theme.errorLight} 100%)`;
       case "primary":
       case "signup":
         return theme.primaryGradient;
@@ -53,6 +57,7 @@ export const BaseButton = styled.button<BaseButtonProps>`
   color: ${({ theme, $variant }) => {
     switch ($variant) {
       case "login":
+      case "secondary":
         return theme.textPrimary;
       default:
         return "#ffffff";
@@ -64,6 +69,10 @@ export const BaseButton = styled.button<BaseButtonProps>`
       switch ($variant) {
         case "login":
           return `${theme.primary}45`;
+        case "secondary":
+          return `${theme.primary}45`;
+        case "danger":
+          return theme.error;
         case "primary":
         case "signup":
           return theme.primary;
@@ -75,7 +84,7 @@ export const BaseButton = styled.button<BaseButtonProps>`
     }};
 
   box-shadow: ${({ $variant }) =>
-    $variant === "login"
+    $variant === "login" || $variant === "secondary"
       ? "none"
       : `0 2px 10px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.08) inset`};
 
@@ -96,24 +105,37 @@ export const BaseButton = styled.button<BaseButtonProps>`
   }
 
   &:hover {
-    box-shadow: ${({ theme, $variant }) =>
-      $variant === "login"
-        ? `0 0 0 1px ${theme.primary}55 inset`
-        : `0 6px 20px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(255, 255, 255, 0.12) inset`};
-    border-color: ${({ theme, $variant }) =>
-      $variant === "login" ? `${theme.primary}70` : theme.primary};
+    box-shadow: ${({ theme, $variant }) => {
+      if ($variant === "login")
+        return `0 0 0 1px ${theme.primary}55 inset`;
+      if ($variant === "secondary")
+        return `0 0 0 1px ${theme.primary}35 inset`;
+      return `0 6px 20px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(255, 255, 255, 0.12) inset`;
+    }};
+    border-color: ${({ theme, $variant }) => {
+      if ($variant === "login") return `${theme.primary}70`;
+      if ($variant === "secondary") return theme.primary;
+      if ($variant === "danger") return theme.error;
+      return theme.primary;
+    }};
     background: ${({ theme, $variant }) => {
       if ($variant === "login") return `${theme.primary}10`;
+      if ($variant === "secondary") return `${theme.primary}12`;
+      if ($variant === "danger")
+        return `linear-gradient(135deg, ${theme.errorLight} 0%, ${theme.error} 100%)`;
       return theme.primaryGradient;
     }};
   }
 
   &:hover::before {
-    left: ${({ $variant }) => ($variant === "login" ? "-100%" : "100%")};
+    left: ${({ $variant }) =>
+      $variant === "login" || $variant === "secondary" ? "-100%" : "100%"};
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.primary};
+    outline: 2px solid
+      ${({ theme, $variant }) =>
+        $variant === "danger" ? theme.error : theme.primary};
     outline-offset: 3px;
   }
 
@@ -134,7 +156,10 @@ export const BaseButton = styled.button<BaseButtonProps>`
     background: ${({ theme, $variant }) => {
       switch ($variant) {
         case "login":
+        case "secondary":
           return "transparent";
+        case "danger":
+          return `linear-gradient(135deg, ${theme.error} 0%, ${theme.errorLight} 100%)`;
         default:
           return theme.primaryGradient;
       }
