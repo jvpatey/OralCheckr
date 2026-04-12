@@ -35,46 +35,35 @@ type PreviewId =
   | "improve"
   | "analyze";
 
+/** Filenames: `public/images/welcome/{id}_light.png` / `{id}_dark.png` */
 const PREVIEW_SLIDE_DEFS: readonly {
   id: PreviewId;
   label: string;
-  darkFile: string;
-  lightFile: string;
   alt: string;
 }[] = [
   {
     id: "dashboard",
     label: "Dashboard",
-    darkFile: "dashboard_screenshot.png",
-    lightFile: "dashboard_light_screenshot.png",
     alt: "OralCheckr dashboard preview",
   },
   {
     id: "assess",
     label: "Assess",
-    darkFile: "assess_screenshot.png",
-    lightFile: "assess_light_screenshot.png",
     alt: "OralCheckr assess questionnaire preview",
   },
   {
     id: "track",
     label: "Track",
-    darkFile: "track_screenshot.png",
-    lightFile: "track_light_screenshot.png",
     alt: "OralCheckr habit tracking preview",
   },
   {
     id: "improve",
     label: "Improve",
-    darkFile: "improve_screenshot.png",
-    lightFile: "improve_light_screenshot.png",
     alt: "OralCheckr improvement goals preview",
   },
   {
     id: "analyze",
     label: "Analyze",
-    darkFile: "analyze_screenshot.png",
-    lightFile: "analyze_light_screenshot.png",
     alt: "OralCheckr analyze insights preview",
   },
 ];
@@ -85,7 +74,7 @@ function previewSlidesForTheme(theme: ThemeType) {
     id: d.id,
     label: d.label,
     alt: d.alt,
-    src: welcomeScreenshot(light ? d.lightFile : d.darkFile),
+    src: welcomeScreenshot(`${d.id}_${light ? "light" : "dark"}.png`),
   }));
 }
 

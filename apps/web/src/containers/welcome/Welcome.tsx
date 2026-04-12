@@ -10,6 +10,7 @@ import {
   FeatureCards,
   Footer,
   HeroAppPreview,
+  WelcomeHeroWaveBands,
 } from "./components";
 import {
   ModernWelcomeContainer,
@@ -47,6 +48,7 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
         <WelcomeNavBar themeToggler={themeToggler} theme={theme} />
 
         <HeroSection id="hero">
+          <WelcomeHeroWaveBands />
           <HeroGrid>
             <HeroCopy>
               <WelcomeContent />
