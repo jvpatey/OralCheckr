@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 // Base button style
 export const BaseButton = styled.div<{ $disabled?: boolean }>`
@@ -33,9 +33,7 @@ export const IconButtonContainer = styled(BaseButton)<{
 
   width: 48px;
   height: 48px;
-  border-radius: 12px;
-  margin-left: 10px;
-  margin-bottom: 10px;
+  border-radius: 14px;
   box-shadow: ${({ theme, $disabled }) =>
     $disabled ? "none" : theme.shadowSm};
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -54,7 +52,7 @@ export const IconButtonContainer = styled(BaseButton)<{
       `linear-gradient(135deg, ${$hoverBackgroundColor} 0%, ${$hoverBackgroundColor}90 100%)`};
     opacity: 0;
     transition: opacity 0.3s ease;
-    border-radius: 10px;
+    border-radius: 12px;
   }
 
   &:hover:not([aria-disabled="true"]) {
@@ -77,6 +75,134 @@ export const IconButtonContainer = styled(BaseButton)<{
   @media (max-width: 768px) {
     width: 44px;
     height: 44px;
+  }
+`;
+
+/** Flanking habit tile: same height as TileContainer (56px / 54px) */
+export const HabitIconButtonContainer = styled(BaseButton)<{
+  $disabled?: boolean;
+  $accent: "plus" | "minus" | "edit" | "delete";
+}>`
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+
+  ${({ $disabled, theme }) =>
+    $disabled
+      ? css`
+          cursor: not-allowed;
+          opacity: 0.42;
+          background: ${theme.disabledBackground};
+          border: 1px solid ${theme.borderMedium};
+          color: ${theme.textDisabled};
+          box-shadow: none;
+        `
+      : css`
+          cursor: pointer;
+          opacity: 1;
+          background: color-mix(in srgb, ${theme.glassBg} 88%, transparent);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.1),
+            ${theme.shadowSm};
+        `}
+
+  ${({ $disabled, $accent, theme }) =>
+    !$disabled &&
+    ($accent === "plus"
+      ? css`
+          border: 1px solid color-mix(in srgb, ${theme.secondary} 36%, transparent);
+          color: ${theme.secondary};
+          &:hover {
+            border-color: color-mix(in srgb, ${theme.secondary} 58%, transparent);
+            background: color-mix(in srgb, ${theme.secondary} 16%, ${theme.glassBg});
+            color: ${theme.secondaryDark};
+            box-shadow:
+              inset 0 1px 0 rgba(255, 255, 255, 0.12),
+              ${theme.shadowMd},
+              0 0 14px color-mix(in srgb, ${theme.secondary} 22%, transparent);
+            transform: translateY(-1px);
+          }
+        `
+      : $accent === "minus"
+        ? css`
+            border: 1px solid color-mix(in srgb, ${theme.primary} 28%, transparent);
+            color: ${theme.textSecondary};
+            &:hover {
+              border-color: color-mix(in srgb, ${theme.error} 48%, transparent);
+              background: color-mix(in srgb, ${theme.error} 11%, ${theme.glassBg});
+              color: ${theme.error};
+              box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                ${theme.shadowMd};
+              transform: translateY(-1px);
+            }
+          `
+        : $accent === "edit"
+          ? css`
+              border: 1px solid color-mix(in srgb, ${theme.warning} 34%, transparent);
+              color: ${theme.textTertiary};
+              &:hover {
+                border-color: color-mix(in srgb, ${theme.warning} 55%, transparent);
+                background: color-mix(in srgb, ${theme.warning} 14%, ${theme.glassBg});
+                color: ${theme.warning};
+                box-shadow:
+                  inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                  ${theme.shadowMd};
+                transform: translateY(-1px);
+              }
+            `
+          : css`
+              border: 1px solid color-mix(in srgb, ${theme.error} 32%, transparent);
+              color: ${theme.textTertiary};
+              &:hover {
+                border-color: color-mix(in srgb, ${theme.error} 58%, transparent);
+                background: color-mix(in srgb, ${theme.error} 14%, ${theme.glassBg});
+                color: ${theme.error};
+                box-shadow:
+                  inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                  ${theme.shadowMd};
+                transform: translateY(-1px);
+              }
+            `)}
+
+  &:active:not([aria-disabled="true"]) {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    width: 54px;
+    height: 54px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &:hover {
+      transform: none;
+    }
+  }
+`;
+
+export const HabitIconInner = styled.div`
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
   }
 `;
 

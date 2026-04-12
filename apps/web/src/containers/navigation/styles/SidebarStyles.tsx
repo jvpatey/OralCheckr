@@ -21,7 +21,7 @@ export const SidebarContainer = styled.nav`
   top: 104px;
   left: 16px;
 
-  background: ${({ theme }) => theme.glassBg}99;
+  background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid ${({ theme }) => theme.borderLight}60;

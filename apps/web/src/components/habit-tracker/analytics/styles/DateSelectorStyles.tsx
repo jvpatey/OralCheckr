@@ -5,6 +5,7 @@ export const DatePickerContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 12px;
   width: 440px;
   margin-bottom: 10px;
 
@@ -34,7 +35,8 @@ export const DatePickerButton = styled.button`
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  box-shadow: ${({ theme }) => theme.shadowMd},
+  box-shadow:
+    ${({ theme }) => theme.shadowMd},
     ${({ theme }) => theme.glowColor} 0 0 15px;
 
   /* Subtle gradient overlay */

@@ -113,7 +113,8 @@ const StyledFormControl = styled(Form.Control)`
     background: ${({ theme }) => theme.glassBg};
     color: ${({ theme }) => theme.textPrimary};
     border-color: ${({ theme }) => theme.primary};
-    box-shadow: ${({ theme }) => theme.shadowMd},
+    box-shadow:
+      ${({ theme }) => theme.shadowMd},
       0 0 0 3px ${({ theme }) => theme.primary}20;
     outline: none;
   }

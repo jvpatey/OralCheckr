@@ -278,13 +278,13 @@ export function HabitCalendar({
             textColor: isCurrentDay
               ? theme.secondary
               : isFutureDate
-              ? theme.textTertiary
-              : theme.primary,
+                ? theme.textTertiary
+                : theme.primary,
             trailColor: isLoading
               ? theme.disabledBackground
               : isFutureDate
-              ? theme.disabledBackground
-              : theme.backgroundColor,
+                ? theme.disabledBackground
+                : theme.backgroundColor,
             strokeLinecap: "round",
           })}
         />

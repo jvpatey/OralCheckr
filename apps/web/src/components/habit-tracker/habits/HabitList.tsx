@@ -8,7 +8,6 @@ import {
   faPlusCircle,
   faMinusCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { useTheme } from "styled-components";
 import { memo } from "react";
 
 export interface HabitListProps {
@@ -37,7 +36,6 @@ const HabitRowComponent = memo(
     handleLog,
     handleRemoveLog,
     selectedDate,
-    theme,
   }: {
     habit: Habit;
     index: number;
@@ -50,47 +48,41 @@ const HabitRowComponent = memo(
     handleLog: (habitName: string, selectedDate: Date) => void;
     handleRemoveLog: (habitName: string, selectedDate: Date) => void;
     selectedDate: Date;
-    theme: ReturnType<typeof useTheme>;
   }) => {
     return (
-      <HabitRow key={index}>
+      <HabitRow>
+        {isEditMode ? (
+          <IconButton
+            look="subtle"
+            accent="edit"
+            icon={faPencilAlt}
+            onClick={() => handleEditHabit(index)}
+          />
+        ) : (
+          <IconButton
+            look="subtle"
+            accent="minus"
+            icon={faMinusCircle}
+            onClick={() => handleRemoveLog(habit.name, selectedDate)}
+            disabled={isRemoveLogDisabled}
+          />
+        )}
         <HabitTile habit={habit} logCount={logCount} />
         {isEditMode ? (
-          <>
-            <IconButton
-              icon={faPencilAlt}
-              onClick={() => handleEditHabit(index)}
-              borderColor={theme.yellow}
-              color={theme.yellow}
-              hoverBackgroundColor={theme.yellow}
-            />
-            <IconButton
-              icon={faTrashAlt}
-              onClick={() => handleDeleteHabit(index)}
-              borderColor={theme.red}
-              color={theme.red}
-              hoverBackgroundColor={theme.red}
-            />
-          </>
+          <IconButton
+            look="subtle"
+            accent="delete"
+            icon={faTrashAlt}
+            onClick={() => handleDeleteHabit(index)}
+          />
         ) : (
-          <>
-            <IconButton
-              icon={faPlusCircle}
-              onClick={() => handleLog(habit.name, selectedDate)}
-              borderColor={theme.green}
-              color={theme.green}
-              hoverBackgroundColor={theme.green}
-              disabled={isAddLogDisabled}
-            />
-            <IconButton
-              icon={faMinusCircle}
-              onClick={() => handleRemoveLog(habit.name, selectedDate)}
-              borderColor={theme.red}
-              color={theme.red}
-              hoverBackgroundColor={theme.red}
-              disabled={isRemoveLogDisabled}
-            />
-          </>
+          <IconButton
+            look="subtle"
+            accent="plus"
+            icon={faPlusCircle}
+            onClick={() => handleLog(habit.name, selectedDate)}
+            disabled={isAddLogDisabled}
+          />
         )}
       </HabitRow>
     );
@@ -110,8 +102,6 @@ const RenderHabits = memo(
     getLogCount,
     isFutureDate,
   }: HabitListProps) => {
-    const theme = useTheme();
-
     return (
       <>
         {habits.map((habit, index) => {
@@ -133,7 +123,6 @@ const RenderHabits = memo(
               handleLog={handleLog}
               handleRemoveLog={handleRemoveLog}
               selectedDate={selectedDate}
-              theme={theme}
             />
           );
         })}

@@ -37,7 +37,7 @@ const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 // Helper function to transform habitLogsMap
 const transformHabitLogsToAnalyticsFormat = (
   habits: Habit[],
-  habitLogsMap: Record<number, Record<string, number>>
+  habitLogsMap: Record<number, Record<string, number>>,
 ): Logging => {
   const result: Logging = {};
 
@@ -87,7 +87,7 @@ const transformHabitLogsToAnalyticsFormat = (
 const createToggleOption = (
   icon: IconDefinition,
   label: string,
-  value: ViewMode
+  value: ViewMode,
 ) => ({
   label: (
     <>
@@ -122,7 +122,7 @@ export function Analytics() {
   // Get a list of habit IDs
   const habitIds = useMemo(
     () => habits.map((h) => h.habitId).filter(Boolean) as number[],
-    [habits]
+    [habits],
   );
 
   // Fetch logs for all habits - for month view

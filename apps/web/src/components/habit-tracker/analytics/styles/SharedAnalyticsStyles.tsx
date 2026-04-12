@@ -52,7 +52,8 @@ export const CardContainer = styled.div`
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: ${({ theme }) => theme.shadowXl},
+  box-shadow:
+    ${({ theme }) => theme.shadowXl},
     ${({ theme }) => theme.glowColor} 0 0 40px;
   padding: 3rem;
   height: calc(100% - 2rem);
@@ -348,7 +349,8 @@ export const TileContainer = styled.div`
   /* Hover effects */
   &:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: ${({ theme }) => theme.shadowXl},
+    box-shadow:
+      ${({ theme }) => theme.shadowXl},
       ${({ theme }) => theme.glowColor} 0 0 30px;
 
     &::before {

@@ -120,8 +120,8 @@ export const DayCell = styled.div<{
     $isToday
       ? theme.blue
       : $isCurrentMonth
-      ? theme.accentBackgroundColor
-      : theme.disabledBackground};
+        ? theme.accentBackgroundColor
+        : theme.disabledBackground};
   color: ${({ $isToday, theme }) =>
     $isToday ? theme.backgroundColor : theme.textGrey};
   border-radius: 5px;

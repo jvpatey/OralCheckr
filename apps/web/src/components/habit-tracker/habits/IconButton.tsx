@@ -1,31 +1,56 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { IconButtonContainer, IconContainer } from "./styles/ButtonStyles";
+import {
+  IconButtonContainer,
+  IconContainer,
+  HabitIconButtonContainer,
+  HabitIconInner,
+} from "./styles/ButtonStyles";
 
-interface IconButtonProps {
+type IconButtonBoldProps = {
   icon: IconDefinition;
   onClick: () => void;
+  disabled?: boolean;
+  look?: "bold";
   borderColor: string;
   color: string;
   hoverBackgroundColor: string;
-  disabled?: boolean;
-}
+};
 
-// Functional component for the common icon button (log, remove log, edit, and delete buttons) - used in the Habits component
-export function IconButton({
-  icon,
-  onClick,
-  borderColor,
-  color,
-  hoverBackgroundColor,
-  disabled = false,
-}: IconButtonProps) {
-  // handler that only calls onClick if not disabled
+type IconButtonSubtleProps = {
+  icon: IconDefinition;
+  onClick: () => void;
+  disabled?: boolean;
+  look: "subtle";
+  accent: "plus" | "minus" | "edit" | "delete";
+};
+
+export type IconButtonProps = IconButtonBoldProps | IconButtonSubtleProps;
+
+// Icon button for habit logging (subtle flanking controls) or analytics (bold)
+export function IconButton(props: IconButtonProps) {
   const handleClick = () => {
-    if (!disabled) {
-      onClick();
+    if (!props.disabled) {
+      props.onClick();
     }
   };
+
+  if (props.look === "subtle") {
+    return (
+      <HabitIconButtonContainer
+        onClick={handleClick}
+        $disabled={props.disabled}
+        $accent={props.accent}
+        aria-disabled={props.disabled ?? false}
+      >
+        <HabitIconInner>
+          <FontAwesomeIcon icon={props.icon} />
+        </HabitIconInner>
+      </HabitIconButtonContainer>
+    );
+  }
+
+  const { icon, disabled, borderColor, color, hoverBackgroundColor } = props;
 
   return (
     <IconButtonContainer

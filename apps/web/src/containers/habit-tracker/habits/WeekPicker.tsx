@@ -21,16 +21,16 @@ const DatePickerControls = styled.div`
   justify-content: center;
   gap: 12px;
   width: 100%;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 
   @media (max-width: 768px) {
     gap: 10px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   @media (max-width: 480px) {
     gap: 8px;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 `;
 

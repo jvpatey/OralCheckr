@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { PageBackground } from "../../../components/PageBackground";
-import { IconTextButton } from "../../../components/habit-tracker/habits/IconTextButton";
 import { WeekPicker } from "./WeekPicker";
 import { AddEditHabitModal } from "./AddEditHabitModal";
 import { ConfirmationModal } from "../../../components/shared/ConfirmationModal";
@@ -8,9 +7,17 @@ import {
   HabitListContainer,
   ScrollableHabitList,
   HabitWrapper,
+  HabitHeroEyebrow,
+  HeaderTitleColumn,
+  HeaderSubtitle,
   Header,
+  HeaderMainRow,
   HeaderText,
-  HeaderButtons,
+  HeaderActionsRow,
+  HabitHeaderButtonPrimary,
+  HabitHeaderButtonOutline,
+  HabitHeaderButtonDangerOutline,
+  HabitHeaderButtonIcon,
   StyledHabitList,
   DatePickerWrapper,
   CardContainer,
@@ -22,7 +29,7 @@ import {
   faTimes,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { useTheme } from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Habit } from "../../../services/habitService";
 import {
   useFetchHabits,
@@ -40,6 +47,7 @@ import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { toast } from "react-toastify";
 import { HabitLogResponse } from "../../../services/habitLogService";
+import { HeroTitleAccent } from "../../../containers/welcome/styles/WelcomeStyles";
 
 // Local timezone
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -55,7 +63,7 @@ const normalizeDate = (date: Date): string => {
 // Reset habit form to default values
 const resetHabitForm = (
   setNewHabit: (habit: Habit) => void,
-  setOriginalHabit: (habit: Habit) => void
+  setOriginalHabit: (habit: Habit) => void,
 ) => {
   setNewHabit({ name: "", count: 0 });
   setOriginalHabit({ name: "", count: 0 });
@@ -75,8 +83,6 @@ export function Habits() {
   const initialDate = new Date();
   const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
 
-  const theme = useTheme();
-
   // Fetch habits using TanStack Query
   const {
     data: habits = [],
@@ -91,7 +97,7 @@ export function Habits() {
   // Get a list of habit IDs
   const habitIds = useMemo(
     () => habits.map((h) => h.habitId).filter(Boolean) as number[],
-    [habits]
+    [habits],
   );
 
   // Fetch logs for all habits
@@ -147,7 +153,7 @@ export function Habits() {
                 autoClose: 800,
               });
             },
-          }
+          },
         );
       } else {
         // Create new habit
@@ -164,7 +170,7 @@ export function Habits() {
                 autoClose: 800,
               });
             },
-          }
+          },
         );
       }
     }
@@ -244,7 +250,7 @@ export function Habits() {
     if (logCount >= habit.count) {
       toast.error(
         `Cannot exceed the maximum count of ${habit.count} for this habit`,
-        { autoClose: 800 }
+        { autoClose: 800 },
       );
       return;
     }
@@ -276,7 +282,7 @@ export function Habits() {
           // Refresh data
           syncWithServer();
         },
-      }
+      },
     );
   };
 
@@ -322,7 +328,7 @@ export function Habits() {
           // Refresh data
           syncWithServer();
         },
-      }
+      },
     );
   };
 
@@ -363,7 +369,12 @@ export function Habits() {
           <CardContainer>
             <HabitWrapper>
               <Header>
-                <HeaderText>Loading habits...</HeaderText>
+                <HeaderMainRow>
+                  <HeaderTitleColumn>
+                    <HabitHeroEyebrow>Track</HabitHeroEyebrow>
+                    <HeaderText>Loading habits...</HeaderText>
+                  </HeaderTitleColumn>
+                </HeaderMainRow>
               </Header>
             </HabitWrapper>
           </CardContainer>
@@ -380,7 +391,12 @@ export function Habits() {
           <CardContainer>
             <HabitWrapper>
               <Header>
-                <HeaderText>Error loading habits</HeaderText>
+                <HeaderMainRow>
+                  <HeaderTitleColumn>
+                    <HabitHeroEyebrow>Track</HabitHeroEyebrow>
+                    <HeaderText>Error loading habits</HeaderText>
+                  </HeaderTitleColumn>
+                </HeaderMainRow>
               </Header>
             </HabitWrapper>
           </CardContainer>
@@ -394,44 +410,74 @@ export function Habits() {
       <HabitListContainer>
         <CardContainer>
           <HabitWrapper>
+            <Header>
+              <HeaderMainRow>
+                <HeaderTitleColumn>
+                  <HabitHeroEyebrow>Track</HabitHeroEyebrow>
+                  <HeaderText>
+                    Habit <HeroTitleAccent as="span">Tracker</HeroTitleAccent>
+                  </HeaderText>
+                  <HeaderSubtitle>
+                    {format(selectedDate, "EEEE, MMMM d, yyyy")} · Tap a habit
+                    for details
+                  </HeaderSubtitle>
+                </HeaderTitleColumn>
+                <HeaderActionsRow>
+                {!isEditMode && (
+                  <>
+                    <HabitHeaderButtonPrimary
+                      type="button"
+                      onClick={handleAddHabitClick}
+                    >
+                      <HabitHeaderButtonIcon aria-hidden>
+                        <FontAwesomeIcon icon={faPlus} />
+                      </HabitHeaderButtonIcon>
+                      Add Habit
+                    </HabitHeaderButtonPrimary>
+                    <HabitHeaderButtonOutline
+                      type="button"
+                      onClick={() => setIsEditMode(true)}
+                      disabled={habits.length === 0}
+                    >
+                      <HabitHeaderButtonIcon aria-hidden>
+                        <FontAwesomeIcon icon={faPencilAlt} />
+                      </HabitHeaderButtonIcon>
+                      Edit
+                    </HabitHeaderButtonOutline>
+                  </>
+                )}
+                {isEditMode && (
+                  <>
+                    <HabitHeaderButtonDangerOutline
+                      type="button"
+                      onClick={handleDeleteAllHabits}
+                      disabled={habits.length === 0}
+                    >
+                      <HabitHeaderButtonIcon aria-hidden>
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </HabitHeaderButtonIcon>
+                      Delete All
+                    </HabitHeaderButtonDangerOutline>
+                    <HabitHeaderButtonPrimary
+                      type="button"
+                      onClick={() => setIsEditMode(false)}
+                    >
+                      <HabitHeaderButtonIcon aria-hidden>
+                        <FontAwesomeIcon icon={faTimes} />
+                      </HabitHeaderButtonIcon>
+                      Exit
+                    </HabitHeaderButtonPrimary>
+                  </>
+                )}
+                </HeaderActionsRow>
+              </HeaderMainRow>
+            </Header>
             <DatePickerWrapper>
               <WeekPicker
                 isEditMode={isEditMode}
                 onDateChange={handleWeekPickerDateChange}
               />
             </DatePickerWrapper>
-            <Header>
-              <HeaderText>Habit Tracker</HeaderText>
-              <HeaderButtons>
-                {!isEditMode && (
-                  <IconTextButton
-                    icon={faPlus}
-                    label="Add Habit"
-                    onClick={handleAddHabitClick}
-                    backgroundColor={theme.green}
-                    hoverColor={theme.green}
-                  />
-                )}
-                {isEditMode && (
-                  <IconTextButton
-                    icon={faTrashAlt}
-                    label="Delete All"
-                    onClick={handleDeleteAllHabits}
-                    backgroundColor={theme.red}
-                    hoverColor={theme.red}
-                    disabled={habits.length === 0}
-                  />
-                )}
-                <IconTextButton
-                  icon={isEditMode ? faTimes : faPencilAlt}
-                  label={isEditMode ? "Exit" : "Edit"}
-                  onClick={() => setIsEditMode(!isEditMode)}
-                  backgroundColor={isEditMode ? theme.red : theme.yellow}
-                  hoverColor={isEditMode ? theme.red : theme.yellow}
-                  disabled={!isEditMode && habits.length === 0}
-                />
-              </HeaderButtons>
-            </Header>
             <ScrollableHabitList>
               <StyledHabitList>
                 <HabitList

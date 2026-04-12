@@ -41,7 +41,7 @@ const generateChartOptions = (
   daysInMonth: number,
   month: string,
   theme: any,
-  seriesData: number[]
+  seriesData: number[],
 ): ApexCharts.ApexOptions => {
   const maxValue = Math.max(...seriesData, 0);
   return {
@@ -242,7 +242,7 @@ export function LineChart({ habitsLog, year, month }: LineChartProps) {
 
   // Get the number of days in the current month
   const daysInMonth = getDaysInMonth(
-    new Date(year, new Date(`${month} 1, ${year}`).getMonth())
+    new Date(year, new Date(`${month} 1, ${year}`).getMonth()),
   );
 
   // Create an array to store the number of logs for each day of the month
