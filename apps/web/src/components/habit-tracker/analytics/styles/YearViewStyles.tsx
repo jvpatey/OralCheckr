@@ -1,16 +1,5 @@
 import styled, { keyframes } from "styled-components";
-
-// Modern keyframe animations
-const fadeInUp = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
+import { slideInFromRight } from "./SharedAnalyticsStyles";
 
 const slideInFromBottom = keyframes`
   from {
@@ -23,7 +12,7 @@ const slideInFromBottom = keyframes`
   }
 `;
 
-// Modern glassmorphism heatmap container - more compact
+/** Matches analytics calendar / tiles: primary outline, glass fill, light gradient, hover lift */
 export const HeatmapContainer = styled.div`
   width: 100%;
   flex: 1;
@@ -34,32 +23,46 @@ export const HeatmapContainer = styled.div`
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   border-radius: 16px;
-  border: 1px solid ${({ theme }) => `${theme.borderLight}60`};
-  padding: 0.75rem 0.75rem 0.65rem;
-  box-shadow:
-    ${({ theme }) => theme.shadowLg},
-    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  padding: 8px 10px 10px;
+  box-shadow: none;
   position: relative;
   overflow: hidden;
-  animation: ${fadeInUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+  cursor: default;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+  animation: ${slideInFromRight} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
 
-  /* Subtle gradient overlay */
+  &:hover {
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}22`} inset;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
+
   &::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: ${({ theme }) => theme.primaryGradient};
-    opacity: 0.05;
+    opacity: 0.03;
     border-radius: 16px;
     pointer-events: none;
   }
 
   @media (max-width: 600px) {
-    padding: 0.75rem;
+    padding: 8px 10px 10px;
     border-radius: 12px;
+
+    &::before {
+      border-radius: 12px;
+    }
   }
 `;
 
