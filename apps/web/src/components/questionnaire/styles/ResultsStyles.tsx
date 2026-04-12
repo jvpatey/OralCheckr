@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { QuestionnairePrimaryCta } from "./QuestionnaireFlowLayout";
+import { QuestionnaireOutlineCta } from "./QuestionnaireFlowLayout";
 
 /** Grid — aligned with dashboard / bento spacing */
 export const BentoGrid = styled.div`
@@ -204,8 +204,10 @@ export const AssessLabel = styled.div`
   }
 `;
 
-export const ResultsQuestionnaireCta = styled(QuestionnairePrimaryCta)`
+export const ResultsQuestionnaireCta = styled(QuestionnaireOutlineCta)`
   min-width: min(100%, 240px);
+  width: auto;
+  max-width: 100%;
   padding: 12px 22px;
   font-size: 0.9375rem;
 `;

@@ -7,11 +7,13 @@ export enum QuestionType {
   RANGE = "range",
 }
 
-// Option type
+// Option type (questionnaire JSON may include feedback and suggestedHabit)
 export interface Option {
   optionId: number;
   optionLabel: string;
   points: number;
+  feedback?: string;
+  suggestedHabit?: { name: string; count: number };
 }
 
 // Question interface
