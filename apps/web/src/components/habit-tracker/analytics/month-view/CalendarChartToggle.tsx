@@ -24,18 +24,11 @@ const ToggleShell = styled.div`
   box-shadow: none;
   transition:
     border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    transform 0.2s ease;
+    box-shadow 0.25s ease;
 
   &:hover {
     border-color: ${({ theme }) => `${theme.primary}65`};
     box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}22`} inset;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    &:hover {
-      transform: translateY(-1px);
-    }
   }
 
   @media (max-width: 768px) {
@@ -53,7 +46,9 @@ const ToggleIndicator = styled.div<{ $activeIndex: number }>`
   border-radius: 9999px;
   box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}22`} inset;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateX(calc(${({ $activeIndex }) => $activeIndex} * (100% + 2px)));
+  transform: translateX(
+    calc(${({ $activeIndex }) => $activeIndex} * (100% + 2px))
+  );
   z-index: 1;
   pointer-events: none;
 `;
