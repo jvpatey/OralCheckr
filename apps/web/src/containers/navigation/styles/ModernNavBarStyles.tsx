@@ -18,8 +18,7 @@ export const ModernNavBar = styled.nav`
   position: fixed;
   top: 0;
   left: 0;
-  /* Use right to prevent covering scrollbar */
-  right: 12px;
+  right: 0;
   z-index: 1000;
   padding: 20px 32px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -49,9 +48,9 @@ export const ModernNavBar = styled.nav`
   }
 `;
 
-// Container for navbar content with max width
+// Container for navbar content — match LandingContainer max-width for aligned edges
 export const NavContainer = styled.div`
-  max-width: 1440px;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;

@@ -14,11 +14,11 @@ const fadeUp = keyframes`
 // Dashboard CTA grid — gap and max width aligned with BentoGridContainer
 export const LandingCardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
   width: 100%;
-  max-width: 1300px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   padding: 0;
   position: relative;
   z-index: 1;
@@ -65,23 +65,23 @@ export const CenteredCardContainer = styled.div`
 export const StatsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
+  gap: 16px;
   width: 100%;
-  max-width: 1300px;
-  margin: 0 auto clamp(32px, 5vw, 48px);
+  max-width: 100%;
+  margin: 0 0 clamp(18px, 3vw, 28px);
   padding: 0;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-bottom: clamp(24px, 4vw, 36px);
+    gap: 12px;
+    margin-bottom: clamp(16px, 3vw, 24px);
   }
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 12px;
+    margin-bottom: 16px;
   }
 `;
 
@@ -89,8 +89,8 @@ export const StatsContainer = styled.div`
 export const StatCard = styled.div`
   background: ${({ theme }) => theme.surfaceColor};
   border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 20px;
-  padding: 24px;
+  border-radius: 18px;
+  padding: 18px 16px;
   text-align: center;
   box-shadow:
     ${({ theme }) => theme.shadowLg},
@@ -128,7 +128,7 @@ export const StatCard = styled.div`
     opacity: 0;
     transition: opacity 0.35s ease;
     pointer-events: none;
-    border-radius: 20px;
+    border-radius: 18px;
   }
 
   &:hover::before {
@@ -137,7 +137,7 @@ export const StatCard = styled.div`
 
   @media (prefers-reduced-motion: no-preference) {
     &:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       box-shadow:
         ${({ theme }) => theme.shadowXl},
         0 10px 36px rgba(0, 0, 0, 0.1),
@@ -157,11 +157,11 @@ export const StatCard = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding: 20px 16px;
+    padding: 16px 14px;
   }
 
   @media (max-width: 480px) {
-    padding: 16px 14px;
+    padding: 14px 12px;
   }
 `;
 
@@ -171,7 +171,7 @@ export const StatValue = styled.div`
   font-weight: 700;
   letter-spacing: -0.03em;
   color: ${({ theme }) => theme.primary};
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   position: relative;
   z-index: 1;
 

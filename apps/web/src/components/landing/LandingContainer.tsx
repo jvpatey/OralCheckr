@@ -13,7 +13,7 @@ export const LandingContainer = styled.div`
   margin: 0 auto;
   min-height: 0;
   padding: clamp(88px, 11vw, 120px) clamp(16px, 4vw, 32px)
-    clamp(40px, 5vw, 56px);
+    clamp(28px, 4vw, 40px);
   overflow-x: hidden;
 
   @media (min-width: 481px) and (max-width: 1023px) {
@@ -21,11 +21,34 @@ export const LandingContainer = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: clamp(72px, 18vw, 92px) 12px clamp(32px, 6vw, 48px);
+    padding: clamp(72px, 18vw, 92px) 12px clamp(24px, 5vw, 36px);
   }
 `;
 
 export const LandingHeroSection = styled.div`
   width: 100%;
-  margin-bottom: clamp(40px, 6vw, 56px);
+  margin-bottom: clamp(20px, 3.5vw, 32px);
+
+  /* Dashboard only — tighter stack under welcome (does not affect other routes) */
+  & > div > p:first-of-type {
+    margin-bottom: 10px;
+  }
+
+  && h1 {
+    margin-bottom: clamp(10px, 2vw, 14px);
+  }
+
+  && h2 {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 480px) {
+    & > div > p:first-of-type {
+      margin-bottom: 8px;
+    }
+
+    && h1 {
+      margin-bottom: 12px;
+    }
+  }
 `;

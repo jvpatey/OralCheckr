@@ -6,6 +6,34 @@ import {
   BentoDescription,
 } from "../../containers/welcome/styles/BentoGridStyles";
 
+const DashboardCardTitle = styled(BentoTitle)`
+  margin-bottom: 8px;
+  font-size: 1.35rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.0625rem;
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+`;
+
+const DashboardCardDescription = styled(BentoDescription)`
+  font-size: 0.9375rem;
+  line-height: 1.5;
+
+  @media (max-width: 768px) {
+    font-size: 0.8125rem;
+    line-height: 1.42;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8125rem;
+  }
+`;
+
 const fadeUp = keyframes`
   from {
     opacity: 0;
@@ -32,7 +60,7 @@ const CardContent = styled.div`
 const CardIconTile = styled.div`
   width: 52px;
   height: 52px;
-  margin: 0 auto 14px;
+  margin: 0 auto 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,11 +103,11 @@ const CardIcon = styled(FontAwesomeIcon)`
 const ModernCard = styled(Link)`
   display: block;
   width: 100%;
-  min-height: 280px;
+  min-height: 228px;
   background: ${({ theme }) => theme.surfaceColor};
   border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 20px;
-  padding: 32px 24px;
+  border-radius: 18px;
+  padding: 22px 20px;
   text-decoration: none;
   cursor: pointer;
   position: relative;
@@ -105,7 +133,7 @@ const ModernCard = styled(Link)`
     opacity: 0;
     transition: opacity 0.35s ease;
     pointer-events: none;
-    border-radius: 20px;
+    border-radius: 18px;
   }
 
   &:hover::before {
@@ -121,7 +149,7 @@ const ModernCard = styled(Link)`
 
   @media (prefers-reduced-motion: no-preference) {
     &:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       box-shadow:
         ${({ theme }) => theme.shadowXl},
         0 10px 36px rgba(0, 0, 0, 0.1),
@@ -147,18 +175,18 @@ const ModernCard = styled(Link)`
   }
 
   @media (max-width: 1024px) {
-    padding: 20px 16px;
-    min-height: 240px;
+    padding: 18px 16px;
+    min-height: 208px;
   }
 
   @media (max-width: 768px) {
-    padding: 18px 16px;
-    min-height: 220px;
+    padding: 16px 14px;
+    min-height: 196px;
   }
 
   @media (max-width: 480px) {
-    padding: 16px 14px;
-    min-height: 200px;
+    padding: 14px 12px;
+    min-height: 184px;
   }
 `;
 
@@ -208,8 +236,8 @@ export function LandingCard({
         <CardIconTile>
           <CardIcon icon={icon} />
         </CardIconTile>
-        <BentoTitle>{title}</BentoTitle>
-        <BentoDescription>{description}</BentoDescription>
+        <DashboardCardTitle>{title}</DashboardCardTitle>
+        <DashboardCardDescription>{description}</DashboardCardDescription>
       </CardContent>
     </ModernCard>
   );

@@ -127,11 +127,7 @@ export function ModernNavBar({
     );
   });
 
-  // Add Home link at the beginning
-  const navLinks = [
-    { name: "Home", path: RoutePaths.LANDING },
-    ...filteredLinks,
-  ];
+  const navLinks = filteredLinks;
 
   // Calculate active index for sliding indicator
   const activeIndex = navLinks.findIndex((link) => isActive(link.path));
