@@ -144,7 +144,8 @@ export const NavLinksContainer = styled.div`
   -webkit-backdrop-filter: blur(16px);
   border-radius: 50px;
   border: 1px solid ${({ theme }) => theme.borderLight}60;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04),
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.04),
     0 0 0 1px rgba(255, 255, 255, 0.03) inset;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: auto;
@@ -157,19 +158,28 @@ export const NavLinksContainer = styled.div`
 `;
 
 // Sliding indicator for active link - liquid glass effect
-export const NavIndicator = styled.div<{ $activeIndex: number; $linkCount: number }>`
+export const NavIndicator = styled.div<{
+  $activeIndex: number;
+  $linkCount: number;
+}>`
   position: absolute;
   top: 8px;
   left: 8px;
-  width: calc((100% - 16px - ${({ $linkCount }) => ($linkCount - 1) * 4}px) / ${({ $linkCount }) => $linkCount});
+  width: calc(
+    (100% - 16px - ${({ $linkCount }) => ($linkCount - 1) * 4}px) /
+      ${({ $linkCount }) => $linkCount}
+  );
   height: calc(100% - 16px);
   background: ${({ theme }) => `${theme.primary}20`};
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 50px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateX(calc(${({ $activeIndex }) => $activeIndex} * (100% + 4px)));
-  box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}30`} inset,
+  transform: translateX(
+    calc(${({ $activeIndex }) => $activeIndex} * (100% + 4px))
+  );
+  box-shadow:
+    0 0 0 1px ${({ theme }) => `${theme.primary}30`} inset,
     0 2px 8px ${({ theme }) => `${theme.primary}15`};
   z-index: 1;
   pointer-events: none;
@@ -192,9 +202,14 @@ export const NavIndicator = styled.div<{ $activeIndex: number; $linkCount: numbe
   @media (max-width: 968px) {
     top: 6px;
     left: 6px;
-    width: calc((100% - 12px - ${({ $linkCount }) => ($linkCount - 1) * 2}px) / ${({ $linkCount }) => $linkCount});
+    width: calc(
+      (100% - 12px - ${({ $linkCount }) => ($linkCount - 1) * 2}px) /
+        ${({ $linkCount }) => $linkCount}
+    );
     height: calc(100% - 12px);
-    transform: translateX(calc(${({ $activeIndex }) => $activeIndex} * (100% + 2px)));
+    transform: translateX(
+      calc(${({ $activeIndex }) => $activeIndex} * (100% + 2px))
+    );
   }
 `;
 

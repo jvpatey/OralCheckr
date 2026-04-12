@@ -7,6 +7,7 @@ import {
   ModalHeading,
   ModalBody,
   ModalOutlineButton,
+  ModalMutedOutlineButton,
   StyledFormButton,
 } from "../../containers/welcome/styles/ModalStyles";
 
@@ -19,6 +20,11 @@ interface ConfirmationModalProps {
   onConfirm: () => void;
   onCancel: () => void;
   isDestructive?: boolean;
+  /** Disables both actions (e.g. while a mutation is running) */
+  isBusy?: boolean;
+  /** When set, passed to react-bootstrap Modal (e.g. `"static"` for delete confirms) */
+  backdrop?: boolean | "static";
+  keyboard?: boolean;
 }
 
 /** Same scale as welcome CardText — centered body copy */
@@ -52,24 +58,6 @@ const ButtonWrapper = styled.div`
   min-width: 0;
 `;
 
-const DangerFormButton = styled(StyledFormButton)`
-  background: ${({ theme }) => theme.error};
-  border: 1px solid ${({ theme }) => theme.error};
-
-  &:hover:not(:disabled) {
-    filter: brightness(1.06);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
-  }
-
-  &:active:not(:disabled) {
-    filter: brightness(0.98);
-  }
-
-  &:focus-visible {
-    outline-color: ${({ theme }) => theme.error};
-  }
-`;
-
 export function ConfirmationModal({
   show,
   title,
@@ -79,11 +67,21 @@ export function ConfirmationModal({
   onConfirm,
   onCancel,
   isDestructive = false,
+  isBusy = false,
+  backdrop,
+  keyboard,
 }: ConfirmationModalProps) {
-  const ConfirmBtn = isDestructive ? DangerFormButton : StyledFormButton;
+  const CancelBtn = isDestructive ? ModalMutedOutlineButton : ModalOutlineButton;
+  const ConfirmBtn = isDestructive ? ModalOutlineButton : StyledFormButton;
 
   return (
-    <StyledModal show={show} onHide={onCancel} centered>
+    <StyledModal
+      show={show}
+      onHide={onCancel}
+      centered
+      backdrop={backdrop}
+      keyboard={keyboard}
+    >
       <ModalHeader closeButton>
         <ModalTitleStack>
           <ModalHeading>{title}</ModalHeading>
@@ -93,12 +91,16 @@ export function ConfirmationModal({
         <ModalMessage>{message}</ModalMessage>
         <ButtonContainer>
           <ButtonWrapper>
-            <ModalOutlineButton type="button" onClick={onCancel}>
+            <CancelBtn type="button" onClick={onCancel} disabled={isBusy}>
               {cancelLabel}
-            </ModalOutlineButton>
+            </CancelBtn>
           </ButtonWrapper>
           <ButtonWrapper>
-            <ConfirmBtn type="button" onClick={onConfirm}>
+            <ConfirmBtn
+              type="button"
+              onClick={onConfirm}
+              disabled={isBusy}
+            >
               {confirmLabel}
             </ConfirmBtn>
           </ButtonWrapper>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { updateProfile } from "../../../../services/profileService";
-import { InputStyle } from "../../../../containers/welcome/styles/ModalStyles";
+import { PillInputStyle } from "../../../welcome/styles/ModalStyles";
 import {
   Section,
   SectionTitle,
@@ -10,6 +10,7 @@ import {
   DescriptionText,
   PasswordFeedback,
 } from "../../styles/AccountTabStyles";
+import { SectionTitleAccent } from "../../styles/ProfileStyles";
 import { SimpleButton } from "../../styles/SimpleButton";
 import { FormLabel } from "../../styles/FormLabel";
 
@@ -44,7 +45,9 @@ export function EmailSection({ currentEmail, refetch }: EmailSectionProps) {
 
   return (
     <Section>
-      <SectionTitle>Change Email Address</SectionTitle>
+      <SectionTitle>
+        Change <SectionTitleAccent>email address</SectionTitleAccent>
+      </SectionTitle>
       <CurrentValue>Current Email: {currentEmail}</CurrentValue>
       <DescriptionText>
         Enter the new email address you want to use for your account:
@@ -52,7 +55,7 @@ export function EmailSection({ currentEmail, refetch }: EmailSectionProps) {
       <StyledForm onSubmit={handleEmailUpdate}>
         <FormLabel>New Email Address</FormLabel>
         <Form.Group style={{ marginBottom: "1.5rem" }}>
-          <InputStyle
+          <PillInputStyle
             type="email"
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}

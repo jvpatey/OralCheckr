@@ -129,6 +129,13 @@ export const ModalHeading = styled.span`
   line-height: 1.35;
 `;
 
+/** Dual-tone title segment — pair inside `ModalHeading` (same scale as hero `HeroTitleAccent`) */
+export const ModalHeadingAccent = styled.span`
+  color: ${({ theme }) => theme.primary};
+  font-weight: 600;
+  letter-spacing: -0.02em;
+`;
+
 export const ModalBody = styled(Modal.Body)`
   background: transparent;
   border-bottom-left-radius: 20px;
@@ -203,6 +210,20 @@ export const InputStyle = styled(Form.Control)`
   }
 `;
 
+/** Full pill radius — profile and other inline forms; login/signup keep `InputStyle` */
+export const PillInputStyle = styled(InputStyle)`
+  && {
+    border-radius: 9999px;
+  }
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    border-radius: 9999px;
+  }
+`;
+
 // Required form group with asterisk
 export const RequiredFormGroup = styled(Form.Group)`
   position: relative;
@@ -223,6 +244,10 @@ export const RequiredFormGroup = styled(Form.Group)`
   ${InputStyle} {
     padding-left: 26px;
   }
+
+  ${PillInputStyle} {
+    padding-left: 26px;
+  }
 `;
 
 // Password field styles
@@ -234,8 +259,16 @@ export const PasswordContainer = styled.div`
     padding-right: 72px;
   }
 
+  ${PillInputStyle} {
+    padding-right: 72px;
+  }
+
   ${RequiredFormGroup} & {
     ${InputStyle} {
+      padding-left: 26px;
+    }
+
+    ${PillInputStyle} {
       padding-left: 26px;
     }
   }
@@ -513,18 +546,59 @@ export const ModalOutlineButton = styled.button`
   transition:
     border-color 0.25s ease,
     background 0.25s ease,
-    color 0.25s ease;
+    color 0.25s ease,
+    opacity 0.25s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     border-color: ${({ theme }) => `${theme.primary}65`};
     background: ${({ theme }) => `${theme.primary}0d`};
     color: ${({ theme }) => theme.primary};
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
   }
 
   &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.primary};
     outline-offset: 3px;
   }
+`;
+
+/** Muted outline — pair with `ModalOutlineButton` when both rows need outline pills (e.g. delete confirm cancel) */
+export const ModalMutedOutlineButton = styled(ModalOutlineButton)`
+  border-color: ${({ theme }) => theme.borderLight};
+  color: ${({ theme }) => theme.textSecondary};
+
+  &:hover:not(:disabled) {
+    border-color: ${({ theme }) => theme.borderMedium};
+    background: ${({ theme }) => theme.surfaceElevated};
+    color: ${({ theme }) => theme.textPrimary};
+  }
+
+  &:focus-visible {
+    outline-color: ${({ theme }) => theme.textSecondary};
+  }
+`;
+
+/** Primary pill — not full width (profile forms, inline actions) */
+export const InlinePrimaryButton = styled(StyledFormButton)`
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 11px 22px;
+  font-size: 0.9375rem;
+`;
+
+/** Outline pill — not full width */
+export const InlineOutlineButton = styled(ModalOutlineButton)`
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 /**

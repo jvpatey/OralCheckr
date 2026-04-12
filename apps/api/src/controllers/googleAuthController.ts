@@ -78,7 +78,11 @@ export const googleLogin = async (
         await user.update({
           googleId: payload.sub,
           avatar: payload.picture || user.avatar,
+          googlePicture: payload.picture ?? user.googlePicture,
         });
+      } else if (payload.picture) {
+        // Keep provider photo in sync for "revert to Google photo" in profile (does not change chosen avatar).
+        await user.update({ googlePicture: payload.picture });
       }
     } else {
       // Create new user if doesn't exist
@@ -89,6 +93,7 @@ export const googleLogin = async (
         password: "", // Empty password for Google users
         googleId: payload.sub,
         avatar: payload.picture,
+        googlePicture: payload.picture,
         isGuest: false,
       });
     }

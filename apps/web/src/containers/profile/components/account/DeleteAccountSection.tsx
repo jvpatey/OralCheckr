@@ -12,6 +12,7 @@ import {
   DescriptionText,
   PasswordFeedback,
 } from "../../styles/AccountTabStyles";
+import { SectionTitleAccent } from "../../styles/ProfileStyles";
 
 export function DeleteAccountSection() {
   const navigate = useNavigate();
@@ -40,7 +41,9 @@ export function DeleteAccountSection() {
   return (
     <>
       <DeleteSection>
-        <SectionTitle>Delete Account</SectionTitle>
+        <SectionTitle>
+          Delete <SectionTitleAccent>account</SectionTitleAccent>
+        </SectionTitle>
         <WarningText>Warning: This action cannot be undone.</WarningText>
         <DescriptionText>
           Deleting your account will permanently remove all your data, including

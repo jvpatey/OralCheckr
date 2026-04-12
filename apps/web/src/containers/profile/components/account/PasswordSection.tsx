@@ -8,6 +8,7 @@ import {
   DescriptionText,
   PasswordFeedback,
 } from "../../styles/AccountTabStyles";
+import { SectionTitleAccent } from "../../styles/ProfileStyles";
 import { SimpleButton } from "../../styles/SimpleButton";
 import { FormLabel } from "../../styles/FormLabel";
 import { PasswordField } from "../../../../containers/welcome/components/PasswordField";
@@ -90,7 +91,9 @@ export function PasswordSection({ refetch }: PasswordSectionProps) {
 
   return (
     <Section>
-      <SectionTitle>Change Password</SectionTitle>
+      <SectionTitle>
+        Change <SectionTitleAccent>password</SectionTitleAccent>
+      </SectionTitle>
       <DescriptionText>
         Update your password by entering your current password and choosing a
         new one:
@@ -114,6 +117,7 @@ export function PasswordSection({ refetch }: PasswordSectionProps) {
             id="currentPassword"
             autoComplete="current-password"
             required
+            variant="pill"
           />
         </Form.Group>
 
@@ -126,6 +130,7 @@ export function PasswordSection({ refetch }: PasswordSectionProps) {
             id="newPassword"
             autoComplete="new-password"
             required
+            variant="pill"
           />
         </Form.Group>
 
@@ -140,6 +145,7 @@ export function PasswordSection({ refetch }: PasswordSectionProps) {
             id="confirmPassword"
             autoComplete="new-password"
             required
+            variant="pill"
           />
         </Form.Group>
 

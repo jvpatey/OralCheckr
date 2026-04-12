@@ -26,19 +26,17 @@ export const Section = styled.div`
 
 export const SectionTitle = styled.h3`
   && {
+    font-family: var(--font-sans), system-ui, sans-serif;
     color: ${({ theme }) => theme.textPrimary};
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-size: clamp(1.1rem, 1.2vw + 0.85rem, 1.35rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.35;
     margin-bottom: 1.5rem;
     padding-bottom: 0.75rem;
-    border-bottom: 2px solid ${({ theme }) => theme.borderLight};
-    background: ${({ theme }) => theme.primaryGradient};
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    border-bottom: 1px solid ${({ theme }) => theme.borderLight};
 
     @media (max-width: 768px) {
-      font-size: 1.125rem;
       margin-bottom: 1.25rem;
     }
   }
@@ -49,55 +47,64 @@ export const StyledForm = styled(Form)`
 `;
 
 export const StyledButton = styled(Button)`
+  font-family: var(--font-sans), system-ui, sans-serif;
   background: ${({ theme }) => theme.primaryGradient};
-  color: white;
+  color: #ffffff;
   border: 1px solid ${({ theme }) => theme.primary};
-  padding: 12px 24px;
+  padding: 11px 22px;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
   font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.02em;
+  border-radius: 9999px;
+  transition:
+    box-shadow 0.25s ease,
+    filter 0.25s ease,
+    opacity 0.25s ease;
   box-shadow: ${({ theme }) => theme.shadowMd};
-  position: relative;
 
-  &:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
+  &:hover:not(:disabled) {
+    filter: brightness(1.05);
     box-shadow: ${({ theme }) => theme.shadowLg};
   }
 
-  &:active {
-    transform: translateY(0);
+  &:active:not(:disabled) {
+    filter: brightness(0.98);
   }
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
-    transform: none;
-    box-shadow: ${({ theme }) => theme.shadowSm};
+    filter: none;
+    box-shadow: none;
   }
 `;
 
 export const CurrentValue = styled.div`
+  font-family: var(--font-sans), system-ui, sans-serif;
   color: ${({ theme }) => theme.textSecondary};
   margin-bottom: 1rem;
   font-size: 0.875rem;
   font-weight: 500;
+  letter-spacing: -0.02em;
 `;
 
 export const DescriptionText = styled.p`
+  font-family: var(--font-sans), system-ui, sans-serif;
   color: ${({ theme }) => theme.textSecondary};
-  font-size: 0.875rem;
+  font-size: clamp(0.95rem, 0.45vw + 0.82rem, 1.0625rem);
   margin-bottom: 1.5rem;
-  line-height: 1.6;
+  line-height: 1.65;
+  font-weight: 400;
 `;
 
 export const StyledLabel = styled(Form.Label)`
-  color: ${({ theme }) => theme.textPrimary};
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: ${({ theme }) => theme.textSecondary};
   margin-bottom: 0.5rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  letter-spacing: -0.02em;
 `;
 
 export const PasswordFeedback = styled.div<{ $success?: boolean }>`
@@ -108,25 +115,28 @@ export const PasswordFeedback = styled.div<{ $success?: boolean }>`
 `;
 
 export const EyeButton = styled(Button)`
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border: 1px solid ${({ theme }) => theme.borderLight};
+  font-family: var(--font-sans), system-ui, sans-serif;
+  background: transparent;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
   color: ${({ theme }) => theme.textSecondary};
-  border-radius: 8px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 9999px;
+  padding: 8px 14px;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease;
 
   &:hover,
   &:focus {
-    background: ${({ theme }) => theme.surfaceElevated};
+    background: ${({ theme }) => `${theme.primary}0d`};
     color: ${({ theme }) => theme.primary};
-    border: 1px solid ${({ theme }) => theme.primary};
-    box-shadow: ${({ theme }) => theme.shadowSm};
+    border-color: ${({ theme }) => `${theme.primary}65`};
   }
 
   &:active {
-    background: ${({ theme }) => theme.surfaceElevated} !important;
+    background: ${({ theme }) => `${theme.primary}0d`} !important;
     color: ${({ theme }) => theme.primary} !important;
-    border: 1px solid ${({ theme }) => theme.primary} !important;
+    border-color: ${({ theme }) => `${theme.primary}65`} !important;
   }
 `;
 
@@ -139,53 +149,64 @@ export const DeleteSection = styled.div`
   padding: 0;
 `;
 
+/** Outline + primary border — same colors as welcome Login (`Button` variant login) */
 export const DeleteButton = styled.button`
-  background: linear-gradient(135deg, #ff6961 0%, #ff4757 100%);
-  color: white;
-  border: 1px solid #ff6961;
-  padding: 12px 24px;
-  font-size: 0.95rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 11px 22px;
+  min-height: 46px;
+  font-size: 0.9375rem;
   font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: ${({ theme }) => theme.shadowMd};
+  letter-spacing: -0.02em;
+  border-radius: 9999px;
   cursor: pointer;
   width: auto;
   max-width: 300px;
+  background: transparent;
+  color: ${({ theme }) => theme.textPrimary};
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  box-shadow: none;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
 
   &:hover:not(:disabled) {
-    opacity: 0.9;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 105, 97, 0.3),
-      ${({ theme }) => theme.shadowLg};
-  }
-
-  &:active {
-    transform: translateY(0);
+    border-color: ${({ theme }) => `${theme.primary}70`};
+    background: ${({ theme }) => `${theme.primary}10`};
+    box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}55`} inset;
+    color: ${({ theme }) => theme.textPrimary};
   }
 
   &:disabled {
-    opacity: 0.6;
-    transform: none;
-    box-shadow: ${({ theme }) => theme.shadowSm};
+    opacity: 0.55;
     cursor: not-allowed;
   }
 
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
+  }
+
   @media (max-width: 768px) {
-    padding: 10px 20px;
-    font-size: 0.9rem;
     max-width: 100%;
   }
 `;
 
 export const WarningText = styled.div`
-  color: #ff6961;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: ${({ theme }) => theme.error};
   font-weight: 600;
   margin-bottom: 1rem;
   font-size: 0.875rem;
   padding: 0.875rem 1rem;
-  background: rgba(255, 105, 97, 0.1);
-  border: 1px solid rgba(255, 105, 97, 0.3);
-  border-radius: 12px;
+  background: ${({ theme }) => `${theme.error}14`};
+  border: 1px solid ${({ theme }) => `${theme.error}45`};
+  border-radius: 20px;
   line-height: 1.5;
 `;

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteButton } from "../../styles/AccountTabStyles";
-import { DeleteConfirmationModal } from "../modals/DeleteConfirmationModal";
+import { ConfirmationModal } from "../../../../components/shared/ConfirmationModal";
+import { ModalHeadingAccent } from "../../../welcome/styles/ModalStyles";
 import { useQuestionnaireData } from "../../../../hooks/questionnaire/useQuestionnaireData";
 import { deleteQuestionnaireData } from "../../../../services/quesService";
 import { LoadingSpinner } from "../../../../components/common/LoadingSpinner";
@@ -10,11 +11,13 @@ import {
   SectionTitle,
   DataGrid,
   DataItem,
+  DataItemInner,
   Label,
   Value,
   WarningText,
   DescriptionText,
 } from "../../styles/DataTabStyles";
+import { SectionTitleAccent } from "../../styles/ProfileStyles";
 
 interface QuestionnaireSectionProps {
   isDeleting: boolean;
@@ -74,8 +77,10 @@ export function QuestionnaireSection({
   const renderContent = () => {
     if (isLoading) {
       return (
-        <DataItem style={{ gridColumn: "1 / -1", textAlign: "center" }}>
-          <LoadingSpinner size="sm" />
+        <DataItem style={{ gridColumn: "1 / -1" }}>
+          <DataItemInner>
+            <LoadingSpinner size="sm" />
+          </DataItemInner>
         </DataItem>
       );
     }
@@ -119,7 +124,9 @@ export function QuestionnaireSection({
   return (
     <>
       <Section>
-        <SectionTitle>Questionnaire Data</SectionTitle>
+        <SectionTitle>
+          Questionnaire <SectionTitleAccent>data</SectionTitleAccent>
+        </SectionTitle>
         <DataGrid>{renderContent()}</DataGrid>
 
         <WarningText>Warning: This action cannot be undone.</WarningText>
@@ -142,13 +149,22 @@ export function QuestionnaireSection({
         </DeleteButton>
       </Section>
 
-      <DeleteConfirmationModal
+      <ConfirmationModal
         show={showDeleteModal}
-        onHide={() => setShowDeleteModal(false)}
-        onConfirm={handleDelete}
-        title="Delete Questionnaire Data"
+        title={
+          <>
+            Delete{" "}
+            <ModalHeadingAccent>questionnaire data</ModalHeadingAccent>
+          </>
+        }
         message="Are you sure you want to delete your questionnaire data? This action cannot be undone."
-        isDeleting={isDeleting}
+        confirmLabel={isDeleting ? "Deleting…" : "Delete"}
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteModal(false)}
+        isDestructive
+        isBusy={isDeleting}
+        backdrop="static"
+        keyboard={false}
       />
     </>
   );

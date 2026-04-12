@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteButton } from "../../styles/AccountTabStyles";
-import { DeleteConfirmationModal } from "../modals/DeleteConfirmationModal";
+import { ConfirmationModal } from "../../../../components/shared/ConfirmationModal";
+import { ModalHeadingAccent } from "../../../welcome/styles/ModalStyles";
 import { useHabitsWithLastTracked } from "../../../../hooks/habits/useHabitsWithLastTracked";
 import { useDeleteAllHabits } from "../../../../hooks/habits/useDeleteAllHabits";
 import {
@@ -14,9 +15,10 @@ import {
   EmptyHabit,
   WarningText,
   DescriptionText,
-  GreenLabel,
+  HabitDatePrefix,
   Spacing,
 } from "../../styles/DataTabStyles";
+import { SectionTitleAccent } from "../../styles/ProfileStyles";
 
 interface HabitsSectionProps {
   isDeleting: boolean;
@@ -91,7 +93,8 @@ export function HabitsSection({
             <HabitDate>
               {habit.lastTracked ? (
                 <>
-                  <GreenLabel>Last tracked:</GreenLabel> {habit.lastTracked}
+                  <HabitDatePrefix>Last tracked:</HabitDatePrefix>{" "}
+                  {habit.lastTracked}
                 </>
               ) : (
                 "Not tracked yet"
@@ -106,7 +109,9 @@ export function HabitsSection({
   return (
     <>
       <Section>
-        <SectionTitle>Habit Tracking Data</SectionTitle>
+        <SectionTitle>
+          Habit tracking <SectionTitleAccent>data</SectionTitleAccent>
+        </SectionTitle>
         {renderContent()}
 
         <Spacing />
@@ -125,13 +130,21 @@ export function HabitsSection({
         </DeleteButton>
       </Section>
 
-      <DeleteConfirmationModal
+      <ConfirmationModal
         show={showDeleteModal}
-        onHide={() => setShowDeleteModal(false)}
-        onConfirm={handleDelete}
-        title="Delete All Habits"
+        title={
+          <>
+            Delete <ModalHeadingAccent>all habits</ModalHeadingAccent>
+          </>
+        }
         message="Are you sure you want to delete all your habits and tracking data? This action cannot be undone."
-        isDeleting={isDeleting}
+        confirmLabel={isDeleting ? "Deleting…" : "Delete"}
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteModal(false)}
+        isDestructive
+        isBusy={isDeleting}
+        backdrop="static"
+        keyboard={false}
       />
     </>
   );

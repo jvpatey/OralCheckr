@@ -1,5 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import {
+  InlinePrimaryButton,
+  InlineOutlineButton,
+} from "../../welcome/styles/ModalStyles";
 
 interface SimpleButtonProps {
   type?: "button" | "submit" | "reset";
@@ -9,63 +13,11 @@ interface SimpleButtonProps {
   variant?: "primary" | "danger";
 }
 
-const ButtonContainer = styled.button<{ $variant?: string }>`
-  background: ${({ theme, $variant }) =>
-    $variant === "danger"
-      ? "linear-gradient(135deg, #ff6961 0%, #ff4757 100%)"
-      : theme.primaryGradient};
-  color: white;
-  border: 1px solid
-    ${({ theme, $variant }) =>
-      $variant === "danger" ? "#ff6961" : theme.primary};
-  padding: 12px 24px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: ${({ theme }) => theme.shadowMd};
-  position: relative;
-  overflow: hidden;
-
-  /* Subtle shine sweep effect */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
-    transition: left 0.6s ease;
-  }
-
-  &:hover:not(:disabled) {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: ${({ theme, $variant }) =>
-      $variant === "danger"
-        ? "0 8px 25px rgba(255, 105, 97, 0.3)"
-        : theme.shadowLg};
-
-    &::before {
-      left: 100%;
-    }
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-
+/** Same outline colors as welcome Login / `ModalOutlineButton` */
+const DeleteOutlinePill = styled(InlineOutlineButton)`
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
-    transform: none;
-    box-shadow: ${({ theme }) => theme.shadowSm};
   }
 `;
 
@@ -76,15 +28,26 @@ export const SimpleButton: React.FC<SimpleButtonProps> = ({
   onClick,
   variant = "primary",
 }) => {
+  if (variant === "danger") {
+    return (
+      <DeleteOutlinePill
+        type={type}
+        disabled={disabled}
+        onClick={onClick}
+      >
+        {children}
+      </DeleteOutlinePill>
+    );
+  }
+
   return (
-    <ButtonContainer
+    <InlinePrimaryButton
       type={type}
       disabled={disabled}
       onClick={onClick}
-      $variant={variant}
     >
       {children}
-    </ButtonContainer>
+    </InlinePrimaryButton>
   );
 };
 

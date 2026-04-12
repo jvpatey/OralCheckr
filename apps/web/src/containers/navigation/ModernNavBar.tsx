@@ -56,7 +56,7 @@ export function ModernNavBar({
 
   // Show logout confirmation modal
   const handleLogoutClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     setShowLogoutModal(true);
@@ -154,9 +154,9 @@ export function ModernNavBar({
           <NavCenterSection>
             <NavLinksContainer>
               {activeIndex >= 0 && (
-                <NavIndicator 
-                  $activeIndex={activeIndex} 
-                  $linkCount={navLinks.length} 
+                <NavIndicator
+                  $activeIndex={activeIndex}
+                  $linkCount={navLinks.length}
                 />
               )}
               {navLinks.map((link) => (
@@ -178,21 +178,28 @@ export function ModernNavBar({
             <NavLinksContainer className="d-none d-xl-flex">
               {(() => {
                 const rightLinks = [
-                  !isGuest && profileLink ? { name: user?.firstName || "Profile", path: profileLink.path } : null,
+                  !isGuest && profileLink
+                    ? {
+                        name: user?.firstName || "Profile",
+                        path: profileLink.path,
+                      }
+                    : null,
                   supportLink
                     ? { name: supportLink.name, path: supportLink.path }
                     : null,
                   { name: "Log Out", path: "" },
                 ].filter(Boolean) as { name: string; path: string }[];
-                
-                const rightActiveIndex = rightLinks.findIndex(link => link.path && isActive(link.path));
-                
+
+                const rightActiveIndex = rightLinks.findIndex(
+                  (link) => link.path && isActive(link.path),
+                );
+
                 return (
                   <>
                     {rightActiveIndex >= 0 && (
-                      <NavIndicator 
-                        $activeIndex={rightActiveIndex} 
-                        $linkCount={rightLinks.length} 
+                      <NavIndicator
+                        $activeIndex={rightActiveIndex}
+                        $linkCount={rightLinks.length}
                       />
                     )}
                     {!isGuest && profileLink && (

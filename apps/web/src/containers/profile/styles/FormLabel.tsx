@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
-// Modern label with proper spacing
 export const FormLabel = styled.div`
-  color: ${({ theme }) => theme.textPrimary};
+  font-family: var(--font-sans), system-ui, sans-serif;
+  display: block;
+  margin: 1rem 0 6px 0;
+  color: ${({ theme }) => theme.textSecondary};
   font-size: 0.875rem;
   font-weight: 600;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
 `;
