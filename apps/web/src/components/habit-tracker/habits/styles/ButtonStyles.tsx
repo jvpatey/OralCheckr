@@ -122,11 +122,20 @@ export const HabitIconButtonContainer = styled(BaseButton)<{
     !$disabled &&
     ($accent === "plus"
       ? css`
-          border: 1px solid color-mix(in srgb, ${theme.secondary} 36%, transparent);
+          border: 1px solid
+            color-mix(in srgb, ${theme.secondary} 36%, transparent);
           color: ${theme.secondary};
           &:hover {
-            border-color: color-mix(in srgb, ${theme.secondary} 58%, transparent);
-            background: color-mix(in srgb, ${theme.secondary} 16%, ${theme.glassBg});
+            border-color: color-mix(
+              in srgb,
+              ${theme.secondary} 58%,
+              transparent
+            );
+            background: color-mix(
+              in srgb,
+              ${theme.secondary} 16%,
+              ${theme.glassBg}
+            );
             color: ${theme.secondaryDark};
             box-shadow:
               inset 0 1px 0 rgba(255, 255, 255, 0.12),
@@ -137,11 +146,16 @@ export const HabitIconButtonContainer = styled(BaseButton)<{
         `
       : $accent === "minus"
         ? css`
-            border: 1px solid color-mix(in srgb, ${theme.primary} 28%, transparent);
+            border: 1px solid
+              color-mix(in srgb, ${theme.primary} 28%, transparent);
             color: ${theme.textSecondary};
             &:hover {
               border-color: color-mix(in srgb, ${theme.error} 48%, transparent);
-              background: color-mix(in srgb, ${theme.error} 11%, ${theme.glassBg});
+              background: color-mix(
+                in srgb,
+                ${theme.error} 11%,
+                ${theme.glassBg}
+              );
               color: ${theme.error};
               box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.1),
@@ -151,11 +165,20 @@ export const HabitIconButtonContainer = styled(BaseButton)<{
           `
         : $accent === "edit"
           ? css`
-              border: 1px solid color-mix(in srgb, ${theme.warning} 34%, transparent);
+              border: 1px solid
+                color-mix(in srgb, ${theme.warning} 34%, transparent);
               color: ${theme.textTertiary};
               &:hover {
-                border-color: color-mix(in srgb, ${theme.warning} 55%, transparent);
-                background: color-mix(in srgb, ${theme.warning} 14%, ${theme.glassBg});
+                border-color: color-mix(
+                  in srgb,
+                  ${theme.warning} 55%,
+                  transparent
+                );
+                background: color-mix(
+                  in srgb,
+                  ${theme.warning} 14%,
+                  ${theme.glassBg}
+                );
                 color: ${theme.warning};
                 box-shadow:
                   inset 0 1px 0 rgba(255, 255, 255, 0.1),
@@ -164,11 +187,20 @@ export const HabitIconButtonContainer = styled(BaseButton)<{
               }
             `
           : css`
-              border: 1px solid color-mix(in srgb, ${theme.error} 32%, transparent);
+              border: 1px solid
+                color-mix(in srgb, ${theme.error} 32%, transparent);
               color: ${theme.textTertiary};
               &:hover {
-                border-color: color-mix(in srgb, ${theme.error} 58%, transparent);
-                background: color-mix(in srgb, ${theme.error} 14%, ${theme.glassBg});
+                border-color: color-mix(
+                  in srgb,
+                  ${theme.error} 58%,
+                  transparent
+                );
+                background: color-mix(
+                  in srgb,
+                  ${theme.error} 14%,
+                  ${theme.glassBg}
+                );
                 color: ${theme.error};
                 box-shadow:
                   inset 0 1px 0 rgba(255, 255, 255, 0.1),

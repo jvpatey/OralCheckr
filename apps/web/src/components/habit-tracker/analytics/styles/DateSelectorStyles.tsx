@@ -80,7 +80,7 @@ export const DatePickerButton = styled.button`
   }
 `;
 
-// Today button styles
+// Today button styles (extended by analytics TodayButton; habits week row sets compact overrides)
 export const TodayButtonContainer = styled.button`
   background-color: ${({ theme }) => theme.backgroundColor};
   color: ${({ theme }) => theme.blue};
@@ -88,20 +88,23 @@ export const TodayButtonContainer = styled.button`
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  height: 45px;
-  padding: 0 15px;
+  min-height: 40px;
+  height: 40px;
+  padding: 0 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 10px;
+  margin-left: 0;
   white-space: nowrap;
   transition: all 0.4s ease-out;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
+  box-sizing: border-box;
 
   @media (max-width: 600px) {
-    font-size: 10px;
-    padding: 0 8px;
+    font-size: 12px;
+    padding: 0 12px;
+    min-height: 40px;
     height: 40px;
   }
 

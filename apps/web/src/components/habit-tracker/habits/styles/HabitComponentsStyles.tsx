@@ -204,11 +204,13 @@ export const Header = styled.div`
   flex-direction: column;
   align-items: stretch;
   width: 100%;
-  margin-bottom: 16px;
+  /* Match padding below content to margin below rule so space above/below the divider feels even */
+  --habit-header-divider-gap: 14px;
+  margin-bottom: var(--habit-header-divider-gap);
   position: relative;
   z-index: 1;
   padding-top: 0;
-  padding-bottom: 10px;
+  padding-bottom: var(--habit-header-divider-gap);
   animation: ${fadeUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
 
   &::after {
@@ -477,7 +479,7 @@ export const PlaceholderText = styled.div`
 
 // Fluid wrapper for date picker (below page header)
 export const DatePickerWrapper = styled.div`
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   width: 100%;
   padding: 0;
   display: flex;
@@ -487,10 +489,10 @@ export const DatePickerWrapper = styled.div`
   z-index: 1;
 
   @media (max-width: 768px) {
-    margin-bottom: 20px;
+    margin-bottom: 14px;
   }
 
   @media (max-width: 480px) {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 `;
