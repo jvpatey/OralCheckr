@@ -4,6 +4,7 @@ import {
   faUser,
   faClipboardCheck,
   faHouse,
+  faFileLines,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faClipboard,
@@ -90,6 +91,12 @@ export const sidebarLinks: NavLink[] = [
     name: "Results",
     path: RoutePaths.RESULTS,
     icon: faClipboardCheck as IconDefinition,
+    displayIn: "sidebar",
+  },
+  {
+    name: "Visit summary",
+    path: RoutePaths.APPOINTMENT_SUMMARY,
+    icon: faFileLines as IconDefinition,
     displayIn: "sidebar",
   },
 ];

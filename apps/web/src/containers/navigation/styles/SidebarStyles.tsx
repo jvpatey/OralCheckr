@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -69,9 +69,9 @@ export const SidebarTrack = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 100%;
+  flex: 1;
   min-height: 0;
+  width: 100%;
 
   @media (max-width: 800px) {
     gap: 6px;
@@ -83,6 +83,7 @@ export const SidebarLinksGroup = styled(motion.div)`
   position: relative;
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 8px;
   width: 100%;
   min-height: 0;
@@ -130,12 +131,22 @@ export const SidebarIndicator = styled.div`
 `;
 
 /** Row styling mirrors ModernNavBar `NavLink` — color/weight only; pill fill is `SidebarIndicator` */
-export const SidebarLink = styled(Link)<{ $isActive: boolean }>`
+export const SidebarLink = styled(Link)<{
+  $isActive: boolean;
+  $pinToBottom?: boolean;
+}>`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
+
+  ${({ $pinToBottom }) =>
+    $pinToBottom &&
+    css`
+      margin-top: auto;
+      padding-top: 10px;
+    `}
 
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 0.95rem;

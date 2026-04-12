@@ -5,6 +5,7 @@ export enum RoutePaths {
   HABITS = "/habit-tracker",
   ANALYTICS = "/habit-tracker/analytics",
   RESULTS = "/questionnaire/results",
+  APPOINTMENT_SUMMARY = "/questionnaire/appointment-summary",
   PROFILE = "/profile",
   ABOUT = "/about",
 }

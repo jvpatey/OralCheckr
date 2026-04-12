@@ -30,6 +30,8 @@ import {
   DateDisplayText,
   AssessLabel,
   ResultsQuestionnaireCta,
+  VisitSummaryRow,
+  VisitSummaryCta,
 } from "./styles/ResultsStyles";
 
 export function Results() {
@@ -88,6 +90,12 @@ export function Results() {
 
             <Recommendations />
           </BentoGrid>
+
+          <VisitSummaryRow>
+            <VisitSummaryCta to={RoutePaths.APPOINTMENT_SUMMARY}>
+              Summary for your visit
+            </VisitSummaryCta>
+          </VisitSummaryRow>
 
           {user && user.role === "guest" && (
             <ModernActionSection>

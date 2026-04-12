@@ -64,9 +64,12 @@ export function App() {
             <HabitProvider>
               {/* Hash-based routing */}
               <HashRouter>
-                {/* Navigation components */}
-                <RenderNavs themeToggler={themeToggler} currentTheme={theme} />
-                {/* Main application routes */}
+                <div className="app-print-chrome">
+                  <RenderNavs
+                    themeToggler={themeToggler}
+                    currentTheme={theme}
+                  />
+                </div>
                 <Router themeToggler={themeToggler} currentTheme={theme} />
               </HashRouter>
             </HabitProvider>

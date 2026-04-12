@@ -13,6 +13,7 @@ import {
   generateRecommendations,
   userAlreadyTracksSuggestedHabit,
 } from "./utils/recommendations-utils";
+import { parseQuestionnaireResponsesFromApi } from "./utils/questionnaire-response-parse";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import {
   CardStackContainer,
@@ -73,24 +74,9 @@ export function Recommendations() {
   useEffect(() => {
     if (!questionnaireData || !questionnaireData.responses) return;
 
-    const convertedResponses: Record<number, number | number[]> = {};
-
-    Object.entries(questionnaireData.responses).forEach(([key, value]) => {
-      const questionId = parseInt(key, 10);
-      if (Number.isNaN(questionId)) return;
-      if (typeof value === "number" || Array.isArray(value)) {
-        convertedResponses[questionId] = value;
-        return;
-      }
-      if (typeof value === "string") {
-        try {
-          convertedResponses[questionId] = JSON.parse(value);
-        } catch {
-          convertedResponses[questionId] = parseInt(value, 10);
-        }
-      }
-    });
-
+    const convertedResponses = parseQuestionnaireResponsesFromApi(
+      questionnaireData.responses
+    );
     const recs = generateRecommendations(convertedResponses);
     setRecommendations(recs);
   }, [questionnaireData]);

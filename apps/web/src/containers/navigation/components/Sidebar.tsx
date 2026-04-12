@@ -25,7 +25,8 @@ function isLinkActive(
     currentPath === link.path ||
     (link.path === RoutePaths.QUESTIONNAIRE &&
       currentPath.startsWith(RoutePaths.QUESTIONNAIRE) &&
-      currentPath !== RoutePaths.RESULTS)
+      currentPath !== RoutePaths.RESULTS &&
+      currentPath !== RoutePaths.APPOINTMENT_SUMMARY)
   );
 }
 
@@ -124,6 +125,8 @@ export function Sidebar({ links }: SidebarProps) {
             )}
             {links.map((link, index) => {
               const isActive = isLinkActive(link, currentPath);
+              const pinToBottom =
+                link.path === RoutePaths.APPOINTMENT_SUMMARY;
 
               return (
                 <SidebarLink
@@ -133,6 +136,7 @@ export function Sidebar({ links }: SidebarProps) {
                     linkRefs.current[index] = el;
                   }}
                   $isActive={isActive}
+                  $pinToBottom={pinToBottom}
                 >
                   <SidebarLinkLabel>{link.name}</SidebarLinkLabel>
                 </SidebarLink>

@@ -23,6 +23,14 @@ export const LandingContainer = styled.div`
   @media (max-width: 480px) {
     padding: clamp(72px, 18vw, 92px) 12px clamp(24px, 5vw, 36px);
   }
+
+  @media print {
+    flex: none;
+    min-height: 0;
+    max-width: none;
+    overflow: visible !important;
+    padding: 12px 16px 24px !important;
+  }
 `;
 
 export const LandingHeroSection = styled.div`
