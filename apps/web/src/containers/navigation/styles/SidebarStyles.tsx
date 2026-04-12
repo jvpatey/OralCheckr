@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 // Match ModernNavBar entrance — subtle vertical fade
@@ -56,6 +57,20 @@ export const SidebarContainer = styled.nav`
 
 /** Track for links + sliding indicator (same role as `NavLinksContainer`) */
 export const SidebarTrack = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-height: 0;
+
+  @media (max-width: 800px) {
+    gap: 6px;
+  }
+`;
+
+/** Animated group when questionnaire ↔ habit sidebar sets swap */
+export const SidebarLinksGroup = styled(motion.div)`
   position: relative;
   display: flex;
   flex-direction: column;

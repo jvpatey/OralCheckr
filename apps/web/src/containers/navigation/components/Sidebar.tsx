@@ -2,9 +2,11 @@ import { useLocation } from "react-router-dom";
 import { RoutePaths } from "../../../common/constants/routes";
 import { AuthContext } from "../../authentication/AuthContext";
 import { useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   SidebarContainer,
   SidebarTrack,
+  SidebarLinksGroup,
   SidebarIndicator,
   SidebarLink,
   SidebarLinkLabel,
@@ -31,6 +33,7 @@ function isLinkActive(
 export function Sidebar({ links }: SidebarProps) {
   const location = useLocation();
   const { isAuthenticated } = useContext(AuthContext);
+  const reduceMotion = useReducedMotion();
   const trackRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
@@ -41,6 +44,11 @@ export function Sidebar({ links }: SidebarProps) {
     const i = links.findIndex((link) => isLinkActive(link, currentPath));
     return i;
   }, [links, currentPath]);
+
+  const linksGroupKey = useMemo(
+    () => links.map((l) => l.path).join("|"),
+    [links]
+  );
 
   const [indicator, setIndicator] = useState({ top: 0, height: 0 });
 
@@ -64,7 +72,7 @@ export function Sidebar({ links }: SidebarProps) {
 
   useLayoutEffect(() => {
     updateIndicator();
-  }, [updateIndicator, links.length]);
+  }, [updateIndicator, linksGroupKey]);
 
   useLayoutEffect(() => {
     const track = trackRef.current;
@@ -86,30 +94,52 @@ export function Sidebar({ links }: SidebarProps) {
     return null;
   }
 
+  const groupTransition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 0.28, ease: [0.4, 0, 0.2, 1] as const };
+
   return (
     <SidebarContainer>
       <SidebarTrack ref={trackRef}>
-        {activeIndex >= 0 && indicator.height > 0 && (
-          <SidebarIndicator
-            style={{ top: indicator.top, height: indicator.height }}
-          />
-        )}
-        {links.map((link, index) => {
-          const isActive = isLinkActive(link, currentPath);
+        <AnimatePresence mode="wait" initial={false}>
+          <SidebarLinksGroup
+            key={linksGroupKey}
+            initial={reduceMotion ? false : { opacity: 0, y: 10, filter: "blur(4px)" }}
+            animate={
+              reduceMotion
+                ? { opacity: 1, y: 0 }
+                : { opacity: 1, y: 0, filter: "blur(0px)" }
+            }
+            exit={
+              reduceMotion
+                ? { opacity: 0 }
+                : { opacity: 0, y: -8, filter: "blur(3px)" }
+            }
+            transition={groupTransition}
+          >
+            {activeIndex >= 0 && indicator.height > 0 && (
+              <SidebarIndicator
+                style={{ top: indicator.top, height: indicator.height }}
+              />
+            )}
+            {links.map((link, index) => {
+              const isActive = isLinkActive(link, currentPath);
 
-          return (
-            <SidebarLink
-              to={link.path}
-              key={link.path}
-              ref={(el) => {
-                linkRefs.current[index] = el;
-              }}
-              $isActive={isActive}
-            >
-              <SidebarLinkLabel>{link.name}</SidebarLinkLabel>
-            </SidebarLink>
-          );
-        })}
+              return (
+                <SidebarLink
+                  to={link.path}
+                  key={link.path}
+                  ref={(el) => {
+                    linkRefs.current[index] = el;
+                  }}
+                  $isActive={isActive}
+                >
+                  <SidebarLinkLabel>{link.name}</SidebarLinkLabel>
+                </SidebarLink>
+              );
+            })}
+          </SidebarLinksGroup>
+        </AnimatePresence>
       </SidebarTrack>
     </SidebarContainer>
   );
