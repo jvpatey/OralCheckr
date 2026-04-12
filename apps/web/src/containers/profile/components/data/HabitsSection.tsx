@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
 import { DeleteButton } from "../../styles/AccountTabStyles";
 import { DeleteConfirmationModal } from "../modals/DeleteConfirmationModal";
 import { useHabitsWithLastTracked } from "../../../../hooks/habits/useHabitsWithLastTracked";
@@ -48,20 +47,10 @@ export function HabitsSection({
     },
     onError: (_error, _variables, context) => {
       queryClient.setQueryData(["habits"], context?.previousData);
-      toast.error("Failed to delete habits", {
-        position: "top-right",
-        autoClose: 3000,
-      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["habits"] });
       queryClient.invalidateQueries({ queryKey: ["habitLogs"] });
-      toast.success("All habits deleted successfully", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-
-      // Force immediate UI update by setting hasNoData
       queryClient.setQueryData(["habits"], []);
     },
     onSettled: () => {

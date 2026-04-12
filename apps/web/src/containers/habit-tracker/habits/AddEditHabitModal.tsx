@@ -1,6 +1,16 @@
 import React, { useEffect, useRef } from "react";
-import { Modal, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { StyledModal } from "../../../components/questionnaire/styles/Modal";
+import { Form, OverlayTrigger, Tooltip } from "react-bootstrap";
+import {
+  StyledModal,
+  ModalHeader,
+  ModalTitleStack,
+  ModalHeading,
+  ModalBody,
+  InputStyle,
+  StyledFormButton,
+  ModalOutlineButton,
+} from "../../welcome/styles/ModalStyles";
+import { HeroTitleAccent } from "../../welcome/styles/WelcomeStyles";
 import { Habit } from "../../../services/habitService";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,144 +25,63 @@ interface AddEditHabitModalProps {
   setNewHabit: (habit: Habit) => void;
 }
 
-// Styled component for the Save Button with gradient
-const SaveButton = styled.button<{ disabled: boolean }>`
-  /* Gradient background */
-  background: ${({ disabled, theme }) =>
-    disabled ? theme.disabledBackground : theme.secondaryGradient};
-  color: ${({ disabled, theme }) => (disabled ? theme.textGrey : "white")};
-  padding: 12px 24px;
-  border-radius: 14px;
-  border: none;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+/** Field labels — same voice as welcome modal copy hierarchy */
+const FieldLabel = styled(Form.Label)`
+  display: block;
+  margin: 0 0 6px 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.875rem;
   font-weight: 600;
-  box-shadow: ${({ theme, disabled }) => (disabled ? "none" : theme.shadowMd)};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-
-  /* Subtle glow effect overlay */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 14px;
-  }
-
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: ${({ theme }) => theme.shadowLg};
-
-    &::before {
-      opacity: 1;
-    }
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(0);
-    transition-duration: 0.1s;
-  }
-`;
-
-// Styled component for the Cancel Button with modern styling
-const CancelButton = styled.button`
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 2px solid ${({ theme }) => theme.borderMedium};
+  letter-spacing: -0.02em;
   color: ${({ theme }) => theme.textSecondary};
-  padding: 12px 24px;
-  border-radius: 14px;
-  cursor: pointer;
-  font-weight: 600;
-  box-shadow: ${({ theme }) => theme.shadowSm};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    background: ${({ theme }) => theme.textSecondary};
-    color: white;
-    border-color: ${({ theme }) => theme.textSecondary};
-    transform: translateY(-2px);
-    box-shadow: ${({ theme }) => theme.shadowMd};
-  }
-
-  &:active {
-    transform: translateY(0);
-    transition-duration: 0.1s;
-  }
 `;
 
-const StyledFormControl = styled(Form.Control)`
-  /* Glassmorphism input styling */
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 2px solid ${({ theme }) => theme.borderLight};
-  border-radius: 14px;
-  color: ${({ theme }) => theme.textPrimary};
-  font-weight: 500;
-  padding: 12px 16px;
-  box-shadow: ${({ theme }) => theme.shadowSm};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &::placeholder {
-    color: ${({ theme }) => theme.textTertiary};
-  }
-
-  &:focus {
-    background: ${({ theme }) => theme.glassBg};
-    color: ${({ theme }) => theme.textPrimary};
-    border-color: ${({ theme }) => theme.primary};
-    box-shadow:
-      ${({ theme }) => theme.shadowMd},
-      0 0 0 3px ${({ theme }) => theme.primary}20;
-    outline: none;
-  }
-
-  &:hover {
-    border-color: ${({ theme }) => theme.primary}60;
-    box-shadow: ${({ theme }) => theme.shadowMd};
-  }
-`;
-
-// Styled component for the Info Icon with gradient color
-const InfoIcon = styled(FontAwesomeIcon)`
-  color: ${({ theme }) => theme.primary};
-  margin-left: 5px;
-  font-size: 0.9rem;
-  cursor: help;
-  transition: all 0.3s ease;
-
-  &:hover {
-    color: ${({ theme }) => theme.primaryLight};
-    transform: scale(1.1);
-  }
-`;
-
-// Styled component for the Form Label Group
-const FormLabelGroup = styled.div`
+const FormLabelRow = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  gap: 6px;
+  margin-bottom: 6px;
 `;
 
-const StyledFormLabel = styled(Form.Label)`
-  margin-bottom: 12px;
-  display: block;
-  color: ${({ theme }) => theme.textPrimary};
-  font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: -0.25px;
+const GoalFieldBlock = styled.div`
+  margin-top: 4px;
+`;
+
+/** Match welcome guest modal — two full-width pill actions */
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 12px;
+  width: 100%;
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+  }
+`;
+
+const ButtonWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+`;
+
+const InfoIcon = styled(FontAwesomeIcon)`
+  color: ${({ theme }) => theme.textSecondary};
+  font-size: 0.875rem;
+  cursor: help;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+  padding: 4px;
+  border-radius: 8px;
+  margin-left: 2px;
+
+  &:hover {
+    color: ${({ theme }) => theme.primary};
+    background: ${({ theme }) => theme.surfaceElevated};
+  }
 `;
 
 const StyledTooltip = styled(Tooltip)`
@@ -161,25 +90,21 @@ const StyledTooltip = styled(Tooltip)`
   }
 
   .tooltip-inner {
-    background-color: ${({ theme }) => theme.backgroundColor};
-    color: ${({ theme }) => theme.textGrey};
-    border: 1px solid ${({ theme }) => theme.blue};
-    padding: 8px 12px;
-    font-size: 0.9rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: ${({ theme }) => theme.surfaceElevated};
+    color: ${({ theme }) => theme.textPrimary};
+    border: 1px solid ${({ theme }) => theme.borderLight};
+    border-radius: 14px;
+    padding: 10px 14px;
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.45;
+    box-shadow: ${({ theme }) => theme.shadowMd};
+    max-width: 260px;
   }
 
   .tooltip-arrow::before {
-    border-right-color: ${({ theme }) => theme.blue};
-  }
-
-  .tooltip-arrow::after {
-    border-right-color: ${({ theme }) => theme.backgroundColor};
-    position: absolute;
-    left: 1px;
-    border-width: 0.4rem 0.4rem 0.4rem 0;
-    border-right-style: solid;
-    content: "";
+    border-right-color: ${({ theme }) => theme.borderLight};
   }
 `;
 
@@ -192,10 +117,8 @@ export function AddEditHabitModal({
   newHabit,
   setNewHabit,
 }: AddEditHabitModalProps) {
-  // Ref for the habit name input
   const habitNameRef = useRef<HTMLInputElement>(null);
 
-  // Focus the habit name input when the modal is shown
   useEffect(() => {
     if (show && habitNameRef.current) {
       habitNameRef.current.focus();
@@ -215,23 +138,32 @@ export function AddEditHabitModal({
 
   const handleHabitCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
-    // Ensure count is at least 1
     const validValue = isNaN(value) ? 1 : Math.max(1, value);
     setNewHabit({ ...newHabit, count: validValue });
   };
 
   return (
-    <StyledModal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>
-          {originalHabit.habitId ? "Edit a Habit" : "Add a New Habit"}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <StyledModal show={show} onHide={handleClose} centered>
+      <ModalHeader closeButton>
+        <ModalTitleStack>
+          <ModalHeading>
+            {originalHabit.habitId ? (
+              <>
+                Edit a <HeroTitleAccent as="span">habit</HeroTitleAccent>
+              </>
+            ) : (
+              <>
+                Add a new <HeroTitleAccent as="span">habit</HeroTitleAccent>
+              </>
+            )}
+          </ModalHeading>
+        </ModalTitleStack>
+      </ModalHeader>
+      <ModalBody>
         <Form>
           <Form.Group controlId="habitName">
-            <StyledFormLabel>Habit Name</StyledFormLabel>
-            <StyledFormControl
+            <FieldLabel>Habit name</FieldLabel>
+            <InputStyle
               type="text"
               placeholder="Enter habit name"
               value={newHabit.name}
@@ -239,40 +171,50 @@ export function AddEditHabitModal({
               ref={habitNameRef}
             />
           </Form.Group>
-          <Form.Group controlId="habitCount" style={{ marginTop: "16px" }}>
-            <FormLabelGroup>
-              <StyledFormLabel style={{ margin: 0 }}>
-                Daily Goal
-              </StyledFormLabel>
-              <OverlayTrigger
-                placement="right"
-                overlay={
-                  <StyledTooltip id="daily-goal-tooltip">
-                    How many times this habit should be completed each day
-                  </StyledTooltip>
-                }
+          <GoalFieldBlock>
+            <Form.Group controlId="habitCount">
+              <FormLabelRow>
+                <FieldLabel style={{ margin: 0 }}>Daily goal</FieldLabel>
+                <OverlayTrigger
+                  placement="right"
+                  overlay={
+                    <StyledTooltip id="daily-goal-tooltip">
+                      How many times this habit should be completed each day
+                    </StyledTooltip>
+                  }
+                >
+                  <span>
+                    <InfoIcon icon={faInfoCircle} />
+                  </span>
+                </OverlayTrigger>
+              </FormLabelRow>
+              <InputStyle
+                type="number"
+                placeholder="Enter daily goal"
+                value={newHabit.count.toString()}
+                onChange={handleHabitCountChange}
+                min={1}
+              />
+            </Form.Group>
+          </GoalFieldBlock>
+          <ButtonContainer>
+            <ButtonWrapper>
+              <ModalOutlineButton type="button" onClick={handleClose}>
+                Cancel
+              </ModalOutlineButton>
+            </ButtonWrapper>
+            <ButtonWrapper>
+              <StyledFormButton
+                type="button"
+                disabled={isSaveDisabled()}
+                onClick={handleSaveHabit}
               >
-                <span>
-                  <InfoIcon icon={faInfoCircle} />
-                </span>
-              </OverlayTrigger>
-            </FormLabelGroup>
-            <StyledFormControl
-              type="number"
-              placeholder="Enter daily goal"
-              value={newHabit.count.toString()}
-              onChange={handleHabitCountChange}
-              min="1"
-            />
-          </Form.Group>
+                Save habit
+              </StyledFormButton>
+            </ButtonWrapper>
+          </ButtonContainer>
         </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <CancelButton onClick={handleClose}>Cancel</CancelButton>
-        <SaveButton disabled={isSaveDisabled()} onClick={handleSaveHabit}>
-          Save Habit
-        </SaveButton>
-      </Modal.Footer>
+      </ModalBody>
     </StyledModal>
   );
 }

@@ -4,17 +4,39 @@ import { ThemeType } from "../../../App";
 import styled from "styled-components";
 import { useState } from "react";
 
-const ToggleWrapper = styled.div`
+const ToggleButton = styled.button`
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px;
+  margin: 0;
+  border: none;
+  background: transparent;
   cursor: pointer;
+  font: inherit;
+  color: inherit;
+  border-radius: 10px;
+  box-sizing: border-box;
 
   &:hover {
     transform: scale(1.1);
   }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 2px;
+  }
+`;
+
+const IconSlot = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  line-height: 0;
 `;
 
 interface ThemeToggleProps {
@@ -36,19 +58,27 @@ export function ThemeToggle({ themeToggler, theme }: ThemeToggleProps) {
   };
 
   return (
-    <ToggleWrapper
+    <ToggleButton
+      type="button"
+      aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+      aria-pressed={isDarkMode}
+      onClick={toggleDarkMode}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <DarkModeSwitch
-        checked={isDarkMode}
-        onChange={toggleDarkMode}
-        size={18}
-        moonColor={
-          isHovered ? themeContext.primary : themeContext.textSecondary
-        }
-        sunColor={isHovered ? themeContext.primary : themeContext.textSecondary}
-      />
-    </ToggleWrapper>
+      <IconSlot aria-hidden>
+        <DarkModeSwitch
+          checked={isDarkMode}
+          onChange={() => {}}
+          size={18}
+          moonColor={
+            isHovered ? themeContext.primary : themeContext.textSecondary
+          }
+          sunColor={
+            isHovered ? themeContext.primary : themeContext.textSecondary
+          }
+        />
+      </IconSlot>
+    </ToggleButton>
   );
 }

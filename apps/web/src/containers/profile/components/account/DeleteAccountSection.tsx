@@ -10,20 +10,19 @@ import {
   DeleteButton,
   WarningText,
   DescriptionText,
+  PasswordFeedback,
 } from "../../styles/AccountTabStyles";
 
-interface DeleteAccountSectionProps {
-  showToast: (type: "success" | "error", message: string) => void;
-}
-
-export function DeleteAccountSection({ showToast }: DeleteAccountSectionProps) {
+export function DeleteAccountSection() {
   const navigate = useNavigate();
   const { updateAuth } = useContext(AuthContext);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
+    setDeleteError("");
     try {
       await deleteAccount();
       await logoutUser();
@@ -31,7 +30,7 @@ export function DeleteAccountSection({ showToast }: DeleteAccountSectionProps) {
       navigate("/welcome");
     } catch (error: any) {
       const errorMessage = error.message || "Failed to delete account";
-      showToast("error", errorMessage);
+      setDeleteError(errorMessage);
       setShowDeleteConfirm(false);
     } finally {
       setIsDeleting(false);
@@ -49,11 +48,15 @@ export function DeleteAccountSection({ showToast }: DeleteAccountSectionProps) {
           data.
         </DescriptionText>
         <DeleteButton
-          onClick={() => setShowDeleteConfirm(true)}
+          onClick={() => {
+            setDeleteError("");
+            setShowDeleteConfirm(true);
+          }}
           disabled={isDeleting}
         >
           Delete Account
         </DeleteButton>
+        {deleteError && <PasswordFeedback>{deleteError}</PasswordFeedback>}
       </DeleteSection>
 
       <DeleteAccountModal

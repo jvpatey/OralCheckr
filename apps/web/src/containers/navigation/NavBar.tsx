@@ -12,6 +12,7 @@ import { NavBrand, MobileMenu, DesktopMenu, ThemeToggle } from "./components";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { RoutePaths } from "../../common/constants/routes";
 import { ConfirmationModal } from "../../components/shared/ConfirmationModal";
+import { HeroTitleAccent } from "../welcome/styles/WelcomeStyles";
 
 // Props for navigation bar
 interface NavBarProps {
@@ -167,7 +168,11 @@ export function NavBar({ links, themeToggler, theme }: NavBarProps) {
 
       <ConfirmationModal
         show={showLogoutModal}
-        title="Log Out"
+        title={
+          <>
+            Log <HeroTitleAccent as="span">out</HeroTitleAccent>
+          </>
+        }
         message="Are you sure you want to log out?"
         confirmLabel="Log Out"
         onConfirm={handleLogoutConfirm}

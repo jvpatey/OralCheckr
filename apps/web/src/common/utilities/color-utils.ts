@@ -26,7 +26,9 @@ export const lightTheme: DefaultTheme = {
   primary: "#06B6D4", // Cyan 500 - Fresh, clean, dental
   primaryLight: "#22D3EE", // Cyan 400 - Lighter variant
   primaryDark: "#0891B2", // Cyan 600 - Darker variant
-  primaryGradient: "linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%)",
+  /* Cyan-only gradient so filled buttons match borders / accents (no blue-500 shift) */
+  primaryGradient:
+    "linear-gradient(135deg, #22D3EE 0%, #06B6D4 42%, #0891B2 100%)",
 
   // ============================================
   // SECONDARY COLORS - Emerald (Health & Growth)

@@ -14,10 +14,9 @@ import { PasswordField } from "../../../../containers/welcome/components/Passwor
 
 interface PasswordSectionProps {
   refetch: () => Promise<any>;
-  showToast: (type: "success" | "error", message: string) => void;
 }
 
-export function PasswordSection({ refetch, showToast }: PasswordSectionProps) {
+export function PasswordSection({ refetch }: PasswordSectionProps) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,6 +24,8 @@ export function PasswordSection({ refetch, showToast }: PasswordSectionProps) {
   const [passwordError, setPasswordError] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Check if new password and confirm password match
   useEffect(() => {
@@ -65,19 +66,21 @@ export function PasswordSection({ refetch, showToast }: PasswordSectionProps) {
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setSubmitError("");
+    setSubmitSuccess(false);
     try {
       await updateProfile({
         currentPassword,
         newPassword,
       });
-      showToast("success", "Password updated successfully!");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      setSubmitSuccess(true);
       await refetch();
     } catch (error: any) {
       const errorMessage = error.message || "Failed to update password";
-      showToast("error", errorMessage);
+      setSubmitError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -142,6 +145,11 @@ export function PasswordSection({ refetch, showToast }: PasswordSectionProps) {
 
         {passwordsDoNotMatch && (
           <PasswordFeedback>Passwords do not match</PasswordFeedback>
+        )}
+
+        {submitError && <PasswordFeedback>{submitError}</PasswordFeedback>}
+        {submitSuccess && (
+          <PasswordFeedback $success>Password updated successfully.</PasswordFeedback>
         )}
 
         <SimpleButton

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
 import { DeleteButton } from "../../styles/AccountTabStyles";
 import { DeleteConfirmationModal } from "../modals/DeleteConfirmationModal";
 import { useQuestionnaireData } from "../../../../hooks/questionnaire/useQuestionnaireData";
@@ -49,18 +48,10 @@ export function QuestionnaireSection({
         ["questionnaireResponse"],
         context?.previousData
       );
-      toast.error("Failed to delete assessment data", {
-        position: "top-right",
-        autoClose: 3000,
-      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["questionnaireResponse"] });
       queryClient.invalidateQueries({ queryKey: ["questionnaireProgress"] });
-      toast.success("Questionnaire data deleted successfully", {
-        position: "top-right",
-        autoClose: 3000,
-      });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["questionnaireResponse"] });

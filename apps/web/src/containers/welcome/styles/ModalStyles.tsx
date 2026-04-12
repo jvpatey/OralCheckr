@@ -145,14 +145,6 @@ export const ModalBody = styled(Modal.Body)`
 // Form inputs — slightly smaller than CTAs so buttons read as primary actions (best practice)
 export const InputStyle = styled(Form.Control)`
   font-family: var(--font-sans), system-ui, sans-serif;
-  background: ${({ theme }) => theme.surfaceElevated};
-  border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 12px;
-  padding: 10px 16px;
-  min-height: 44px;
-  font-size: 0.9375rem;
-  line-height: 1.45;
-  color: ${({ theme }) => theme.textPrimary};
   margin-top: 0;
   margin-bottom: 14px;
   transition:
@@ -160,20 +152,54 @@ export const InputStyle = styled(Form.Control)`
     box-shadow 0.2s ease,
     background 0.2s ease;
 
+  /* && beats .modal-body color and Bootstrap .form-control so filled values stay readable */
+  && {
+    background-color: ${({ theme }) => theme.surfaceElevated};
+    border: 1px solid ${({ theme }) => theme.borderLight};
+    border-radius: 12px;
+    padding: 10px 16px;
+    min-height: 44px;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    font-weight: 500;
+    color: ${({ theme }) => theme.textPrimary};
+    -webkit-text-fill-color: ${({ theme }) => theme.textPrimary};
+    caret-color: ${({ theme }) => theme.primary};
+  }
+
   &::placeholder {
     color: ${({ theme }) => theme.textTertiary};
     opacity: 1;
+    -webkit-text-fill-color: ${({ theme }) => theme.textTertiary};
   }
 
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.primary};
     box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}22;
-    background: ${({ theme }) => theme.surfaceColor};
+    background-color: ${({ theme }) => theme.surfaceColor};
+    color: ${({ theme }) => theme.textPrimary};
+    -webkit-text-fill-color: ${({ theme }) => theme.textPrimary};
   }
 
   &:hover:not(:focus) {
     border-color: ${({ theme }) => theme.borderMedium};
+  }
+
+  /* Chrome / Safari autofill: keep text and fill aligned with theme */
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-text-fill-color: ${({ theme }) => theme.textPrimary} !important;
+    box-shadow: 0 0 0 1000px ${({ theme }) => theme.surfaceElevated} inset !important;
+    border: 1px solid ${({ theme }) => theme.borderLight};
+    border-radius: 12px;
+    transition: background-color 9999s ease-out 0s;
+  }
+
+  &:focus:-webkit-autofill {
+    box-shadow: 0 0 0 1000px ${({ theme }) => theme.surfaceColor} inset !important;
   }
 `;
 

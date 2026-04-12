@@ -45,7 +45,6 @@ import {
 } from "../../../hooks/habitLogs";
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
-import { toast } from "react-toastify";
 import { HabitLogResponse } from "../../../services/habitLogService";
 import { HeroTitleAccent } from "../../../containers/welcome/styles/WelcomeStyles";
 
@@ -146,13 +145,8 @@ export function Habits() {
             onSuccess: () => {
               setShowAddHabitModal(false);
               resetHabitForm(setNewHabit, setOriginalHabit);
-              toast.success("Habit updated successfully", { autoClose: 800 });
             },
-            onError: (error) => {
-              toast.error(`Failed to update habit: ${error}`, {
-                autoClose: 800,
-              });
-            },
+            onError: () => {},
           },
         );
       } else {
@@ -163,13 +157,8 @@ export function Habits() {
             onSuccess: () => {
               setShowAddHabitModal(false);
               resetHabitForm(setNewHabit, setOriginalHabit);
-              toast.success("Habit created successfully", { autoClose: 800 });
             },
-            onError: (error) => {
-              toast.error(`Failed to create habit: ${error}`, {
-                autoClose: 800,
-              });
-            },
+            onError: () => {},
           },
         );
       }
@@ -196,12 +185,10 @@ export function Habits() {
 
     deleteHabitMutation.mutate(habitToDelete.habitId, {
       onSuccess: () => {
-        toast.success("Habit deleted successfully", { autoClose: 800 });
         setShowDeleteModal(false);
         setHabitToDelete(null);
       },
-      onError: (error) => {
-        toast.error(`Failed to delete habit: ${error}`, { autoClose: 800 });
+      onError: () => {
         setShowDeleteModal(false);
         setHabitToDelete(null);
       },
@@ -216,13 +203,9 @@ export function Habits() {
   const handleConfirmDeleteAll = () => {
     deleteAllHabitsMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success("All habits deleted successfully", { autoClose: 800 });
         setShowDeleteAllModal(false);
       },
-      onError: (error) => {
-        toast.error(`Failed to delete all habits: ${error}`, {
-          autoClose: 800,
-        });
+      onError: () => {
         setShowDeleteAllModal(false);
       },
     });
@@ -248,10 +231,6 @@ export function Habits() {
 
     // Validate against maximum count
     if (logCount >= habit.count) {
-      toast.error(
-        `Cannot exceed the maximum count of ${habit.count} for this habit`,
-        { autoClose: 800 },
-      );
       return;
     }
 
@@ -266,20 +245,14 @@ export function Habits() {
       { habitId, date: selectedDate },
       {
         onSuccess: (data: HabitLogResponse) => {
-          toast.success("Habit logged successfully", { autoClose: 800 });
-
           // Use server count or fallback to local count
           const updatedCount = data.logs?.[0]?.count || logCount + 1;
 
           // Sync with server data
           updateLogCount(habitId, selectedDate, updatedCount);
         },
-        onError: (error) => {
-          // Revert on error
+        onError: () => {
           updateLogCount(habitId, selectedDate, logCount);
-          toast.error(`Failed to log habit: ${error}`, { autoClose: 800 });
-
-          // Refresh data
           syncWithServer();
         },
       },
@@ -296,7 +269,6 @@ export function Habits() {
 
     // Validate minimum count
     if (logCount <= 0) {
-      toast.error(`No logs to remove for this date`, { autoClose: 800 });
       return;
     }
 
@@ -311,8 +283,6 @@ export function Habits() {
       { habitId, date: selectedDate },
       {
         onSuccess: (data: HabitLogResponse) => {
-          toast.success("Habit log removed successfully", { autoClose: 800 });
-
           // Use server count or fallback to calculated count
           const updatedCount =
             data.logs?.[0]?.count || Math.max(0, logCount - 1);
@@ -320,12 +290,8 @@ export function Habits() {
           // Sync with server data
           updateLogCount(habitId, selectedDate, updatedCount);
         },
-        onError: (error) => {
-          // Revert on error
+        onError: () => {
           updateLogCount(habitId, selectedDate, logCount);
-          toast.error(`Failed to remove log: ${error}`, { autoClose: 800 });
-
-          // Refresh data
           syncWithServer();
         },
       },
@@ -508,8 +474,22 @@ export function Habits() {
 
       <ConfirmationModal
         show={showDeleteModal}
-        title="Delete Habit"
-        message={`Are you sure you want to delete "${habitToDelete?.name}"? This will also delete all tracking history for this habit.`}
+        title={
+          <>
+            Delete <HeroTitleAccent as="span">habit</HeroTitleAccent>
+          </>
+        }
+        message={
+          <>
+            Are you sure you want to delete{" "}
+            <HeroTitleAccent as="span">
+              {habitToDelete?.name ?? ""}
+            </HeroTitleAccent>
+            ?
+            <br />
+            This will also delete all tracking history for this habit.
+          </>
+        }
         confirmLabel="Delete"
         onConfirm={handleConfirmDelete}
         onCancel={() => {
@@ -521,8 +501,18 @@ export function Habits() {
 
       <ConfirmationModal
         show={showDeleteAllModal}
-        title="Delete All Habits"
-        message="Are you sure you want to delete all habits and their tracking history? This action cannot be undone."
+        title={
+          <>
+            Delete all <HeroTitleAccent as="span">habits</HeroTitleAccent>
+          </>
+        }
+        message={
+          <>
+            Are you sure you want to delete all habits and their tracking history?
+            <br />
+            This action cannot be undone.
+          </>
+        }
         confirmLabel="Delete All"
         onConfirm={handleConfirmDeleteAll}
         onCancel={() => setShowDeleteAllModal(false)}

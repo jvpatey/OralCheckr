@@ -100,8 +100,9 @@ export const StyledLabel = styled(Form.Label)`
   font-size: 0.9rem;
 `;
 
-export const PasswordFeedback = styled.div`
-  color: ${({ theme }) => theme.red};
+export const PasswordFeedback = styled.div<{ $success?: boolean }>`
+  color: ${({ theme, $success }) =>
+    $success ? theme.secondary : theme.red};
   font-size: 0.875rem;
   margin-top: 0.25rem;
 `;
@@ -129,7 +130,6 @@ export const EyeButton = styled(Button)`
   }
 `;
 
-// Note: Toast styling is now handled globally in ToastStyles.tsx
 // This component can be removed if no longer needed
 
 export const DeleteSection = styled.div`

@@ -8,6 +8,7 @@ import {
   StyledForm,
   CurrentValue,
   DescriptionText,
+  PasswordFeedback,
 } from "../../styles/AccountTabStyles";
 import { SimpleButton } from "../../styles/SimpleButton";
 import { FormLabel } from "../../styles/FormLabel";
@@ -15,28 +16,27 @@ import { FormLabel } from "../../styles/FormLabel";
 interface EmailSectionProps {
   currentEmail: string;
   refetch: () => Promise<any>;
-  showToast: (type: "success" | "error", message: string) => void;
 }
 
-export function EmailSection({
-  currentEmail,
-  refetch,
-  showToast,
-}: EmailSectionProps) {
+export function EmailSection({ currentEmail, refetch }: EmailSectionProps) {
   const [newEmail, setNewEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleEmailUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setSubmitError("");
+    setSubmitSuccess(false);
     try {
       await updateProfile({ email: newEmail });
-      showToast("success", "Email updated successfully!");
       setNewEmail("");
+      setSubmitSuccess(true);
       await refetch();
     } catch (error: any) {
       const errorMessage = error.message || "Failed to update email";
-      showToast("error", errorMessage);
+      setSubmitError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -60,6 +60,10 @@ export function EmailSection({
             required
           />
         </Form.Group>
+        {submitError && <PasswordFeedback>{submitError}</PasswordFeedback>}
+        {submitSuccess && (
+          <PasswordFeedback $success>Email updated successfully.</PasswordFeedback>
+        )}
         <SimpleButton type="submit" disabled={isLoading || !newEmail.trim()}>
           Update Email
         </SimpleButton>
