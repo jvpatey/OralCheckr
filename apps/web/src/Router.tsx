@@ -6,6 +6,7 @@ import { Questionnaire } from "./containers/questionnaire/Questionnaire";
 import { Habits } from "./containers/habit-tracker/habits/Habits";
 import { Analytics } from "./containers/habit-tracker/analytics/Analytics";
 import { Results } from "./components/questionnaire/Results";
+import { AppointmentSummary } from "./components/questionnaire/AppointmentSummary";
 import { Landing } from "./components/landing/Landing";
 import { Welcome } from "./containers/welcome/Welcome";
 import { Profile } from "./containers/profile/components/Profile";
@@ -62,6 +63,14 @@ export function Router({ themeToggler, currentTheme }: RouterProps) {
         element={
           <GuardedRoute>
             <Results />
+          </GuardedRoute>
+        }
+      />
+      <Route
+        path={RoutePaths.APPOINTMENT_SUMMARY}
+        element={
+          <GuardedRoute>
+            <AppointmentSummary />
           </GuardedRoute>
         }
       />

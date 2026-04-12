@@ -36,7 +36,8 @@ export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
         sidebarNavLinks.filter(
           (link) =>
             link.path.startsWith(RoutePaths.HABITS) ||
-            link.path.startsWith(RoutePaths.ANALYTICS)
+            link.path.startsWith(RoutePaths.ANALYTICS) ||
+            link.path === RoutePaths.APPOINTMENT_SUMMARY
         )
       );
     } else if (isQuestionnaireRoute) {

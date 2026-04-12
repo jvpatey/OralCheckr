@@ -85,6 +85,10 @@ export const BackgroundEffects = styled.div`
       animation: ${pulse} 12s ease-in-out infinite;
     }
   }
+
+  @media print {
+    display: none !important;
+  }
 `;
 
 // Modern container — padding tuned for phone, iPad, desktop

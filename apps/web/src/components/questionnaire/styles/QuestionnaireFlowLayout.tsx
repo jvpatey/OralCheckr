@@ -206,6 +206,15 @@ export const QuestionnairePageShell = styled.div<{
     min-height: calc(100vh - 80px);
     padding-bottom: 32px;
   }
+
+  @media print {
+    width: 100% !important;
+    margin-left: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 16px 24px !important;
+    animation: none !important;
+  }
 `;
 
 export const QuestionnaireGuestSignupCta = styled(BaseButton).attrs(() => ({

@@ -79,4 +79,25 @@ export const PageBackground = styled.div`
       mix-blend-mode: soft-light;
     }
   }
+
+  /* Fixed + viewport-sized box is clipped to one page in many print engines */
+  @media print {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    display: block !important;
+    background: #ffffff !important;
+
+    &::before,
+    &::after {
+      display: none !important;
+    }
+  }
 `;

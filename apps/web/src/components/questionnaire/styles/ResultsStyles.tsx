@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { QuestionnaireOutlineCta } from "./QuestionnaireFlowLayout";
 
 /** Grid — aligned with dashboard / bento spacing */
@@ -206,6 +207,26 @@ export const AssessLabel = styled.div`
 
 export const ResultsQuestionnaireCta = styled(QuestionnaireOutlineCta)`
   min-width: min(100%, 240px);
+  width: auto;
+  max-width: 100%;
+  padding: 12px 22px;
+  font-size: 0.9375rem;
+`;
+
+export const VisitSummaryRow = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: clamp(20px, 3vw, 28px);
+  width: 100%;
+`;
+
+export const VisitSummaryCta = styled(QuestionnaireOutlineCta).attrs(() => ({
+  as: Link,
+}))`
+  text-decoration: none;
+  min-width: min(100%, 280px);
   width: auto;
   max-width: 100%;
   padding: 12px 22px;

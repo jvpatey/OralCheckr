@@ -139,3 +139,48 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+@media print {
+  .app-print-chrome {
+    display: none !important;
+  }
+
+  html {
+    height: auto !important;
+    overflow: visible !important;
+    scroll-behavior: auto;
+    scrollbar-gutter: auto;
+  }
+
+  body {
+    display: block !important;
+    place-items: unset !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  #root {
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+    background: #ffffff !important;
+  }
+
+  .appointment-summary-print-root {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .appointment-summary-adherence-row,
+  .appointment-summary-print-root tr {
+    break-inside: avoid;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
