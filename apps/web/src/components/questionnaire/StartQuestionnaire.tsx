@@ -3,19 +3,24 @@ import { PageBackground } from "../PageBackground";
 import { LandingContainer } from "../landing/LandingContainer";
 import {
   BackgroundEffects,
-  HeroEyebrow,
   HeroTitleAccent,
-  HeroSubtitle,
   HeroDescription,
 } from "../../containers/welcome/styles/WelcomeStyles";
 import { StartQuestionnaireProps } from "../../common/types/questionnaire/start-questionnaire.types";
 import {
   QuestionnaireFlowContainer,
-  QuestionnaireHeroCopy,
-  QuestionnairePageTitle,
-  QuestionnaireCtaSection,
+  QuestionnaireStackHeader,
+  QuestionnaireFlowBodyCentered,
+  QuestionnaireCtaSectionCentered,
   QuestionnaireCtaLink,
 } from "./styles/QuestionnaireFlowLayout";
+import {
+  HeaderMainRow,
+  HeaderTitleColumn,
+  HabitHeroEyebrow,
+  HeaderText,
+  HeaderSubtitle,
+} from "../habit-tracker/habits/HabitComponents";
 
 export function StartQuestionnaire({
   isAuthenticated,
@@ -25,25 +30,31 @@ export function StartQuestionnaire({
       <BackgroundEffects />
       <LandingContainer>
         <QuestionnaireFlowContainer $isAuthenticated={isAuthenticated}>
-          <QuestionnaireHeroCopy>
-            <HeroEyebrow>Assess</HeroEyebrow>
-            <QuestionnairePageTitle>
-              Oral Health <HeroTitleAccent>Questionnaire</HeroTitleAccent>
-            </QuestionnairePageTitle>
-            <HeroSubtitle>
-              Take our comprehensive oral health questionnaire to evaluate your
-              dental well-being and get personalized insights.
-            </HeroSubtitle>
+          <QuestionnaireStackHeader>
+            <HeaderMainRow>
+              <HeaderTitleColumn>
+                <HabitHeroEyebrow>Assess</HabitHeroEyebrow>
+                <HeaderText>
+                  Oral Health <HeroTitleAccent>Questionnaire</HeroTitleAccent>
+                </HeaderText>
+                <HeaderSubtitle>
+                  Take our comprehensive oral health questionnaire to evaluate
+                  your dental well-being and get personalized insights.
+                </HeaderSubtitle>
+              </HeaderTitleColumn>
+            </HeaderMainRow>
+          </QuestionnaireStackHeader>
+          <QuestionnaireFlowBodyCentered>
             <HeroDescription>
               Receive a detailed score and tailored recommendations based on your
               answers to improve your oral health journey.
             </HeroDescription>
-            <QuestionnaireCtaSection>
+            <QuestionnaireCtaSectionCentered>
               <QuestionnaireCtaLink to={`${RoutePaths.QUESTIONNAIRE}/1`}>
                 Begin questionnaire
               </QuestionnaireCtaLink>
-            </QuestionnaireCtaSection>
-          </QuestionnaireHeroCopy>
+            </QuestionnaireCtaSectionCentered>
+          </QuestionnaireFlowBodyCentered>
         </QuestionnaireFlowContainer>
       </LandingContainer>
     </PageBackground>

@@ -8,6 +8,7 @@ import { QuestionnaireCtaSection } from "../../../components/questionnaire/style
 
 export const RetakeCtaSection = styled(QuestionnaireCtaSection)`
   margin-top: 0;
+  justify-content: center;
 `;
 
 /**
@@ -27,6 +28,7 @@ export const RetakeBelowCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   width: 100%;
   gap: clamp(18px, 3.5vw, 24px);
 `;

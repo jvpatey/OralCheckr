@@ -9,7 +9,16 @@ import { RenderQuestions } from "./RenderQuestions";
 import { RoutePaths } from "../../common/constants/routes";
 import { StartQuestionnaire } from "../../components/questionnaire/StartQuestionnaire";
 import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
-import { BackgroundEffects } from "../welcome/styles/WelcomeStyles";
+import {
+  BackgroundEffects,
+  HeroTitleAccent,
+} from "../welcome/styles/WelcomeStyles";
+import {
+  HeaderMainRow,
+  HeaderTitleColumn,
+  HabitHeroEyebrow,
+  HeaderText,
+} from "../../components/habit-tracker/habits/HabitComponents";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../authentication/AuthContext";
@@ -26,10 +35,12 @@ import {
 } from "../../common/types/questionnaire/questionnaire.types";
 import {
   ModernAssessmentContainer,
-  AssessmentTopBar,
-  QuestionnaireBackButton,
   AssessmentMainColumn,
+  AssessmentSectionHeader,
+  AssessmentBackAndStepRow,
+  QuestionnaireBackButtonCompact,
   AssessmentHeader,
+  AssessmentStepLine,
   QuestionCardRow,
   QuestionNavSide,
   QuestionNavMobileBar,
@@ -42,8 +53,6 @@ import {
   ProgressTrack,
   ProgressFill,
   ProgressPercentInside,
-  ProgressLabelsRow,
-  ProgressIndicator,
   ErrorMessage,
 } from "./styles/QuestionnaireStyles";
 import {
@@ -386,19 +395,32 @@ export function Questionnaire() {
       <BackgroundEffects />
       <LandingContainer>
         <ModernAssessmentContainer $isAuthenticated={isAuthenticated}>
-          <AssessmentTopBar>
-            <QuestionnaireBackButton
-              type="button"
-              onClick={handleQuit}
-              aria-label={
-                hasEverSubmitted
-                  ? "Back to results"
-                  : "Back and leave questionnaire"
-              }
-            >
-              Back
-            </QuestionnaireBackButton>
-          </AssessmentTopBar>
+          <AssessmentSectionHeader>
+            <HeaderMainRow>
+              <HeaderTitleColumn>
+                <HabitHeroEyebrow>Assess</HabitHeroEyebrow>
+                <HeaderText>
+                  Oral Health <HeroTitleAccent>Questionnaire</HeroTitleAccent>
+                </HeaderText>
+                <AssessmentBackAndStepRow>
+                  <QuestionnaireBackButtonCompact
+                    type="button"
+                    onClick={handleQuit}
+                    aria-label={
+                      hasEverSubmitted
+                        ? "Back to results"
+                        : "Back and leave questionnaire"
+                    }
+                  >
+                    Back
+                  </QuestionnaireBackButtonCompact>
+                  <AssessmentStepLine>
+                    Question {progressStep} of {questions.length}
+                  </AssessmentStepLine>
+                </AssessmentBackAndStepRow>
+              </HeaderTitleColumn>
+            </HeaderMainRow>
+          </AssessmentSectionHeader>
 
           <AssessmentMainColumn>
             <AssessmentHeader>
@@ -419,12 +441,6 @@ export function Questionnaire() {
                   </ProgressPercentInside>
                 </ProgressTrack>
               </ProgressRoot>
-
-              <ProgressLabelsRow>
-                <ProgressIndicator>
-                  Question {progressStep} of {questions.length}
-                </ProgressIndicator>
-              </ProgressLabelsRow>
             </AssessmentHeader>
 
             <QuestionCardRow>

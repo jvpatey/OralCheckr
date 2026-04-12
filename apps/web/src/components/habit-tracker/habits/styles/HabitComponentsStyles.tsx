@@ -402,7 +402,7 @@ export const HabitHeaderButtonIcon = styled.span`
   }
 `;
 
-// Page title — same scale as QuestionnairePageTitle (HeroTitle)
+// Page title — same scale as questionnaire HeaderText (HeroTitle)
 export const HeaderText = styled(HeroTitle).attrs({ as: "h2" })`
   margin: 0 0 8px;
   max-width: none;

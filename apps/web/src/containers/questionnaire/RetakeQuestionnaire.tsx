@@ -4,11 +4,7 @@ import { useTheme } from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
 import { PageBackground } from "../../components/PageBackground";
 import { LandingContainer } from "../../components/landing/LandingContainer";
-import {
-  BackgroundEffects,
-  HeroEyebrow,
-  HeroTitleAccent,
-} from "../welcome/styles/WelcomeStyles";
+import { BackgroundEffects, HeroTitleAccent } from "../welcome/styles/WelcomeStyles";
 import {
   StyledModal,
   ModalHeader,
@@ -18,10 +14,17 @@ import {
 } from "../welcome/styles/ModalStyles";
 import {
   QuestionnaireFlowContainer,
-  QuestionnaireHeroCopy,
-  QuestionnairePageTitle,
+  QuestionnaireStackHeader,
+  QuestionnaireFlowBodyCentered,
   QuestionnairePrimaryCta,
 } from "../../components/questionnaire/styles/QuestionnaireFlowLayout";
+import {
+  HeaderMainRow,
+  HeaderTitleColumn,
+  HabitHeroEyebrow,
+  HeaderText,
+  HeaderSubtitle,
+} from "../../components/habit-tracker/habits/HabitComponents";
 import { AuthContext } from "../authentication/AuthContext";
 import { RetakeQuestionnaireProps } from "../../common/types/questionnaire/retake-questionnaire.types";
 import {
@@ -101,41 +104,51 @@ export function RetakeQuestionnaire({
       <BackgroundEffects />
       <LandingContainer>
         <QuestionnaireFlowContainer $isAuthenticated={isAuthenticated}>
-          <RetakePageStack>
-            <QuestionnaireHeroCopy>
-              <HeroEyebrow>Assess</HeroEyebrow>
-              <QuestionnairePageTitle>
-                Oral Health <HeroTitleAccent>Questionnaire</HeroTitleAccent>
-              </QuestionnairePageTitle>
-            </QuestionnaireHeroCopy>
+          <QuestionnaireStackHeader>
+            <HeaderMainRow>
+              <HeaderTitleColumn>
+                <HabitHeroEyebrow>Assess</HabitHeroEyebrow>
+                <HeaderText>
+                  Oral Health <HeroTitleAccent>Questionnaire</HeroTitleAccent>
+                </HeaderText>
+                <HeaderSubtitle>
+                  You have a completed assessment on file. Your latest score
+                  and date are shown below.
+                </HeaderSubtitle>
+              </HeaderTitleColumn>
+            </HeaderMainRow>
+          </QuestionnaireStackHeader>
 
-            <RetakeScoreCard>
-              <RetakeScoreNumber $scoreColor={scoreColor}>
-                {questionnaireData.score}
-              </RetakeScoreNumber>
-              <RetakeScoreLabel>Oral health score</RetakeScoreLabel>
-              <RetakeCompletionLine>
-                <RetakeCompletionMuted>Completed on: </RetakeCompletionMuted>
-                {questionnaireData.lastCompleted ?? "—"}
-              </RetakeCompletionLine>
-            </RetakeScoreCard>
+          <QuestionnaireFlowBodyCentered>
+            <RetakePageStack>
+              <RetakeScoreCard>
+                <RetakeScoreNumber $scoreColor={scoreColor}>
+                  {questionnaireData.score}
+                </RetakeScoreNumber>
+                <RetakeScoreLabel>Oral health score</RetakeScoreLabel>
+                <RetakeCompletionLine>
+                  <RetakeCompletionMuted>Completed on: </RetakeCompletionMuted>
+                  {questionnaireData.lastCompleted ?? "—"}
+                </RetakeCompletionLine>
+              </RetakeScoreCard>
 
-            <RetakeBelowCard>
-              <RetakeHeroDescription>
-                It looks like you&apos;ve already completed the oral health
-                questionnaire.
-              </RetakeHeroDescription>
-              <RetakeHeroDescription>
-                If you wish to retake it to update your score and oral health
-                status, use the button below.
-              </RetakeHeroDescription>
-              <RetakeCtaSection>
-                <QuestionnairePrimaryCta onClick={handleRetakeClick}>
-                  Retake questionnaire
-                </QuestionnairePrimaryCta>
-              </RetakeCtaSection>
-            </RetakeBelowCard>
-          </RetakePageStack>
+              <RetakeBelowCard>
+                <RetakeHeroDescription>
+                  It looks like you&apos;ve already completed the oral health
+                  questionnaire.
+                </RetakeHeroDescription>
+                <RetakeHeroDescription>
+                  If you wish to retake it to update your score and oral health
+                  status, use the button below.
+                </RetakeHeroDescription>
+                <RetakeCtaSection>
+                  <QuestionnairePrimaryCta onClick={handleRetakeClick}>
+                    Retake questionnaire
+                  </QuestionnairePrimaryCta>
+                </RetakeCtaSection>
+              </RetakeBelowCard>
+            </RetakePageStack>
+          </QuestionnaireFlowBodyCentered>
         </QuestionnaireFlowContainer>
       </LandingContainer>
 

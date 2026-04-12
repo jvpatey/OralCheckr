@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { QuestionnaireFlowPrimaryButton } from "../../../components/questionnaire/styles/QuestionnaireFlowLayout";
+import { Header } from "../../../components/habit-tracker/habits/HabitComponents";
 import { BaseButton } from "../../welcome/styles/ButtonStyles";
 import { scrollbarStyle } from "../../../styles/SharedStyles";
 
@@ -63,19 +64,34 @@ export const QuestionnaireBackButton = styled(BaseButton).attrs(() => ({
   padding: 10px 20px !important;
 `;
 
-/** Top row: back aligned with main column */
-export const AssessmentTopBar = styled.div`
-  flex-shrink: 0;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  max-width: ${assessmentMaxWidth};
-  margin: 0 auto 16px;
-  padding: 0 4px;
+/** Inline with question counter — low profile (overrides BaseButton 44px login min-height) */
+export const QuestionnaireBackButtonCompact = styled(QuestionnaireBackButton)`
+  padding: 2px 10px !important;
+  min-height: 28px !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  line-height: 1.15 !important;
+`;
 
-  @media (max-width: 768px) {
-    margin-bottom: 12px;
+/**
+ * Back left, “Question n of m” optically centered (equal 1fr side tracks).
+ */
+export const AssessmentBackAndStepRow = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 8px;
+  width: 100%;
+  margin-top: 6px;
+  min-width: 0;
+
+  & > *:first-child {
+    justify-self: start;
+  }
+
+  & > *:nth-child(2) {
+    justify-self: center;
+    text-align: center;
   }
 `;
 
@@ -193,12 +209,12 @@ export const QuestionnaireNavSubmitButton = styled(QuestionnaireFlowPrimaryButto
   font-size: 1rem !important;
 `;
 
-// Compact header section with minimal spacing
+// Progress bar only (title + step line live in AssessmentSectionHeader)
 export const AssessmentHeader = styled.div`
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 20px;
   padding: 0 4px;
   width: 100%;
@@ -347,13 +363,6 @@ export const ProgressFill = styled.div<{ $percent: number }>`
   }
 `;
 
-export const ProgressLabelsRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-`;
-
 export const ProgressIndicator = styled.span`
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 1rem;
@@ -364,5 +373,26 @@ export const ProgressIndicator = styled.span`
   @media (max-width: 480px) {
     font-size: 0.9375rem;
   }
+`;
+
+/** Question counter — centered in grid middle column */
+export const AssessmentStepLine = styled(ProgressIndicator)`
+  margin: 0;
+  white-space: nowrap;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+/** Title stack + divider; width matches AssessmentMainColumn */
+export const AssessmentSectionHeader = styled(Header)`
+  width: 100%;
+  max-width: ${assessmentMaxWidth};
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 4px;
+  padding-right: 4px;
+  box-sizing: border-box;
 `;
 
