@@ -202,5 +202,4 @@ export const QuickActionButton = styled.button`
   }
 `;
 
-// Note: Toast styling is now handled globally in ToastStyles.tsx
 // This component can be removed if no longer needed

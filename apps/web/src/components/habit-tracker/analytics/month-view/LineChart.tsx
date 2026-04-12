@@ -14,15 +14,13 @@ const ChartContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 300px;
+  min-height: 0;
 
   @media (max-width: 768px) {
-    min-height: 350px;
     padding: 8px;
   }
 
   @media (max-width: 480px) {
-    min-height: 400px;
     padding: 6px;
   }
 `;
@@ -41,7 +39,7 @@ const generateChartOptions = (
   daysInMonth: number,
   month: string,
   theme: any,
-  seriesData: number[]
+  seriesData: number[],
 ): ApexCharts.ApexOptions => {
   const maxValue = Math.max(...seriesData, 0);
   return {
@@ -242,7 +240,7 @@ export function LineChart({ habitsLog, year, month }: LineChartProps) {
 
   // Get the number of days in the current month
   const daysInMonth = getDaysInMonth(
-    new Date(year, new Date(`${month} 1, ${year}`).getMonth())
+    new Date(year, new Date(`${month} 1, ${year}`).getMonth()),
   );
 
   // Create an array to store the number of logs for each day of the month

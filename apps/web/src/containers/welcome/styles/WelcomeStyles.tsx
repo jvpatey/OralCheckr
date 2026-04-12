@@ -31,7 +31,7 @@ const pulse = keyframes`
   }
 `;
 
-// Background floating elements for modern effect
+// Background floating elements — softer, slower; motion only when allowed
 export const BackgroundEffects = styled.div`
   position: fixed;
   top: 0;
@@ -45,78 +45,153 @@ export const BackgroundEffects = styled.div`
   &::before {
     content: "";
     position: absolute;
-    top: 10%;
-    left: 10%;
-    width: 300px;
-    height: 300px;
+    top: 12%;
+    left: 8%;
+    width: 220px;
+    height: 220px;
     background: linear-gradient(
       135deg,
-      ${({ theme }) => theme.primary}20,
-      ${({ theme }) => theme.accent}20
+      ${({ theme }) => theme.primary}14,
+      ${({ theme }) => theme.accent}12
     );
     border-radius: 50%;
-    filter: blur(60px);
-    animation: ${float} 6s ease-in-out infinite;
+    filter: blur(72px);
+    opacity: 0.85;
   }
 
   &::after {
     content: "";
     position: absolute;
-    bottom: 20%;
-    right: 15%;
-    width: 200px;
-    height: 200px;
+    bottom: 18%;
+    right: 10%;
+    width: 180px;
+    height: 180px;
     background: linear-gradient(
       135deg,
-      ${({ theme }) => theme.secondary}20,
-      ${({ theme }) => theme.primary}20
+      ${({ theme }) => theme.secondary}12,
+      ${({ theme }) => theme.primary}10
     );
     border-radius: 50%;
-    filter: blur(40px);
-    animation: ${pulse} 4s ease-in-out infinite;
+    filter: blur(56px);
+    opacity: 0.8;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &::before {
+      animation: ${float} 14s ease-in-out infinite;
+    }
+
+    &::after {
+      animation: ${pulse} 12s ease-in-out infinite;
+    }
   }
 `;
 
-// Modern container that replaces the single card
+// Modern container — padding tuned for phone, iPad, desktop
 export const ModernWelcomeContainer = styled.div`
   position: relative;
   z-index: 1;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 60px 20px 0 20px;
+  padding: 56px clamp(16px, 4vw, 32px) 0;
   display: flex;
   flex-direction: column;
 
-  @media (max-width: 768px) {
-    padding: 50px 16px 0 16px;
+  @media (min-width: 481px) and (max-width: 1023px) {
+    padding-top: 52px;
   }
 
   @media (max-width: 480px) {
-    padding: 45px 12px 0 12px;
+    padding: 48px 12px 0;
   }
 `;
 
-// Hero section with modern typography and spacing
+// Hero section — grid layout lives inside
 export const HeroSection = styled.section`
+  display: block;
+  width: 100%;
+  padding: clamp(48px, 7vw, 96px) 0 clamp(64px, 9vw, 120px);
+  position: relative;
+  scroll-margin-top: 80px;
+
+  @media (max-width: 480px) {
+    padding: 40px 0 56px;
+  }
+`;
+
+export const HeroGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: clamp(32px, 5vw, 56px);
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+    gap: clamp(40px, 4vw, 72px);
+  }
+`;
+
+export const HeroCopy = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 85vh;
   text-align: center;
-  padding: 100px 0 140px 0;
-  position: relative;
-  scroll-margin-top: 80px; /* Offset for fixed navbar */
+  width: 100%;
+  min-width: 0;
 
-  @media (max-width: 768px) {
-    min-height: 60vh;
-    padding: 60px 0 80px 0;
+  @media (min-width: 1024px) {
+    align-items: flex-start;
+    text-align: left;
+  }
+`;
+
+export const HeroPreviewColumn = styled.div`
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+
+  @media (min-width: 1024px) {
+    justify-content: flex-end;
+  }
+`;
+
+export const HeroEyebrow = styled.p`
+  margin: 0 0 16px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.primary};
+  opacity: 0.95;
+  animation: ${fadeUp} 0.85s ease-out 0.05s both;
+
+  @media (max-width: 480px) {
+    margin-bottom: 12px;
+    font-size: 0.75rem;
+  }
+`;
+
+export const HeroTrustRow = styled.p`
+  margin: 0 0 28px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  color: ${({ theme }) => theme.textTertiary};
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  max-width: 36rem;
+  animation: ${fadeUp} 0.85s ease-out 0.48s both;
+
+  @media (min-width: 1024px) {
+    text-align: left;
   }
 
   @media (max-width: 480px) {
-    min-height: 50vh;
-    padding: 40px 0 60px 0;
+    margin-bottom: 22px;
+    font-size: 0.875rem;
   }
 `;
 
@@ -154,101 +229,69 @@ export const CTASection = styled.section`
   }
 `;
 
-// Modern hero typography with enhanced visual impact
+// Hero title — same family as UI, extra-bold for hierarchy (no second webfont)
 export const HeroTitle = styled.h1`
-  text-align: center;
-  margin-bottom: 24px;
-  font-size: 4.5rem;
-  font-weight: 900;
-  letter-spacing: -2px;
-  line-height: 0.95;
-  animation: ${fadeUp} 1s ease-out 0.2s both;
+  margin: 0 0 20px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: clamp(2.5rem, 5vw + 1rem, 3.75rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  color: ${({ theme }) => theme.textPrimary};
+  text-align: inherit;
+  max-width: 16ch;
+  animation: ${fadeUp} 0.9s ease-out 0.15s both;
 
-  /* Enhanced gradient text effect */
-  background: linear-gradient(
-    135deg,
-    ${({ theme }) => theme.primary} 0%,
-    ${({ theme }) => theme.secondary} 35%,
-    ${({ theme }) => theme.accent} 70%,
-    ${({ theme }) => theme.primary} 100%
-  );
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: ${fadeUp} 1s ease-out 0.2s both,
-    gradientShift 3s ease-in-out infinite;
-
-  /* Enhanced glow effect */
-  filter: drop-shadow(0 8px 16px rgba(6, 182, 212, 0.4));
-
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-  @keyframes gradientShift {
-    0%,
-    100% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-  }
-
-  @media (max-width: 768px) {
-    font-size: 3.5rem;
-    margin-bottom: 20px;
-    letter-spacing: -1.5px;
+  @media (min-width: 481px) and (max-width: 1023px) {
+    max-width: 20ch;
   }
 
   @media (max-width: 480px) {
-    font-size: 2.75rem;
-    letter-spacing: -1px;
+    margin-bottom: 16px;
+    max-width: none;
   }
 `;
 
-export const HeroSubtitle = styled.h2`
-  color: ${({ theme }) => theme.textSecondary};
-  text-align: center;
-  margin-bottom: 32px;
-  font-size: 1.75rem;
-  font-weight: 600;
-  letter-spacing: -0.75px;
-  opacity: 0.9;
-  animation: ${fadeUp} 1s ease-out 0.4s both;
+export const HeroTitleAccent = styled.span`
+  color: ${({ theme }) => theme.primary};
+  font-weight: 800;
+  letter-spacing: -0.04em;
+`;
 
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-    margin-bottom: 24px;
-    letter-spacing: -0.5px;
-  }
+export const HeroSubtitle = styled.h2`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: ${({ theme }) => theme.textSecondary};
+  margin: 0 0 20px;
+  font-size: clamp(1.2rem, 1.5vw + 0.85rem, 1.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  text-align: inherit;
+  max-width: 36rem;
+  animation: ${fadeUp} 0.9s ease-out 0.28s both;
 
   @media (max-width: 480px) {
-    font-size: 1.25rem;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 `;
 
 export const HeroDescription = styled.p`
+  font-family: var(--font-sans), system-ui, sans-serif;
   color: ${({ theme }) => theme.textSecondary};
-  text-align: center;
-  margin: 0 auto 40px;
-  font-size: 1.125rem;
+  margin: 0 0 32px;
+  font-size: clamp(1rem, 0.6vw + 0.9rem, 1.125rem);
   font-weight: 400;
-  line-height: 1.6;
-  max-width: 700px;
-  opacity: 0.8;
-  animation: ${fadeUp} 1s ease-out 0.6s both;
+  line-height: 1.65;
+  max-width: 34rem;
+  text-align: inherit;
+  animation: ${fadeUp} 0.9s ease-out 0.4s both;
 
-  @media (max-width: 768px) {
-    font-size: 1rem;
-    margin-bottom: 32px;
-    max-width: 600px;
+  @media (min-width: 1024px) {
+    margin-bottom: 28px;
   }
 
   @media (max-width: 480px) {
-    font-size: 0.95rem;
     margin-bottom: 24px;
-    max-width: 100%;
   }
 `;
 
@@ -289,16 +332,14 @@ export const LogoImgStyle = styled.img`
   }
 `;
 
+// Wordmark base — matches HeroTitle color/weight; pair with HeroTitleAccent for "Checkr"
 export const LogoText = styled.span`
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 3rem;
-  font-weight: 700;
-  letter-spacing: -1px;
-
-  /* Enhanced gradient text effect */
-  background: ${({ theme }) => theme.primaryGradient};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  color: ${({ theme }) => theme.textPrimary};
 
   display: inline-block;
   position: relative;
@@ -306,7 +347,7 @@ export const LogoText = styled.span`
   margin-left: 12px;
 
   ${LogoStyle}:hover & {
-    filter: brightness(1.1);
+    filter: brightness(1.05);
     transform: scale(1.02);
   }
 
@@ -361,26 +402,48 @@ export const CTASectionSubtitle = styled.p`
   }
 `;
 
-// Hero section buttons - more prominent and modern
+// Hero CTAs — row on desktop/tablet landscape-friendly widths; stack on narrow phones
 export const HeroButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 20px;
+  align-items: stretch;
+  gap: 12px 14px;
   width: 100%;
-  max-width: 500px;
-  animation: ${fadeUp} 1s ease-out 0.8s both;
+  max-width: 420px;
+  animation: ${fadeUp} 0.9s ease-out 0.6s both;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 16px;
-    max-width: 400px;
+  @media (min-width: 1024px) {
+    justify-content: flex-start;
+    max-width: 440px;
   }
 
   @media (max-width: 480px) {
-    gap: 14px;
+    flex-direction: column;
     max-width: 100%;
+    gap: 12px;
+  }
+`;
+
+export const HeroGuestHintRow = styled.div`
+  margin-top: 18px;
+  width: 100%;
+  max-width: 440px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: ${({ theme }) => theme.textSecondary};
+  text-align: center;
+  animation: ${fadeUp} 0.9s ease-out 0.68s both;
+
+  @media (min-width: 1024px) {
+    text-align: left;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 16px;
+    font-size: 0.875rem;
   }
 `;
 

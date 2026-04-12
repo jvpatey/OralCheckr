@@ -24,7 +24,7 @@ interface HabitLogsData {
 export const useHabitLogsForAllHabits = (
   habitIds: number[],
   year: number,
-  month: string
+  month: string,
 ) => {
   // Store logs in a map for quick access
   const [habitLogsMap, setHabitLogsMap] = useState<
@@ -37,6 +37,8 @@ export const useHabitLogsForAllHabits = (
   const {
     data: allHabitLogsData,
     isLoading,
+    isFetching,
+    isPlaceholderData,
     isError,
     error,
     refetch,
@@ -44,7 +46,7 @@ export const useHabitLogsForAllHabits = (
     queryKey: ["allHabitLogs", habitIds, year, month],
     queryFn: async (): Promise<HabitLogsData[]> => {
       const promises = habitIds.map((habitId) =>
-        fetchHabitLogs(habitId, year, month)
+        fetchHabitLogs(habitId, year, month),
       );
 
       const results = await Promise.all(promises);
@@ -59,6 +61,8 @@ export const useHabitLogsForAllHabits = (
     gcTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true,
     retry: 1,
+    /* Keep showing prior month/year data while the new range loads — avoids isLoading flicker and full-page unmount */
+    placeholderData: (previousData) => previousData,
   });
 
   // Process and store fetched logs
@@ -85,13 +89,6 @@ export const useHabitLogsForAllHabits = (
       setHabitLogsMap(newHabitLogsMap);
     }
   }, [allHabitLogsData, habitIds]);
-
-  // Refresh data when date changes
-  useEffect(() => {
-    if (habitIds.length > 0) {
-      refetch();
-    }
-  }, [year, month, refetch, habitIds]);
 
   // Update log count for a specific habit and date
   const updateLogCount = useCallback(
@@ -123,7 +120,7 @@ export const useHabitLogsForAllHabits = (
             const updatedLogs = habitData.logs ? [...habitData.logs] : [];
 
             const existingLogIndex = updatedLogs.findIndex(
-              (log) => normalizeDate(log.date) === dateStr
+              (log) => normalizeDate(log.date) === dateStr,
             );
 
             if (existingLogIndex >= 0) {
@@ -148,10 +145,10 @@ export const useHabitLogsForAllHabits = (
               logs: updatedLogs,
             };
           });
-        }
+        },
       );
     },
-    [habitLogsMap, queryClient, habitIds, year, month]
+    [habitLogsMap, queryClient, habitIds, year, month],
   );
 
   // Force refresh from server
@@ -166,6 +163,8 @@ export const useHabitLogsForAllHabits = (
     updateLogCount,
     syncWithServer,
     isLoading,
+    isFetching,
+    isPlaceholderData,
     isError,
     error,
   };

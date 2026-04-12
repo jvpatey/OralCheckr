@@ -1,17 +1,15 @@
 import styled from "styled-components";
 import { Modal, Form, Button } from "react-bootstrap";
-import { FormButton } from "../../../components/questionnaire/styles/FormButton";
 
-// Modal structure styles
+// Modal shell — solid surface + cyan accents (aligned with welcome / bento)
 export const StyledModal = styled(Modal)`
   .modal-content {
-    background: ${({ theme }) => theme.glassBg};
-    backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-    -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-    border-radius: 24px;
+    background: ${({ theme }) => theme.surfaceColor};
+    border-radius: 20px;
     border: 1px solid ${({ theme }) => theme.borderLight};
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
-      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    box-shadow:
+      ${({ theme }) => theme.shadowXl},
+      0 0 0 1px ${({ theme }) => theme.borderLight} inset;
   }
 
   .modal-dialog {
@@ -23,100 +21,206 @@ export const ModalHeader = styled(Modal.Header)`
   background: transparent;
   color: ${({ theme }) => theme.textPrimary};
   border: none;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  display: flex;
-  justify-content: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  /* Equal left/right columns so title stays visually centered with close on the right */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  column-gap: 8px;
+  padding: 16px 16px 0 16px;
   position: relative;
-  padding: 24px 24px 0 24px;
+
+  .modal-title {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    margin: 0 !important;
+    max-width: 100%;
+  }
 
   .btn-close {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    background: ${({ theme }) => theme.glassBg};
-    backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-    border: 1px solid ${({ theme }) => theme.borderLight};
-    border-radius: 12px;
-    width: 36px;
-    height: 36px;
-    opacity: 0.8;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: ${({ theme }) => theme.textPrimary};
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    align-self: start;
+    position: static !important;
+    margin: 0 !important;
+    top: auto !important;
+    right: auto !important;
+    /* Drop Bootstrap SVG × — we draw a lighter glyph */
+    background: transparent !important;
+    background-image: none !important;
+    filter: none !important;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.55;
+    flex-shrink: 0;
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease,
+      opacity 0.2s ease,
+      color 0.2s ease;
 
     &::before {
       content: "×";
-      font-size: 20px;
-      font-weight: bold;
-      color: ${({ theme }) => theme.textPrimary};
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1;
+      color: ${({ theme }) => theme.textTertiary};
     }
 
     &:hover {
       opacity: 1;
-      transform: scale(1.05);
-      border-color: ${({ theme }) => theme.primary};
+      border-color: ${({ theme }) => theme.borderLight};
       background: ${({ theme }) => theme.surfaceElevated};
     }
 
+    &:hover::before {
+      color: ${({ theme }) => theme.textSecondary};
+    }
+
     &:focus {
-      box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}20;
+      box-shadow: 0 0 0 2px ${({ theme }) => theme.primary}30;
+      opacity: 1;
     }
   }
 `;
 
-export const HeaderText = styled(Modal.Title)`
-  font-size: 2rem;
-  font-weight: 700;
+/** Title block — sits in center grid column of ModalHeader */
+export const ModalTitleStack = styled(Modal.Title)`
+  width: 100%;
   text-align: center;
-  margin: 0 auto;
-  background: linear-gradient(
-    135deg,
-    ${({ theme }) => theme.primary} 0%,
-    ${({ theme }) => theme.secondary} 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.5px;
+  margin: 0;
+  padding: 4px 0 0 0;
+`;
+
+/** Brand lockup — same treatment as hero title, scaled for modal (see WelcomeStyles HeroTitle) */
+export const ModalWordmark = styled.p`
+  margin: 0 0 8px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: clamp(1.2rem, 2.6vw + 0.65rem, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  color: ${({ theme }) => theme.textPrimary};
+`;
+
+export const ModalWordmarkAccent = styled.span`
+  color: ${({ theme }) => theme.primary};
+  font-weight: 800;
+  letter-spacing: -0.04em;
+`;
+
+/** Step headline — mirrors HeroSubtitle scale, primary color so it reads above body copy */
+export const ModalHeading = styled.span`
+  display: block;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: clamp(1.1rem, 1.2vw + 0.85rem, 1.35rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.textPrimary};
+  line-height: 1.35;
+`;
+
+/** Dual-tone title segment — pair inside `ModalHeading` (same scale as hero `HeroTitleAccent`) */
+export const ModalHeadingAccent = styled.span`
+  color: ${({ theme }) => theme.primary};
+  font-weight: 600;
+  letter-spacing: -0.02em;
 `;
 
 export const ModalBody = styled(Modal.Body)`
   background: transparent;
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
-  padding: 20px 24px 24px 24px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding: 16px 22px 22px 22px;
+  /* Override Bootstrap body color so copy reads on dark surfaces */
+  color: ${({ theme }) => theme.textSecondary};
+
+  p {
+    color: inherit;
+  }
 `;
 
-// Form input styles
+// Form inputs — slightly smaller than CTAs so buttons read as primary actions (best practice)
 export const InputStyle = styled(Form.Control)`
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 16px;
-  padding: 16px 20px;
-  font-size: 1rem;
-  color: ${({ theme }) => theme.textPrimary};
+  font-family: var(--font-sans), system-ui, sans-serif;
   margin-top: 0;
-  margin-bottom: 20px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 14px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+
+  /* && beats .modal-body color and Bootstrap .form-control so filled values stay readable */
+  && {
+    background-color: ${({ theme }) => theme.surfaceElevated};
+    border: 1px solid ${({ theme }) => theme.borderLight};
+    border-radius: 12px;
+    padding: 10px 16px;
+    min-height: 44px;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    font-weight: 500;
+    color: ${({ theme }) => theme.textPrimary};
+    -webkit-text-fill-color: ${({ theme }) => theme.textPrimary};
+    caret-color: ${({ theme }) => theme.primary};
+  }
 
   &::placeholder {
-    color: ${({ theme }) => theme.textSecondary};
-    opacity: 0.8;
+    color: ${({ theme }) => theme.textTertiary};
+    opacity: 1;
+    -webkit-text-fill-color: ${({ theme }) => theme.textTertiary};
   }
 
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}20,
-      0 8px 25px rgba(0, 0, 0, 0.15);
-    background: ${({ theme }) => theme.surfaceElevated};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}22;
+    background-color: ${({ theme }) => theme.surfaceColor};
+    color: ${({ theme }) => theme.textPrimary};
+    -webkit-text-fill-color: ${({ theme }) => theme.textPrimary};
   }
 
-  &:hover {
+  &:hover:not(:focus) {
     border-color: ${({ theme }) => theme.borderMedium};
+  }
+
+  /* Chrome / Safari autofill: keep text and fill aligned with theme */
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-text-fill-color: ${({ theme }) => theme.textPrimary} !important;
+    box-shadow: 0 0 0 1000px ${({ theme }) => theme.surfaceElevated} inset !important;
+    border: 1px solid ${({ theme }) => theme.borderLight};
+    border-radius: 12px;
+    transition: background-color 9999s ease-out 0s;
+  }
+
+  &:focus:-webkit-autofill {
+    box-shadow: 0 0 0 1000px ${({ theme }) => theme.surfaceColor} inset !important;
+  }
+`;
+
+/** Full pill radius — profile and other inline forms; login/signup keep `InputStyle` */
+export const PillInputStyle = styled(InputStyle)`
+  && {
+    border-radius: 9999px;
+  }
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    border-radius: 9999px;
   }
 `;
 
@@ -129,16 +233,20 @@ export const RequiredFormGroup = styled(Form.Group)`
     content: "*";
     color: ${({ theme }) => theme.error || "#dc3545"};
     position: absolute;
-    left: 20px;
+    left: 14px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 600;
   }
 
   ${InputStyle} {
-    padding-left: 32px;
+    padding-left: 26px;
+  }
+
+  ${PillInputStyle} {
+    padding-left: 26px;
   }
 `;
 
@@ -147,17 +255,28 @@ export const PasswordContainer = styled.div`
   position: relative;
   margin-top: 0;
 
+  ${InputStyle} {
+    padding-right: 72px;
+  }
+
+  ${PillInputStyle} {
+    padding-right: 72px;
+  }
+
   ${RequiredFormGroup} & {
     ${InputStyle} {
-      padding-left: 32px;
-      padding-right: 80px;
+      padding-left: 26px;
+    }
+
+    ${PillInputStyle} {
+      padding-left: 26px;
     }
   }
 `;
 
 export const PasswordToggle = styled.span`
   position: absolute;
-  right: 20px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
@@ -175,7 +294,7 @@ export const PasswordToggle = styled.span`
 
 export const InfoIcon = styled.span`
   position: absolute;
-  right: 50px;
+  right: 44px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
@@ -191,14 +310,16 @@ export const InfoIcon = styled.span`
   }
 `;
 
-// Text styles
+/** Intro copy — aligned with WelcomeStyles HeroDescription */
 export const CardText = styled.p`
+  font-family: var(--font-sans), system-ui, sans-serif;
   color: ${({ theme }) => theme.textSecondary};
-  margin-bottom: 24px;
+  margin: 0 auto 20px;
+  max-width: 32rem;
   text-align: center;
-  font-size: 1rem;
-  line-height: 1.5;
-  opacity: 0.9;
+  font-size: clamp(0.95rem, 0.45vw + 0.82rem, 1.0625rem);
+  line-height: 1.65;
+  font-weight: 400;
 `;
 
 // Required fields note
@@ -230,13 +351,14 @@ export const RequiredLabel = styled.label`
 
 // Small note for required fields
 export const RequiredNote = styled.div`
-  color: ${({ theme }) => theme.textSecondary};
-  font-size: 0.75rem;
+  color: ${({ theme }) => theme.textTertiary};
+  font-size: 0.8125rem;
   text-align: right;
-  margin-top: -12px;
-  margin-bottom: 16px;
+  margin-top: -6px;
+  margin-bottom: 12px;
   font-style: italic;
-  opacity: 0.7;
+  font-weight: 400;
+  opacity: 0.92;
 
   &::before {
     content: "* ";
@@ -246,15 +368,12 @@ export const RequiredNote = styled.div`
 
 // Password requirement styles
 export const RequirementList = styled.ul`
-  padding: 16px 20px;
+  padding: 14px 18px;
   margin: 12px 0 0 0;
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  background: ${({ theme }) => theme.surfaceElevated};
   border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 16px;
+  border-radius: 14px;
   list-style: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
 export const RequirementItem = styled.li<{ $isMet: boolean }>`
@@ -287,11 +406,13 @@ export const OrSeparator = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 24px 0;
-  color: ${({ theme }) => theme.textSecondary};
-  font-size: 0.875rem;
-  font-weight: 500;
-  opacity: 0.8;
+  margin: 16px 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: ${({ theme }) => theme.textTertiary};
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 
   &::before,
   &::after {
@@ -301,11 +422,11 @@ export const OrSeparator = styled.div`
   }
 
   &::before {
-    margin-right: 16px;
+    margin-right: 14px;
   }
 
   &::after {
-    margin-left: 16px;
+    margin-left: 14px;
   }
 `;
 
@@ -326,30 +447,38 @@ export const GoogleButton = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 20px;
-  height: 52px;
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  font-family: var(--font-sans), system-ui, sans-serif;
+  min-height: 46px;
+  padding: 11px 20px;
+  background: ${({ theme }) => theme.surfaceColor};
   color: ${({ theme }) => theme.textPrimary};
-  border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 16px;
+  border: 1px solid ${({ theme }) => `${theme.primary}40`};
+  border-radius: 9999px;
   font-weight: 600;
-  font-size: 0.95rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.9375rem;
+  letter-spacing: -0.02em;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 
   &:hover {
     background: ${({ theme }) => theme.surfaceElevated};
     color: ${({ theme }) => theme.textPrimary};
-    border-color: ${({ theme }) => theme.borderMedium};
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: ${({ theme }) => `${theme.primary}60`};
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   }
 
-  &:active {
-    transform: translateY(0);
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 
   img {
@@ -358,68 +487,147 @@ export const GoogleButton = styled(Button)`
   }
 `;
 
-export const StyledFormButton = styled(FormButton)`
-  background: ${({ theme }) => theme.secondaryGradient} !important;
-  border: 1px solid ${({ theme }) => theme.secondary} !important;
-  border-radius: 16px;
+/** Primary submit — taller & heavier type than inputs (visual hierarchy) */
+export const StyledFormButton = styled.button`
+  font-family: var(--font-sans), system-ui, sans-serif;
   width: 100%;
   margin: 0;
-  height: 52px;
-  padding: 16px 20px;
+  min-height: 50px;
+  padding: 13px 24px;
+  border-radius: 9999px;
+  font-size: 1.0625rem;
   font-weight: 600;
-  font-size: 1rem;
-  color: white !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-
-  /* Subtle shine sweep effect */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
-    transition: left 0.6s ease;
-    z-index: 1;
-  }
-
-  /* Keep text above the sweep effect */
-  & > * {
-    position: relative;
-    z-index: 2;
-  }
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  background: ${({ theme }) => theme.primaryGradient};
+  border: 1px solid ${({ theme }) => theme.primary};
+  cursor: pointer;
+  transition:
+    box-shadow 0.25s ease,
+    filter 0.25s ease,
+    opacity 0.25s ease;
 
   &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.secondaryGradient} !important;
-    color: white !important;
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-
-    &::before {
-      left: 100%;
-    }
+    filter: brightness(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
   }
 
-  &:active {
-    background: ${({ theme }) => theme.secondaryGradient} !important;
-    color: white !important;
-    transform: translateY(0) scale(1.01);
+  &:active:not(:disabled) {
+    filter: brightness(0.98);
   }
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
-    transform: none;
+    filter: none;
+    box-shadow: none;
   }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
+  }
+`;
+
+/** Outline pill — matches welcome Login / footer Support */
+export const ModalOutlineButton = styled.button`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 20px;
+  border-radius: 9999px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.textPrimary};
+  background: transparent;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    opacity 0.25s ease;
+
+  &:hover:not(:disabled) {
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    background: ${({ theme }) => `${theme.primary}0d`};
+    color: ${({ theme }) => theme.primary};
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
+  }
+`;
+
+/** Muted outline — pair with `ModalOutlineButton` when both rows need outline pills (e.g. delete confirm cancel) */
+export const ModalMutedOutlineButton = styled(ModalOutlineButton)`
+  border-color: ${({ theme }) => theme.borderLight};
+  color: ${({ theme }) => theme.textSecondary};
+
+  &:hover:not(:disabled) {
+    border-color: ${({ theme }) => theme.borderMedium};
+    background: ${({ theme }) => theme.surfaceElevated};
+    color: ${({ theme }) => theme.textPrimary};
+  }
+
+  &:focus-visible {
+    outline-color: ${({ theme }) => theme.textSecondary};
+  }
+`;
+
+/** Primary pill — not full width (profile forms, inline actions) */
+export const InlinePrimaryButton = styled(StyledFormButton)`
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 11px 22px;
+  font-size: 0.9375rem;
+`;
+
+/** Outline pill — not full width */
+export const InlineOutlineButton = styled(ModalOutlineButton)`
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+/**
+ * Wraps modal guest CTA — same footprint as StyledFormButton so primary + secondary align.
+ * (ContinueAsGuestButton renders the button as a direct child after Fragment flattening.)
+ */
+export const ModalGuestSlot = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+
+  & > button {
+    min-height: 50px;
+    padding: 13px 24px;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    box-sizing: border-box;
+  }
+`;
+
+export const ModalMutedMessage = styled.p`
+  margin: 12px 0;
+  text-align: center;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: ${({ theme }) => theme.textTertiary};
 `;
 
 // Global popover styles for password requirements

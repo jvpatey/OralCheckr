@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { HeroTitleAccent } from "../../welcome/styles/WelcomeStyles";
 
 // Smooth slide-in animation for navbar
 const slideDown = keyframes`
@@ -17,8 +18,7 @@ export const ModernNavBar = styled.nav`
   position: fixed;
   top: 0;
   left: 0;
-  /* Use right to prevent covering scrollbar */
-  right: 12px;
+  right: 0;
   z-index: 1000;
   padding: 20px 32px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -48,9 +48,9 @@ export const ModernNavBar = styled.nav`
   }
 `;
 
-// Container for navbar content with max width
+// Container for navbar content — match LandingContainer max-width for aligned edges
 export const NavContainer = styled.div`
-  max-width: 1440px;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -76,34 +76,47 @@ export const NavBrandSection = styled.div`
   flex-shrink: 0;
 `;
 
-// Brand text with gradient matching welcome page
-export const BrandText = styled.div`
+// Brand wordmark — Oral stays put; Checkr slides on hover
+export const BrandText = styled.span`
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: -1px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  color: ${({ theme }) => theme.textPrimary};
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Enhanced gradient text effect */
-  background: ${({ theme }) => theme.primaryGradient};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-
-  &:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-  }
+  display: inline-block;
 
   @media (max-width: 768px) {
     font-size: 1.75rem;
-    letter-spacing: -0.75px;
   }
 
   @media (max-width: 480px) {
     font-size: 1.5rem;
-    letter-spacing: -0.5px;
+  }
+`;
+
+/** "Checkr" — slides right on hover, no scale or rotation */
+export const NavBrandAccent = styled(HeroTitleAccent)`
+  display: inline-block;
+  transition:
+    transform 0.45s cubic-bezier(0.33, 1, 0.68, 1),
+    color 0.35s ease,
+    filter 0.35s ease;
+
+  @media (prefers-reduced-motion: no-preference) {
+    ${BrandText}:hover & {
+      transform: translateX(0.32em);
+      color: ${({ theme }) => theme.primaryDark};
+      filter: brightness(1.08);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ${BrandText}:hover & {
+      color: ${({ theme }) => theme.primaryDark};
+    }
   }
 `;
 
@@ -131,7 +144,8 @@ export const NavLinksContainer = styled.div`
   -webkit-backdrop-filter: blur(16px);
   border-radius: 50px;
   border: 1px solid ${({ theme }) => theme.borderLight}60;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04),
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.04),
     0 0 0 1px rgba(255, 255, 255, 0.03) inset;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: auto;
@@ -144,19 +158,28 @@ export const NavLinksContainer = styled.div`
 `;
 
 // Sliding indicator for active link - liquid glass effect
-export const NavIndicator = styled.div<{ $activeIndex: number; $linkCount: number }>`
+export const NavIndicator = styled.div<{
+  $activeIndex: number;
+  $linkCount: number;
+}>`
   position: absolute;
   top: 8px;
   left: 8px;
-  width: calc((100% - 16px - ${({ $linkCount }) => ($linkCount - 1) * 4}px) / ${({ $linkCount }) => $linkCount});
+  width: calc(
+    (100% - 16px - ${({ $linkCount }) => ($linkCount - 1) * 4}px) /
+      ${({ $linkCount }) => $linkCount}
+  );
   height: calc(100% - 16px);
   background: ${({ theme }) => `${theme.primary}20`};
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 50px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateX(calc(${({ $activeIndex }) => $activeIndex} * (100% + 4px)));
-  box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}30`} inset,
+  transform: translateX(
+    calc(${({ $activeIndex }) => $activeIndex} * (100% + 4px))
+  );
+  box-shadow:
+    0 0 0 1px ${({ theme }) => `${theme.primary}30`} inset,
     0 2px 8px ${({ theme }) => `${theme.primary}15`};
   z-index: 1;
   pointer-events: none;
@@ -179,9 +202,14 @@ export const NavIndicator = styled.div<{ $activeIndex: number; $linkCount: numbe
   @media (max-width: 968px) {
     top: 6px;
     left: 6px;
-    width: calc((100% - 12px - ${({ $linkCount }) => ($linkCount - 1) * 2}px) / ${({ $linkCount }) => $linkCount});
+    width: calc(
+      (100% - 12px - ${({ $linkCount }) => ($linkCount - 1) * 2}px) /
+        ${({ $linkCount }) => $linkCount}
+    );
     height: calc(100% - 12px);
-    transform: translateX(calc(${({ $activeIndex }) => $activeIndex} * (100% + 2px)));
+    transform: translateX(
+      calc(${({ $activeIndex }) => $activeIndex} * (100% + 2px))
+    );
   }
 `;
 

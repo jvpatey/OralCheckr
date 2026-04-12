@@ -13,9 +13,10 @@ export interface SaveResponseData {
 export interface QuestionnaireResponse {
   id: number;
   userId: number;
-  responses: Record<string, string>;
+  responses: Record<string, number | number[]>;
   totalScore: number;
   currentQuestion: number;
+  completedAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -23,6 +24,7 @@ export interface QuestionnaireResponse {
 export interface QuestionnaireProgress {
   responses: Record<number, number | number[]>;
   currentQuestion: number;
+  completedAt?: string | null;
   [key: string]: unknown;
 }
 

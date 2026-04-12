@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { Link } from "react-router-dom";
 
 // Smooth slide-in animation for navbar
 const slideDown = keyframes`
@@ -101,7 +102,8 @@ export const NavLinksContainer = styled.div`
   -webkit-backdrop-filter: blur(16px);
   border-radius: 50px;
   border: 1px solid ${({ theme }) => theme.borderLight};
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
     0 0 0 1px rgba(255, 255, 255, 0.05) inset;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: auto;
@@ -114,19 +116,28 @@ export const NavLinksContainer = styled.div`
 `;
 
 // Sliding indicator for active link - liquid glass effect
-export const NavIndicator = styled.div<{ $activeIndex: number; $linkCount: number }>`
+export const NavIndicator = styled.div<{
+  $activeIndex: number;
+  $linkCount: number;
+}>`
   position: absolute;
   top: 8px;
   left: 8px;
-  width: calc((100% - 16px - ${({ $linkCount }) => ($linkCount - 1) * 4}px) / ${({ $linkCount }) => $linkCount});
+  width: calc(
+    (100% - 16px - ${({ $linkCount }) => ($linkCount - 1) * 4}px) /
+      ${({ $linkCount }) => $linkCount}
+  );
   height: calc(100% - 16px);
   background: ${({ theme }) => `${theme.primary}20`};
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 50px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateX(calc(${({ $activeIndex }) => $activeIndex} * (100% + 4px)));
-  box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}30`} inset,
+  transform: translateX(
+    calc(${({ $activeIndex }) => $activeIndex} * (100% + 4px))
+  );
+  box-shadow:
+    0 0 0 1px ${({ theme }) => `${theme.primary}30`} inset,
     0 2px 8px ${({ theme }) => `${theme.primary}15`};
   z-index: 1;
   pointer-events: none;
@@ -149,9 +160,14 @@ export const NavIndicator = styled.div<{ $activeIndex: number; $linkCount: numbe
   @media (max-width: 968px) {
     top: 6px;
     left: 6px;
-    width: calc((100% - 12px - ${({ $linkCount }) => ($linkCount - 1) * 2}px) / ${({ $linkCount }) => $linkCount});
+    width: calc(
+      (100% - 12px - ${({ $linkCount }) => ($linkCount - 1) * 2}px) /
+        ${({ $linkCount }) => $linkCount}
+    );
     height: calc(100% - 12px);
-    transform: translateX(calc(${({ $activeIndex }) => $activeIndex} * (100% + 2px)));
+    transform: translateX(
+      calc(${({ $activeIndex }) => $activeIndex} * (100% + 2px))
+    );
   }
 `;
 
@@ -202,60 +218,111 @@ export const NavLink = styled.button<{ $isActive: boolean }>`
   }
 `;
 
-// Right section for theme toggle and other actions
+// Right section: Support + theme toggle (outside scroll-spy pill)
 export const NavRightSection = styled.div`
   position: absolute;
   right: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 
   @media (max-width: 768px) {
     gap: 8px;
   }
 `;
 
-// Theme toggle wrapper with enhanced glassmorphism
-export const TooltipWrapper = styled.div`
-  position: relative;
-  display: flex;
+/* Matches footer Support + welcome Login outline: pill, cyan border, calm hover */
+export const NavSupportLink = styled(Link)`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 9999px;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.textPrimary};
+  background: transparent;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease;
+  pointer-events: auto;
+  white-space: nowrap;
 
-  /* Modern glassmorphism button styling */
-  background: ${({ theme }) => theme.glassBg}cc;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  &:hover {
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    background: ${({ theme }) => `${theme.primary}0d`};
+    color: ${({ theme }) => theme.primary};
+  }
 
-  padding: 10px;
-  border-radius: 12px;
-  border: 1px solid ${({ theme }) => theme.borderLight};
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
+  }
 
-  /* Enhanced shadow */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-1px);
+    }
 
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    &:active {
+      transform: translateY(0);
+    }
+  }
 
   @media (max-width: 768px) {
-    padding: 8px;
-    border-radius: 10px;
+    min-height: 38px;
+    font-size: 0.8125rem;
+    padding: 0 14px;
   }
 
   @media (max-width: 480px) {
-    padding: 7px;
-    border-radius: 8px;
+    min-height: 36px;
+    padding: 0 12px;
+  }
+`;
+
+/* Pill shell aligned with NavSupportLink (outline, same height, hover) */
+export const TooltipWrapper = styled.div`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 2px;
+  border-radius: 9999px;
+  background: transparent;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease;
+
+  @media (max-width: 768px) {
+    min-height: 38px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 36px;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12),
-      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-    border-color: ${({ theme }) => theme.primary}60;
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    background: ${({ theme }) => `${theme.primary}0d`};
   }
 
-  &:active {
-    transform: translateY(0);
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 
   &:hover::after {

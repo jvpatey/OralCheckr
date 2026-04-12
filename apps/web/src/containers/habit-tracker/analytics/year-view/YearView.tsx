@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { HabitDropdown } from "../HabitDropdown";
-import { Habit } from "../../../../services/habitService";
+import { AnimatePresence, motion } from "framer-motion";
+import styled from "styled-components";
 import { Logging } from "../Analytics";
 import { Heatmap } from "./Heatmap";
 import {
@@ -10,27 +10,35 @@ import {
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
 import { useHabitContext } from "../../../../contexts/HabitContext";
-import { ViewContainer } from "../../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
+import { AnalyticsViewRoot } from "../../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
 import {
   HeatmapContainer,
   HeatmapHeader,
   YearPickerContainer,
 } from "../../../../components/habit-tracker/analytics/styles/YearViewStyles";
+import {
+  analyticsOpacityVariants,
+  useAnalyticsOpacityTransition,
+} from "../analyticsMotion";
 
-// Interface for the props that YearView accepts
+const HeatmapBodyMotion = styled(motion.div)`
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+`;
+
 interface YearViewProps {
-  habits: Habit[];
-  onSelectHabit: (habitName: string) => void;
   habitsLog: Logging;
   hideAnalytics: boolean;
   selectedDate: Date;
   onDateChange: (date: Date) => void;
 }
 
-// Functional component to display the heatmap view for the year
 export function YearView({
-  habits,
-  onSelectHabit,
   habitsLog,
   hideAnalytics,
   selectedDate,
@@ -38,42 +46,44 @@ export function YearView({
 }: YearViewProps) {
   const { selectedHabit } = useHabitContext();
   const year = selectedDate.getFullYear();
+  const heatmapDateTransition = useAnalyticsOpacityTransition();
 
-  // Generate heatmap data for the selected habit and year
   const heatmapData: HeatmapSeries[] = useMemo(() => {
     if (!selectedHabit || hideAnalytics) return [];
     return generateHeatmapData(habitsLog, selectedHabit, year);
   }, [habitsLog, selectedHabit, year, hideAnalytics]);
 
-  // Function to handle habit selection
-  const handleSelectHabit = (habitName: string) => {
-    onSelectHabit(habitName);
-  };
+  if (hideAnalytics) {
+    return null;
+  }
 
   return (
-    <ViewContainer>
-      {!hideAnalytics && (
-        <>
-          <HabitDropdown habits={habits} onSelectHabit={handleSelectHabit} />
-          <HeatmapContainer>
-            <HeatmapHeader>
-              <div></div>
-              <YearPickerContainer>
-                <AnalyticsDateSelector
-                  selectedDate={selectedDate}
-                  onDateChange={onDateChange}
-                  viewType={ViewType.YEAR}
-                />
-              </YearPickerContainer>
-              <div></div>
-            </HeatmapHeader>
+    <AnalyticsViewRoot>
+      <HeatmapContainer>
+        <HeatmapHeader>
+          <div />
+          <YearPickerContainer>
+            <AnalyticsDateSelector
+              selectedDate={selectedDate}
+              onDateChange={onDateChange}
+              viewType={ViewType.YEAR}
+            />
+          </YearPickerContainer>
+          <div />
+        </HeatmapHeader>
+        <AnimatePresence mode="wait" initial={false}>
+          <HeatmapBodyMotion
+            key={year}
+            variants={analyticsOpacityVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={heatmapDateTransition}
+          >
             <Heatmap data={heatmapData} />
-          </HeatmapContainer>
-        </>
-      )}
-      {hideAnalytics && (
-        <HabitDropdown habits={habits} onSelectHabit={handleSelectHabit} />
-      )}
-    </ViewContainer>
+          </HeatmapBodyMotion>
+        </AnimatePresence>
+      </HeatmapContainer>
+    </AnalyticsViewRoot>
   );
 }

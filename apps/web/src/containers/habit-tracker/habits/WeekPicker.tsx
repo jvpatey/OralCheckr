@@ -2,76 +2,105 @@ import { useState, forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { TodayButton } from "../../../components/habit-tracker/analytics/TodayButton";
-import { formatDateShort } from "../../../common/utilities/date-utils";
 import { DayBubbleSelector } from "./DayBubbleSelector";
+import { weekToolbarCalendarButtonBox } from "./weekToolbarTokens";
 
-// Fluid container for date picker controls
-const DateControlsContainer = styled.div`
+// Day strip + week calendar + Today on one row — one height token for calendar + Today
+const DateControlsRow = styled.div`
+  --week-toolbar-control-height: 48px;
+  /* Slightly smaller than Today — solid fill + shadow otherwise looks oversized in the row */
+  --week-toolbar-calendar-size: max(
+    32px,
+    calc(var(--week-toolbar-control-height) - 8px)
+  );
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
-
-// Wrapper for the date picker and today button
-const DatePickerControls = styled.div`
-  display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
   width: 100%;
-  margin-bottom: 8px;
+  min-width: 0;
 
   @media (max-width: 768px) {
-    gap: 10px;
-    margin-bottom: 6px;
+    --week-toolbar-control-height: 44px;
+    gap: 6px;
   }
 
   @media (max-width: 480px) {
-    gap: 8px;
-    margin-bottom: 4px;
+    --week-toolbar-control-height: 40px;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding-bottom: 2px;
   }
 `;
 
 // Modern styled wrapper for the week picker dropdown
 const StyledWeekPickerWrapper = styled.div`
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+
+  /* react-datepicker wraps customInput — keep wrapper from changing perceived control height */
+  .react-datepicker-wrapper {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    border: 0 !important;
+    line-height: 0 !important;
+    vertical-align: middle;
+  }
+
   .react-datepicker {
     background: ${({ theme }) => theme.glassBg} !important;
     backdrop-filter: blur(${({ theme }) => theme.glassBlur}) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid ${({ theme }) => `${theme.primary}35`} !important;
     border-radius: 16px !important;
     box-shadow: ${({ theme }) => theme.shadowXl} !important;
-    padding: 16px !important;
+    padding: 12px 14px !important;
     font-family: inherit !important;
+    overflow: hidden !important;
   }
 
   .react-datepicker__header {
     background: transparent !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    padding: 0 0 12px 0 !important;
-    margin-bottom: 12px !important;
+    padding: 0 0 8px 0 !important;
+    margin-bottom: 8px !important;
   }
 
   .react-datepicker__current-month {
     color: ${({ theme }) => theme.primary} !important;
     font-weight: 700 !important;
-    font-size: 18px !important;
-    margin-bottom: 8px !important;
+    font-size: 16px !important;
+    margin-bottom: 6px !important;
   }
 
   .react-datepicker__navigation {
     background: ${({ theme }) => theme.primaryGradient} !important;
-    border: none !important;
-    border-radius: 8px !important;
-    width: 32px !important;
-    height: 32px !important;
+    border: 1px solid ${({ theme }) => theme.primary} !important;
+    border-radius: 10px !important;
+    width: 30px !important;
+    height: 30px !important;
     top: 8px !important;
-    transition: all 0.3s ease !important;
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
+    transition: all 0.25s ease !important;
 
     &:hover {
-      transform: scale(1.1) !important;
-      box-shadow: ${({ theme }) => theme.shadowMd} !important;
+      box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.14),
+        0 0 0 1px rgba(255, 255, 255, 0.12) inset !important;
     }
 
     &::before {
@@ -81,83 +110,125 @@ const StyledWeekPickerWrapper = styled.div`
   }
 
   .react-datepicker__navigation--previous {
-    left: 8px !important;
+    left: 6px !important;
   }
 
   .react-datepicker__navigation--next {
-    right: 8px !important;
+    right: 6px !important;
   }
 
   .react-datepicker__month {
     margin: 0 !important;
   }
 
+  /* Fixed square cells — full pill radius on narrow inline-blocks caused tall “bars” and hid week-range labels */
   .react-datepicker__day {
-    color: ${({ theme }) => theme.textSecondary} !important;
-    font-weight: 500 !important;
-    padding: 8px !important;
+    box-sizing: border-box !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    line-height: 1 !important;
+    padding: 0 !important;
     margin: 2px !important;
     border-radius: 8px !important;
-    transition: all 0.3s ease !important;
+    color: ${({ theme }) => theme.textSecondary} !important;
+    font-weight: 500 !important;
+    transition: background 0.2s ease, color 0.2s ease !important;
     border: 1px solid transparent !important;
+    vertical-align: middle !important;
 
     &:hover {
-      background: rgba(6, 182, 212, 0.1) !important;
+      background: ${({ theme }) => `${theme.primary}18`} !important;
       color: ${({ theme }) => theme.primary} !important;
-      transform: translateY(-1px) !important;
     }
   }
 
   .react-datepicker__day--selected {
     background: ${({ theme }) => theme.primaryGradient} !important;
-    color: white !important;
+    color: #ffffff !important;
     font-weight: 600 !important;
-    box-shadow: ${({ theme }) => theme.shadowMd} !important;
-    border: none !important;
+    border-radius: 8px !important;
+    border: 1px solid ${({ theme }) => theme.primary} !important;
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
 
     &:hover {
       background: ${({ theme }) => theme.primaryGradient} !important;
-      transform: translateY(-1px) scale(1.02) !important;
+      color: #ffffff !important;
     }
   }
 
   .react-datepicker__day--in-selecting-range,
   .react-datepicker__day--in-range {
-    background: rgba(6, 182, 212, 0.2) !important;
-    color: ${({ theme }) => theme.primary} !important;
+    background: ${({ theme }) => `${theme.primary}28`} !important;
+    color: #ffffff !important;
     font-weight: 600 !important;
-    border: 1px solid rgba(6, 182, 212, 0.3) !important;
+    border: 1px solid ${({ theme }) => `${theme.primary}55`} !important;
+    border-radius: 8px !important;
+    opacity: 1 !important;
   }
 
   .react-datepicker__day--range-start,
   .react-datepicker__day--range-end {
     background: ${({ theme }) => theme.primaryGradient} !important;
-    color: white !important;
+    color: #ffffff !important;
     font-weight: 600 !important;
-    box-shadow: ${({ theme }) => theme.shadowMd} !important;
-    border: none !important;
+    border-radius: 8px !important;
+    border: 1px solid ${({ theme }) => theme.primary} !important;
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
   }
 
-  .react-datepicker__day--today {
-    background: rgba(16, 185, 129, 0.1) !important;
+  .react-datepicker__day--keyboard-selected {
+    background: ${({ theme }) => `${theme.primary}35`} !important;
+    color: #ffffff !important;
+    border-radius: 8px !important;
+  }
+
+  .react-datepicker__day--keyboard-selected.react-datepicker__day--today {
+    color: #ffffff !important;
+  }
+
+  .react-datepicker__day--today:not(.react-datepicker__day--selected) {
+    background: ${({ theme }) => `${theme.secondary}22`} !important;
     color: ${({ theme }) => theme.secondary} !important;
     font-weight: 600 !important;
-    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    border: 1px solid ${({ theme }) => `${theme.secondary}45`} !important;
+    border-radius: 8px !important;
   }
 
   .react-datepicker__day--outside-month {
     color: ${({ theme }) => theme.textTertiary} !important;
-    opacity: 0.5 !important;
+    opacity: 0.45 !important;
+  }
+
+  /* Week highlight often includes adjacent-month cells; keep numbers readable */
+  .react-datepicker__day--outside-month.react-datepicker__day--in-range,
+  .react-datepicker__day--outside-month.react-datepicker__day--selected,
+  .react-datepicker__day--outside-month.react-datepicker__day--range-start,
+  .react-datepicker__day--outside-month.react-datepicker__day--range-end {
+    opacity: 1 !important;
+    color: #ffffff !important;
   }
 
   .react-datepicker__day-name {
+    display: inline-block !important;
+    box-sizing: border-box !important;
     color: ${({ theme }) => theme.textSecondary} !important;
     font-weight: 600 !important;
-    padding: 8px !important;
+    width: 2.25rem !important;
+    line-height: 1.2 !important;
+    padding: 4px 0 6px !important;
     margin: 2px !important;
+    text-align: center !important;
     text-transform: uppercase !important;
-    font-size: 12px !important;
-    letter-spacing: 0.5px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.04em !important;
+    vertical-align: middle !important;
   }
 
   /* Hide the default arrow */
@@ -166,66 +237,83 @@ const StyledWeekPickerWrapper = styled.div`
   }
 `;
 
-// Custom-styled button to be used as the input field for the DatePicker with gradient
-const CustomDatePickerInput = styled.button<{ $disabled: boolean }>`
-  /* Gradient background */
+// Icon-only trigger — same pill language as HabitHeaderButtonPrimary (circle)
+const WeekPickerIconButton = styled.button<{ $disabled: boolean }>`
+  ${weekToolbarCalendarButtonBox}
+  font-family: var(--font-sans), system-ui, sans-serif;
   background: ${({ $disabled, theme }) =>
     $disabled ? theme.disabledBackground : theme.primaryGradient};
-  color: ${({ $disabled, theme }) => ($disabled ? theme.textGrey : "white")};
-  border: none;
-  padding: 12px 20px;
-  border-radius: 14px;
-  text-align: center;
-  min-width: 180px;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 12px;
+  color: ${({ $disabled, theme }) => ($disabled ? theme.textGrey : "#ffffff")};
+  border: 1px solid
+    ${({ $disabled, theme }) =>
+      $disabled ? theme.borderLight : theme.primary};
+  border-radius: 9999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+  box-sizing: border-box;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-  font-weight: 600;
-  font-size: 0.95rem;
-  box-shadow: ${({ theme, $disabled }) =>
-    $disabled ? "none" : theme.shadowMd};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Lighter than header primary pills so the control matches outline neighbors visually */
+  box-shadow: ${({ $disabled }) =>
+    $disabled
+      ? "none"
+      : `0 1px 4px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.06) inset`};
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+  flex-shrink: 0;
   position: relative;
   overflow: hidden;
 
-  /* Subtle glow effect overlay */
   &::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: linear-gradient(
       135deg,
       rgba(255, 255, 255, 0.2) 0%,
       rgba(255, 255, 255, 0) 100%
     );
     opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 14px;
+    transition: opacity 0.25s ease;
+    border-radius: 9999px;
   }
 
   &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: ${({ theme }) => theme.shadowLg};
+    border-color: ${({ theme }) => theme.primary};
+    box-shadow:
+      0 3px 10px rgba(0, 0, 0, 0.12),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 
     &::before {
       opacity: 1;
     }
   }
 
-  &:active:not(:disabled) {
-    transform: translateY(0);
-    transition-duration: 0.1s;
+  &:disabled {
+    opacity: 0.5;
+    transform: none;
+    box-shadow: none;
   }
 
-  &:focus {
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0) scale(0.99);
+    }
+  }
+
+  &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.primary};
-    outline-offset: 2px;
+    outline-offset: 3px;
   }
 `;
 
@@ -258,12 +346,24 @@ export function WeekPicker({ isEditMode, onDateChange }: WeekPickerProps) {
     return day;
   });
 
-  // Custom input for the DatePicker to show the selected week range
-  const CustomInput = forwardRef(({ onClick }: any, ref: any) => (
-    <CustomDatePickerInput $disabled={isEditMode} onClick={onClick} ref={ref}>
-      {`${formatDateShort(startOfWeek)} - ${formatDateShort(daysInWeek[6])}`}
-    </CustomDatePickerInput>
-  ));
+  const WeekPickerIconTrigger = forwardRef<
+    HTMLButtonElement,
+    { onClick?: () => void; disabled?: boolean }
+  >(function WeekPickerIconTrigger({ onClick, disabled }, ref) {
+    return (
+      <WeekPickerIconButton
+        type="button"
+        ref={ref}
+        onClick={onClick}
+        disabled={disabled}
+        $disabled={!!disabled}
+        aria-label="Open calendar to select a week"
+        title="Select week"
+      >
+        <FontAwesomeIcon icon={faCalendarAlt} aria-hidden />
+      </WeekPickerIconButton>
+    );
+  });
 
   // Handle the click on the Today button to set the selected date to today
   const handleTodayClick = () => {
@@ -272,22 +372,7 @@ export function WeekPicker({ isEditMode, onDateChange }: WeekPickerProps) {
   };
 
   return (
-    <DateControlsContainer>
-      <DatePickerControls>
-        <StyledWeekPickerWrapper>
-          <DatePicker
-            selected={selectedFullDate}
-            onChange={handleDateChange}
-            dateFormat="w/yyyy"
-            showWeekPicker // Enable week selection mode for React Weekpicker
-            customInput={<CustomInput />}
-            disabled={isEditMode}
-            maxDate={today} // Prevent selecting dates in the future
-          />
-        </StyledWeekPickerWrapper>
-        <TodayButton onClick={handleTodayClick} disabled={isEditMode} />
-      </DatePickerControls>
-
+    <DateControlsRow>
       <DayBubbleSelector
         daysInWeek={daysInWeek}
         selectedFullDate={selectedFullDate}
@@ -295,6 +380,19 @@ export function WeekPicker({ isEditMode, onDateChange }: WeekPickerProps) {
         onDateChange={onDateChange}
         isEditMode={isEditMode}
       />
-    </DateControlsContainer>
+      <StyledWeekPickerWrapper>
+        <DatePicker
+          selected={selectedFullDate}
+          onChange={handleDateChange}
+          dateFormat="w/yyyy"
+          showWeekPicker
+          customInput={<WeekPickerIconTrigger disabled={isEditMode} />}
+          disabled={isEditMode}
+          maxDate={today}
+          popperPlacement="bottom-end"
+        />
+      </StyledWeekPickerWrapper>
+      <TodayButton onClick={handleTodayClick} disabled={isEditMode} />
+    </DateControlsRow>
   );
 }

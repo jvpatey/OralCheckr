@@ -14,52 +14,42 @@ export function FeatureCards() {
     {
       id: "assessment",
       icon: <FontAwesomeIcon icon={faClipboardList} size="lg" />,
-      title: "Oral Health Questionnaire",
+      title: "Oral health questionnaire",
       description:
-        "Comprehensive questionnaire to evaluate your oral health status and receive personalized recommendations.",
+        "A structured check-in that surfaces priorities and next steps tailored to you.",
       size: "medium",
-      color: "primary",
-      gradient: "primaryGradient",
     },
     {
       id: "tracking",
       icon: <FontAwesomeIcon icon={faTasksAlt} size="lg" />,
-      title: "Habit Tracking",
+      title: "Habit tracking",
       description:
-        "Monitor daily oral hygiene routines with streak tracking and progress insights.",
+        "Log routines, keep streaks, and see consistency at a glance.",
       size: "medium",
-      color: "secondary",
-      gradient: "secondaryGradient",
     },
     {
       id: "analytics",
       icon: <FontAwesomeIcon icon={faChartLine} size="sm" />,
-      title: "Analytics & Insights",
+      title: "Analytics and insights",
       description:
-        "Detailed monthly and yearly progress tracking with calendar views and data insights.",
+        "Month and year views with calendars and trends so progress feels tangible.",
       size: "small",
-      color: "accent",
-      gradient: "accentGradient",
     },
     {
       id: "recommendations",
       icon: <FontAwesomeIcon icon={faLightbulb} size="sm" />,
-      title: "Smart Recommendations",
+      title: "Smart recommendations",
       description:
-        "Personalized tips and suggestions based on your assessment results.",
+        "Practical tips grounded in your latest assessment—not generic advice.",
       size: "small",
-      color: "primary",
-      gradient: "primaryGradient",
     },
     {
       id: "progress",
       icon: <FontAwesomeIcon icon={faCalendarCheck} size="sm" />,
-      title: "Progress Visualization",
+      title: "Progress visualization",
       description:
-        "Calendar views, heatmaps, and streak tracking to visualize your journey.",
+        "Heatmaps and calendars that make momentum easy to spot.",
       size: "small",
-      color: "secondary",
-      gradient: "secondaryGradient",
     },
   ];
 
@@ -72,8 +62,6 @@ export function FeatureCards() {
           title={feature.title}
           description={feature.description}
           size={feature.size as "small" | "medium" | "large"}
-          color={feature.color as "primary" | "secondary" | "accent"}
-          gradient={feature.gradient}
           index={index}
         />
       ))}

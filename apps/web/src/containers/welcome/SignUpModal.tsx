@@ -13,7 +13,10 @@ import { validatePassword } from "./utils/password-utils";
 import {
   StyledModal,
   ModalHeader,
-  HeaderText,
+  ModalTitleStack,
+  ModalWordmark,
+  ModalWordmarkAccent,
+  ModalHeading,
   ModalBody,
   InputStyle,
   CardText,
@@ -22,6 +25,8 @@ import {
   OrSeparator,
   StyledFormButton,
   GlobalPopoverStyles,
+  ModalGuestSlot,
+  ModalMutedMessage,
 } from "./styles/ModalStyles";
 
 // Get Google Client ID from environment variable or config.js
@@ -229,12 +234,17 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
     <GlobalPopoverStyles>
       <StyledModal show={show} onHide={handleClose} centered>
         <ModalHeader closeButton>
-          <HeaderText>Sign Up</HeaderText>
+          <ModalTitleStack>
+            <ModalWordmark>
+              Oral<ModalWordmarkAccent>Checkr</ModalWordmarkAccent>
+            </ModalWordmark>
+            <ModalHeading>Sign up</ModalHeading>
+          </ModalTitleStack>
         </ModalHeader>
         <ModalBody>
           <CardText>Let's get you started! Create your account below:</CardText>
           <Form onSubmit={handleSignUpSubmit}>
-            <RequiredFormGroup controlId="formFirstName" className="m-3">
+            <RequiredFormGroup controlId="formFirstName">
               <InputStyle
                 type="text"
                 placeholder="First Name"
@@ -244,7 +254,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
                 required
               />
             </RequiredFormGroup>
-            <RequiredFormGroup controlId="formLastName" className="m-3">
+            <RequiredFormGroup controlId="formLastName">
               <InputStyle
                 type="text"
                 placeholder="Last Name"
@@ -254,7 +264,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
                 required
               />
             </RequiredFormGroup>
-            <RequiredFormGroup controlId="formEmail" className="m-3">
+            <RequiredFormGroup controlId="formEmail">
               <InputStyle
                 type="email"
                 placeholder="Email"
@@ -264,7 +274,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
                 required
               />
             </RequiredFormGroup>
-            <RequiredFormGroup className="m-3">
+            <RequiredFormGroup>
               <PasswordField
                 value={password}
                 onChange={setPassword}
@@ -284,7 +294,7 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
             <RequiredNote>Required field</RequiredNote>
 
             <StyledFormButton type="submit" disabled={!formValid}>
-              Sign Up with Email
+              Sign up with email
             </StyledFormButton>
 
             <OrSeparator>OR</OrSeparator>
@@ -299,18 +309,19 @@ export function SignUpModal({ show, handleClose }: SignUpModalProps) {
                 }}
               ></div>
             ) : (
-              <div
-                style={{ textAlign: "center", margin: "1rem 0", color: "#666" }}
-              >
+              <ModalMutedMessage>
                 Google Sign-In temporarily unavailable
-              </div>
+              </ModalMutedMessage>
             )}
 
             <OrSeparator>OR</OrSeparator>
 
-            <div style={{ textAlign: "center", marginTop: "1rem" }}>
-              <ContinueAsGuestButton onClose={handleClose} />
-            </div>
+            <ModalGuestSlot>
+              <ContinueAsGuestButton
+                onClose={handleClose}
+                buttonVariant="login"
+              />
+            </ModalGuestSlot>
           </Form>
         </ModalBody>
       </StyledModal>

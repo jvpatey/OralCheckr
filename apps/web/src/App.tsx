@@ -6,9 +6,6 @@ import { lightTheme, darkTheme } from "./common/utilities/color-utils";
 import { Router } from "./Router";
 import { AuthProvider } from "./containers/authentication/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { GlobalToastStyles } from "./styles/ToastStyles";
 import { HabitProvider } from "./contexts/HabitContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GOOGLE_CLIENT_ID } from "./config/environment";
@@ -33,33 +30,6 @@ export function App() {
     ) {
       setTheme(savedTheme);
     }
-  }, []);
-
-  // Show scrollbar when scrolling
-  useEffect(() => {
-    let scrollTimer: NodeJS.Timeout;
-
-    const handleScroll = () => {
-      // Add is-scrolling class when scrolling
-      document.body.classList.add('is-scrolling');
-
-      // Clear previous timer
-      clearTimeout(scrollTimer);
-
-      // Remove is-scrolling class after scrolling stops
-      scrollTimer = setTimeout(() => {
-        document.body.classList.remove('is-scrolling');
-      }, 1000);
-    };
-
-    // Add scroll listener
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(scrollTimer);
-    };
   }, []);
 
   // Persist query client across renders
@@ -87,9 +57,6 @@ export function App() {
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       {/* Theme provider for styled components */}
       <ThemeProvider theme={theme === ThemeType.LIGHT ? lightTheme : darkTheme}>
-        {/* Global toast styles */}
-        <GlobalToastStyles />
-        {/* React Query provider for data fetching */}
         <QueryClientProvider client={queryClientRef.current}>
           {/* Authentication context provider */}
           <AuthProvider>
@@ -101,22 +68,6 @@ export function App() {
                 <RenderNavs themeToggler={themeToggler} currentTheme={theme} />
                 {/* Main application routes */}
                 <Router themeToggler={themeToggler} currentTheme={theme} />
-                {/* Toast notifications */}
-                <ToastContainer
-                  position="top-right"
-                  autoClose={3000}
-                  hideProgressBar={false}
-                  closeOnClick={true}
-                  pauseOnHover={true}
-                  draggable={true}
-                  limit={3}
-                  theme={theme === ThemeType.LIGHT ? "light" : "dark"}
-                  toastClassName="modern-toast"
-                  progressClassName="toast-progress"
-                  closeButton={true}
-                  newestOnTop={true}
-                  rtl={false}
-                />
               </HashRouter>
             </HabitProvider>
           </AuthProvider>

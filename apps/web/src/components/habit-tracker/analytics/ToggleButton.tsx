@@ -5,119 +5,117 @@ interface ToggleButtonProps {
   options: { label: React.ReactNode; value: string }[];
   activeValue: string;
   onChange: (value: string) => void;
+  /** When true, omits outer margin (e.g. inside analytics header). */
+  embedded?: boolean;
+  /** `end` fills parent width (pair with a sized column); `center` sizes to content. */
+  align?: "center" | "end";
 }
 
-const ToggleButtonContainer = styled.div`
+const ToggleButtonContainer = styled.div<{
+  $embedded?: boolean;
+  $align: "center" | "end";
+}>`
   display: flex;
-  justify-content: center;
+  justify-content: ${({ $align }) => ($align === "end" ? "stretch" : "center")};
   align-items: center;
-  margin-bottom: 1.5rem;
-  width: 100%;
+  margin-bottom: ${({ $embedded }) => ($embedded ? "0" : "1.5rem")};
+  width: ${({ $align }) => ($align === "end" ? "100%" : "fit-content")};
+  max-width: 100%;
+  flex-shrink: 0;
   box-sizing: border-box;
 `;
 
-// Modern 2025 pill-shaped toggle with floating indicator
+/** Outer shell matches HabitDropdown outline toggle (border, radius, height, no shadow). */
 const ToggleWrapper = styled.div`
   position: relative;
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50px;
-  padding: 6px;
-  box-shadow: ${({ theme }) => theme.shadowLg};
   display: flex;
   align-items: center;
-  overflow: hidden;
-
-  /* Subtle gradient overlay */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: ${({ theme }) => theme.primaryGradient};
-    opacity: 0.05;
-    border-radius: 50px;
-    pointer-events: none;
-  }
-`;
-
-const ToggleIndicator = styled.div<{ $activeIndex: number }>`
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  width: calc(50% - 6px);
-  height: calc(100% - 12px);
-  background: ${({ theme }) => theme.primaryGradient};
-  border-radius: 50px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateX(${({ $activeIndex }) => $activeIndex * 100}%);
-  box-shadow: ${({ theme }) => theme.shadowMd},
-    ${({ theme }) => theme.glowColor} 0 0 20px;
-  z-index: 1;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    border-radius: 50px;
-  }
-`;
-
-const Button = styled.button<{ $active: boolean }>`
-  position: relative;
-  background: transparent;
-  color: ${({ $active, theme }) =>
-    $active ? theme.white : theme.textSecondary};
-  border: none;
-  padding: 12px 24px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  width: 215px;
+  justify-content: center;
+  gap: 2px;
+  padding: 3px;
+  width: 100%;
   box-sizing: border-box;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 2;
-  border-radius: 50px;
-
-  /* Icon spacing */
-  svg {
-    margin-right: 8px;
-    transition: all 0.3s ease;
-  }
+  min-height: 40px;
+  background: transparent;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  border-radius: 9999px;
+  box-shadow: none;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
 
   &:hover {
-    color: ${({ $active, theme }) => ($active ? theme.white : theme.primary)};
-    transform: translateY(-1px);
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}22`} inset;
+  }
 
-    svg {
-      transform: scale(1.1);
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-1px);
     }
   }
 
-  &:active {
-    transform: translateY(0);
-    transition-duration: 0.1s;
+  @media (max-width: 768px) {
+    min-height: 38px;
+  }
+`;
+
+const ToggleIndicator = styled.div<{
+  $activeIndex: number;
+  $segmentCount: number;
+}>`
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(
+    (100% - 6px - ${({ $segmentCount }) => ($segmentCount - 1) * 2}px) /
+      ${({ $segmentCount }) => $segmentCount}
+  );
+  height: calc(100% - 6px);
+  background: ${({ theme }) => `${theme.primary}0d`};
+  border-radius: 9999px;
+  box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}22`} inset;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(
+    calc(${({ $activeIndex }) => $activeIndex} * (100% + 2px))
+  );
+  z-index: 1;
+  pointer-events: none;
+`;
+
+const SegmentButton = styled.button<{ $active: boolean }>`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 0;
+  min-width: 0;
+  background: transparent;
+  color: ${({ $active, theme }) =>
+    $active ? theme.primary : theme.textSecondary};
+  border: none;
+  padding: 0 12px;
+  border-radius: 9999px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  z-index: 2;
+  box-sizing: border-box;
+  transition: color 0.25s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.primary};
   }
 
-  @media (max-width: 600px) {
-    width: 145px;
-    padding: 10px 16px;
-    font-size: 13px;
-
-    svg {
-      margin-right: 6px;
-    }
+  @media (max-width: 768px) {
+    font-size: 0.8125rem;
+    padding: 0 10px;
   }
 `;
 
@@ -125,23 +123,31 @@ export function ToggleButton({
   options,
   activeValue,
   onChange,
+  embedded = false,
+  align = "center",
 }: ToggleButtonProps) {
-  const activeIndex = options.findIndex(
-    (option) => option.value === activeValue
+  const activeIndex = Math.max(
+    0,
+    options.findIndex((option) => option.value === activeValue),
   );
+  const segmentCount = options.length;
 
   return (
-    <ToggleButtonContainer>
+    <ToggleButtonContainer $embedded={embedded} $align={align}>
       <ToggleWrapper>
-        <ToggleIndicator $activeIndex={activeIndex} />
+        <ToggleIndicator
+          $activeIndex={activeIndex}
+          $segmentCount={segmentCount}
+        />
         {options.map((option) => (
-          <Button
+          <SegmentButton
             key={option.value}
+            type="button"
             $active={activeValue === option.value}
             onClick={() => onChange(option.value)}
           >
             {option.label}
-          </Button>
+          </SegmentButton>
         ))}
       </ToggleWrapper>
     </ToggleButtonContainer>

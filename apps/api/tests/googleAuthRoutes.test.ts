@@ -30,6 +30,7 @@ jest.mock("google-auth-library", () => {
                 given_name: "Google",
                 family_name: "User",
                 sub: "google_id_123",
+                picture: "https://lh3.googleusercontent.com/a/google-profile.jpg",
               }),
             };
           } else {
@@ -113,7 +114,35 @@ describe("Google Auth Endpoints", () => {
       expect(res.body.user).toHaveProperty("userId", mockUser.userId);
       expect(mockUpdate).toHaveBeenCalledWith({
         googleId: "google_id_123",
-        avatar: undefined,
+        avatar: "https://lh3.googleusercontent.com/a/google-profile.jpg",
+        googlePicture: "https://lh3.googleusercontent.com/a/google-profile.jpg",
+      });
+    });
+
+    it("should refresh googlePicture for returning Google user without changing stored avatar", async () => {
+      const mockUpdate = jest.fn().mockResolvedValue(true);
+      const mockUserData: GoogleUserAttributes & { update: typeof mockUpdate } =
+        {
+          userId: mockUser.userId,
+          email: "google@example.com",
+          firstName: "Test",
+          lastName: "User",
+          googleId: "google_id_123",
+          avatar: "https://cdn.example/emoji.png",
+          update: mockUpdate,
+        };
+
+      jest
+        .spyOn(User, "findOne")
+        .mockResolvedValue(mockUserData as unknown as Model);
+
+      const res = await request(app)
+        .post("/auth/google-login")
+        .send({ token: "valid_token" });
+
+      expect(res.status).toBe(200);
+      expect(mockUpdate).toHaveBeenCalledWith({
+        googlePicture: "https://lh3.googleusercontent.com/a/google-profile.jpg",
       });
     });
 

@@ -1,5 +1,6 @@
-import { Section, SectionTitle } from "../../styles/AccountTabStyles";
 import {
+  SupportSection,
+  SupportSectionTitle,
   ContentBox,
   ContentText,
 } from "../../../../containers/about/styles/AboutContentStyles";
@@ -7,8 +8,8 @@ import {
 // About section component
 export function AboutSection() {
   return (
-    <Section>
-      <SectionTitle>About OralCheckr</SectionTitle>
+    <SupportSection>
+      <SupportSectionTitle>About OralCheckr</SupportSectionTitle>
       <ContentBox style={{ marginBottom: "2rem" }}>
         <ContentText>
           OralCheckr is a dental health tracking application designed to help
@@ -18,6 +19,6 @@ export function AboutSection() {
           you build consistent dental care routines.
         </ContentText>
       </ContentBox>
-    </Section>
+    </SupportSection>
   );
 }

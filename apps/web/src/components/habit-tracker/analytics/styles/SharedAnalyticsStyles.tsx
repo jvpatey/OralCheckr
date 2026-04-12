@@ -51,9 +51,10 @@ export const CardContainer = styled.div`
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: ${({ theme }) => theme.shadowXl},
-    ${({ theme }) => theme.glowColor} 0 0 40px;
+  border: 1px solid ${({ theme }) => `${theme.borderLight}60`};
+  box-shadow:
+    ${({ theme }) => theme.shadowXl},
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
   padding: 3rem;
   height: calc(100% - 2rem);
   margin: 1rem 2rem;
@@ -110,84 +111,27 @@ export const ViewContainer = styled.div`
   > * {
     margin-bottom: 8px;
   }
-
-  .dropdown {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .dropdown-toggle {
-    width: 215px;
-  }
-
-  @media (max-width: 600px) {
-    .dropdown-toggle {
-      width: 145px;
-    }
-  }
 `;
 
-// Page title styling
-export const AnalyticsTitle = styled.h1`
-  background: ${({ theme }) => theme.primaryGradient};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 0.75rem;
-  font-size: 1.75rem;
-  font-weight: 700;
-  text-align: center;
-  letter-spacing: -0.5px;
-  animation: ${fadeUp} 0.8s ease-out;
-
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-`;
-
-export const AnalyticsContainer = styled.div`
-  /* Account for sidebar width (220px) + margin (16px) + padding (16px) */
-  width: calc(100% - 252px);
-  height: calc(100vh - 96px);
-  overflow: hidden;
-  position: absolute;
-  /* Account for navbar height (96px) */
-  top: 96px;
-  /* Account for sidebar width (220px) + margin (16px) */
-  left: 236px;
-  animation: ${fadeUp} 1s cubic-bezier(0.4, 0, 0.2, 1);
+/** Fills the analytics card without extra child margins — keeps month/year views in the flex chain */
+export const AnalyticsViewRoot = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  animation: ${fadeUp} 0.5s ease-out;
   box-sizing: border-box;
-  background: ${({ theme }) => theme.backgroundGradient};
-  padding: 2rem;
+`;
+
+export const AnalyticsContentScroll = styled.div`
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
   overflow-y: auto;
+  width: 100%;
   ${scrollbarStyle}
-
-  @media (max-width: 800px) {
-    /* Account for mobile sidebar width (70px) + margin (8px) + padding (8px) */
-    width: calc(100% - 86px);
-    /* Account for navbar height on mobile */
-    top: 88px;
-    /* Account for mobile sidebar width (70px) + margin (8px) */
-    left: 78px;
-    padding: 1.5rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 1rem;
-  }
-
-  @media (max-height: 700px) {
-    /* Account for smaller navbar height on short screens */
-    top: 88px;
-    height: calc(100vh - 110px);
-  }
 `;
 
 // Shared text styles
@@ -219,14 +163,18 @@ export const ControlsContainer = styled.div`
 export const AnalyticsGrid = styled.div`
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
-  gap: 1.5rem;
+  gap: 1rem;
+  align-items: stretch;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
+  flex: 1;
+  min-height: 0;
 
   @media (max-width: 1200px) {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 0.625rem;
+    align-items: stretch;
     max-width: 100%;
   }
 `;
@@ -235,12 +183,23 @@ export const TilesSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  min-height: 0;
+  align-self: stretch;
+  height: 100%;
+
+  @media (max-width: 1200px) {
+    flex: none;
+    height: auto;
+  }
 `;
 
 export const CalendarSection = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0;
+  min-height: 0;
+  align-self: stretch;
+  height: 100%;
 `;
 
 export const TilesAndCalendarContainer = styled.div`
@@ -272,10 +231,12 @@ export const TilesAndCalendarContainer = styled.div`
 export const TilesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0.5625rem;
   width: 100%;
-  height: 400px;
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  align-self: stretch;
 
   /* Staggered animation for tiles */
   & > *:nth-child(1) {
@@ -294,87 +255,95 @@ export const TilesContainer = styled.div`
     animation: ${scaleIn} 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
   }
 
+  & > *:nth-child(5) {
+    animation: ${scaleIn} 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
+  }
+
+  & > *:nth-child(6) {
+    animation: ${scaleIn} 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.6s both;
+  }
+
   @media (max-width: 1200px) {
-    height: 360px;
-    gap: 0.875rem;
+    flex: none;
+    height: auto;
+    min-height: 440px;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 0.5625rem;
   }
 
   @media (max-width: 1024px) {
-    height: auto;
-    min-height: 320px;
-    gap: 0.75rem;
+    min-height: 400px;
+    gap: 0.625rem;
   }
 
   @media (max-width: 480px) {
     gap: 0.5rem;
-    height: 280px;
+    min-height: 360px;
   }
 `;
 
-// Modern glassmorphism tile styles with hover effects - Dashboard format
+/** Matches month calendar card: primary outline, glass fill, no heavy shadow */
 export const TileContainer = styled.div`
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 1rem;
-  box-shadow: ${({ theme }) => theme.shadowLg};
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
-  aspect-ratio: 1;
-  position: relative;
+  min-height: 0;
+  padding: 0.875rem 0.75rem;
+  box-sizing: border-box;
+  background: ${({ theme }) => theme.glassBg};
+  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  border-radius: 16px;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  box-shadow: none;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
+  cursor: default;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
 
-  /* Subtle gradient overlay */
   &::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
+    z-index: 0;
     background: ${({ theme }) => theme.primaryGradient};
-    opacity: 0.05;
-    border-radius: 20px;
-    transition: opacity 0.3s ease;
+    opacity: 0.03;
+    border-radius: 16px;
+    pointer-events: none;
   }
 
-  /* Hover effects */
   &:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: ${({ theme }) => theme.shadowXl},
-      ${({ theme }) => theme.glowColor} 0 0 30px;
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}22`} inset;
+  }
 
-    &::before {
-      opacity: 0.1;
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-1px);
     }
   }
 
-  /* Focus state for accessibility */
   &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.primary};
     outline-offset: 2px;
   }
 
   @media (max-width: 1024px) {
-    min-height: 160px;
-    padding: 1.5rem;
-    border-radius: 16px;
+    padding: 0.8125rem 0.625rem;
+    border-radius: 14px;
 
     &::before {
-      border-radius: 16px;
+      border-radius: 14px;
     }
   }
 
   @media (max-width: 480px) {
-    min-height: 140px;
-    padding: 1.25rem;
+    padding: 1rem 0.625rem;
     border-radius: 12px;
 
     &::before {
@@ -383,7 +352,48 @@ export const TileContainer = styled.div`
   }
 `;
 
-export const TileHeading = styled.h3`
+/** Habit-tile-style liquid fill for metrics that are 0–100% (e.g. completion rate) */
+export const TileProgressFill = styled.div<{
+  $progress: number;
+  $isComplete: boolean;
+}>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: ${({ $progress }) => Math.min(100, Math.max(0, $progress))}%;
+  z-index: 1;
+  pointer-events: none;
+  background: ${({ $isComplete, theme }) =>
+    $isComplete
+      ? `linear-gradient(135deg, ${theme.secondary}55, ${theme.secondary}32, ${theme.secondary}78)`
+      : `linear-gradient(135deg, ${theme.primary}55, ${theme.primary}32, ${theme.primary}78)`};
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: ${({ $isComplete }) =>
+    $isComplete ? "16px" : "16px 0 0 16px"};
+
+  @media (max-width: 1024px) {
+    border-radius: ${({ $isComplete }) =>
+      $isComplete ? "14px" : "14px 0 0 14px"};
+  }
+
+  @media (max-width: 480px) {
+    border-radius: ${({ $isComplete }) =>
+      $isComplete ? "12px" : "12px 0 0 12px"};
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: width 0.2s ease-out;
+  }
+`;
+
+const tileTextOverFillShadow = `
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 0 14px rgba(255, 255, 255, 0.45);
+`;
+
+export const TileHeading = styled.h3<{ $overProgressFill?: boolean }>`
   font-size: 12px;
   font-weight: 600;
   color: ${({ theme }) => theme.textSecondary};
@@ -392,7 +402,8 @@ export const TileHeading = styled.h3`
   text-transform: uppercase;
   letter-spacing: 0.5px;
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  ${({ $overProgressFill }) => ($overProgressFill ? tileTextOverFillShadow : "")}
 
   @media (max-width: 1024px) {
     font-size: 11px;
@@ -407,24 +418,26 @@ export const TileHeading = styled.h3`
 export const TileMainContent = styled.div<{
   $isMissedDays?: boolean;
   $isLoading?: boolean;
+  $overProgressFill?: boolean;
 }>`
-  font-size: 42px;
+  font-size: 36px;
   font-weight: 700;
   color: ${({ $isMissedDays, theme }) =>
     $isMissedDays ? theme.error : theme.primary};
   margin: 0;
   opacity: ${({ $isLoading }) => ($isLoading ? 0.5 : 1)};
   position: relative;
-  z-index: 1;
+  z-index: 2;
   line-height: 1;
   text-align: center;
+  ${({ $overProgressFill }) => ($overProgressFill ? tileTextOverFillShadow : "")}
 
   @media (max-width: 1024px) {
-    font-size: 36px;
+    font-size: 32px;
   }
 
   @media (max-width: 480px) {
-    font-size: 28px;
+    font-size: 26px;
   }
 `;
 
@@ -434,10 +447,30 @@ export const TileSubContent = styled.div`
   margin: 0.25rem 0 0 0;
   text-align: center;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   font-weight: 400;
 
   @media (max-width: 480px) {
     font-size: 12px;
+  }
+`;
+
+/** Short plain-language hint below the tile label or context line */
+export const TileDescription = styled.p<{ $overProgressFill?: boolean }>`
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: ${({ theme }) => theme.textGrey};
+  margin: 0.35rem 0 0 0;
+  padding: 0 0.25rem;
+  text-align: center;
+  max-width: 100%;
+  position: relative;
+  z-index: 2;
+  ${({ $overProgressFill }) => ($overProgressFill ? tileTextOverFillShadow : "")}
+
+  @media (max-width: 480px) {
+    font-size: 9px;
+    margin-top: 0.3rem;
   }
 `;

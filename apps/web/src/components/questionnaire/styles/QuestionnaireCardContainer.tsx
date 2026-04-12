@@ -8,24 +8,26 @@ interface QuestionnaireCardContainerProps {
 export const QuestionnaireCardContainer = styled.div<QuestionnaireCardContainerProps>`
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex: 1;
   width: ${({ $isAuthenticated }) =>
-    $isAuthenticated ? "calc(100% - 200px)" : "100%"};
-  margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "200px" : "0")};
-  padding: 20px;
-  margin-top: 70px;
+    $isAuthenticated ? "calc(100% - 240px)" : "100%"};
+  margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
+  padding: 40px 20px;
+  min-height: calc(100vh - 120px);
 
-  @media (max-width: 768px) {
-    width: ${({ $isAuthenticated }) =>
-      $isAuthenticated ? "calc(100% - 50px)" : "100%"};
-    margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "50px" : "0")};
-    padding: 10px;
+  @media (max-width: 1199px) {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  @media (max-width: 800px) {
+    padding: 24px 16px;
+    min-height: calc(100vh - 100px);
   }
 
   @media (max-width: 375px) {
-    padding: 5px;
-    margin-top: 50px;
+    padding: 12px 10px;
   }
 
   @media (max-height: 700px) {

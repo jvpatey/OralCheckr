@@ -6,10 +6,11 @@ import {
   QuestionTitle,
   OptionsContainer,
   OptionItem,
-  OptionLabel,
+  OptionText,
   RadioInput,
   CheckboxInput,
   RangeContainer,
+  RangeSliderShell,
   RangeInput,
   RangeLabels,
   RangeLabel,
@@ -113,9 +114,7 @@ function RenderQuestionsComponent(
                     onChange={handleRadioChange}
                     checked={rangeValue === option.optionId}
                   />
-                  <OptionLabel htmlFor={`${id}-${option.optionId}`}>
-                    {option.optionLabel}
-                  </OptionLabel>
+                  <OptionText>{option.optionLabel}</OptionText>
                 </OptionItem>
               ));
             case QuestionType.CHECKBOX:
@@ -132,30 +131,39 @@ function RenderQuestionsComponent(
                     onChange={handleCheckboxChange}
                     checked={selectedOptions.includes(option.optionId)}
                   />
-                  <OptionLabel htmlFor={`${id}-${option.optionId}`}>
-                    {option.optionLabel}
-                  </OptionLabel>
+                  <OptionText>{option.optionLabel}</OptionText>
                 </OptionItem>
               ));
             case QuestionType.RANGE:
               return (
                 <RangeContainer>
-                  <RangeInput
-                    type="range"
-                    id={`question-${id}`}
-                    name={`question-${id}`}
-                    min="0"
-                    max={options.length - 1}
-                    value={rangeValue !== null ? rangeValue - 1 : 0}
-                    onChange={handleRangeChange}
-                  />
-                  <RangeLabels>
-                    {options.map((option) => (
-                      <RangeLabel key={option.optionId}>
-                        {option.optionLabel}
-                      </RangeLabel>
-                    ))}
-                  </RangeLabels>
+                  <RangeSliderShell>
+                    <RangeInput
+                      type="range"
+                      id={`question-${id}`}
+                      name={`question-${id}`}
+                      min="0"
+                      max={options.length - 1}
+                      value={rangeValue !== null ? rangeValue - 1 : 0}
+                      onChange={handleRangeChange}
+                    />
+                    <RangeLabels>
+                      {options.map((option, index) => (
+                        <RangeLabel
+                          key={option.optionId}
+                          $index={index}
+                          $total={options.length}
+                          data-active={
+                            rangeValue !== null && rangeValue - 1 === index
+                              ? true
+                              : undefined
+                          }
+                        >
+                          {option.optionLabel}
+                        </RangeLabel>
+                      ))}
+                    </RangeLabels>
+                  </RangeSliderShell>
                 </RangeContainer>
               );
             default:

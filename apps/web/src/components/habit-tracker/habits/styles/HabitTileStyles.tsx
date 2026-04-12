@@ -1,27 +1,44 @@
 import styled, { css } from "styled-components";
 
-// Common styles for both sides of the flip card with enhanced glassmorphism
+// Common styles for both sides — stronger frosted glass
 export const flipCardCommonStyles = css<{ $isComplete: boolean }>`
-  /* Enhanced glassmorphism background */
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  background: ${({ $isComplete, theme }) =>
+    $isComplete
+      ? `linear-gradient(
+    165deg,
+    color-mix(in srgb, ${theme.surfaceElevated} 42%, transparent) 0%,
+    ${theme.glassBg} 45%,
+    color-mix(in srgb, ${theme.secondary} 14%, ${theme.glassBg}) 100%
+  )`
+      : `linear-gradient(
+    165deg,
+    color-mix(in srgb, ${theme.surfaceElevated} 42%, transparent) 0%,
+    ${theme.glassBg} 45%,
+    color-mix(in srgb, ${theme.primary} 12%, ${theme.glassBg}) 100%
+  )`};
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 
-  /* Gradient text color */
   color: ${({ $isComplete, theme }) =>
     $isComplete ? theme.secondary : theme.primary};
   font-weight: 600;
 
-  /* Subtle gradient border */
-  border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 16px;
+  border: 1px solid
+    ${({ $isComplete, theme }) =>
+      $isComplete
+        ? `color-mix(in srgb, ${theme.secondary} 32%, transparent)`
+        : `color-mix(in srgb, ${theme.primary} 28%, transparent)`};
+  border-radius: 9999px;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  box-shadow: ${({ theme }) => theme.shadowMd};
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    ${({ theme }) => theme.shadowMd},
+    0 0 0 1px color-mix(in srgb, ${({ theme }) => theme.borderLight} 75%, transparent);
   padding: 16px;
   position: absolute;
   backface-visibility: hidden;
@@ -32,22 +49,14 @@ export const flipCardCommonStyles = css<{ $isComplete: boolean }>`
 // Styled component for the tile container with modern effects
 export const TileContainer = styled.div`
   perspective: 1000px;
-  border-radius: 14px;
-  width: 100%;
+  border-radius: 9999px;
+  flex: 1;
+  min-width: 0;
+  width: auto;
   height: 56px;
-  margin-bottom: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 
-  &:hover {
-    box-shadow: ${({ theme }) => theme.shadowLg};
-    transform: translateY(-2px);
-  }
-
   @media (max-width: 768px) {
-    width: 100%;
     height: 54px;
   }
 
@@ -68,67 +77,16 @@ export const ProgressBar = styled.div<{
   width: ${({ $progress }) => $progress}%;
   background: ${({ $isComplete, theme }) =>
     $isComplete
-      ? `linear-gradient(135deg, ${theme.secondary}40, ${theme.secondary}20, ${theme.secondary}60)`
-      : `linear-gradient(135deg, ${theme.primary}40, ${theme.primary}20, ${theme.primary}60)`};
-  background-size: 200% 100%;
+      ? `linear-gradient(135deg, ${theme.secondary}55, ${theme.secondary}32, ${theme.secondary}78)`
+      : `linear-gradient(135deg, ${theme.primary}55, ${theme.primary}32, ${theme.primary}78)`};
   z-index: 1;
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 16px 0 0 16px;
+  border-radius: ${({ $isComplete }) =>
+    $isComplete ? "9999px" : "9999px 0 0 9999px"};
   overflow: hidden;
 
-  /* Liquid flowing animation */
-  &::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-      45deg,
-      transparent 30%,
-      rgba(255, 255, 255, 0.3) 50%,
-      transparent 70%
-    );
-    animation: liquidFlow 3s ease-in-out infinite;
-    transform: translateX(-100%) rotate(45deg);
-  }
-
-  /* Liquid bubble effect */
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 10%;
-    right: 10%;
-    width: 8px;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    animation: bubbleFloat 2s ease-in-out infinite;
-  }
-
-  @keyframes liquidFlow {
-    0% {
-      transform: translateX(-100%) rotate(45deg);
-    }
-    50% {
-      transform: translateX(100%) rotate(45deg);
-    }
-    100% {
-      transform: translateX(100%) rotate(45deg);
-    }
-  }
-
-  @keyframes bubbleFloat {
-    0%,
-    100% {
-      transform: translateY(0) scale(1);
-      opacity: 0.4;
-    }
-    50% {
-      transform: translateY(-10px) scale(1.2);
-      opacity: 0.8;
-    }
+  @media (prefers-reduced-motion: reduce) {
+    transition: width 0.2s ease-out;
   }
 `;
 
@@ -141,6 +99,10 @@ export const FlipCard = styled.div<{ $flipped: boolean }>`
   transition: transform 0.6s;
   transform: ${({ $flipped }) =>
     $flipped ? "rotateX(180deg)" : "rotateX(0deg)"};
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 `;
 
 // Front side of the flip card
@@ -260,52 +222,39 @@ export const BackText = styled.div`
   }
 `;
 
-// Liquid-style log count bubble with glassmorphism
-export const LogCountBubble = styled.div`
-  /* Liquid gradient background */
-  background: ${({ theme }) => theme.secondaryGradient};
-  color: white;
-  font-weight: 700;
-  font-size: 0.875rem;
-  border-radius: 16px;
-  min-width: 36px;
-  height: 36px;
+// Count badge: quiet glass until goal met, then emerald (secondary) success
+export const LogCountBubble = styled.div<{ $isComplete: boolean }>`
+  font-size: 0.8125rem;
+  font-weight: ${({ $isComplete }) => ($isComplete ? 700 : 600)};
+  border-radius: 9999px;
+  min-width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   margin-left: 12px;
   z-index: 2;
-  box-shadow: ${({ theme }) => theme.shadowMd};
-  padding: 0 10px;
+  padding: 0 9px;
   position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
 
-  /* Liquid shimmer effect */
-  &::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-      45deg,
-      transparent 30%,
-      rgba(255, 255, 255, 0.4) 50%,
-      transparent 70%
-    );
-    animation: shimmer 2s ease-in-out infinite;
-    transform: translateX(-100%) rotate(45deg);
-  }
-
-  @keyframes shimmer {
-    0% {
-      transform: translateX(-100%) rotate(45deg);
-    }
-    100% {
-      transform: translateX(100%) rotate(45deg);
-    }
-  }
+  ${({ $isComplete, theme }) =>
+    $isComplete
+      ? `
+    background: ${theme.secondaryGradient};
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      ${theme.shadowMd},
+      0 0 12px color-mix(in srgb, ${theme.secondary} 28%, transparent);
+  `
+      : `
+    background: color-mix(in srgb, ${theme.glassBg} 92%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: ${theme.textSecondary};
+    border: 1px solid color-mix(in srgb, ${theme.borderLight} 85%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  `}
 `;

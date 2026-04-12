@@ -71,7 +71,6 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 
       // Clear cache on logout
       if (user === null) {
-        queryClient.setQueryData(["hasSavedResponse"], false);
         queryClient.setQueryData(["totalScore"], null);
         queryClient.setQueryData(["questionnaireResponse"], null);
         queryClient.setQueryData(["questionnaireProgress"], null);

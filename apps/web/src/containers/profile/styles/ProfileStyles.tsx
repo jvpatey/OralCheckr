@@ -1,6 +1,13 @@
 import styled, { keyframes } from "styled-components";
-import { Nav } from "react-bootstrap";
-export { Nav };
+import { BaseButton } from "../../welcome/styles/ButtonStyles";
+import { NavLinksContainer } from "../../navigation/styles/ModernNavBarStyles";
+
+export { NavIndicator as ProfileTabIndicator, NavLink as ProfileTabButton } from "../../navigation/styles/ModernNavBarStyles";
+
+export const ProfileTabBarShell = styled(NavLinksContainer)`
+  width: 100%;
+  margin-bottom: 2rem;
+`;
 
 // Modern 2025 animations
 export const fadeIn = keyframes`
@@ -144,26 +151,80 @@ export const ProfileCard = styled.div`
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 clamp(1rem, 4vw, 2rem);
   animation: ${fadeIn} 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   z-index: 1;
   flex-shrink: 0;
+  box-sizing: border-box;
 `;
 
-export const ProfileHeader = styled.div`
+/** Left-aligned hero — matches Track / Analyze page title stack */
+export const ProfilePageHeader = styled.div`
+  width: 100%;
+  text-align: left;
+  margin-bottom: 1.75rem;
+  max-width: 100%;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1.5rem;
+  }
+`;
+
+/** Guest / loading / error copy inside ProfileHeader */
+export const ProfileStateTitle = styled.h2`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  margin: 0 0 12px;
+  font-size: clamp(1.1rem, 1.2vw + 0.85rem, 1.35rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.textPrimary};
+  line-height: 1.35;
+`;
+
+export const ProfileStateText = styled.p`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  margin: 0 0 10px;
+  font-size: clamp(0.95rem, 0.45vw + 0.82rem, 1.0625rem);
+  line-height: 1.65;
+  color: ${({ theme }) => theme.textSecondary};
+  font-weight: 400;
+  max-width: 36rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+/** Accent segment for `SectionTitle` in account/data tabs — matches `ModalHeadingAccent` */
+export const SectionTitleAccent = styled.span`
+  color: ${({ theme }) => theme.primary};
+  -webkit-text-fill-color: ${({ theme }) => theme.primary};
+  font-weight: 600;
+  letter-spacing: -0.02em;
+`;
+
+export const ProfileHeader = styled.div<{ $singleColumn?: boolean }>`
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 24px;
+  border-radius: 28px;
   box-shadow: ${({ theme }) => theme.shadowXl},
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   padding: 2.5rem 3rem;
   margin-bottom: 2rem;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: ${({ $singleColumn }) =>
+    $singleColumn ? "1fr" : "auto 1fr"};
   gap: 2rem;
+
+  ${({ $singleColumn }) =>
+    $singleColumn &&
+    `
+    text-align: center;
+    justify-items: center;
+  `}
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -183,10 +244,13 @@ export const ProfilePictureSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 `;
 
-export const ProfilePicture = styled.div<{ $hasAvatar?: boolean }>`
+export const ProfilePicture = styled.div<{
+  $hasAvatar?: boolean;
+  $isEditing?: boolean;
+}>`
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -196,17 +260,25 @@ export const ProfilePicture = styled.div<{ $hasAvatar?: boolean }>`
   align-items: center;
   justify-content: center;
   border: 3px
-    ${({ $hasAvatar, theme }) =>
-      $hasAvatar ? `solid ${theme.primary}` : `dashed ${theme.borderMedium}`};
+    ${({ $hasAvatar, $isEditing, theme }) =>
+      $isEditing
+        ? `solid ${theme.primary}`
+        : $hasAvatar
+          ? `solid ${theme.primary}`
+          : `dashed ${theme.borderMedium}`};
   color: ${({ theme }) => theme.textSecondary};
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 0.875rem;
   cursor: pointer;
   overflow: hidden;
   text-align: center;
-  padding: 1rem;
+  padding: ${({ $hasAvatar }) => ($hasAvatar ? "0" : "1rem")};
   position: relative;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: ${({ theme }) => theme.shadowLg};
+  box-shadow: ${({ theme, $isEditing }) =>
+    $isEditing
+      ? `${theme.shadowXl}, 0 0 0 4px ${theme.primary}28, 0 0 28px ${theme.primary}30`
+      : theme.shadowLg};
 
   &:hover {
     border-color: ${({ theme }) => theme.secondary};
@@ -222,8 +294,8 @@ export const ProfilePicture = styled.div<{ $hasAvatar?: boolean }>`
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    padding: 0.5rem;
+    object-fit: cover;
+    object-position: center;
   }
 
   @media (max-width: 480px) {
@@ -232,41 +304,91 @@ export const ProfilePicture = styled.div<{ $hasAvatar?: boolean }>`
   }
 `;
 
+/** Sits below the circular avatar; same action as tapping the photo in edit mode. */
+export const ProfilePictureEditHint = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: ${({ theme }) => `${theme.primary}e6`};
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 6px 12px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1.2;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  transition:
+    filter 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
+  }
+`;
+
 export const UploadButton = styled.button`
-  background-color: ${({ theme }) => theme.blue};
-  color: ${({ theme }) => theme.backgroundColor};
+  font-family: var(--font-sans), system-ui, sans-serif;
+  background: ${({ theme }) => theme.primaryGradient};
+  color: #ffffff;
   width: auto;
-  height: 35px;
-  display: flex;
+  min-height: 40px;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  border-radius: 25px;
-  padding: 0 20px;
+  border-radius: 9999px;
+  padding: 0 22px;
   cursor: pointer;
-  transition: all 0.4s ease-out;
+  transition:
+    box-shadow 0.25s ease,
+    filter 0.25s ease,
+    opacity 0.25s ease;
   white-space: nowrap;
-  border: 2px solid ${({ theme }) => theme.blue};
-  font-size: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  position: relative;
+  border: 1px solid ${({ theme }) => theme.primary};
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  box-shadow: ${({ theme }) => theme.shadowMd};
 
   &:hover {
-    background-color: ${({ theme }) => theme.backgroundColor};
-    border-color: ${({ theme }) => theme.blue};
-    color: ${({ theme }) => theme.blue};
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+    filter: brightness(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
   }
 
   @media (max-width: 768px) {
-    padding: 0 15px;
-    font-size: 14px;
+    padding: 0 18px;
+    font-size: 0.875rem;
   }
 
   @media (max-width: 480px) {
-    padding: 0 10px;
-    font-size: 12px;
+    padding: 0 14px;
+    font-size: 0.8125rem;
   }
 `;
 
@@ -294,34 +416,24 @@ export const ProfileInfo = styled.div`
   }
 `;
 
-export const ProfileEditButton = styled.button`
+/** Icon-only control — same outline pill treatment as welcome Login (`BaseButton` login variant). */
+export const ProfileEditButton = styled(BaseButton).attrs({
+  type: "button",
+  $variant: "login" as const,
+})`
   position: absolute;
   top: -1.5rem;
   right: -2rem;
-  background: ${({ theme }) => theme.primaryGradient};
-  border: 1px solid ${({ theme }) => theme.primary};
-  color: white;
-  cursor: pointer;
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: ${({ theme }) => theme.shadowMd};
   z-index: 1;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: ${({ theme }) => theme.shadowLg};
-    opacity: 0.9;
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  flex: none;
+  flex-shrink: 0;
 
   svg {
     font-size: 1rem;
@@ -335,11 +447,14 @@ export const ProfileEditButton = styled.button`
   @media (max-width: 480px) {
     top: -1rem;
     right: -0.5rem;
-    font-size: 0.85rem;
-    padding: 8px 12px;
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    height: 40px;
+    min-height: 40px;
 
     svg {
-      font-size: 0.9rem;
+      font-size: 0.9375rem;
     }
   }
 `;
@@ -361,21 +476,27 @@ export const InfoGroup = styled.div`
 `;
 
 export const Label = styled.div`
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 0.875rem;
   color: ${({ theme }) => theme.textSecondary};
   margin-bottom: 0.5rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: -0.02em;
 `;
 
 export const Value = styled.div<{ $isEditing?: boolean }>`
+  font-family: var(--font-sans), system-ui, sans-serif;
   color: ${({ theme }) => theme.textPrimary};
-  font-size: 1rem;
-  padding: 0.875rem 1rem;
-  background: ${({ theme }) => theme.glassBg};
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.45;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: ${({ theme }) => theme.surfaceElevated};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border-radius: 12px;
+  border-radius: 9999px;
   border: 1px solid ${({ theme }) => theme.borderLight};
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: ${({ theme }) => theme.shadowSm};
@@ -391,9 +512,11 @@ export const Value = styled.div<{ $isEditing?: boolean }>`
 
 export const EditActions = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
-  height: 44px;
+  min-height: 46px;
   justify-content: flex-end;
+  align-items: center;
 
   @media (max-width: 768px) {
     gap: 8px;
@@ -401,172 +524,131 @@ export const EditActions = styled.div`
 `;
 
 export const EditButton = styled.button`
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 10px;
-  color: ${({ theme }) => theme.primary};
+  font-family: var(--font-sans), system-ui, sans-serif;
+  background: transparent;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  border-radius: 9999px;
+  color: ${({ theme }) => theme.textPrimary};
   cursor: pointer;
-  padding: 8px 12px;
-  display: flex;
+  padding: 10px 16px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: ${({ theme }) => theme.shadowSm};
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease;
 
   &:hover {
-    background: ${({ theme }) => theme.surfaceElevated};
-    border-color: ${({ theme }) => theme.primary};
-    transform: translateY(-2px);
-    box-shadow: ${({ theme }) => theme.shadowMd};
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    background: ${({ theme }) => `${theme.primary}0d`};
+    color: ${({ theme }) => theme.primary};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
   }
 `;
 
 export const EditInput = styled.input`
   width: 100%;
-  padding: 0.875rem 1rem;
-  font-size: 1rem;
+  box-sizing: border-box;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  padding: 10px 16px;
+  min-height: 44px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.45;
   color: ${({ theme }) => theme.textPrimary};
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  background: ${({ theme }) => theme.surfaceElevated};
   border: 1px solid ${({ theme }) => theme.primary};
-  border-radius: 12px;
+  border-radius: 9999px;
   outline: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}20;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+  box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}22;
 
   &:focus {
     border-color: ${({ theme }) => theme.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}30,
-      ${({ theme }) => theme.shadowMd};
-    background: ${({ theme }) => theme.surfaceElevated};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}30;
+    background: ${({ theme }) => theme.surfaceColor};
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.textSecondary};
-    opacity: 0.6;
+    color: ${({ theme }) => theme.textTertiary};
+    opacity: 1;
   }
 `;
 
 export const EditActionButton = styled.button<{ $isCancel?: boolean }>`
-  padding: 0 1.5rem;
-  border-radius: 12px;
-  font-size: 0.9rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  padding: 11px 22px;
+  border-radius: 9999px;
+  font-size: 0.9375rem;
   font-weight: 600;
+  letter-spacing: -0.02em;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  height: 100%;
-  display: flex;
+  transition:
+    box-shadow 0.25s ease,
+    filter 0.25s ease,
+    opacity 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease;
+  min-height: 46px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: ${({ theme }) => theme.shadowMd};
-  position: relative;
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
+  }
 
   @media (max-width: 480px) {
-    padding: 0 1rem;
-    height: 36px;
-    font-size: 0.85rem;
+    padding: 10px 18px;
+    min-height: 44px;
+    font-size: 0.875rem;
   }
 
   ${({ $isCancel, theme }) =>
     $isCancel
       ? `
-    background: ${theme.glassBg};
-    backdrop-filter: blur(${theme.glassBlur});
-    color: ${theme.textSecondary};
-    border: 1px solid ${theme.borderLight};
+    background: transparent;
+    color: ${theme.textPrimary};
+    border: 1px solid ${`${theme.primary}45`};
 
     &:hover {
-      background: ${theme.surfaceElevated};
-      color: ${theme.textPrimary};
-      border-color: ${theme.borderMedium};
-      transform: translateY(-2px);
-      box-shadow: ${theme.shadowLg};
-    }
-
-    &:active {
-      transform: translateY(0);
+      border-color: ${`${theme.primary}65`};
+      background: ${`${theme.primary}0d`};
+      color: ${theme.primary};
     }
   `
       : `
     background: ${theme.primaryGradient};
-    color: white;
+    color: #ffffff;
     border: 1px solid ${theme.primary};
 
-    &:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
+    &:hover:not(:disabled) {
+      filter: brightness(1.05);
       box-shadow: ${theme.shadowLg};
     }
 
-    &:active {
-      transform: translateY(0);
+    &:active:not(:disabled) {
+      filter: brightness(0.98);
     }
   `}
 `;
 
-export const StyledNav = styled(Nav)`
-  margin-bottom: 2rem;
-  border-bottom: 2px solid ${({ theme }) => theme.borderLight};
-  display: flex;
-  flex-wrap: nowrap;
-  width: 100%;
-  gap: 8px;
-
-  @media (max-width: 480px) {
-    gap: 0;
-    justify-content: stretch;
-
-    .nav-item {
-      flex: 1;
-      text-align: center;
-    }
-  }
-
-  .nav-link {
-    color: ${({ theme }) => theme.textSecondary};
-    padding: 1rem 1.75rem;
-    white-space: nowrap;
-    margin-bottom: -2px;
-    border: none;
-    border-bottom: 2px solid transparent;
-    border-radius: 0;
-    background: transparent;
-    font-size: 1.25rem;
-    font-weight: 700;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-
-    &.active {
-      color: ${({ theme }) => theme.primary};
-      border-bottom-color: ${({ theme }) => theme.primary};
-      background: transparent;
-
-      &::after {
-        content: "";
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: ${({ theme }) => theme.primaryGradient};
-        box-shadow: 0 0 8px ${({ theme }) => theme.primary}50;
-      }
-    }
-
-    &:hover:not(.active) {
-      color: ${({ theme }) => theme.textPrimary};
-      background: ${({ theme }) => theme.glassBg};
-      border-radius: 12px 12px 0 0;
-    }
-
-    @media (max-width: 480px) {
-      padding: 0.875rem 0.5rem;
-      font-size: 1rem;
-      width: 100%;
-      text-align: center;
-    }
-  }
+// Clips horizontal motion when switching tab panels
+export const ProfileTabPanelRegion = styled.div`
+  overflow-x: hidden;
 `;
 
 // Container for tabs section
@@ -575,7 +657,7 @@ export const TabsContainer = styled.div`
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 24px;
+  border-radius: 28px;
   box-shadow: ${({ theme }) => theme.shadowXl},
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   padding: 2.5rem 3rem;
@@ -597,27 +679,31 @@ export const TabContent = styled.div`
   background: transparent;
 
   h3 {
+    font-family: var(--font-sans), system-ui, sans-serif;
     color: ${({ theme }) => theme.textPrimary};
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    background: ${({ theme }) => theme.primaryGradient};
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: clamp(1.15rem, 1.2vw + 0.9rem, 1.35rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.35;
+    margin-bottom: 1.75rem;
+    /* Do not set -webkit-text-fill-color here — it inherits into child spans and
+       blocks dual-tone titles (SectionTitle + SectionTitleAccent). */
   }
 
   @media (max-width: 768px) {
     h3 {
-      font-size: 1.25rem;
       margin-bottom: 1.5rem;
     }
   }
 `;
 
 export const EditInstructions = styled.p`
-  color: ${({ theme }) => theme.textSecondary};
-  font-size: 0.875rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: ${({ theme }) => theme.textTertiary};
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  font-weight: 400;
+  letter-spacing: 0.01em;
   grid-column: 1 / -1;
   text-align: left;
   margin: 0;
@@ -628,17 +714,19 @@ export const EditInstructions = styled.p`
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   pointer-events: none;
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border-radius: 12px;
-  border: 1px solid ${({ theme }) => theme.borderLight};
+  /* Muted “hint” — reads clearly below form fields, not like an input */
+  background: color-mix(in srgb, ${({ theme }) => theme.borderLight} 22%, transparent);
+  border-radius: 20px;
+  border: 1px solid
+    color-mix(in srgb, ${({ theme }) => theme.borderMedium} 35%, transparent);
+  box-shadow: none;
 
   &.entering {
     max-height: 80px;
     opacity: 1;
     transform: translateY(0);
     margin-bottom: 1rem;
-    padding: 1rem;
+    padding: 0.75rem 0.9rem;
     pointer-events: auto;
   }
 

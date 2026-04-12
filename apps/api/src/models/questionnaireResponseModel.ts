@@ -13,10 +13,15 @@ interface ResponseAttributes {
   responses: Record<number, number | number[]>;
   totalScore?: number;
   currentQuestion?: number;
+  /** Set when the user submits a full questionnaire (not on partial progress). */
+  completedAt?: Date | null;
 }
 
 interface ResponseCreationAttributes
-  extends Optional<ResponseAttributes, "id" | "currentQuestion"> {}
+  extends Optional<
+    ResponseAttributes,
+    "id" | "currentQuestion" | "completedAt"
+  > {}
 
 /* -- QuestionnaireResponse Model Definition -- */
 class QuestionnaireResponse
@@ -29,6 +34,7 @@ class QuestionnaireResponse
   public responses!: Record<number, number | number[]>;
   public totalScore!: number;
   public currentQuestion!: number;
+  public completedAt!: Date | null;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -64,6 +70,11 @@ QuestionnaireResponse.init(
       type: getIntegerType(),
       allowNull: true,
       defaultValue: 0,
+    },
+    completedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
     },
   },
   {

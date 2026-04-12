@@ -1,147 +1,153 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
-// Modern question container - no card, just clean layout
+/** Subtle overshoot when a tile becomes selected (no theme inside keyframes) */
+const optionTileSelect = keyframes`
+  0% {
+    transform: scale(0.985);
+  }
+  55% {
+    transform: scale(1.012);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
+const radioDotIn = keyframes`
+  from {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+`;
+
+const checkmarkIn = keyframes`
+  from {
+    transform: translate(-50%, -50%) scale(0.35) rotate(-12deg);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+`;
+
 export const QuestionContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
-  max-width: 600px;
+  max-width: 640px;
   margin: 0 auto;
-
-  /* No animation here - handled by parent wrapper */
 `;
 
-// Compact question title with minimal spacing
+/** Matches BentoTitle — solid headline on questionnaire panel */
 export const QuestionTitle = styled.h2`
-  background: ${({ theme }) => theme.primaryGradient};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-
-  font-size: 1.75rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: ${({ theme }) => theme.textPrimary};
+  font-size: 1.5rem;
   font-weight: 700;
+  margin: 0 0 20px;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
   text-align: center;
-  margin-bottom: 16px;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
 
   @media (max-width: 768px) {
-    font-size: 1.5rem;
-    margin-bottom: 14px;
+    font-size: 1.25rem;
+    margin-bottom: 16px;
   }
 
   @media (max-width: 480px) {
-    font-size: 1.25rem;
-    margin-bottom: 12px;
+    font-size: 1.125rem;
+    margin-bottom: 14px;
   }
 `;
 
-// Fluid options container - clean list styling
 export const OptionsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 10px;
   width: 100%;
-  padding: 0 20px;
-
-  @media (max-width: 768px) {
-    padding: 0 16px;
-  }
+  padding: 0;
 `;
 
-// Compact option item - no cards, clean list styling with dark mode support
-export const OptionItem = styled.div`
+/** Full-width selectable tiles — native `<label>` so the whole row toggles the control */
+export const OptionItem = styled.label`
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid ${({ theme }) => theme.borderLight};
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 14px;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 14px;
+  background: ${({ theme }) => theme.surfaceColor};
   cursor: pointer;
-  position: relative;
   color: ${({ theme }) => theme.textPrimary};
-
-  &:last-child {
-    border-bottom: none;
-  }
+  transform-origin: center;
+  transition:
+    border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
+    border-color: ${({ theme }) => `${theme.primary}40`};
     background: ${({ theme }) => theme.surfaceElevated};
-    margin: 0 -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 12px;
-    border-bottom-color: transparent;
-    color: ${({ theme }) => theme.textPrimary};
-
-    &:last-child {
-      border-bottom: none;
-    }
   }
 
-  /* Selected state - subtle like navbar */
   &[data-selected="true"] {
-    background: ${({ theme }) => theme.primary}12;
-    color: ${({ theme }) => theme.primary};
-    margin: 0 -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 12px;
-    border-bottom-color: transparent;
+    border-color: ${({ theme }) => theme.primary};
+    background: ${({ theme }) => `${theme.primary}12`};
+    color: ${({ theme }) => theme.textPrimary};
+    box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}25`};
+  }
 
-    &:last-child {
-      border-bottom: none;
+  @media (prefers-reduced-motion: no-preference) {
+    &[data-selected="true"] {
+      animation: ${optionTileSelect} 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
   }
 
-  @media (max-width: 768px) {
-    padding: 10px 0;
-    gap: 10px;
+  &:has(input:focus-visible) {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 2px;
+  }
 
-    &:hover,
-    &[data-selected="true"] {
-      margin: 0 -16px;
-      padding-left: 16px;
-      padding-right: 16px;
-    }
+  @media (max-width: 480px) {
+    padding: 10px 14px;
+    min-height: 44px;
+    border-radius: 12px;
   }
 `;
 
-// Compact option label with dark mode support
-export const OptionLabel = styled.label`
-  font-size: 1rem;
+/** Text inside OptionItem — must be a span (label already wraps the row) */
+export const OptionText = styled.span`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1.0625rem;
   font-weight: 500;
   color: inherit;
-  cursor: pointer;
   flex: 1;
-  line-height: 1.3;
-  transition: color 0.2s ease;
-
-  ${OptionItem}:hover & {
-    color: ${({ theme }) => theme.primary};
-  }
-
-  ${OptionItem}[data-selected="true"] & {
-    color: inherit;
-  }
+  line-height: 1.35;
+  text-align: left;
 
   @media (max-width: 768px) {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 `;
 
-// Subtle radio input styling like navbar
 export const RadioInput = styled.input`
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
   border: 2px solid ${({ theme }) => theme.borderMedium};
   border-radius: 50%;
   background: ${({ theme }) => theme.surfaceColor};
   cursor: pointer;
   position: relative;
-  transition: all 0.2s ease;
-
-  /* Remove default browser styling */
+  transition: border-color 0.2s ease, background 0.2s ease;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -155,11 +161,16 @@ export const RadioInput = styled.input`
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: ${({ theme }) => theme.primaryLight};
+      transform: translate(-50%, -50%);
+      transform-origin: center;
+
+      @media (prefers-reduced-motion: no-preference) {
+        animation: ${radioDotIn} 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
     }
   }
 
@@ -168,18 +179,16 @@ export const RadioInput = styled.input`
   }
 `;
 
-// Subtle checkbox input styling like navbar
 export const CheckboxInput = styled.input`
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
   border: 2px solid ${({ theme }) => theme.borderMedium};
-  border-radius: 4px;
+  border-radius: 6px;
   background: ${({ theme }) => theme.surfaceColor};
   cursor: pointer;
   position: relative;
-  transition: all 0.2s ease;
-
-  /* Remove default browser styling */
+  transition: border-color 0.2s ease, background 0.2s ease;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -193,10 +202,16 @@ export const CheckboxInput = styled.input`
       position: absolute;
       top: 50%;
       left: 50%;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
       transform: translate(-50%, -50%);
-      color: ${({ theme }) => theme.primaryLight};
-      font-size: 11px;
-      font-weight: bold;
+      transform-origin: center;
+
+      @media (prefers-reduced-motion: no-preference) {
+        animation: ${checkmarkIn} 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
     }
   }
 
@@ -205,68 +220,153 @@ export const CheckboxInput = styled.input`
   }
 `;
 
-// Clean range container - no separator line
 export const RangeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
   width: 100%;
-  padding: 16px 0;
+  padding: 8px 0 4px;
 `;
 
-// Modern range input
+/** Inset matches half thumb width (22px) so track + labels share the same geometry */
+export const RangeSliderShell = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  padding: 0 11px;
+  box-sizing: border-box;
+`;
+
 export const RangeInput = styled.input`
   width: 100%;
-  height: 8px;
-  border-radius: 8px;
-  background: ${({ theme }) => theme.surfaceElevated};
-  outline: none;
+  height: 28px;
+  margin: 0;
+  background: transparent;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:focus-visible::-webkit-slider-thumb {
+    box-shadow:
+      0 0 0 3px ${({ theme }) => theme.surfaceColor},
+      0 0 0 5px ${({ theme }) => theme.primary};
+  }
+
+  &:focus-visible::-moz-range-thumb {
+    box-shadow:
+      0 0 0 3px ${({ theme }) => theme.surfaceColor},
+      0 0 0 5px ${({ theme }) => theme.primary};
+  }
+
+  &::-webkit-slider-runnable-track {
+    height: 8px;
+    border-radius: 9999px;
+    background: ${({ theme }) => theme.surfaceElevated};
+    border: 1px solid ${({ theme }) => theme.borderLight};
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) inset;
+  }
+
+  &::-moz-range-track {
+    height: 8px;
+    border-radius: 9999px;
+    background: ${({ theme }) => theme.surfaceElevated};
+    border: 1px solid ${({ theme }) => theme.borderLight};
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) inset;
+  }
 
   &::-webkit-slider-thumb {
     appearance: none;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
+    margin-top: -7px;
     border-radius: 50%;
     background: ${({ theme }) => theme.primaryGradient};
     cursor: pointer;
+    border: 2px solid ${({ theme }) => theme.surfaceColor};
     box-shadow: ${({ theme }) => theme.shadowMd};
-    transition: all 0.2s ease;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
 
     &:hover {
-      transform: scale(1.1);
+      transform: scale(1.06);
       box-shadow: ${({ theme }) => theme.shadowLg};
     }
   }
 
   &::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     background: ${({ theme }) => theme.primaryGradient};
     cursor: pointer;
-    border: none;
+    border: 2px solid ${({ theme }) => theme.surfaceColor};
     box-shadow: ${({ theme }) => theme.shadowMd};
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::-webkit-slider-thumb,
+    &::-moz-range-thumb {
+      transition: none;
+    }
+
+    &::-webkit-slider-thumb:hover {
+      transform: none;
+    }
   }
 `;
 
-// Range labels container
 export const RangeLabels = styled.div`
-  display: flex;
-  justify-content: space-between;
+  position: relative;
   width: 100%;
-  padding: 0 12px;
+  min-height: 2.75rem;
 `;
 
-// Individual range label
-export const RangeLabel = styled.span`
-  font-size: 0.9rem;
+/**
+ * Thumb centers span [11px, width - 11px] for a 22px thumb — match with calc, not space-between.
+ */
+export const RangeLabel = styled.span<{ $index: number; $total: number }>`
+  position: absolute;
+  top: 0;
+  left: ${({ $index, $total }) =>
+    $total <= 1
+      ? "50%"
+      : `calc(11px + (100% - 22px) * ${$index} / ${$total - 1})`};
+  transform: translateX(-50%);
+  transform-origin: center top;
+  max-width: min(140px, 32vw);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.9375rem;
   font-weight: 500;
   color: ${({ theme }) => theme.textSecondary};
   text-align: center;
-  flex: 1;
+  line-height: 1.35;
+  transition:
+    color 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    font-weight 0.22s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &[data-active="true"] {
+    color: ${({ theme }) => theme.primary};
+    font-weight: 700;
+    transform: translateX(-50%) scale(1.07);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: color 0.2s ease, font-weight 0.15s ease;
+
+    &[data-active="true"] {
+      transform: translateX(-50%);
+    }
+  }
 
   @media (max-width: 768px) {
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
+    max-width: min(120px, 38vw);
   }
 `;

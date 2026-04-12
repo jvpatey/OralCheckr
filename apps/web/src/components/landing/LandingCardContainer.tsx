@@ -11,31 +11,29 @@ const fadeUp = keyframes`
   }
 `;
 
-// Modern grid container for dashboard cards
+// Dashboard CTA grid — gap and max width aligned with BentoGridContainer
 export const LandingCardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 0 16px;
+    gap: 16px;
   }
 
   @media (max-width: 480px) {
-    gap: 20px;
-    padding: 0 12px;
+    gap: 16px;
   }
 `;
 
-// Alternative layout for when you want centered cards
 export const CenteredCardContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,7 +43,8 @@ export const CenteredCardContainer = styled.div`
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0;
+  box-sizing: border-box;
 
   @media (min-width: 1024px) {
     flex-direction: row;
@@ -55,51 +54,54 @@ export const CenteredCardContainer = styled.div`
 
   @media (max-width: 768px) {
     gap: 24px;
-    padding: 0 16px;
   }
 
   @media (max-width: 480px) {
     gap: 20px;
-    padding: 0 12px;
   }
 `;
 
-// Stats section for dashboard overview
+// Stats — spacing aligned with welcome feature grid
 export const StatsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 16px;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto 40px;
-  padding: 0 20px;
+  max-width: 100%;
+  margin: clamp(16px, 2.5vw, 28px) 0 clamp(18px, 3vw, 28px);
+  padding: 0;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-bottom: 30px;
-    padding: 0 16px;
+    gap: 12px;
+    margin-bottom: clamp(16px, 3vw, 24px);
   }
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
     gap: 12px;
-    margin-bottom: 24px;
-    padding: 0 12px;
+    margin-bottom: 16px;
   }
 `;
 
-// Individual stat card
+// Stat tiles — solid bento-style surface (BentoCardContainer)
 export const StatCard = styled.div`
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  background: ${({ theme }) => theme.surfaceColor};
   border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 18px;
+  padding: 18px 16px;
   text-align: center;
-  box-shadow: ${({ theme }) => theme.shadowMd};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: ${fadeUp} 1s ease-out both;
+  box-shadow:
+    ${({ theme }) => theme.shadowLg},
+    0 0 0 1px ${({ theme }) => theme.borderLight} inset;
+  transition:
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.35s ease;
+  animation: ${fadeUp} 0.8s ease-out both;
+  position: relative;
+  overflow: hidden;
 
   &:nth-child(1) {
     animation-delay: 0.1s;
@@ -114,26 +116,64 @@ export const StatCard = styled.div`
     animation-delay: 0.4s;
   }
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: ${({ theme }) => theme.shadowLg};
-    border-color: ${({ theme }) => theme.primary}40;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.primary}07 0%,
+      transparent 52%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    border-radius: 18px;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        ${({ theme }) => theme.shadowXl},
+        0 10px 36px rgba(0, 0, 0, 0.1),
+        0 0 0 1px ${({ theme }) => theme.borderLight} inset;
+      border-color: ${({ theme }) => `${theme.primary}30`};
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &:hover {
+      transform: none;
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px);
   }
 
   @media (max-width: 768px) {
-    padding: 20px 16px;
+    padding: 16px 14px;
   }
 
   @media (max-width: 480px) {
-    padding: 16px 12px;
+    padding: 14px 12px;
   }
 `;
 
 export const StatValue = styled.div`
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 2rem;
   font-weight: 700;
+  letter-spacing: -0.03em;
   color: ${({ theme }) => theme.primary};
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
 
   @media (max-width: 768px) {
     font-size: 1.75rem;
@@ -145,13 +185,16 @@ export const StatValue = styled.div`
 `;
 
 export const StatLabel = styled.div`
-  font-size: 0.875rem;
-  color: ${({ theme }) => theme.textSecondary};
-  font-weight: 500;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: ${({ theme }) => theme.textSecondary};
+  position: relative;
+  z-index: 1;
 
   @media (max-width: 480px) {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 `;

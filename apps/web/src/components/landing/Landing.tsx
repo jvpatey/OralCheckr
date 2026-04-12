@@ -1,13 +1,16 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useContext } from "react";
 import { PageBackground } from "../PageBackground";
+import { LandingContainer, LandingHeroSection } from "./LandingContainer";
 import {
-  LandingContainer,
   BackgroundEffects,
-  WelcomeHeader,
-  WelcomeTitle,
-  WelcomeSubtitle,
-} from "./LandingContainer";
+  HeroCopy,
+  HeroEyebrow,
+  HeroTitle,
+  HeroTitleAccent,
+  HeroSubtitle,
+  HeroDescription,
+} from "../../containers/welcome/styles/WelcomeStyles";
 import {
   LandingCardContainer,
   StatsContainer,
@@ -23,35 +26,38 @@ import { useGetTotalScore } from "../../hooks/questionnaire/useGetTotalScore";
 import { useFetchHabits } from "../../hooks/habits/useFetchHabits";
 import { useQuestionnaireData } from "../../hooks/questionnaire/useQuestionnaireData";
 import { LoadingSpinner } from "../common/LoadingSpinner";
+import { DashboardHeroBackdrop } from "./DashboardHeroBackdrop";
 
-// Modern functional component for the Landing Dashboard
+// Authenticated dashboard — visual language aligned with the welcome page
 export function Landing() {
   const { user } = useContext(AuthContext);
 
-  // Get user's first name, fallback to "there" if not available
   const userName = user?.firstName || "there";
 
-  // Fetch real user data
   const { data: oralHealthScore, isLoading: isLoadingScore } =
     useGetTotalScore();
   const { data: habits, isLoading: isLoadingHabits } = useFetchHabits();
   const { data: questionnaireData, isLoading: isLoadingQuestionnaire } =
     useQuestionnaireData();
 
-  // Calculate stats from real data
   const totalHabits = habits?.length || 0;
-  const lastCompletedDate = questionnaireData?.lastCompleted || "Not completed";
+  const lastCompletedDate = questionnaireData?.lastCompleted ?? "--";
 
-  // Show loading state
   if (isLoadingScore || isLoadingHabits || isLoadingQuestionnaire) {
     return (
       <PageBackground>
         <BackgroundEffects />
+        <DashboardHeroBackdrop />
         <LandingContainer>
-          <WelcomeHeader>
-            <WelcomeTitle>Welcome, {userName}</WelcomeTitle>
-            <WelcomeSubtitle>Loading your dashboard...</WelcomeSubtitle>
-          </WelcomeHeader>
+          <LandingHeroSection>
+            <HeroCopy>
+              <HeroEyebrow>Your dashboard</HeroEyebrow>
+              <HeroTitle>
+                Welcome, <HeroTitleAccent>{userName}</HeroTitleAccent>
+              </HeroTitle>
+              <HeroDescription>Loading your dashboard…</HeroDescription>
+            </HeroCopy>
+          </LandingHeroSection>
           <StatsContainer>
             {[...Array(3)].map((_, index) => (
               <StatCard key={index}>
@@ -67,29 +73,35 @@ export function Landing() {
   return (
     <PageBackground>
       <BackgroundEffects />
+      <DashboardHeroBackdrop />
       <LandingContainer>
-        <WelcomeHeader>
-          <WelcomeTitle>Welcome, {userName}</WelcomeTitle>
-          <WelcomeSubtitle>
-            Track your oral health journey with our comprehensive tools and
-            insights
-          </WelcomeSubtitle>
-        </WelcomeHeader>
+        <LandingHeroSection>
+          <HeroCopy>
+            <HeroEyebrow>Your dashboard</HeroEyebrow>
+            <HeroTitle>
+              Welcome, <HeroTitleAccent>{userName}</HeroTitleAccent>
+            </HeroTitle>
+            <HeroSubtitle>
+              Track your oral health journey with our comprehensive tools and
+              insights.
+            </HeroSubtitle>
+          </HeroCopy>
+        </LandingHeroSection>
 
         <StatsContainer>
           <StatCard>
             <StatValue>
               {oralHealthScore ? `${oralHealthScore}%` : "N/A"}
             </StatValue>
-            <StatLabel>Oral Health Score</StatLabel>
+            <StatLabel>Oral health score</StatLabel>
           </StatCard>
           <StatCard>
             <StatValue>{totalHabits}</StatValue>
-            <StatLabel>Habits Tracked</StatLabel>
+            <StatLabel>Habits tracked</StatLabel>
           </StatCard>
           <StatCard>
             <StatValue>{lastCompletedDate}</StatValue>
-            <StatLabel>Last Assessment</StatLabel>
+            <StatLabel>Last assessment</StatLabel>
           </StatCard>
         </StatsContainer>
 

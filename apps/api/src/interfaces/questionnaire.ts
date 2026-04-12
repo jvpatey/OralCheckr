@@ -24,6 +24,7 @@ export interface QuestionnaireResponse {
   responses: Record<number, number | number[]>;
   totalScore: number;
   currentQuestion: number;
+  completedAt?: Date | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -34,6 +35,7 @@ export interface QuestionnaireProgress {
   userId: number;
   responses: Record<number, number | number[]>;
   currentQuestion: number;
+  completedAt?: Date | null;
   createdAt?: Date;
   updatedAt?: Date;
 }

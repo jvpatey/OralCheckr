@@ -8,6 +8,8 @@ interface ProfileData {
   email: string;
   isGuest: boolean;
   avatar?: string;
+  /** Google profile image URL from last OAuth sign-in; use to restore after picking another avatar. */
+  googlePicture?: string;
 }
 
 interface ProfileUpdateData extends Record<string, unknown> {

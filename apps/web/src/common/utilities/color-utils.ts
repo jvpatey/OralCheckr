@@ -26,7 +26,9 @@ export const lightTheme: DefaultTheme = {
   primary: "#06B6D4", // Cyan 500 - Fresh, clean, dental
   primaryLight: "#22D3EE", // Cyan 400 - Lighter variant
   primaryDark: "#0891B2", // Cyan 600 - Darker variant
-  primaryGradient: "linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%)",
+  /* Cyan-only gradient so filled buttons match borders / accents (no blue-500 shift) */
+  primaryGradient:
+    "linear-gradient(135deg, #22D3EE 0%, #06B6D4 42%, #0891B2 100%)",
 
   // ============================================
   // SECONDARY COLORS - Emerald (Health & Growth)
@@ -202,3 +204,49 @@ export const blueHeatMapShades = {
   Dark: "#1D4ED8", // Blue 700
   Darkest: "#1E40AF", // Blue 800
 };
+
+/** True when the app background is dark (used for heatmap palette and Apex theme mode). */
+export function isDarkThemeBackground(theme: DefaultTheme): boolean {
+  const hex = theme.backgroundColor.replace("#", "").trim();
+  if (hex.length !== 6) return false;
+  const r = parseInt(hex.slice(0, 2), 16) / 255;
+  const g = parseInt(hex.slice(2, 4), 16) / 255;
+  const b = parseInt(hex.slice(4, 6), 16) / 255;
+  const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return lum < 0.45;
+}
+
+/**
+ * Heatmap color scale: empty cells use a tint distinct from the page background so the grid reads
+ * in both themes; filled cells use the shared blue ramp in light and dark mode.
+ */
+export function getHeatmapColorScaleRanges(theme: DefaultTheme) {
+  const empty = isDarkThemeBackground(theme)
+    ? theme.surfaceElevated
+    : theme.disabledBackground;
+
+  return [
+    { from: 0, to: 0, color: empty, name: "0 logs" },
+    { from: 1, to: 1, color: blueHeatMapShades.Light, name: "1 log" },
+    {
+      from: 2,
+      to: 5,
+      color: blueHeatMapShades.MediumLight,
+      name: "2-5 logs",
+    },
+    { from: 6, to: 7, color: blueHeatMapShades.Medium, name: "6-7 logs" },
+    {
+      from: 8,
+      to: 9,
+      color: blueHeatMapShades.MediumDark,
+      name: "8-9 logs",
+    },
+    { from: 10, to: 11, color: blueHeatMapShades.Dark, name: "10-11 logs" },
+    {
+      from: 12,
+      to: Infinity,
+      color: blueHeatMapShades.Darkest,
+      name: "12+ logs",
+    },
+  ];
+}

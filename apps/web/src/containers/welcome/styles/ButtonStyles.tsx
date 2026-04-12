@@ -3,6 +3,7 @@ import styled from "styled-components";
 export type ButtonVariant =
   | "primary"
   | "secondary"
+  | "danger"
   | "guest"
   | "login"
   | "signup";
@@ -12,14 +13,40 @@ interface BaseButtonProps {
 }
 
 export const BaseButton = styled.button<BaseButtonProps>`
-  /* Modern glassmorphism button styling */
+  margin: 0;
+  border-radius: 9999px;
+  padding: 12px 22px;
+  min-height: 44px;
+  height: auto;
+  width: 100%;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+
   background: ${({ theme, $variant }) => {
     switch ($variant) {
+      case "login":
+      case "secondary":
+        return "transparent";
+      case "danger":
+        return `linear-gradient(135deg, ${theme.error} 0%, ${theme.errorLight} 100%)`;
       case "primary":
       case "signup":
         return theme.primaryGradient;
-      case "login":
-        return theme.secondaryGradient;
       case "guest":
         return theme.primaryGradient;
       default:
@@ -27,22 +54,28 @@ export const BaseButton = styled.button<BaseButtonProps>`
     }
   }};
 
-  color: ${({ $variant }) => {
+  color: ${({ theme, $variant }) => {
     switch ($variant) {
-      case "guest":
-        return "white";
+      case "login":
+      case "secondary":
+        return theme.textPrimary;
       default:
-        return "white";
+        return "#ffffff";
     }
   }};
+
   border: 1px solid
     ${({ theme, $variant }) => {
       switch ($variant) {
+        case "login":
+          return `${theme.primary}45`;
+        case "secondary":
+          return `${theme.primary}45`;
+        case "danger":
+          return theme.error;
         case "primary":
         case "signup":
           return theme.primary;
-        case "login":
-          return theme.secondary;
         case "guest":
           return theme.primary;
         default:
@@ -50,34 +83,11 @@ export const BaseButton = styled.button<BaseButtonProps>`
       }
     }};
 
-  /* Modern sizing and spacing */
-  margin: 0;
-  border-radius: 16px;
-  padding: 16px 20px;
-  width: 100%;
-  height: 52px;
+  box-shadow: ${({ $variant }) =>
+    $variant === "login" || $variant === "secondary"
+      ? "none"
+      : `0 2px 10px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.08) inset`};
 
-  /* Full width in horizontal layout */
-  flex: 1;
-  min-width: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: -0.25px;
-
-  /* Enhanced shadows and effects */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-
-  /* Smooth transitions */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-
-  /* Subtle shine effect */
   &::before {
     content: "";
     position: absolute;
@@ -88,51 +98,92 @@ export const BaseButton = styled.button<BaseButtonProps>`
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.22),
       transparent
     );
-    transition: left 0.6s ease;
+    transition: left 0.55s ease;
   }
 
   &:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    box-shadow: ${({ theme, $variant }) => {
+      if ($variant === "login")
+        return `0 0 0 1px ${theme.primary}55 inset`;
+      if ($variant === "secondary")
+        return `0 0 0 1px ${theme.primary}35 inset`;
+      return `0 6px 20px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(255, 255, 255, 0.12) inset`;
+    }};
+    border-color: ${({ theme, $variant }) => {
+      if ($variant === "login") return `${theme.primary}70`;
+      if ($variant === "secondary") return theme.primary;
+      if ($variant === "danger") return theme.error;
+      return theme.primary;
+    }};
+    background: ${({ theme, $variant }) => {
+      if ($variant === "login") return `${theme.primary}10`;
+      if ($variant === "secondary") return `${theme.primary}12`;
+      if ($variant === "danger")
+        return `linear-gradient(135deg, ${theme.errorLight} 0%, ${theme.error} 100%)`;
+      return theme.primaryGradient;
+    }};
+  }
 
-    &::before {
-      left: 100%;
-    }
+  &:hover::before {
+    left: ${({ $variant }) =>
+      $variant === "login" || $variant === "secondary" ? "-100%" : "100%"};
+  }
+
+  &:focus-visible {
+    outline: 2px solid
+      ${({ theme, $variant }) =>
+        $variant === "danger" ? theme.error : theme.primary};
+    outline-offset: 3px;
   }
 
   &:active {
-    transform: translateY(0) scale(1.01);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    transform: scale(0.99);
   }
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
     transform: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
   }
 
   &:disabled:hover {
     transform: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
+    background: ${({ theme, $variant }) => {
+      switch ($variant) {
+        case "login":
+        case "secondary":
+          return "transparent";
+        case "danger":
+          return `linear-gradient(135deg, ${theme.error} 0%, ${theme.errorLight} 100%)`;
+        default:
+          return theme.primaryGradient;
+      }
+    }};
   }
 
-  @media (max-width: 768px) {
-    padding: 16px 24px;
-    font-size: 0.95rem;
-    border-radius: 14px;
-    flex: none;
-    width: 100%;
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    &:disabled:hover {
+      transform: none;
+    }
   }
 
   @media (max-width: 480px) {
-    padding: 14px 20px;
-    font-size: 0.9rem;
-    border-radius: 12px;
+    flex: none;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 0.9375rem;
   }
 `;

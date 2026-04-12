@@ -1,10 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import {
-  getQuestionnaireResponse,
-  QuestionnaireResponse,
-} from "../../services/quesService";
 import { format } from "date-fns";
-import { useHasSavedResponse } from "./useHasSavedResponse";
+import { useQuestionnaireResponseQuery } from "./useQuestionnaireResponseQuery";
 
 // Structure for formatted questionnaire data
 export interface QuestionnaireData {
@@ -14,33 +9,21 @@ export interface QuestionnaireData {
 
 // Hook for fetching and formatting questionnaire data
 export function useQuestionnaireData() {
-  // Check if user has any saved responses
-  const { data: hasSavedData } = useHasSavedResponse();
+  const { data, isLoading, isError, error } = useQuestionnaireResponseQuery();
 
-  // Fetch raw questionnaire data
-  const { data, isLoading, isError, error } = useQuery<
-    QuestionnaireResponse | null,
-    Error
-  >({
-    queryKey: ["questionnaireResponse"],
-    queryFn: getQuestionnaireResponse,
-    // Try to fetch if we're not sure about saved data
-    enabled: hasSavedData !== false,
-    staleTime: 0,
-    gcTime: 0,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
-    retry: 2,
-    initialData: null,
-  });
+  const formatCompletedDate = (iso: string | undefined): string | null => {
+    if (!iso) return null;
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return null;
+    return format(d, "MMMM d, yyyy");
+  };
 
-  // Format the raw questionnaire data for display
   const formattedData: QuestionnaireData = {
-    lastCompleted:
-      data && data.updatedAt
-        ? format(new Date(data.updatedAt), "MMMM d, yyyy")
-        : null,
+    lastCompleted: data
+      ? formatCompletedDate(data.completedAt ?? undefined) ??
+        formatCompletedDate(data.updatedAt) ??
+        formatCompletedDate(data.createdAt)
+      : null,
     score: data?.totalScore ?? null,
   };
 

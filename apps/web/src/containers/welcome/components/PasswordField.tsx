@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {
   InputStyle,
+  PillInputStyle,
   PasswordContainer,
   PasswordToggle,
   InfoIcon,
@@ -21,6 +22,8 @@ interface PasswordFieldProps {
   autoComplete?: string;
   id?: string;
   required?: boolean;
+  /** `pill` for profile-style full-radius fields; default matches welcome modals */
+  variant?: "default" | "pill";
 }
 
 export function PasswordField({
@@ -31,6 +34,7 @@ export function PasswordField({
   autoComplete = "current-password",
   id = "formPassword",
   required = false,
+  variant = "default",
 }: PasswordFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -43,9 +47,11 @@ export function PasswordField({
     setShowTooltip(isHovering);
   };
 
+  const FieldComponent = variant === "pill" ? PillInputStyle : InputStyle;
+
   return (
     <PasswordContainer>
-      <InputStyle
+      <FieldComponent
         id={id}
         type={showPassword ? "text" : "password"}
         placeholder={placeholder}

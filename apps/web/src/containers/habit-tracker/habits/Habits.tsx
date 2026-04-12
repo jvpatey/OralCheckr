@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { PageBackground } from "../../../components/PageBackground";
-import { IconTextButton } from "../../../components/habit-tracker/habits/IconTextButton";
 import { WeekPicker } from "./WeekPicker";
 import { AddEditHabitModal } from "./AddEditHabitModal";
 import { ConfirmationModal } from "../../../components/shared/ConfirmationModal";
@@ -8,9 +7,17 @@ import {
   HabitListContainer,
   ScrollableHabitList,
   HabitWrapper,
+  HabitHeroEyebrow,
+  HeaderTitleColumn,
+  HeaderSubtitle,
   Header,
+  HeaderMainRow,
   HeaderText,
-  HeaderButtons,
+  HeaderActionsRow,
+  HabitHeaderButtonPrimary,
+  HabitHeaderButtonOutline,
+  HabitHeaderButtonDangerOutline,
+  HabitHeaderButtonIcon,
   StyledHabitList,
   DatePickerWrapper,
   CardContainer,
@@ -22,7 +29,7 @@ import {
   faTimes,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { useTheme } from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Habit } from "../../../services/habitService";
 import {
   useFetchHabits,
@@ -38,8 +45,8 @@ import {
 } from "../../../hooks/habitLogs";
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
-import { toast } from "react-toastify";
 import { HabitLogResponse } from "../../../services/habitLogService";
+import { HeroTitleAccent } from "../../../containers/welcome/styles/WelcomeStyles";
 
 // Local timezone
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -55,7 +62,7 @@ const normalizeDate = (date: Date): string => {
 // Reset habit form to default values
 const resetHabitForm = (
   setNewHabit: (habit: Habit) => void,
-  setOriginalHabit: (habit: Habit) => void
+  setOriginalHabit: (habit: Habit) => void,
 ) => {
   setNewHabit({ name: "", count: 0 });
   setOriginalHabit({ name: "", count: 0 });
@@ -75,8 +82,6 @@ export function Habits() {
   const initialDate = new Date();
   const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
 
-  const theme = useTheme();
-
   // Fetch habits using TanStack Query
   const {
     data: habits = [],
@@ -91,7 +96,7 @@ export function Habits() {
   // Get a list of habit IDs
   const habitIds = useMemo(
     () => habits.map((h) => h.habitId).filter(Boolean) as number[],
-    [habits]
+    [habits],
   );
 
   // Fetch logs for all habits
@@ -140,14 +145,9 @@ export function Habits() {
             onSuccess: () => {
               setShowAddHabitModal(false);
               resetHabitForm(setNewHabit, setOriginalHabit);
-              toast.success("Habit updated successfully", { autoClose: 800 });
             },
-            onError: (error) => {
-              toast.error(`Failed to update habit: ${error}`, {
-                autoClose: 800,
-              });
-            },
-          }
+            onError: () => {},
+          },
         );
       } else {
         // Create new habit
@@ -157,14 +157,9 @@ export function Habits() {
             onSuccess: () => {
               setShowAddHabitModal(false);
               resetHabitForm(setNewHabit, setOriginalHabit);
-              toast.success("Habit created successfully", { autoClose: 800 });
             },
-            onError: (error) => {
-              toast.error(`Failed to create habit: ${error}`, {
-                autoClose: 800,
-              });
-            },
-          }
+            onError: () => {},
+          },
         );
       }
     }
@@ -190,12 +185,10 @@ export function Habits() {
 
     deleteHabitMutation.mutate(habitToDelete.habitId, {
       onSuccess: () => {
-        toast.success("Habit deleted successfully", { autoClose: 800 });
         setShowDeleteModal(false);
         setHabitToDelete(null);
       },
-      onError: (error) => {
-        toast.error(`Failed to delete habit: ${error}`, { autoClose: 800 });
+      onError: () => {
         setShowDeleteModal(false);
         setHabitToDelete(null);
       },
@@ -210,13 +203,9 @@ export function Habits() {
   const handleConfirmDeleteAll = () => {
     deleteAllHabitsMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success("All habits deleted successfully", { autoClose: 800 });
         setShowDeleteAllModal(false);
       },
-      onError: (error) => {
-        toast.error(`Failed to delete all habits: ${error}`, {
-          autoClose: 800,
-        });
+      onError: () => {
         setShowDeleteAllModal(false);
       },
     });
@@ -242,10 +231,6 @@ export function Habits() {
 
     // Validate against maximum count
     if (logCount >= habit.count) {
-      toast.error(
-        `Cannot exceed the maximum count of ${habit.count} for this habit`,
-        { autoClose: 800 }
-      );
       return;
     }
 
@@ -260,23 +245,17 @@ export function Habits() {
       { habitId, date: selectedDate },
       {
         onSuccess: (data: HabitLogResponse) => {
-          toast.success("Habit logged successfully", { autoClose: 800 });
-
           // Use server count or fallback to local count
           const updatedCount = data.logs?.[0]?.count || logCount + 1;
 
           // Sync with server data
           updateLogCount(habitId, selectedDate, updatedCount);
         },
-        onError: (error) => {
-          // Revert on error
+        onError: () => {
           updateLogCount(habitId, selectedDate, logCount);
-          toast.error(`Failed to log habit: ${error}`, { autoClose: 800 });
-
-          // Refresh data
           syncWithServer();
         },
-      }
+      },
     );
   };
 
@@ -290,7 +269,6 @@ export function Habits() {
 
     // Validate minimum count
     if (logCount <= 0) {
-      toast.error(`No logs to remove for this date`, { autoClose: 800 });
       return;
     }
 
@@ -305,8 +283,6 @@ export function Habits() {
       { habitId, date: selectedDate },
       {
         onSuccess: (data: HabitLogResponse) => {
-          toast.success("Habit log removed successfully", { autoClose: 800 });
-
           // Use server count or fallback to calculated count
           const updatedCount =
             data.logs?.[0]?.count || Math.max(0, logCount - 1);
@@ -314,15 +290,11 @@ export function Habits() {
           // Sync with server data
           updateLogCount(habitId, selectedDate, updatedCount);
         },
-        onError: (error) => {
-          // Revert on error
+        onError: () => {
           updateLogCount(habitId, selectedDate, logCount);
-          toast.error(`Failed to remove log: ${error}`, { autoClose: 800 });
-
-          // Refresh data
           syncWithServer();
         },
-      }
+      },
     );
   };
 
@@ -363,7 +335,12 @@ export function Habits() {
           <CardContainer>
             <HabitWrapper>
               <Header>
-                <HeaderText>Loading habits...</HeaderText>
+                <HeaderMainRow>
+                  <HeaderTitleColumn>
+                    <HabitHeroEyebrow>Track</HabitHeroEyebrow>
+                    <HeaderText>Loading habits...</HeaderText>
+                  </HeaderTitleColumn>
+                </HeaderMainRow>
               </Header>
             </HabitWrapper>
           </CardContainer>
@@ -380,7 +357,12 @@ export function Habits() {
           <CardContainer>
             <HabitWrapper>
               <Header>
-                <HeaderText>Error loading habits</HeaderText>
+                <HeaderMainRow>
+                  <HeaderTitleColumn>
+                    <HabitHeroEyebrow>Track</HabitHeroEyebrow>
+                    <HeaderText>Error loading habits</HeaderText>
+                  </HeaderTitleColumn>
+                </HeaderMainRow>
               </Header>
             </HabitWrapper>
           </CardContainer>
@@ -394,44 +376,74 @@ export function Habits() {
       <HabitListContainer>
         <CardContainer>
           <HabitWrapper>
+            <Header>
+              <HeaderMainRow>
+                <HeaderTitleColumn>
+                  <HabitHeroEyebrow>Track</HabitHeroEyebrow>
+                  <HeaderText>
+                    Habit <HeroTitleAccent as="span">Tracker</HeroTitleAccent>
+                  </HeaderText>
+                  <HeaderSubtitle>
+                    {format(selectedDate, "EEEE, MMMM d, yyyy")} · Tap a habit
+                    for details
+                  </HeaderSubtitle>
+                </HeaderTitleColumn>
+                <HeaderActionsRow>
+                {!isEditMode && (
+                  <>
+                    <HabitHeaderButtonPrimary
+                      type="button"
+                      onClick={handleAddHabitClick}
+                    >
+                      <HabitHeaderButtonIcon aria-hidden>
+                        <FontAwesomeIcon icon={faPlus} />
+                      </HabitHeaderButtonIcon>
+                      Add Habit
+                    </HabitHeaderButtonPrimary>
+                    <HabitHeaderButtonOutline
+                      type="button"
+                      onClick={() => setIsEditMode(true)}
+                      disabled={habits.length === 0}
+                    >
+                      <HabitHeaderButtonIcon aria-hidden>
+                        <FontAwesomeIcon icon={faPencilAlt} />
+                      </HabitHeaderButtonIcon>
+                      Edit
+                    </HabitHeaderButtonOutline>
+                  </>
+                )}
+                {isEditMode && (
+                  <>
+                    <HabitHeaderButtonDangerOutline
+                      type="button"
+                      onClick={handleDeleteAllHabits}
+                      disabled={habits.length === 0}
+                    >
+                      <HabitHeaderButtonIcon aria-hidden>
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </HabitHeaderButtonIcon>
+                      Delete All
+                    </HabitHeaderButtonDangerOutline>
+                    <HabitHeaderButtonPrimary
+                      type="button"
+                      onClick={() => setIsEditMode(false)}
+                    >
+                      <HabitHeaderButtonIcon aria-hidden>
+                        <FontAwesomeIcon icon={faTimes} />
+                      </HabitHeaderButtonIcon>
+                      Exit
+                    </HabitHeaderButtonPrimary>
+                  </>
+                )}
+                </HeaderActionsRow>
+              </HeaderMainRow>
+            </Header>
             <DatePickerWrapper>
               <WeekPicker
                 isEditMode={isEditMode}
                 onDateChange={handleWeekPickerDateChange}
               />
             </DatePickerWrapper>
-            <Header>
-              <HeaderText>Habit Tracker</HeaderText>
-              <HeaderButtons>
-                {!isEditMode && (
-                  <IconTextButton
-                    icon={faPlus}
-                    label="Add Habit"
-                    onClick={handleAddHabitClick}
-                    backgroundColor={theme.green}
-                    hoverColor={theme.green}
-                  />
-                )}
-                {isEditMode && (
-                  <IconTextButton
-                    icon={faTrashAlt}
-                    label="Delete All"
-                    onClick={handleDeleteAllHabits}
-                    backgroundColor={theme.red}
-                    hoverColor={theme.red}
-                    disabled={habits.length === 0}
-                  />
-                )}
-                <IconTextButton
-                  icon={isEditMode ? faTimes : faPencilAlt}
-                  label={isEditMode ? "Exit" : "Edit"}
-                  onClick={() => setIsEditMode(!isEditMode)}
-                  backgroundColor={isEditMode ? theme.red : theme.yellow}
-                  hoverColor={isEditMode ? theme.red : theme.yellow}
-                  disabled={!isEditMode && habits.length === 0}
-                />
-              </HeaderButtons>
-            </Header>
             <ScrollableHabitList>
               <StyledHabitList>
                 <HabitList
@@ -462,8 +474,22 @@ export function Habits() {
 
       <ConfirmationModal
         show={showDeleteModal}
-        title="Delete Habit"
-        message={`Are you sure you want to delete "${habitToDelete?.name}"? This will also delete all tracking history for this habit.`}
+        title={
+          <>
+            Delete <HeroTitleAccent as="span">habit</HeroTitleAccent>
+          </>
+        }
+        message={
+          <>
+            Are you sure you want to delete{" "}
+            <HeroTitleAccent as="span">
+              {habitToDelete?.name ?? ""}
+            </HeroTitleAccent>
+            ?
+            <br />
+            This will also delete all tracking history for this habit.
+          </>
+        }
         confirmLabel="Delete"
         onConfirm={handleConfirmDelete}
         onCancel={() => {
@@ -475,8 +501,18 @@ export function Habits() {
 
       <ConfirmationModal
         show={showDeleteAllModal}
-        title="Delete All Habits"
-        message="Are you sure you want to delete all habits and their tracking history? This action cannot be undone."
+        title={
+          <>
+            Delete all <HeroTitleAccent as="span">habits</HeroTitleAccent>
+          </>
+        }
+        message={
+          <>
+            Are you sure you want to delete all habits and their tracking history?
+            <br />
+            This action cannot be undone.
+          </>
+        }
         confirmLabel="Delete All"
         onConfirm={handleConfirmDeleteAll}
         onCancel={() => setShowDeleteAllModal(false)}

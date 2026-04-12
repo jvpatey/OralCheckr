@@ -9,10 +9,14 @@ import {
   WelcomeButtons,
   FeatureCards,
   Footer,
+  HeroAppPreview,
 } from "./components";
 import {
   ModernWelcomeContainer,
   HeroSection,
+  HeroGrid,
+  HeroCopy,
+  HeroPreviewColumn,
   FeatureSection,
   BackgroundEffects,
 } from "./styles/WelcomeStyles";
@@ -43,11 +47,18 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
         <WelcomeNavBar themeToggler={themeToggler} theme={theme} />
 
         <HeroSection id="hero">
-          <WelcomeContent />
-          <WelcomeButtons
-            onSignUpClick={handleShowSignUpModal}
-            onLoginClick={handleShowLoginModal}
-          />
+          <HeroGrid>
+            <HeroCopy>
+              <WelcomeContent />
+              <WelcomeButtons
+                onSignUpClick={handleShowSignUpModal}
+                onLoginClick={handleShowLoginModal}
+              />
+            </HeroCopy>
+            <HeroPreviewColumn>
+              <HeroAppPreview theme={theme} />
+            </HeroPreviewColumn>
+          </HeroGrid>
         </HeroSection>
 
         <FeatureSection id="features">

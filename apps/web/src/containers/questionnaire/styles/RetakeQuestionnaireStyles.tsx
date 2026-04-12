@@ -1,191 +1,107 @@
 import styled from "styled-components";
-import { Button } from "react-bootstrap";
-import { ButtonProps } from "react-bootstrap/Button";
-import { keyframes } from "styled-components";
+import {
+  ModalOutlineButton,
+  StyledFormButton,
+} from "../../welcome/styles/ModalStyles";
+import { HeroDescription } from "../../welcome/styles/WelcomeStyles";
+import { QuestionnaireCtaSection } from "../../../components/questionnaire/styles/QuestionnaireFlowLayout";
 
-export const ModalButton = styled(Button)<ButtonProps>`
-  &.btn-secondary {
-    background-color: ${({ theme }) => theme.accentBackgroundColor};
-    color: ${({ theme }) => theme.textGrey};
-    border: 1px solid ${({ theme }) => theme.textGrey};
-
-    &:hover {
-      background-color: ${({ theme }) => theme.textGrey};
-      color: ${({ theme }) => theme.accentBackgroundColor};
-      border-color: ${({ theme }) => theme.backgroundColor};
-    }
-  }
-
-  &.btn-primary {
-    background-color: ${({ theme }) => theme.accentBackgroundColor};
-    border-color: ${({ theme }) => theme.blue};
-    color: ${({ theme }) => theme.blue};
-
-    &:hover {
-      background-color: ${({ theme }) => theme.blue};
-      border-color: ${({ theme }) => theme.blue};
-      color: ${({ theme }) => theme.accentBackgroundColor};
-    }
-  }
+export const RetakeCtaSection = styled(QuestionnaireCtaSection)`
+  margin-top: 0;
 `;
 
-export const MiniResultsCard = styled.div`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  border-radius: 10px;
-  padding: 10px;
-  margin: -10px 0 10px 0;
-  width: 60%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/**
+ * One shared measure for title + card + copy (avoids a narrow card under a wide headline).
+ * ~38rem caps line length on ultra-wide while fitting “Oral Health Questionnaire” on one line.
+ */
+export const RetakePageStack = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: min(100%, 38rem);
+  gap: clamp(28px, 5vw, 40px);
+`;
+
+export const RetakeBelowCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  width: 100%;
+  gap: clamp(18px, 3.5vw, 24px);
 `;
 
-export const ScoreText = styled.div<{ $scoreColor: string }>`
-  font-size: 1.2rem;
-  color: ${(props) => props.$scoreColor};
-  font-weight: bold;
-  margin: 0;
+/** Body copy under the card — full width of stack (same band as title + card) */
+export const RetakeHeroDescription = styled(HeroDescription)`
+  margin-bottom: 0;
+  max-width: none;
+  width: 100%;
 `;
 
-export const CompletedText = styled.span`
-  font-weight: bold;
-  color: ${({ theme }) => theme.textGrey};
-`;
-
-export const DateText = styled.div`
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.textGrey};
-  margin: 0;
-`;
-
-// Smooth fade-up animation matching landing page
-const fadeUp = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-// Modern fluid container
-export const ModernRetakeContainer = styled.div<{
-  $isAuthenticated: boolean;
-}>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 120px);
-  width: ${({ $isAuthenticated }) =>
-    $isAuthenticated ? "calc(100% - 240px)" : "100%"};
-  margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
-  animation: ${fadeUp} 0.8s ease-out 0.1s both;
-  padding: 40px 20px;
-
-  @media (max-width: 800px) {
-    width: ${({ $isAuthenticated }) =>
-      $isAuthenticated ? "calc(100% - 86px)" : "100%"};
-    margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "86px" : "0")};
-    padding: 24px 16px;
-    min-height: calc(100vh - 100px);
-  }
-
-  @media (max-height: 700px) {
-    min-height: calc(100vh - 80px);
-    padding: 20px;
-  }
-`;
-
-// Modern hero title with gradient
-export const HeroTitle = styled.h1`
-  background: ${({ theme }) => theme.primaryGradient};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-
-  font-size: 3rem;
-  font-weight: 800;
-  text-align: center;
-  margin-bottom: 40px;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-
-  @media (max-width: 768px) {
-    font-size: 2.5rem;
-    margin-bottom: 32px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 2rem;
-    margin-bottom: 24px;
-  }
-`;
-
-// Modern description text
-export const DescriptionText = styled.p`
-  font-size: 1.25rem;
-  font-weight: 400;
-  color: ${({ theme }) => theme.textSecondary};
-  text-align: center;
-  line-height: 1.6;
-  margin: 0 0 24px 0;
-  max-width: 600px;
-
-  @media (max-width: 768px) {
-    font-size: 1.1rem;
-    margin: 0 0 20px 0;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1rem;
-    margin: 0 0 16px 0;
-  }
-`;
-
-// Modern glassmorphic score card with theme background
-export const ModernScoreCard = styled.div`
-  /* Theme background like results page */
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-
-  /* Modern borders and shadows */
+/** Score summary — solid bento-style surface */
+export const RetakeScoreCard = styled.div`
+  position: relative;
+  isolation: isolate;
+  background: ${({ theme }) => theme.surfaceColor};
   border: 1px solid ${({ theme }) => theme.borderLight};
   border-radius: 20px;
-  box-shadow: ${({ theme }) => theme.shadowLg};
-
-  padding: 24px 32px;
-  margin: 32px 0;
+  box-shadow:
+    ${({ theme }) => theme.shadowLg},
+    0 0 0 1px ${({ theme }) => theme.borderLight} inset;
+  padding: 26px 28px 28px;
+  margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  max-width: 400px;
+  gap: 12px;
   width: 100%;
+  max-width: none;
+  align-self: stretch;
   color: ${({ theme }) => theme.textPrimary};
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.primary}07 0%,
+      transparent 52%
+    );
+    opacity: 1;
+    pointer-events: none;
+    border-radius: 20px;
+  }
+
+  & > * {
+    position: relative;
+    z-index: 1;
+  }
 
   @media (max-width: 768px) {
-    padding: 20px 24px;
-    margin: 24px 0;
-    gap: 12px;
+    padding: 22px 24px 24px;
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 20px 22px;
+    gap: 10px;
   }
 `;
 
-// Modern score number - matches results page
-export const ModernScoreNumber = styled.div<{ $scoreColor: string }>`
-  font-size: 2.8rem;
+export const RetakeScoreNumber = styled.div<{ $scoreColor: string }>`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 2.75rem;
   font-weight: 700;
-  line-height: 1;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
   margin: 0;
   color: ${({ $scoreColor }) => $scoreColor};
 
   @media (max-width: 768px) {
-    font-size: 2.4rem;
+    font-size: 2.35rem;
   }
 
   @media (max-width: 480px) {
@@ -193,135 +109,67 @@ export const ModernScoreNumber = styled.div<{ $scoreColor: string }>`
   }
 `;
 
-// Modern score label - matches results page
-export const ModernScoreLabel = styled.div`
-  font-size: 0.85rem;
-  font-weight: 500;
+export const RetakeScoreLabel = styled.div`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: ${({ theme }) => theme.textSecondary};
   margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-
-  @media (max-width: 768px) {
-    font-size: 0.8rem;
-  }
+  line-height: 1.4;
 
   @media (max-width: 480px) {
     font-size: 0.75rem;
   }
 `;
 
-// Modern completion text
-export const ModernCompletionText = styled.div`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.textSecondary};
+export const RetakeCompletionLine = styled.div`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.textPrimary};
+  opacity: 0.88;
   text-align: center;
-  line-height: 1.4;
-  margin-top: 8px;
+  line-height: 1.55;
+  margin-top: 4px;
+  max-width: 100%;
+`;
 
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
+export const RetakeCompletionMuted = styled.span`
+  color: ${({ theme }) => theme.textSecondary};
+  opacity: 1;
+  font-weight: 400;
+`;
+
+/** Confirm copy — theme tokens (Bootstrap defaults are too dark for our modal surface) */
+export const RetakeModalMessage = styled.p`
+  margin: 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: ${({ theme }) => theme.textSecondary};
+
+  strong {
+    color: ${({ theme }) => theme.textPrimary};
+    font-weight: 600;
   }
 `;
 
-// Modern action section
-export const ModernActionSection = styled.div`
+export const RetakeModalActions = styled.div`
   display: flex;
-  justify-content: center;
-  margin-top: 32px;
-  width: 100%;
-
-  @media (max-width: 768px) {
-    margin-top: 24px;
-  }
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 22px;
 `;
 
-// Modern gradient button
-export const ModernGradientButton = styled.button`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+export const RetakeModalCancel = styled(ModalOutlineButton)`
+  width: auto;
+  min-width: 112px;
+`;
 
-  /* Modern gradient background - blue gradient */
-  background: ${({ theme }) => theme.primaryGradient};
-  color: white;
-
-  /* Typography */
-  font-size: 1.25rem;
-  font-weight: 600;
-  text-decoration: none;
-  letter-spacing: 0.01em;
-
-  /* Spacing */
-  padding: 18px 48px;
-  border-radius: 16px;
-
-  /* Modern shadow */
-  box-shadow: ${({ theme }) => theme.shadowLg};
-
-  /* Smooth transitions */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Border */
-  border: none;
-  position: relative;
-  overflow: hidden;
-
-  /* Subtle shine sweep effect */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
-    transition: left 0.6s ease;
-  }
-
-  /* Hover effects */
-  &:hover:not(:disabled) {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: ${({ theme }) => theme.shadowXl};
-    color: white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-
-    &::before {
-      left: 100%;
-    }
-  }
-
-  /* Active state */
-  &:active:not(:disabled) {
-    transform: translateY(0);
-    transition-duration: 0.1s;
-  }
-
-  /* Disabled state */
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  /* Focus state for accessibility */
-  &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.primary};
-    outline-offset: 2px;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 1.1rem;
-    padding: 16px 36px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1rem;
-    padding: 14px 32px;
-  }
+export const RetakeModalConfirm = styled(StyledFormButton)`
+  width: auto;
+  min-width: 148px;
 `;

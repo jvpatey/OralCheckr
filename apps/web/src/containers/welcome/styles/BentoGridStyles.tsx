@@ -27,23 +27,20 @@ export const BentoGridContainer = styled.div`
   }
 `;
 
-// Bento card container with dynamic sizing and scroll animations
+// Bento cards — solid surfaces + cyan accents (aligned with hero / app preview)
 export const BentoCardContainer = styled.div<{
   $size: "small" | "medium" | "large";
-  $color: "primary" | "secondary" | "accent";
-  $gradient: string;
   $index: number;
   $isVisible?: boolean;
 }>`
-  /* Dynamic grid sizing based on card size */
   grid-column: ${({ $size }) => {
     switch ($size) {
       case "large":
-        return "span 8"; // Takes up 8/12 columns (2/3 width)
+        return "span 8";
       case "medium":
-        return "span 6"; // Takes up 6/12 columns (1/2 width)
+        return "span 6";
       case "small":
-        return "span 4"; // Takes up 4/12 columns (1/3 width)
+        return "span 4";
       default:
         return "span 4";
     }
@@ -51,49 +48,39 @@ export const BentoCardContainer = styled.div<{
   grid-row: ${({ $size }) => {
     switch ($size) {
       case "large":
-        return "span 2"; // Takes up 2 rows for height
+        return "span 2";
       case "medium":
-        return "span 1"; // Takes up 1 row
       case "small":
-        return "span 1"; // Takes up 1 row
+        return "span 1";
       default:
         return "span 1";
     }
   }};
 
-  /* Apple-style scroll animation - smooth fade in and slide up */
   opacity: ${({ $isVisible = false }) => ($isVisible ? 1 : 0)};
   transform: ${({ $isVisible = false }) =>
-    $isVisible ? "translateY(0) scale(1)" : "translateY(60px) scale(0.95)"};
-  filter: ${({ $isVisible = false }) => ($isVisible ? "blur(0px)" : "blur(8px)")};
-  
-  /* Smooth transitions with easing */
-  transition: 
-    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* Staggered delay for cascading effect */
-  transition-delay: ${({ $index }) => $index * 0.12}s;
+    $isVisible ? "translateY(0)" : "translateY(36px)"};
+  filter: ${({ $isVisible = false }) =>
+    $isVisible ? "blur(0px)" : "blur(6px)"};
 
-  /* Enhanced Glassmorphism Effect */
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  transition:
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
 
-  /* Modern border styling */
+  transition-delay: ${({ $index }) => $index * 0.1}s;
+
+  background: ${({ theme }) => theme.surfaceColor};
   border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 24px;
-
-  /* Enhanced shadow system */
-  box-shadow: ${({ theme }) => theme.shadowLg},
-    0 0 0 1px ${({ theme }) => theme.borderLight} inset,
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  border-radius: 20px;
+  box-shadow:
+    ${({ theme }) => theme.shadowLg},
+    0 0 0 1px ${({ theme }) => theme.borderLight} inset;
 
   padding: 32px 24px;
-  cursor: pointer;
+  cursor: default;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -114,97 +101,58 @@ export const BentoCardContainer = styled.div<{
     }
   }};
 
-  /* Enhanced hover effects - only when visible */
-  &:hover {
-    transform: ${({ $isVisible = false }) => 
-      $isVisible ? "translateY(-6px) scale(1.02)" : "translateY(60px) scale(0.95)"};
-    filter: blur(0px);
-    box-shadow: ${({ theme }) => theme.shadowXl},
-      0 0 24px
-        ${({ theme, $color }) =>
-          $color === "primary"
-            ? theme.primary + "25"
-            : $color === "secondary"
-            ? theme.secondary + "25"
-            : theme.accent + "25"},
-      0 0 0 1px
-        ${({ theme, $color }) =>
-          $color === "primary"
-            ? theme.primary + "40"
-            : $color === "secondary"
-            ? theme.secondary + "40"
-            : theme.accent + "40"}
-        inset;
-    border-color: ${({ theme, $color }) =>
-      $color === "primary"
-        ? theme.primary + "50"
-        : $color === "secondary"
-        ? theme.secondary + "50"
-        : theme.accent + "50"};
-  }
-
-  &:active {
-    transform: ${({ $isVisible = false }) => 
-      $isVisible ? "translateY(-3px) scale(1.01)" : "translateY(60px) scale(0.95)"};
-  }
-
-  /* Dynamic gradient overlay */
   &::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: ${({ theme, $color }) =>
-      $color === "primary"
-        ? `linear-gradient(135deg, ${theme.primary}08 0%, transparent 50%)`
-        : $color === "secondary"
-        ? `linear-gradient(135deg, ${theme.secondary}08 0%, transparent 50%)`
-        : `linear-gradient(135deg, ${theme.accent}08 0%, transparent 50%)`};
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.primary}07 0%,
+      transparent 52%
+    );
     opacity: 0;
-    transition: all 0.4s ease;
+    transition: opacity 0.35s ease;
     pointer-events: none;
-    border-radius: 24px;
+    border-radius: 20px;
   }
 
   &:hover::before {
     opacity: 1;
   }
 
-  /* Subtle shine effect on hover */
-  &::after {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-      45deg,
-      transparent 40%,
-      rgba(255, 255, 255, 0.1) 50%,
-      transparent 60%
-    );
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-    transition: transform 0.6s ease;
-    pointer-events: none;
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: ${({ $isVisible = false }) =>
+        $isVisible ? "translateY(-3px)" : "translateY(36px)"};
+      box-shadow:
+        ${({ theme }) => theme.shadowXl},
+        0 10px 36px rgba(0, 0, 0, 0.1),
+        0 0 0 1px ${({ theme }) => theme.borderLight} inset;
+      border-color: ${({ theme }) => `${theme.primary}30`};
+    }
   }
 
-  &:hover::after {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
+  @media (prefers-reduced-motion: reduce) {
+    filter: none;
+    &:hover {
+      transform: none;
+    }
   }
 
-  /* Responsive adjustments */
+  &:active {
+    transform: ${({ $isVisible = false }) =>
+      $isVisible ? "translateY(-1px)" : "translateY(36px)"};
+  }
+
   @media (max-width: 1024px) {
     grid-column: ${({ $size }) => {
       switch ($size) {
         case "large":
-          return "span 8"; // Still takes up most of the width
+          return "span 8";
         case "medium":
-          return "span 6"; // Half width
+          return "span 6";
         case "small":
-          return "span 3"; // Quarter width
+          return "span 3";
         default:
           return "span 3";
       }
@@ -228,11 +176,9 @@ export const BentoCardContainer = styled.div<{
     grid-column: ${({ $size }) => {
       switch ($size) {
         case "large":
-          return "span 6"; // Half width
         case "medium":
-          return "span 6"; // Half width
         case "small":
-          return "span 6"; // Half width
+          return "span 6";
         default:
           return "span 6";
       }
@@ -253,7 +199,7 @@ export const BentoCardContainer = styled.div<{
   }
 
   @media (max-width: 480px) {
-    grid-column: span 1; // Full width on mobile
+    grid-column: span 1;
     padding: 16px 14px;
     min-height: ${({ $size }) => {
       switch ($size) {
@@ -270,84 +216,58 @@ export const BentoCardContainer = styled.div<{
   }
 `;
 
-// Bento icon styling
-export const BentoIcon = styled.div<{
-  $color: "primary" | "secondary" | "accent";
-}>`
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 16px;
+// Calm icon tile: light surface, cyan glyph (no multi-color gradients)
+export const BentoIcon = styled.div`
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ theme, $color }) =>
-    $color === "primary"
-      ? theme.primaryGradient
-      : $color === "secondary"
-      ? theme.secondaryGradient
-      : theme.accentGradient};
-  border-radius: 16px;
-  color: white;
-  font-size: 28px;
-  box-shadow: ${({ theme }) => theme.shadowLg},
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  flex-shrink: 0;
+  background: ${({ theme }) => theme.surfaceElevated};
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 14px;
+  color: ${({ theme }) => theme.primary};
+  font-size: 1.35rem;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
 
-  /* Subtle inner glow */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      transparent 50%
-    );
-    border-radius: 18px;
-    pointer-events: none;
+  svg {
+    opacity: 0.92;
   }
 
   ${BentoCardContainer}:hover & {
-    transform: scale(1.05);
-    box-shadow: ${({ theme }) => theme.shadowXl},
-      0 0 15px
-        ${({ theme, $color }) =>
-          $color === "primary"
-            ? theme.primary + "30"
-            : $color === "secondary"
-            ? theme.secondary + "30"
-            : theme.accent + "30"},
-      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    border-color: ${({ theme }) => `${theme.primary}35`};
+    background: ${({ theme }) => theme.surfaceColor};
+    color: ${({ theme }) => theme.primaryDark};
   }
 
   @media (max-width: 768px) {
-    width: 64px;
-    height: 64px;
-    font-size: 24px;
-    margin-bottom: 16px;
-    border-radius: 18px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
   }
 
   @media (max-width: 480px) {
-    width: 56px;
-    height: 56px;
-    font-size: 20px;
-    margin-bottom: 14px;
-    border-radius: 16px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    border-radius: 12px;
   }
 `;
 
-// Bento title styling
 export const BentoTitle = styled.h3`
+  font-family: var(--font-sans), system-ui, sans-serif;
   color: ${({ theme }) => theme.textPrimary};
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 12px;
-  letter-spacing: -0.25px;
+  letter-spacing: -0.03em;
   line-height: 1.2;
 
   @media (max-width: 768px) {
@@ -361,22 +281,21 @@ export const BentoTitle = styled.h3`
   }
 `;
 
-// Bento description styling
 export const BentoDescription = styled.p`
+  font-family: var(--font-sans), system-ui, sans-serif;
   color: ${({ theme }) => theme.textSecondary};
   font-size: 1rem;
   line-height: 1.6;
   margin: 0;
   font-weight: 400;
-  opacity: 0.9;
   max-width: 100%;
 
   @media (max-width: 768px) {
-    font-size: 0.8rem;
-    line-height: 1.4;
+    font-size: 0.875rem;
+    line-height: 1.45;
   }
 
   @media (max-width: 480px) {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
   }
 `;

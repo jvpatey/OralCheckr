@@ -10,6 +10,7 @@ import {
   NavContainer,
   NavBrandSection,
   BrandText,
+  NavBrandAccent,
   NavCenterSection,
   NavLinksContainer,
   NavIndicator,
@@ -23,10 +24,13 @@ import { ThemeToggle, MobileMenu } from "./components";
 import { useProfile } from "../../hooks/profile/useProfile";
 import { RoutePaths } from "../../common/constants/routes";
 import { ConfirmationModal } from "../../components/shared/ConfirmationModal";
+import { HeroTitleAccent } from "../welcome/styles/WelcomeStyles";
 
 // Props for navigation bar
 interface ModernNavBarProps {
   links: NavLink[];
+  /** Habit / questionnaire sub-routes shown in the mobile menu when the sidebar is hidden */
+  mobileSectionLinks?: NavLink[];
   themeToggler: () => void;
   theme: ThemeType;
 }
@@ -34,6 +38,7 @@ interface ModernNavBarProps {
 // Modern navigation bar component matching welcome page
 export function ModernNavBar({
   links,
+  mobileSectionLinks = [],
   themeToggler,
   theme,
 }: ModernNavBarProps) {
@@ -54,7 +59,7 @@ export function ModernNavBar({
 
   // Show logout confirmation modal
   const handleLogoutClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     setShowLogoutModal(true);
@@ -118,26 +123,22 @@ export function ModernNavBar({
       return false;
     }
 
-    // Exclude Log Out, Profile, and About from center nav
+    // Exclude Log Out, Profile, and Support from center nav
     return (
       link.name !== "Log Out" &&
       link.name !== "Profile" &&
-      link.name !== "About"
+      link.name !== "Support"
     );
   });
 
-  // Add Home link at the beginning
-  const navLinks = [
-    { name: "Home", path: RoutePaths.LANDING },
-    ...filteredLinks,
-  ];
+  const navLinks = filteredLinks;
 
   // Calculate active index for sliding indicator
   const activeIndex = navLinks.findIndex((link) => isActive(link.path));
 
-  // Find Profile and About links for right section
+  // Find Profile and Support links for right section
   const profileLink = links.find((link) => link.name === "Profile");
-  const aboutLink = links.find((link) => link.name === "About");
+  const supportLink = links.find((link) => link.name === "Support");
 
   return (
     <>
@@ -146,7 +147,9 @@ export function ModernNavBar({
           {/* Logo on the left */}
           <NavBrandSection>
             <Link to={RoutePaths.LANDING} style={{ textDecoration: "none" }}>
-              <BrandText>OralCheckr</BrandText>
+              <BrandText>
+                Oral<NavBrandAccent>Checkr</NavBrandAccent>
+              </BrandText>
             </Link>
           </NavBrandSection>
 
@@ -154,9 +157,9 @@ export function ModernNavBar({
           <NavCenterSection>
             <NavLinksContainer>
               {activeIndex >= 0 && (
-                <NavIndicator 
-                  $activeIndex={activeIndex} 
-                  $linkCount={navLinks.length} 
+                <NavIndicator
+                  $activeIndex={activeIndex}
+                  $linkCount={navLinks.length}
                 />
               )}
               {navLinks.map((link) => (
@@ -174,23 +177,32 @@ export function ModernNavBar({
 
           {/* Right section with profile, about, logout, theme toggle and mobile menu */}
           <NavRightSection>
-            {/* Desktop Profile, About and Logout */}
+            {/* Desktop Profile, Support, and Logout */}
             <NavLinksContainer className="d-none d-xl-flex">
               {(() => {
                 const rightLinks = [
-                  !isGuest && profileLink ? { name: user?.firstName || "Profile", path: profileLink.path } : null,
-                  aboutLink ? { name: "About", path: aboutLink.path } : null,
+                  !isGuest && profileLink
+                    ? {
+                        name: user?.firstName || "Profile",
+                        path: profileLink.path,
+                      }
+                    : null,
+                  supportLink
+                    ? { name: supportLink.name, path: supportLink.path }
+                    : null,
                   { name: "Log Out", path: "" },
                 ].filter(Boolean) as { name: string; path: string }[];
-                
-                const rightActiveIndex = rightLinks.findIndex(link => link.path && isActive(link.path));
-                
+
+                const rightActiveIndex = rightLinks.findIndex(
+                  (link) => link.path && isActive(link.path),
+                );
+
                 return (
                   <>
                     {rightActiveIndex >= 0 && (
-                      <NavIndicator 
-                        $activeIndex={rightActiveIndex} 
-                        $linkCount={rightLinks.length} 
+                      <NavIndicator
+                        $activeIndex={rightActiveIndex}
+                        $linkCount={rightLinks.length}
                       />
                     )}
                     {!isGuest && profileLink && (
@@ -205,13 +217,13 @@ export function ModernNavBar({
                         {user?.firstName || "Profile"}
                       </StyledNavLink>
                     )}
-                    {aboutLink && (
+                    {supportLink && (
                       <StyledNavLink
-                        $isActive={isActive(aboutLink.path)}
-                        onClick={() => navigate(aboutLink.path)}
+                        $isActive={isActive(supportLink.path)}
+                        onClick={() => navigate(supportLink.path)}
                         type="button"
                       >
-                        About
+                        {supportLink.name}
                       </StyledNavLink>
                     )}
                     <StyledNavLink
@@ -236,6 +248,7 @@ export function ModernNavBar({
             <MobileMenuWrapper>
               <MobileMenu
                 links={links}
+                sectionLinks={mobileSectionLinks}
                 isActive={isActive}
                 handleLogout={(e: any) => {
                   e.preventDefault();
@@ -260,7 +273,11 @@ export function ModernNavBar({
 
       <ConfirmationModal
         show={showLogoutModal}
-        title="Log Out"
+        title={
+          <>
+            Log <HeroTitleAccent as="span">out</HeroTitleAccent>
+          </>
+        }
         message="Are you sure you want to log out?"
         confirmLabel="Log Out"
         onConfirm={handleLogoutConfirm}

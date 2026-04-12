@@ -1,72 +1,105 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDay } from "@fortawesome/free-solid-svg-icons";
-import { TodayButtonContainer } from "./styles/DateSelectorStyles";
 import styled from "styled-components";
+import { weekToolbarControlHeight } from "../../../containers/habit-tracker/habits/weekToolbarTokens";
 
-// Styled component that extends the shared TodayButtonContainer with gradient
-const StyledTodayButton = styled(TodayButtonContainer)<{ disabled: boolean }>`
-  /* Gradient background */
-  background: ${({ disabled, theme }) =>
-    disabled ? theme.disabledBackground : theme.secondaryGradient};
-  color: ${({ disabled, theme }) => (disabled ? theme.textGrey : "white")};
-  border: none;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-  margin-bottom: 12px;
+/** Heights come from weekToolbarControlHeight — must match WeekPickerIconButton exactly */
+const TodayToolbarButton = styled.button`
+  ${weekToolbarControlHeight}
+  font-family: var(--font-sans), system-ui, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  margin: 0;
+  width: auto;
+  min-width: 0;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  background: transparent;
+  color: ${({ theme }) => theme.textPrimary};
+  box-shadow: none;
+  font-size: 0.875rem;
   font-weight: 600;
-  box-shadow: ${({ theme, disabled }) => (disabled ? "none" : theme.shadowMd)};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  border-radius: 14px;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
 
-  /* Subtle glow effect overlay */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 14px;
+  @media (max-width: 768px) {
+    padding-left: 11px !important;
+    padding-right: 11px !important;
   }
 
-  &:hover:not([disabled]) {
-    transform: translateY(-2px);
-    box-shadow: ${({ theme }) => theme.shadowLg};
+  @media (max-width: 480px) {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    font-size: 0.75rem;
+  }
 
-    &::before {
-      opacity: 1;
+  &:hover:not(:disabled) {
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    background: ${({ theme }) => `${theme.primary}0d`};
+    color: ${({ theme }) => theme.primary};
+    box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}22`} inset;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition:
+      background 0.25s ease,
+      color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0) scale(0.99);
     }
   }
 
-  &:active:not([disabled]) {
-    transform: translateY(0);
-    transition-duration: 0.1s;
-  }
-
   svg {
-    margin-right: 8px;
+    display: block;
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
   }
 `;
 
 interface TodayButtonProps {
   onClick: () => void;
-  disabled?: boolean; // disabled prop for use in DateRangePicker component
+  disabled?: boolean;
 }
 
-// TodayButton functional component - used in YearSelector, MonthSelector, and DateRangePicker components
 export function TodayButton({ onClick, disabled = false }: TodayButtonProps) {
   return (
-    <StyledTodayButton onClick={onClick} disabled={disabled}>
-      <FontAwesomeIcon icon={faCalendarDay} />
+    <TodayToolbarButton type="button" onClick={onClick} disabled={disabled}>
+      <FontAwesomeIcon icon={faCalendarDay} aria-hidden />
       Today
-    </StyledTodayButton>
+    </TodayToolbarButton>
   );
 }

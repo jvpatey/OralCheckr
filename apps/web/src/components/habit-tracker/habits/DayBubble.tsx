@@ -13,7 +13,7 @@ const DaySegment = styled.div<{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px 8px;
+  padding: 5px 3px;
   position: relative;
   cursor: ${({ $isEditMode }) => ($isEditMode ? "not-allowed" : "pointer")};
   /* Smoother, more fluid transition with spring-like easing */
@@ -59,11 +59,11 @@ const DaySegment = styled.div<{
   }
 
   @media (max-width: 768px) {
-    padding: 8px 6px;
+    padding: 6px 4px;
   }
 
   @media (max-width: 480px) {
-    padding: 6px 4px;
+    padding: 5px 3px;
   }
   
   /* Reduce motion for accessibility */
@@ -75,7 +75,7 @@ const DaySegment = styled.div<{
 
 // Date number (larger, prominent)
 const DateNumber = styled.div<{ selected: boolean; $isEditMode: boolean }>`
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
   color: ${({ selected, $isEditMode, theme }) =>
     selected ? "white" : $isEditMode ? theme.textGrey : theme.textPrimary};
@@ -86,11 +86,11 @@ const DateNumber = styled.div<{ selected: boolean; $isEditMode: boolean }>`
   will-change: color;
 
   @media (max-width: 768px) {
-    font-size: 1.125rem;
+    font-size: 1rem;
   }
 
   @media (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 0.9375rem;
   }
   
   /* Reduce motion for accessibility */
@@ -101,7 +101,7 @@ const DateNumber = styled.div<{ selected: boolean; $isEditMode: boolean }>`
 
 // Day abbreviation (smaller, below date)
 const DayName = styled.div<{ selected: boolean; $isEditMode: boolean }>`
-  font-size: 0.75rem;
+  font-size: 0.625rem;
   font-weight: 600;
   color: ${({ selected, $isEditMode, theme }) =>
     selected ? "white" : $isEditMode ? theme.textGrey : theme.textSecondary};
@@ -113,11 +113,11 @@ const DayName = styled.div<{ selected: boolean; $isEditMode: boolean }>`
   will-change: color;
 
   @media (max-width: 768px) {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
 
   @media (max-width: 480px) {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
   }
   
   /* Reduce motion for accessibility */

@@ -13,37 +13,43 @@ const fadeUp = keyframes`
   }
 `;
 
-// Truly fluid assessment container - no card styling at all
+// Column capped to viewport so long questions scroll inside QuestionContent (not clipped)
 export const ModernAssessmentContainer = styled.div<{
   $isAuthenticated: boolean;
 }>`
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 120px);
+  flex: 1 1 auto;
+  min-height: 0;
   width: ${({ $isAuthenticated }) =>
     $isAuthenticated ? "calc(100% - 240px)" : "100%"};
   margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
   padding: 40px 20px;
+  max-height: calc(100dvh - clamp(100px, 11vw, 132px) - clamp(40px, 5vw, 56px));
+  overflow: hidden;
 
   /* Smooth fade-up animation matching landing page */
   animation: ${fadeUp} 0.8s ease-out 0.1s both;
 
+  @media (max-width: 1199px) {
+    width: 100%;
+    margin-left: 0;
+  }
+
   @media (max-width: 800px) {
-    width: ${({ $isAuthenticated }) =>
-      $isAuthenticated ? "calc(100% - 86px)" : "100%"};
-    margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "86px" : "0")};
     padding: 20px 16px;
-    min-height: calc(100vh - 100px);
+    max-height: calc(100dvh - clamp(88px, 14vw, 108px) - clamp(32px, 6vw, 48px));
   }
 
   @media (max-height: 700px) {
-    min-height: calc(100vh - 80px);
     padding: 20px;
+    max-height: calc(100dvh - 88px - 36px);
   }
 `;
 
 // Compact header section with minimal spacing
 export const AssessmentHeader = styled.div`
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -60,33 +66,34 @@ export const AssessmentHeader = styled.div`
   }
 `;
 
-// Compact question content area with minimal spacing
+// Scrollable middle — flex min-height:0 + flex-start so long checklists aren’t clipped
 export const QuestionContent = styled.div`
-  flex: 1;
+  flex: 1 1 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
   margin-bottom: 20px;
+  overflow-x: hidden;
   overflow-y: auto;
   position: relative;
+  -webkit-overflow-scrolling: touch;
   ${scrollbarStyle}
-
-  /* Prevent layout shift during transitions */
-  min-height: 300px;
 
   @media (max-width: 768px) {
     margin-bottom: 18px;
-    min-height: 250px;
   }
 `;
 
 // Fade wrapper for smooth question transitions without remounting
 export const QuestionFadeWrapper = styled.div`
   width: 100%;
+  min-width: 0;
+  flex-shrink: 0;
   opacity: 1;
   transition: opacity 0.12s ease-in-out;
 
@@ -99,8 +106,26 @@ export const QuestionFadeWrapper = styled.div`
   }
 `;
 
+/** Bento-style surface wrapping the active question */
+export const QuestionPanel = styled.div`
+  width: 100%;
+  background: ${({ theme }) => theme.surfaceColor};
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 20px;
+  box-shadow:
+    ${({ theme }) => theme.shadowLg},
+    0 0 0 1px ${({ theme }) => theme.borderLight} inset;
+  padding: clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px);
+
+  @media (max-width: 480px) {
+    border-radius: 16px;
+    padding: 18px 14px;
+  }
+`;
+
 // Compact action section for buttons
 export const ActionSection = styled.div`
+  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -135,235 +160,89 @@ export const ErrorMessage = styled.div`
   margin-right: auto;
 `;
 
-// Clean progress bar with no background - fully transparent
-export const ProgressBar = styled.div`
+/** Host for role="progressbar" — bar + % on one row */
+export const ProgressRoot = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding: 4px;
-
-  .progress-segment {
-    flex: 1;
-    height: 8px;
-    background-color: ${({ theme }) => theme.textTertiary};
-    border-radius: 8px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-
-    &.filled {
-      background: ${({ theme }) => theme.secondaryGradient};
-      box-shadow: 0 0 12px ${({ theme }) => theme.glowColor};
-    }
-  }
+  margin-bottom: 10px;
 
   @media (max-width: 768px) {
-    margin-bottom: 10px;
-    gap: 6px;
-    padding: 3px;
-
-    .progress-segment {
-      height: 6px;
-      border-radius: 6px;
-    }
+    margin-bottom: 8px;
   }
 `;
 
-// Modern progress indicator with gradient text
-export const ProgressIndicator = styled.div`
-  font-size: 1.25rem;
-  background: ${({ theme }) => theme.primaryGradient};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 0.01em;
+export const ProgressTrack = styled.div`
+  position: relative;
+  width: 100%;
+  height: 22px;
+  border-radius: 9999px;
+  background: ${({ theme }) => theme.surfaceElevated};
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) inset;
 
   @media (max-width: 768px) {
-    font-size: 1.1rem;
+    height: 20px;
   }
 
   @media (max-width: 480px) {
-    font-size: 1rem;
+    height: 18px;
   }
 `;
 
-// Modern gradient submit button matching app style
-export const SubmitButton = styled.button`
-  display: inline-flex;
+/** Centered on the track — legible on both fill and track (shadow + white) */
+export const ProgressPercentInside = styled.span`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: #ffffff;
+  text-shadow:
+    0 0 6px rgba(0, 0, 0, 0.65),
+    0 1px 2px rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+  user-select: none;
+
+  @media (min-width: 480px) {
+    font-size: 0.75rem;
+  }
+`;
+
+export const ProgressFill = styled.div<{ $percent: number }>`
+  height: 100%;
+  width: ${({ $percent }) => Math.min(100, Math.max(0, $percent))}%;
+  border-radius: inherit;
+  background: ${({ theme }) => theme.primaryGradient};
+  box-shadow: 0 0 12px ${({ theme }) => `${theme.primary}35`};
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+`;
+
+export const ProgressLabelsRow = styled.div`
+  display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+`;
 
-  /* Modern gradient background */
-  background: ${({ theme }) => theme.secondaryGradient};
-  color: white;
-
-  /* Typography */
+export const ProgressIndicator = styled.span`
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 1rem;
   font-weight: 600;
-  text-decoration: none;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.textPrimary};
 
-  /* Spacing */
-  padding: 14px 32px;
-  border-radius: 16px;
-
-  /* Modern shadow */
-  box-shadow: ${({ theme }) => theme.shadowLg};
-
-  /* Smooth transitions */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Border */
-  border: none;
-  position: relative;
-  overflow: hidden;
-  min-width: 120px;
-
-  /* Subtle glow effect */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: ${({ theme }) => theme.primaryGradient};
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 16px;
-  }
-
-  /* Hover effects */
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: ${({ theme }) => theme.shadowXl};
-    color: white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-
-    &::before {
-      opacity: 0.3;
-    }
-  }
-
-  /* Active state */
-  &:active:not(:disabled) {
-    transform: translateY(0);
-    transition-duration: 0.1s;
-  }
-
-  /* Disabled state */
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  /* Focus state for accessibility */
-  &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.primary};
-    outline-offset: 2px;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-    padding: 12px 24px;
-    min-width: 100px;
+  @media (max-width: 480px) {
+    font-size: 0.9375rem;
   }
 `;
 
-// Modern quit button with gradient styling
-export const QuitButton = styled.button`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-
-  /* Modern gradient background */
-  background: linear-gradient(
-    135deg,
-    ${({ theme }) => theme.error} 0%,
-    ${({ theme }) => theme.errorLight} 100%
-  );
-  color: white;
-
-  /* Typography */
-  font-size: 1rem;
-  font-weight: 600;
-  text-decoration: none;
-  letter-spacing: 0.01em;
-
-  /* Spacing */
-  padding: 14px 24px;
-  border-radius: 16px;
-
-  /* Modern shadow */
-  box-shadow: ${({ theme }) => theme.shadowMd};
-
-  /* Smooth transitions */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Border */
-  border: none;
-  position: relative;
-  overflow: hidden;
-  white-space: nowrap;
-  min-width: max-content;
-
-  /* Subtle glow effect */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      ${({ theme }) => theme.errorLight} 0%,
-      ${({ theme }) => theme.error} 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 16px;
-  }
-
-  /* Hover effects */
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: ${({ theme }) => theme.shadowLg};
-    color: white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-
-    &::before {
-      opacity: 0.3;
-    }
-  }
-
-  /* Active state */
-  &:active:not(:disabled) {
-    transform: translateY(0);
-    transition-duration: 0.1s;
-  }
-
-  /* Disabled state */
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  /* Focus state for accessibility */
-  &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.error};
-    outline-offset: 2px;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-    padding: 12px 20px;
-  }
-`;

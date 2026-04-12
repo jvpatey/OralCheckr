@@ -1,25 +1,43 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useContext, useEffect } from "react";
-import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "styled-components";
 import { RoutePaths } from "../../common/constants/routes";
 import { PageBackground } from "../../components/PageBackground";
 import { LandingContainer } from "../../components/landing/LandingContainer";
-import { StyledModal } from "../../components/questionnaire/styles/Modal";
+import {
+  BackgroundEffects,
+  HeroEyebrow,
+  HeroTitleAccent,
+} from "../welcome/styles/WelcomeStyles";
+import {
+  StyledModal,
+  ModalHeader,
+  ModalTitleStack,
+  ModalHeading,
+  ModalBody,
+} from "../welcome/styles/ModalStyles";
+import {
+  QuestionnaireFlowContainer,
+  QuestionnaireHeroCopy,
+  QuestionnairePageTitle,
+  QuestionnairePrimaryCta,
+} from "../../components/questionnaire/styles/QuestionnaireFlowLayout";
 import { AuthContext } from "../authentication/AuthContext";
 import { RetakeQuestionnaireProps } from "../../common/types/questionnaire/retake-questionnaire.types";
 import {
-  ModalButton,
-  ModernRetakeContainer,
-  HeroTitle,
-  DescriptionText,
-  ModernActionSection,
-  ModernGradientButton,
-  ModernScoreCard,
-  ModernScoreNumber,
-  ModernScoreLabel,
-  ModernCompletionText,
+  RetakePageStack,
+  RetakeBelowCard,
+  RetakeHeroDescription,
+  RetakeCtaSection,
+  RetakeScoreCard,
+  RetakeScoreNumber,
+  RetakeScoreLabel,
+  RetakeCompletionLine,
+  RetakeCompletionMuted,
+  RetakeModalMessage,
+  RetakeModalActions,
+  RetakeModalCancel,
+  RetakeModalConfirm,
 } from "./styles/RetakeQuestionnaireStyles";
 import { useQuestionnaireData } from "../../hooks/questionnaire/useQuestionnaireData";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
@@ -37,7 +55,6 @@ export function RetakeQuestionnaire({
     hasNoData,
   } = useQuestionnaireData();
 
-  // If there's no data, redirect to the start screen
   useEffect(() => {
     if (!isLoading && (hasNoData || !questionnaireData)) {
       navigate(RoutePaths.QUESTIONNAIRE);
@@ -55,82 +72,93 @@ export function RetakeQuestionnaire({
 
   const handleConfirmRetake = () => {
     setShowModal(false);
-    resetResponses();
-    navigate(`${RoutePaths.QUESTIONNAIRE}/1`);
+    void resetResponses();
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
-  // Show loading state while checking data
   if (isLoading) {
     return (
       <PageBackground>
+        <BackgroundEffects />
         <LandingContainer>
-          <ModernRetakeContainer $isAuthenticated={isAuthenticated}>
+          <QuestionnaireFlowContainer $isAuthenticated={isAuthenticated}>
             <LoadingSpinner />
-          </ModernRetakeContainer>
+          </QuestionnaireFlowContainer>
         </LandingContainer>
       </PageBackground>
     );
   }
 
-  // Don't render anything if there's no data (will redirect)
   if (hasNoData || !questionnaireData) {
     return null;
   }
 
   return (
     <PageBackground>
+      <BackgroundEffects />
       <LandingContainer>
-        <ModernRetakeContainer $isAuthenticated={isAuthenticated}>
-          <HeroTitle>Oral Health Questionnaire</HeroTitle>
+        <QuestionnaireFlowContainer $isAuthenticated={isAuthenticated}>
+          <RetakePageStack>
+            <QuestionnaireHeroCopy>
+              <HeroEyebrow>Assess</HeroEyebrow>
+              <QuestionnairePageTitle>
+                Oral Health <HeroTitleAccent>Questionnaire</HeroTitleAccent>
+              </QuestionnairePageTitle>
+            </QuestionnaireHeroCopy>
 
-          <ModernScoreCard>
-            <ModernScoreNumber $scoreColor={scoreColor}>
-              {questionnaireData.score}
-            </ModernScoreNumber>
-            <ModernScoreLabel>ORAL HEALTH SCORE</ModernScoreLabel>
-            <ModernCompletionText>
-              Completed on: {questionnaireData.lastCompleted}
-            </ModernCompletionText>
-          </ModernScoreCard>
+            <RetakeScoreCard>
+              <RetakeScoreNumber $scoreColor={scoreColor}>
+                {questionnaireData.score}
+              </RetakeScoreNumber>
+              <RetakeScoreLabel>Oral health score</RetakeScoreLabel>
+              <RetakeCompletionLine>
+                <RetakeCompletionMuted>Completed on: </RetakeCompletionMuted>
+                {questionnaireData.lastCompleted ?? "—"}
+              </RetakeCompletionLine>
+            </RetakeScoreCard>
 
-          <DescriptionText>
-            It looks like you've already completed the oral health
-            questionnaire.
-          </DescriptionText>
-
-          <DescriptionText>
-            If you wish to retake it to update your score and oral health
-            status, please click the button below.
-          </DescriptionText>
-
-          <ModernActionSection>
-            <ModernGradientButton onClick={handleRetakeClick}>
-              Retake Questionnaire
-            </ModernGradientButton>
-          </ModernActionSection>
-        </ModernRetakeContainer>
+            <RetakeBelowCard>
+              <RetakeHeroDescription>
+                It looks like you&apos;ve already completed the oral health
+                questionnaire.
+              </RetakeHeroDescription>
+              <RetakeHeroDescription>
+                If you wish to retake it to update your score and oral health
+                status, use the button below.
+              </RetakeHeroDescription>
+              <RetakeCtaSection>
+                <QuestionnairePrimaryCta onClick={handleRetakeClick}>
+                  Retake questionnaire
+                </QuestionnairePrimaryCta>
+              </RetakeCtaSection>
+            </RetakeBelowCard>
+          </RetakePageStack>
+        </QuestionnaireFlowContainer>
       </LandingContainer>
 
-      <StyledModal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <strong>Are you sure you want to retake the questionnaire?</strong>{" "}
-          This will clear your previous responses and oral health score.
-        </Modal.Body>
-        <Modal.Footer>
-          <ModalButton variant="secondary" onClick={handleCloseModal}>
-            Cancel
-          </ModalButton>
-          <ModalButton variant="primary" onClick={handleConfirmRetake}>
-            Yes, Retake
-          </ModalButton>
-        </Modal.Footer>
+      <StyledModal show={showModal} onHide={handleCloseModal} centered>
+        <ModalHeader closeButton>
+          <ModalTitleStack>
+            <ModalHeading>Retake questionnaire?</ModalHeading>
+          </ModalTitleStack>
+        </ModalHeader>
+        <ModalBody>
+          <RetakeModalMessage>
+            <strong>Are you sure you want to retake the questionnaire?</strong>{" "}
+            This will clear your previous responses and oral health score.
+          </RetakeModalMessage>
+          <RetakeModalActions>
+            <RetakeModalCancel type="button" onClick={handleCloseModal}>
+              Cancel
+            </RetakeModalCancel>
+            <RetakeModalConfirm type="button" onClick={handleConfirmRetake}>
+              Yes, retake
+            </RetakeModalConfirm>
+          </RetakeModalActions>
+        </ModalBody>
       </StyledModal>
     </PageBackground>
   );

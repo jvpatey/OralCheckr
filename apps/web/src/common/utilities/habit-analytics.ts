@@ -91,3 +91,61 @@ export function calculateMissedDays(
 
   return missedDays;
 }
+
+/** Days in the month where the habit met its full daily target. */
+export function calculatePerfectDays(
+  habitsLog: Logging,
+  habitName: string,
+  year: number,
+  month: string,
+  habitCount: number
+): number {
+  const daysInMonth = getDaysInMonth(
+    year,
+    new Date(`${month} 1, ${year}`).getMonth()
+  );
+  const logsForMonth = habitsLog[habitName]?.[year]?.[month] || {};
+  let perfect = 0;
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    if (logsForMonth[day] && logsForMonth[day] >= habitCount) {
+      perfect += 1;
+    }
+  }
+
+  return perfect;
+}
+
+/**
+ * Consecutive complete days ending at the last relevant day of the month:
+ * for the current calendar month, through today; otherwise through the last day of the month.
+ */
+export function calculateCurrentStreakInMonth(
+  habitsLog: Logging,
+  habitName: string,
+  year: number,
+  month: string,
+  habitCount: number,
+  today: Date = new Date()
+): number {
+  const monthIndex = new Date(`${month} 1, ${year}`).getMonth();
+  const daysInMonth = getDaysInMonth(year, monthIndex);
+  const logsForMonth = habitsLog[habitName]?.[year]?.[month] || {};
+
+  const isCurrentMonth =
+    today.getFullYear() === year && today.getMonth() === monthIndex;
+  const endDay = isCurrentMonth
+    ? Math.min(today.getDate(), daysInMonth)
+    : daysInMonth;
+
+  let streak = 0;
+  for (let day = endDay; day >= 1; day--) {
+    if (logsForMonth[day] && logsForMonth[day] >= habitCount) {
+      streak += 1;
+    } else {
+      break;
+    }
+  }
+
+  return streak;
+}

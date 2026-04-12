@@ -1,6 +1,38 @@
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  BentoTitle,
+  BentoDescription,
+} from "../../containers/welcome/styles/BentoGridStyles";
+
+const DashboardCardTitle = styled(BentoTitle)`
+  margin-bottom: 8px;
+  font-size: 1.35rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.0625rem;
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+`;
+
+const DashboardCardDescription = styled(BentoDescription)`
+  font-size: 0.9375rem;
+  line-height: 1.5;
+
+  @media (max-width: 768px) {
+    font-size: 0.8125rem;
+    line-height: 1.42;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8125rem;
+  }
+`;
 
 const fadeUp = keyframes`
   from {
@@ -13,7 +45,6 @@ const fadeUp = keyframes`
   }
 `;
 
-// Define styled components first
 const CardContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -25,146 +56,88 @@ const CardContent = styled.div`
   z-index: 1;
 `;
 
-const CardTitle = styled.h2`
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.textPrimary};
-  margin-bottom: 16px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  letter-spacing: -0.5px;
-
-  @media (max-width: 768px) {
-    font-size: 1.75rem;
-    margin-bottom: 14px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1.5rem;
-    margin-bottom: 12px;
-  }
-`;
-
-const CardIconContainer = styled.div`
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 20px;
+// Icon tile — same language as BentoIcon (elevated surface, cyan glyph)
+const CardIconTile = styled.div`
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ theme }) => theme.primaryGradient};
-  border-radius: 20px;
-  color: white;
-  font-size: 24px;
-  box-shadow: ${({ theme }) => theme.shadowLg},
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  flex-shrink: 0;
+  background: ${({ theme }) => theme.surfaceElevated};
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  border-radius: 14px;
+  color: ${({ theme }) => theme.primary};
+  font-size: 1.35rem;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
 
-  /* Subtle inner glow */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      transparent 50%
-    );
-    border-radius: 18px;
-    pointer-events: none;
+  svg {
+    opacity: 0.92;
   }
 
   @media (max-width: 768px) {
-    width: 56px;
-    height: 56px;
-    font-size: 22px;
-    margin-bottom: 16px;
-    border-radius: 18px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
   }
 
   @media (max-width: 480px) {
-    width: 52px;
-    height: 52px;
-    font-size: 20px;
-    margin-bottom: 14px;
-    border-radius: 16px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    border-radius: 12px;
   }
 `;
 
 const CardIcon = styled(FontAwesomeIcon)`
-  position: relative;
-  z-index: 1;
+  color: inherit;
 `;
 
-const CardText = styled.p`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.textTertiary};
-  line-height: 1.6;
-  margin: 0;
-  max-width: 300px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  @media (max-width: 768px) {
-    font-size: 0.95rem;
-    max-width: 280px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.9rem;
-    max-width: 100%;
-  }
-`;
-
-// Now define the ModernCard that references the above components
+// Solid bento-style surface + hover (see BentoCardContainer)
 const ModernCard = styled(Link)`
   display: block;
   width: 100%;
-  min-height: 300px;
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+  min-height: 228px;
+  background: ${({ theme }) => theme.surfaceColor};
   border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 24px;
-  padding: 32px;
+  border-radius: 18px;
+  padding: 22px 20px;
   text-decoration: none;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: ${fadeUp} 1s ease-out both;
-  box-shadow: ${({ theme }) => theme.shadowLg};
+  transition:
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.35s ease;
+  animation: ${fadeUp} 0.8s ease-out both;
+  box-shadow:
+    ${({ theme }) => theme.shadowLg},
+    0 0 0 1px ${({ theme }) => theme.borderLight} inset;
 
-  /* Gradient overlay for depth */
   &::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: ${({ theme }) => theme.primaryGradient};
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  /* Subtle background pattern */
-  &::after {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(
-      circle at 30% 20%,
-      ${({ theme }) => theme.primary}08 0%,
-      transparent 50%
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.primary}07 0%,
+      transparent 52%
     );
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.35s ease;
     pointer-events: none;
+    border-radius: 18px;
+  }
+
+  &:hover::before {
+    opacity: 1;
   }
 
   &:nth-child(1) {
@@ -174,71 +147,67 @@ const ModernCard = styled(Link)`
     animation-delay: 0.2s;
   }
 
-  &:hover {
-    transform: translateY(-3px);
-    border-color: ${({ theme }) => theme.primary}60;
-    box-shadow: ${({ theme }) => theme.shadowXl};
-
-    &::before {
-      opacity: 1;
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        ${({ theme }) => theme.shadowXl},
+        0 10px 36px rgba(0, 0, 0, 0.1),
+        0 0 0 1px ${({ theme }) => theme.borderLight} inset;
+      border-color: ${({ theme }) => `${theme.primary}30`};
     }
 
-    &::after {
-      opacity: 1;
+    &:hover ${CardIconTile} {
+      border-color: ${({ theme }) => `${theme.primary}35`};
+      background: ${({ theme }) => theme.surfaceColor};
+      color: ${({ theme }) => theme.primaryDark};
     }
+  }
 
-    ${CardIconContainer} {
-      transform: scale(1.05);
-      box-shadow: ${({ theme }) => theme.shadowXl},
-        0 0 15px ${({ theme }) => theme.primary + "30"},
-        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  @media (prefers-reduced-motion: reduce) {
+    &:hover {
+      transform: none;
     }
+  }
 
-    ${CardTitle} {
-      color: ${({ theme }) => theme.primary};
-    }
+  &:active {
+    transform: translateY(-1px);
+  }
 
-    ${CardText} {
-      color: ${({ theme }) => theme.textSecondary};
-    }
+  @media (max-width: 1024px) {
+    padding: 18px 16px;
+    min-height: 208px;
   }
 
   @media (max-width: 768px) {
-    min-height: 280px;
-    padding: 28px 24px;
+    padding: 16px 14px;
+    min-height: 196px;
   }
 
   @media (max-width: 480px) {
-    min-height: 260px;
-    padding: 24px 20px;
+    padding: 14px 12px;
+    min-height: 184px;
   }
 `;
 
-// Optional feature badge for cards
 const FeatureBadge = styled.div`
   position: absolute;
   top: 16px;
   right: 16px;
-  background: ${({ theme }) => theme.accentGradient};
-  color: white;
-  font-size: 0.75rem;
+  z-index: 2;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.6875rem;
   font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 12px;
+  padding: 5px 10px;
+  border-radius: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: ${({ theme }) => theme.shadowSm};
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  ${ModernCard}:hover & {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  letter-spacing: 0.08em;
+  background: ${({ theme }) => theme.surfaceElevated};
+  border: 1px solid ${({ theme }) => theme.borderLight};
+  color: ${({ theme }) => theme.primary};
 
   @media (max-width: 480px) {
-    font-size: 0.7rem;
+    font-size: 0.625rem;
     padding: 4px 8px;
     top: 12px;
     right: 12px;
@@ -250,10 +219,9 @@ type DashboardCardProps = {
   description: string;
   buttonLink: string;
   icon: any;
-  badge?: string; // Optional badge text
+  badge?: string;
 };
 
-// Modern functional component for Landing card buttons
 export function LandingCard({
   title,
   description,
@@ -265,11 +233,11 @@ export function LandingCard({
     <ModernCard to={buttonLink}>
       {badge && <FeatureBadge>{badge}</FeatureBadge>}
       <CardContent>
-        <CardIconContainer>
+        <CardIconTile>
           <CardIcon icon={icon} />
-        </CardIconContainer>
-        <CardTitle>{title}</CardTitle>
-        <CardText>{description}</CardText>
+        </CardIconTile>
+        <DashboardCardTitle>{title}</DashboardCardTitle>
+        <DashboardCardDescription>{description}</DashboardCardDescription>
       </CardContent>
     </ModernCard>
   );

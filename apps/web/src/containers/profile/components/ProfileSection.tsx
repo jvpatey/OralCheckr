@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { updateProfile } from "../../../services/profileService";
 import { ConfirmationModal } from "../../../components/shared/ConfirmationModal";
+import { ModalHeadingAccent } from "../../welcome/styles/ModalStyles";
 import {
   ProfileHeader,
   ProfilePictureSection,
   ProfilePicture,
+  ProfilePictureEditHint,
   ProfileInfo,
   InfoGroup,
   Label,
@@ -150,19 +152,37 @@ export function ProfileSection({
     <>
       <ProfileHeader>
         <ProfilePictureSection>
-          <ProfilePicture onClick={onAvatarClick} $hasAvatar={!!avatar}>
+          <ProfilePicture
+            onClick={onAvatarClick}
+            $hasAvatar={!!avatar}
+            $isEditing={isEditing}
+            aria-label={
+              isEditing ? "Change profile photo" : "Open profile photo options"
+            }
+          >
             {avatar ? (
               <img
                 src={avatar}
-                alt="Profile"
+                alt=""
                 onError={(e) => {
                   console.error("Error loading avatar image:", e);
                 }}
               />
             ) : (
-              <span>Click to select avatar</span>
+              <span>
+                {isEditing ? "Tap to choose photo" : "Click to select avatar"}
+              </span>
             )}
           </ProfilePicture>
+          {isEditing && avatar ? (
+            <ProfilePictureEditHint
+              type="button"
+              onClick={onAvatarClick}
+              aria-label="Change profile photo"
+            >
+              Change photo
+            </ProfilePictureEditHint>
+          ) : null}
         </ProfilePictureSection>
 
         <ProfileInfo>
@@ -170,8 +190,8 @@ export function ProfileSection({
             <EditInstructions
               className={isTransitioning ? "entering" : "exiting"}
             >
-              Choose the field to edit your information below, then click "Save
-              Changes" to update your profile.
+              Edit your details below, or tap your profile photo to change it.
+              Click &quot;Save Changes&quot; to update your name and email.
             </EditInstructions>
           )}
           {renderField("First Name", firstName, "firstName")}
@@ -190,9 +210,11 @@ export function ProfileSection({
             )}
           </div>
           {!isEditing && (
-            <ProfileEditButton onClick={handleEditClick}>
-              <FontAwesomeIcon icon={faPencil} />
-              Edit Profile
+            <ProfileEditButton
+              aria-label="Edit profile"
+              onClick={handleEditClick}
+            >
+              <FontAwesomeIcon icon={faPencil} aria-hidden />
             </ProfileEditButton>
           )}
         </ProfileInfo>
@@ -200,7 +222,11 @@ export function ProfileSection({
 
       <ConfirmationModal
         show={showConfirmModal}
-        title="Confirm Changes"
+        title={
+          <>
+            Confirm <ModalHeadingAccent>changes</ModalHeadingAccent>
+          </>
+        }
         message="Are you sure you want to update your profile information?"
         confirmLabel="Update"
         onConfirm={handleConfirmEdit}

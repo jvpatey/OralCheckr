@@ -8,67 +8,71 @@ import { DayBubble } from "../../../components/habit-tracker/habits/DayBubble";
 import { formatDateShort } from "../../../common/utilities/date-utils";
 import { addWeeks, isSameWeek, subWeeks } from "date-fns";
 
-// Main container for the entire day selector
+// Main container for the entire day selector (shares toolbar row with week icon + Today)
 const DayBubbleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  margin-top: 0px;
-  width: 100%;
+  gap: 6px;
+  margin: 0;
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
 
   @media (max-width: 768px) {
-    gap: 8px;
-    margin-top: 0px;
+    gap: 6px;
+  }
+
+  @media (max-width: 480px) {
+    flex: 1 1 auto;
+    min-width: min(100%, 280px);
   }
 `;
 
-// iOS-style segmented control container with glassmorphism
+// Pill track — outline style aligned with HabitHeaderButtonOutline
 const SegmentedControlContainer = styled.div`
-  /* Glassmorphism background */
-  background: ${({ theme }) => theme.glassBg};
+  background: transparent;
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
 
-  border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 16px;
-  padding: 6px;
-  box-shadow: ${({ theme }) => theme.shadowMd};
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  border-radius: 9999px;
+  padding: 4px;
+  box-shadow: none;
 
   display: flex;
   position: relative;
   overflow: hidden;
   flex: 1;
-  max-width: 650px;
+  min-width: 0;
+  max-width: none;
 
   @media (max-width: 768px) {
-    max-width: 100%;
     padding: 4px;
-    border-radius: 14px;
   }
 
   @media (max-width: 640px) {
     padding: 3px;
-    border-radius: 12px;
   }
 
   @media (max-width: 480px) {
-    padding: 2px;
-    border-radius: 10px;
+    padding: 3px;
   }
 `;
 
 // Sliding indicator that moves between selected days
 const SlidingIndicator = styled.div<{ $selectedIndex: number; $totalDays: number }>`
   position: absolute;
-  top: 6px;
-  bottom: 6px;
-  left: 6px;
-  width: calc((100% - 12px) / ${({ $totalDays }) => $totalDays});
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / ${({ $totalDays }) => $totalDays});
   background: ${({ theme }) => theme.primaryGradient};
-  border-radius: 12px;
-  box-shadow: ${({ theme }) => theme.shadowMd};
+  border-radius: 9999px;
+  border: 1px solid ${({ theme }) => theme.primary};
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset;
   transform: translateX(calc(${({ $selectedIndex }) => $selectedIndex} * 100%));
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 0;
@@ -93,10 +97,10 @@ const SlidingIndicator = styled.div<{ $selectedIndex: number; $totalDays: number
   }
 
   @media (max-width: 480px) {
-    top: 2px;
-    bottom: 2px;
-    left: 2px;
-    width: calc((100% - 4px) / ${({ $totalDays }) => $totalDays});
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc((100% - 6px) / ${({ $totalDays }) => $totalDays});
   }
   
   /* Reduce motion for accessibility */
@@ -105,72 +109,75 @@ const SlidingIndicator = styled.div<{ $selectedIndex: number; $totalDays: number
   }
 `;
 
-// Styled component for the arrow buttons integrated with segmented design
+// Circular outline pills — same language as HabitHeaderButtonOutline
 const ArrowButton = styled.button<{ $disabled: boolean }>`
-  /* Glassmorphism background */
-  background: ${({ $disabled, theme }) =>
-    $disabled ? "transparent" : theme.glassBg};
-  backdrop-filter: ${({ $disabled }) => ($disabled ? "none" : "blur(8px)")};
-  -webkit-backdrop-filter: ${({ $disabled }) =>
-    $disabled ? "none" : "blur(8px)"};
+  font-family: var(--font-sans), system-ui, sans-serif;
+  background: transparent;
   border: 1px solid
     ${({ $disabled, theme }) =>
-      $disabled ? theme.borderLight : theme.borderLight};
+      $disabled ? theme.borderLight : `${theme.primary}45`};
   color: ${({ $disabled, theme }) =>
-    $disabled ? theme.textGrey : theme.primary};
-  font-size: 1.125rem;
+    $disabled ? theme.textGrey : theme.textPrimary};
+  font-size: 0.75rem;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-  border-radius: 12px;
-  width: 44px;
-  height: 44px;
+  border-radius: 9999px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Smoother transition matching day bubbles */
-  transition: all 0.4s cubic-bezier(0.34, 1.15, 0.64, 1);
-  box-shadow: ${({ theme, $disabled }) =>
-    $disabled ? "none" : theme.shadowSm};
+  box-sizing: border-box;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+  box-shadow: none;
   flex-shrink: 0;
-  /* Performance optimization */
-  will-change: ${({ $disabled }) => ($disabled ? "auto" : "transform")};
-  transform: translateZ(0);
 
   &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.primary};
-    color: white;
-    border-color: ${({ theme }) => theme.primary};
-    transform: scale(1.08) translateZ(0);
-    box-shadow: ${({ theme }) => theme.shadowMd};
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    background: ${({ theme }) => `${theme.primary}0d`};
+    color: ${({ theme }) => theme.primary};
+    box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}22`} inset;
   }
 
-  &:active:not(:disabled) {
-    transform: scale(0.95) translateZ(0);
-    transition-duration: 0.15s;
-  }
-
-  &:focus {
+  &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.primary};
-    outline-offset: 2px;
+    outline-offset: 3px;
   }
 
   &:disabled {
     cursor: not-allowed;
     pointer-events: none;
+    opacity: 0.5;
   }
 
   @media (max-width: 768px) {
     width: 40px;
     height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     font-size: 1rem;
   }
 
   @media (max-width: 480px) {
-    width: 36px;
-    height: 36px;
     font-size: 0.875rem;
   }
-  
-  /* Reduce motion for accessibility */
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0) scale(0.99);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     transition-duration: 0.01ms;
     transform: none !important;

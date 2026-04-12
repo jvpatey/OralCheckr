@@ -24,7 +24,8 @@ const ButtonContainer = styled.div<{
     // Create gradient based on color
     if (
       $backgroundColor === theme.green ||
-      $backgroundColor === theme.secondary
+      $backgroundColor === theme.secondary ||
+      $backgroundColor === theme.success
     ) {
       return theme.secondaryGradient;
     }
@@ -39,7 +40,16 @@ const ButtonContainer = styled.div<{
     }
     return theme.primaryGradient;
   }};
-  color: ${({ theme, $disabled }) => ($disabled ? theme.textGrey : "white")};
+  color: ${({ theme, $disabled, $backgroundColor }) => {
+    if ($disabled) return theme.textGrey;
+    if (
+      $backgroundColor === theme.yellow ||
+      $backgroundColor === theme.warning
+    ) {
+      return "#0f172a";
+    }
+    return "white";
+  }};
   width: auto;
   height: 38px;
   display: flex;
@@ -124,6 +134,7 @@ const Label = styled.div`
   justify-content: center;
   margin-left: 10px;
   white-space: nowrap;
+  color: inherit;
 
   @media (max-width: 768px) {
     font-size: 14px;

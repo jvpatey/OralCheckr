@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { scrollbarStyle } from "../styles/SharedStyles";
 
-// Modern page background with enhanced gradient - no animation to prevent flash
+const noiseDataUri = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E`;
+
+// Page background with soft mesh, light radial accents, and subtle grain
 export const PageBackground = styled.div`
   min-height: 100vh;
   width: 100%;
@@ -11,7 +13,6 @@ export const PageBackground = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 0;
-  /* Add padding to the right to make space for scrollbar */
   padding-right: 0;
   overflow-y: auto;
   position: fixed;
@@ -21,13 +22,9 @@ export const PageBackground = styled.div`
   bottom: 0;
   z-index: 1;
   opacity: 1;
-  /* Instant render - no transition to prevent flash */
   ${scrollbarStyle}
-  
-  /* Ensure scrollbar is always visible and accessible */
   scrollbar-gutter: stable;
 
-  /* Additional gradient overlay for depth */
   &::before {
     content: "";
     position: fixed;
@@ -35,30 +32,51 @@ export const PageBackground = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(
-        circle at 20% 80%,
-        ${({ theme }) => theme.primary}08 0%,
-        transparent 50%
+    background:
+      radial-gradient(
+        ellipse 100% 80% at 50% -30%,
+        ${({ theme }) => theme.primary}0d 0%,
+        transparent 55%
       ),
       radial-gradient(
-        circle at 80% 20%,
-        ${({ theme }) => theme.secondary}06 0%,
-        transparent 50%
+        circle at 15% 85%,
+        ${({ theme }) => theme.primary}06 0%,
+        transparent 45%
       ),
       radial-gradient(
-        circle at 40% 40%,
+        circle at 88% 18%,
+        ${({ theme }) => theme.secondary}05 0%,
+        transparent 42%
+      ),
+      radial-gradient(
+        circle at 42% 48%,
         ${({ theme }) => theme.accent}04 0%,
-        transparent 50%
+        transparent 40%
       );
     pointer-events: none;
     z-index: 0;
   }
 
-  @media (max-width: 768px) {
-    padding: 0;
+  &::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("${noiseDataUri}");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 0;
   }
 
-  @media (max-width: 480px) {
-    padding: 0;
+  @media (prefers-color-scheme: dark) {
+    &::after {
+      opacity: 0.045;
+      mix-blend-mode: soft-light;
+    }
   }
 `;

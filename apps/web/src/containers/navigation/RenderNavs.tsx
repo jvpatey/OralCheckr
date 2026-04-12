@@ -56,6 +56,7 @@ export function RenderNavs({ themeToggler, currentTheme }: RenderNavsProps) {
     <>
       <ModernNavBar
         links={navbarLinks}
+        mobileSectionLinks={sidebarLinks}
         themeToggler={themeToggler}
         theme={currentTheme}
       />

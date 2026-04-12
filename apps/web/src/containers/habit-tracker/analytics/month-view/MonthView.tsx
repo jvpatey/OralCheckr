@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { HabitDropdown } from "../HabitDropdown";
+import { AnimatePresence, motion } from "framer-motion";
+import { format } from "date-fns";
 import { Habit } from "../../../../services/habitService";
 import { Logging } from "../Analytics";
 import { HabitCalendar } from "./HabitCalendar";
@@ -8,25 +9,31 @@ import {
   calculateMonthlyCompletion,
   calculateLongestStreak,
   calculateMissedDays,
+  calculatePerfectDays,
+  calculateCurrentStreakInMonth,
+  getDaysInMonth,
 } from "../../../../common/utilities/habit-analytics";
 import { AnalyticsTile } from "../../../../components/habit-tracker/analytics/month-view/AnalyticsTile";
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
 import { useHabitContext } from "../../../../contexts/HabitContext";
 import {
-  ViewContainer,
-  ControlsContainer,
+  AnalyticsViewRoot,
   AnalyticsGrid,
   TilesSection,
   CalendarSection,
   TilesContainer,
 } from "../../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
+import {
+  analyticsOpacityVariants,
+  useAnalyticsOpacityTransition,
+} from "../analyticsMotion";
 import { CalendarContainer } from "../../../../components/habit-tracker/analytics/styles/MonthViewStyles";
 
-// Interface for the MonthView component props
+const MonthAnalyticsGridMotion = motion(AnalyticsGrid);
+
 interface ViewProps {
   habits: Habit[];
-  onSelectHabit: (habitName: string) => void;
   habitsLog: Logging;
   hideAnalytics: boolean;
   selectedDate: Date;
@@ -34,10 +41,17 @@ interface ViewProps {
   isLoading?: boolean;
 }
 
-// The MonthView functional component for displaying monthly analytics
+const MONTH_ANALYTICS_TILE_DESCRIPTIONS = {
+  completionRate: "Percent of a perfect month.",
+  perfectDays: "Days you fully hit your daily target.",
+  currentStreak: "Consecutive days where you hit your full daily target.",
+  longestStreak: "Your best run of fully completed days this month.",
+  totalLogs: "Every check-in this month added together.",
+  missedDays: "Days in this month with no check-in.",
+} as const;
+
 export function MonthView({
   habits,
-  onSelectHabit,
   habitsLog,
   hideAnalytics,
   selectedDate,
@@ -46,33 +60,28 @@ export function MonthView({
 }: ViewProps) {
   const { selectedHabit } = useHabitContext();
   const [showChart, setShowChart] = useState(false);
+  const dateContentTransition = useAnalyticsOpacityTransition();
 
-  // Handle month change from the date selector
   const onMonthChange = (date: Date) => {
     onDateChange(date);
   };
 
-  // Handle toggle between calendar and chart view
   const handleToggleView = () => {
     setShowChart(!showChart);
   };
 
-  // Handle today button click
   const handleTodayClick = () => {
     const today = new Date();
     onDateChange(today);
   };
 
-  // Get the current month and year from the selected date
   const currentMonth = selectedDate
     .toLocaleString("default", { month: "long" })
     .toLowerCase();
   const currentYear = selectedDate.getFullYear();
 
-  // Get the habit count (for completion rate calculation)
   const habitCount = habits.find((h) => h.name === selectedHabit)?.count || 1;
 
-  // Calculate analytics metrics for the selected habit and month
   const totalCount = selectedHabit
     ? calculateTotalCount(habitsLog, selectedHabit, currentYear, currentMonth)
     : 0;
@@ -81,7 +90,7 @@ export function MonthView({
     totalCount,
     habitCount,
     currentYear,
-    currentMonth
+    currentMonth,
   );
 
   const longestStreak = selectedHabit
@@ -90,7 +99,7 @@ export function MonthView({
         selectedHabit,
         currentYear,
         currentMonth,
-        habitCount
+        habitCount,
       )
     : 0;
 
@@ -98,13 +107,36 @@ export function MonthView({
     ? calculateMissedDays(habitsLog, selectedHabit, currentYear, currentMonth)
     : 0;
 
-  // Get the logs for the selected habit, month, and year for the calendar
+  const perfectDays = selectedHabit
+    ? calculatePerfectDays(
+        habitsLog,
+        selectedHabit,
+        currentYear,
+        currentMonth,
+        habitCount,
+      )
+    : 0;
+
+  const currentStreakInMonth = selectedHabit
+    ? calculateCurrentStreakInMonth(
+        habitsLog,
+        selectedHabit,
+        currentYear,
+        currentMonth,
+        habitCount,
+      )
+    : 0;
+
+  const daysInSelectedMonth = getDaysInMonth(
+    currentYear,
+    new Date(`${currentMonth} 1, ${currentYear}`).getMonth(),
+  );
+
   const habitLogs =
     selectedHabit && habitsLog[selectedHabit]
       ? habitsLog[selectedHabit][currentYear]?.[currentMonth] || {}
       : {};
 
-  // Convert habitLogs to the format expected by HabitCalendar
   const formattedHabitLogs: Logging = {};
   if (selectedHabit) {
     formattedHabitLogs[selectedHabit] = {};
@@ -112,73 +144,99 @@ export function MonthView({
     formattedHabitLogs[selectedHabit][currentYear][currentMonth] = habitLogs;
   }
 
+  if (hideAnalytics) {
+    return null;
+  }
+
+  const dateContentKey = format(selectedDate, "yyyy-MM");
+
   return (
-    <ViewContainer>
-      {!hideAnalytics && (
-        <>
-          <ControlsContainer>
-            <HabitDropdown habits={habits} onSelectHabit={onSelectHabit} />
-          </ControlsContainer>
+    <AnalyticsViewRoot>
+      <AnimatePresence mode="wait" initial={false}>
+        <MonthAnalyticsGridMotion
+          key={dateContentKey}
+          variants={analyticsOpacityVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={dateContentTransition}
+        >
+          <TilesSection>
+            <TilesContainer>
+              <AnalyticsTile
+                heading="Completion Rate"
+                mainContent={isLoading ? "..." : `${completionRate}%`}
+                subContent=""
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.completionRate}
+                progressPercent={isLoading ? undefined : completionRate}
+                isLoading={isLoading}
+              />
+              <AnalyticsTile
+                heading="Perfect Days"
+                mainContent={isLoading ? "..." : perfectDays}
+                subContent={
+                  isLoading ? "" : `of ${daysInSelectedMonth} days`
+                }
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.perfectDays}
+                isLoading={isLoading}
+              />
+              <AnalyticsTile
+                heading="Current Streak"
+                mainContent={isLoading ? "..." : currentStreakInMonth}
+                subContent=""
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.currentStreak}
+                isLoading={isLoading}
+              />
+              <AnalyticsTile
+                heading="Longest Streak"
+                mainContent={isLoading ? "..." : longestStreak}
+                subContent=""
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.longestStreak}
+                isLoading={isLoading}
+              />
+              <AnalyticsTile
+                heading="Total Logs"
+                mainContent={isLoading ? "..." : totalCount}
+                subContent=""
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.totalLogs}
+                isLoading={isLoading}
+              />
+              <AnalyticsTile
+                heading="Missed Days"
+                mainContent={isLoading ? "..." : missedDays}
+                subContent=""
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.missedDays}
+                isMissedDays={true}
+                isLoading={isLoading}
+              />
+            </TilesContainer>
+          </TilesSection>
 
-          <AnalyticsGrid>
-            <TilesSection>
-              <TilesContainer>
-                <AnalyticsTile
-                  heading="Total Logs"
-                  mainContent={isLoading ? "..." : totalCount}
-                  subContent=""
-                  isLoading={isLoading}
-                />
-                <AnalyticsTile
-                  heading="Completion Rate"
-                  mainContent={isLoading ? "..." : `${completionRate}%`}
-                  subContent=""
-                  isLoading={isLoading}
-                />
-                <AnalyticsTile
-                  heading="Longest Streak"
-                  mainContent={isLoading ? "..." : longestStreak}
-                  subContent=""
-                  isLoading={isLoading}
-                />
-                <AnalyticsTile
-                  heading="Missed Days"
-                  mainContent={isLoading ? "..." : missedDays}
-                  subContent=""
-                  isMissedDays={true}
-                  isLoading={isLoading}
-                />
-              </TilesContainer>
-            </TilesSection>
-
-            <CalendarSection>
-              <CalendarContainer>
-                <HabitCalendar
-                  habitsLog={formattedHabitLogs}
-                  year={currentYear}
-                  month={currentMonth}
-                  habitCount={habitCount}
-                  selectedMonth={selectedDate}
-                  showChart={showChart}
-                  onToggleView={handleToggleView}
-                  isLoading={isLoading}
-                  onTodayClick={handleTodayClick}
-                  dateSelector={
-                    <AnalyticsDateSelector
-                      selectedDate={selectedDate}
-                      onDateChange={onMonthChange}
-                      viewType={ViewType.MONTH}
-                    />
-                  }
-                />
-              </CalendarContainer>
-            </CalendarSection>
-          </AnalyticsGrid>
-        </>
-      )}
-      {hideAnalytics && (
-        <HabitDropdown habits={habits} onSelectHabit={onSelectHabit} />
-      )}
-    </ViewContainer>
+          <CalendarSection>
+            <CalendarContainer>
+              <HabitCalendar
+                habitsLog={formattedHabitLogs}
+                year={currentYear}
+                month={currentMonth}
+                habitCount={habitCount}
+                selectedMonth={selectedDate}
+                showChart={showChart}
+                onToggleView={handleToggleView}
+                isLoading={isLoading}
+                onTodayClick={handleTodayClick}
+                suppressLayoutEntrance
+                dateSelector={
+                  <AnalyticsDateSelector
+                    selectedDate={selectedDate}
+                    onDateChange={onMonthChange}
+                    viewType={ViewType.MONTH}
+                  />
+                }
+              />
+            </CalendarContainer>
+          </CalendarSection>
+        </MonthAnalyticsGridMotion>
+      </AnimatePresence>
+    </AnalyticsViewRoot>
   );
 }

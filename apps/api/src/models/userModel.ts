@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import bcrypt from "bcryptjs";
 import sequelize from "../db/db";
-import { getIntegerType, STRING, BOOLEAN } from "../db/dataTypes";
+import { getIntegerType, STRING, BOOLEAN, TEXT } from "../db/dataTypes";
 
 /* -- User Model -- */
 
@@ -15,13 +15,15 @@ interface UserAttributes {
   password: string;
   isGuest?: boolean;
   avatar?: string;
+  /** Last Google profile picture URL from OAuth; not overwritten by in-app avatar picks. */
+  googlePicture?: string;
   googleId?: string;
 }
 
 interface UserCreationAttributes
   extends Optional<
     UserAttributes,
-    "userId" | "isGuest" | "avatar" | "googleId"
+    "userId" | "isGuest" | "avatar" | "googlePicture" | "googleId"
   > {}
 
 /* -- User Model Definition -- */
@@ -36,6 +38,7 @@ class User
   public password!: string;
   public isGuest!: boolean;
   public avatar?: string;
+  public googlePicture?: string;
   public googleId?: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -110,6 +113,11 @@ User.init(
       validate: {
         isUrl: { msg: "Avatar must be a valid URL" },
       },
+    },
+    googlePicture: {
+      type: TEXT,
+      allowNull: true,
+      field: "googlePicture",
     },
     googleId: {
       type: STRING(255),

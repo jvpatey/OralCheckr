@@ -1,10 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { SectionTitle } from "../../styles/AccountTabStyles";
+import { SupportSectionTitle } from "../../../../containers/about/styles/AboutContentStyles";
 import {
   ContentSection,
   ContentBox,
-  ContentItem,
   SubHeading,
   ContentText,
   SocialLinks,
@@ -16,42 +15,40 @@ import { ContactForm } from "../../../../components/shared/ContactForm";
 export function ContactSection() {
   return (
     <ContentSection>
-      <SectionTitle>Get in Touch</SectionTitle>
+      <SupportSectionTitle>Get in Touch</SupportSectionTitle>
       <ContentBox>
-        <ContentItem>
-          <SubHeading>Contact</SubHeading>
-          <ContentText style={{ marginBottom: "1.5rem" }}>
-            For any feedback, bug reports, or issues, please fill out the form
-            below and I'll get back to you as soon as possible.
-          </ContentText>
-          <ContactForm />
-        </ContentItem>
+        <SubHeading>Contact</SubHeading>
+        <ContentText style={{ marginBottom: "1rem" }}>
+          For any feedback, bug reports, or issues, please fill out the form
+          below and I'll get back to you as soon as possible.
+        </ContentText>
+        <ContactForm />
+      </ContentBox>
 
-        <ContentItem>
-          <SubHeading>Connect</SubHeading>
-          <ContentText>
-            Thanks for checking out my app! To see my other projects or connect
-            with me professionally:
-          </ContentText>
-          <SocialLinks>
-            <SocialLink
-              href="https://github.com/jvpatey"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub Profile"
-            >
-              <FontAwesomeIcon icon={faGithub as any} /> GitHub
-            </SocialLink>
-            <SocialLink
-              href="https://www.linkedin.com/in/jeffreypatey/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn Profile"
-            >
-              <FontAwesomeIcon icon={faLinkedin as any} /> LinkedIn
-            </SocialLink>
-          </SocialLinks>
-        </ContentItem>
+      <ContentBox>
+        <SubHeading>Connect</SubHeading>
+        <ContentText style={{ marginBottom: "0.25rem" }}>
+          Thanks for checking out my app! To see my other projects or connect
+          with me professionally:
+        </ContentText>
+        <SocialLinks>
+          <SocialLink
+            href="https://github.com/jvpatey"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub Profile"
+          >
+            <FontAwesomeIcon icon={faGithub as any} /> GitHub
+          </SocialLink>
+          <SocialLink
+            href="https://www.linkedin.com/in/jeffreypatey/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn Profile"
+          >
+            <FontAwesomeIcon icon={faLinkedin as any} /> LinkedIn
+          </SocialLink>
+        </SocialLinks>
       </ContentBox>
     </ContentSection>
   );

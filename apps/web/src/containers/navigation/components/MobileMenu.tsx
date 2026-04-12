@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import { Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,6 +9,8 @@ import { NavLink } from "../../../common/links";
 // Props for mobile menu component
 interface MobileMenuProps {
   links: NavLink[];
+  /** Sub-nav (sidebar) links for the current section; shown first, deduped from `links` by path */
+  sectionLinks?: NavLink[];
   isActive: (href: string) => boolean;
   handleLogout: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   isGuest?: boolean;
@@ -164,6 +166,7 @@ const AvatarImage = styled.img`
 // Navbar links component for mobile view (dropdown menu)
 export function MobileMenu({
   links,
+  sectionLinks = [],
   isActive,
   handleLogout,
   isGuest = false,
@@ -171,6 +174,39 @@ export function MobileMenu({
   userAvatar,
   userFirstName,
 }: MobileMenuProps) {
+  const sectionPaths = useMemo(
+    () => new Set(sectionLinks.map((l) => l.path)),
+    [sectionLinks],
+  );
+  const mainNavLinks = useMemo(
+    () => links.filter((l) => !sectionPaths.has(l.path)),
+    [links, sectionPaths],
+  );
+
+  const renderLinkRow = (link: NavLink) => (
+    <CustomDropdownItem
+      key={link.path}
+      className={isActive(link.path) ? "active" : ""}
+      as={Link}
+      to={link.path === "/" ? "/" : link.path}
+      onClick={link.name === "Log Out" ? handleLogout : undefined}
+      $isProfileWithName={link.name === "Profile" && !!userFirstName}
+    >
+      <Icon>
+        {link.name === "Profile" ? (
+          userAvatar ? (
+            <AvatarImage src={userAvatar} alt="Profile" />
+          ) : (
+            <FontAwesomeIcon icon={link.icon} />
+          )
+        ) : (
+          <FontAwesomeIcon icon={link.icon} />
+        )}
+      </Icon>
+      {link.name === "Profile" && userFirstName ? userFirstName : link.name}
+    </CustomDropdownItem>
+  );
+
   return (
     <Dropdown>
       <CustomDropdownToggle id="dropdown-basic">
@@ -185,31 +221,11 @@ export function MobileMenu({
             Create Account
           </CustomDropdownItem>
         )}
-        {links.map((link) => (
-          <CustomDropdownItem
-            key={link.path}
-            className={isActive(link.path) ? "active" : ""}
-            as={Link}
-            to={link.path === "/" ? "/" : link.path}
-            onClick={link.name === "Log Out" ? handleLogout : undefined}
-            $isProfileWithName={link.name === "Profile" && !!userFirstName}
-          >
-            <Icon>
-              {link.name === "Profile" ? (
-                userAvatar ? (
-                  <AvatarImage src={userAvatar} alt="Profile" />
-                ) : (
-                  <FontAwesomeIcon icon={link.icon} />
-                )
-              ) : (
-                <FontAwesomeIcon icon={link.icon} />
-              )}
-            </Icon>
-            {link.name === "Profile" && userFirstName
-              ? userFirstName
-              : link.name}
-          </CustomDropdownItem>
-        ))}
+        {sectionLinks.map(renderLinkRow)}
+        {sectionLinks.length > 0 && mainNavLinks.length > 0 && (
+          <Dropdown.Divider />
+        )}
+        {mainNavLinks.map(renderLinkRow)}
       </CustomDropdownMenu>
     </Dropdown>
   );

@@ -46,7 +46,9 @@ const HabitTile = memo(({ habit, logCount }: HabitTileProps) => {
         <FlipCardFront $isComplete={isComplete}>
           <ProgressBar $progress={progress} $isComplete={isComplete} />
           <HabitName>{habit.name}</HabitName>
-          <LogCountBubble>{displayedLogCount}</LogCountBubble>
+          <LogCountBubble $isComplete={isComplete}>
+            {displayedLogCount}
+          </LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>
@@ -61,7 +63,9 @@ const HabitTile = memo(({ habit, logCount }: HabitTileProps) => {
               Daily Goal: <span className="value">{habit.count}</span>
             </div>
           </BackText>
-          <LogCountBubble>{displayedLogCount}</LogCountBubble>
+          <LogCountBubble $isComplete={isComplete}>
+            {displayedLogCount}
+          </LogCountBubble>
           <ArrowIconWrapper className="arrow-icon">
             <FontAwesomeIcon icon={faSync} />
           </ArrowIconWrapper>

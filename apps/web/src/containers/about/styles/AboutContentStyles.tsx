@@ -1,6 +1,43 @@
 import styled from "styled-components";
 import { Accordion } from "react-bootstrap";
-import { Section } from "../../../containers/profile/styles/AccountTabStyles";
+
+const accordionChevronMask =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='black' fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E\")";
+
+/** Support / About page sections — decoupled from profile AccountTabStyles */
+export const SupportSection = styled.div`
+  margin-bottom: 3rem;
+  position: relative;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 2rem;
+  }
+`;
+
+export const SupportSectionTitle = styled.h3`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: ${({ theme }) => theme.textPrimary};
+  font-size: clamp(1.125rem, 0.8vw + 1rem, 1.35rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid ${({ theme }) => theme.borderLight};
+
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+  }
+`;
 
 export const FAQContainer = styled.div`
   margin-bottom: 2rem;
@@ -8,17 +45,23 @@ export const FAQContainer = styled.div`
 
 export const StyledAccordion = styled(Accordion)`
   .accordion-item {
-    background: ${({ theme }) => theme.surfaceElevated};
+    background: ${({ theme }) => theme.surfaceColor};
     border: 1px solid ${({ theme }) => theme.borderLight};
-    border-radius: 16px !important;
+    border-radius: 20px !important;
     margin-bottom: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
+    box-shadow:
+      ${({ theme }) => theme.shadowLg},
+      0 0 0 1px ${({ theme }) => theme.borderLight} inset;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
 
     &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: ${({ theme }) => `${theme.primary}35`};
+      box-shadow:
+        ${({ theme }) => theme.shadowLg},
+        0 0 0 1px ${({ theme }) => `${theme.primary}20`} inset;
     }
 
     &:last-child {
@@ -27,31 +70,47 @@ export const StyledAccordion = styled(Accordion)`
   }
 
   .accordion-button {
-    background: ${({ theme }) => theme.surfaceElevated};
+    font-family: var(--font-sans), system-ui, sans-serif;
+    background: ${({ theme }) => theme.surfaceColor};
     color: ${({ theme }) => theme.textPrimary};
     font-weight: 600;
-    font-size: 1rem;
-    padding: 1.25rem 1.5rem;
+    font-size: 0.9375rem;
+    padding: 1.125rem 1.35rem;
     border: none;
     box-shadow: none;
-    transition: all 0.3s ease;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
 
     &:not(.collapsed) {
-      background: ${({ theme }) => theme.glassBg};
-      backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-      -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
+      background: ${({ theme }) => theme.surfaceElevated};
       color: ${({ theme }) => theme.primary};
       box-shadow: none;
     }
 
     &:focus {
-      box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}33;
+      box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}22;
       border-color: transparent;
     }
 
+    &:focus-visible {
+      outline: none;
+    }
+
     &::after {
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2322C55E'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-      transition: transform 0.3s ease;
+      background-image: none !important;
+      background-color: ${({ theme }) => theme.primary};
+      -webkit-mask-image: ${accordionChevronMask};
+      mask-image: ${accordionChevronMask};
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-size: 1rem;
+      mask-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+      transition: transform 0.25s ease;
     }
 
     &:not(.collapsed)::after {
@@ -60,42 +119,50 @@ export const StyledAccordion = styled(Accordion)`
   }
 
   .accordion-body {
+    font-family: var(--font-sans), system-ui, sans-serif;
     background: ${({ theme }) => theme.surfaceElevated};
     color: ${({ theme }) => theme.textSecondary};
-    padding: 1.5rem;
-    line-height: 1.7;
-    font-size: 0.95rem;
+    padding: 1.35rem 1.35rem 1.5rem;
+    line-height: 1.65;
+    font-size: clamp(0.95rem, 0.35vw + 0.85rem, 1.0625rem);
+    font-weight: 400;
     border-top: 1px solid ${({ theme }) => theme.borderLight};
   }
 `;
 
-export const ContentSection = styled(Section)`
+export const ContentSection = styled(SupportSection)`
   margin-top: 2rem;
 `;
 
 export const ContentBox = styled.div`
   margin-top: 1rem;
-  background: ${({ theme }) => theme.surfaceElevated};
+  background: ${({ theme }) => theme.surfaceColor};
   border: 1px solid ${({ theme }) => theme.borderLight};
   padding: 1.5rem;
-  border-radius: 16px;
-  line-height: 1.7;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  border-radius: 20px;
+  line-height: 1.65;
+  box-shadow:
+    ${({ theme }) => theme.shadowLg},
+    0 0 0 1px ${({ theme }) => theme.borderLight} inset;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border-color: ${({ theme }) => `${theme.primary}30`};
+    box-shadow:
+      ${({ theme }) => theme.shadowLg},
+      0 0 0 1px ${({ theme }) => `${theme.primary}18`} inset;
   }
 
   @media (max-width: 768px) {
     padding: 1.25rem;
-    border-radius: 14px;
+    border-radius: 18px;
   }
 
   @media (max-width: 480px) {
-    padding: 1rem;
-    border-radius: 12px;
+    padding: 1.125rem;
+    border-radius: 16px;
   }
 `;
 
@@ -108,87 +175,74 @@ export const ContentItem = styled.div`
 `;
 
 export const SubHeading = styled.h4`
-  background: ${({ theme }) => theme.primaryGradient};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 0.75rem;
-  font-size: 1.125rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: ${({ theme }) => theme.textPrimary};
+  margin: 0 0 0.75rem;
+  font-size: clamp(1rem, 0.5vw + 0.9rem, 1.125rem);
   font-weight: 600;
-  letter-spacing: -0.25px;
+  letter-spacing: -0.02em;
 `;
 
 export const ContentText = styled.div`
+  font-family: var(--font-sans), system-ui, sans-serif;
   color: ${({ theme }) => theme.textSecondary};
-  font-size: 0.95rem;
-  line-height: 1.7;
+  font-size: clamp(0.95rem, 0.45vw + 0.82rem, 1.0625rem);
+  line-height: 1.65;
+  font-weight: 400;
 `;
 
 export const StyledLink = styled.a`
   color: ${({ theme }) => theme.primary};
   text-decoration: none;
   font-weight: 500;
-  transition: all 0.2s ease;
-  position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: ${({ theme }) => theme.primaryGradient};
-    transition: width 0.3s ease;
-  }
+  transition: color 0.2s ease;
 
   &:hover {
     color: ${({ theme }) => theme.primary};
-    transform: translateY(-1px);
-
-    &::after {
-      width: 100%;
-    }
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 `;
 
 export const SocialLinks = styled.div`
   display: flex;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
   margin-top: 1rem;
 `;
 
 export const SocialLink = styled.a`
+  font-family: var(--font-sans), system-ui, sans-serif;
   color: ${({ theme }) => theme.textPrimary};
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 12px 20px;
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  -webkit-backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border: 1px solid ${({ theme }) => theme.borderLight};
-  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  padding: 10px 18px;
+  background: transparent;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  border-radius: 9999px;
   text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
   &:hover {
     color: ${({ theme }) => theme.primary};
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    border-color: ${({ theme }) => theme.primary};
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    background: ${({ theme }) => `${theme.primary}0d`};
   }
 
-  &:active {
-    transform: translateY(-1px) scale(1.02);
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
   }
 
   @media (max-width: 768px) {
-    padding: 10px 16px;
-    font-size: 0.9rem;
-    border-radius: 10px;
+    padding: 9px 16px;
+    font-size: 0.875rem;
   }
 `;

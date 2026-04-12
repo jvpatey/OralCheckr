@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
-import { blueHeatMapShades } from "../../../../common/utilities/color-utils";
+import {
+  getHeatmapColorScaleRanges,
+  isDarkThemeBackground,
+} from "../../../../common/utilities/color-utils";
 import { ApexOptions } from "apexcharts";
 import { LoadingComponent } from "../../../../components/habit-tracker/analytics/LoadingComponent";
 import { useTheme } from "styled-components";
@@ -27,17 +30,27 @@ const MONTH_NAMES = [
 // Modern heatmap chart container with glassmorphism
 const HeatmapChartContainer = styled.div`
   width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
   background: transparent;
   position: relative;
   z-index: 1;
 
   .apexcharts-heatmap-rect {
-    stroke: rgba(255, 255, 255, 0.1);
+    stroke: ${({ theme }) =>
+      isDarkThemeBackground(theme)
+        ? "rgba(248, 250, 252, 0.14)"
+        : "rgba(15, 23, 42, 0.12)"};
     stroke-width: 2px;
     transition: all 0.3s ease;
 
     &:hover {
-      stroke: rgba(255, 255, 255, 0.3);
+      stroke: ${({ theme }) =>
+        isDarkThemeBackground(theme)
+          ? "rgba(248, 250, 252, 0.28)"
+          : "rgba(15, 23, 42, 0.22)"};
       stroke-width: 3px;
     }
   }
@@ -74,7 +87,7 @@ const HeatmapChartContainer = styled.div`
 const useHeatmapOptions = (theme: ThemeType): ApexOptions => {
   return {
     chart: {
-      height: 200,
+      height: 320,
       type: "heatmap",
       toolbar: { show: false },
       zoom: { enabled: false },
@@ -88,46 +101,13 @@ const useHeatmapOptions = (theme: ThemeType): ApexOptions => {
       },
     },
     theme: {
-      mode: theme.mode,
+      mode: isDarkThemeBackground(theme) ? "dark" : "light",
     },
     plotOptions: {
       heatmap: {
         shadeIntensity: 0.8,
         colorScale: {
-          ranges: [
-            { from: 0, to: 0, color: theme.backgroundColor, name: "0 logs" },
-            { from: 1, to: 1, color: blueHeatMapShades.Light, name: "1 log" },
-            {
-              from: 2,
-              to: 5,
-              color: blueHeatMapShades.MediumLight,
-              name: "2-5 logs",
-            },
-            {
-              from: 6,
-              to: 7,
-              color: blueHeatMapShades.Medium,
-              name: "6-7 logs",
-            },
-            {
-              from: 8,
-              to: 9,
-              color: blueHeatMapShades.MediumDark,
-              name: "8-9 logs",
-            },
-            {
-              from: 10,
-              to: 11,
-              color: blueHeatMapShades.Dark,
-              name: "10-11 logs",
-            },
-            {
-              from: 12,
-              to: Infinity,
-              color: blueHeatMapShades.Darkest,
-              name: "12+ logs",
-            },
-          ],
+          ranges: getHeatmapColorScaleRanges(theme),
         },
       },
     },
@@ -235,7 +215,7 @@ function HeatmapChart({
       options={options}
       series={data}
       type="heatmap"
-      height={350}
+      height={320}
     />
   );
 }

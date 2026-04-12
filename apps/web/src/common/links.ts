@@ -3,6 +3,7 @@ import {
   faChartSimple,
   faUser,
   faClipboardCheck,
+  faHouse,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faClipboard,
@@ -27,6 +28,12 @@ export interface NavLink {
 // Links for the navbar
 export const navbarLinks: NavLink[] = [
   {
+    name: "Dashboard",
+    path: RoutePaths.LANDING,
+    icon: faHouse,
+    displayIn: "navbar",
+  },
+  {
     name: "Profile",
     path: RoutePaths.PROFILE,
     icon: faUser,
@@ -34,7 +41,7 @@ export const navbarLinks: NavLink[] = [
     hideForGuest: true,
   },
   {
-    name: "About",
+    name: "Support",
     path: RoutePaths.ABOUT,
     icon: faCircleQuestion as IconDefinition,
     displayIn: "navbar",

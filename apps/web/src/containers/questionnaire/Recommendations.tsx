@@ -42,12 +42,18 @@ export function Recommendations() {
     const convertedResponses: Record<number, number | number[]> = {};
 
     Object.entries(questionnaireData.responses).forEach(([key, value]) => {
-      const questionId = parseInt(key);
-      try {
-        const parsed = JSON.parse(value);
-        convertedResponses[questionId] = parsed;
-      } catch (e) {
-        convertedResponses[questionId] = parseInt(value);
+      const questionId = parseInt(key, 10);
+      if (Number.isNaN(questionId)) return;
+      if (typeof value === "number" || Array.isArray(value)) {
+        convertedResponses[questionId] = value;
+        return;
+      }
+      if (typeof value === "string") {
+        try {
+          convertedResponses[questionId] = JSON.parse(value);
+        } catch {
+          convertedResponses[questionId] = parseInt(value, 10);
+        }
       }
     });
 
@@ -136,10 +142,10 @@ export function Recommendations() {
 
             {/* Content with slide animation */}
             <SlideContainer $animationDirection={animationDirection}>
+              <ImprovementLabel>Improve</ImprovementLabel>
               <CategoryHeader>
                 {recommendations[currentIndex]?.category}
               </CategoryHeader>
-              <ImprovementLabel>IMPROVEMENT AREA</ImprovementLabel>
               <RecommendationText>
                 {recommendations[currentIndex]?.feedback}
               </RecommendationText>

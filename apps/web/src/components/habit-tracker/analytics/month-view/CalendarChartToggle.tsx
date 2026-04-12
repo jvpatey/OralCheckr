@@ -7,116 +7,88 @@ interface ToggleProps {
   onToggleView: (value: boolean) => void;
 }
 
-// Compact pill-shaped toggle container
-const ToggleButtonContainer = styled.div`
+/** Same outline segmented pattern as analytics Month/Year ToggleButton */
+const ToggleShell = styled.div`
   position: relative;
-  background: ${({ theme }) => theme.glassBg};
-  backdrop-filter: blur(${({ theme }) => theme.glassBlur});
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 40px;
-  padding: 4px;
-  box-shadow: ${({ theme }) => theme.shadowLg};
   display: flex;
   align-items: center;
-  overflow: hidden;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px;
+  box-sizing: border-box;
+  min-height: 44px;
+  width: fit-content;
+  background: transparent;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  border-radius: 9999px;
+  box-shadow: none;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: ${({ theme }) => theme.primaryGradient};
-    opacity: 0.05;
-    border-radius: 40px;
-    pointer-events: none;
+  &:hover {
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}22`} inset;
+  }
+
+  @media (max-width: 768px) {
+    min-height: 40px;
   }
 `;
 
-// Floating indicator for active state
 const ToggleIndicator = styled.div<{ $activeIndex: number }>`
   position: absolute;
   top: 4px;
   left: 4px;
-  width: calc(50% - 4px);
+  width: calc((100% - 8px - 2px) / 2);
   height: calc(100% - 8px);
-  background: ${({ theme }) => theme.primaryGradient};
-  border-radius: 40px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateX(${({ $activeIndex }) => $activeIndex * 100}%);
-  box-shadow: ${({ theme }) => theme.shadowMd},
-    ${({ theme }) => theme.glowColor} 0 0 15px;
+  background: ${({ theme }) => `${theme.primary}0d`};
+  border-radius: 9999px;
+  box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}22`} inset;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(
+    calc(${({ $activeIndex }) => $activeIndex} * (100% + 2px))
+  );
   z-index: 1;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    border-radius: 40px;
-  }
+  pointer-events: none;
 `;
 
-// Individual toggle buttons - smaller compact design
-const ToggleButton = styled.button<{ $active: boolean }>`
+const IconSegment = styled.button<{ $active: boolean }>`
   position: relative;
-  background: transparent;
-  color: ${({ $active, theme }) =>
-    $active ? theme.white : theme.textSecondary};
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  width: 36px;
-  height: 36px;
-  box-sizing: border-box;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 2;
-  border-radius: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  svg {
-    font-size: 14px;
-    transition: all 0.3s ease;
-  }
+  flex: 1 1 0;
+  min-width: 40px;
+  min-height: 36px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 9999px;
+  color: ${({ $active, theme }) =>
+    $active ? theme.primary : theme.textSecondary};
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.25s ease;
 
   &:hover {
-    color: ${({ $active, theme }) => ($active ? theme.white : theme.primary)};
-    transform: translateY(-1px);
-
-    svg {
-      transform: scale(1.1);
-    }
+    color: ${({ theme }) => theme.primary};
   }
 
-  &:active {
-    transform: translateY(0);
-    transition-duration: 0.1s;
+  svg {
+    font-size: 1.0625rem;
   }
 
-  @media (max-width: 600px) {
-    width: 32px;
-    height: 32px;
-    padding: 6px;
+  @media (max-width: 768px) {
+    min-width: 40px;
+    min-height: 36px;
 
     svg {
-      font-size: 12px;
+      font-size: 1rem;
     }
   }
 `;
 
-// functional component to toggle between calendar and line chart view for analytics
 export function CalendarChartToggle({
   isCalendarView,
   onToggleView,
@@ -124,17 +96,26 @@ export function CalendarChartToggle({
   const activeIndex = isCalendarView ? 0 : 1;
 
   return (
-    <ToggleButtonContainer>
+    <ToggleShell>
       <ToggleIndicator $activeIndex={activeIndex} />
-      <ToggleButton $active={isCalendarView} onClick={() => onToggleView(true)}>
+      <IconSegment
+        type="button"
+        $active={isCalendarView}
+        onClick={() => onToggleView(true)}
+        aria-label="Calendar view"
+        aria-pressed={isCalendarView}
+      >
         <FontAwesomeIcon icon={faCalendarAlt} />
-      </ToggleButton>
-      <ToggleButton
+      </IconSegment>
+      <IconSegment
+        type="button"
         $active={!isCalendarView}
         onClick={() => onToggleView(false)}
+        aria-label="Chart view"
+        aria-pressed={!isCalendarView}
       >
         <FontAwesomeIcon icon={faChartLine} />
-      </ToggleButton>
-    </ToggleButtonContainer>
+      </IconSegment>
+    </ToggleShell>
   );
 }
