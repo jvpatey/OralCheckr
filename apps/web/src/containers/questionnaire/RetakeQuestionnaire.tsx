@@ -134,10 +134,6 @@ export function RetakeQuestionnaire({
 
               <RetakeBelowCard>
                 <RetakeHeroDescription>
-                  It looks like you&apos;ve already completed the oral health
-                  questionnaire.
-                </RetakeHeroDescription>
-                <RetakeHeroDescription>
                   If you wish to retake it to update your score and oral health
                   status, use the button below.
                 </RetakeHeroDescription>
