@@ -9,6 +9,9 @@ import {
   calculateMonthlyCompletion,
   calculateLongestStreak,
   calculateMissedDays,
+  calculatePerfectDays,
+  calculateCurrentStreakInMonth,
+  getDaysInMonth,
 } from "../../../../common/utilities/habit-analytics";
 import { AnalyticsTile } from "../../../../components/habit-tracker/analytics/month-view/AnalyticsTile";
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
@@ -37,6 +40,15 @@ interface ViewProps {
   onDateChange: (date: Date) => void;
   isLoading?: boolean;
 }
+
+const MONTH_ANALYTICS_TILE_DESCRIPTIONS = {
+  completionRate: "Percent of a perfect month.",
+  perfectDays: "Days you fully hit your daily target.",
+  currentStreak: "Consecutive days where you hit your full daily target.",
+  longestStreak: "Your best run of fully completed days this month.",
+  totalLogs: "Every check-in this month added together.",
+  missedDays: "Days in this month with no check-in.",
+} as const;
 
 export function MonthView({
   habits,
@@ -95,6 +107,31 @@ export function MonthView({
     ? calculateMissedDays(habitsLog, selectedHabit, currentYear, currentMonth)
     : 0;
 
+  const perfectDays = selectedHabit
+    ? calculatePerfectDays(
+        habitsLog,
+        selectedHabit,
+        currentYear,
+        currentMonth,
+        habitCount,
+      )
+    : 0;
+
+  const currentStreakInMonth = selectedHabit
+    ? calculateCurrentStreakInMonth(
+        habitsLog,
+        selectedHabit,
+        currentYear,
+        currentMonth,
+        habitCount,
+      )
+    : 0;
+
+  const daysInSelectedMonth = getDaysInMonth(
+    currentYear,
+    new Date(`${currentMonth} 1, ${currentYear}`).getMonth(),
+  );
+
   const habitLogs =
     selectedHabit && habitsLog[selectedHabit]
       ? habitsLog[selectedHabit][currentYear]?.[currentMonth] || {}
@@ -127,27 +164,48 @@ export function MonthView({
           <TilesSection>
             <TilesContainer>
               <AnalyticsTile
-                heading="Total Logs"
-                mainContent={isLoading ? "..." : totalCount}
-                subContent=""
-                isLoading={isLoading}
-              />
-              <AnalyticsTile
                 heading="Completion Rate"
                 mainContent={isLoading ? "..." : `${completionRate}%`}
                 subContent=""
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.completionRate}
+                progressPercent={isLoading ? undefined : completionRate}
+                isLoading={isLoading}
+              />
+              <AnalyticsTile
+                heading="Perfect Days"
+                mainContent={isLoading ? "..." : perfectDays}
+                subContent={
+                  isLoading ? "" : `of ${daysInSelectedMonth} days`
+                }
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.perfectDays}
+                isLoading={isLoading}
+              />
+              <AnalyticsTile
+                heading="Current Streak"
+                mainContent={isLoading ? "..." : currentStreakInMonth}
+                subContent=""
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.currentStreak}
                 isLoading={isLoading}
               />
               <AnalyticsTile
                 heading="Longest Streak"
                 mainContent={isLoading ? "..." : longestStreak}
                 subContent=""
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.longestStreak}
+                isLoading={isLoading}
+              />
+              <AnalyticsTile
+                heading="Total Logs"
+                mainContent={isLoading ? "..." : totalCount}
+                subContent=""
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.totalLogs}
                 isLoading={isLoading}
               />
               <AnalyticsTile
                 heading="Missed Days"
                 mainContent={isLoading ? "..." : missedDays}
                 subContent=""
+                description={MONTH_ANALYTICS_TILE_DESCRIPTIONS.missedDays}
                 isMissedDays={true}
                 isLoading={isLoading}
               />

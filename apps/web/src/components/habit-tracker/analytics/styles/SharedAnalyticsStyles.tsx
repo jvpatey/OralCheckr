@@ -231,7 +231,7 @@ export const TilesAndCalendarContainer = styled.div`
 export const TilesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: repeat(3, 1fr);
   gap: 0.5625rem;
   width: 100%;
   flex: 1 1 auto;
@@ -255,22 +255,30 @@ export const TilesContainer = styled.div`
     animation: ${scaleIn} 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
   }
 
+  & > *:nth-child(5) {
+    animation: ${scaleIn} 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
+  }
+
+  & > *:nth-child(6) {
+    animation: ${scaleIn} 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.6s both;
+  }
+
   @media (max-width: 1200px) {
     flex: none;
     height: auto;
-    min-height: 280px;
-    grid-template-rows: 1fr 1fr;
+    min-height: 440px;
+    grid-template-rows: repeat(3, 1fr);
     gap: 0.5625rem;
   }
 
   @media (max-width: 1024px) {
-    min-height: 280px;
+    min-height: 400px;
     gap: 0.625rem;
   }
 
   @media (max-width: 480px) {
     gap: 0.5rem;
-    min-height: 260px;
+    min-height: 360px;
   }
 `;
 
@@ -302,6 +310,7 @@ export const TileContainer = styled.div`
     content: "";
     position: absolute;
     inset: 0;
+    z-index: 0;
     background: ${({ theme }) => theme.primaryGradient};
     opacity: 0.03;
     border-radius: 16px;
@@ -343,7 +352,48 @@ export const TileContainer = styled.div`
   }
 `;
 
-export const TileHeading = styled.h3`
+/** Habit-tile-style liquid fill for metrics that are 0–100% (e.g. completion rate) */
+export const TileProgressFill = styled.div<{
+  $progress: number;
+  $isComplete: boolean;
+}>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: ${({ $progress }) => Math.min(100, Math.max(0, $progress))}%;
+  z-index: 1;
+  pointer-events: none;
+  background: ${({ $isComplete, theme }) =>
+    $isComplete
+      ? `linear-gradient(135deg, ${theme.secondary}40, ${theme.secondary}20, ${theme.secondary}60)`
+      : `linear-gradient(135deg, ${theme.primary}40, ${theme.primary}20, ${theme.primary}60)`};
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: ${({ $isComplete }) =>
+    $isComplete ? "16px" : "16px 0 0 16px"};
+
+  @media (max-width: 1024px) {
+    border-radius: ${({ $isComplete }) =>
+      $isComplete ? "14px" : "14px 0 0 14px"};
+  }
+
+  @media (max-width: 480px) {
+    border-radius: ${({ $isComplete }) =>
+      $isComplete ? "12px" : "12px 0 0 12px"};
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: width 0.2s ease-out;
+  }
+`;
+
+const tileTextOverFillShadow = `
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 0 14px rgba(255, 255, 255, 0.45);
+`;
+
+export const TileHeading = styled.h3<{ $overProgressFill?: boolean }>`
   font-size: 12px;
   font-weight: 600;
   color: ${({ theme }) => theme.textSecondary};
@@ -352,7 +402,8 @@ export const TileHeading = styled.h3`
   text-transform: uppercase;
   letter-spacing: 0.5px;
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  ${({ $overProgressFill }) => ($overProgressFill ? tileTextOverFillShadow : "")}
 
   @media (max-width: 1024px) {
     font-size: 11px;
@@ -367,6 +418,7 @@ export const TileHeading = styled.h3`
 export const TileMainContent = styled.div<{
   $isMissedDays?: boolean;
   $isLoading?: boolean;
+  $overProgressFill?: boolean;
 }>`
   font-size: 36px;
   font-weight: 700;
@@ -375,9 +427,10 @@ export const TileMainContent = styled.div<{
   margin: 0;
   opacity: ${({ $isLoading }) => ($isLoading ? 0.5 : 1)};
   position: relative;
-  z-index: 1;
+  z-index: 2;
   line-height: 1;
   text-align: center;
+  ${({ $overProgressFill }) => ($overProgressFill ? tileTextOverFillShadow : "")}
 
   @media (max-width: 1024px) {
     font-size: 32px;
@@ -394,10 +447,30 @@ export const TileSubContent = styled.div`
   margin: 0.25rem 0 0 0;
   text-align: center;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   font-weight: 400;
 
   @media (max-width: 480px) {
     font-size: 12px;
+  }
+`;
+
+/** Short plain-language hint below the tile label or context line */
+export const TileDescription = styled.p<{ $overProgressFill?: boolean }>`
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: ${({ theme }) => theme.textGrey};
+  margin: 0.35rem 0 0 0;
+  padding: 0 0.25rem;
+  text-align: center;
+  max-width: 100%;
+  position: relative;
+  z-index: 2;
+  ${({ $overProgressFill }) => ($overProgressFill ? tileTextOverFillShadow : "")}
+
+  @media (max-width: 480px) {
+    font-size: 9px;
+    margin-top: 0.3rem;
   }
 `;
