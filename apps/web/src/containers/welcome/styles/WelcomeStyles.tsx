@@ -181,6 +181,8 @@ export const HeroTrustRow = styled.p`
   font-size: 0.9375rem;
   color: ${({ theme }) => theme.textTertiary};
   letter-spacing: 0.02em;
+  line-height: 1.5;
+  max-width: 36rem;
   animation: ${fadeUp} 0.85s ease-out 0.48s both;
 
   @media (min-width: 1024px) {

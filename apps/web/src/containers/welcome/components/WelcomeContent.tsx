@@ -21,7 +21,9 @@ export function WelcomeContent() {
         Guided questionnaire, habit tracking, and clear insights—so you can
         focus on a healthier smile without the noise.
       </HeroDescription>
-      <HeroTrustRow>Built for daily use · Free to start</HeroTrustRow>
+      <HeroTrustRow>
+        Built by dental professionals for daily use · Free to start
+      </HeroTrustRow>
     </>
   );
 }
