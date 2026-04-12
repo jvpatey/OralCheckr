@@ -11,7 +11,7 @@ import { StartQuestionnaire } from "../../components/questionnaire/StartQuestion
 import { RetakeQuestionnaire } from "./RetakeQuestionnaire";
 import { BackgroundEffects } from "../welcome/styles/WelcomeStyles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../authentication/AuthContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSaveQuestionnaireResponse } from "../../hooks/questionnaire/useSaveQuestionnaireResponse";
@@ -26,11 +26,18 @@ import {
 } from "../../common/types/questionnaire/questionnaire.types";
 import {
   ModernAssessmentContainer,
+  AssessmentTopBar,
+  QuestionnaireBackButton,
+  AssessmentMainColumn,
   AssessmentHeader,
+  QuestionCardRow,
+  QuestionNavSide,
+  QuestionNavMobileBar,
+  QuestionNavArrowButton,
+  QuestionnaireNavSubmitButton,
   QuestionContent,
   QuestionFadeWrapper,
   QuestionPanel,
-  ActionSection,
   ProgressRoot,
   ProgressTrack,
   ProgressFill,
@@ -39,11 +46,6 @@ import {
   ProgressIndicator,
   ErrorMessage,
 } from "./styles/QuestionnaireStyles";
-import {
-  QuestionnaireFlowPrimaryButton,
-  QuestionnaireFlowSecondaryButton,
-  QuestionnaireFlowDangerButton,
-} from "../../components/questionnaire/styles/QuestionnaireFlowLayout";
 import {
   createResponseChangeHandler,
   createNextHandler,
@@ -199,27 +201,45 @@ export function Questionnaire() {
     navigate,
   ]);
 
+  // Question cross-fade: depend only on currentQuestion. Including displayedQuestion
+  // in deps cleared timeouts when the swap fired, canceling the fade-in and restuttering the animation.
   useEffect(() => {
-    if (prevQuestionRef.current !== currentQuestion && currentQuestion > 0) {
-      setIsTransitioning(true);
-
-      const updateTimer = setTimeout(() => {
-        setDisplayedQuestion(currentQuestion);
-      }, 75);
-
-      const fadeInTimer = setTimeout(() => {
-        setIsTransitioning(false);
-        prevQuestionRef.current = currentQuestion;
-      }, 150);
-
-      return () => {
-        clearTimeout(updateTimer);
-        clearTimeout(fadeInTimer);
-      };
-    } else if (currentQuestion > 0 && displayedQuestion !== currentQuestion) {
-      setDisplayedQuestion(currentQuestion);
+    if (currentQuestion <= 0) {
+      setDisplayedQuestion(0);
+      prevQuestionRef.current = 0;
+      setIsTransitioning(false);
+      return;
     }
-  }, [currentQuestion, displayedQuestion]);
+
+    // First entry into the flow (e.g. /questionnaire/1 or resume): show immediately, no fade.
+    if (prevQuestionRef.current === 0) {
+      setDisplayedQuestion(currentQuestion);
+      prevQuestionRef.current = currentQuestion;
+      setIsTransitioning(false);
+      return;
+    }
+
+    if (prevQuestionRef.current === currentQuestion) {
+      return;
+    }
+
+    const fadeMs = 180;
+    setIsTransitioning(true);
+
+    const updateTimer = window.setTimeout(() => {
+      setDisplayedQuestion(currentQuestion);
+    }, fadeMs);
+
+    const fadeInTimer = window.setTimeout(() => {
+      setIsTransitioning(false);
+      prevQuestionRef.current = currentQuestion;
+    }, fadeMs * 2);
+
+    return () => {
+      window.clearTimeout(updateTimer);
+      window.clearTimeout(fadeInTimer);
+    };
+  }, [currentQuestion]);
 
   const showRetakeScreen =
     initialLoadDone &&
@@ -253,6 +273,9 @@ export function Questionnaire() {
   const resetForRetake = useCallback(async () => {
     setResponses({});
     setHasInProgressQuestionnaire(false);
+    setDisplayedQuestion(1);
+    prevQuestionRef.current = 1;
+    setIsTransitioning(false);
     setCurrentQuestion(1);
     try {
       await saveProgressMutate({ responses: {}, currentQuestion: 1 });
@@ -323,12 +346,17 @@ export function Questionnaire() {
     setIsRetaking,
     setHasInProgressQuestionnaire,
     saveProgressMutate,
-    navigate
+    navigate,
+    queryClient
   );
 
   if (currentQuestion === 0) {
     return <StartQuestionnaire isAuthenticated={isAuthenticated} />;
   }
+
+  /** Avoid questions[-1] when URL/hydration sets currentQuestion before displayedQuestion catches up */
+  const visualQuestionStep =
+    displayedQuestion > 0 ? displayedQuestion : currentQuestion;
 
   const currentQuestionObj = questions[currentQuestion - 1];
   const currentQuestionType = currentQuestionObj?.type;
@@ -347,8 +375,8 @@ export function Questionnaire() {
       responses[lastQuestionKey] === undefined ||
       responses[lastQuestionKey] === null);
 
-  /** Keep bar/labels aligned with the faded question, not the step ahead during transition */
-  const progressStep = displayedQuestion;
+  /** Keep bar/labels aligned with the visible question */
+  const progressStep = visualQuestionStep;
   const progressPercent = Math.round(
     (progressStep / questions.length) * 100
   );
@@ -358,82 +386,139 @@ export function Questionnaire() {
       <BackgroundEffects />
       <LandingContainer>
         <ModernAssessmentContainer $isAuthenticated={isAuthenticated}>
-          <AssessmentHeader>
-            <ProgressRoot
-              role="progressbar"
-              aria-valuemin={0}
-              aria-valuemax={questions.length}
-              aria-valuenow={progressStep}
-              aria-valuetext={`${progressPercent}% complete, question ${progressStep} of ${questions.length}`}
-              aria-label="Questionnaire progress"
+          <AssessmentTopBar>
+            <QuestionnaireBackButton
+              type="button"
+              onClick={handleQuit}
+              aria-label={
+                hasEverSubmitted
+                  ? "Back to results"
+                  : "Back and leave questionnaire"
+              }
             >
-              <ProgressTrack>
-                <ProgressFill
-                  $percent={(progressStep / questions.length) * 100}
-                />
-                <ProgressPercentInside aria-hidden="true">
-                  {progressPercent}%
-                </ProgressPercentInside>
-              </ProgressTrack>
-            </ProgressRoot>
+              Back
+            </QuestionnaireBackButton>
+          </AssessmentTopBar>
 
-            <ProgressLabelsRow>
-              <ProgressIndicator>
-                Question {progressStep} of {questions.length}
-              </ProgressIndicator>
-            </ProgressLabelsRow>
-          </AssessmentHeader>
-
-          <QuestionContent>
-            <QuestionFadeWrapper
-              className={isTransitioning ? "fade-out" : "fade-in"}
-            >
-              <QuestionPanel>
-                <RenderQuestions
-                  {...questions[displayedQuestion - 1]}
-                  onResponseChange={handleResponseChange}
-                  initialResponse={
-                    questions[displayedQuestion - 1]
-                      ? responses[questions[displayedQuestion - 1].id]
-                      : undefined
-                  }
-                  questionId={displayedQuestion}
-                />
-              </QuestionPanel>
-            </QuestionFadeWrapper>
-          </QuestionContent>
-
-          <ActionSection>
-            <QuestionnaireFlowDangerButton onClick={handleQuit}>
-              <FontAwesomeIcon icon={faArrowLeft} aria-hidden />
-              {hasEverSubmitted ? "Exit to Results" : "Quit"}
-            </QuestionnaireFlowDangerButton>
-
-            <QuestionnaireFlowSecondaryButton
-              onClick={handlePrevious}
-              disabled={currentQuestion === 1}
-            >
-              Previous
-            </QuestionnaireFlowSecondaryButton>
-
-            {currentQuestion === questions.length ? (
-              <QuestionnaireFlowPrimaryButton
-                onClick={handleSubmit}
-                disabled={isSubmitDisabled || isSaving}
+          <AssessmentMainColumn>
+            <AssessmentHeader>
+              <ProgressRoot
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={questions.length}
+                aria-valuenow={progressStep}
+                aria-valuetext={`${progressPercent}% complete, question ${progressStep} of ${questions.length}`}
+                aria-label="Questionnaire progress"
               >
-                {isSaving ? "Submitting..." : "Submit"}
-              </QuestionnaireFlowPrimaryButton>
-            ) : (
-              <QuestionnaireFlowPrimaryButton
-                onClick={handleNext}
-                disabled={isNextDisabled}
-              >
-                Next
-              </QuestionnaireFlowPrimaryButton>
+                <ProgressTrack>
+                  <ProgressFill
+                    $percent={(progressStep / questions.length) * 100}
+                  />
+                  <ProgressPercentInside aria-hidden="true">
+                    {progressPercent}%
+                  </ProgressPercentInside>
+                </ProgressTrack>
+              </ProgressRoot>
+
+              <ProgressLabelsRow>
+                <ProgressIndicator>
+                  Question {progressStep} of {questions.length}
+                </ProgressIndicator>
+              </ProgressLabelsRow>
+            </AssessmentHeader>
+
+            <QuestionCardRow>
+              <QuestionNavSide>
+                <QuestionNavArrowButton
+                  type="button"
+                  onClick={handlePrevious}
+                  disabled={currentQuestion === 1}
+                  aria-label="Previous question"
+                >
+                  <FontAwesomeIcon icon={faChevronLeft} size="lg" />
+                </QuestionNavArrowButton>
+              </QuestionNavSide>
+
+              <QuestionContent>
+                <QuestionFadeWrapper
+                  className={isTransitioning ? "fade-out" : "fade-in"}
+                >
+                  <QuestionPanel>
+                    <RenderQuestions
+                      {...questions[visualQuestionStep - 1]}
+                      onResponseChange={handleResponseChange}
+                      initialResponse={
+                        questions[visualQuestionStep - 1]
+                          ? responses[questions[visualQuestionStep - 1].id]
+                          : undefined
+                      }
+                      questionId={visualQuestionStep}
+                    />
+                  </QuestionPanel>
+                </QuestionFadeWrapper>
+              </QuestionContent>
+
+              <QuestionNavSide>
+                {currentQuestion === questions.length ? (
+                  <QuestionnaireNavSubmitButton
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={isSubmitDisabled || isSaving}
+                    aria-label={
+                      isSaving ? "Submitting questionnaire" : "Submit questionnaire"
+                    }
+                  >
+                    {isSaving ? "Submitting..." : "Submit"}
+                  </QuestionnaireNavSubmitButton>
+                ) : (
+                  <QuestionNavArrowButton
+                    type="button"
+                    onClick={handleNext}
+                    disabled={isNextDisabled}
+                    aria-label="Next question"
+                  >
+                    <FontAwesomeIcon icon={faChevronRight} size="lg" />
+                  </QuestionNavArrowButton>
+                )}
+              </QuestionNavSide>
+
+              <QuestionNavMobileBar>
+                <QuestionNavArrowButton
+                  type="button"
+                  onClick={handlePrevious}
+                  disabled={currentQuestion === 1}
+                  aria-label="Previous question"
+                >
+                  <FontAwesomeIcon icon={faChevronLeft} size="lg" />
+                </QuestionNavArrowButton>
+                {currentQuestion === questions.length ? (
+                  <QuestionnaireNavSubmitButton
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={isSubmitDisabled || isSaving}
+                    aria-label={
+                      isSaving ? "Submitting questionnaire" : "Submit questionnaire"
+                    }
+                  >
+                    {isSaving ? "Submitting..." : "Submit"}
+                  </QuestionnaireNavSubmitButton>
+                ) : (
+                  <QuestionNavArrowButton
+                    type="button"
+                    onClick={handleNext}
+                    disabled={isNextDisabled}
+                    aria-label="Next question"
+                  >
+                    <FontAwesomeIcon icon={faChevronRight} size="lg" />
+                  </QuestionNavArrowButton>
+                )}
+              </QuestionNavMobileBar>
+            </QuestionCardRow>
+
+            {saveError && (
+              <ErrorMessage>Error: {saveError.message}</ErrorMessage>
             )}
-          </ActionSection>
-
-          {saveError && <ErrorMessage>Error: {saveError.message}</ErrorMessage>}
+          </AssessmentMainColumn>
         </ModernAssessmentContainer>
       </LandingContainer>
     </PageBackground>

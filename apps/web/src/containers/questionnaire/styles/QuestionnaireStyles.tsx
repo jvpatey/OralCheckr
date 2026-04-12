@@ -1,5 +1,10 @@
 import styled, { keyframes } from "styled-components";
+import { QuestionnaireFlowPrimaryButton } from "../../../components/questionnaire/styles/QuestionnaireFlowLayout";
+import { BaseButton } from "../../welcome/styles/ButtonStyles";
 import { scrollbarStyle } from "../../../styles/SharedStyles";
+
+/** Shared max width for questionnaire column */
+const assessmentMaxWidth = "min(960px, 100%)";
 
 // Smooth fade-up animation matching landing page
 const fadeUp = keyframes`
@@ -24,7 +29,7 @@ export const ModernAssessmentContainer = styled.div<{
   width: ${({ $isAuthenticated }) =>
     $isAuthenticated ? "calc(100% - 240px)" : "100%"};
   margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
-  padding: 40px 20px;
+  padding: 24px 20px 32px;
   max-height: calc(100dvh - clamp(100px, 11vw, 132px) - clamp(40px, 5vw, 56px));
   overflow: hidden;
 
@@ -37,7 +42,7 @@ export const ModernAssessmentContainer = styled.div<{
   }
 
   @media (max-width: 800px) {
-    padding: 20px 16px;
+    padding: 16px 16px 24px;
     max-height: calc(100dvh - clamp(88px, 14vw, 108px) - clamp(32px, 6vw, 48px));
   }
 
@@ -47,6 +52,147 @@ export const ModernAssessmentContainer = styled.div<{
   }
 `;
 
+/** Same outline pill as welcome Login — compact, no full-width stretch */
+export const QuestionnaireBackButton = styled(BaseButton).attrs(() => ({
+  type: "button" as const,
+  $variant: "login" as const,
+}))`
+  flex: none !important;
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 10px 20px !important;
+`;
+
+/** Top row: back aligned with main column */
+export const AssessmentTopBar = styled.div`
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  max-width: ${assessmentMaxWidth};
+  margin: 0 auto 16px;
+  padding: 0 4px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 12px;
+  }
+`;
+
+/** Progress + card column */
+export const AssessmentMainColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  max-width: ${assessmentMaxWidth};
+  margin: 0 auto;
+`;
+
+/** Desktop: prev | card | next. Mobile: card then nav bar below */
+export const QuestionCardRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: clamp(10px, 2vw, 24px);
+  width: 100%;
+  flex: 1 1 0;
+  min-height: 0;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    flex: 1 1 auto;
+    align-items: stretch;
+    gap: 0;
+  }
+`;
+
+/** Side arrow column — hidden on small screens (mobile bar used instead) */
+export const QuestionNavSide = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  align-self: center;
+
+  @media (max-width: 640px) {
+    display: none;
+  }
+`;
+
+/** Prev + Next/Submit under the card on narrow viewports */
+export const QuestionNavMobileBar = styled.div`
+  display: none;
+
+  @media (max-width: 640px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-shrink: 0;
+    margin-top: 14px;
+    gap: 12px;
+    padding: 0 2px;
+  }
+`;
+
+/** Circular controls — border / hover aligned with welcome `login` outline button */
+export const QuestionNavArrowButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  background: transparent;
+  color: ${({ theme }) => theme.textPrimary};
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: none;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
+
+  &:hover:not(:disabled) {
+    background: ${({ theme }) => `${theme.primary}10`};
+    border-color: ${({ theme }) => `${theme.primary}70`};
+    box-shadow: 0 0 0 1px ${({ theme }) => `${theme.primary}55`} inset;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &:disabled:hover {
+    background: transparent;
+    border-color: ${({ theme }) => `${theme.primary}45`};
+    box-shadow: none;
+  }
+`;
+
+/** Compact primary submit for final step (desktop flank + mobile bar) */
+export const QuestionnaireNavSubmitButton = styled(QuestionnaireFlowPrimaryButton)`
+  flex: none !important;
+  min-width: min(160px, 42vw) !important;
+  padding: 12px 22px !important;
+  font-size: 1rem !important;
+`;
+
 // Compact header section with minimal spacing
 export const AssessmentHeader = styled.div`
   flex-shrink: 0;
@@ -54,39 +200,34 @@ export const AssessmentHeader = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
-  padding: 0 20px;
+  padding: 0 4px;
   width: 100%;
-  max-width: 800px;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
 
   @media (max-width: 768px) {
-    margin-bottom: 18px;
-    padding: 0 16px;
+    margin-bottom: 16px;
   }
 `;
 
 // Scrollable middle — flex min-height:0 + flex-start so long checklists aren’t clipped
 export const QuestionContent = styled.div`
   flex: 1 1 0;
+  min-width: 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  margin-bottom: 20px;
+  max-width: 100%;
+  margin: 0;
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
   -webkit-overflow-scrolling: touch;
   ${scrollbarStyle}
-
-  @media (max-width: 768px) {
-    margin-bottom: 18px;
-  }
 `;
 
 // Fade wrapper for smooth question transitions without remounting
@@ -95,7 +236,7 @@ export const QuestionFadeWrapper = styled.div`
   min-width: 0;
   flex-shrink: 0;
   opacity: 1;
-  transition: opacity 0.12s ease-in-out;
+  transition: opacity 0.18s ease-in-out;
 
   &.fade-out {
     opacity: 0;
@@ -115,32 +256,11 @@ export const QuestionPanel = styled.div`
   box-shadow:
     ${({ theme }) => theme.shadowLg},
     0 0 0 1px ${({ theme }) => theme.borderLight} inset;
-  padding: clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px);
+  padding: clamp(24px, 4.5vw, 40px) clamp(20px, 3.5vw, 36px);
 
   @media (max-width: 480px) {
     border-radius: 16px;
-    padding: 18px 14px;
-  }
-`;
-
-// Compact action section for buttons
-export const ActionSection = styled.div`
-  flex-shrink: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  margin-top: 16px;
-  flex-wrap: wrap;
-
-  @media (max-width: 768px) {
-    gap: 12px;
-    flex-direction: column;
-    align-items: stretch;
-    margin-top: 14px;
+    padding: 20px 16px;
   }
 `;
 
@@ -155,7 +275,7 @@ export const ErrorMessage = styled.div`
   text-align: center;
   font-weight: 500;
   width: 100%;
-  max-width: 800px;
+  max-width: ${assessmentMaxWidth};
   margin-left: auto;
   margin-right: auto;
 `;

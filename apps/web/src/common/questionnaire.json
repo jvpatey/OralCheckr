@@ -365,7 +365,7 @@
           "optionId": 3,
           "optionLabel": "Often",
           "points": 1,
-          "feedback": "Persistent dry mouth often needs evaluation. Your dentistal professional can suggest strategies and tips to help you manage it."
+          "feedback": "Persistent dry mouth often needs evaluation. Your dental professional can suggest strategies and tips to help you manage it."
         },
         {
           "optionId": 4,
@@ -451,13 +451,13 @@
           "optionId": 3,
           "optionLabel": "Frequently",
           "points": 1,
-          "feedback": "Frequent bleeding is a sign of gum disease, which can lead to loss of supporting bone and tissues around your teeth over time. Visit your dentist for an evaluation."
+          "feedback": "Frequent bleeding is a sign of gum disease, which can lead to loss of supporting bone and tissues around your teeth over time. Visit your dental professional for an evaluation."
         },
         {
           "optionId": 4,
           "optionLabel": "Always",
           "points": 0,
-          "feedback": "Persistent bleeding is a sign of gum disease, which can lead to loss of supporting bone and tissues around your teeth over time. Visit your dentist for an evaluation."
+          "feedback": "Persistent bleeding is a sign of gum disease, which can lead to loss of supporting bone and tissues around your teeth over time. Visit your dental professional for an evaluation."
         }
       ]
     },
@@ -471,13 +471,13 @@
           "optionId": 1,
           "optionLabel": "Yes",
           "points": 0,
-          "feedback": "Frequent sensitivity can indicate enamel erosion, gum recession, or other tooth-related issues. Consider using a toothpaste for sensitive teeth and consult your dentist."
+          "feedback": "Frequent sensitivity can indicate enamel erosion, gum recession, or other tooth-related issues. Consider using a toothpaste for sensitive teeth and consult your dental professional."
         },
         {
           "optionId": 2,
           "optionLabel": "Occasionally",
           "points": 2,
-          "feedback": "Occasional sensitivity is common but can be a sign of other tooth-related issues. Consider using a toothpaste for sensitive teeth but if it persists, consult your dentist."
+          "feedback": "Occasional sensitivity is common but can be a sign of other tooth-related issues. Consider using a toothpaste for sensitive teeth but if it persists, consult your dental professional."
         },
         {
           "optionId": 3,
@@ -506,19 +506,19 @@
           "optionId": 3,
           "optionLabel": "3-4",
           "points": 4,
-          "feedback": "Occasional jaw pain can often be helped with simple self-care. If it persists, consult your dentist."
+          "feedback": "Occasional jaw pain can often be helped with simple self-care. If it persists, consult your dental professional."
         },
         {
           "optionId": 4,
           "optionLabel": "5-6",
           "points": 3,
-          "feedback": "Moderate pain should be evaluated by a dentist to identify and treat the underlying cause."
+          "feedback": "Moderate pain should be evaluated by a dental professional to identify and treat the underlying cause."
         },
         {
           "optionId": 5,
           "optionLabel": "7-8",
           "points": 2,
-          "feedback": "Frequent jaw or jaw-joint pain should be evaluated by a dentist or specialist, who can advise you on next steps."
+          "feedback": "Frequent jaw or jaw-joint pain should be evaluated by a dental professional, who can advise you on next steps."
         },
         {
           "optionId": 6,
@@ -538,7 +538,7 @@
           "optionId": 1,
           "optionLabel": "Yes",
           "points": 0,
-          "feedback": "Grinding or clenching can lead to tooth damage and jaw pain. If you are experiencing these issues, consult your dentist."
+          "feedback": "Grinding or clenching can lead to tooth damage and jaw pain. If you are experiencing these issues, consult your dental professional."
         },
         {
           "optionId": 2,
@@ -549,7 +549,7 @@
           "optionId": 3,
           "optionLabel": "Not sure",
           "points": 0,
-          "feedback": "If you're unsure, your dentist can check for signs of grinding or clenching during your next visit. Without preventative measures, clenching and grinding can cause excess wear on your teeth, strain on your jaw joints, and muscle pain."
+          "feedback": "If you're unsure, your dental professional can check for signs of grinding or clenching during your next visit. Without preventative measures, clenching and grinding can cause excess wear on your teeth, strain on your jaw joints, and muscle pain."
         }
       ]
     },
@@ -610,7 +610,7 @@
           "optionId": 5,
           "optionLabel": "I'm not sure",
           "points": 1,
-          "feedback": "It's important to start visiting the dentist. Schedule an appointment to begin your oral health care routine."
+          "feedback": "It's important to start visiting the dental office. Schedule an appointment to begin your oral health care routine."
         }
       ]
     }
