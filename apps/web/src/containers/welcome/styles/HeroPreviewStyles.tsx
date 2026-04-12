@@ -1,4 +1,26 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
+
+const heroPreviewFadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(1.02) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+`;
+
+const heroPreviewFadeOut = keyframes`
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.985) translateY(-4px);
+  }
+`;
 
 export const HeroPreviewRoot = styled.div<{ $visible: boolean }>`
   width: 100%;
@@ -114,6 +136,53 @@ export const HeroPreviewBody = styled.div`
   overflow: hidden;
 `;
 
+export const HeroPreviewImageStack = styled.div`
+  position: absolute;
+  inset: 0;
+`;
+
+export const HeroPreviewImageCrossfade = styled.img<{
+  $phase: "in" | "out" | "hold";
+}>`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  pointer-events: none;
+  z-index: ${({ $phase }) => ($phase === "out" ? 1 : 2)};
+
+  ${({ $phase }) =>
+    $phase === "hold" &&
+    css`
+      opacity: 1;
+    `}
+
+  ${({ $phase }) =>
+    $phase === "in" &&
+    css`
+      opacity: 0;
+      animation: ${heroPreviewFadeIn} 0.5s cubic-bezier(0.22, 1, 0.36, 1)
+        forwards;
+    `}
+
+  ${({ $phase }) =>
+    $phase === "out" &&
+    css`
+      opacity: 1;
+      animation: ${heroPreviewFadeOut} 0.5s cubic-bezier(0.22, 1, 0.36, 1)
+        forwards;
+    `}
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+`;
+
 export const HeroPreviewImage = styled.img`
   width: 100%;
   height: 100%;
@@ -170,7 +239,9 @@ export const HeroPreviewBadgeRow = styled.div`
   }
 `;
 
-export const HeroPreviewBadge = styled.span`
+export const HeroPreviewBadge = styled.button<{ $active?: boolean }>`
+  margin: 0;
+  appearance: none;
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
@@ -178,9 +249,33 @@ export const HeroPreviewBadge = styled.span`
   text-transform: uppercase;
   padding: 8px 14px;
   border-radius: 9999px;
-  color: ${({ theme }) => theme.textSecondary};
-  background: ${({ theme }) => theme.glassBg};
-  border: 1px solid ${({ theme }) => theme.borderLight};
+  color: ${({ theme, $active }) =>
+    $active ? theme.textPrimary : theme.textSecondary};
+  background: ${({ theme, $active }) =>
+    $active ? theme.surfaceElevated : theme.glassBg};
+  border: 1px solid
+    ${({ theme, $active }) =>
+      $active ? theme.borderMedium : theme.borderLight};
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.textPrimary};
+    border-color: ${({ theme }) => theme.borderLight};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 `;

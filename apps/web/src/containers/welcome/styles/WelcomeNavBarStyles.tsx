@@ -287,49 +287,42 @@ export const NavSupportLink = styled(Link)`
   }
 `;
 
-// Theme toggle wrapper with enhanced glassmorphism
+/* Pill shell aligned with NavSupportLink (outline, same height, hover) */
 export const TooltipWrapper = styled.div`
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  /* Modern glassmorphism button styling */
-  background: ${({ theme }) => theme.glassBg}cc;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-
-  padding: 10px;
-  border-radius: 14px;
-  border: 1px solid ${({ theme }) => theme.borderLight};
-
-  /* Enhanced shadow */
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.08),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 40px;
+  padding: 0 2px;
+  border-radius: 9999px;
+  background: transparent;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease;
 
   @media (max-width: 768px) {
-    padding: 8px;
-    border-radius: 12px;
+    min-height: 38px;
   }
 
   @media (max-width: 480px) {
-    padding: 7px;
-    border-radius: 12px;
+    min-height: 36px;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow:
-      0 4px 16px rgba(0, 0, 0, 0.12),
-      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-    border-color: ${({ theme }) => theme.primary}60;
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    background: ${({ theme }) => `${theme.primary}0d`};
   }
 
-  &:active {
-    transform: translateY(0);
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 
   &:hover::after {

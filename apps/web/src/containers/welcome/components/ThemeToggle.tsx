@@ -5,29 +5,37 @@ import styled from "styled-components";
 import { useState } from "react";
 
 const ToggleButton = styled.button`
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
-  padding: 8px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0 12px;
   margin: 0;
   border: none;
   background: transparent;
   cursor: pointer;
   font: inherit;
   color: inherit;
-  border-radius: 10px;
+  border-radius: 9999px;
   box-sizing: border-box;
+  transition: color 0.25s ease;
 
-  &:hover {
-    transform: scale(1.1);
+  @media (max-width: 768px) {
+    min-height: 38px;
+    min-width: 38px;
+    padding: 0 11px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 36px;
+    min-width: 36px;
+    padding: 0 10px;
   }
 
   &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.primary};
-    outline-offset: 2px;
+    outline-offset: 3px;
   }
 `;
 
