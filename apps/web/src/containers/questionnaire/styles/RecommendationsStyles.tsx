@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { QuestionnaireOutlineCta } from "../../../components/questionnaire/styles/QuestionnaireFlowLayout";
 import { scrollbarStyle } from "../../../styles/SharedStyles";
 
 // Animation keyframes
@@ -189,6 +190,10 @@ export const SlideContainer = styled.div<{
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
   animation: ${({ $animationDirection }) => {
       switch ($animationDirection) {
         case "slideInLeft":
@@ -238,6 +243,8 @@ export const RecommendationText = styled.div`
   padding: 0 12px;
   font-weight: 400;
   margin-top: 8px;
+  flex: 1;
+  min-height: 0;
 
   @media (max-width: 768px) {
     font-size: 0.95rem;
@@ -250,6 +257,92 @@ export const RecommendationText = styled.div`
     line-height: 1.3;
     padding: 0 4px;
   }
+`;
+
+/** Bottom strip on the rec card — left-aligned, separated from main copy */
+export const SuggestedHabitFooter = styled.div`
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 100%;
+  margin-top: auto;
+  padding: 16px 4px 0;
+  text-align: left;
+
+  @media (max-width: 480px) {
+    padding: 14px 0 0;
+  }
+`;
+
+export const SuggestedHabitHeading = styled.h3`
+  margin: 0 0 10px 0;
+  padding: 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-align: left;
+  line-height: 1.3;
+  color: ${({ theme }) => theme.textSecondary};
+`;
+
+export const SuggestedHabitHeadingAccent = styled.span`
+  color: ${({ theme }) => theme.primary};
+  font-weight: 800;
+  letter-spacing: -0.03em;
+`;
+
+export const SuggestedHabitDivider = styled.div`
+  width: 100%;
+  height: 1px;
+  margin: 0 0 12px 0;
+  background: ${({ theme }) => theme.borderLight};
+`;
+
+export const SuggestedHabitAddButton = styled(QuestionnaireOutlineCta)`
+  width: 100%;
+`;
+
+export const AlreadyTrackingNote = styled.p`
+  margin: 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.textTertiary};
+  text-align: left;
+  line-height: 1.45;
+`;
+
+export const HabitAddedNote = styled.p`
+  margin: 0 0 12px 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.success};
+  text-align: left;
+  line-height: 1.45;
+`;
+
+export const ViewHabitTrackerButton = styled(QuestionnaireOutlineCta)`
+  width: 100%;
+`;
+
+/** Wraps suggested-habit action blocks for layout animation */
+export const SuggestedHabitActionsSlot = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+`;
+
+export const HabitActionError = styled.p`
+  margin: 8px 0 0 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.error};
+  text-align: left;
+  line-height: 1.4;
 `;
 
 // Empty state

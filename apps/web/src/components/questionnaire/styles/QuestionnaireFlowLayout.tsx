@@ -94,6 +94,52 @@ export const QuestionnairePrimaryCta = styled(BaseButton).attrs(() => ({
   font-size: 1.0625rem;
 `;
 
+/**
+ * Outline pill — same look as suggested-habit “Add to tracker” / “Go to habit tracker”
+ * (welcome login outline + results retake CTA).
+ */
+export const QuestionnaireOutlineCta = styled.button`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-height: 46px;
+  padding: 11px 18px;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  text-align: center;
+  color: ${({ theme }) => theme.textPrimary};
+  background: transparent;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    opacity 0.25s ease,
+    transform 0.2s ease;
+
+  &:hover:not(:disabled) {
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    background: ${({ theme }) => `${theme.primary}0d`};
+    color: ${({ theme }) => theme.primary};
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
+  }
+`;
+
 /** In-flow questionnaire: Next / Submit */
 export const QuestionnaireFlowPrimaryButton = styled(BaseButton).attrs(() => ({
   $variant: "primary" as const,
