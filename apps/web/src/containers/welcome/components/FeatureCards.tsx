@@ -16,7 +16,7 @@ export function FeatureCards() {
       icon: <FontAwesomeIcon icon={faClipboardList} size="lg" />,
       title: "Oral health questionnaire",
       description:
-        "A structured check-in that surfaces priorities and next steps tailored to you.",
+        "A structured check-in that surfaces priorities and next steps tailored to you. When you are done, open a printable visit summary for your appointment.",
       size: "medium",
     },
     {
@@ -40,7 +40,7 @@ export function FeatureCards() {
       icon: <FontAwesomeIcon icon={faLightbulb} size="sm" />,
       title: "Smart recommendations",
       description:
-        "Practical tips grounded in your latest assessment—not generic advice.",
+        "Practical tips from your latest assessment, plus one-tap suggested habits for your tracker—not generic advice.",
       size: "small",
     },
     {

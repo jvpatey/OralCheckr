@@ -146,6 +146,9 @@ const ModernCard = styled(Link)`
   &:nth-child(2) {
     animation-delay: 0.2s;
   }
+  &:nth-child(3) {
+    animation-delay: 0.3s;
+  }
 
   @media (prefers-reduced-motion: no-preference) {
     &:hover {
