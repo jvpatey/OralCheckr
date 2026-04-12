@@ -5,8 +5,8 @@ import { IconButton } from "./IconButton";
 import {
   faTrashAlt,
   faPencilAlt,
-  faPlusCircle,
-  faMinusCircle,
+  faPlus,
+  faMinus,
 } from "@fortawesome/free-solid-svg-icons";
 import { memo } from "react";
 
@@ -62,7 +62,7 @@ const HabitRowComponent = memo(
           <IconButton
             look="subtle"
             accent="minus"
-            icon={faMinusCircle}
+            icon={faMinus}
             onClick={() => handleRemoveLog(habit.name, selectedDate)}
             disabled={isRemoveLogDisabled}
           />
@@ -79,7 +79,7 @@ const HabitRowComponent = memo(
           <IconButton
             look="subtle"
             accent="plus"
-            icon={faPlusCircle}
+            icon={faPlus}
             onClick={() => handleLog(habit.name, selectedDate)}
             disabled={isAddLogDisabled}
           />

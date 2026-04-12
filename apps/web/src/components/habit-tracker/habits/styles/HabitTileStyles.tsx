@@ -28,7 +28,7 @@ export const flipCardCommonStyles = css<{ $isComplete: boolean }>`
       $isComplete
         ? `color-mix(in srgb, ${theme.secondary} 32%, transparent)`
         : `color-mix(in srgb, ${theme.primary} 28%, transparent)`};
-  border-radius: 16px;
+  border-radius: 9999px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -49,19 +49,12 @@ export const flipCardCommonStyles = css<{ $isComplete: boolean }>`
 // Styled component for the tile container with modern effects
 export const TileContainer = styled.div`
   perspective: 1000px;
-  border-radius: 14px;
+  border-radius: 9999px;
   flex: 1;
   min-width: 0;
   width: auto;
   height: 56px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-
-  &:hover {
-    box-shadow: ${({ theme }) =>
-      `${theme.shadowLg}, 0 0 28px color-mix(in srgb, ${theme.primary} 22%, transparent)`};
-    transform: translateY(-2px);
-  }
 
   @media (max-width: 768px) {
     height: 54px;
@@ -69,14 +62,6 @@ export const TileContainer = styled.div`
 
   &:hover .arrow-icon {
     opacity: 1;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-
-    &:hover {
-      transform: none;
-    }
   }
 `;
 
@@ -94,74 +79,14 @@ export const ProgressBar = styled.div<{
     $isComplete
       ? `linear-gradient(135deg, ${theme.secondary}40, ${theme.secondary}20, ${theme.secondary}60)`
       : `linear-gradient(135deg, ${theme.primary}40, ${theme.primary}20, ${theme.primary}60)`};
-  background-size: 200% 100%;
   z-index: 1;
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 16px 0 0 16px;
+  border-radius: ${({ $isComplete }) =>
+    $isComplete ? "9999px" : "9999px 0 0 9999px"};
   overflow: hidden;
-
-  /* Liquid flowing animation */
-  &::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-      45deg,
-      transparent 30%,
-      rgba(255, 255, 255, 0.3) 50%,
-      transparent 70%
-    );
-    animation: liquidFlow 3s ease-in-out infinite;
-    transform: translateX(-100%) rotate(45deg);
-  }
-
-  /* Liquid bubble effect */
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 10%;
-    right: 10%;
-    width: 8px;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    animation: bubbleFloat 2s ease-in-out infinite;
-  }
-
-  @keyframes liquidFlow {
-    0% {
-      transform: translateX(-100%) rotate(45deg);
-    }
-    50% {
-      transform: translateX(100%) rotate(45deg);
-    }
-    100% {
-      transform: translateX(100%) rotate(45deg);
-    }
-  }
-
-  @keyframes bubbleFloat {
-    0%,
-    100% {
-      transform: translateY(0) scale(1);
-      opacity: 0.4;
-    }
-    50% {
-      transform: translateY(-10px) scale(1.2);
-      opacity: 0.8;
-    }
-  }
 
   @media (prefers-reduced-motion: reduce) {
     transition: width 0.2s ease-out;
-
-    &::before,
-    &::after {
-      animation: none !important;
-    }
   }
 `;
 
@@ -301,7 +226,7 @@ export const BackText = styled.div`
 export const LogCountBubble = styled.div<{ $isComplete: boolean }>`
   font-size: 0.8125rem;
   font-weight: ${({ $isComplete }) => ($isComplete ? 700 : 600)};
-  border-radius: 12px;
+  border-radius: 9999px;
   min-width: 34px;
   height: 34px;
   display: flex;
@@ -312,7 +237,6 @@ export const LogCountBubble = styled.div<{ $isComplete: boolean }>`
   z-index: 2;
   padding: 0 9px;
   position: relative;
-  overflow: hidden;
 
   ${({ $isComplete, theme }) =>
     $isComplete
@@ -333,37 +257,4 @@ export const LogCountBubble = styled.div<{ $isComplete: boolean }>`
     border: 1px solid color-mix(in srgb, ${theme.borderLight} 85%, transparent);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   `}
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    opacity: ${({ $isComplete }) => ($isComplete ? 1 : 0)};
-    background: linear-gradient(
-      45deg,
-      transparent 30%,
-      rgba(255, 255, 255, 0.35) 50%,
-      transparent 70%
-    );
-    animation: ${({ $isComplete }) => ($isComplete ? "shimmer 2.5s ease-in-out infinite" : "none")};
-    transform: translateX(-100%) rotate(45deg);
-  }
-
-  @keyframes shimmer {
-    0% {
-      transform: translateX(-100%) rotate(45deg);
-    }
-    100% {
-      transform: translateX(100%) rotate(45deg);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    &::before {
-      animation: none !important;
-    }
-  }
 `;

@@ -438,17 +438,22 @@ export const StyledHabitList = styled.div`
   padding-right: 4px;
 `;
 
-// Row: flanking controls match TileContainer height (56px / 54px)
+// Row: flanking controls = week-selector arrow size, centered in narrow columns
 export const HabitRow = styled.div`
   display: grid;
-  grid-template-columns: 56px minmax(0, 1fr) 56px;
+  grid-template-columns: 40px minmax(0, 1fr) 40px;
   column-gap: 10px;
   align-items: center;
   width: 100%;
   min-width: 0;
 
+  & > *:first-child,
+  & > *:last-child {
+    justify-self: center;
+  }
+
   @media (max-width: 768px) {
-    grid-template-columns: 54px minmax(0, 1fr) 54px;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
   }
 
   @media (max-width: 480px) {

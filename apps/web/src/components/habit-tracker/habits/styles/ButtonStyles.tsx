@@ -78,144 +78,105 @@ export const IconButtonContainer = styled(BaseButton)<{
   }
 `;
 
-/** Flanking habit tile: same height as TileContainer (56px / 54px) */
+/** Flanking habit controls — same visual language as week-selector ArrowButton */
 export const HabitIconButtonContainer = styled(BaseButton)<{
   $disabled?: boolean;
   $accent: "plus" | "minus" | "edit" | "delete";
 }>`
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
 
   ${({ $disabled, theme }) =>
     $disabled
       ? css`
           cursor: not-allowed;
-          opacity: 0.42;
-          background: ${theme.disabledBackground};
-          border: 1px solid ${theme.borderMedium};
-          color: ${theme.textDisabled};
+          pointer-events: none;
+          opacity: 0.5;
+          background: transparent;
+          border: 1px solid ${theme.borderLight};
+          color: ${theme.textGrey};
           box-shadow: none;
         `
       : css`
           cursor: pointer;
           opacity: 1;
-          background: color-mix(in srgb, ${theme.glassBg} 88%, transparent);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.1),
-            ${theme.shadowSm};
+          background: transparent;
+          box-shadow: none;
         `}
 
   ${({ $disabled, $accent, theme }) =>
     !$disabled &&
-    ($accent === "plus"
+    ($accent === "plus" || $accent === "minus"
       ? css`
-          border: 1px solid
-            color-mix(in srgb, ${theme.secondary} 36%, transparent);
-          color: ${theme.secondary};
+          border: 1px solid ${`${theme.primary}45`};
+          color: ${theme.textPrimary};
           &:hover {
-            border-color: color-mix(
-              in srgb,
-              ${theme.secondary} 58%,
-              transparent
-            );
-            background: color-mix(
-              in srgb,
-              ${theme.secondary} 16%,
-              ${theme.glassBg}
-            );
-            color: ${theme.secondaryDark};
-            box-shadow:
-              inset 0 1px 0 rgba(255, 255, 255, 0.12),
-              ${theme.shadowMd},
-              0 0 14px color-mix(in srgb, ${theme.secondary} 22%, transparent);
-            transform: translateY(-1px);
+            border-color: ${`${theme.primary}65`};
+            background: ${`${theme.primary}0d`};
+            color: ${theme.primary};
+            box-shadow: 0 0 0 1px ${`${theme.primary}22`} inset;
           }
         `
-      : $accent === "minus"
+      : $accent === "edit"
         ? css`
             border: 1px solid
-              color-mix(in srgb, ${theme.primary} 28%, transparent);
-            color: ${theme.textSecondary};
+              color-mix(in srgb, ${theme.warning} 45%, transparent);
+            color: ${theme.textPrimary};
             &:hover {
-              border-color: color-mix(in srgb, ${theme.error} 48%, transparent);
+              border-color: color-mix(
+                in srgb,
+                ${theme.warning} 65%,
+                transparent
+              );
               background: color-mix(
                 in srgb,
-                ${theme.error} 11%,
-                ${theme.glassBg}
+                ${theme.warning} 12%,
+                transparent
               );
-              color: ${theme.error};
-              box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                ${theme.shadowMd};
-              transform: translateY(-1px);
+              color: ${theme.warning};
+              box-shadow: 0 0 0 1px
+                color-mix(in srgb, ${theme.warning} 22%, transparent) inset;
             }
           `
-        : $accent === "edit"
-          ? css`
-              border: 1px solid
-                color-mix(in srgb, ${theme.warning} 34%, transparent);
-              color: ${theme.textTertiary};
-              &:hover {
-                border-color: color-mix(
-                  in srgb,
-                  ${theme.warning} 55%,
-                  transparent
-                );
-                background: color-mix(
-                  in srgb,
-                  ${theme.warning} 14%,
-                  ${theme.glassBg}
-                );
-                color: ${theme.warning};
-                box-shadow:
-                  inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                  ${theme.shadowMd};
-                transform: translateY(-1px);
-              }
-            `
-          : css`
-              border: 1px solid
-                color-mix(in srgb, ${theme.error} 32%, transparent);
-              color: ${theme.textTertiary};
-              &:hover {
-                border-color: color-mix(
-                  in srgb,
-                  ${theme.error} 58%,
-                  transparent
-                );
-                background: color-mix(
-                  in srgb,
-                  ${theme.error} 14%,
-                  ${theme.glassBg}
-                );
-                color: ${theme.error};
-                box-shadow:
-                  inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                  ${theme.shadowMd};
-                transform: translateY(-1px);
-              }
-            `)}
+        : css`
+            border: 1px solid
+              color-mix(in srgb, ${theme.error} 45%, transparent);
+            color: ${theme.textPrimary};
+            &:hover {
+              border-color: color-mix(in srgb, ${theme.error} 65%, transparent);
+              background: color-mix(in srgb, ${theme.error} 12%, transparent);
+              color: ${theme.error};
+              box-shadow: 0 0 0 1px
+                color-mix(in srgb, ${theme.error} 22%, transparent) inset;
+            }
+          `)}
 
-  &:active:not([aria-disabled="true"]) {
-    transform: translateY(0);
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
   }
 
   @media (max-width: 768px) {
-    width: 54px;
-    height: 54px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -224,17 +185,31 @@ export const HabitIconButtonContainer = styled(BaseButton)<{
       transform: none;
     }
   }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover:not([aria-disabled="true"]) {
+      transform: translateY(-1px);
+    }
+
+    &:active:not([aria-disabled="true"]) {
+      transform: translateY(0) scale(0.99);
+    }
+  }
 `;
 
 export const HabitIconInner = styled.div`
-  font-size: 19px;
+  font-size: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 0;
 
   @media (max-width: 768px) {
-    font-size: 18px;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.875rem;
   }
 `;
 
