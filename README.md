@@ -1,37 +1,58 @@
-# OralCheckr (monorepo)
+# OralCheckr
 
-Full-stack oral health assessment and habit tracking: **React + Vite** frontend and **Express + Sequelize** API in one repository.
+**Personalized oral health assessments, habit tracking, and analytics** — a full-stack monorepo with a React + Vite frontend and an Express + Sequelize API.
 
-| App | Path | Stack |
-|-----|------|--------|
-| Web | [`apps/web`](apps/web) | React 18, TypeScript, Vite |
-| API | [`apps/api`](apps/api) | Node.js, Express, TypeScript, Sequelize |
+[**Live demo →**](https://jvpatey.github.io/OralCheckr/)
 
-**Live demo:** [jvpatey.github.io/OralCheckr](https://jvpatey.github.io/OralCheckr/)
+---
 
-Product details, screenshots, and feature list: [apps/web/README.md](apps/web/README.md).  
-API endpoints and server env vars: [apps/api/README.md](apps/api/README.md).
+## Highlights
+
+| Feature | What you get |
+| --- | --- |
+| **Assessment** | Guided questionnaire, oral health score, and tailored recommendations |
+| **Suggested habits** | Add habits to your tracker in one tap from recommendation cards |
+| **Visit summary** | Printable summary of your last assessment to share at appointments |
+| **Habits & analytics** | Daily logging, month and year views, trends, and heatmaps |
+| **Sign-in options** | Email/password, Google OAuth, or **Continue as guest** |
+| **Guest upgrade** | Questionnaire, habits, and logs carry over when you create an account |
+| **Experience** | Redesigned welcome and dashboard, light/dark theme, responsive layout |
+
+---
+
+## Stack
+
+| Layer | Location | Technologies |
+| --- | --- | --- |
+| **Web** | [`apps/web`](apps/web) | React 18, TypeScript, Vite, React Query, styled-components, Bootstrap |
+| **API** | [`apps/api`](apps/api) | Node.js, Express, TypeScript, Sequelize (MySQL / PostgreSQL) |
+
+More detail: [apps/web/README.md](apps/web/README.md) (product walkthrough & screenshots) · [apps/api/README.md](apps/api/README.md) (endpoints & environment variables).
+
+---
 
 ## Prerequisites
 
 - Node.js (v18+ recommended)
-- MySQL (local dev) or PostgreSQL (production-style)
+- MySQL for local development, or PostgreSQL for production-style setups
 - npm
+
+---
 
 ## Run locally
 
-**1. API** (from repo root):
+**1. API** (terminal one — from repo root):
 
 ```bash
 cd apps/api
 npm install
-# Create .env — see variables listed in apps/api/README.md
+# Create apps/api/.env — variables are listed in apps/api/README.md
 npm run dev
 ```
 
-Default API URL: `http://localhost:3000`. Health check: `GET http://localhost:3000/health`.
+Default base URL: `http://localhost:3000` · Health: `GET http://localhost:3000/health`
 
-**2. Web** (second terminal):
+**2. Web** (terminal two):
 
 ```bash
 cd apps/web
@@ -40,7 +61,7 @@ npm install
 
 Create `apps/web/.env`:
 
-```
+```env
 VITE_API_URL=http://localhost:3000
 VITE_GOOGLE_CLIENT_ID=your_google_client_id
 ```
@@ -49,27 +70,25 @@ VITE_GOOGLE_CLIENT_ID=your_google_client_id
 npm run dev
 ```
 
-The API must allow your web origin in CORS (see `apps/api/src/config/corsConfig.ts`). Local Vite typically uses `http://localhost:5173`.
+The API must allow your web origin in CORS (`apps/api/src/config/corsConfig.ts`). Vite usually serves at `http://localhost:5173`.
+
+---
 
 ## Deployments
 
-- **Frontend (GitHub Pages):** workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) builds and deploys from `apps/web`.
-- **Backend (Render):** connect this repository and set **Root Directory** to `apps/api`. Build: `npm install && npm run build:prod`. Start: `npm start`.
+| Target | Notes |
+| --- | --- |
+| **Frontend (GitHub Pages)** | [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) builds and deploys `apps/web` |
+| **Backend (Render)** | Connect the repo, set **Root Directory** to `apps/api` · Build: `npm install && npm run build:prod` · Start: `npm start` |
+
+---
 
 ## Repository layout
 
 ```
 apps/
-  web/     # Vite React app (GitHub Pages)
-  api/     # Express API (e.g. Render)
+  web/          # Vite React app (GitHub Pages)
+  api/          # Express API (e.g. Render)
 .github/
   workflows/
 ```
-
-## Render (API)
-
-1. Open your Render web service for the API.
-2. Connect it to this GitHub repository and branch you deploy from (e.g. `master`).
-3. Set **Root Directory** to `apps/api`.
-4. **Build command:** `npm install && npm run build:prod` — **Start command:** `npm start`.
-5. Deploy and verify `GET /health` and that the live site can reach the API.
