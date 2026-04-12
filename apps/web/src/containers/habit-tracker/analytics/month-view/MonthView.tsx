@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { format } from "date-fns";
 import { Habit } from "../../../../services/habitService";
 import { Logging } from "../Analytics";
 import { HabitCalendar } from "./HabitCalendar";
@@ -19,7 +21,13 @@ import {
   CalendarSection,
   TilesContainer,
 } from "../../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
+import {
+  analyticsOpacityVariants,
+  useAnalyticsOpacityTransition,
+} from "../analyticsMotion";
 import { CalendarContainer } from "../../../../components/habit-tracker/analytics/styles/MonthViewStyles";
+
+const MonthAnalyticsGridMotion = motion(AnalyticsGrid);
 
 interface ViewProps {
   habits: Habit[];
@@ -40,6 +48,7 @@ export function MonthView({
 }: ViewProps) {
   const { selectedHabit } = useHabitContext();
   const [showChart, setShowChart] = useState(false);
+  const dateContentTransition = useAnalyticsOpacityTransition();
 
   const onMonthChange = (date: Date) => {
     onDateChange(date);
@@ -102,62 +111,74 @@ export function MonthView({
     return null;
   }
 
+  const dateContentKey = format(selectedDate, "yyyy-MM");
+
   return (
     <AnalyticsViewRoot>
-      <AnalyticsGrid>
-        <TilesSection>
-          <TilesContainer>
-            <AnalyticsTile
-              heading="Total Logs"
-              mainContent={isLoading ? "..." : totalCount}
-              subContent=""
-              isLoading={isLoading}
-            />
-            <AnalyticsTile
-              heading="Completion Rate"
-              mainContent={isLoading ? "..." : `${completionRate}%`}
-              subContent=""
-              isLoading={isLoading}
-            />
-            <AnalyticsTile
-              heading="Longest Streak"
-              mainContent={isLoading ? "..." : longestStreak}
-              subContent=""
-              isLoading={isLoading}
-            />
-            <AnalyticsTile
-              heading="Missed Days"
-              mainContent={isLoading ? "..." : missedDays}
-              subContent=""
-              isMissedDays={true}
-              isLoading={isLoading}
-            />
-          </TilesContainer>
-        </TilesSection>
+      <AnimatePresence mode="wait" initial={false}>
+        <MonthAnalyticsGridMotion
+          key={dateContentKey}
+          variants={analyticsOpacityVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={dateContentTransition}
+        >
+          <TilesSection>
+            <TilesContainer>
+              <AnalyticsTile
+                heading="Total Logs"
+                mainContent={isLoading ? "..." : totalCount}
+                subContent=""
+                isLoading={isLoading}
+              />
+              <AnalyticsTile
+                heading="Completion Rate"
+                mainContent={isLoading ? "..." : `${completionRate}%`}
+                subContent=""
+                isLoading={isLoading}
+              />
+              <AnalyticsTile
+                heading="Longest Streak"
+                mainContent={isLoading ? "..." : longestStreak}
+                subContent=""
+                isLoading={isLoading}
+              />
+              <AnalyticsTile
+                heading="Missed Days"
+                mainContent={isLoading ? "..." : missedDays}
+                subContent=""
+                isMissedDays={true}
+                isLoading={isLoading}
+              />
+            </TilesContainer>
+          </TilesSection>
 
-        <CalendarSection>
-          <CalendarContainer>
-            <HabitCalendar
-              habitsLog={formattedHabitLogs}
-              year={currentYear}
-              month={currentMonth}
-              habitCount={habitCount}
-              selectedMonth={selectedDate}
-              showChart={showChart}
-              onToggleView={handleToggleView}
-              isLoading={isLoading}
-              onTodayClick={handleTodayClick}
-              dateSelector={
-                <AnalyticsDateSelector
-                  selectedDate={selectedDate}
-                  onDateChange={onMonthChange}
-                  viewType={ViewType.MONTH}
-                />
-              }
-            />
-          </CalendarContainer>
-        </CalendarSection>
-      </AnalyticsGrid>
+          <CalendarSection>
+            <CalendarContainer>
+              <HabitCalendar
+                habitsLog={formattedHabitLogs}
+                year={currentYear}
+                month={currentMonth}
+                habitCount={habitCount}
+                selectedMonth={selectedDate}
+                showChart={showChart}
+                onToggleView={handleToggleView}
+                isLoading={isLoading}
+                onTodayClick={handleTodayClick}
+                suppressLayoutEntrance
+                dateSelector={
+                  <AnalyticsDateSelector
+                    selectedDate={selectedDate}
+                    onDateChange={onMonthChange}
+                    viewType={ViewType.MONTH}
+                  />
+                }
+              />
+            </CalendarContainer>
+          </CalendarSection>
+        </MonthAnalyticsGridMotion>
+      </AnimatePresence>
     </AnalyticsViewRoot>
   );
 }

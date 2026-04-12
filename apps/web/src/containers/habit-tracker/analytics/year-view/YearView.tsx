@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import styled from "styled-components";
 import { Logging } from "../Analytics";
 import { Heatmap } from "./Heatmap";
 import {
@@ -14,6 +16,20 @@ import {
   HeatmapHeader,
   YearPickerContainer,
 } from "../../../../components/habit-tracker/analytics/styles/YearViewStyles";
+import {
+  analyticsOpacityVariants,
+  useAnalyticsOpacityTransition,
+} from "../analyticsMotion";
+
+const HeatmapBodyMotion = styled(motion.div)`
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+`;
 
 interface YearViewProps {
   habitsLog: Logging;
@@ -30,6 +46,7 @@ export function YearView({
 }: YearViewProps) {
   const { selectedHabit } = useHabitContext();
   const year = selectedDate.getFullYear();
+  const heatmapDateTransition = useAnalyticsOpacityTransition();
 
   const heatmapData: HeatmapSeries[] = useMemo(() => {
     if (!selectedHabit || hideAnalytics) return [];
@@ -54,7 +71,18 @@ export function YearView({
           </YearPickerContainer>
           <div />
         </HeatmapHeader>
-        <Heatmap data={heatmapData} />
+        <AnimatePresence mode="wait" initial={false}>
+          <HeatmapBodyMotion
+            key={year}
+            variants={analyticsOpacityVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={heatmapDateTransition}
+          >
+            <Heatmap data={heatmapData} />
+          </HeatmapBodyMotion>
+        </AnimatePresence>
       </HeatmapContainer>
     </AnalyticsViewRoot>
   );

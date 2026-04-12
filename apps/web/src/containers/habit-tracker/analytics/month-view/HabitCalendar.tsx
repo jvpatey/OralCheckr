@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -22,6 +22,8 @@ interface CalendarProgressProps {
   isLoading?: boolean;
   dateSelector?: React.ReactNode;
   onTodayClick?: () => void;
+  /** When true, skip weekday/grid entrance keyframes (e.g. parent already crossfades the view). */
+  suppressLayoutEntrance?: boolean;
 }
 
 /* Max week rows in a month grid (react-datepicker); keeps height stable when switching months */
@@ -73,32 +75,40 @@ const MonthTransitionRoot = styled.div`
   width: 100%;
 `;
 
-const MonthWeekdayStrip = styled.div`
+const MonthWeekdayStrip = styled.div<{ $suppressLayoutEntrance?: boolean }>`
   flex-shrink: 0;
   width: 100%;
 
-  @media (prefers-reduced-motion: no-preference) {
-    animation: ${monthWeekdayEnter} 0.42s ${monthEaseWeekday} both;
-  }
+  ${({ $suppressLayoutEntrance }) =>
+    !$suppressLayoutEntrance &&
+    css`
+      @media (prefers-reduced-motion: no-preference) {
+        animation: ${monthWeekdayEnter} 0.42s ${monthEaseWeekday} both;
+      }
 
-  @media (prefers-reduced-motion: reduce) {
-    animation: ${monthEnterReduced} 0.22s ease-out both;
-  }
+      @media (prefers-reduced-motion: reduce) {
+        animation: ${monthEnterReduced} 0.22s ease-out both;
+      }
+    `}
 `;
 
-const MonthGridWrapper = styled.div`
+const MonthGridWrapper = styled.div<{ $suppressLayoutEntrance?: boolean }>`
   flex: 1 1 auto;
   min-height: 0;
   width: 100%;
 
-  @media (prefers-reduced-motion: no-preference) {
-    animation: ${monthGridEnter} 0.68s ${monthEaseOut} 0.07s both;
-    transform-origin: 50% 15%;
-  }
+  ${({ $suppressLayoutEntrance }) =>
+    !$suppressLayoutEntrance &&
+    css`
+      @media (prefers-reduced-motion: no-preference) {
+        animation: ${monthGridEnter} 0.68s ${monthEaseOut} 0.07s both;
+        transform-origin: 50% 15%;
+      }
 
-  @media (prefers-reduced-motion: reduce) {
-    animation: ${monthEnterReduced} 0.24s ease-out 0.04s both;
-  }
+      @media (prefers-reduced-motion: reduce) {
+        animation: ${monthEnterReduced} 0.24s ease-out 0.04s both;
+      }
+    `}
 `;
 
 // Container for the entire calendar component - improved spacing
@@ -414,6 +424,7 @@ export function HabitCalendar({
   isLoading = false,
   dateSelector,
   onTodayClick,
+  suppressLayoutEntrance = false,
 }: CalendarProgressProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const theme = useTheme();
@@ -521,7 +532,9 @@ export function HabitCalendar({
           aria-hidden={showChart}
         >
           <MonthTransitionRoot key={monthAnimKey}>
-            <MonthWeekdayStrip>
+            <MonthWeekdayStrip
+              $suppressLayoutEntrance={suppressLayoutEntrance}
+            >
               <DaysHeader>
                 {daysOfWeek.map((day, index) => (
                   <DayName key={index} $isToday={index === currentDayOfWeek}>
@@ -530,7 +543,7 @@ export function HabitCalendar({
                 ))}
               </DaysHeader>
             </MonthWeekdayStrip>
-            <MonthGridWrapper>
+            <MonthGridWrapper $suppressLayoutEntrance={suppressLayoutEntrance}>
               <DatePicker
                 selected={selectedDate}
                 inline

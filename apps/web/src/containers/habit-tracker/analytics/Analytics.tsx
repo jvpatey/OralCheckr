@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
 import { PageBackground } from "../../../components/PageBackground";
 import { ToggleButton } from "../../../components/habit-tracker/analytics/ToggleButton";
@@ -28,6 +29,10 @@ import {
   HeaderTitleColumn,
 } from "../../../components/habit-tracker/habits/HabitComponents";
 import { HeroTitleAccent } from "../../welcome/styles/WelcomeStyles";
+import {
+  analyticsOpacityVariants,
+  useAnalyticsOpacityTransition,
+} from "./analyticsMotion";
 
 // Enum for view modes
 enum ViewMode {
@@ -94,6 +99,17 @@ const toggleOptions = [
   { label: "Monthly", value: ViewMode.MONTH },
   { label: "Yearly", value: ViewMode.YEAR },
 ];
+
+const AnalyticsViewMotionPanel = styled(motion.div)`
+  width: 100%;
+`;
+
+/** Title + subtitle use the same motion as analytics body for a single cohesive toggle. */
+const AnalyticsHeaderTextMotion = styled(motion.div)`
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+`;
 
 /* Top-align toggle with title stack — HeaderMainRow defaults to flex-end (baseline with subtitle). */
 const AnalyticsHeaderMainRow = styled(HeaderMainRow)`
@@ -166,6 +182,7 @@ const AnalyticsPageTitle = styled(HeaderText)`
 // The main functional component for the Analytics page of the habit tracker
 export function Analytics() {
   const [view, setView] = useState<ViewMode>(ViewMode.MONTH);
+  const analyticsViewTransition = useAnalyticsOpacityTransition();
   const { selectedHabit, setSelectedHabit } = useHabitContext();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -191,10 +208,8 @@ export function Analytics() {
     isError: isMonthLogsError,
   } = useHabitLogsForAllHabits(habitIds, year, month);
 
-  const {
-    habitLogsMap: yearLogsMap,
-    isError: isYearLogsError,
-  } = useHabitLogsForAllHabits(habitIds, year, "");
+  const { habitLogsMap: yearLogsMap, isError: isYearLogsError } =
+    useHabitLogsForAllHabits(habitIds, year, "");
 
   const habitsLog = useMemo(() => {
     const logsMap = view === ViewMode.MONTH ? monthLogsMap : yearLogsMap;
@@ -227,11 +242,12 @@ export function Analytics() {
     setSelectedDate(date);
   };
 
-  const headerSubtitleYear = `${year} · Year-at-a-glance heatmap`;
+  const handleViewChange = (newView: ViewMode) => {
+    setView(newView);
+  };
 
   const monthViewLogsLoading =
-    isLoadingMonthLogs ||
-    (isFetchingMonthLogs && isPlaceholderMonthLogs);
+    isLoadingMonthLogs || (isFetchingMonthLogs && isPlaceholderMonthLogs);
 
   if (isPageLoading) {
     return (
@@ -298,36 +314,63 @@ export function Analytics() {
               <AnalyticsHeaderMainRow>
                 <HeaderTitleColumn>
                   <HabitHeroEyebrow>Analyze</HabitHeroEyebrow>
-                  <AnalyticsPageTitle>
-                    {view === ViewMode.MONTH ? (
-                      <>
-                        Monthly Habit{" "}
-                        <HeroTitleAccent as="span">Analytics</HeroTitleAccent>
-                      </>
-                    ) : (
-                      <>
-                        Yearly Habit{" "}
-                        <HeroTitleAccent as="span">Analytics</HeroTitleAccent>
-                      </>
-                    )}
-                  </AnalyticsPageTitle>
-                  <HeaderSubtitle>
-                    {view === ViewMode.MONTH ? (
-                      <>
-                        {format(selectedDate, "MMMM yyyy")} · Daily completion
-                        and trends
-                        {selectedHabit ? (
+                  <AnimatePresence mode="wait" initial={false}>
+                    <AnalyticsHeaderTextMotion
+                      key={view}
+                      variants={analyticsOpacityVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      transition={analyticsViewTransition}
+                    >
+                      <AnalyticsPageTitle>
+                        {view === ViewMode.MONTH ? (
                           <>
-                            {" "}
-                            <SubtitleForWord>for </SubtitleForWord>
-                            <SubtitleHabitName>{selectedHabit}</SubtitleHabitName>
+                            Monthly Habit{" "}
+                            <HeroTitleAccent as="span">
+                              Analytics
+                            </HeroTitleAccent>
                           </>
-                        ) : null}
-                      </>
-                    ) : (
-                      headerSubtitleYear
-                    )}
-                  </HeaderSubtitle>
+                        ) : (
+                          <>
+                            Yearly Habit{" "}
+                            <HeroTitleAccent as="span">
+                              Analytics
+                            </HeroTitleAccent>
+                          </>
+                        )}
+                      </AnalyticsPageTitle>
+                      <HeaderSubtitle>
+                        {view === ViewMode.MONTH ? (
+                          <>
+                            {format(selectedDate, "MMMM yyyy")} · Daily
+                            completion and trends
+                            {selectedHabit ? (
+                              <>
+                                {" "}
+                                <SubtitleForWord>for </SubtitleForWord>
+                                <SubtitleHabitName>
+                                  {selectedHabit}
+                                </SubtitleHabitName>
+                              </>
+                            ) : null}
+                          </>
+                        ) : (
+                          <>
+                            {year} · Every day you logged
+                            {selectedHabit ? (
+                              <>
+                                {" "}
+                                <SubtitleHabitName>
+                                  {selectedHabit}
+                                </SubtitleHabitName>
+                              </>
+                            ) : null}
+                          </>
+                        )}
+                      </HeaderSubtitle>
+                    </AnalyticsHeaderTextMotion>
+                  </AnimatePresence>
                 </HeaderTitleColumn>
                 <AnalyticsHeaderControlsColumn>
                   <ToggleButton
@@ -335,7 +378,9 @@ export function Analytics() {
                     align="end"
                     options={toggleOptions}
                     activeValue={view}
-                    onChange={(newView) => setView(newView as ViewMode)}
+                    onChange={(newView) =>
+                      handleViewChange(newView as ViewMode)
+                    }
                   />
                   <HabitDropdown
                     habits={habits}
@@ -348,23 +393,43 @@ export function Analytics() {
             </AnalyticsPageHeader>
 
             <AnalyticsContentScroll>
-              {view === ViewMode.MONTH ? (
-                <MonthView
-                  habits={habits}
-                  habitsLog={habitsLog}
-                  hideAnalytics={!selectedHabit}
-                  selectedDate={selectedDate}
-                  onDateChange={handleDateChange}
-                  isLoading={monthViewLogsLoading}
-                />
-              ) : (
-                <YearView
-                  habitsLog={habitsLog}
-                  hideAnalytics={!selectedHabit}
-                  selectedDate={selectedDate}
-                  onDateChange={handleDateChange}
-                />
-              )}
+              <AnimatePresence mode="wait" initial={false}>
+                {view === ViewMode.MONTH ? (
+                  <AnalyticsViewMotionPanel
+                    key="analytics-month"
+                    variants={analyticsOpacityVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={analyticsViewTransition}
+                  >
+                    <MonthView
+                      habits={habits}
+                      habitsLog={habitsLog}
+                      hideAnalytics={!selectedHabit}
+                      selectedDate={selectedDate}
+                      onDateChange={handleDateChange}
+                      isLoading={monthViewLogsLoading}
+                    />
+                  </AnalyticsViewMotionPanel>
+                ) : (
+                  <AnalyticsViewMotionPanel
+                    key="analytics-year"
+                    variants={analyticsOpacityVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={analyticsViewTransition}
+                  >
+                    <YearView
+                      habitsLog={habitsLog}
+                      hideAnalytics={!selectedHabit}
+                      selectedDate={selectedDate}
+                      onDateChange={handleDateChange}
+                    />
+                  </AnalyticsViewMotionPanel>
+                )}
+              </AnimatePresence>
               {!selectedHabit && (
                 <NoHabitMessage>
                   Please select a habit to display analytics.

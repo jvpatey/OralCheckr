@@ -24,7 +24,7 @@ interface HabitLogsData {
 export const useHabitLogsForAllHabits = (
   habitIds: number[],
   year: number,
-  month: string
+  month: string,
 ) => {
   // Store logs in a map for quick access
   const [habitLogsMap, setHabitLogsMap] = useState<
@@ -46,7 +46,7 @@ export const useHabitLogsForAllHabits = (
     queryKey: ["allHabitLogs", habitIds, year, month],
     queryFn: async (): Promise<HabitLogsData[]> => {
       const promises = habitIds.map((habitId) =>
-        fetchHabitLogs(habitId, year, month)
+        fetchHabitLogs(habitId, year, month),
       );
 
       const results = await Promise.all(promises);
@@ -120,7 +120,7 @@ export const useHabitLogsForAllHabits = (
             const updatedLogs = habitData.logs ? [...habitData.logs] : [];
 
             const existingLogIndex = updatedLogs.findIndex(
-              (log) => normalizeDate(log.date) === dateStr
+              (log) => normalizeDate(log.date) === dateStr,
             );
 
             if (existingLogIndex >= 0) {
@@ -145,10 +145,10 @@ export const useHabitLogsForAllHabits = (
               logs: updatedLogs,
             };
           });
-        }
+        },
       );
     },
-    [habitLogsMap, queryClient, habitIds, year, month]
+    [habitLogsMap, queryClient, habitIds, year, month],
   );
 
   // Force refresh from server
