@@ -1,11 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { useScrollAnimation } from "../../../hooks/useScrollAnimation";
-
-const previewObserverOptions: IntersectionObserverInit = {
-  threshold: 0.12,
-  rootMargin: "0px 0px -80px 0px",
-};
+import { ThemeType } from "../../../App";
 import {
   HeroPreviewRoot,
   HeroPreviewFrame,
@@ -23,6 +19,11 @@ import {
   HeroPreviewBadgeRow,
 } from "../styles/HeroPreviewStyles";
 
+const previewObserverOptions: IntersectionObserverInit = {
+  threshold: 0.12,
+  rootMargin: "0px 0px -80px 0px",
+};
+
 /** Public folder URLs must include Vite `base` (e.g. /OralCheckr/) so assets resolve on GitHub Pages. */
 const welcomeScreenshot = (filename: string) =>
   `${import.meta.env.BASE_URL}images/welcome/${filename}`;
@@ -34,66 +35,94 @@ type PreviewId =
   | "improve"
   | "analyze";
 
-const PREVIEW_SLIDES: readonly {
+const PREVIEW_SLIDE_DEFS: readonly {
   id: PreviewId;
   label: string;
-  src: string;
+  darkFile: string;
+  lightFile: string;
   alt: string;
 }[] = [
   {
     id: "dashboard",
     label: "Dashboard",
-    src: welcomeScreenshot("dashboard_screenshot.png"),
+    darkFile: "dashboard_screenshot.png",
+    lightFile: "dashboard_light_screenshot.png",
     alt: "OralCheckr dashboard preview",
   },
   {
     id: "assess",
     label: "Assess",
-    src: welcomeScreenshot("assess_screenshot.png"),
+    darkFile: "assess_screenshot.png",
+    lightFile: "assess_light_screenshot.png",
     alt: "OralCheckr assess questionnaire preview",
   },
   {
     id: "track",
     label: "Track",
-    src: welcomeScreenshot("track_screenshot.png"),
+    darkFile: "track_screenshot.png",
+    lightFile: "track_light_screenshot.png",
     alt: "OralCheckr habit tracking preview",
   },
   {
     id: "improve",
     label: "Improve",
-    src: welcomeScreenshot("improve_screenshot.png"),
+    darkFile: "improve_screenshot.png",
+    lightFile: "improve_light_screenshot.png",
     alt: "OralCheckr improvement goals preview",
   },
   {
     id: "analyze",
     label: "Analyze",
-    src: welcomeScreenshot("analyze_screenshot.png"),
+    darkFile: "analyze_screenshot.png",
+    lightFile: "analyze_light_screenshot.png",
     alt: "OralCheckr analyze insights preview",
   },
 ];
 
+function previewSlidesForTheme(theme: ThemeType) {
+  const light = theme === ThemeType.LIGHT;
+  return PREVIEW_SLIDE_DEFS.map((d) => ({
+    id: d.id,
+    label: d.label,
+    alt: d.alt,
+    src: welcomeScreenshot(light ? d.lightFile : d.darkFile),
+  }));
+}
+
 const CROSSFADE_MS = 500;
 
-type Slide = (typeof PREVIEW_SLIDES)[number];
+type Slide = ReturnType<typeof previewSlidesForTheme>[number];
 
-export function HeroAppPreview() {
+interface HeroAppPreviewProps {
+  theme: ThemeType;
+}
+
+export function HeroAppPreview({ theme }: HeroAppPreviewProps) {
   const { ref, isVisible } = useScrollAnimation(previewObserverOptions);
   /** `null` before mount — treat as motion OK so first paint matches SSR/hydration. */
   const prefersReducedMotion = useReducedMotion() === true;
-  const [activeId, setActiveId] = useState<PreviewId>(PREVIEW_SLIDES[0].id);
+  const previewSlides = useMemo(
+    () => previewSlidesForTheme(theme),
+    [theme]
+  );
+  const [activeId, setActiveId] = useState<PreviewId>(PREVIEW_SLIDE_DEFS[0].id);
   const [outgoingSlide, setOutgoingSlide] = useState<Slide | null>(null);
   const [hasPreviewInteracted, setHasPreviewInteracted] = useState(false);
-  const [failedIds, setFailedIds] = useState<ReadonlySet<PreviewId>>(
+  const [failedSrcs, setFailedSrcs] = useState<ReadonlySet<string>>(
     () => new Set()
   );
 
   const activeSlide =
-    PREVIEW_SLIDES.find((s) => s.id === activeId) ?? PREVIEW_SLIDES[0];
-  const imgFailed = failedIds.has(activeSlide.id);
+    previewSlides.find((s) => s.id === activeId) ?? previewSlides[0];
+  const imgFailed = failedSrcs.has(activeSlide.src);
 
-  const handleImgError = useCallback((id: PreviewId) => {
-    setFailedIds((prev) => new Set(prev).add(id));
+  const handleImgError = useCallback((src: string) => {
+    setFailedSrcs((prev) => new Set(prev).add(src));
   }, []);
+
+  useEffect(() => {
+    setOutgoingSlide(null);
+  }, [theme]);
 
   useEffect(() => {
     if (!outgoingSlide) return;
@@ -103,10 +132,9 @@ export function HeroAppPreview() {
 
   const goToSlide = (newId: PreviewId) => {
     if (newId === activeId) return;
-    if (!failedIds.has(activeId)) {
-      setOutgoingSlide(
-        PREVIEW_SLIDES.find((s) => s.id === activeId) ?? null
-      );
+    const current = previewSlides.find((s) => s.id === activeId);
+    if (current && !failedSrcs.has(current.src)) {
+      setOutgoingSlide(current);
     } else {
       setOutgoingSlide(null);
     }
@@ -117,7 +145,7 @@ export function HeroAppPreview() {
   const showOutgoing =
     !prefersReducedMotion &&
     outgoingSlide &&
-    !failedIds.has(outgoingSlide.id) &&
+    !failedSrcs.has(outgoingSlide.src) &&
     outgoingSlide.id !== activeSlide.id;
 
   return (
@@ -138,13 +166,13 @@ export function HeroAppPreview() {
                 key={activeSlide.src}
                 src={activeSlide.src}
                 alt={activeSlide.alt}
-                onError={() => handleImgError(activeSlide.id)}
+                onError={() => handleImgError(activeSlide.src)}
               />
             ) : (
               <HeroPreviewImageStack>
                 {showOutgoing && outgoingSlide ? (
                   <HeroPreviewImageCrossfade
-                    key={`out-${outgoingSlide.id}`}
+                    key={`out-${outgoingSlide.src}`}
                     $phase="out"
                     src={outgoingSlide.src}
                     alt=""
@@ -152,11 +180,11 @@ export function HeroAppPreview() {
                   />
                 ) : null}
                 <HeroPreviewImageCrossfade
-                  key={`in-${activeSlide.id}`}
+                  key={`in-${activeSlide.src}`}
                   $phase={hasPreviewInteracted ? "in" : "hold"}
                   src={activeSlide.src}
                   alt={activeSlide.alt}
-                  onError={() => handleImgError(activeSlide.id)}
+                  onError={() => handleImgError(activeSlide.src)}
                 />
               </HeroPreviewImageStack>
             )
@@ -180,7 +208,7 @@ export function HeroAppPreview() {
         </HeroPreviewBody>
       </HeroPreviewFrame>
       <HeroPreviewBadgeRow role="group" aria-label="Choose app preview">
-        {PREVIEW_SLIDES.map((slide) => (
+        {previewSlides.map((slide) => (
           <HeroPreviewBadge
             key={slide.id}
             type="button"

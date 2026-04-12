@@ -56,7 +56,7 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
               />
             </HeroCopy>
             <HeroPreviewColumn>
-              <HeroAppPreview />
+              <HeroAppPreview theme={theme} />
             </HeroPreviewColumn>
           </HeroGrid>
         </HeroSection>
