@@ -37,6 +37,8 @@ export const useHabitLogsForAllHabits = (
   const {
     data: allHabitLogsData,
     isLoading,
+    isFetching,
+    isPlaceholderData,
     isError,
     error,
     refetch,
@@ -59,6 +61,8 @@ export const useHabitLogsForAllHabits = (
     gcTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true,
     retry: 1,
+    /* Keep showing prior month/year data while the new range loads — avoids isLoading flicker and full-page unmount */
+    placeholderData: (previousData) => previousData,
   });
 
   // Process and store fetched logs
@@ -85,13 +89,6 @@ export const useHabitLogsForAllHabits = (
       setHabitLogsMap(newHabitLogsMap);
     }
   }, [allHabitLogsData, habitIds]);
-
-  // Refresh data when date changes
-  useEffect(() => {
-    if (habitIds.length > 0) {
-      refetch();
-    }
-  }, [year, month, refetch, habitIds]);
 
   // Update log count for a specific habit and date
   const updateLogCount = useCallback(
@@ -166,6 +163,8 @@ export const useHabitLogsForAllHabits = (
     updateLogCount,
     syncWithServer,
     isLoading,
+    isFetching,
+    isPlaceholderData,
     isError,
     error,
   };

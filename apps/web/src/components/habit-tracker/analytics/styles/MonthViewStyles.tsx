@@ -15,7 +15,7 @@ export const CalendarContainer = styled.div`
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   border-radius: 16px;
   border: 1px solid ${({ theme }) => `${theme.primary}45`};
-  padding: 10px 12px 12px;
+  padding: 8px 10px 10px;
   box-shadow: none;
   min-height: 0;
   height: 100%;
@@ -47,7 +47,7 @@ export const CalendarContainer = styled.div`
 
   @media (max-width: 1024px) {
     margin-top: 0;
-    padding: 10px 12px 12px;
+    padding: 8px 10px 10px;
     border-radius: 16px;
     max-width: 100%;
     min-width: 450px;

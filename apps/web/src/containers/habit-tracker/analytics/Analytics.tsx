@@ -98,7 +98,7 @@ const toggleOptions = [
 /* Top-align toggle with title stack — HeaderMainRow defaults to flex-end (baseline with subtitle). */
 const AnalyticsHeaderMainRow = styled(HeaderMainRow)`
   flex-wrap: wrap;
-  row-gap: 0.75rem;
+  row-gap: 0.5rem;
   align-items: flex-start;
 `;
 
@@ -141,6 +141,28 @@ const SubtitleHabitName = styled.span`
   font-weight: 600;
 `;
 
+const AnalyticsPageCard = styled(CardContainer)`
+  padding: 1.125rem 1.5rem 1.25rem;
+
+  @media (max-width: 800px) {
+    padding: 1rem 1.25rem 1.125rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.875rem 1rem 1rem;
+  }
+`;
+
+const AnalyticsPageHeader = styled(Header)`
+  --habit-header-divider-gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+`;
+
+const AnalyticsPageTitle = styled(HeaderText)`
+  margin: 0 0 4px;
+`;
+
 // The main functional component for the Analytics page of the habit tracker
 export function Analytics() {
   const [view, setView] = useState<ViewMode>(ViewMode.MONTH);
@@ -164,12 +186,13 @@ export function Analytics() {
   const {
     habitLogsMap: monthLogsMap,
     isLoading: isLoadingMonthLogs,
+    isFetching: isFetchingMonthLogs,
+    isPlaceholderData: isPlaceholderMonthLogs,
     isError: isMonthLogsError,
   } = useHabitLogsForAllHabits(habitIds, year, month);
 
   const {
     habitLogsMap: yearLogsMap,
-    isLoading: isLoadingYearLogs,
     isError: isYearLogsError,
   } = useHabitLogsForAllHabits(habitIds, year, "");
 
@@ -178,9 +201,8 @@ export function Analytics() {
     return transformHabitLogsToAnalyticsFormat(habits, logsMap);
   }, [habits, monthLogsMap, yearLogsMap, view]);
 
-  const isLoading =
-    isLoadingHabits ||
-    (view === ViewMode.MONTH ? isLoadingMonthLogs : isLoadingYearLogs);
+  /* Full-page spinner only while habits list loads — log queries use placeholder data so month/year changes do not unmount the page */
+  const isPageLoading = isLoadingHabits;
   const isError =
     habitsError ||
     (view === ViewMode.MONTH ? isMonthLogsError : isYearLogsError);
@@ -207,27 +229,31 @@ export function Analytics() {
 
   const headerSubtitleYear = `${year} · Year-at-a-glance heatmap`;
 
-  if (isLoading) {
+  const monthViewLogsLoading =
+    isLoadingMonthLogs ||
+    (isFetchingMonthLogs && isPlaceholderMonthLogs);
+
+  if (isPageLoading) {
     return (
       <PageBackground>
         <HabitListContainer>
-          <CardContainer>
+          <AnalyticsPageCard>
             <HabitWrapper>
-              <Header>
+              <AnalyticsPageHeader>
                 <HeaderMainRow>
                   <HeaderTitleColumn>
                     <HabitHeroEyebrow>Analyze</HabitHeroEyebrow>
-                    <HeaderText>
+                    <AnalyticsPageTitle>
                       Habit{" "}
                       <HeroTitleAccent as="span">Analytics</HeroTitleAccent>
-                    </HeaderText>
+                    </AnalyticsPageTitle>
                     <HeaderSubtitle>Loading your data…</HeaderSubtitle>
                   </HeaderTitleColumn>
                 </HeaderMainRow>
-              </Header>
+              </AnalyticsPageHeader>
               <LoadingComponent />
             </HabitWrapper>
-          </CardContainer>
+          </AnalyticsPageCard>
         </HabitListContainer>
       </PageBackground>
     );
@@ -237,27 +263,27 @@ export function Analytics() {
     return (
       <PageBackground>
         <HabitListContainer>
-          <CardContainer>
+          <AnalyticsPageCard>
             <HabitWrapper>
-              <Header>
+              <AnalyticsPageHeader>
                 <HeaderMainRow>
                   <HeaderTitleColumn>
                     <HabitHeroEyebrow>Analyze</HabitHeroEyebrow>
-                    <HeaderText>
+                    <AnalyticsPageTitle>
                       Habit{" "}
                       <HeroTitleAccent as="span">Analytics</HeroTitleAccent>
-                    </HeaderText>
+                    </AnalyticsPageTitle>
                     <HeaderSubtitle>
                       Something went wrong while loading this page.
                     </HeaderSubtitle>
                   </HeaderTitleColumn>
                 </HeaderMainRow>
-              </Header>
+              </AnalyticsPageHeader>
               <NoHabitMessage style={{ marginTop: 0 }}>
                 Error loading analytics data. Please try again later.
               </NoHabitMessage>
             </HabitWrapper>
-          </CardContainer>
+          </AnalyticsPageCard>
         </HabitListContainer>
       </PageBackground>
     );
@@ -266,13 +292,13 @@ export function Analytics() {
   return (
     <PageBackground>
       <HabitListContainer>
-        <CardContainer>
+        <AnalyticsPageCard>
           <HabitWrapper>
-            <Header>
+            <AnalyticsPageHeader>
               <AnalyticsHeaderMainRow>
                 <HeaderTitleColumn>
                   <HabitHeroEyebrow>Analyze</HabitHeroEyebrow>
-                  <HeaderText>
+                  <AnalyticsPageTitle>
                     {view === ViewMode.MONTH ? (
                       <>
                         Monthly Habit{" "}
@@ -284,7 +310,7 @@ export function Analytics() {
                         <HeroTitleAccent as="span">Analytics</HeroTitleAccent>
                       </>
                     )}
-                  </HeaderText>
+                  </AnalyticsPageTitle>
                   <HeaderSubtitle>
                     {view === ViewMode.MONTH ? (
                       <>
@@ -319,7 +345,7 @@ export function Analytics() {
                   />
                 </AnalyticsHeaderControlsColumn>
               </AnalyticsHeaderMainRow>
-            </Header>
+            </AnalyticsPageHeader>
 
             <AnalyticsContentScroll>
               {view === ViewMode.MONTH ? (
@@ -329,7 +355,7 @@ export function Analytics() {
                   hideAnalytics={!selectedHabit}
                   selectedDate={selectedDate}
                   onDateChange={handleDateChange}
-                  isLoading={isLoadingMonthLogs}
+                  isLoading={monthViewLogsLoading}
                 />
               ) : (
                 <YearView
@@ -346,7 +372,7 @@ export function Analytics() {
               )}
             </AnalyticsContentScroll>
           </HabitWrapper>
-        </CardContainer>
+        </AnalyticsPageCard>
       </HabitListContainer>
     </PageBackground>
   );

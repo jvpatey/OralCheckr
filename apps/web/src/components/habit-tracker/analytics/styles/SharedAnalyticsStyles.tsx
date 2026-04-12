@@ -113,6 +113,18 @@ export const ViewContainer = styled.div`
   }
 `;
 
+/** Fills the analytics card without extra child margins — keeps month/year views in the flex chain */
+export const AnalyticsViewRoot = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  animation: ${fadeUp} 0.5s ease-out;
+  box-sizing: border-box;
+`;
+
 export const AnalyticsContentScroll = styled.div`
   flex: 1;
   min-height: 0;
@@ -151,15 +163,17 @@ export const ControlsContainer = styled.div`
 export const AnalyticsGrid = styled.div`
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
-  gap: 1.5rem;
+  gap: 1rem;
   align-items: stretch;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
+  flex: 1;
+  min-height: 0;
 
   @media (max-width: 1200px) {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 0.625rem;
     align-items: stretch;
     max-width: 100%;
   }
@@ -168,7 +182,7 @@ export const AnalyticsGrid = styled.div`
 export const TilesSection = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
   min-height: 0;
   align-self: stretch;
   height: 100%;
@@ -218,7 +232,7 @@ export const TilesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: 1fr 1fr;
-  gap: 0.75rem;
+  gap: 0.5625rem;
   width: 100%;
   flex: 1 1 auto;
   min-height: 0;
@@ -244,9 +258,9 @@ export const TilesContainer = styled.div`
   @media (max-width: 1200px) {
     flex: none;
     height: auto;
-    min-height: 300px;
+    min-height: 280px;
     grid-template-rows: 1fr 1fr;
-    gap: 0.75rem;
+    gap: 0.5625rem;
   }
 
   @media (max-width: 1024px) {
@@ -270,7 +284,7 @@ export const TileContainer = styled.div`
   width: 100%;
   height: 100%;
   min-height: 0;
-  padding: 1.25rem 1rem;
+  padding: 0.875rem 0.75rem;
   box-sizing: border-box;
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
@@ -311,7 +325,7 @@ export const TileContainer = styled.div`
   }
 
   @media (max-width: 1024px) {
-    padding: 1.125rem 0.875rem;
+    padding: 0.8125rem 0.625rem;
     border-radius: 14px;
 
     &::before {
@@ -354,7 +368,7 @@ export const TileMainContent = styled.div<{
   $isMissedDays?: boolean;
   $isLoading?: boolean;
 }>`
-  font-size: 42px;
+  font-size: 36px;
   font-weight: 700;
   color: ${({ $isMissedDays, theme }) =>
     $isMissedDays ? theme.error : theme.primary};
@@ -366,11 +380,11 @@ export const TileMainContent = styled.div<{
   text-align: center;
 
   @media (max-width: 1024px) {
-    font-size: 36px;
+    font-size: 32px;
   }
 
   @media (max-width: 480px) {
-    font-size: 28px;
+    font-size: 26px;
   }
 `;
 

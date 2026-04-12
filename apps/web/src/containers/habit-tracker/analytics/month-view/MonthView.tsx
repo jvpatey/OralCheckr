@@ -13,7 +13,7 @@ import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
 import { useHabitContext } from "../../../../contexts/HabitContext";
 import {
-  ViewContainer,
+  AnalyticsViewRoot,
   AnalyticsGrid,
   TilesSection,
   CalendarSection,
@@ -103,7 +103,7 @@ export function MonthView({
   }
 
   return (
-    <ViewContainer>
+    <AnalyticsViewRoot>
       <AnalyticsGrid>
         <TilesSection>
           <TilesContainer>
@@ -158,6 +158,6 @@ export function MonthView({
           </CalendarContainer>
         </CalendarSection>
       </AnalyticsGrid>
-    </ViewContainer>
+    </AnalyticsViewRoot>
   );
 }

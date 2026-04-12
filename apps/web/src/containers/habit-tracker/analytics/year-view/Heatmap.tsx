@@ -27,6 +27,10 @@ const MONTH_NAMES = [
 // Modern heatmap chart container with glassmorphism
 const HeatmapChartContainer = styled.div`
   width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
   background: transparent;
   position: relative;
   z-index: 1;

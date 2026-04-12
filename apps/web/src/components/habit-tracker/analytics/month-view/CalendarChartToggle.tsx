@@ -16,7 +16,7 @@ const ToggleShell = styled.div`
   gap: 2px;
   padding: 4px;
   box-sizing: border-box;
-  min-height: 48px;
+  min-height: 44px;
   width: fit-content;
   background: transparent;
   border: 1px solid ${({ theme }) => `${theme.primary}45`};
@@ -39,7 +39,7 @@ const ToggleShell = styled.div`
   }
 
   @media (max-width: 768px) {
-    min-height: 44px;
+    min-height: 40px;
   }
 `;
 
@@ -64,8 +64,8 @@ const IconSegment = styled.button<{ $active: boolean }>`
   align-items: center;
   justify-content: center;
   flex: 1 1 0;
-  min-width: 44px;
-  min-height: 40px;
+  min-width: 40px;
+  min-height: 36px;
   padding: 0;
   background: transparent;
   border: none;

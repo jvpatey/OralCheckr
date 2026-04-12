@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,6 +7,7 @@ import "react-circular-progressbar/dist/styles.css";
 import { Logging } from "../Analytics";
 import { CalendarChartToggle } from "../../../../components/habit-tracker/analytics/month-view/CalendarChartToggle";
 import { LineChart } from "../../../../components/habit-tracker/analytics/month-view/LineChart";
+import { TodayButton } from "../../../../components/habit-tracker/analytics/TodayButton";
 import { useTheme } from "styled-components";
 import { useHabitContext } from "../../../../contexts/HabitContext";
 
@@ -23,8 +24,89 @@ interface CalendarProgressProps {
   onTodayClick?: () => void;
 }
 
+/* Max week rows in a month grid (react-datepicker); keeps height stable when switching months */
+const CAL_DAY_ROW_PX = 52;
+const CAL_WEEK_GAP_PX = 12;
+const CAL_MAX_WEEK_ROWS = 6;
+
+/* Softer deceleration — settles without a hard stop */
+const monthEaseOut = "cubic-bezier(0.16, 1, 0.3, 1)";
+const monthEaseWeekday = "cubic-bezier(0.25, 0.9, 0.35, 1)";
+
+const monthWeekdayEnter = keyframes`
+  from {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+`;
+
+const monthGridEnter = keyframes`
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+`;
+
+const monthEnterReduced = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const MonthTransitionRoot = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+`;
+
+const MonthWeekdayStrip = styled.div`
+  flex-shrink: 0;
+  width: 100%;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: ${monthWeekdayEnter} 0.42s ${monthEaseWeekday} both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: ${monthEnterReduced} 0.22s ease-out both;
+  }
+`;
+
+const MonthGridWrapper = styled.div`
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: ${monthGridEnter} 0.68s ${monthEaseOut} 0.07s both;
+    transform-origin: 50% 15%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: ${monthEnterReduced} 0.24s ease-out 0.04s both;
+  }
+`;
+
 // Container for the entire calendar component - improved spacing
 const CalendarContainer = styled.div`
+  --cal-day-row-h: ${CAL_DAY_ROW_PX}px;
+  --cal-week-gap: ${CAL_WEEK_GAP_PX}px;
+  --cal-week-rows: ${CAL_MAX_WEEK_ROWS};
+
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -57,9 +139,15 @@ const CalendarContainer = styled.div`
   .react-datepicker__month {
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
     margin: 0;
     padding: 0;
-    gap: 12px 0;
+    gap: var(--cal-week-gap) 0;
+    /* Always reserve 6 rows so February / 4-row months do not shrink vs 6-row months */
+    min-height: calc(
+      var(--cal-week-rows) * var(--cal-day-row-h) + (var(--cal-week-rows) - 1) *
+        var(--cal-week-gap)
+    );
   }
 
   .react-datepicker__week {
@@ -75,7 +163,7 @@ const CalendarContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 52px;
+    height: var(--cal-day-row-h);
     margin: 0;
     text-align: center;
     border: none;
@@ -109,7 +197,7 @@ const DaysHeader = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   width: 100%;
-  margin: 0 0 10px 0;
+  margin: 0 0 8px 0;
   gap: 4px;
   flex-shrink: 0;
 `;
@@ -144,8 +232,8 @@ const DayName = styled.div<{ $isToday?: boolean }>`
 
 const DayWrapper = styled.div<{ $isCurrentDay?: boolean }>`
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   max-width: 100%;
   display: flex;
   align-items: center;
@@ -162,51 +250,85 @@ const DayWrapper = styled.div<{ $isCurrentDay?: boolean }>`
   border: none;
 
   @media (min-width: 1024px) {
-    width: 42px;
-    height: 42px;
+    width: 46px;
+    height: 46px;
   }
 `;
 
-const HeaderSideSpacer = styled.div`
-  flex: 1 1 0;
-  min-width: 0;
-`;
-
+/** `1fr | auto | 1fr` keeps the month picker centered while Today (left) and chart toggle (right) differ in width */
 const CalendarControlsHeader = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
+  column-gap: 6px;
   width: 100%;
-  gap: 8px;
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
   flex-shrink: 0;
-  min-height: 48px;
+  min-height: 44px;
 
   @media (max-width: 800px) {
-    flex-wrap: wrap;
+    row-gap: 8px;
+    margin-bottom: 6px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    justify-items: center;
+  }
+`;
+
+const CalendarHeaderLeft = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 0;
+
+  @media (max-width: 800px) {
     justify-content: center;
-    row-gap: 10px;
-    margin-bottom: 8px;
+    width: 100%;
+    order: 1;
+  }
+`;
+
+const CalendarHeaderCenter = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+
+  @media (max-width: 800px) {
+    width: 100%;
+    order: 0;
+  }
+`;
+
+const CalendarHeaderRight = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+
+  @media (max-width: 800px) {
+    justify-content: center;
+    width: 100%;
+    order: 2;
   }
 `;
 
 const DateSelectorContainer = styled.div`
-  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 0;
 `;
 
-const ToggleContainer = styled.div`
-  flex: 1 1 0;
-  min-width: 0;
+/** Match analytics month/chevron control height (44px) */
+const AnalyticsTodayWrap = styled.div`
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  --week-toolbar-control-height: 44px;
 
-  @media (max-width: 800px) {
-    flex: 1 1 100%;
-    justify-content: center;
+  @media (max-width: 768px) {
+    --week-toolbar-control-height: 42px;
   }
 `;
 
@@ -291,6 +413,7 @@ export function HabitCalendar({
   onToggleView,
   isLoading = false,
   dateSelector,
+  onTodayClick,
 }: CalendarProgressProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const theme = useTheme();
@@ -335,7 +458,7 @@ export function HabitCalendar({
           text={day.toString()}
           strokeWidth={9}
           styles={buildStyles({
-            textSize: isCurrentDay ? "22px" : "20px",
+            textSize: isCurrentDay ? "26px" : "24px",
             pathColor: isComplete ? theme.secondary : theme.primary,
             textColor: isCurrentDay
               ? theme.primary
@@ -361,17 +484,35 @@ export function HabitCalendar({
     }
   };
 
+  const monthAnimKey = `${selectedMonth.getFullYear()}-${selectedMonth.getMonth()}`;
+
+  const now = new Date();
+  const isViewingCurrentMonth =
+    selectedMonth.getFullYear() === now.getFullYear() &&
+    selectedMonth.getMonth() === now.getMonth();
+
   return (
     <CalendarContainer>
       <CalendarControlsHeader>
-        <HeaderSideSpacer aria-hidden />
-        <DateSelectorContainer>{dateSelector}</DateSelectorContainer>
-        <ToggleContainer>
+        <CalendarHeaderLeft>
+          {onTodayClick ? (
+            <AnalyticsTodayWrap>
+              <TodayButton
+                onClick={onTodayClick}
+                disabled={isViewingCurrentMonth}
+              />
+            </AnalyticsTodayWrap>
+          ) : null}
+        </CalendarHeaderLeft>
+        <CalendarHeaderCenter>
+          <DateSelectorContainer>{dateSelector}</DateSelectorContainer>
+        </CalendarHeaderCenter>
+        <CalendarHeaderRight>
           <CalendarChartToggle
             isCalendarView={!showChart}
             onToggleView={handleToggleView}
           />
-        </ToggleContainer>
+        </CalendarHeaderRight>
       </CalendarControlsHeader>
 
       <CalendarChartSwap>
@@ -379,20 +520,26 @@ export function HabitCalendar({
           $obscured={showChart}
           aria-hidden={showChart}
         >
-          <DaysHeader>
-            {daysOfWeek.map((day, index) => (
-              <DayName key={index} $isToday={index === currentDayOfWeek}>
-                {day}
-              </DayName>
-            ))}
-          </DaysHeader>
-          <DatePicker
-            selected={selectedDate}
-            inline
-            renderDayContents={(day) => renderDayContents(day)}
-            calendarClassName="custom-calendar"
-            showPopperArrow={false}
-          />
+          <MonthTransitionRoot key={monthAnimKey}>
+            <MonthWeekdayStrip>
+              <DaysHeader>
+                {daysOfWeek.map((day, index) => (
+                  <DayName key={index} $isToday={index === currentDayOfWeek}>
+                    {day}
+                  </DayName>
+                ))}
+              </DaysHeader>
+            </MonthWeekdayStrip>
+            <MonthGridWrapper>
+              <DatePicker
+                selected={selectedDate}
+                inline
+                renderDayContents={(day) => renderDayContents(day)}
+                calendarClassName="custom-calendar"
+                showPopperArrow={false}
+              />
+            </MonthGridWrapper>
+          </MonthTransitionRoot>
         </CalendarMonthArea>
         <ChartOverlay
           $visible={showChart}

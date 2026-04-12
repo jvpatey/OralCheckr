@@ -8,7 +8,7 @@ import {
 import { AnalyticsDateSelector } from "../AnalyticsDateSelector";
 import { ViewType } from "../AnalyticsDateSelector";
 import { useHabitContext } from "../../../../contexts/HabitContext";
-import { ViewContainer } from "../../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
+import { AnalyticsViewRoot } from "../../../../components/habit-tracker/analytics/styles/SharedAnalyticsStyles";
 import {
   HeatmapContainer,
   HeatmapHeader,
@@ -41,7 +41,7 @@ export function YearView({
   }
 
   return (
-    <ViewContainer>
+    <AnalyticsViewRoot>
       <HeatmapContainer>
         <HeatmapHeader>
           <div />
@@ -56,6 +56,6 @@ export function YearView({
         </HeatmapHeader>
         <Heatmap data={heatmapData} />
       </HeatmapContainer>
-    </ViewContainer>
+    </AnalyticsViewRoot>
   );
 }

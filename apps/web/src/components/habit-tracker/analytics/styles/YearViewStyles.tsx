@@ -26,7 +26,11 @@ const slideInFromBottom = keyframes`
 // Modern glassmorphism heatmap container - more compact
 export const HeatmapContainer = styled.div`
   width: 100%;
-  margin-top: 0.5rem;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.25rem;
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(${({ theme }) => theme.glassBlur});
   border-radius: 16px;
@@ -64,7 +68,8 @@ export const HeatmapHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0.75rem;
+  flex-shrink: 0;
+  margin-bottom: 0.5rem;
   position: relative;
   z-index: 1;
 

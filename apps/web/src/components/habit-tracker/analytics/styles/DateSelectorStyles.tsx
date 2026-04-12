@@ -24,9 +24,9 @@ export const AnalyticsDateTriggerButton = styled.button`
   color: ${({ theme }) => theme.textPrimary};
   border: 1px solid ${({ theme }) => `${theme.primary}45`};
   border-radius: 9999px;
-  min-height: 48px;
-  padding: 0 22px;
-  font-size: 1rem;
+  min-height: 44px;
+  padding: 0 18px;
+  font-size: 0.9375rem;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -76,8 +76,8 @@ export const AnalyticsDateTriggerButton = styled.button`
 /** Outline chevron — aligned with enlarged month trigger */
 export const AnalyticsChevronButton = styled.button<{ $disabled?: boolean }>`
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 9999px;
   border: 1px solid
     ${({ theme, $disabled }) =>
