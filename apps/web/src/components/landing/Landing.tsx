@@ -19,7 +19,11 @@ import {
   StatLabel,
 } from "./LandingCardContainer";
 import { LandingCard } from "./LandingCard";
-import { faClipboardList, faTasksAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClipboardList,
+  faFileLines,
+  faTasksAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { RoutePaths } from "../../common/constants/routes";
 import { AuthContext } from "../../containers/authentication/AuthContext";
 import { useGetTotalScore } from "../../hooks/questionnaire/useGetTotalScore";
@@ -108,7 +112,7 @@ export function Landing() {
         <LandingCardContainer>
           <LandingCard
             title="Oral Health Questionnaire"
-            description="Complete our comprehensive oral health questionnaire to get personalized recommendations and track your progress over time."
+            description="Complete our oral health questionnaire for personalized recommendations, one-tap suggested habits from your answers, and progress tracking over time."
             buttonLink={RoutePaths.QUESTIONNAIRE}
             icon={faClipboardList}
             badge={
@@ -121,6 +125,14 @@ export function Landing() {
             buttonLink={RoutePaths.HABITS}
             icon={faTasksAlt}
           />
+          {questionnaireData?.lastCompleted ? (
+            <LandingCard
+              title="Visit summary"
+              description="Review and print a clear summary of your last assessment to share with your dentist."
+              buttonLink={RoutePaths.APPOINTMENT_SUMMARY}
+              icon={faFileLines}
+            />
+          ) : null}
         </LandingCardContainer>
       </LandingContainer>
     </PageBackground>
