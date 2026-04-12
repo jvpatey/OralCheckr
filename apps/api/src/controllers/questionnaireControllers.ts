@@ -61,11 +61,12 @@ export const saveResponse = async (
     });
 
     if (existingResponse) {
-      // Update existing response and reset currentQuestion to 1
+      // Final submission: idle session (0) + completion timestamp (client may PUT progress again with 0)
       await existingResponse.update({
         responses,
         totalScore,
-        currentQuestion: 1,
+        currentQuestion: 0,
+        completedAt: new Date(),
       });
       res.status(200).json({
         message: "Questionnaire response updated",
@@ -75,12 +76,12 @@ export const saveResponse = async (
         `Updated existing questionnaire response: ${existingResponse.id} for user: ${userId}`
       );
     } else {
-      // Create new response and set currentQuestion to 1
       const newResponse = await QuestionnaireResponse.create({
         userId,
         responses,
         totalScore,
-        currentQuestion: 1,
+        currentQuestion: 0,
+        completedAt: new Date(),
       });
       res.status(201).json({
         message: "Questionnaire response saved",
@@ -164,6 +165,7 @@ export const getResponseByUser = async (
         "responses",
         "totalScore",
         "currentQuestion",
+        "completedAt",
         "createdAt",
         "updatedAt",
       ],
@@ -300,10 +302,10 @@ export const getProgress = async (
       return;
     }
 
-    // Send a success response to the client
     res.status(200).json({
       responses: responseRecord.responses,
       currentQuestion: responseRecord.currentQuestion,
+      completedAt: responseRecord.completedAt,
     } as QuestionnaireProgress);
   } catch (error) {
     console.error(
@@ -337,6 +339,8 @@ export const saveGuestQuestionnaireResponse = async (
       userId: guestUserId,
       responses,
       totalScore,
+      currentQuestion: 0,
+      completedAt: new Date(),
     });
     console.log(
       `Questionnaire responses save successful: Guest responses saved for user: ${guestUserId}`
@@ -442,7 +446,8 @@ export const saveQuestionnaireResponses = async (
       userId,
       responses,
       totalScore,
-      currentQuestion: 0, // Reset to 0 after completion
+      currentQuestion: 0,
+      completedAt: new Date(),
     });
 
     res.status(201).json({

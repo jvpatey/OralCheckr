@@ -120,6 +120,7 @@ export const convertGuestToUser = async (
           responses: response.responses,
           totalScore: response.totalScore,
           currentQuestion: response.currentQuestion,
+          completedAt: response.completedAt ?? null,
         });
         questionnaireCount++;
       }

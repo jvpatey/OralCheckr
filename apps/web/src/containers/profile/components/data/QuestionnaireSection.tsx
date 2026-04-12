@@ -56,7 +56,6 @@ export function QuestionnaireSection({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["questionnaireResponse"] });
-      queryClient.invalidateQueries({ queryKey: ["hasSavedResponse"] });
       queryClient.invalidateQueries({ queryKey: ["questionnaireProgress"] });
       toast.success("Questionnaire data deleted successfully", {
         position: "top-right",
@@ -65,7 +64,6 @@ export function QuestionnaireSection({
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["questionnaireResponse"] });
-      queryClient.invalidateQueries({ queryKey: ["hasSavedResponse"] });
       queryClient.invalidateQueries({ queryKey: ["questionnaireProgress"] });
     },
   });

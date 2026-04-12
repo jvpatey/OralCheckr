@@ -72,8 +72,7 @@ export function RetakeQuestionnaire({
 
   const handleConfirmRetake = () => {
     setShowModal(false);
-    resetResponses();
-    navigate(`${RoutePaths.QUESTIONNAIRE}/1`);
+    void resetResponses();
   };
 
   const handleCloseModal = () => {

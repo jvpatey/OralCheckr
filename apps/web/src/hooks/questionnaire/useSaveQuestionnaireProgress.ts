@@ -1,5 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveQuestionnaireProgress } from "../../services/quesService";
+import {
+  saveQuestionnaireProgress,
+  type QuestionnaireResponse,
+} from "../../services/quesService";
 
 // Structure for questionnaire progress data
 interface ProgressData {
@@ -17,9 +20,24 @@ export const useSaveQuestionnaireProgress = () => {
     mutationFn: async (progressData) => {
       await saveQuestionnaireProgress(progressData);
     },
-    onSuccess: () => {
-      // Invalidate the questionnaire progress query to ensure fresh data
+    onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["questionnaireProgress"] });
+      queryClient.setQueryData(
+        ["questionnaireResponse"],
+        (prev: QuestionnaireResponse | null | undefined) => {
+          if (!prev) {
+            void queryClient.invalidateQueries({
+              queryKey: ["questionnaireResponse"],
+            });
+            return prev;
+          }
+          return {
+            ...prev,
+            responses: variables.responses as QuestionnaireResponse["responses"],
+            currentQuestion: variables.currentQuestion,
+          };
+        }
+      );
     },
   });
 };

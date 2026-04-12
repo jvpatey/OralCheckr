@@ -54,7 +54,7 @@ describe("Questionnaire Endpoints", () => {
         userId: mockUser.userId,
         responses: mockQuestionnaireData.responses,
         totalScore: mockQuestionnaireData.totalScore,
-        currentQuestion: 1,
+        currentQuestion: 0,
       } as unknown as MockQuestionnaireModel;
 
       jest
@@ -72,7 +72,7 @@ describe("Questionnaire Endpoints", () => {
         "message",
         "Questionnaire response saved"
       );
-      expect(res.body.response).toHaveProperty("currentQuestion", 1);
+      expect(res.body.response).toHaveProperty("currentQuestion", 0);
     });
 
     it("should update an existing questionnaire response", async () => {
@@ -84,7 +84,7 @@ describe("Questionnaire Endpoints", () => {
         userId: mockUser.userId,
         responses: { 1: 3, 2: [2, 3] },
         totalScore: 90,
-        currentQuestion: 1,
+        currentQuestion: 0,
       };
 
       const mockExistingResponse: MockQuestionnaireModel = {
@@ -92,7 +92,10 @@ describe("Questionnaire Endpoints", () => {
         responses: { 1: 2, 2: [1, 3] },
         totalScore: 85,
         currentQuestion: 1,
-        update: jest.fn().mockResolvedValue(updatedResponse),
+        update: jest.fn().mockImplementation(async (data: Record<string, unknown>) => {
+          Object.assign(mockExistingResponse, data);
+          return mockExistingResponse;
+        }),
         toJSON: () => updatedResponse,
       } as unknown as MockQuestionnaireModel;
 
@@ -117,7 +120,7 @@ describe("Questionnaire Endpoints", () => {
         "Questionnaire response updated"
       );
       expect(res.body.response).toHaveProperty("totalScore", 90);
-      expect(res.body.response).toHaveProperty("currentQuestion", 1);
+      expect(res.body.response).toHaveProperty("currentQuestion", 0);
     });
 
     it("should return 401 when no token is provided", async () => {

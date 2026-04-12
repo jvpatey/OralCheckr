@@ -94,7 +94,7 @@ export const createPreviousHandler = (
 // Handles quitting the questionnaire
 
 export const createQuitHandler = (
-  hasCompletedQuestionnaire: boolean,
+  hasEverSubmittedQuestionnaire: boolean,
   saveProgressMutate: (data: {
     responses: Responses;
     currentQuestion: number;
@@ -105,8 +105,7 @@ export const createQuitHandler = (
   navigate: NavigateFunction
 ) => {
   return async () => {
-    // If user has completed a questionnaire before
-    if (hasCompletedQuestionnaire) {
+    if (hasEverSubmittedQuestionnaire) {
       try {
         // Clear in-progress state but keep responses
         await saveProgressMutate({ responses, currentQuestion: 0 });

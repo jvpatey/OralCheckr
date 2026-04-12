@@ -11,12 +11,9 @@ export const useSaveQuestionnaireResponse = () => {
   return useMutation<void, Error, SaveResponseData>({
     mutationFn: saveQuestionnaireResponse,
     onSuccess: () => {
-      // Invalidate all relevant queries to trigger refetch
-      queryClient.invalidateQueries({ queryKey: ["hasSavedResponse"] });
       queryClient.invalidateQueries({ queryKey: ["totalScore"] });
       queryClient.invalidateQueries({ queryKey: ["questionnaireResponse"] });
       queryClient.invalidateQueries({ queryKey: ["questionnaireProgress"] });
-      queryClient.setQueryData(["hasSavedResponse"], true);
     },
   });
 };

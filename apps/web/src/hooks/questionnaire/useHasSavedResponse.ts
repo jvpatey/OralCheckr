@@ -1,17 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { hasSavedResponse } from "../../services/quesService";
+import { useQuestionnaireResponseQuery } from "./useQuestionnaireResponseQuery";
 
-// Hook for checking if user has saved responses
+/** True when GET /questionnaire/response returned a row (same cache as full response query). */
 export const useHasSavedResponse = () => {
-  return useQuery({
-    queryKey: ["hasSavedResponse"],
-    queryFn: hasSavedResponse,
-    staleTime: 0,
-    gcTime: 0,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
-    retry: 2,
-    initialData: false,
-  });
+  const query = useQuestionnaireResponseQuery();
+  const { data: raw, ...rest } = query;
+  return {
+    ...rest,
+    data: raw != null,
+  };
 };

@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import sequelize from "./db/db";
 import { connectDB } from "./db/db";
+import config from "./db/config";
 import authRoutes from "./routes/authRoutes";
 import questionnaireRoutes from "./routes/questionnaireRoutes";
 import habitRoutes from "./routes/habitRoutes";
@@ -67,6 +68,29 @@ const startServer = async () => {
       // Synchronize models with the database
       await sequelize.sync({ alter: true });
       console.log("All models synchronized successfully.");
+
+      // Backfill completedAt for rows that clearly finished before the column existed
+      try {
+        if (config.DB_DIALECT === "postgres") {
+          await sequelize.query(`
+            UPDATE "questionnaire_responses"
+            SET "completedAt" = "updatedAt"
+            WHERE "completedAt" IS NULL
+              AND "currentQuestion" = 0
+              AND "totalScore" IS NOT NULL
+          `);
+        } else {
+          await sequelize.query(`
+            UPDATE questionnaire_responses
+            SET completedAt = updatedAt
+            WHERE completedAt IS NULL
+              AND currentQuestion = 0
+              AND totalScore IS NOT NULL
+          `);
+        }
+      } catch (e) {
+        console.warn("completedAt backfill skipped or failed:", e);
+      }
     }
 
     // Start the Express server
