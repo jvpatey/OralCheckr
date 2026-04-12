@@ -31,10 +31,12 @@ export const ModernAssessmentContainer = styled.div<{
   /* Smooth fade-up animation matching landing page */
   animation: ${fadeUp} 0.8s ease-out 0.1s both;
 
+  @media (max-width: 1199px) {
+    width: 100%;
+    margin-left: 0;
+  }
+
   @media (max-width: 800px) {
-    width: ${({ $isAuthenticated }) =>
-      $isAuthenticated ? "calc(100% - 86px)" : "100%"};
-    margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "86px" : "0")};
     padding: 20px 16px;
     max-height: calc(100dvh - clamp(88px, 14vw, 108px) - clamp(32px, 6vw, 48px));
   }

@@ -138,10 +138,10 @@ export const HabitListContainer = styled.div`
   backface-visibility: hidden;
   animation: ${fadeUp} 1s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
 
-  @media (max-width: 800px) {
-    width: calc(100% - 86px);
-    left: 78px;
-    padding: 0 1rem;
+  @media (max-width: 1199px) {
+    width: 100%;
+    left: 0;
+    padding: 0 1.25rem;
   }
 
   @media (max-height: 700px) {

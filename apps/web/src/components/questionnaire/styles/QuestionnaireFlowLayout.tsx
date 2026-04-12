@@ -58,10 +58,12 @@ export const QuestionnaireFlowContainer = styled.div<{
   padding: 40px clamp(16px, 4vw, 24px);
   animation: ${fadeUp} 0.8s ease-out 0.1s both;
 
+  @media (max-width: 1199px) {
+    width: 100%;
+    margin-left: 0;
+  }
+
   @media (max-width: 800px) {
-    width: ${({ $isAuthenticated }) =>
-      $isAuthenticated ? "calc(100% - 86px)" : "100%"};
-    margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "86px" : "0")};
     padding: 24px 16px;
     min-height: calc(100vh - 100px);
   }
@@ -155,10 +157,12 @@ export const QuestionnairePageShell = styled.div<{
   min-height: calc(100vh - 120px);
   animation: ${fadeUp} 0.8s ease-out 0.1s both;
 
+  @media (max-width: 1199px) {
+    width: 100%;
+    margin-left: 0;
+  }
+
   @media (max-width: 800px) {
-    width: ${({ $isAuthenticated }) =>
-      $isAuthenticated ? "calc(100% - 86px)" : "100%"};
-    margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "86px" : "0")};
     padding: 0 16px 40px;
     min-height: calc(100vh - 100px);
   }

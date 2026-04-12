@@ -29,6 +29,8 @@ import { HeroTitleAccent } from "../welcome/styles/WelcomeStyles";
 // Props for navigation bar
 interface ModernNavBarProps {
   links: NavLink[];
+  /** Habit / questionnaire sub-routes shown in the mobile menu when the sidebar is hidden */
+  mobileSectionLinks?: NavLink[];
   themeToggler: () => void;
   theme: ThemeType;
 }
@@ -36,6 +38,7 @@ interface ModernNavBarProps {
 // Modern navigation bar component matching welcome page
 export function ModernNavBar({
   links,
+  mobileSectionLinks = [],
   themeToggler,
   theme,
 }: ModernNavBarProps) {
@@ -245,6 +248,7 @@ export function ModernNavBar({
             <MobileMenuWrapper>
               <MobileMenu
                 links={links}
+                sectionLinks={mobileSectionLinks}
                 isActive={isActive}
                 handleLogout={(e: any) => {
                   e.preventDefault();

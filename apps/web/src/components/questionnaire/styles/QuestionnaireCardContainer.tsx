@@ -16,10 +16,12 @@ export const QuestionnaireCardContainer = styled.div<QuestionnaireCardContainerP
   padding: 40px 20px;
   min-height: calc(100vh - 120px);
 
+  @media (max-width: 1199px) {
+    width: 100%;
+    margin-left: 0;
+  }
+
   @media (max-width: 800px) {
-    width: ${({ $isAuthenticated }) =>
-      $isAuthenticated ? "calc(100% - 86px)" : "100%"};
-    margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "86px" : "0")};
     padding: 24px 16px;
     min-height: calc(100vh - 100px);
   }

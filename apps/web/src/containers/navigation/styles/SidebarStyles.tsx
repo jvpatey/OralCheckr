@@ -38,6 +38,11 @@ export const SidebarContainer = styled.nav`
   animation: ${fadeIn} 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 900;
 
+  /* Sidebar nav moves into the navbar dropdown (ModernNavBar mobile breakpoint). */
+  @media (max-width: 1199px) {
+    display: none;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     animation: none;
   }
