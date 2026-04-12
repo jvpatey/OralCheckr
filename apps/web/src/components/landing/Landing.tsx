@@ -26,6 +26,7 @@ import { useGetTotalScore } from "../../hooks/questionnaire/useGetTotalScore";
 import { useFetchHabits } from "../../hooks/habits/useFetchHabits";
 import { useQuestionnaireData } from "../../hooks/questionnaire/useQuestionnaireData";
 import { LoadingSpinner } from "../common/LoadingSpinner";
+import { DashboardHeroBackdrop } from "./DashboardHeroBackdrop";
 
 // Authenticated dashboard — visual language aligned with the welcome page
 export function Landing() {
@@ -46,6 +47,7 @@ export function Landing() {
     return (
       <PageBackground>
         <BackgroundEffects />
+        <DashboardHeroBackdrop />
         <LandingContainer>
           <LandingHeroSection>
             <HeroCopy>
@@ -71,6 +73,7 @@ export function Landing() {
   return (
     <PageBackground>
       <BackgroundEffects />
+      <DashboardHeroBackdrop />
       <LandingContainer>
         <LandingHeroSection>
           <HeroCopy>
