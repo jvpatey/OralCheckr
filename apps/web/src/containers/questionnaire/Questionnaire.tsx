@@ -330,16 +330,22 @@ export function Questionnaire() {
     return <StartQuestionnaire isAuthenticated={isAuthenticated} />;
   }
 
-  const currentQuestionType = questions[currentQuestion - 1]?.type;
+  const currentQuestionObj = questions[currentQuestion - 1];
+  const currentQuestionType = currentQuestionObj?.type;
+  const currentQuestionKey = currentQuestionObj?.id;
+  const lastQuestionKey = questions[questions.length - 1]?.id;
+
   const isNextDisabled =
     currentQuestionType !== QuestionType.RANGE &&
-    (responses[currentQuestion] === undefined ||
-      responses[currentQuestion] === null);
+    (currentQuestionKey === undefined ||
+      responses[currentQuestionKey] === undefined ||
+      responses[currentQuestionKey] === null);
 
   const isSubmitDisabled =
     currentQuestion === questions.length &&
-    (responses[questions.length] === undefined ||
-      responses[questions.length] === null);
+    (lastQuestionKey === undefined ||
+      responses[lastQuestionKey] === undefined ||
+      responses[lastQuestionKey] === null);
 
   /** Keep bar/labels aligned with the faded question, not the step ahead during transition */
   const progressStep = displayedQuestion;
@@ -386,7 +392,11 @@ export function Questionnaire() {
                 <RenderQuestions
                   {...questions[displayedQuestion - 1]}
                   onResponseChange={handleResponseChange}
-                  initialResponse={responses[displayedQuestion]}
+                  initialResponse={
+                    questions[displayedQuestion - 1]
+                      ? responses[questions[displayedQuestion - 1].id]
+                      : undefined
+                  }
                   questionId={displayedQuestion}
                 />
               </QuestionPanel>

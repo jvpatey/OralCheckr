@@ -146,6 +146,123 @@
         { "optionId": 4, "optionLabel": "More than 2 years", "points": 2, "feedback": "Schedule a dental appointment as soon as possible. Regular check-ups are crucial." },
         { "optionId": 5, "optionLabel": "I'm not sure", "points": 1, "feedback": "It's important to start visiting the dentist. Schedule an appointment to begin your oral health care routine." }
       ]
+    },
+    {
+      "id": 13,
+      "title": "Does the toothpaste you use most often contain fluoride?",
+      "type": "radio",
+      "Category": "Fluoride",
+      "options": [
+        { "optionId": 1, "optionLabel": "Yes", "points": 4 },
+        { "optionId": 2, "optionLabel": "I'm not sure", "points": 2, "feedback": "Check the ingredient label for fluoride (often listed as sodium fluoride or similar). Fluoride toothpaste helps strengthen enamel and reduce decay risk." },
+        { "optionId": 3, "optionLabel": "No", "points": 0, "feedback": "Dentists typically recommend using fluoride toothpaste twice daily unless your clinician has advised otherwise. Ask your dental professional what's right for you." }
+      ]
+    },
+    {
+      "id": 14,
+      "title": "After brushing, what do you usually do?",
+      "type": "radio",
+      "Category": "Fluoride",
+      "options": [
+        { "optionId": 1, "optionLabel": "Spit out excess toothpaste and rinse only briefly, or not at all", "points": 4 },
+        { "optionId": 2, "optionLabel": "Rinse my mouth thoroughly with water", "points": 2, "feedback": "A full rinse washes away some fluoride left on the teeth. If your dentist agrees, try spitting without a long rinse so fluoride stays in contact with your enamel a bit longer." },
+        { "optionId": 3, "optionLabel": "I'm not sure", "points": 2, "feedback": "Ask your dental professional about rinsing habits. Many people benefit from fluoride toothpaste staying on the teeth a little longer after brushing." }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Has a dental professional recommended a prescription-strength or higher-fluoride toothpaste, gel, or rinse for you?",
+      "type": "radio",
+      "Category": "Fluoride",
+      "options": [
+        { "optionId": 1, "optionLabel": "Not applicable — none has been recommended", "points": 4 },
+        { "optionId": 2, "optionLabel": "Yes, and I use it as directed", "points": 4 },
+        { "optionId": 3, "optionLabel": "Yes, but I don't use it consistently", "points": 1, "feedback": "Higher-fluoride products can significantly lower decay risk when used as prescribed. Talk to your dentist if you're having trouble fitting them into your routine." },
+        { "optionId": 4, "optionLabel": "I'm not sure", "points": 2, "feedback": "If you're at higher risk for cavities, your dentist may recommend a prescription or professional fluoride product. Ask at your next visit." }
+      ]
+    },
+    {
+      "id": 16,
+      "title": "How many times per day do you have sugary snacks or sweetened drinks between meals (not counting regular meals)?",
+      "type": "radio",
+      "Category": "Sugar and Snacking",
+      "options": [
+        { "optionId": 1, "optionLabel": "None", "points": 4 },
+        { "optionId": 2, "optionLabel": "Once", "points": 3 },
+        { "optionId": 3, "optionLabel": "2-3 times", "points": 2, "feedback": "Frequent sugar exposure feeds bacteria that cause decay. Try to limit between-meal sweets and choose water when possible." },
+        { "optionId": 4, "optionLabel": "4 or more times", "points": 0, "feedback": "Many small exposures to sugar through the day can be hard on your teeth. Combine fewer snacks with brushing or rinsing with water, and see your dentist for personalized advice." }
+      ]
+    },
+    {
+      "id": 17,
+      "title": "When you have a sugary or acidic drink or snack between meals, how do you usually consume it?",
+      "type": "radio",
+      "Category": "Sugar and Snacking",
+      "options": [
+        { "optionId": 1, "optionLabel": "I rarely have these between meals", "points": 4 },
+        { "optionId": 2, "optionLabel": "Mostly with a meal or finished within about 15 minutes", "points": 4 },
+        { "optionId": 3, "optionLabel": "I sometimes sip or nibble over a longer period (e.g., 30+ minutes)", "points": 2, "feedback": "Sipping or grazing keeps acid and sugar in contact with teeth longer, which raises decay and erosion risk. Drinking with meals or finishing quicker is gentler on enamel." },
+        { "optionId": 4, "optionLabel": "I often sip or snack throughout much of the day", "points": 0, "feedback": "Constant exposure to sugar and acid is especially tough on teeth. Try scheduling treats, using a straw for drinks when appropriate, and rinsing with water afterward." }
+      ]
+    },
+    {
+      "id": 18,
+      "title": "How often do you experience dry mouth?",
+      "type": "radio",
+      "Category": "Dry Mouth",
+      "options": [
+        { "optionId": 1, "optionLabel": "Rarely or never", "points": 4 },
+        { "optionId": 2, "optionLabel": "Occasionally", "points": 2, "feedback": "Dry mouth can increase cavity risk and discomfort. Stay hydrated, review medications with your doctor or dentist, and mention it at your next dental visit." },
+        { "optionId": 3, "optionLabel": "Often", "points": 1, "feedback": "Persistent dry mouth often needs evaluation. Your dentist can suggest fluoride, saliva substitutes, or other strategies, especially if you take medications that reduce saliva." },
+        { "optionId": 4, "optionLabel": "Almost always", "points": 0, "feedback": "Ongoing dry mouth raises decay and gum problems. Schedule a dental visit and discuss medical causes and treatments; saliva helps protect teeth around the clock." }
+      ]
+    },
+    {
+      "id": 19,
+      "title": "On a typical day, how would you describe your water intake?",
+      "type": "radio",
+      "Category": "Hydration",
+      "options": [
+        { "optionId": 1, "optionLabel": "I drink water regularly throughout the day", "points": 4 },
+        { "optionId": 2, "optionLabel": "I drink when thirsty but could be more consistent", "points": 3 },
+        { "optionId": 3, "optionLabel": "I often feel I don't drink enough water", "points": 1, "feedback": "Water supports saliva and rinses food and acids from your mouth. Try keeping a bottle handy and sipping between meals." },
+        { "optionId": 4, "optionLabel": "I'm not sure", "points": 2, "feedback": "Aim for steady water intake during the day; it helps oral comfort and dilutes acids after eating and drinking." }
+      ]
+    },
+    {
+      "id": 20,
+      "title": "Aside from exercise or nasal congestion, how often do you breathe through your mouth while awake or asleep?",
+      "type": "radio",
+      "Category": "Mouth Breathing",
+      "options": [
+        { "optionId": 1, "optionLabel": "Rarely or never", "points": 4 },
+        { "optionId": 2, "optionLabel": "Sometimes", "points": 2, "feedback": "Mouth breathing can dry oral tissues and contribute to discomfort or bad breath. If it's frequent, mention it to your dentist or physician." },
+        { "optionId": 3, "optionLabel": "Often", "points": 0, "feedback": "Regular mouth breathing may dry the mouth and increase dental risks. A dental or medical evaluation can identify causes and options to protect your oral health." }
+      ]
+    },
+    {
+      "id": 21,
+      "title": "When you brush, do you brush for about two minutes?",
+      "type": "radio",
+      "Category": "Brushing",
+      "options": [
+        { "optionId": 1, "optionLabel": "Yes, most of the time", "points": 4 },
+        { "optionId": 2, "optionLabel": "Sometimes", "points": 2, "feedback": "Two minutes helps you reach all surfaces. Try a timer or an electric brush with a built-in pacer." },
+        { "optionId": 3, "optionLabel": "Usually less than two minutes", "points": 0, "feedback": "Short brushing often misses plaque along the gumline. Aim for about two minutes, twice a day, with gentle pressure." },
+        { "optionId": 4, "optionLabel": "I'm not sure", "points": 1, "feedback": "Use a clock or phone timer for a few days to see how long you actually brush; many people underestimate." }
+      ]
+    },
+    {
+      "id": 22,
+      "title": "How often do you replace your toothbrush (or power brush head)?",
+      "type": "radio",
+      "Category": "Brushing",
+      "options": [
+        { "optionId": 1, "optionLabel": "About every 3-4 months, or sooner if bristles look frayed", "points": 4 },
+        { "optionId": 2, "optionLabel": "About twice a year", "points": 3, "feedback": "Worn bristles clean less effectively. Replacing every 3-4 months (or after illness) is a good rule of thumb." },
+        { "optionId": 3, "optionLabel": "Less often than twice a year", "points": 1, "feedback": "Old or frayed brushes remove plaque poorly and can be harsh on gums. Plan to replace on a schedule you'll remember." },
+        { "optionId": 4, "optionLabel": "I'm not sure / only when I remember", "points": 1, "feedback": "Mark your calendar or set a reminder to replace your brush about every three to four months." }
+      ]
     }
   ]
 }
