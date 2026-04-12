@@ -77,8 +77,8 @@ export const ProgressBar = styled.div<{
   width: ${({ $progress }) => $progress}%;
   background: ${({ $isComplete, theme }) =>
     $isComplete
-      ? `linear-gradient(135deg, ${theme.secondary}40, ${theme.secondary}20, ${theme.secondary}60)`
-      : `linear-gradient(135deg, ${theme.primary}40, ${theme.primary}20, ${theme.primary}60)`};
+      ? `linear-gradient(135deg, ${theme.secondary}55, ${theme.secondary}32, ${theme.secondary}78)`
+      : `linear-gradient(135deg, ${theme.primary}55, ${theme.primary}32, ${theme.primary}78)`};
   z-index: 1;
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: ${({ $isComplete }) =>

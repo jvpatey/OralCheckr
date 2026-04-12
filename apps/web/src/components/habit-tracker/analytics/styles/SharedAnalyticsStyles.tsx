@@ -366,8 +366,8 @@ export const TileProgressFill = styled.div<{
   pointer-events: none;
   background: ${({ $isComplete, theme }) =>
     $isComplete
-      ? `linear-gradient(135deg, ${theme.secondary}40, ${theme.secondary}20, ${theme.secondary}60)`
-      : `linear-gradient(135deg, ${theme.primary}40, ${theme.primary}20, ${theme.primary}60)`};
+      ? `linear-gradient(135deg, ${theme.secondary}55, ${theme.secondary}32, ${theme.secondary}78)`
+      : `linear-gradient(135deg, ${theme.primary}55, ${theme.primary}32, ${theme.primary}78)`};
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: ${({ $isComplete }) =>
     $isComplete ? "16px" : "16px 0 0 16px"};
