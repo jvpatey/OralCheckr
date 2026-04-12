@@ -6,34 +6,90 @@
       "type": "radio",
       "Category": "Brushing",
       "options": [
-        { "optionId": 1, "optionLabel": "Once a day", "points": 2, "feedback": "Brushing once a day is good, but it is recommended to brush twice a day to maintain optimal oral health."},
-        { "optionId": 2, "optionLabel": "Twice a day", "points": 4 },
-        { "optionId": 3, "optionLabel": "More than twice a day", "points": 4 },
-        { "optionId": 4, "optionLabel": "I don't brush my teeth daily", "points": 0, "feedback": "It's important to brush at least once a day to remove plaque and prevent tooth decay."}
+        {
+          "optionId": 1,
+          "optionLabel": "Once a day",
+          "points": 2,
+          "feedback": "Brushing once a day is good, but it is recommended to brush twice a day to maintain optimal oral health."
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "Twice a day",
+          "points": 4
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "More than twice a day",
+          "points": 4
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "I don't brush my teeth daily",
+          "points": 0,
+          "feedback": "It's important to brush at least once a day to remove plaque and prevent tooth decay."
+        }
       ]
     },
     {
       "id": 2,
-      "title": "How often do you floss your teeth?",
+      "title": "Roughly how long do you brush your teeth each time?",
       "type": "radio",
-      "Category": "Flossing",
+      "Category": "Brushing",
       "options": [
-        { "optionId": 1, "optionLabel": "Daily", "points": 4 },
-        { "optionId": 2, "optionLabel": "A few times a week", "points": 3, "feedback": "Good job! Try to increase flossing frequency to daily for best results." },
-        { "optionId": 3, "optionLabel": "Occasionally", "points": 2, "feedback": "Flossing occasionally is better than not at all. Aim to floss daily to improve your oral health" },
-        { "optionId": 4, "optionLabel": "Never", "points": 0, "feedback": "Flossing is essential for removing plaque between teeth. Start flossing daily to prevent gum disease."}
+        {
+          "optionId": 1,
+          "optionLabel": "About two minutes or longer",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "About one to two minutes",
+          "points": 2,
+          "feedback": "Aim for about two minutes each time so you can reach all surfaces. Try a timer or an electric brush with a built-in timer."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "Less than one minute",
+          "points": 0,
+          "feedback": "Short brushing often misses plaque along the gumline. Aim for about two minutes, twice a day, with gentle pressure."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "I'm not sure",
+          "points": 1,
+          "feedback": "Use a clock or phone timer for a few days to see how long you actually brush; many people underestimate. Aim for about two minutes each time so you can reach all surfaces."
+        }
       ]
     },
     {
       "id": 3,
-      "title": "How often do you use a mouthrinse?",
+      "title": "How often do you replace your toothbrush (or power brush head)?",
       "type": "radio",
-      "Category": "Mouthrinse",
+      "Category": "Brushing",
       "options": [
-        { "optionId": 1, "optionLabel": "Daily", "points": 4 },
-        { "optionId": 2, "optionLabel": "A few times a week", "points": 3, "feedback": "Good! Consider using it daily for maximum benefit." },
-        { "optionId": 3, "optionLabel": "Occasionally", "points": 2, "feedback": "Try to use mouth rinse more regularly to improve your oral health." },
-        { "optionId": 4, "optionLabel": "Never", "points": 0, "feedback": "Adding a mouth rinse to your routine can help reduce plaque and improve oral hygiene." }
+        {
+          "optionId": 1,
+          "optionLabel": "About every 3-4 months, or sooner if bristles look frayed",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "About twice a year",
+          "points": 3,
+          "feedback": "Worn bristles clean less effectively. Replacing every 3-4 months or sooner if bristles look frayed is a good rule of thumb."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "Less often than twice a year",
+          "points": 1,
+          "feedback": "Old or frayed brushes remove plaque poorly and can be harsh on gums. Plan to replace on a schedule you'll remember."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "I'm not sure / only when I remember",
+          "points": 1,
+          "feedback": "Mark your calendar or set a reminder to replace your brush about every three to four months."
+        }
       ]
     },
     {
@@ -42,109 +98,520 @@
       "type": "checkbox",
       "Category": "Oral Health Aids",
       "options": [
-        { "optionId": 1, "optionLabel": "Manual toothbrush", "points": 5, "feedback": "Manual toothbrushes are reliable for daily oral care. Make sure you use soft bristles to decrease your risk of damaging your gums." },
-        { "optionId": 2, "optionLabel": "Power toothbrush", "points": 7, "feedback":"Power toothbrushes improve brushing efficiency and effectiveness while being gentler along the gumline to promote great oral health." },
-        { "optionId": 3, "optionLabel": "String floss", "points": 7, "feedback": "String floss effectively removes plaque and debris from in between your teeth. Make sure to wrap it around each side of the tooth to adapt the floss to your gumline." },
-        { "optionId": 4, "optionLabel": "Floss picks", "points": 5, "feedback": "Floss picks are convenient for on-the-go use. While string floss can be more effective, a lot of people find that floss sticks are easier to use. " },
-        { "optionId": 5, "optionLabel": "Soft picks", "points": 5, "feedback": "Soft picks are gentle yet effective, offering an easier solution for cleaning larger spaces, such as areas with bone loss or underneath bridges." },
-        { "optionId": 6, "optionLabel": "Waterflosser", "points": 7, "feedback": "Water flossers effectively clean between teeth and along the gumline, ideal for braces and dental work."},
-        { "optionId": 7, "optionLabel": "Tongue scraper", "points": 5, "feedback": "The tongue harbors bacteria and is often overlooked in oral health routines. Using a tongue scraper can effectively clean the tongue and help control bacterial buildup." }
+        {
+          "optionId": 1,
+          "optionLabel": "Manual toothbrush",
+          "points": 5,
+          "feedback": "Manual toothbrushes are reliable for daily oral care. Make sure you use soft bristles to decrease your risk of damaging your gums."
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "Power toothbrush",
+          "points": 7,
+          "feedback": "Power toothbrushes improve brushing efficiency and effectiveness while being gentler along the gumline to promote great oral health."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "String floss",
+          "points": 7,
+          "feedback": "String floss effectively removes plaque and debris from in between your teeth. Make sure to wrap it around each side of the tooth to adapt the floss to your gumline."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "Floss picks",
+          "points": 5,
+          "feedback": "Floss picks are convenient for on-the-go use. While string floss can be more effective, a lot of people find that floss sticks are easier to use. "
+        },
+        {
+          "optionId": 5,
+          "optionLabel": "Soft picks",
+          "points": 5,
+          "feedback": "Soft picks are gentle yet effective, offering an easier solution for cleaning larger spaces, such as areas with bone loss or underneath bridges."
+        },
+        {
+          "optionId": 6,
+          "optionLabel": "Waterflosser",
+          "points": 7,
+          "feedback": "Water flossers effectively clean between teeth and along the gumline, ideal for braces and dental work."
+        },
+        {
+          "optionId": 7,
+          "optionLabel": "Tongue scraper",
+          "points": 5,
+          "feedback": "The tongue harbors bacteria and is often overlooked in oral health routines. Using a tongue scraper can effectively clean the tongue and help control bacterial buildup."
+        }
       ]
     },
     {
       "id": 5,
-      "title": "Do you grind or clench your teeth?",
+      "title": "How often do you floss your teeth?",
       "type": "radio",
-      "Category": "Clenching and Grinding",
+      "Category": "Flossing",
       "options": [
-        { "optionId": 1, "optionLabel": "Yes", "points": 0, "feedback": "Grinding or clenching can lead to tooth damage and jaw pain. Consider wearing a mouthguard at night and discuss with your dentist." },
-        { "optionId": 2, "optionLabel": "No", "points": 3 },
-        { "optionId": 3, "optionLabel": "Not sure", "points": 0, "feedback": "If you're unsure, your dentist can check for signs of grinding or clenching during your next visit. Without preventative measures, clenching and grinding can cause excess wear and tear on your TMJ and muscle pain." }
+        {
+          "optionId": 1,
+          "optionLabel": "Daily",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "A few times a week",
+          "points": 3,
+          "feedback": "Good job! Try to increase flossing frequency to daily for best results."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "Occasionally",
+          "points": 2,
+          "feedback": "Flossing occasionally is better than not at all. Aim to floss daily to improve your oral health"
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "Never",
+          "points": 0,
+          "feedback": "Flossing is essential for removing plaque between teeth. Start flossing daily to prevent gum disease."
+        }
       ]
     },
     {
       "id": 6,
-      "title": "How often do your gums bleed when flossing?",
+      "title": "How often do you use a mouthrinse?",
       "type": "radio",
-      "Category": "Bleeding Gums",
+      "Category": "Mouthrinse",
       "options": [
-        { "optionId": 1, "optionLabel": "Never", "points": 4 },
-        { "optionId": 2, "optionLabel": "Occasionally", "points": 2, "feedback": "Occasional bleeding can be a sign of gum inflammation. Ensure you're brushing and flossing properly." },
-        { "optionId": 3, "optionLabel": "Frequently", "points": 1, "feedback": "Frequent bleeding is a sign of gum disease, which can lead to loss of supporting bone and tissues around your teeth over time. Visit your dentist for an evaluation." },
-        { "optionId": 4, "optionLabel": "Always", "points": 0, "feedback": "Persistent bleeding is a sign of gum disease, which can lead to loss of supporting bone and tissues around your teeth over time. Visit your dentist for an evaluation." }
+        {
+          "optionId": 1,
+          "optionLabel": "Daily",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "A few times a week",
+          "points": 3,
+          "feedback": "Good! Consider using it daily for maximum benefit."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "Occasionally",
+          "points": 2,
+          "feedback": "Try to use mouth rinse more regularly to improve your oral health."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "Never",
+          "points": 0,
+          "feedback": "Adding a mouth rinse to your routine can help reduce plaque and improve oral hygiene."
+        }
       ]
     },
     {
       "id": 7,
-      "title": "How many acidic foods or beverages do you consume in a day? (e.g., citrus fruits, carbonated beverages, wine, etc.)",
-      "type": "range",
-      "Category": "Acid in Diet",
+      "title": "Does the toothpaste you use most often contain fluoride?",
+      "type": "radio",
+      "Category": "Fluoride",
       "options": [
-        { "optionId": 1, "optionLabel": "None", "points": 4 },
-        { "optionId": 2, "optionLabel": "1-2", "points": 3 },
-        { "optionId": 3, "optionLabel": "3-5", "points": 2, "feedback": "Moderate consumption is better but try to limit acidic foods and drinks to protect your enamel." },
-        { "optionId": 4, "optionLabel": "5 or more", "points": 1, "feedback": "Frequent consumption of acidic foods can erode tooth enamel. Rinse your mouth with water after consuming acidic items and consider using an enamel-buffering toothpaste such as Sensodyne Pronamel." }
+        {
+          "optionId": 1,
+          "optionLabel": "Yes",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "I'm not sure",
+          "points": 2,
+          "feedback": "Check the ingredient label for fluoride (often listed as sodium fluoride or similar). Fluoride toothpaste helps strengthen enamel and reduce decay risk."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "No",
+          "points": 0,
+          "feedback": "Dental professionals typically recommend using fluoride toothpaste twice daily. For best results, ask your dental professional what's right for you."
+        }
       ]
     },
     {
       "id": 8,
-      "title": "Do you experience tooth sensitivity to hot or cold?",
+      "title": "After brushing, what do you usually do?",
       "type": "radio",
-      "Category": "Sensitivity",
+      "Category": "Fluoride",
       "options": [
-        { "optionId": 1, "optionLabel": "Yes", "points": 0, "feedback": "Frequent sensitivity can indicate enamel erosion or gum recession. Use toothpaste for sensitive teeth and consult your dentist." },
-        { "optionId": 2, "optionLabel": "Occasionally", "points": 2, "feedback": "Occasional sensitivity is common. Consider using a toothpaste for sensitive teeth." },
-        { "optionId": 3, "optionLabel": "Never", "points": 3 }
+        {
+          "optionId": 1,
+          "optionLabel": "Spit out excess toothpaste and rinse only briefly, or not at all",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "Rinse my mouth thoroughly with water",
+          "points": 2,
+          "feedback": "A full rinse washes away some fluoride left on the teeth. If your dental professional agrees, try spitting without a long rinse so fluoride stays in contact with your enamel a bit longer."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "I'm not sure",
+          "points": 2,
+          "feedback": "Ask your dental professional about rinsing habits. Many people benefit from fluoride toothpaste staying on the teeth a little longer after brushing."
+        }
       ]
     },
     {
       "id": 9,
-      "title": "If you experience TMJ (temporomandibular joint) pain or discomfort, how would you rate your pain?",
+      "title": "How many acidic foods or beverages do you consume in a day? (e.g., citrus fruits, carbonated beverages, wine, etc.)",
       "type": "range",
-      "Category": "TMJ Pain/Discomfort",
+      "Category": "Acid in Diet",
       "options": [
-        { "optionId": 1, "optionLabel": "0", "points": 6 },
-        { "optionId": 2, "optionLabel": "1-2", "points": 5 },
-        { "optionId": 3, "optionLabel": "3-4", "points": 4, "feedback": "Occasional TMJ pain can be managed with self-care measures. If it persists, consult your dentist." },
-        { "optionId": 4, "optionLabel": "5-6", "points": 3, "feedback": "Moderate pain should be evaluated by a dentist to identify and treat the underlying cause." },
-        { "optionId": 5, "optionLabel": "7-8", "points": 2, "feedback": "Frequent TMJ pain should be evaluated by a dentist or specialist. Consider treatments like biteplanes or physiotherapy." },
-        { "optionId": 6, "optionLabel": "9-10", "points": 0, "feedback": "Severe and persistent pain requires immediate attention. Schedule a dental appointment to address the issues" }
+        {
+          "optionId": 1,
+          "optionLabel": "None",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "1-2",
+          "points": 3
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "3-5",
+          "points": 2,
+          "feedback": "Moderate consumption is better but try to limit acidic foods and drinks to protect your enamel."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "5 or more",
+          "points": 1,
+          "feedback": "Frequent consumption of acidic foods can erode tooth enamel. Rinse your mouth with water after consuming acidic items and consider using an enamel-protecting toothpaste to help."
+        }
       ]
     },
     {
       "id": 10,
-      "title": "Do you smoke or use any vaping products?",
+      "title": "How many times per day do you have sugary snacks or sweetened drinks between meals (not counting regular meals)?",
       "type": "radio",
-      "Category": "Smoking/Vaping",
+      "Category": "Sugar and Snacking",
       "options": [
-        { "optionId": 1, "optionLabel": "Yes", "points": 0, "feedback": "Smoking and vaping can impact your oral health and cause long-term irreversible damage. Consider quitting and discuss cessation options with your doctor."},
-        { "optionId": 2, "optionLabel": "Occasionally", "points": 1, "feedback": "Even occasional smoking and/or vaping can affect your oral health. Try to eliminate smoking or vaping completely." },
-        { "optionId": 3, "optionLabel": "No", "points": 3 }
+        {
+          "optionId": 1,
+          "optionLabel": "None",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "Once",
+          "points": 3
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "2-3 times",
+          "points": 2,
+          "feedback": "Frequent sugar exposure feeds bacteria that cause decay. Try to limit between-meal sweets and choose water when possible."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "4 or more times",
+          "points": 0,
+          "feedback": "Many small exposures to sugar through the day can be hard on your teeth. Combine fewer snacks with brushing or rinsing with water, and see your dental professional for personalized advice."
+        }
       ]
     },
     {
       "id": 11,
-      "title": "If you are experiencing tooth pain, how would you rate the pain on a scale from 1-10? (0 if no pain)",
-      "type": "range",
-      "Category": "Tooth Pain",
+      "title": "When you have a sugary or acidic drink or snack between meals, how do you usually consume it?",
+      "type": "radio",
+      "Category": "Sugar and Snacking",
       "options": [
-        { "optionId": 1, "optionLabel": "0", "points": 4 },
-        { "optionId": 2, "optionLabel": "1-3", "points": 2, "feedback": "If it feels like its related to your gums, mild pain can usually be managed with good oral hygiene. If it persists or worsens, consult your dentist." },
-        { "optionId": 3, "optionLabel": "4-6", "points": 1, "feedback": "Moderate pain should be evaluated by a dentist to identify and treat the underlying cause."},
-        { "optionId": 4, "optionLabel": "7-10", "points": 0, "feedback": "Severe pain requires immediate attention. Schedule an emergency dental appointment. If you are experiencing facial swelling, you should proceed to the ER."}
+        {
+          "optionId": 1,
+          "optionLabel": "I rarely have these between meals",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "Mostly with a meal or finished within about 15 minutes",
+          "points": 4
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "I sometimes sip or nibble over a longer period (e.g., 30+ minutes)",
+          "points": 2,
+          "feedback": "Sipping or grazing keeps acid and sugar in contact with teeth longer, which raises decay and erosion risk. Drinking with meals or finishing quicker is gentler on enamel."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "I often sip or snack throughout much of the day",
+          "points": 0,
+          "feedback": "Constant exposure to sugar and acid is especially tough on teeth. When you can, have sweets or acidic drinks with a meal instead of on their own—eating with other foods. It helps to buffer acids and sugars and shortens the time your teeth are exposed."
+        }
       ]
     },
     {
       "id": 12,
+      "title": "How often do you experience dry mouth?",
+      "type": "radio",
+      "Category": "Dry Mouth",
+      "options": [
+        {
+          "optionId": 1,
+          "optionLabel": "Rarely or never",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "Occasionally",
+          "points": 2,
+          "feedback": "Dry mouth can increase cavity risk and discomfort. Ask your dental professional about it at your next dental visit."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "Often",
+          "points": 1,
+          "feedback": "Persistent dry mouth often needs evaluation. Your dental professional can suggest strategies and tips to help you manage it."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "Almost always",
+          "points": 0,
+          "feedback": "Ongoing dry mouth raises decay and gum problems. Schedule a dental visit and discuss cause and strategies to help you manage it."
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "title": "On a typical day, how would you describe your water intake?",
+      "type": "radio",
+      "Category": "Hydration",
+      "options": [
+        {
+          "optionId": 1,
+          "optionLabel": "I drink water regularly throughout the day",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "I drink when thirsty but could be more consistent",
+          "points": 3
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "I often feel I don't drink enough water",
+          "points": 1,
+          "feedback": "Water supports saliva and rinses food and acids from your mouth. Try keeping a bottle handy and sipping between meals."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "I'm not sure",
+          "points": 2,
+          "feedback": "Aim for steady water intake during the day; it helps oral comfort and buffers acids after eating and drinking."
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Would you say you're often a mouth breather—mostly breathing through your mouth when you're resting or sleeping?",
+      "type": "radio",
+      "Category": "Mouth Breathing",
+      "options": [
+        {
+          "optionId": 1,
+          "optionLabel": "No—not really. I mostly breathe through my nose when I'm resting or sleeping.",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "Sometimes—especially at night or when I'm very relaxed.",
+          "points": 2,
+          "feedback": "If this happens only sometimes, mouth breathing can still dry oral tissues and contribute to discomfort or bad breath. If it becomes more frequent, mention it to your dental professional."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "Yes—I often breathe through my mouth when I'm resting or sleeping.",
+          "points": 0,
+          "feedback": "Regular mouth breathing while you rest or sleep may dry the mouth and increase dental risks. A dental professional can identify causes and options to protect your oral health."
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "How often do your gums bleed when flossing?",
+      "type": "radio",
+      "Category": "Bleeding Gums",
+      "options": [
+        {
+          "optionId": 1,
+          "optionLabel": "Never",
+          "points": 4
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "Occasionally",
+          "points": 2,
+          "feedback": "Occasional bleeding can be a sign of gum inflammation. Ensure you're brushing and flossing properly."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "Frequently",
+          "points": 1,
+          "feedback": "Frequent bleeding is a sign of gum disease, which can lead to loss of supporting bone and tissues around your teeth over time. Visit your dental professional for an evaluation."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "Always",
+          "points": 0,
+          "feedback": "Persistent bleeding is a sign of gum disease, which can lead to loss of supporting bone and tissues around your teeth over time. Visit your dental professional for an evaluation."
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Do you experience tooth sensitivity to hot or cold?",
+      "type": "radio",
+      "Category": "Sensitivity",
+      "options": [
+        {
+          "optionId": 1,
+          "optionLabel": "Yes",
+          "points": 0,
+          "feedback": "Frequent sensitivity can indicate enamel erosion, gum recession, or other tooth-related issues. Consider using a toothpaste for sensitive teeth and consult your dental professional."
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "Occasionally",
+          "points": 2,
+          "feedback": "Occasional sensitivity is common but can be a sign of other tooth-related issues. Consider using a toothpaste for sensitive teeth but if it persists, consult your dental professional."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "Never",
+          "points": 3
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "title": "If you have pain or discomfort in your jaw or in front of your ears (where the jaw opens and closes), how would you rate it?",
+      "type": "range",
+      "Category": "Jaw Pain/Discomfort",
+      "options": [
+        {
+          "optionId": 1,
+          "optionLabel": "0",
+          "points": 6
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "1-2",
+          "points": 5
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "3-4",
+          "points": 4,
+          "feedback": "Occasional jaw pain can often be helped with simple self-care. If it persists, consult your dental professional."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "5-6",
+          "points": 3,
+          "feedback": "Moderate pain should be evaluated by a dental professional to identify and treat the underlying cause."
+        },
+        {
+          "optionId": 5,
+          "optionLabel": "7-8",
+          "points": 2,
+          "feedback": "Frequent jaw or jaw-joint pain should be evaluated by a dental professional, who can advise you on next steps."
+        },
+        {
+          "optionId": 6,
+          "optionLabel": "9-10",
+          "points": 0,
+          "feedback": "Severe and persistent pain requires immediate attention. Schedule a dental appointment to address the issues"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "title": "Do you grind or clench your teeth?",
+      "type": "radio",
+      "Category": "Clenching and Grinding",
+      "options": [
+        {
+          "optionId": 1,
+          "optionLabel": "Yes",
+          "points": 0,
+          "feedback": "Grinding or clenching can lead to tooth damage and jaw pain. If you are experiencing these issues, consult your dental professional."
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "No",
+          "points": 3
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "Not sure",
+          "points": 0,
+          "feedback": "If you're unsure, your dental professional can check for signs of grinding or clenching during your next visit. Without preventative measures, clenching and grinding can cause excess wear on your teeth, strain on your jaw joints, and muscle pain."
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "title": "Do you smoke or use any vaping products?",
+      "type": "radio",
+      "Category": "Smoking/Vaping",
+      "options": [
+        {
+          "optionId": 1,
+          "optionLabel": "Yes",
+          "points": 0,
+          "feedback": "Smoking and vaping can impact your oral health and cause long-term irreversible damage. Consider quitting and discuss cessation options with your doctor."
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "Occasionally",
+          "points": 1,
+          "feedback": "Even occasional smoking and/or vaping can affect your oral health. Try to eliminate smoking or vaping completely."
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "No",
+          "points": 3
+        }
+      ]
+    },
+    {
+      "id": 20,
       "title": "When was your last visit to a dental professional?",
       "type": "radio",
       "Category": "Last Dental Visit",
       "options": [
-        { "optionId": 1, "optionLabel": "Less than 6 months", "points": 5 },
-        { "optionId": 2, "optionLabel": "6 months to 1 year", "points": 4 },
-        { "optionId": 3, "optionLabel": "1 to 2 years", "points": 3, "feedback": "It's time for a check-up. Regular visits help prevent dental issues." },
-        { "optionId": 4, "optionLabel": "More than 2 years", "points": 2, "feedback": "Schedule a dental appointment as soon as possible. Regular check-ups are crucial." },
-        { "optionId": 5, "optionLabel": "I'm not sure", "points": 1, "feedback": "It's important to start visiting the dentist. Schedule an appointment to begin your oral health care routine." }
+        {
+          "optionId": 1,
+          "optionLabel": "Less than 6 months",
+          "points": 5
+        },
+        {
+          "optionId": 2,
+          "optionLabel": "6 months to 1 year",
+          "points": 4
+        },
+        {
+          "optionId": 3,
+          "optionLabel": "1 to 2 years",
+          "points": 3,
+          "feedback": "It's time for a check-up. Regular visits help prevent dental issues."
+        },
+        {
+          "optionId": 4,
+          "optionLabel": "More than 2 years",
+          "points": 2,
+          "feedback": "Schedule a dental appointment as soon as possible. Regular check-ups are crucial to maintaining your oral health."
+        },
+        {
+          "optionId": 5,
+          "optionLabel": "I'm not sure",
+          "points": 1,
+          "feedback": "It's important to start visiting the dental office. Schedule an appointment to begin your oral health care routine."
+        }
       ]
     }
   ]

@@ -4,17 +4,19 @@ import { OralHealthStatus } from "./OralHealthStatus";
 import { Recommendations } from "../../containers/questionnaire/Recommendations";
 import { PageBackground } from "../PageBackground";
 import { LandingContainer } from "../landing/LandingContainer";
-import { BackgroundEffects } from "../../containers/welcome/styles/WelcomeStyles";
-import {
-  HeroEyebrow,
-  HeroTitleAccent,
-} from "../../containers/welcome/styles/WelcomeStyles";
+import { BackgroundEffects, HeroTitleAccent } from "../../containers/welcome/styles/WelcomeStyles";
 import {
   QuestionnairePageShell,
-  QuestionnaireHeroCopy,
-  QuestionnairePageTitle,
+  QuestionnaireStackHeader,
   QuestionnaireGuestSignupCta,
 } from "./styles/QuestionnaireFlowLayout";
+import {
+  HeaderMainRow,
+  HeaderTitleColumn,
+  HabitHeroEyebrow,
+  HeaderText,
+  HeaderSubtitle,
+} from "../habit-tracker/habits/HabitComponents";
 import { AuthContext } from "../../containers/authentication/AuthContext";
 import { SignUpModal } from "../../containers/welcome/SignUpModal";
 import { useQuestionnaireData } from "../../hooks/questionnaire/useQuestionnaireData";
@@ -48,12 +50,20 @@ export function Results() {
       <BackgroundEffects />
       <LandingContainer>
         <QuestionnairePageShell $isAuthenticated={isAuthenticated}>
-          <QuestionnaireHeroCopy>
-            <HeroEyebrow>Improve</HeroEyebrow>
-            <QuestionnairePageTitle>
-              Questionnaire <HeroTitleAccent>Results</HeroTitleAccent>
-            </QuestionnairePageTitle>
-          </QuestionnaireHeroCopy>
+          <QuestionnaireStackHeader>
+            <HeaderMainRow>
+              <HeaderTitleColumn>
+                <HabitHeroEyebrow>Improve</HabitHeroEyebrow>
+                <HeaderText>
+                  Questionnaire <HeroTitleAccent>Results</HeroTitleAccent>
+                </HeaderText>
+                <HeaderSubtitle>
+                  Your oral health score, last assessment, and personalized
+                  recommendations.
+                </HeaderSubtitle>
+              </HeaderTitleColumn>
+            </HeaderMainRow>
+          </QuestionnaireStackHeader>
 
           <BentoGrid>
             <LargeBentoCard>

@@ -118,9 +118,21 @@ export const HeroSection = styled.section`
   @media (max-width: 480px) {
     padding: 40px 0 56px;
   }
+
+  /* Desktop: center hero in first viewport under fixed nav (matches ModernWelcomeContainer padding-top) */
+  @media (min-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - 56px);
+    min-height: calc(100dvh - 56px);
+    padding: clamp(28px, 4vw, 56px) 0 clamp(48px, 7vw, 88px);
+  }
 `;
 
 export const HeroGrid = styled.div`
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;

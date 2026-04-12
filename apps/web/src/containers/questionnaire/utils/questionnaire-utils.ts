@@ -1,4 +1,5 @@
 import React from "react";
+import type { QueryClient } from "@tanstack/react-query";
 import {
   Question,
   Responses,
@@ -143,7 +144,8 @@ export const createSubmitHandler = (
     responses: Responses;
     currentQuestion: number;
   }) => Promise<any>,
-  navigate: NavigateFunction
+  navigate: NavigateFunction,
+  queryClient: QueryClient
 ) => {
   return async () => {
     const totalScore = calculateTotalScore(questions, responses);
@@ -164,8 +166,11 @@ export const createSubmitHandler = (
         // Error handled silently
       }
 
-      // Navigate to results page
-      navigate(RoutePaths.RESULTS);
+      // Ensure Results sees fresh GET /questionnaire/response data after navigation
+      await queryClient.refetchQueries({ queryKey: ["questionnaireResponse"] });
+      await queryClient.refetchQueries({ queryKey: ["questionnaireProgress"] });
+
+      navigate(RoutePaths.RESULTS, { replace: true });
     } catch (err) {
       // Error is displayed to the user via the UI
     }

@@ -1,5 +1,9 @@
 import styled, { css, keyframes } from "styled-components";
-import { scrollbarStyle } from "../../../../styles/SharedStyles";
+import {
+  AUTH_FIXED_MAIN_HEIGHT_CALC,
+  AUTH_FIXED_MAIN_TOP,
+  scrollbarStyle,
+} from "../../../../styles/SharedStyles";
 import {
   HeroEyebrow as WelcomeHeroEyebrow,
   HeroTitle,
@@ -125,9 +129,9 @@ export const CardContainer = styled.div`
 export const HabitListContainer = styled.div`
   /* Sidebar: 220px + 16px margin; main column starts past it */
   width: calc(100% - 252px);
-  height: calc(100vh - 120px);
+  height: ${AUTH_FIXED_MAIN_HEIGHT_CALC};
   position: fixed;
-  top: 104px;
+  top: ${AUTH_FIXED_MAIN_TOP};
   left: 236px;
   padding: 0 1.5rem;
   box-sizing: border-box;
@@ -145,8 +149,8 @@ export const HabitListContainer = styled.div`
   }
 
   @media (max-height: 700px) {
-    top: 96px;
-    height: calc(100vh - 118px);
+    top: ${AUTH_FIXED_MAIN_TOP};
+    height: ${AUTH_FIXED_MAIN_HEIGHT_CALC};
   }
 
   @media (max-width: 480px) {
@@ -402,7 +406,7 @@ export const HabitHeaderButtonIcon = styled.span`
   }
 `;
 
-// Page title — same scale as QuestionnairePageTitle (HeroTitle)
+// Page title — same scale as questionnaire HeaderText (HeroTitle)
 export const HeaderText = styled(HeroTitle).attrs({ as: "h2" })`
   margin: 0 0 8px;
   max-width: none;

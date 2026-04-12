@@ -1,6 +1,10 @@
 import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import {
+  AUTH_FIXED_MAIN_HEIGHT_CALC,
+  AUTH_FIXED_MAIN_TOP,
+} from "../../../styles/SharedStyles";
 
 // Match ModernNavBar entrance — subtle vertical fade
 const fadeIn = keyframes`
@@ -16,10 +20,10 @@ const fadeIn = keyframes`
 
 /** Shell aligned with ModernNavBar `NavLinksContainer` — vertical stack of pills */
 export const SidebarContainer = styled.nav`
-  height: calc(100vh - 120px);
+  height: ${AUTH_FIXED_MAIN_HEIGHT_CALC};
   width: 220px;
   position: fixed;
-  top: 104px;
+  top: ${AUTH_FIXED_MAIN_TOP};
   left: 16px;
 
   background: ${({ theme }) => theme.glassBg};
@@ -55,8 +59,8 @@ export const SidebarContainer = styled.nav`
   }
 
   @media (max-height: 700px) {
-    top: 96px;
-    height: calc(100vh - 118px);
+    top: ${AUTH_FIXED_MAIN_TOP};
+    height: ${AUTH_FIXED_MAIN_HEIGHT_CALC};
   }
 `;
 
