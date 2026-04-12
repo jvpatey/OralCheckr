@@ -68,7 +68,7 @@ export const StatsContainer = styled.div`
   gap: 16px;
   width: 100%;
   max-width: 100%;
-  margin: 0 0 clamp(18px, 3vw, 28px);
+  margin: clamp(16px, 2.5vw, 28px) 0 clamp(18px, 3vw, 28px);
   padding: 0;
   box-sizing: border-box;
 
