@@ -11,18 +11,17 @@ export const BentoGridContainer = styled.div`
   width: 100%;
   box-sizing: border-box;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(8, 1fr);
-    gap: 22px;
+  /* iPad / tablet: keep 12-column bento math so medium + small tiles sit side-by-side */
+  @media (max-width: 1024px) and (min-width: 768px) {
+    gap: 20px;
   }
 
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(6, 1fr);
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
     gap: 16px;
   }
 
   @media (max-width: 480px) {
-    grid-template-columns: 1fr;
     gap: 16px;
   }
 `;
@@ -144,56 +143,35 @@ export const BentoCardContainer = styled.div<{
       $isVisible ? "translateY(-1px)" : "translateY(36px)"};
   }
 
-  @media (max-width: 1024px) {
-    grid-column: ${({ $size }) => {
-      switch ($size) {
-        case "large":
-          return "span 8";
-        case "medium":
-          return "span 6";
-        case "small":
-          return "span 3";
-        default:
-          return "span 3";
-      }
-    }};
-    padding: 20px 16px;
+  @media (max-width: 1024px) and (min-width: 768px) {
+    padding: 26px 20px;
     min-height: ${({ $size }) => {
       switch ($size) {
         case "large":
-          return "220px";
+          return "260px";
         case "medium":
-          return "180px";
+          return "228px";
         case "small":
-          return "140px";
+          return "188px";
         default:
-          return "140px";
+          return "188px";
       }
     }};
   }
 
-  @media (max-width: 768px) {
-    grid-column: ${({ $size }) => {
-      switch ($size) {
-        case "large":
-        case "medium":
-        case "small":
-          return "span 6";
-        default:
-          return "span 6";
-      }
-    }};
+  @media (max-width: 767px) {
+    grid-column: span 1;
     padding: 18px 16px;
     min-height: ${({ $size }) => {
       switch ($size) {
         case "large":
           return "200px";
         case "medium":
-          return "160px";
+          return "168px";
         case "small":
-          return "140px";
+          return "148px";
         default:
-          return "140px";
+          return "148px";
       }
     }};
   }
@@ -245,7 +223,7 @@ export const BentoIcon = styled.div`
     color: ${({ theme }) => theme.primaryDark};
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     width: 48px;
     height: 48px;
     font-size: 1.2rem;
@@ -270,7 +248,12 @@ export const BentoTitle = styled.h3`
   letter-spacing: -0.03em;
   line-height: 1.2;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) and (min-width: 768px) {
+    font-size: 1.3125rem;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 767px) {
     font-size: 1.125rem;
     margin-bottom: 6px;
   }
@@ -290,7 +273,12 @@ export const BentoDescription = styled.p`
   font-weight: 400;
   max-width: 100%;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) and (min-width: 768px) {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 767px) {
     font-size: 0.875rem;
     line-height: 1.45;
   }

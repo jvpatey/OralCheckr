@@ -36,7 +36,7 @@ export const HeroPreviewRoot = styled.div<{ $visible: boolean }>`
     transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
     filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
     max-width: none;
     margin: 0;
   }
@@ -234,11 +234,11 @@ export const HeroPreviewBadgeRow = styled.div`
   gap: 8px;
   margin-top: 20px;
 
-  @media (max-width: 1023px) {
+  @media (max-width: 767px) {
     margin-top: 24px;
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
     justify-content: flex-start;
   }
 `;
