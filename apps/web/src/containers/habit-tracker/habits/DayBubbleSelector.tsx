@@ -23,9 +23,15 @@ const DayBubbleContainer = styled.div`
     gap: 6px;
   }
 
+  @media (max-width: 640px) {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+    gap: 8px;
+  }
+
   @media (max-width: 480px) {
-    flex: 1 1 auto;
-    min-width: min(100%, 280px);
+    gap: 8px;
   }
 `;
 
@@ -52,11 +58,11 @@ const SegmentedControlContainer = styled.div`
   }
 
   @media (max-width: 640px) {
-    padding: 3px;
+    padding: 5px;
   }
 
   @media (max-width: 480px) {
-    padding: 3px;
+    padding: 5px;
   }
 `;
 
@@ -90,17 +96,17 @@ const SlidingIndicator = styled.div<{ $selectedIndex: number; $totalDays: number
   }
 
   @media (max-width: 640px) {
-    top: 3px;
-    bottom: 3px;
-    left: 3px;
-    width: calc((100% - 6px) / ${({ $totalDays }) => $totalDays});
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    width: calc((100% - 10px) / ${({ $totalDays }) => $totalDays});
   }
 
   @media (max-width: 480px) {
-    top: 3px;
-    bottom: 3px;
-    left: 3px;
-    width: calc((100% - 6px) / ${({ $totalDays }) => $totalDays});
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    width: calc((100% - 10px) / ${({ $totalDays }) => $totalDays});
   }
   
   /* Reduce motion for accessibility */
@@ -165,7 +171,11 @@ const ArrowButton = styled.button<{ $disabled: boolean }>`
   }
 
   @media (max-width: 480px) {
-    font-size: 0.875rem;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    font-size: 0.8125rem;
   }
 
   @media (prefers-reduced-motion: no-preference) {

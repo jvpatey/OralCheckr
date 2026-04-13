@@ -490,6 +490,7 @@ export const PlaceholderText = styled.div`
 export const DatePickerWrapper = styled.div`
   margin-bottom: 16px;
   width: 100%;
+  min-width: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -499,6 +500,14 @@ export const DatePickerWrapper = styled.div`
 
   @media (max-width: 768px) {
     margin-bottom: 14px;
+  }
+
+  @media (max-width: 640px) {
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
   }
 
   @media (max-width: 480px) {

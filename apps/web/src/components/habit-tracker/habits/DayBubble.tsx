@@ -62,8 +62,12 @@ const DaySegment = styled.div<{
     padding: 6px 4px;
   }
 
+  @media (max-width: 640px) {
+    padding: 7px 5px;
+  }
+
   @media (max-width: 480px) {
-    padding: 5px 3px;
+    padding: 6px 4px;
   }
   
   /* Reduce motion for accessibility */
@@ -89,8 +93,13 @@ const DateNumber = styled.div<{ selected: boolean; $isEditMode: boolean }>`
     font-size: 1rem;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
+    margin-bottom: 3px;
     font-size: 0.9375rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.875rem;
   }
   
   /* Reduce motion for accessibility */
@@ -114,6 +123,11 @@ const DayName = styled.div<{ selected: boolean; $isEditMode: boolean }>`
 
   @media (max-width: 768px) {
     font-size: 0.65rem;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
   }
 
   @media (max-width: 480px) {
