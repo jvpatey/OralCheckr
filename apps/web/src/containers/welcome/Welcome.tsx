@@ -44,9 +44,8 @@ export function Welcome({ themeToggler, theme }: WelcomeProps) {
   return (
     <PageBackground>
       <BackgroundEffects />
+      <WelcomeNavBar themeToggler={themeToggler} theme={theme} />
       <ModernWelcomeContainer>
-        <WelcomeNavBar themeToggler={themeToggler} theme={theme} />
-
         <HeroSection id="hero">
           <WelcomeHeroWaveBands />
           <HeroGrid>

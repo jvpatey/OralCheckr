@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 
-// Smooth slide-in animation for navbar
+// Smooth slide-in animation for navbar (desktop — transform can clip with backdrop-filter on mobile)
 const slideDown = keyframes`
   from {
     transform: translateY(-100%);
@@ -9,6 +9,16 @@ const slideDown = keyframes`
   }
   to {
     transform: translateY(0);
+    opacity: 1;
+  }
+`;
+
+// Small screens: opacity only — avoids translateY + fixed + blur being clipped at the top of the viewport
+const navFadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
 `;
@@ -56,6 +66,23 @@ export const GlassNavBar = styled.nav<{ $isScrolled: boolean }>`
 
   @media (max-width: 480px) {
     padding: ${({ $isScrolled }) => ($isScrolled ? "8px 16px" : "12px 16px")};
+  }
+
+  /*
+   * Small screens: min top inset — env(safe-area-inset-top) is often 0 in devtools / some in-app browsers,
+   * so pairing it with max() keeps Support + theme toggle below the status bar / rounded display corner.
+   */
+  @media (max-width: 1023px) {
+    top: max(16px, env(safe-area-inset-top, 0px));
+    left: env(safe-area-inset-left, 0px);
+    right: max(12px, env(safe-area-inset-right, 0px));
+    animation: ${navFadeIn} 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: none;
+  }
+
+  @media (max-width: 1023px) and (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 1;
   }
 `;
 

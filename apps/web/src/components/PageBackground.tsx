@@ -6,6 +6,7 @@ const noiseDataUri = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 // Page background with soft mesh, light radial accents, and subtle grain
 export const PageBackground = styled.div`
   min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   background: ${({ theme }) => theme.backgroundGradient};
   display: flex;
@@ -15,6 +16,8 @@ export const PageBackground = styled.div`
   padding: 0;
   padding-right: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   position: fixed;
   top: 0;
   left: 0;
@@ -24,6 +27,11 @@ export const PageBackground = styled.div`
   opacity: 1;
   ${scrollbarStyle}
   scrollbar-gutter: stable;
+
+  /* Room past the last content on phones (home indicator + last pixels of preview/footer) */
+  @media (max-width: 1023px) {
+    padding-bottom: max(28px, env(safe-area-inset-bottom, 0px));
+  }
 
   &::before {
     content: "";

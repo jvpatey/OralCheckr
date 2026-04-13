@@ -234,6 +234,10 @@ export const HeroPreviewBadgeRow = styled.div`
   gap: 8px;
   margin-top: 20px;
 
+  @media (max-width: 1023px) {
+    margin-top: 24px;
+  }
+
   @media (min-width: 1024px) {
     justify-content: flex-start;
   }

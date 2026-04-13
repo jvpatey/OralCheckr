@@ -103,11 +103,14 @@ export const ModernWelcomeContainer = styled.div`
   flex-direction: column;
 
   @media (min-width: 481px) and (max-width: 1023px) {
-    padding-top: 52px;
+    /* Tracks nav top offset (max(16px, safe-area)) + bar height without double-counting inset */
+    --welcome-nav-offset: calc(72px + max(16px, env(safe-area-inset-top, 0px)));
+    padding-top: var(--welcome-nav-offset);
   }
 
   @media (max-width: 480px) {
-    padding: 48px 12px 0;
+    --welcome-nav-offset: calc(72px + max(16px, env(safe-area-inset-top, 0px)));
+    padding: var(--welcome-nav-offset) 12px 0;
   }
 `;
 
@@ -119,8 +122,9 @@ export const HeroSection = styled.section`
   position: relative;
   scroll-margin-top: 80px;
 
-  @media (max-width: 480px) {
-    padding: 40px 0 56px;
+  @media (max-width: 1023px) {
+    --hero-mobile-pad-top: 40px;
+    padding: var(--hero-mobile-pad-top) 0 64px;
   }
 
   /* Desktop: center hero in first viewport under fixed nav (matches ModernWelcomeContainer padding-top) */
@@ -143,6 +147,12 @@ export const HeroGrid = styled.div`
   gap: clamp(32px, 5vw, 56px);
   width: 100%;
 
+  @media (max-width: 1023px) {
+    /* Tighter step between full-viewport hero pane and preview pane */
+    gap: clamp(24px, 6vw, 40px);
+    align-items: stretch;
+  }
+
   @media (min-width: 1024px) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
     gap: clamp(40px, 4vw, 72px);
@@ -157,6 +167,20 @@ export const HeroCopy = styled.div`
   width: 100%;
   min-width: 0;
 
+  @media (max-width: 1023px) {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    /* One viewport: copy + CTAs only; then user scrolls to preview */
+    min-height: calc(
+      100vh - var(--welcome-nav-offset) - var(--hero-mobile-pad-top)
+    );
+    min-height: calc(
+      100dvh - var(--welcome-nav-offset) - var(--hero-mobile-pad-top)
+    );
+    justify-content: center;
+  }
+
   @media (min-width: 1024px) {
     align-items: flex-start;
     text-align: left;
@@ -168,6 +192,18 @@ export const HeroPreviewColumn = styled.div`
   min-width: 0;
   display: flex;
   justify-content: center;
+
+  @media (max-width: 1023px) {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: center;
+    /* Second viewport beat: app preview, then scroll to features */
+    min-height: calc(100vh - 48px);
+    min-height: calc(100dvh - 48px);
+    justify-content: center;
+  }
 
   @media (min-width: 1024px) {
     justify-content: flex-end;
@@ -455,6 +491,10 @@ export const HeroGuestHintRow = styled.div`
 
   @media (min-width: 1024px) {
     text-align: left;
+  }
+
+  @media (max-width: 1023px) {
+    margin-bottom: 12px;
   }
 
   @media (max-width: 480px) {
