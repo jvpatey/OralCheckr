@@ -5,6 +5,7 @@ export interface GuestLoginResponse {
   message: string;
   userId: number;
   role: string;
+  accessToken: string;
 }
 
 // Response structure for successful guest to regular user conversion
@@ -22,6 +23,7 @@ export interface GuestConversionResponse {
     habits: number;
     habitLogs: number;
   };
+  accessToken: string;
 }
 
 // Custom error type for guest conversion validation failures

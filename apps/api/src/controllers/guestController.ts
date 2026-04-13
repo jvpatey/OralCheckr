@@ -43,6 +43,7 @@ export const guestLogin = async (
       message: "Guest login successful",
       userId: guestUser.userId,
       role: "guest",
+      accessToken,
     };
 
     // Send a success response to the client
@@ -241,6 +242,7 @@ export const convertGuestToUser = async (
         habits: habitCount,
         habitLogs: logCount,
       },
+      accessToken: newAccessToken,
     };
 
     // Return the new user details

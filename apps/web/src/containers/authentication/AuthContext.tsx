@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import { useValidateAuth } from "../../hooks/auth/useValidateAuth";
 import { useQueryClient } from "@tanstack/react-query";
+import { clearAccessToken } from "../../services/accessTokenStorage";
 
 // User data structure
 interface User {
@@ -71,6 +72,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 
       // Clear cache on logout
       if (user === null) {
+        clearAccessToken();
         queryClient.setQueryData(["totalScore"], null);
         queryClient.setQueryData(["questionnaireResponse"], null);
         queryClient.setQueryData(["questionnaireProgress"], null);

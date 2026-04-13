@@ -120,6 +120,7 @@ export const googleLogin = async (
     const response: GoogleLoginResponse = {
       message: "Google login successful",
       user: userResponse,
+      accessToken,
     };
 
     // Send a success response to the client
