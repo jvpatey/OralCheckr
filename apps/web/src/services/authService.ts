@@ -8,6 +8,7 @@ import {
   GOOGLE_LOGIN_ENDPOINT,
 } from "../config/authApiConfig";
 import { apiRequest, handleApiError } from "./apiUtils";
+import { clearAccessToken, setAccessToken } from "./accessTokenStorage";
 
 /* -- Registration Service -- */
 
@@ -22,17 +23,22 @@ export interface RegisterData {
 export interface RegisterResponse {
   message?: string;
   userId: number;
+  accessToken?: string;
 }
 
 export const registerUser = async (
   userData: RegisterData
 ): Promise<RegisterResponse> => {
   try {
-    return await apiRequest<RegisterResponse>(
+    const data = await apiRequest<RegisterResponse>(
       REGISTER_ENDPOINT,
       "POST",
       userData
     );
+    if (data.accessToken) {
+      setAccessToken(data.accessToken);
+    }
+    return data;
   } catch (error) {
     console.error("Registration failed:", error);
     throw error;
@@ -51,13 +57,22 @@ export interface LoginResponse {
   userId: number;
   message: string;
   role?: string;
+  accessToken?: string;
 }
 
 export const loginUser = async (
   loginData: LoginData
 ): Promise<LoginResponse> => {
   try {
-    return await apiRequest<LoginResponse>(LOGIN_ENDPOINT, "POST", loginData);
+    const data = await apiRequest<LoginResponse>(
+      LOGIN_ENDPOINT,
+      "POST",
+      loginData
+    );
+    if (data.accessToken) {
+      setAccessToken(data.accessToken);
+    }
+    return data;
   } catch (error) {
     console.error("Login failed:", error);
     throw error;
@@ -69,6 +84,7 @@ export const loginUser = async (
 export interface GuestLoginResponse {
   userId: number;
   role: string;
+  accessToken?: string;
 }
 
 export const handleGuestLogin = async (): Promise<GuestLoginResponse> => {
@@ -83,6 +99,10 @@ export const handleGuestLogin = async (): Promise<GuestLoginResponse> => {
       response.role = "guest";
     }
 
+    if (response.accessToken) {
+      setAccessToken(response.accessToken);
+    }
+
     return response;
   } catch (error) {
     throw error;
@@ -91,6 +111,7 @@ export const handleGuestLogin = async (): Promise<GuestLoginResponse> => {
 
 /* -- Logout Service -- */
 export const logoutUser = async (): Promise<void> => {
+  clearAccessToken();
   try {
     await apiRequest<void>(LOGOUT_ENDPOINT, "POST");
   } catch (error) {
@@ -141,15 +162,25 @@ export const validateAuth = async (): Promise<AuthResponse | null> => {
 
 /* -- Convert guest user to registered user on signup service -- */
 
+interface GuestConversionApiResponse {
+  message: string;
+  user: { userId: number };
+  accessToken?: string;
+}
+
 export const convertGuestToUser = async (
   userData: RegisterData
 ): Promise<{ userId: number }> => {
   try {
-    return await apiRequest<{ userId: number }>(
+    const data = await apiRequest<GuestConversionApiResponse>(
       CONVERT_GUEST_ENDPOINT,
       "POST",
       userData
     );
+    if (data.accessToken) {
+      setAccessToken(data.accessToken);
+    }
+    return { userId: data.user.userId };
   } catch (error) {
     throw error;
   }
@@ -161,6 +192,15 @@ export interface GoogleLoginData {
   [key: string]: unknown;
 }
 
+interface GoogleLoginApiResponse {
+  message: string;
+  user: {
+    userId: number;
+    isGuest?: boolean;
+  };
+  accessToken?: string;
+}
+
 export const googleLogin = async (
   googleData: GoogleLoginData
 ): Promise<LoginResponse> => {
@@ -169,11 +209,21 @@ export const googleLogin = async (
       token: googleData.credential,
     };
 
-    return await apiRequest<LoginResponse>(
+    const data = await apiRequest<GoogleLoginApiResponse>(
       GOOGLE_LOGIN_ENDPOINT,
       "POST",
       transformedData
     );
+
+    if (data.accessToken) {
+      setAccessToken(data.accessToken);
+    }
+
+    return {
+      message: data.message,
+      userId: data.user.userId,
+      role: data.user.isGuest ? "guest" : "user",
+    };
   } catch (error) {
     throw error;
   }

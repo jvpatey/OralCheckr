@@ -102,10 +102,13 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       getCookieConfig(COOKIE_EXPIRATION.USER)
     );
 
-    // Send a success response to the client
-    res
-      .status(201)
-      .json({ message: "User created successfully", userId: newUser.userId });
+    // Send a success response to the client (accessToken supports SPAs where
+    // cross-site httpOnly cookies are blocked, e.g. mobile Safari)
+    res.status(201).json({
+      message: "User created successfully",
+      userId: newUser.userId,
+      accessToken,
+    });
     console.log(
       `Registration successful: User ${newUser.email} created with ID ${newUser.userId}`
     );
@@ -172,7 +175,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     );
 
     // Send a success response to the client
-    res.status(200).json({ message: "Login successful", userId: user.userId });
+    res.status(200).json({
+      message: "Login successful",
+      userId: user.userId,
+      accessToken,
+    });
     console.log(
       `Login successful: User ${user.email} logged in with ID ${user.userId}`
     );

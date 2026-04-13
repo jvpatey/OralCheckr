@@ -82,6 +82,8 @@ describe("Google Auth Endpoints", () => {
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty("message", "Google login successful");
       expect(res.body.user).toHaveProperty("userId", 999);
+      expect(typeof res.body.accessToken).toBe("string");
+      expect(res.body.accessToken.length).toBeGreaterThan(0);
 
       // Should have a cookie set
       expect(res.headers["set-cookie"]).toBeDefined();

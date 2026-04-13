@@ -20,6 +20,8 @@ export interface GoogleLoginResponse {
     avatar?: string;
     isGuest: boolean;
   };
+  /** JWT for clients that cannot use cross-site httpOnly cookies (e.g. mobile browsers). */
+  accessToken: string;
 }
 
 // Custom error type for Google authentication failures

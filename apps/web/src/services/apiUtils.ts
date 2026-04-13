@@ -1,6 +1,7 @@
 // Common utilities for API services
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
+import { clearAccessToken, getAccessToken } from "./accessTokenStorage";
 
 // Get user's local timezone
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -32,11 +33,20 @@ export const apiRequest = async <T>(
   body?: Record<string, unknown>
 ): Promise<T> => {
   try {
+    const token = getAccessToken();
+    const headers: Record<string, string> = {
+      ...fetchOptions.headers,
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     // Set up request options
     const options = {
       ...fetchOptions,
       method,
       credentials: "include" as RequestCredentials,
+      headers,
       ...(body && { body: JSON.stringify(body) }),
     };
 
@@ -47,6 +57,7 @@ export const apiRequest = async <T>(
       (response.status === 401 || response.status === 403) &&
       (url.includes("/auth/validate") || url.includes("/auth/profile"))
     ) {
+      clearAccessToken();
       return null as unknown as T;
     }
 
@@ -103,6 +114,7 @@ export const apiRequest = async <T>(
       (error.message.includes("401") || error.message.includes("403")) &&
       (url.includes("/auth/validate") || url.includes("/auth/profile"))
     ) {
+      clearAccessToken();
       return null as unknown as T;
     }
 
