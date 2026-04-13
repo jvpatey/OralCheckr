@@ -103,11 +103,14 @@ export const ModernWelcomeContainer = styled.div`
   flex-direction: column;
 
   @media (min-width: 481px) and (max-width: 1023px) {
-    padding-top: 52px;
+    /* Tracks nav top offset (max(16px, safe-area)) + bar height without double-counting inset */
+    --welcome-nav-offset: calc(72px + max(16px, env(safe-area-inset-top, 0px)));
+    padding-top: var(--welcome-nav-offset);
   }
 
   @media (max-width: 480px) {
-    padding: 48px 12px 0;
+    --welcome-nav-offset: calc(72px + max(16px, env(safe-area-inset-top, 0px)));
+    padding: var(--welcome-nav-offset) 12px 0;
   }
 `;
 
@@ -119,8 +122,20 @@ export const HeroSection = styled.section`
   position: relative;
   scroll-margin-top: 80px;
 
-  @media (max-width: 480px) {
-    padding: 40px 0 56px;
+  /* Phones: compact padding; copy + preview use stacked “beats” below */
+  @media (max-width: 767px) {
+    --hero-mobile-pad-top: 40px;
+    padding: var(--hero-mobile-pad-top) 0 64px;
+  }
+
+  /* iPad / tablet: two-column hero, centered in first viewport like desktop */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - 56px);
+    min-height: calc(100dvh - 56px);
+    padding: clamp(24px, 3.5vw, 44px) 0 clamp(40px, 5vw, 72px);
   }
 
   /* Desktop: center hero in first viewport under fixed nav (matches ModernWelcomeContainer padding-top) */
@@ -143,6 +158,18 @@ export const HeroGrid = styled.div`
   gap: clamp(32px, 5vw, 56px);
   width: 100%;
 
+  @media (max-width: 767px) {
+    gap: clamp(24px, 6vw, 40px);
+    align-items: stretch;
+  }
+
+  /* iPad / tablet: side-by-side copy + preview */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 3vw, 40px);
+    align-items: center;
+  }
+
   @media (min-width: 1024px) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
     gap: clamp(40px, 4vw, 72px);
@@ -157,6 +184,25 @@ export const HeroCopy = styled.div`
   width: 100%;
   min-width: 0;
 
+  @media (max-width: 767px) {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    /* One viewport: copy + CTAs only; then user scrolls to preview */
+    min-height: calc(
+      100vh - var(--welcome-nav-offset) - var(--hero-mobile-pad-top)
+    );
+    min-height: calc(
+      100dvh - var(--welcome-nav-offset) - var(--hero-mobile-pad-top)
+    );
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    align-items: flex-start;
+    text-align: left;
+  }
+
   @media (min-width: 1024px) {
     align-items: flex-start;
     text-align: left;
@@ -168,6 +214,23 @@ export const HeroPreviewColumn = styled.div`
   min-width: 0;
   display: flex;
   justify-content: center;
+
+  @media (max-width: 767px) {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: center;
+    /* Second viewport beat: app preview, then scroll to features */
+    min-height: calc(100vh - 48px);
+    min-height: calc(100dvh - 48px);
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    align-items: stretch;
+    justify-content: center;
+  }
 
   @media (min-width: 1024px) {
     justify-content: flex-end;
@@ -201,7 +264,7 @@ export const HeroTrustRow = styled.p`
   max-width: 36rem;
   animation: ${fadeUp} 0.85s ease-out 0.48s both;
 
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
     text-align: left;
   }
 
@@ -218,7 +281,11 @@ export const FeatureSection = styled.section`
   position: relative;
   scroll-margin-top: 80px; /* Offset for fixed navbar */
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) and (min-width: 768px) {
+    padding: 96px 0 104px;
+  }
+
+  @media (max-width: 767px) {
     padding: 80px 0;
   }
 
@@ -258,8 +325,13 @@ export const HeroTitle = styled.h1`
   max-width: 16ch;
   animation: ${fadeUp} 0.9s ease-out 0.15s both;
 
-  @media (min-width: 481px) and (max-width: 1023px) {
+  @media (min-width: 481px) and (max-width: 767px) {
     max-width: 20ch;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    max-width: 22ch;
+    font-size: clamp(2.35rem, 3.2vw + 1.35rem, 3.25rem);
   }
 
   @media (max-width: 480px) {
@@ -430,6 +502,11 @@ export const HeroButtonsContainer = styled.div`
   max-width: 420px;
   animation: ${fadeUp} 0.9s ease-out 0.6s both;
 
+  @media (min-width: 768px) and (max-width: 1023px) {
+    justify-content: flex-start;
+    max-width: 100%;
+  }
+
   @media (min-width: 1024px) {
     justify-content: flex-start;
     max-width: 440px;
@@ -453,8 +530,12 @@ export const HeroGuestHintRow = styled.div`
   text-align: center;
   animation: ${fadeUp} 0.9s ease-out 0.68s both;
 
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
     text-align: left;
+  }
+
+  @media (max-width: 767px) {
+    margin-bottom: 12px;
   }
 
   @media (max-width: 480px) {

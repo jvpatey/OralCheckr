@@ -29,15 +29,19 @@ const DateControlsRow = styled.div`
     gap: 6px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     --week-toolbar-control-height: 40px;
-    gap: 6px;
-    overflow-x: auto;
+    /* Week strip on its own row; calendar + Today below — less cramped than one squeezed row */
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    row-gap: 12px;
+    column-gap: 10px;
+    min-width: 0;
+    padding-bottom: 4px;
+    overflow-x: visible;
     overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    padding-bottom: 2px;
   }
 `;
 

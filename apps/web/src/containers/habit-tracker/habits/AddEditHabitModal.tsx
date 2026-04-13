@@ -137,9 +137,20 @@ export function AddEditHabitModal({
   };
 
   const handleHabitCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    const validValue = isNaN(value) ? 1 : Math.max(1, value);
-    setNewHabit({ ...newHabit, count: validValue });
+    const raw = e.target.value;
+    if (raw === "") {
+      setNewHabit({ ...newHabit, count: 0 });
+      return;
+    }
+    const value = parseInt(raw, 10);
+    if (Number.isNaN(value)) return;
+    setNewHabit({ ...newHabit, count: Math.max(1, value) });
+  };
+
+  const handleHabitCountBlur = () => {
+    if (newHabit.count <= 0) {
+      setNewHabit({ ...newHabit, count: 1 });
+    }
   };
 
   return (
@@ -190,9 +201,11 @@ export function AddEditHabitModal({
               </FormLabelRow>
               <InputStyle
                 type="number"
-                placeholder="Enter daily goal"
-                value={newHabit.count.toString()}
+                inputMode="numeric"
+                placeholder="e.g. 1"
+                value={newHabit.count > 0 ? String(newHabit.count) : ""}
                 onChange={handleHabitCountChange}
+                onBlur={handleHabitCountBlur}
                 min={1}
               />
             </Form.Group>

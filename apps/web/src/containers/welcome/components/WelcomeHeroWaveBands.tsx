@@ -108,6 +108,15 @@ const BandRoot = styled.div<{ $anchor: "top" | "bottom" }>`
     );
 
     ${({ $anchor }) => $anchor === "bottom" && maskBottomDesktop}
+
+    /* Nudge top band only: small offset from original position so nav doesn’t visually slice the stroke */
+    ${({ $anchor }) =>
+      $anchor === "top" &&
+      css`
+        top: calc(
+          clamp(-14px, -2.2vw, -28px) + clamp(10px, 1.8vw, 24px)
+        );
+      `}
   }
 
   @media (max-width: 768px) {
@@ -124,8 +133,7 @@ const FlipInner = styled.div<{ $flip: boolean }>`
   width: 100%;
   height: 100%;
   /* Horizontal + vertical flip so bottom waves curve and drift opposite the top */
-  transform: ${({ $flip }) =>
-    $flip ? "scaleX(-1) scaleY(-1)" : "none"};
+  transform: ${({ $flip }) => ($flip ? "scaleX(-1) scaleY(-1)" : "none")};
 `;
 
 /** Full-bleed wave lines above and below the welcome hero (dashboard strokes). */
