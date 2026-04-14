@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import {
   AUTH_FIXED_MAIN_HEIGHT_CALC,
   AUTH_FIXED_MAIN_TOP,
+  SIDEBAR_LEFT,
 } from "../../../styles/SharedStyles";
 
 // Match ModernNavBar entrance — subtle vertical fade
@@ -18,13 +19,13 @@ const fadeIn = keyframes`
   }
 `;
 
-/** Shell aligned with ModernNavBar `NavLinksContainer` — vertical stack of pills */
+/** Shell — left edge aligns with nav logo (`NavContainer`); vertical stack of pills */
 export const SidebarContainer = styled.nav`
   height: ${AUTH_FIXED_MAIN_HEIGHT_CALC};
   width: 220px;
   position: fixed;
   top: ${AUTH_FIXED_MAIN_TOP};
-  left: 16px;
+  left: ${SIDEBAR_LEFT};
 
   background: ${({ theme }) => theme.glassBg};
   backdrop-filter: blur(16px);
@@ -37,7 +38,7 @@ export const SidebarContainer = styled.nav`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 14px 12px;
+  padding: 14px 12px clamp(22px, 3.5vh, 36px);
 
   animation: ${fadeIn} 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 900;
@@ -49,18 +50,6 @@ export const SidebarContainer = styled.nav`
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
-  }
-
-  @media (max-width: 800px) {
-    width: min(220px, calc(100vw - 24px));
-    left: 8px;
-    padding: 12px 10px;
-    border-radius: 24px;
-  }
-
-  @media (max-height: 700px) {
-    top: ${AUTH_FIXED_MAIN_TOP};
-    height: ${AUTH_FIXED_MAIN_HEIGHT_CALC};
   }
 `;
 

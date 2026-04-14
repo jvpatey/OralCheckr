@@ -2,6 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { BaseButton } from "../../../containers/welcome/styles/ButtonStyles";
 import { Header } from "../../habit-tracker/habits/HabitComponents";
+import { AUTH_QUESTIONNAIRE_MARGIN_LEFT } from "../../../styles/SharedStyles";
 
 const fadeUp = keyframes`
   from {
@@ -29,8 +30,9 @@ export const QuestionnaireFlowContainer = styled.div<{
   justify-content: flex-start;
   min-height: calc(100vh - 120px);
   width: ${({ $isAuthenticated }) =>
-    $isAuthenticated ? "calc(100% - 240px)" : "100%"};
-  margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
+    $isAuthenticated ? `calc(100% - ${AUTH_QUESTIONNAIRE_MARGIN_LEFT})` : "100%"};
+  margin-left: ${({ $isAuthenticated }) =>
+    $isAuthenticated ? AUTH_QUESTIONNAIRE_MARGIN_LEFT : "0"};
   padding: 0 clamp(16px, 4vw, 24px) 48px;
   animation: ${fadeUp} 0.8s ease-out 0.1s both;
 
@@ -186,8 +188,9 @@ export const QuestionnairePageShell = styled.div<{
   flex-direction: column;
   align-items: stretch;
   width: ${({ $isAuthenticated }) =>
-    $isAuthenticated ? "calc(100% - 240px)" : "100%"};
-  margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
+    $isAuthenticated ? `calc(100% - ${AUTH_QUESTIONNAIRE_MARGIN_LEFT})` : "100%"};
+  margin-left: ${({ $isAuthenticated }) =>
+    $isAuthenticated ? AUTH_QUESTIONNAIRE_MARGIN_LEFT : "0"};
   padding: 0 clamp(16px, 4vw, 24px) 48px;
   min-height: calc(100vh - 120px);
   animation: ${fadeUp} 0.8s ease-out 0.1s both;

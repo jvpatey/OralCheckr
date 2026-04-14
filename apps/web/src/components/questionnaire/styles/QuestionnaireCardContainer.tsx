@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { AUTH_QUESTIONNAIRE_MARGIN_LEFT } from "../../../styles/SharedStyles";
 
 interface QuestionnaireCardContainerProps {
   $isAuthenticated: boolean;
@@ -11,8 +12,9 @@ export const QuestionnaireCardContainer = styled.div<QuestionnaireCardContainerP
   align-items: center;
   flex: 1;
   width: ${({ $isAuthenticated }) =>
-    $isAuthenticated ? "calc(100% - 240px)" : "100%"};
-  margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
+    $isAuthenticated ? `calc(100% - ${AUTH_QUESTIONNAIRE_MARGIN_LEFT})` : "100%"};
+  margin-left: ${({ $isAuthenticated }) =>
+    $isAuthenticated ? AUTH_QUESTIONNAIRE_MARGIN_LEFT : "0"};
   padding: 40px 20px;
   min-height: calc(100vh - 120px);
 
