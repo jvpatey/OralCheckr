@@ -264,7 +264,7 @@ export function Questionnaire() {
     return (
       <PageBackground>
         <BackgroundEffects />
-        <LandingContainer>
+        <LandingContainer $compactNavClearance>
           <QuestionnaireCardContainer $isAuthenticated={isAuthenticated}>
             <QuestionnaireCard>
               <LoadingSpinner fullHeight />
@@ -393,7 +393,7 @@ export function Questionnaire() {
   return (
     <PageBackground>
       <BackgroundEffects />
-      <LandingContainer>
+      <LandingContainer $compactNavClearance>
         <ModernAssessmentContainer $isAuthenticated={isAuthenticated}>
           <AssessmentSectionHeader>
             <HeaderMainRow>

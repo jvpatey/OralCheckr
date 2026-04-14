@@ -19,19 +19,19 @@ const fadeUp = keyframes`
   }
 `;
 
-// Column capped to viewport so long questions scroll inside QuestionContent (not clipped)
+// Fills LandingContainer flex column; long questions scroll inside QuestionContent (not clipped)
 export const ModernAssessmentContainer = styled.div<{
   $isAuthenticated: boolean;
 }>`
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
+  flex: 1 1 0;
+  align-self: stretch;
   min-height: 0;
   width: ${({ $isAuthenticated }) =>
     $isAuthenticated ? "calc(100% - 240px)" : "100%"};
   margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
   padding: 24px 20px 32px;
-  max-height: calc(100dvh - clamp(100px, 11vw, 132px) - clamp(40px, 5vw, 56px));
   overflow: hidden;
 
   /* Smooth fade-up animation matching landing page */
@@ -44,12 +44,10 @@ export const ModernAssessmentContainer = styled.div<{
 
   @media (max-width: 800px) {
     padding: 16px 16px 24px;
-    max-height: calc(100dvh - clamp(88px, 14vw, 108px) - clamp(32px, 6vw, 48px));
   }
 
   @media (max-height: 700px) {
     padding: 20px;
-    max-height: calc(100dvh - 88px - 36px);
   }
 `;
 
@@ -239,6 +237,8 @@ export const QuestionContent = styled.div`
   width: 100%;
   max-width: 100%;
   margin: 0;
+  padding-bottom: 12px;
+  box-sizing: border-box;
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
@@ -394,5 +394,32 @@ export const AssessmentSectionHeader = styled(Header)`
   padding-left: 4px;
   padding-right: 4px;
   box-sizing: border-box;
+  flex-shrink: 0;
+
+  /* Section title scale — not full marketing HeroTitle — frees vertical space for the card */
+  & h2 {
+    font-size: clamp(1.65rem, 2vw + 0.85rem, 2.35rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.12;
+    margin: 0 0 6px;
+    max-width: none;
+    animation: none;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    & h2 {
+      font-size: clamp(1.5rem, 1.8vw + 1rem, 2.1rem);
+    }
+  }
+
+  @media (max-height: 900px) {
+    --habit-header-divider-gap: 10px;
+
+    & h2 {
+      font-size: clamp(1.35rem, 1.5vw + 0.85rem, 1.95rem);
+      margin-bottom: 4px;
+    }
+  }
 `;
 

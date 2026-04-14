@@ -64,6 +64,18 @@ export const QuestionTitle = styled.h2`
     font-size: 1.125rem;
     margin-bottom: 14px;
   }
+
+  @media (max-height: 900px) and (min-width: 481px) {
+    font-size: 1.3125rem;
+    margin-bottom: 14px;
+    line-height: 1.22;
+  }
+
+  @media (max-height: 750px) {
+    font-size: 1.1875rem;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
 `;
 
 export const OptionsContainer = styled.div`
@@ -72,6 +84,14 @@ export const OptionsContainer = styled.div`
   gap: 10px;
   width: 100%;
   padding: 0;
+
+  @media (max-height: 900px) and (min-width: 481px) {
+    gap: 8px;
+  }
+
+  @media (max-height: 750px) {
+    gap: 6px;
+  }
 `;
 
 /** Full-width selectable tiles — native `<label>` so the whole row toggles the control */
@@ -120,6 +140,16 @@ export const OptionItem = styled.label`
     padding: 10px 14px;
     min-height: 44px;
     border-radius: 12px;
+  }
+
+  @media (max-height: 900px) and (min-width: 481px) {
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+
+  @media (max-height: 750px) {
+    min-height: 42px;
+    padding: 8px 12px;
   }
 `;
 
