@@ -2,7 +2,10 @@ import styled, { keyframes } from "styled-components";
 import { QuestionnaireFlowPrimaryButton } from "../../../components/questionnaire/styles/QuestionnaireFlowLayout";
 import { Header } from "../../../components/habit-tracker/habits/HabitComponents";
 import { BaseButton } from "../../welcome/styles/ButtonStyles";
-import { scrollbarStyle } from "../../../styles/SharedStyles";
+import {
+  AUTH_QUESTIONNAIRE_MARGIN_LEFT,
+  scrollbarStyle,
+} from "../../../styles/SharedStyles";
 
 /** Shared max width for questionnaire column */
 const assessmentMaxWidth = "min(960px, 100%)";
@@ -29,8 +32,9 @@ export const ModernAssessmentContainer = styled.div<{
   align-self: stretch;
   min-height: 0;
   width: ${({ $isAuthenticated }) =>
-    $isAuthenticated ? "calc(100% - 240px)" : "100%"};
-  margin-left: ${({ $isAuthenticated }) => ($isAuthenticated ? "240px" : "0")};
+    $isAuthenticated ? `calc(100% - ${AUTH_QUESTIONNAIRE_MARGIN_LEFT})` : "100%"};
+  margin-left: ${({ $isAuthenticated }) =>
+    $isAuthenticated ? AUTH_QUESTIONNAIRE_MARGIN_LEFT : "0"};
   padding: 24px 20px 32px;
   overflow: hidden;
 

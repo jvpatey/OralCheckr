@@ -2,6 +2,8 @@ import styled, { css, keyframes } from "styled-components";
 import {
   AUTH_FIXED_MAIN_HEIGHT_CALC,
   AUTH_FIXED_MAIN_TOP,
+  AUTH_HABIT_COLUMN_LEFT,
+  AUTH_HABIT_COLUMN_WIDTH,
   scrollbarStyle,
 } from "../../../../styles/SharedStyles";
 import {
@@ -127,12 +129,11 @@ export const CardContainer = styled.div`
 
 // Main habit area — same top + height as SidebarContainer (see SidebarStyles)
 export const HabitListContainer = styled.div`
-  /* Sidebar: 220px + 16px margin; main column starts past it */
-  width: calc(100% - 252px);
+  width: ${AUTH_HABIT_COLUMN_WIDTH};
   height: ${AUTH_FIXED_MAIN_HEIGHT_CALC};
   position: fixed;
   top: ${AUTH_FIXED_MAIN_TOP};
-  left: 236px;
+  left: ${AUTH_HABIT_COLUMN_LEFT};
   padding: 0 1.5rem;
   box-sizing: border-box;
   display: flex;
