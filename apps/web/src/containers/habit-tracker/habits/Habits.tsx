@@ -47,6 +47,7 @@ import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { HabitLogResponse } from "../../../services/habitLogService";
 import { HeroTitleAccent } from "../../../containers/welcome/styles/WelcomeStyles";
+import { useHabitCompletionCelebration } from "../../../hooks/useHabitCompletionCelebration";
 
 // Local timezone
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -117,10 +118,15 @@ export function Habits() {
   // Mutations for habit log operations
   const incrementHabitLogMutation = useIncrementHabitLog();
   const decrementHabitLogMutation = useDecrementHabitLog();
+  const { celebrateHabitCompletion, prefersReducedMotion } =
+    useHabitCompletionCelebration();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteAllModal, setShowDeleteAllModal] = useState(false);
   const [habitToDelete, setHabitToDelete] = useState<Habit | null>(null);
+  const [completionTokens, setCompletionTokens] = useState<
+    Record<number, number>
+  >({});
 
   // Handler for showing the add habit modal
   const handleAddHabitClick = () => {
@@ -222,23 +228,37 @@ export function Habits() {
   };
 
   // Handler for logging habit activity
-  const handleLog = (habitName: string, selectedDate: Date) => {
-    const habit = habits.find((h) => h.name === habitName);
+  const handleLog = (habitId: number, selectedDate: Date) => {
+    const habit = habits.find((h) => Number(h.habitId) === habitId);
     if (!habit || !habit.habitId) return;
 
     // Get current log count
-    const logCount = getLogCount(habitName, selectedDate);
+    const logCount = getLogCount(habit.name, selectedDate);
 
     // Validate against maximum count
     if (logCount >= habit.count) {
       return;
     }
 
-    // Ensure habitId is a number
-    const habitId = Number(habit.habitId);
+    const nextCount = logCount + 1;
+    const shouldCelebrate = logCount < habit.count && nextCount === habit.count;
 
     // Update UI immediately
-    updateLogCount(habitId, selectedDate, logCount + 1);
+    updateLogCount(habitId, selectedDate, nextCount);
+
+    if (shouldCelebrate) {
+      if (!prefersReducedMotion) {
+        const tileElement = document.querySelector<HTMLElement>(
+          `[data-habit-tile-id="${habitId}"]`,
+        );
+        celebrateHabitCompletion(tileElement);
+      }
+
+      setCompletionTokens((previous) => ({
+        ...previous,
+        [habitId]: Date.now(),
+      }));
+    }
 
     // Send to server
     incrementHabitLogMutation.mutate(
@@ -246,13 +266,22 @@ export function Habits() {
       {
         onSuccess: (data: HabitLogResponse) => {
           // Use server count or fallback to local count
-          const updatedCount = data.logs?.[0]?.count || logCount + 1;
+          const updatedCount = data.logs?.[0]?.count || nextCount;
 
           // Sync with server data
           updateLogCount(habitId, selectedDate, updatedCount);
         },
         onError: () => {
           updateLogCount(habitId, selectedDate, logCount);
+          setCompletionTokens((previous) => {
+            if (!shouldCelebrate) {
+              return previous;
+            }
+
+            const updated = { ...previous };
+            delete updated[habitId];
+            return updated;
+          });
           syncWithServer();
         },
       },
@@ -260,20 +289,17 @@ export function Habits() {
   };
 
   // Handler for removing a log
-  const handleRemoveLog = (habitName: string, selectedDate: Date) => {
-    const habit = habits.find((h) => h.name === habitName);
+  const handleRemoveLog = (habitId: number, selectedDate: Date) => {
+    const habit = habits.find((h) => Number(h.habitId) === habitId);
     if (!habit || !habit.habitId) return;
 
     // Get current log count
-    const logCount = getLogCount(habitName, selectedDate);
+    const logCount = getLogCount(habit.name, selectedDate);
 
     // Validate minimum count
     if (logCount <= 0) {
       return;
     }
-
-    // Ensure habitId is a number
-    const habitId = Number(habit.habitId);
 
     // Update UI immediately
     updateLogCount(habitId, selectedDate, logCount - 1);
@@ -456,6 +482,7 @@ export function Habits() {
                   handleRemoveLog={handleRemoveLog}
                   getLogCount={getLogCount}
                   isFutureDate={isFutureDate}
+                  completionTokens={completionTokens}
                 />
               </StyledHabitList>
             </ScrollableHabitList>

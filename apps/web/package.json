@@ -24,6 +24,7 @@
     "apexcharts": "^3.52.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "canvas-confetti": "^1.9.4",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "framer-motion": "^11.18.2",
@@ -39,6 +40,7 @@
     "styled-components": "^6.1.11"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@types/lodash": "^4.17.7",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
