@@ -1,4 +1,6 @@
 import { useCallback, useContext } from "react";
+import { faPrint } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PageBackground } from "../PageBackground";
 import { LandingContainer } from "../landing/LandingContainer";
 import {
@@ -19,9 +21,10 @@ import {
 import { AuthContext } from "../../containers/authentication/AuthContext";
 import { LoadingSpinner } from "../common/LoadingSpinner";
 import { useAppointmentSummaryData } from "../../hooks/questionnaire/useAppointmentSummaryData";
-import { RoutePaths } from "../../common/constants/routes";
 import {
   SummaryRoot,
+  ReportHeaderActions,
+  ReportHeaderIconButton,
   PrintHeaderBlock,
   PrintEyebrow,
   PrintTitleLine,
@@ -41,7 +44,6 @@ import {
   EmptyNote,
   ActionRow,
   PrintButton,
-  BackLink,
 } from "./styles/AppointmentSummaryStyles";
 
 export function AppointmentSummary() {
@@ -76,13 +78,22 @@ export function AppointmentSummary() {
               <HeaderTitleColumn style={{ textAlign: "left" }}>
                 <HabitHeroEyebrow>Improve</HabitHeroEyebrow>
                 <HeaderText style={{ textAlign: "left" }}>
-                  Visit <HeroTitleAccent>summary</HeroTitleAccent>
+                  Oral Health <HeroTitleAccent>Report</HeroTitleAccent>
                 </HeaderText>
                 <HeaderSubtitle style={{ textAlign: "left", maxWidth: "40rem" }}>
                   Your score, questionnaire answers, and recent habit adherence —
                   print or save as PDF for your visit.
                 </HeaderSubtitle>
               </HeaderTitleColumn>
+              <ReportHeaderActions>
+                <ReportHeaderIconButton
+                  onClick={handlePrint}
+                  aria-label="Print or save Oral Health Report as PDF"
+                  title="Print or save as PDF"
+                >
+                  <FontAwesomeIcon icon={faPrint} />
+                </ReportHeaderIconButton>
+              </ReportHeaderActions>
             </HeaderMainRow>
           </QuestionnaireStackHeader>
 
@@ -102,7 +113,7 @@ export function AppointmentSummary() {
                   <PrintTitleLine>
                     Oral<PrintTitleAccent>Checkr</PrintTitleAccent>
                   </PrintTitleLine>
-                  <PrintSubtitle>Oral health visit summary</PrintSubtitle>
+                  <PrintSubtitle>Oral Health Report</PrintSubtitle>
                   <PrintMeta>
                     Generated {generatedAtLabel}
                     {patientDisplayName ? ` · ${patientDisplayName}` : ""}
@@ -198,7 +209,6 @@ export function AppointmentSummary() {
                   <PrintButton onClick={handlePrint}>
                     Print or save as PDF
                   </PrintButton>
-                  <BackLink to={RoutePaths.RESULTS}>Back to results</BackLink>
                 </ActionRow>
               </>
             )}

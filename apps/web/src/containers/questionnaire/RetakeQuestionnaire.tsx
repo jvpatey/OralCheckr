@@ -134,8 +134,8 @@ export function RetakeQuestionnaire({
 
               <RetakeBelowCard>
                 <RetakeHeroDescription>
-                  If you wish to retake it to update your score and oral health
-                  status, use the button below.
+                  Made progress since your last check-in? Retake the
+                  questionnaire to refresh your results.
                 </RetakeHeroDescription>
                 <RetakeCtaSection>
                   <QuestionnairePrimaryCta onClick={handleRetakeClick}>

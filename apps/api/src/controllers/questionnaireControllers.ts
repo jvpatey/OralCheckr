@@ -1,5 +1,4 @@
-import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import { Response } from "express";
 import QuestionnaireResponse from "../models/questionnaireResponseModel";
 import User from "../models/userModel";
 import { AuthenticatedRequest } from "../interfaces/auth";
@@ -7,7 +6,6 @@ import {
   QuestionnaireProgress,
   QuestionnaireError,
   ValidationError,
-  DecodedToken,
   SequelizeValidationError,
   QuestionnaireRequestBody,
 } from "../interfaces/questionnaire";
@@ -16,24 +14,15 @@ import {
 
 /* -- Save questionaire responss on submission of questionnaire -- */
 export const saveResponse = async (
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response
 ): Promise<void> => {
   try {
-    // Get the JWT token from the cookies
-    const token = req.cookies.accessToken;
-    if (!token) {
-      res.status(401).json({ error: "Unauthorized - No token provided" });
-      console.log("Questionnaire responses save failed: No token provided");
+    const userId = req.user?.userId;
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized: No user found" });
       return;
     }
-
-    // Verify and decode JWT
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as DecodedToken;
-    const userId = decoded.userId;
 
     // Get responses and totalScore from request body
     const { responses, totalScore } = req.body as QuestionnaireRequestBody;
@@ -127,24 +116,15 @@ export const saveResponse = async (
 
 /* -- Get questionnaire responses by user ID -- */
 export const getResponseByUser = async (
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response
 ): Promise<void> => {
   try {
-    // Get the JWT token from the cookies
-    const token = req.cookies.accessToken;
-    if (!token) {
-      res.status(401).json({ error: "Unauthorized - No token provided" });
-      console.log("Questionnaire responses get failed: No token provided");
+    const userId = req.user?.userId;
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized: No user found" });
       return;
     }
-
-    // Verify and decode JWT
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as DecodedToken;
-    const userId = decoded.userId;
 
     // Get the user to check if they're a guest
     const user = await User.findByPk(userId);
@@ -199,24 +179,15 @@ export const getResponseByUser = async (
 
 /* -- Save or update questionnaire progress (partial responses and current question) -- */
 export const updateProgress = async (
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response
 ): Promise<void> => {
   try {
-    // Get the JWT token from the cookies
-    const token = req.cookies.accessToken;
-    if (!token) {
-      res.status(401).json({ error: "Unauthorized - No token provided" });
-      console.log("Questionnaire progress update failed: No token provided");
+    const userId = req.user?.userId;
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized: No user found" });
       return;
     }
-
-    // Verify and decode JWT
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as DecodedToken;
-    const userId = decoded.userId;
 
     // Get the responses and current question from the request body
     const { responses, currentQuestion } = req.body as QuestionnaireProgress;
@@ -263,24 +234,15 @@ export const updateProgress = async (
 
 /* -- Retrieve questionnaire progress for authenticated users -- */
 export const getProgress = async (
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response
 ): Promise<void> => {
   try {
-    // Get the JWT token from the cookies
-    const token = req.cookies.accessToken;
-    if (!token) {
-      res.status(401).json({ error: "Unauthorized - No token provided" });
-      console.log("Questionnaire progress get failed: No token provided");
+    const userId = req.user?.userId;
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized: No user found" });
       return;
     }
-
-    // Verify and decode JWT
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as DecodedToken;
-    const userId = decoded.userId;
 
     // Get the user to check if they're a guest
     const user = await User.findByPk(userId);
@@ -399,24 +361,15 @@ export const deleteQuestionnaireData = async (
 
 /* -- Save questionnaire responses on submission of questionnaire -- */
 export const saveQuestionnaireResponses = async (
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response
 ): Promise<void> => {
   try {
-    // Get the JWT token from the cookies
-    const token = req.cookies.accessToken;
-    if (!token) {
-      res.status(401).json({ error: "Unauthorized - No token provided" });
-      console.log("Questionnaire responses save failed: No token provided");
+    const userId = req.user?.userId;
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized: No user found" });
       return;
     }
-
-    // Verify and decode JWT
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as DecodedToken;
-    const userId = decoded.userId;
 
     // Get responses and totalScore from request body
     const { responses, totalScore } = req.body as {

@@ -88,13 +88,13 @@ export const sidebarLinks: NavLink[] = [
     displayIn: "sidebar",
   },
   {
-    name: "Results",
+    name: "Oral Health Summary",
     path: RoutePaths.RESULTS,
     icon: faClipboardCheck as IconDefinition,
     displayIn: "sidebar",
   },
   {
-    name: "Visit summary",
+    name: "Oral Health Report",
     path: RoutePaths.APPOINTMENT_SUMMARY,
     icon: faFileLines as IconDefinition,
     displayIn: "sidebar",

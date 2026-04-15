@@ -155,6 +155,38 @@ export const makeGuestRequest = (
   return makeAuthenticatedRequest(method, url, body, userId, "guest");
 };
 
+// Make mock authenticated request with Authorization header token only
+export const makeBearerAuthenticatedRequest = (
+  method: HttpMethod,
+  url: string,
+  body?: Record<string, unknown>,
+  userId = mockUser.userId,
+  role?: string
+) => {
+  const token = generateToken(userId, role);
+
+  switch (method.toLowerCase()) {
+    case "get":
+      return request(app).get(url).set("Authorization", `Bearer ${token}`);
+    case "post":
+      return request(app)
+        .post(url)
+        .set("Authorization", `Bearer ${token}`)
+        .send(body);
+    case "put":
+      return request(app)
+        .put(url)
+        .set("Authorization", `Bearer ${token}`)
+        .send(body);
+    case "delete":
+      return request(app)
+        .delete(url)
+        .set("Authorization", `Bearer ${token}`);
+    default:
+      throw new Error(`Unsupported method: ${method}`);
+  }
+};
+
 // Make mock unauthenticated request (no token)
 export const makeUnauthenticatedRequest = (
   method: HttpMethod,

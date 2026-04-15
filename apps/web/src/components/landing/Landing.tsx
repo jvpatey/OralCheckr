@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { PageBackground } from "../PageBackground";
 import { LandingContainer, LandingHeroSection } from "./LandingContainer";
 import {
@@ -93,17 +94,17 @@ export function Landing() {
         </LandingHeroSection>
 
         <StatsContainer>
-          <StatCard>
+          <StatCard as={Link} to={RoutePaths.RESULTS}>
             <StatValue>
               {oralHealthScore ? `${oralHealthScore}%` : "N/A"}
             </StatValue>
             <StatLabel>Oral health score</StatLabel>
           </StatCard>
-          <StatCard>
+          <StatCard as={Link} to={RoutePaths.HABITS}>
             <StatValue>{totalHabits}</StatValue>
             <StatLabel>Habits tracked</StatLabel>
           </StatCard>
-          <StatCard>
+          <StatCard as={Link} to={RoutePaths.QUESTIONNAIRE}>
             <StatValue>{lastCompletedDate}</StatValue>
             <StatLabel>Last assessment</StatLabel>
           </StatCard>
@@ -127,7 +128,7 @@ export function Landing() {
           />
           {questionnaireData?.lastCompleted ? (
             <LandingCard
-              title="Visit summary"
+              title="Oral Health Report"
               description="Review and print a clear summary of your last assessment to share with your dentist."
               buttonLink={RoutePaths.APPOINTMENT_SUMMARY}
               icon={faFileLines}

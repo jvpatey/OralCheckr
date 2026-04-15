@@ -92,6 +92,9 @@ export const StatCard = styled.div`
   border-radius: 18px;
   padding: 18px 16px;
   text-align: center;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
   box-shadow:
     ${({ theme }) => theme.shadowLg},
     0 0 0 1px ${({ theme }) => theme.borderLight} inset;
