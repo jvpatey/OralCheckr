@@ -7,6 +7,7 @@ import {
   mockGuestUser,
   mockQuestionnaireData,
   makeAuthenticatedRequest,
+  makeBearerAuthenticatedRequest,
   makeUnauthenticatedRequest,
   makeGuestRequest,
   expectQuestionnaireProperties,
@@ -142,6 +143,36 @@ describe("Questionnaire Endpoints", () => {
       );
     });
 
+    it("should create a questionnaire response with bearer token auth", async () => {
+      jest
+        .spyOn(User, "findByPk")
+        .mockResolvedValue(mockUser as unknown as Model);
+      jest.spyOn(QuestionnaireResponse, "findOne").mockResolvedValue(null);
+
+      const mockResponseData: MockQuestionnaireModel = {
+        userId: mockUser.userId,
+        responses: mockQuestionnaireData.responses,
+        totalScore: mockQuestionnaireData.totalScore,
+        currentQuestion: 0,
+      } as unknown as MockQuestionnaireModel;
+
+      jest
+        .spyOn(QuestionnaireResponse, "create")
+        .mockResolvedValue(mockResponseData);
+
+      const res = await makeBearerAuthenticatedRequest(
+        "post",
+        "/questionnaire/response",
+        mockQuestionnaireData
+      );
+
+      expect(res.statusCode).toEqual(201);
+      expect(res.body).toHaveProperty(
+        "message",
+        "Questionnaire response saved"
+      );
+    });
+
     it("should return 400 when required fields are missing", async () => {
       jest
         .spyOn(User, "findByPk")
@@ -228,6 +259,30 @@ describe("Questionnaire Endpoints", () => {
 
       expect(res.statusCode).toEqual(204);
       expect(res.body).toEqual({});
+    });
+
+    it("should retrieve response with bearer token auth", async () => {
+      const mockResponseData: MockQuestionnaireModel = {
+        userId: mockUser.userId,
+        responses: mockQuestionnaireData.responses,
+        totalScore: mockQuestionnaireData.totalScore,
+        currentQuestion: mockQuestionnaireData.currentQuestion,
+      } as unknown as MockQuestionnaireModel;
+
+      jest
+        .spyOn(QuestionnaireResponse, "findOne")
+        .mockResolvedValue(mockResponseData);
+      jest
+        .spyOn(User, "findByPk")
+        .mockResolvedValue(mockUser as unknown as Model);
+
+      const res = await makeBearerAuthenticatedRequest(
+        "get",
+        "/questionnaire/response"
+      );
+
+      expect(res.statusCode).toEqual(200);
+      expectQuestionnaireProperties(res.body);
     });
   });
 
@@ -336,6 +391,37 @@ describe("Questionnaire Endpoints", () => {
         "Questionnaire progress saved"
       );
     });
+
+    it("should update progress with bearer token auth", async () => {
+      const updatedProgress: MockQuestionnaireAttributes = {
+        userId: mockUser.userId,
+        responses: { 1: 2 },
+        currentQuestion: 2,
+      };
+
+      const mockExistingProgress: MockQuestionnaireModel = {
+        userId: mockUser.userId,
+        responses: { 1: 2 },
+        currentQuestion: 1,
+        update: jest.fn().mockResolvedValue(updatedProgress),
+      } as unknown as MockQuestionnaireModel;
+
+      jest
+        .spyOn(QuestionnaireResponse, "findOne")
+        .mockResolvedValue(mockExistingProgress);
+
+      const res = await makeBearerAuthenticatedRequest(
+        "put",
+        "/questionnaire/progress",
+        { responses: { 1: 2 }, currentQuestion: 2 }
+      );
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveProperty(
+        "message",
+        "Questionnaire progress updated"
+      );
+    });
   });
 
   // Tests the questionnaire progress GET endpoint
@@ -386,6 +472,28 @@ describe("Questionnaire Endpoints", () => {
 
       expect(res.statusCode).toEqual(204);
       expect(res.body).toEqual({});
+    });
+
+    it("should retrieve progress with bearer token auth", async () => {
+      const mockProgress: MockQuestionnaireModel = {
+        userId: mockUser.userId,
+        responses: { 1: 2 },
+        currentQuestion: 2,
+      } as unknown as MockQuestionnaireModel;
+
+      jest.spyOn(User, "findByPk").mockResolvedValue(mockUser as unknown as Model);
+      jest
+        .spyOn(QuestionnaireResponse, "findOne")
+        .mockResolvedValue(mockProgress);
+
+      const res = await makeBearerAuthenticatedRequest(
+        "get",
+        "/questionnaire/progress"
+      );
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveProperty("responses");
+      expect(res.body).toHaveProperty("currentQuestion");
     });
   });
 
