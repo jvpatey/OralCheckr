@@ -16,10 +16,11 @@ export interface HabitListProps {
   isEditMode: boolean;
   handleEditHabit: (index: number) => void;
   handleDeleteHabit: (index: number) => void;
-  handleLog: (habitName: string, selectedDate: Date) => void;
-  handleRemoveLog: (habitName: string, selectedDate: Date) => void;
+  handleLog: (habitId: number, selectedDate: Date) => void;
+  handleRemoveLog: (habitId: number, selectedDate: Date) => void;
   getLogCount: (habitName: string, date: Date) => number;
   isFutureDate: boolean;
+  completionTokens: Record<number, number>;
 }
 
 // HabitRow component to render a single habit row
@@ -36,6 +37,7 @@ const HabitRowComponent = memo(
     handleLog,
     handleRemoveLog,
     selectedDate,
+    completionToken,
   }: {
     habit: Habit;
     index: number;
@@ -45,10 +47,13 @@ const HabitRowComponent = memo(
     isRemoveLogDisabled: boolean;
     handleEditHabit: (index: number) => void;
     handleDeleteHabit: (index: number) => void;
-    handleLog: (habitName: string, selectedDate: Date) => void;
-    handleRemoveLog: (habitName: string, selectedDate: Date) => void;
+    handleLog: (habitId: number, selectedDate: Date) => void;
+    handleRemoveLog: (habitId: number, selectedDate: Date) => void;
     selectedDate: Date;
+    completionToken?: number;
   }) => {
+    const habitId = typeof habit.habitId === "number" ? habit.habitId : null;
+
     return (
       <HabitRow>
         {isEditMode ? (
@@ -63,11 +68,20 @@ const HabitRowComponent = memo(
             look="subtle"
             accent="minus"
             icon={faMinus}
-            onClick={() => handleRemoveLog(habit.name, selectedDate)}
-            disabled={isRemoveLogDisabled}
+            onClick={() => {
+              if (habitId !== null) {
+                handleRemoveLog(habitId, selectedDate);
+              }
+            }}
+            disabled={isRemoveLogDisabled || habitId === null}
           />
         )}
-        <HabitTile habit={habit} logCount={logCount} />
+        <HabitTile
+          habit={habit}
+          logCount={logCount}
+          completionToken={completionToken}
+          habitId={habitId}
+        />
         {isEditMode ? (
           <IconButton
             look="subtle"
@@ -80,8 +94,12 @@ const HabitRowComponent = memo(
             look="subtle"
             accent="plus"
             icon={faPlus}
-            onClick={() => handleLog(habit.name, selectedDate)}
-            disabled={isAddLogDisabled}
+            onClick={() => {
+              if (habitId !== null) {
+                handleLog(habitId, selectedDate);
+              }
+            }}
+            disabled={isAddLogDisabled || habitId === null}
           />
         )}
       </HabitRow>
@@ -101,6 +119,7 @@ const RenderHabits = memo(
     handleRemoveLog,
     getLogCount,
     isFutureDate,
+    completionTokens,
   }: HabitListProps) => {
     return (
       <>
@@ -123,6 +142,11 @@ const RenderHabits = memo(
               handleLog={handleLog}
               handleRemoveLog={handleRemoveLog}
               selectedDate={selectedDate}
+              completionToken={
+                typeof habit.habitId === "number"
+                  ? completionTokens[habit.habitId]
+                  : undefined
+              }
             />
           );
         })}
@@ -142,6 +166,7 @@ export function HabitList({
   handleRemoveLog,
   getLogCount,
   isFutureDate,
+  completionTokens,
 }: HabitListProps) {
   return habits.length === 0 ? (
     <PlaceholderText>
@@ -158,6 +183,7 @@ export function HabitList({
       handleRemoveLog={handleRemoveLog}
       getLogCount={getLogCount}
       isFutureDate={isFutureDate}
+      completionTokens={completionTokens}
     />
   );
 }

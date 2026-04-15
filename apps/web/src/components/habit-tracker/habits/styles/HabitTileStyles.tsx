@@ -1,5 +1,28 @@
 import styled, { css } from "styled-components";
 
+const celebrationPulse = css`
+  animation: tileCelebratePulse 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+
+  @keyframes tileCelebratePulse {
+    0% {
+      transform: scale(1);
+      box-shadow: none;
+    }
+    35% {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 5px color-mix(in srgb, ${({ theme }) => theme.secondary} 20%, transparent);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
+
 // Common styles for both sides — stronger frosted glass
 export const flipCardCommonStyles = css<{ $isComplete: boolean }>`
   background: ${({ $isComplete, theme }) =>
@@ -47,7 +70,7 @@ export const flipCardCommonStyles = css<{ $isComplete: boolean }>`
 `;
 
 // Styled component for the tile container with modern effects
-export const TileContainer = styled.div`
+export const TileContainer = styled.div<{ $isCelebrating?: boolean }>`
   perspective: 1000px;
   border-radius: 9999px;
   flex: 1;
@@ -62,6 +85,45 @@ export const TileContainer = styled.div`
 
   &:hover .arrow-icon {
     opacity: 1;
+  }
+
+  ${({ $isCelebrating }) => $isCelebrating && celebrationPulse}
+
+  .completion-badge {
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    z-index: 4;
+    padding: 3px 9px;
+    border-radius: 9999px;
+    font-size: 0.62rem;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.35px;
+    background: ${({ theme }) => theme.secondaryGradient};
+    color: #fff;
+    border: 1px solid color-mix(in srgb, ${({ theme }) => theme.secondary} 48%, white);
+    box-shadow: ${({ theme }) => theme.shadowMd};
+    white-space: nowrap;
+    animation: completionBadgeIn 0.35s ease-out;
+  }
+
+  @keyframes completionBadgeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -86%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -100%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .completion-badge {
+      animation: none;
+    }
   }
 `;
 

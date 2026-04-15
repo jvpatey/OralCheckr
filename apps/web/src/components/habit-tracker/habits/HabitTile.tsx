@@ -19,61 +19,84 @@ interface HabitTileProps {
     count: number;
   };
   logCount: number;
+  completionToken?: number;
+  habitId: number | null;
 }
 
 // Functional component to render the tile that stores the habit name, count, and logs - used in the Habits component
-const HabitTile = memo(({ habit, logCount }: HabitTileProps) => {
-  const [flipped, setFlipped] = useState(false);
-  const [displayedLogCount, setDisplayedLogCount] = useState(logCount);
+const HabitTile = memo(
+  ({ habit, logCount, completionToken, habitId }: HabitTileProps) => {
+    const [flipped, setFlipped] = useState(false);
+    const [displayedLogCount, setDisplayedLogCount] = useState(logCount);
+    const [isCelebrating, setIsCelebrating] = useState(false);
 
-  // Update the displayed log count when the prop changes
-  useEffect(() => {
-    setDisplayedLogCount(logCount);
-  }, [logCount]);
+    // Update the displayed log count when the prop changes
+    useEffect(() => {
+      setDisplayedLogCount(logCount);
+    }, [logCount]);
 
-  // Calculate the progress as a percentage
-  const progress = Math.min((displayedLogCount / habit.count) * 100, 100);
+    useEffect(() => {
+      if (!completionToken) {
+        return;
+      }
 
-  // Determine if the habit is complete
-  const isComplete = displayedLogCount >= habit.count;
+      setIsCelebrating(true);
+      const timeoutId = window.setTimeout(() => setIsCelebrating(false), 1100);
 
-  // Handler for flipping the card
-  const handleFlip = () => setFlipped(!flipped);
+      return () => window.clearTimeout(timeoutId);
+    }, [completionToken]);
 
-  return (
-    <TileContainer onClick={handleFlip}>
-      <FlipCard $flipped={flipped}>
-        <FlipCardFront $isComplete={isComplete}>
-          <ProgressBar $progress={progress} $isComplete={isComplete} />
-          <HabitName>{habit.name}</HabitName>
-          <LogCountBubble $isComplete={isComplete}>
-            {displayedLogCount}
-          </LogCountBubble>
-          <ArrowIconWrapper className="arrow-icon">
-            <FontAwesomeIcon icon={faSync} />
-          </ArrowIconWrapper>
-        </FlipCardFront>
-        <FlipCardBack $isComplete={isComplete}>
-          <ProgressBar $progress={progress} $isComplete={isComplete} />
-          <BackText>
-            <div className="label spaced">
-              Habit Name: <span className="value">{habit.name}</span>
-            </div>
-            <div className="label">
-              Daily Goal: <span className="value">{habit.count}</span>
-            </div>
-          </BackText>
-          <LogCountBubble $isComplete={isComplete}>
-            {displayedLogCount}
-          </LogCountBubble>
-          <ArrowIconWrapper className="arrow-icon">
-            <FontAwesomeIcon icon={faSync} />
-          </ArrowIconWrapper>
-        </FlipCardBack>
-      </FlipCard>
-    </TileContainer>
-  );
-});
+    // Calculate the progress as a percentage
+    const progress = Math.min((displayedLogCount / habit.count) * 100, 100);
+
+    // Determine if the habit is complete
+    const isComplete = displayedLogCount >= habit.count;
+
+    // Handler for flipping the card
+    const handleFlip = () => setFlipped(!flipped);
+
+    return (
+      <TileContainer
+        onClick={handleFlip}
+        data-habit-tile-id={habitId ?? undefined}
+        $isCelebrating={isCelebrating}
+      >
+        <FlipCard $flipped={flipped}>
+          <FlipCardFront $isComplete={isComplete}>
+            <ProgressBar $progress={progress} $isComplete={isComplete} />
+            <HabitName>{habit.name}</HabitName>
+            {isCelebrating && (
+              <div className="completion-badge">Target Complete</div>
+            )}
+            <LogCountBubble $isComplete={isComplete}>
+              {displayedLogCount}
+            </LogCountBubble>
+            <ArrowIconWrapper className="arrow-icon">
+              <FontAwesomeIcon icon={faSync} />
+            </ArrowIconWrapper>
+          </FlipCardFront>
+          <FlipCardBack $isComplete={isComplete}>
+            <ProgressBar $progress={progress} $isComplete={isComplete} />
+            <BackText>
+              <div className="label spaced">
+                Habit Name: <span className="value">{habit.name}</span>
+              </div>
+              <div className="label">
+                Daily Goal: <span className="value">{habit.count}</span>
+              </div>
+            </BackText>
+            <LogCountBubble $isComplete={isComplete}>
+              {displayedLogCount}
+            </LogCountBubble>
+            <ArrowIconWrapper className="arrow-icon">
+              <FontAwesomeIcon icon={faSync} />
+            </ArrowIconWrapper>
+          </FlipCardBack>
+        </FlipCard>
+      </TileContainer>
+    );
+  },
+);
 
 // Export the memoized component
 export { HabitTile };
