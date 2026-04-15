@@ -1,5 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { faFileLines } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OralHealthStatus } from "./OralHealthStatus";
 import { Recommendations } from "../../containers/questionnaire/Recommendations";
 import { PageBackground } from "../PageBackground";
@@ -30,8 +32,8 @@ import {
   DateDisplayText,
   AssessLabel,
   ResultsQuestionnaireCta,
-  VisitSummaryRow,
-  VisitSummaryCta,
+  ResultsHeaderActions,
+  ResultsHeaderIconCta,
 } from "./styles/ResultsStyles";
 
 export function Results() {
@@ -57,13 +59,22 @@ export function Results() {
               <HeaderTitleColumn>
                 <HabitHeroEyebrow>Improve</HabitHeroEyebrow>
                 <HeaderText>
-                  Questionnaire <HeroTitleAccent>Results</HeroTitleAccent>
+                  Oral Health <HeroTitleAccent>Summary</HeroTitleAccent>
                 </HeaderText>
                 <HeaderSubtitle>
                   Your oral health score, last assessment, and personalized
                   recommendations.
                 </HeaderSubtitle>
               </HeaderTitleColumn>
+              <ResultsHeaderActions>
+                <ResultsHeaderIconCta
+                  to={RoutePaths.APPOINTMENT_SUMMARY}
+                  aria-label="Open Oral Health Report"
+                  title="Oral Health Report"
+                >
+                  <FontAwesomeIcon icon={faFileLines} />
+                </ResultsHeaderIconCta>
+              </ResultsHeaderActions>
             </HeaderMainRow>
           </QuestionnaireStackHeader>
 
@@ -90,12 +101,6 @@ export function Results() {
 
             <Recommendations />
           </BentoGrid>
-
-          <VisitSummaryRow>
-            <VisitSummaryCta to={RoutePaths.APPOINTMENT_SUMMARY}>
-              Summary for your visit
-            </VisitSummaryCta>
-          </VisitSummaryRow>
 
           {user && user.role === "guest" && (
             <ModernActionSection>

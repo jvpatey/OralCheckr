@@ -128,7 +128,7 @@ export function Landing() {
           />
           {questionnaireData?.lastCompleted ? (
             <LandingCard
-              title="Visit summary"
+              title="Oral Health Report"
               description="Review and print a clear summary of your last assessment to share with your dentist."
               buttonLink={RoutePaths.APPOINTMENT_SUMMARY}
               icon={faFileLines}

@@ -146,7 +146,7 @@ export const SidebarLink = styled(Link)<{
   color: ${({ theme, $isActive }) =>
     $isActive ? theme.primary : theme.textSecondary};
 
-  padding: 14px 20px;
+  padding: 14px 14px;
   border-radius: 50px;
 
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -171,7 +171,7 @@ export const SidebarLink = styled(Link)<{
   }
 
   @media (max-width: 800px) {
-    padding: 12px 18px;
+    padding: 12px 14px;
     font-size: 0.9rem;
   }
 `;

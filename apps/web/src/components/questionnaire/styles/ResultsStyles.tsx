@@ -213,6 +213,26 @@ export const ResultsQuestionnaireCta = styled(QuestionnaireOutlineCta)`
   font-size: 0.9375rem;
 `;
 
+export const ResultsHeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+`;
+
+export const ResultsHeaderIconCta = styled(QuestionnaireOutlineCta).attrs(() => ({
+  as: Link,
+}))`
+  text-decoration: none;
+  min-height: 40px;
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 9999px;
+`;
+
 export const VisitSummaryRow = styled.div`
   display: flex;
   justify-content: center;

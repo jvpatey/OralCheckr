@@ -1,17 +1,17 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { BaseButton } from "../../../containers/welcome/styles/ButtonStyles";
-import { QuestionnaireOutlineCta } from "./QuestionnaireFlowLayout";
 
 export const SummaryRoot = styled.div`
   width: 100%;
   max-width: 720px;
   margin: 0 auto;
+  padding-bottom: clamp(28px, 5vh, 48px);
   text-align: left;
   color: ${({ theme }) => theme.textPrimary};
 
   @media print {
     max-width: 100%;
+    padding-bottom: 0;
     overflow: visible !important;
     color: #0f172a !important;
     print-color-adjust: exact;
@@ -27,6 +27,52 @@ export const PrintHeaderBlock = styled.header`
 
   @media print {
     margin-bottom: 20px;
+  }
+`;
+
+export const ReportHeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+`;
+
+export const ReportHeaderIconButton = styled.button`
+  font-family: var(--font-sans), system-ui, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 9999px;
+  border: 1px solid ${({ theme }) => `${theme.primary}45`};
+  background: transparent;
+  color: ${({ theme }) => theme.textPrimary};
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.2s ease;
+
+  &:hover:not(:disabled) {
+    border-color: ${({ theme }) => `${theme.primary}65`};
+    background: ${({ theme }) => `${theme.primary}0d`};
+    color: ${({ theme }) => theme.primary};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.primary};
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
   }
 `;
 
@@ -271,10 +317,4 @@ export const PrintButton = styled(BaseButton).attrs(() => ({
   flex: none;
   padding: 12px 22px;
   font-size: 0.9375rem;
-`;
-
-export const BackLink = styled(QuestionnaireOutlineCta).attrs(() => ({
-  as: Link,
-}))`
-  text-decoration: none;
 `;
