@@ -95,11 +95,59 @@ export function FAQSection() {
               symptoms, and concerns. Answer each question honestly, and you can
               always go back to previous questions if needed. Once you submit
               the questionnaire, our system will calculate your oral health
-              score (0-100). You'll then receive personalized feedback based on
-              your responses, highlighting areas of strength and suggesting
-              improvements for areas of concern. This information helps you
-              track your oral health progress over time and make informed
-              decisions about your daily oral care routine.
+              score (0-100). Your results appear in Oral Health Summary, where
+              you'll see personalized feedback and recommendations based on your
+              answers. You can also open your Oral Health Report to print or
+              save a shareable version for your dental visit.
+            </Accordion.Body>
+          </Accordion.Item>
+
+          <Accordion.Item eventKey="6">
+            <Accordion.Header>
+              What is the difference between Oral Health Summary and Oral Health
+              Report?
+            </Accordion.Header>
+            <Accordion.Body>
+              Oral Health Summary is your interactive results view with your
+              score, last assessment date, and recommendations. Oral Health
+              Report is a print-friendly page that includes your assessment
+              details and recent habit adherence in a format you can save or
+              share.
+            </Accordion.Body>
+          </Accordion.Item>
+
+          <Accordion.Item eventKey="7">
+            <Accordion.Header>
+              How do I print or save my Oral Health Report as a PDF?
+            </Accordion.Header>
+            <Accordion.Body>
+              Open Oral Health Report from your dashboard or the icon on Oral
+              Health Summary. Then use the print icon in the page header (or
+              the print button near the bottom). In your browser print dialog,
+              choose "Save as PDF" if you want a digital copy.
+            </Accordion.Body>
+          </Accordion.Item>
+
+          <Accordion.Item eventKey="8">
+            <Accordion.Header>
+              How often should I retake the questionnaire?
+            </Accordion.Header>
+            <Accordion.Body>
+              A good rule is every few months, or sooner if your routine has
+              changed and you want to check your progress. If you've improved
+              habits like brushing, flossing, or diet, retaking is a great way
+              to refresh your score and recommendations.
+            </Accordion.Body>
+          </Accordion.Item>
+
+          <Accordion.Item eventKey="9">
+            <Accordion.Header>
+              Can I share my Oral Health Report with my dental professional?
+            </Accordion.Header>
+            <Accordion.Body>
+              Yes. You can print the report or save it as a PDF and bring it to
+              your appointment. It is meant to support conversation with your
+              dental professional, not replace a clinical exam or diagnosis.
             </Accordion.Body>
           </Accordion.Item>
         </StyledAccordion>

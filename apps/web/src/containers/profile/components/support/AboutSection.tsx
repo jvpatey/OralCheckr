@@ -12,11 +12,12 @@ export function AboutSection() {
       <SupportSectionTitle>About OralCheckr</SupportSectionTitle>
       <ContentBox style={{ marginBottom: "2rem" }}>
         <ContentText>
-          OralCheckr is a dental health tracking application designed to help
-          you maintain good oral hygiene habits and monitor your oral health
-          over time. The app features a comprehensive assessment to evaluate
-          your oral health status and provides a habit tracking system to help
-          you build consistent dental care routines.
+          OralCheckr is an oral health tracking app designed to help you build
+          consistent daily routines and monitor your progress over time. It
+          includes a comprehensive questionnaire, an Oral Health Summary with
+          personalized recommendations, and habit tracking to support long-term
+          improvement. You can also open your Oral Health Report to print or
+          save a copy for your dental professional.
         </ContentText>
       </ContentBox>
     </SupportSection>
